@@ -27,6 +27,7 @@ const makeApi = (widgets: IWidget[] = []): Api => {
             getWidgetsInRoom: vi.fn().mockReturnValue(widgets),
         }),
         i18n: {
+            namespaced: vi.fn().mockReturnThis(),
             translate: vi.fn().mockImplementation((key: string) => key),
         },
     } as unknown as Api;

@@ -39,6 +39,7 @@ class RestrictedGuestsModule implements Module {
 
         document.adoptedStyleSheets.push(style);
 
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
         this.api.i18n.register(Translations);
 
         try {
@@ -56,7 +57,7 @@ class RestrictedGuestsModule implements Module {
 
         // Room preview bar customisations (for Matrix guest support)
         this.api.customComponents.registerRoomPreviewBar((props, OriginalComponent) => (
-            <RoomPreviewBar {...props} api={this.api} config={this.config!}>
+            <RoomPreviewBar {...props} api={this.api} i18n={i18n} config={this.config!}>
                 <OriginalComponent {...props} />
             </RoomPreviewBar>
         ));

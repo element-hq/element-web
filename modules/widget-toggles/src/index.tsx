@@ -33,6 +33,7 @@ class WidgetToggleModule implements Module {
             throw new Error(`Errors in module configuration for widget toggles module`);
         }
 
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
         this.api.extras.addRoomHeaderButtonCallback((roomId: string) => {
             const widgets = this.api.widget.getWidgetsInRoom(roomId);
             const toggleElements: JSX.Element[] = [];
@@ -40,12 +41,7 @@ class WidgetToggleModule implements Module {
             for (const widget of widgets) {
                 if (this.config?.types.includes(widget.type)) {
                     toggleElements.push(
-                        <WidgetToggle
-                            app={widget}
-                            roomId={roomId}
-                            widgetApi={this.api.widget}
-                            i18nApi={this.api.i18n}
-                        />,
+                        <WidgetToggle app={widget} roomId={roomId} widgetApi={this.api.widget} i18nApi={i18n} />,
                     );
                 }
             }

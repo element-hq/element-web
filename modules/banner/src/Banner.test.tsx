@@ -8,18 +8,16 @@ Please see LICENSE files in the repository root for full details.
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 import Banner from "./Banner";
 import { Theme } from "./theme";
 import { type StaticConfig } from "./config";
 
-const makeApi = (): Api => {
+const makeI18n = (): I18nApi => {
     return {
-        i18n: {
-            translate: vi.fn((key: string) => key),
-        },
-    } as unknown as Api;
+        translate: vi.fn((key: string) => key),
+    } as unknown as I18nApi;
 };
 
 const menu: StaticConfig = {
@@ -31,7 +29,13 @@ describe("Banner", () => {
     it("renders the title without a link when no href is provided", () => {
         render(
             <ThemeProvider theme={Theme.parse({})}>
-                <Banner api={makeApi()} logoUrl="https://example.com/logo.png" href="" menu={menu} title="My Portal" />
+                <Banner
+                    i18n={makeI18n()}
+                    logoUrl="https://example.com/logo.png"
+                    href=""
+                    menu={menu}
+                    title="My Portal"
+                />
             </ThemeProvider>,
         );
 
@@ -43,7 +47,7 @@ describe("Banner", () => {
         render(
             <ThemeProvider theme={Theme.parse({})}>
                 <Banner
-                    api={makeApi()}
+                    i18n={makeI18n()}
                     logoUrl="https://example.com/logo.png"
                     href="https://example.com"
                     menu={menu}

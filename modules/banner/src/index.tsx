@@ -30,6 +30,7 @@ class BannerModule implements Module {
 
         document.adoptedStyleSheets.push(style);
 
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
         this.api.i18n.register(Translations);
 
         try {
@@ -47,7 +48,7 @@ class BannerModule implements Module {
         root.render(
             <ThemeProvider theme={this.config.theme}>
                 <Banner
-                    api={this.api}
+                    i18n={i18n}
                     logoUrl={this.config.logo_url}
                     href={this.config.heading_href}
                     menu={this.config.menu}
