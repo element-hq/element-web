@@ -37,5 +37,32 @@ describe("MatrixSchemePermalinkConstructor", () => {
                 permalinkConstructor.parsePermalink("matrix:roomid/room:example.com/e/event?via=one.example.com"),
             ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
         });
+
+        it.each([
+            ["an action after the via servers", "?via=one.example.com&via=two.example.com&action=join"],
+            ["an action before the via servers", "?action=join&via=one.example.com&via=two.example.com"],
+            [
+                "a custom parameter between via servers",
+                "?via=one.example.com&org.example.key=value&via=two.example.com",
+            ],
+        ])("should read only the via servers from a room link with %s", (name: string, query: string) => {
+            expect(permalinkConstructor.parsePermalink(`matrix:roomid/room:example.com${query}`)).toEqual(
+                PermalinkParts.forRoom("!room:example.com", ["one.example.com", "two.example.com"]),
+            );
+        });
+
+        it("should read only the via servers from an event link with other parameters", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "matrix:roomid/room:example.com/e/event?via=one.example.com&org.example.key=value",
+                ),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
+        });
+
+        it("should ignore an action and custom parameters on user links", () => {
+            expect(
+                permalinkConstructor.parsePermalink("matrix:u/user:example.com?action=chat&org.example.key=value"),
+            ).toEqual(new PermalinkParts(null, null, "@user:example.com", null));
+        });
     });
 });
