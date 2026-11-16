@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { UrlPreview } from "shared-types";
 import type { MatrixEvent } from "../models/event";
+import type { Unregister } from "../utils";
 
 /**
  * Render a URL preview for a given URL.
@@ -25,7 +26,8 @@ export interface UrlPreviewApi {
     /**
      * Register a handler function that will be used to generate URL previews
      * for URLs that match a RegExp.
+     * @returns A function that removes this handler.
      * @alpha Subject to change.
      */
-    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
+    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): Unregister;
 }

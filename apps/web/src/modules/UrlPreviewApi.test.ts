@@ -148,4 +148,45 @@ describe("UrlPreviewApi", () => {
 
         await expect(api.getPreview("https://example.org/page")).rejects.toThrow("Preview failed");
     });
+
+    describe("registerPreviewHandler unregister", () => {
+        const regex = /^https:\/\/example\.org\//;
+
+        it("removes the handler", async () => {
+            const handler = vi.fn().mockResolvedValue(PREVIEW);
+            const api = new UrlPreviewApi();
+            const unregister = api.registerPreviewHandler(regex, handler);
+
+            unregister();
+
+            await expect(api.getPreview("https://example.org/page")).resolves.toBeNull();
+            expect(handler).not.toHaveBeenCalled();
+        });
+
+        it("lets a handler registered again be used instead of the removed one", async () => {
+            const oldHandler = vi.fn().mockResolvedValue(PREVIEW);
+            const newHandler = vi.fn().mockResolvedValue({ ...PREVIEW, title: "New" });
+            const api = new UrlPreviewApi();
+            const unregister = api.registerPreviewHandler(/^https:\/\/example\.org\//, oldHandler);
+            api.registerPreviewHandler(/^https:\/\/example\.org\//, newHandler);
+
+            unregister();
+
+            await expect(api.getPreview("https://example.org/page")).resolves.toMatchObject({ title: "New" });
+            expect(oldHandler).not.toHaveBeenCalled();
+        });
+
+        it("does not remove a newer handler registered with the same RegExp", async () => {
+            const oldHandler = vi.fn().mockResolvedValue(PREVIEW);
+            const newHandler = vi.fn().mockResolvedValue(PREVIEW);
+            const api = new UrlPreviewApi();
+            const unregister = api.registerPreviewHandler(regex, oldHandler);
+            api.registerPreviewHandler(regex, newHandler);
+
+            unregister();
+
+            await api.getPreview("https://example.org/page");
+            expect(newHandler).toHaveBeenCalled();
+        });
+    });
 });
