@@ -11,6 +11,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import { CONFIG_KEY, WidgetTogglesConfig } from "./config";
 import { WidgetToggle } from "./toggle";
+import Translations from "./translations.json";
 import { name as ModuleName } from "../package.json";
 
 class WidgetToggleModule implements Module {
@@ -34,6 +35,7 @@ class WidgetToggleModule implements Module {
         }
 
         const i18n = this.api.i18n.namespaced(CONFIG_KEY);
+        i18n.register(Translations);
         this.api.extras.addRoomHeaderButtonCallback((roomId: string) => {
             const widgets = this.api.widget.getWidgetsInRoom(roomId);
             const toggleElements: JSX.Element[] = [];

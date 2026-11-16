@@ -1,0 +1,8 @@
+{
+    "hide_widget": {
+        "en": "Hide %(name)s"
+    },
+    "show_widget": {
+        "en": "Show %(name)s"
+    }
+}
