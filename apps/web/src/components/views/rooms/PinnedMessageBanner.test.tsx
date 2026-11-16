@@ -353,7 +353,7 @@ describe("<PinnedMessageBanner />", () => {
                 origin_server_ts: 0,
                 event_id: "$pinnedEventsState",
             });
-            await room.addLiveEvents([pinnedEventsState, pinnedEvent], { addToState: true });
+            await room.addLiveEvents([pinnedEventsState], { addToState: true });
         });
 
         function makeRedaction(eventId: string, reason?: string): MatrixEvent {
@@ -368,25 +368,37 @@ describe("<PinnedMessageBanner />", () => {
             });
         }
 
-        it("should stop showing the content of a pinned message that is redacted", async () => {
+        it("should stop showing a pinned message the room has loaded once it is redacted", async () => {
+            await room.addLiveEvents([pinnedEvent], { addToState: false });
             renderBanner();
             await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
 
-            await act(async () => {
-                await room.addLiveEvents([makeRedaction("$redaction")], { addToState: false });
+            // The room redacts its own copy and emits RoomEvent.Redaction. Retention calls tryApplyRedaction directly,
+            // without adding anything to the timeline, so this is the only signal the banner gets.
+            act(() => {
+                room.tryApplyRedaction(makeRedaction("$synthetic_redaction", "Retention policy"));
             });
 
             await waitFor(() => expect(screen.queryByText("First pinned message")).toBeNull());
             expect(screen.getByText("Message deleted")).toBeVisible();
         });
 
-        it("should stop showing the content of a pinned message that a retention policy expires", async () => {
+        it("should stop showing a pinned message fetched from the server once it is redacted", async () => {
+            const redaction = makeRedaction("$redaction");
+            // The room does not have the pinned message, so the banner fetches it, and fetches it again on redaction.
+            let redacted = false;
+            vi.mocked(mockClient.fetchRoomEvent).mockImplementation(async () =>
+                redacted
+                    ? { ...pinnedEvent.event, content: {}, unsigned: { redacted_because: redaction.event as IEvent } }
+                    : pinnedEvent.event,
+            );
             renderBanner();
             await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
 
-            // A retention policy redacts expired events locally, without a redaction in the timeline.
-            act(() => {
-                room.tryApplyRedaction(makeRedaction("$synthetic_redaction", "Retention policy"));
+            // The room has no copy to redact, so there is no RoomEvent.Redaction: only the redaction in the timeline.
+            redacted = true;
+            await act(async () => {
+                await room.addLiveEvents([redaction], { addToState: false });
             });
 
             await waitFor(() => expect(screen.queryByText("First pinned message")).toBeNull());
