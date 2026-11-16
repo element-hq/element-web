@@ -42,6 +42,11 @@
                 "file": "shared-components.json",
                 "excludes": ["packages/shared-components/src/i18n/strings/en_EN.json"],
                 "lang": "${autodetectLang}"
+            },
+            {
+                "pattern": "modules/*/src/translations.json",
+                "path": "${path}",
+                "features": ["multilingual", "plural_object", "filter_untranslated"]
             }
         ]
     },
@@ -64,6 +69,14 @@
         "includeSourceLang": "${includeSourceLang|false}",
         "langAliases": {
             "en": "en-EN"
+        }
+    },
+
+    "conversion": {
+        "actions": {
+            "conditions": "startsWith: modules/, ${path}",
+            "type": "json-multilingual",
+            "output": "${path}/${file}"
         }
     }
 }

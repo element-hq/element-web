@@ -8,6 +8,7 @@
     "scripts": {
         "build": "nx build",
         "lint:types": "nx lint:types",
+        "i18n:lint": "oxfmt src/translations.json",
         "test:unit": "nx test:unit"
     },
     "devDependencies": {
