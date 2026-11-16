@@ -11,10 +11,12 @@ import {
     type SpacePanelItemProps,
     type ExtrasApi,
     type RoomHeaderButtonsCallback,
+    type Unregister,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
+import { createUnregister, removeFromArray } from "./utils/unregister";
 
 export interface ModuleSpacePanelItem extends SpacePanelItemProps {
     spaceKey: string;
@@ -43,8 +45,9 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
         this.visibleRoomBySpaceKey.set(spaceKey, cb);
     }
 
-    public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
+    public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): Unregister {
         this.roomHeaderButtonsCallbacks.push(cb);
+        return createUnregister(() => removeFromArray(this.roomHeaderButtonsCallbacks, cb));
     }
 
     public setCreditsAttribution(attributionId: string, render: () => JSX.Element): void {
