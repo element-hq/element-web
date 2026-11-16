@@ -319,12 +319,19 @@ export interface I18nApi {
     get language(): string;
     namespaced(this: void, namespace: string): I18nApi;
     register(this: void, translations: Partial<Translations>): void;
+    registerLanguage(this: void, language: string, translations: LanguageTranslations): void;
     translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;
 }
 
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
+
+// @public
+export interface LanguageTranslations {
+    // (undocumented)
+    [key: string]: string | LanguageTranslations;
+}
 
 // @alpha
 export type LocationRenderFunction = () => JSX.Element;

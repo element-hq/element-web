@@ -39,6 +39,29 @@ describe("I18nApi", () => {
         );
     });
 
+    describe("registerLanguage", () => {
+        it("registers under the app's key for the language", () => {
+            const i18n = new I18nApi();
+            i18n.registerLanguage("en_EN", { "register.language": "Hello from en_EN" });
+
+            expect(i18n.translate("register.language")).toBe("Hello from en_EN");
+        });
+
+        it("supports nested keys", () => {
+            const i18n = new I18nApi();
+            i18n.registerLanguage("en", { "register.group": { greeting: "Hello from a group" } });
+
+            expect(i18n.translate("register.group|greeting")).toBe("Hello from a group");
+        });
+
+        it("nests translations under the namespace", () => {
+            const i18n = new I18nApi();
+            i18n.namespaced("module.language").registerLanguage("en", { greeting: "Hello from a module" });
+
+            expect(i18n.translate("module.language|greeting")).toBe("Hello from a module");
+        });
+    });
+
     describe("namespaced", () => {
         it("keeps translations in different namespaces apart", () => {
             const i18n = new I18nApi();

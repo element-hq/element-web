@@ -9,15 +9,17 @@ import {
     type I18nApi as II18nApi,
     type Variables,
     type Translations,
+    type LanguageTranslations,
     type Tags,
 } from "@element-hq/element-web-module-api";
 
 import { humanizeTime } from "../utils/humanize";
-import { _t, getLocale, KEY_SEPARATOR, registerTranslations } from "./i18n";
+import { _t, getLocale, getNormalizedLanguageKeys, KEY_SEPARATOR, registerTranslations } from "./i18n";
 
 export class I18nApi implements II18nApi {
     /**
-     * @param namespace - Path of keys that `register` and `translate` nest every key under, empty for no namespace
+     * @param namespace - Path of keys that `register`, `registerLanguage` and `translate` nest every key under,
+     *   empty for no namespace
      * @param root - The un-namespaced API this one was derived from, if any
      */
     public constructor(
@@ -47,12 +49,24 @@ export class I18nApi implements II18nApi {
 
         // Finally, tell counterpart about our translations, nested under the namespace
         for (const lang in langs) {
-            registerTranslations(
-                lang,
-                this.namespace.reduceRight<object>((data, segment) => ({ [segment]: data }), langs[lang]),
-            );
+            registerTranslations(lang, this.nestUnderNamespace(langs[lang]));
         }
     };
+
+    /**
+     * Register the translations for a single language, may override app's existing translations
+     * @param language - The language, as an IETF language tag such as `de-DE`, or with an underscore such as `de_DE`
+     * @param translations - The translations for that language, keyed by translation key
+     */
+    public registerLanguage = (language: string, translations: LanguageTranslations): void => {
+        // Use the same key the app registers its own translations under, e.g. `de-DE` becomes `de`
+        const [languageKey] = getNormalizedLanguageKeys(language);
+        registerTranslations(languageKey, this.nestUnderNamespace(translations));
+    };
+
+    private nestUnderNamespace(translations: object): object {
+        return this.namespace.reduceRight<object>((data, segment) => ({ [segment]: data }), translations);
+    }
 
     /**
      * Perform a translation, with optional variables
@@ -71,7 +85,8 @@ export class I18nApi implements II18nApi {
     public humanizeTime = (timeMillis: number): string => humanizeTime(timeMillis, this.root ?? this);
 
     /**
-     * Get a copy of this API whose `register` and `translate` prefix every key with the given namespace
+     * Get a copy of this API whose `register`, `registerLanguage` and `translate` prefix every key with the given
+     * namespace
      * @param namespace - The prefix for every key
      */
     public namespaced = (namespace: string): II18nApi =>

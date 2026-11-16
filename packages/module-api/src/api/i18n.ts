@@ -19,6 +19,15 @@ export type Translations = Record<
 >;
 
 /**
+ * The translations for a single language, keyed by translation key.
+ * A nested object groups keys, which are then translated by joining them with `|`, e.g. `"group|key"`.
+ * @public
+ */
+export interface LanguageTranslations {
+    [key: string]: string | LanguageTranslations;
+}
+
+/**
  * The value a variable or tag can take for a translation interpolation.
  *
  * When used as a function, `sub` is the text content wrapped between the tag
@@ -77,6 +86,14 @@ export interface I18nApi {
     register(this: void, translations: Partial<Translations>): void;
 
     /**
+     * Register the translations for a single language, may override app's existing translations.
+     * Modules should namespace their translations to avoid being stepped on.
+     * @param language - The language, as an IETF language tag such as `de-DE`, or with an underscore such as `de_DE`
+     * @param translations - The translations for that language, keyed by translation key
+     */
+    registerLanguage(this: void, language: string, translations: LanguageTranslations): void;
+
+    /**
      * Perform a translation, with optional variables
      * @param key - The key to translate
      * @param variables - Optional variables to interpolate into the translation
@@ -98,8 +115,8 @@ export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
 
     /**
-     * Get a copy of this API whose `register` and `translate` prefix every key with the given namespace,
-     * so that a module's translations cannot clash with those of the app or of other modules.
+     * Get a copy of this API whose `register`, `registerLanguage` and `translate` prefix every key with the given
+     * namespace, so that a module's translations cannot clash with those of the app or of other modules.
      * @param namespace - The prefix for every key, such as the module's config key
      */
     namespaced(this: void, namespace: string): I18nApi;
