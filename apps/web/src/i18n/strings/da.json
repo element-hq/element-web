@@ -1262,8 +1262,6 @@
         "bridge_state_workspace": "Arbejdsområde: <networkLink/>",
         "click_for_info": "Klik for mere info",
         "currently_experimental": "I øjeblikket eksperimentel.",
-        "dynamic_room_predecessors": "Dynamiske rumforgængere",
-        "dynamic_room_predecessors_description": "Aktivér MSC3946 (for at understøtte forsinkede rumarkiver)",
         "element_call_video_rooms": "Element Call video-rum",
         "experimental_description": "Er du i humør til at eksperimentere? Afprøv vores nyeste ideer, som stadig er under udvikling. Disse funktioner er ikke færdigukviklende; de kan være ustabile, kan ændres eller kan blive droppet helt. <a>Få mere at vide</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
@@ -2437,7 +2435,6 @@
             "web_session": "Websession"
         },
         "show_avatar_changes": "Vis ændringer af profilbillede",
-        "show_breadcrumbs": "Vis genveje til senest viste rum over rumlisten",
         "show_chat_effects": "Vis chateffekter (animationer, når du modtager f.eks. konfetti)",
         "show_displayname_changes": "Vis ændringer af det viste navn",
         "show_join_leave": "Vis tilmeldings-/forladelsesbeskeder (invitationer/fjernelser/forbud påvirkes ikke)",

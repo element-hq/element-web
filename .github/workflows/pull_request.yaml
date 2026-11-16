@@ -14,3 +14,27 @@ jobs:
             pull-requests: write
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    # Marks license/cla as passing on PRs labelled X-Bypass-CLA, for when the CLA assistant is being unreliable.
+    bypass-cla:
+        name: Bypass license/cla
+        if: >
+            github.event_name == 'pull_request_target'
+            && contains(github.event.pull_request.labels.*.name, 'X-Bypass-CLA')
+            && (
+              github.event.action == 'synchronize'
+              || (github.event.action == 'labeled' && github.event.label.name == 'X-Bypass-CLA')
+            )
+        runs-on: ubuntu-26.04
+        permissions:
+            statuses: write
+        steps:
+            - name: Mark license/cla as passing
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  context: license/cla
+                  description: Bypassed using the X-Bypass-CLA label
+                  sha: ${{ github.event.pull_request.head.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

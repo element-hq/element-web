@@ -21,9 +21,17 @@ export interface Profile {
      */
     userId?: string;
     /**
+     * The device ID of this client, if undefined then no user is logged in.
+     */
+    deviceId?: string;
+    /**
      * The display name of the logged-in user.
      */
     displayName?: string;
+    /**
+     * The base API URL of the homeserver the user is logged into.
+     */
+    homeserverUrl?: string;
 }
 
 /**

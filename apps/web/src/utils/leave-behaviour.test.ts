@@ -22,7 +22,6 @@ import { SDKContextClass } from "../contexts/SDKContextClass";
 import DMRoomMap from "../utils/DMRoomMap";
 import { MetaSpace } from "../stores/spaces";
 import { type ActionPayload } from "../dispatcher/payloads";
-import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
 import { type Call } from "../models/Call";
 
@@ -148,31 +147,6 @@ describe("leaveRoomBehaviour", () => {
             action: Action.ViewRoom,
             room_id: space.roomId,
             metricsTrigger: undefined,
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            await leaveRoomBehaviour(client, room.roomId);
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, true, false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            await leaveRoomBehaviour(client, room.roomId);
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, true, true);
         });
     });
 });

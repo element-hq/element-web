@@ -5,7 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import { logger } from "@sentry/browser";
+import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomMember, type Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

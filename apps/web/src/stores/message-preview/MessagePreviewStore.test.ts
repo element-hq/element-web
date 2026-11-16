@@ -27,6 +27,8 @@ import { mkThread } from "test-utils/threads";
 
 import { MessagePreviewStore } from ".";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
+import { CallStore, CallStoreEvent } from "../CallStore";
+import { ElementCall } from "../../models/Call";
 
 describe("MessagePreviewStore", () => {
     let client: Mocked<MatrixClient>;
@@ -91,6 +93,7 @@ describe("MessagePreviewStore", () => {
 
     afterEach(() => {
         store.destroy();
+        vi.restoreAllMocks();
     });
 
     it("should ignore edits for events other than the latest one", async () => {
@@ -447,6 +450,29 @@ describe("MessagePreviewStore", () => {
                 expect(store.generatePreviewForEvent(callEvent)).toBeTruthy();
             },
         );
+
+        it("should switch the rtc notification preview from 'Call started' to 'Call ended' when the call ends", async () => {
+            const getCall = vi
+                .spyOn(CallStore.instance, "getCall")
+                .mockReturnValue(Object.create(ElementCall.prototype));
+            const notification = mkEvent({
+                event: true,
+                type: EventType.RTCNotification,
+                user: "@sender:server",
+                room: room.roomId,
+                content: {},
+            });
+            await addEvent(store, room, notification);
+            expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toBe("Call started");
+
+            const onChange = vi.fn();
+            store.on(MessagePreviewStore.getPreviewChangedEventName(room), onChange);
+            getCall.mockReturnValue(null);
+            CallStore.instance.emit(CallStoreEvent.Call, null, room.roomId);
+
+            await vi.waitFor(() => expect(onChange).toHaveBeenCalled());
+            expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toBe("Call ended");
+        });
 
         it("should return an empty string for an event type without a previewer", () => {
             const topicEvent = mkEvent({

@@ -311,10 +311,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
         }
 
-        const hasCaption =
-            [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
-            content.filename &&
-            content.filename !== content.body;
+        const hasCaption = MediaEventHelper.hasCaption(this.props.mxEvent);
         const bodyProps: IBodyProps = {
             ref: this.body,
             mxEvent: this.props.mxEvent,

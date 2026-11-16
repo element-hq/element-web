@@ -1143,7 +1143,6 @@
         "bridge_state_workspace": "ワークスペース：<networkLink/>",
         "click_for_info": "クリックすると詳細を表示",
         "currently_experimental": "現在実験中。",
-        "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
         "element_call_video_rooms": "Element Callのビデオ通話ルーム",
         "experimental_description": "実験に参加したいですか？開発中のアイディアを試してください。これらの機能は完成していません。不安定な可能性や変更される可能性、また、開発が中止される可能性もあります。<a>詳細を確認</a>。",
         "experimental_section": "早期プレビュー",
@@ -2162,7 +2161,6 @@
             "verify_session": "セッションを認証",
             "web_session": "Webセッション"
         },
-        "show_breadcrumbs": "ルームの一覧の上に、最近表示したルームのショートカットを表示",
         "show_chat_effects": "チャットのエフェクトを表示（紙吹雪などを受け取ったときのアニメーション）",
         "show_displayname_changes": "表示名の変更を表示",
         "show_join_leave": "参加/退出のメッセージを表示（招待/削除/ブロックには影響しません）",

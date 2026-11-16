@@ -14,7 +14,7 @@ import { _t } from "../../../../languageHandler";
 import { ChangeRecoveryKeyBody } from "./ChangeRecoveryKeyBody";
 
 // Same props as the body, minus the class name, which the settings panel does not need
-type ChangeRecoveryKeyProps = Omit<ComponentProps<typeof ChangeRecoveryKeyBody>, "className">;
+type ChangeRecoveryKeyProps = Omit<ComponentProps<typeof ChangeRecoveryKeyBody>, "dialog">;
 
 /**
  * The Encryption Settings panel to set up or change the recovery key.

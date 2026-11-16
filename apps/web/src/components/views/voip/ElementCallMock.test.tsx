@@ -28,6 +28,7 @@ import {
     configurationForIntent,
 } from "@element-hq/element-call-component/api";
 import { ElementCall, initializeElementCall } from "./ElementCallMock";
+import { CallStore } from "../../../stores/CallStore";
 
 const roomId = "!1:example.org";
 
@@ -164,6 +165,27 @@ describe("ElementCallMock", () => {
 
         await user.click(screen.getByRole("button", { name: "Close" }));
         expect(bridge.close).toHaveBeenCalled();
+    });
+
+    it("publishes the configured LiveKit transports as livekit foci only", async () => {
+        vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+            { type: "m.livekit", url: "wss://sfu.example.org" },
+            { type: "livekit", livekit_service_url: "https://livekit-jwt.example.org" },
+            { type: "something_else" },
+        ]);
+        const user = userEvent.setup();
+        renderCall();
+
+        await user.click(screen.getByRole("button", { name: "notifyJoined" }));
+        const [, , membership] = vi.mocked(client.sendStateEvent).mock.lastCall!;
+        const foci = (membership as { foci_preferred: { type: string }[] }).foci_preferred;
+        // Deployed clients only read `livekit`, and Ruma-based clients fail on any focus type they don't know
+        expect(foci.map(({ type }) => type)).not.toContain("m.livekit");
+        expect(foci).toContainEqual({
+            type: "livekit",
+            livekit_service_url: "https://livekit-jwt.example.org",
+            livekit_alias: "element-call-mock",
+        });
     });
 
     it("clears its membership when unmounted while in the call", async () => {

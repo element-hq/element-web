@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useState } from "react";
+import { type JSX, useState } from "react";
 import {
     type SpacePanelItemProps,
     type ExtrasApi,
@@ -32,6 +32,7 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
     public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
+    public creditsAttributions = new Map<string, () => JSX.Element>();
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -44,6 +45,10 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
 
     public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
         this.roomHeaderButtonsCallbacks.push(cb);
+    }
+
+    public setCreditsAttribution(attributionId: string, render: () => JSX.Element): void {
+        this.creditsAttributions.set(attributionId, render);
     }
 }
 

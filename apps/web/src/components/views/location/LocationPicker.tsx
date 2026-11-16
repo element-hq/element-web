@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type SyntheticEvent } from "react";
-import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomMember, ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
@@ -23,6 +22,7 @@ import { MapError } from "./MapError";
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from "./LiveDurationDropdown";
 import { LocationShareType, type ShareLocationFn } from "./shareLocation";
 import Marker from "./Marker";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 export interface ILocationPickerProps {
     sender: RoomMember;
