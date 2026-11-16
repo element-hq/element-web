@@ -68,7 +68,7 @@ class RestrictedGuestsModule implements Module {
         // Login component customisations (for no guest support)
         this.api.customComponents.registerLoginComponent((props, OriginalComponent) => (
             <OriginalComponent {...props}>
-                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} config={this.config!} />
+                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} i18n={i18n} config={this.config!} />
             </OriginalComponent>
         ));
     }
