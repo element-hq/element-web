@@ -2,8 +2,8 @@
 
 Element Web can render [A2UI](https://a2ui.org/) surfaces sent by agents and bots as interactive UI in the timeline,
 and report the user's actions back. The Matrix event formats and which components and functions each client supports
-are documented in `A2UI.md` in the parent folder of this checkout ([../../A2UI.md](../../A2UI.md)); this page covers what is specific
-to Element Web.
+are documented in [A2UI over Matrix](https://github.com/hughns/a2ui-prototype/blob/main/A2UI.md); this page covers
+what is specific to Element Web.
 
 Enable the **Interactive agent messages (A2UI)** labs flag (`feature_a2ui`).
 
@@ -25,9 +25,10 @@ Enable the **Interactive agent messages (A2UI)** labs flag (`feature_a2ui`).
 Open **Developer tools → Send custom timeline event** in a room and fill in:
 
 - **Event Type**: `m.room.message`
-- **Event Content**: only the value of `content` from the rendering example in `A2UI.md`, starting at
-  `{ "msgtype": ... }`. Pasting the whole example, including `type`, wraps the real content in a `content` key and
-  the message renders as raw JSON instead.
+- **Event Content**: only the value of `content` from the
+  [example in A2UI over Matrix](https://github.com/hughns/a2ui-prototype/blob/main/A2UI.md#creating-surfaces),
+  starting at `{ "msgtype": ... }`. Pasting the whole example, including `type`, wraps the real content in a
+  `content` key and the message renders as raw JSON instead.
 
 Pressing the button sends the action event, which you can inspect with **Explore room state** or the network tab.
 
