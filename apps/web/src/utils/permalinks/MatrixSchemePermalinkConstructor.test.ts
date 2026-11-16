@@ -20,5 +20,22 @@ describe("MatrixSchemePermalinkConstructor", () => {
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
+
+        it("should keep via servers on room links", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "matrix:roomid/room:example.com?via=one.example.com&via=two.example.com",
+                ),
+            ).toEqual(PermalinkParts.forRoom("!room:example.com", ["one.example.com", "two.example.com"]));
+            expect(permalinkConstructor.parsePermalink("matrix:r/alias:example.com?via=one.example.com")).toEqual(
+                PermalinkParts.forRoom("#alias:example.com", ["one.example.com"]),
+            );
+        });
+
+        it("should keep via servers on event links", () => {
+            expect(
+                permalinkConstructor.parsePermalink("matrix:roomid/room:example.com/e/event?via=one.example.com"),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
+        });
     });
 });
