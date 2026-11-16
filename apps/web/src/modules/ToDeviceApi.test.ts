@@ -7,30 +7,31 @@
 
 // @vitest-environment happy-dom
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ClientEvent, type MatrixClient, type ReceivedToDeviceMessage } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 import { createTestClient, stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ToDeviceApi } from "./ToDeviceApi";
 
-const REQUEST_TYPE = "org.example.request";
-const RESPONSE_TYPE = "org.example.response";
+const MESSAGE_TYPE = "org.example.message";
+const OTHER_TYPE = "org.example.other";
 const RECIPIENT_USER_ID = "@bot:example.org";
 
-function request(
-    overrides: Partial<Parameters<ToDeviceApi["request"]>[0]> = {},
-): Parameters<ToDeviceApi["request"]>[0] {
+function outgoing(
+    overrides: Partial<Parameters<ToDeviceApi["sendMessage"]>[0]> = {},
+): Parameters<ToDeviceApi["sendMessage"]>[0] {
     return {
         recipientUserId: RECIPIENT_USER_ID,
-        requestType: REQUEST_TYPE,
-        responseType: RESPONSE_TYPE,
+        recipientDeviceId: "*",
+        type: MESSAGE_TYPE,
         content: { action: "probe" },
         ...overrides,
     };
 }
 
-function emitResponse(client: MatrixClient, type: string, sender: string, content: unknown): void {
+function emitMessage(client: MatrixClient, type: string, sender: string, content: unknown): void {
     client.emit(ClientEvent.ReceivedToDeviceMessage, {
         message: { type, sender, content },
         encryptionInfo: null,
@@ -38,198 +39,299 @@ function emitResponse(client: MatrixClient, type: string, sender: string, conten
 }
 
 describe("ToDeviceApi", () => {
-    afterEach(() => {
-        vi.useRealTimers();
-    });
+    it.each(["*", "BOT_DEVICE"])(
+        "sends to recipient device %s without changing the content or adding a listener",
+        async (recipientDeviceId) => {
+            const client = stubClient();
+            const api = new ToDeviceApi();
+            const on = vi.spyOn(client, "on");
+            const content = { request_id: "module-id", requesting_device_id: "module-device" };
 
-    it("sends a correlated request to all recipient devices without mutating the caller content", async () => {
-        const client = stubClient();
-        const off = vi.spyOn(client, "off");
-        const api = new ToDeviceApi();
-        const content = { action: "probe", request_id: "caller-id", requesting_device_id: "caller-device" };
+            await api.sendMessage(outgoing({ recipientDeviceId, content }));
 
-        const response = api.request(request({ content }));
-        const [eventType, contentMap, transactionId] = vi.mocked(client.sendToDevice).mock.calls[0]!;
-        const sentContent = contentMap.get(RECIPIENT_USER_ID)?.get("*");
+            expect(client.sendToDevice).toHaveBeenCalledWith(
+                MESSAGE_TYPE,
+                new Map([[RECIPIENT_USER_ID, new Map([[recipientDeviceId, content]])]]),
+            );
+            expect(vi.mocked(client.sendToDevice).mock.calls[0]).toHaveLength(2);
+            expect(content).toEqual({ request_id: "module-id", requesting_device_id: "module-device" });
+            expect(client.getAccessToken).not.toHaveBeenCalled();
+            expect(on).not.toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
+        },
+    );
 
-        expect(eventType).toBe(REQUEST_TYPE);
-        expect(sentContent).toMatchObject({
-            action: "probe",
-            request_id: transactionId,
-            requesting_device_id: "ABCDEFGHI",
-        });
-        expect(content).toEqual({ action: "probe", request_id: "caller-id", requesting_device_id: "caller-device" });
-        expect(client.getAccessToken).not.toHaveBeenCalled();
-
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: transactionId });
-        await expect(response).resolves.toMatchObject({ request_id: transactionId });
-        expect(off).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
-    });
-
-    it("registers correlation before sendToDevice can emit an immediate response", async () => {
+    it("resolves after the send succeeds without waiting for a response", async () => {
         const client = stubClient();
         const api = new ToDeviceApi();
-        const responseContent = { request_id: "replaced", accepted: true };
-        vi.spyOn(client, "sendToDevice").mockImplementation((_type, contentMap, transactionId) => {
-            const sentContent = contentMap.get(RECIPIENT_USER_ID)?.get("*");
-            responseContent.request_id = transactionId!;
-            emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { ...sentContent, accepted: true });
-            return Promise.resolve({});
-        });
+        const pendingSend = Promise.withResolvers<{}>();
+        vi.mocked(client.sendToDevice).mockReturnValue(pendingSend.promise);
+        const settled = vi.fn();
 
-        await expect(api.request(request())).resolves.toMatchObject({
-            action: "probe",
-            requesting_device_id: "ABCDEFGHI",
-            ...responseContent,
-        });
-    });
-
-    it("resolves only for the matching sender, response type, and request ID", async () => {
-        const client = stubClient();
-        const api = new ToDeviceApi();
-        const onResolved = vi.fn();
-        const response = api.request(request());
-        void response.then(onResolved);
-        const requestId = vi.mocked(client.sendToDevice).mock.calls[0]![2]!;
-
-        emitResponse(client, RESPONSE_TYPE, "@other:example.org", { request_id: requestId });
-        emitResponse(client, REQUEST_TYPE, RECIPIENT_USER_ID, { request_id: requestId });
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: "wrong-id" });
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, []);
+        const send = api.sendMessage(outgoing()).then(settled);
         await Promise.resolve();
-        expect(onResolved).not.toHaveBeenCalled();
+        expect(settled).not.toHaveBeenCalled();
 
-        const content = { request_id: requestId, arbitrary: { untrusted: true } };
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, content);
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: requestId, duplicate: true });
-        await expect(response).resolves.toBe(content);
+        pendingSend.resolve({});
+        await send;
+        expect(settled).toHaveBeenCalledOnce();
     });
 
-    it("keeps simultaneous requests with the same event types independent", async () => {
+    it("rejects send failures without exposing upstream error details", async () => {
         const client = stubClient();
         const api = new ToDeviceApi();
-        const first = api.request(request({ content: { index: 1 } }));
-        const second = api.request(request({ content: { index: 2 } }));
-        const firstId = vi.mocked(client.sendToDevice).mock.calls[0]![2]!;
-        const secondId = vi.mocked(client.sendToDevice).mock.calls[1]![2]!;
-
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: secondId, index: 2 });
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: firstId, index: 1 });
-
-        await expect(first).resolves.toMatchObject({ index: 1 });
-        await expect(second).resolves.toMatchObject({ index: 2 });
-    });
-
-    it("rejects and cleans up a request after timeout", async () => {
-        vi.useFakeTimers();
-        const client = stubClient();
-        const api = new ToDeviceApi();
-        const response = api.request(request({ timeoutMs: 100 }));
-        const rejection = response.catch((error: unknown) => error);
-
-        await vi.advanceTimersByTimeAsync(100);
-        await expect(rejection).resolves.toMatchObject({ message: "To-device request timed out" });
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, {
-            request_id: vi.mocked(client.sendToDevice).mock.calls[0]![2],
-        });
-        expect(vi.getTimerCount()).toBe(0);
-    });
-
-    it("rejects at timeout if the session ended without a response", async () => {
-        vi.useFakeTimers();
-        const client = stubClient();
-        const api = new ToDeviceApi();
-        const off = vi.spyOn(client, "off");
-        const response = api.request(request({ timeoutMs: 100 }));
-        const rejection = response.catch((error: unknown) => error);
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
-
-        await vi.advanceTimersByTimeAsync(100);
-
-        await expect(rejection).resolves.toMatchObject({ message: "Matrix session ended" });
-        expect(off).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
-        expect(vi.getTimerCount()).toBe(0);
-    });
-
-    it("rejects and cleans up when sending fails", async () => {
-        vi.useFakeTimers();
-        const client = stubClient();
-        const api = new ToDeviceApi();
-        const off = vi.spyOn(client, "off");
         vi.mocked(client.sendToDevice).mockRejectedValue(new Error("sensitive upstream details"));
 
-        await expect(api.request(request())).rejects.toThrow("Failed to send to-device request");
-        expect(off).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
-        expect(vi.getTimerCount()).toBe(0);
+        await expect(api.sendMessage(outgoing())).rejects.toThrow("Failed to send to-device message");
     });
 
-    it.each(["user", "device"] as const)("rejects pending requests when the %s changes", async (changedIdentity) => {
+    it("validates outgoing messages before sending", async () => {
         const client = stubClient();
         const api = new ToDeviceApi();
-        const response = api.request(request());
-        const rejection = response.catch((error: unknown) => error);
-        const requestId = vi.mocked(client.sendToDevice).mock.calls[0]![2]!;
+        const invalidMessages = [
+            outgoing({ recipientUserId: "not-a-user-id" }),
+            outgoing({ recipientDeviceId: "" }),
+            outgoing({ recipientDeviceId: "BAD DEVICE" }),
+            outgoing({ recipientDeviceId: "x".repeat(256) }),
+            outgoing({ type: " " }),
+            outgoing({ type: "x".repeat(256) }),
+            outgoing({ content: [] as unknown as Record<string, unknown> }),
+            outgoing({ content: new Date() as unknown as Record<string, unknown> }),
+        ];
+
+        for (const message of invalidMessages) {
+            await expect(api.sendMessage(message)).rejects.toThrow();
+        }
+        expect(client.sendToDevice).not.toHaveBeenCalled();
+    });
+
+    it("supports a receive-only subscription and passes only message data", () => {
+        const client = stubClient();
+        const api = new ToDeviceApi();
+        const listener = vi.fn();
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+        const content = ["unvalidated"];
+
+        emitMessage(client, OTHER_TYPE, RECIPIENT_USER_ID, { ignored: true });
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, content);
+
+        expect(listener).toHaveBeenCalledOnce();
+        expect(listener).toHaveBeenCalledWith({
+            type: MESSAGE_TYPE,
+            sender: RECIPIENT_USER_ID,
+            content,
+        });
+        expect(Object.keys(listener.mock.calls[0]![0])).toEqual(["type", "sender", "content"]);
+        expect(client.sendToDevice).not.toHaveBeenCalled();
+        unsubscribe();
+    });
+
+    it("allows registration without a session, then delivers on login", () => {
+        const client = stubClient();
+        const on = vi.spyOn(client, "on");
+        const get = vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
+        const api = new ToDeviceApi();
+        const listener = vi.fn();
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+        expect(on).not.toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
+
+        get.mockReturnValue(client);
+        api.setClient(client);
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { ready: true });
+
+        expect(listener).toHaveBeenCalledOnce();
+        unsubscribe();
+    });
+
+    it("suspends delivery on logout and resumes on a replacement session", async () => {
+        const oldClient = stubClient();
+        const api = new ToDeviceApi();
+        const listener = vi.fn();
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+        const oldOff = vi.spyOn(oldClient, "off");
+
+        api.setClient(null);
+        emitMessage(oldClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { stale: true });
+        expect(listener).not.toHaveBeenCalled();
+        expect(oldOff).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
+        await expect(api.sendMessage(outgoing())).rejects.toThrow("No active Matrix session");
+
+        const newClient = createTestClient();
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
+        api.setClient(newClient);
+        emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
+        expect(listener).toHaveBeenCalledOnce();
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({ content: { current: true } }));
+        unsubscribe();
+    });
+
+    it("keeps subscriptions independent and makes unsubscribe permanent", () => {
+        const oldClient = stubClient();
+        const on = vi.spyOn(oldClient, "on");
+        const api = new ToDeviceApi();
+        const first = vi.fn();
+        const second = vi.fn();
+        const unsubscribeFirst = api.onMessage(MESSAGE_TYPE, first);
+        const unsubscribeSecond = api.onMessage(MESSAGE_TYPE, second);
+        expect(on).toHaveBeenCalledTimes(1);
+
+        unsubscribeFirst();
+        unsubscribeFirst();
+        emitMessage(oldClient, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
+        expect(first).not.toHaveBeenCalled();
+        expect(second).toHaveBeenCalledOnce();
+
+        const newClient = createTestClient();
+        const off = vi.spyOn(newClient, "off");
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
+        api.setClient(newClient);
+        emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
+        expect(first).not.toHaveBeenCalled();
+        expect(second).toHaveBeenCalledTimes(2);
+
+        unsubscribeSecond();
+        expect(off).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
+    });
+
+    it("isolates a throwing module listener from other subscribers", () => {
+        const client = stubClient();
+        const api = new ToDeviceApi();
+        const logError = vi.spyOn(logger, "error").mockImplementation(() => {});
+        const unsubscribeThrowing = api.onMessage(MESSAGE_TYPE, () => {
+            throw new Error("module details");
+        });
+        const listener = vi.fn();
+        const unsubscribeOther = api.onMessage(MESSAGE_TYPE, listener);
+
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
+
+        expect(listener).toHaveBeenCalledOnce();
+        expect(logError).toHaveBeenCalledWith("To-device module listener failed");
+        unsubscribeThrowing();
+        unsubscribeOther();
+    });
+
+    it("stops delivery to remaining listeners if a callback logs out", () => {
+        const client = stubClient();
+        const api = new ToDeviceApi();
+        const second = vi.fn();
+        api.onMessage(MESSAGE_TYPE, () => api.setClient(null));
+        api.onMessage(MESSAGE_TYPE, second);
+
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
+
+        expect(second).not.toHaveBeenCalled();
+    });
+
+    it("starts a listener added during delivery with the next message", () => {
+        const client = stubClient();
+        const api = new ToDeviceApi();
+        const lateListener = vi.fn();
+        api.onMessage(MESSAGE_TYPE, () => api.onMessage(MESSAGE_TYPE, lateListener));
+
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { first: true });
+        expect(lateListener).not.toHaveBeenCalled();
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { second: true });
+        expect(lateListener).toHaveBeenCalledOnce();
+    });
+
+    it.each(["user", "device"] as const)("stops old delivery when the session %s changes", (changedIdentity) => {
+        const client = stubClient();
+        const api = new ToDeviceApi();
+        const off = vi.spyOn(client, "off");
+        const listener = vi.fn();
+        api.onMessage(MESSAGE_TYPE, listener);
 
         if (changedIdentity === "user") {
             vi.mocked(client.getUserId).mockReturnValue("@other:example.org");
         } else {
             vi.mocked(client.getDeviceId).mockReturnValue("OTHER_DEVICE");
         }
-        emitResponse(client, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: requestId });
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
 
-        await expect(rejection).resolves.toMatchObject({ message: "Matrix session ended" });
-    });
-
-    it("rejects old work when the current client changes and sends new requests through the replacement", async () => {
-        const oldClient = stubClient();
-        const api = new ToDeviceApi();
-        const off = vi.spyOn(oldClient, "off");
-        const response = api.request(request());
-        const rejection = response.catch((error: unknown) => error);
-
-        const newClient = createTestClient();
-        const on = vi.spyOn(newClient, "on");
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
-
-        const oldRequestId = vi.mocked(oldClient.sendToDevice).mock.calls[0]![2]!;
-        emitResponse(oldClient, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: oldRequestId });
-        await expect(rejection).resolves.toMatchObject({ message: "Matrix session ended" });
+        expect(listener).not.toHaveBeenCalled();
         expect(off).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
-
-        const newResponse = api.request(request());
-        expect(on).toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
-        const newRequestId = vi.mocked(newClient.sendToDevice).mock.calls[0]![2]!;
-        emitResponse(oldClient, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: newRequestId, wrongClient: true });
-        emitResponse(newClient, RESPONSE_TYPE, RECIPIENT_USER_ID, { request_id: newRequestId, correctClient: true });
-        await expect(newResponse).resolves.toMatchObject({ correctClient: true });
     });
 
-    it("validates request inputs before sending", async () => {
+    it("reattaches a subscription when the device changes on the same client", () => {
         const client = stubClient();
         const api = new ToDeviceApi();
-        const invalidRequests = [
-            request({ recipientUserId: "not-a-user-id" }),
-            request({ requestType: " " }),
-            request({ responseType: "x".repeat(256) }),
-            request({ content: [] as unknown as Record<string, unknown> }),
-            request({ content: new Date() as unknown as Record<string, unknown> }),
-            request({ timeoutMs: Number.NaN }),
-            request({ timeoutMs: 1.5 }),
-            request({ timeoutMs: 0 }),
-            request({ timeoutMs: 60_001 }),
-        ];
+        const listener = vi.fn();
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
 
-        for (const invalidRequest of invalidRequests) {
-            await expect(api.request(invalidRequest)).rejects.toThrow();
-        }
-        expect(client.sendToDevice).not.toHaveBeenCalled();
+        vi.mocked(client.getDeviceId).mockReturnValue("NEW_DEVICE");
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { stale: true });
+        expect(listener).not.toHaveBeenCalled();
+
+        api.setClient(client);
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
+        expect(listener).toHaveBeenCalledOnce();
+        unsubscribe();
     });
 
-    it("rejects requests when no active session is available", async () => {
-        stubClient();
+    it("does not deliver events from a replaced client", () => {
+        const oldClient = stubClient();
+        const api = new ToDeviceApi();
+        const listener = vi.fn();
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+        const newClient = createTestClient();
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
+
+        emitMessage(oldClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { stale: true });
+        expect(listener).not.toHaveBeenCalled();
+
+        api.setClient(newClient);
+        emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
+        expect(listener).toHaveBeenCalledOnce();
+        unsubscribe();
+    });
+
+    it("ignores an old-client callback already queued during replacement", () => {
+        const oldClient = stubClient();
+        const newClient = createTestClient();
+        const get = vi.spyOn(MatrixClientPeg, "get");
+        const api = new ToDeviceApi();
+        const listener = vi.fn();
+        oldClient.once(ClientEvent.ReceivedToDeviceMessage, () => {
+            get.mockReturnValue(newClient);
+            api.setClient(newClient);
+        });
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+
+        emitMessage(oldClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { stale: true });
+        expect(listener).not.toHaveBeenCalled();
+
+        emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
+        expect(listener).toHaveBeenCalledOnce();
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({ content: { current: true } }));
+        unsubscribe();
+    });
+
+    it("ignores a callback from an earlier attachment to the same client", () => {
+        const client = stubClient();
+        const api = new ToDeviceApi();
+        const listener = vi.fn();
+        client.once(ClientEvent.ReceivedToDeviceMessage, () => api.setClient(client));
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { stale: true });
+        expect(listener).not.toHaveBeenCalled();
+
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
+        expect(listener).toHaveBeenCalledOnce();
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({ content: { current: true } }));
+        unsubscribe();
+    });
+
+    it("validates subscription inputs while allowing a missing session", async () => {
+        const client = stubClient();
         vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
         const api = new ToDeviceApi();
-
-        await expect(api.request(request())).rejects.toThrow("No active Matrix session");
+        const on = vi.spyOn(client, "on");
+        expect(() => api.onMessage(" ", vi.fn())).toThrow("Invalid to-device event type");
+        expect(() => api.onMessage("x".repeat(256), vi.fn())).toThrow("Invalid to-device event type");
+        expect(() => api.onMessage(MESSAGE_TYPE, null as unknown as () => void)).toThrow("Invalid to-device listener");
+        expect(() => api.onMessage(MESSAGE_TYPE, vi.fn())).not.toThrow();
+        expect(on).not.toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
+        await expect(api.sendMessage(outgoing())).rejects.toThrow("No active Matrix session");
     });
 });

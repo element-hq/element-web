@@ -11,107 +11,142 @@ import {
     type ReceivedToDeviceMessage,
     type SendToDeviceContentMap,
 } from "matrix-js-sdk/src/matrix";
-import { type ToDeviceApi as IToDeviceApi, type ToDeviceRequest } from "@element-hq/element-web-module-api";
+import { logger } from "matrix-js-sdk/src/logger";
+import {
+    type IncomingToDeviceMessage,
+    type OutgoingToDeviceMessage,
+    type ToDeviceApi as IToDeviceApi,
+} from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-const DEFAULT_TIMEOUT_MS = 10_000;
-const MAX_TIMEOUT_MS = 60_000;
 const MAX_EVENT_TYPE_LENGTH = 255;
+const MAX_DEVICE_ID_LENGTH = 255;
 
 type MatrixSessionIdentity = { readonly userId: string; readonly deviceId: string };
+type Subscription = {
+    readonly type: string;
+    readonly listener: (message: IncomingToDeviceMessage) => void;
+};
 
-/** Sends correlated to-device requests through the current Matrix client. */
+/** Sends to-device messages and keeps module subscriptions across Matrix sessions. */
 export class ToDeviceApi implements IToDeviceApi {
-    /** Send a request and resolve with the matching response content. */
-    public request = async (request: ToDeviceRequest): Promise<unknown> => {
-        const timeoutMs = this.validateRequest(request);
-        const client = MatrixClientPeg.get();
-        const session = client && this.getSessionIdentity(client);
-        if (!client || !session) {
+    private readonly subscriptions = new Set<Subscription>();
+    private client: MatrixClient | null = MatrixClientPeg.get();
+    private session: MatrixSessionIdentity | null = this.client && this.getSessionIdentity(this.client);
+    private receivedListener: ((payload: ReceivedToDeviceMessage) => void) | null = null;
+
+    /** Send one message without waiting for a response. */
+    public sendMessage = async (message: OutgoingToDeviceMessage): Promise<void> => {
+        this.validateMessage(message);
+        const client = this.client;
+        const session = this.session;
+        if (!client || !session || !this.isCurrentSession(client, session)) {
             throw new Error("No active Matrix session");
         }
 
-        const requestId = globalThis.crypto.randomUUID();
-        const content = {
-            ...request.content,
-            request_id: requestId,
-            requesting_device_id: session.deviceId,
-        };
-        const contentMap: SendToDeviceContentMap = new Map([[request.recipientUserId, new Map([["*", content]])]]);
-
-        return new Promise((resolve, reject) => {
-            let settled = false;
-            const cleanup = (): void => {
-                clearTimeout(timer);
-                client.off(ClientEvent.ReceivedToDeviceMessage, onResponse);
-            };
-            const fail = (error: Error): void => {
-                if (settled) return;
-                settled = true;
-                cleanup();
-                reject(error);
-            };
-            const onResponse = (payload: ReceivedToDeviceMessage): void => {
-                if (settled) return;
-                if (!this.isCurrentSession(client, session)) {
-                    fail(new Error("Matrix session ended"));
-                    return;
-                }
-
-                const message = payload?.message;
-                if (
-                    !message ||
-                    message.type !== request.responseType ||
-                    message.sender !== request.recipientUserId ||
-                    !this.isRecord(message.content) ||
-                    message.content.request_id !== requestId
-                ) {
-                    return;
-                }
-
-                settled = true;
-                cleanup();
-                resolve(message.content);
-            };
-            const timer = setTimeout(() => {
-                fail(
-                    new Error(
-                        this.isCurrentSession(client, session) ? "To-device request timed out" : "Matrix session ended",
-                    ),
-                );
-            }, timeoutMs);
-
-            client.on(ClientEvent.ReceivedToDeviceMessage, onResponse);
-            try {
-                void client.sendToDevice(request.requestType, contentMap, requestId).catch(() => {
-                    fail(new Error("Failed to send to-device request"));
-                });
-            } catch {
-                fail(new Error("Failed to send to-device request"));
-            }
-        });
+        const contentMap: SendToDeviceContentMap = new Map([
+            [message.recipientUserId, new Map([[message.recipientDeviceId, message.content]])],
+        ]);
+        try {
+            await client.sendToDevice(message.type, contentMap);
+        } catch {
+            throw new Error("Failed to send to-device message");
+        }
     };
 
-    private validateRequest(request: ToDeviceRequest): number {
-        if (!request || typeof request !== "object") {
-            throw new Error("Invalid to-device request");
-        }
-        if (typeof request.recipientUserId !== "string" || !/^@[^:\s]+:[^\s]+$/u.test(request.recipientUserId)) {
-            throw new Error("Invalid to-device recipient");
-        }
-        if (!this.isValidEventType(request.requestType) || !this.isValidEventType(request.responseType)) {
+    /** Register a listener that follows the active Matrix session until unsubscribed. */
+    public onMessage = (type: string, listener: (message: IncomingToDeviceMessage) => void): (() => void) => {
+        if (!this.isValidEventType(type)) {
             throw new Error("Invalid to-device event type");
         }
-        if (!this.isPlainRecord(request.content)) {
-            throw new Error("Invalid to-device content");
+        if (typeof listener !== "function") {
+            throw new Error("Invalid to-device listener");
         }
 
-        const timeoutMs = request.timeoutMs === undefined ? DEFAULT_TIMEOUT_MS : request.timeoutMs;
-        if (!Number.isInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_TIMEOUT_MS) {
-            throw new Error("Invalid to-device timeout");
+        const subscription: Subscription = { type, listener };
+        this.subscriptions.add(subscription);
+        try {
+            this.attach();
+        } catch (error) {
+            this.subscriptions.delete(subscription);
+            throw error;
         }
-        return timeoutMs;
+
+        return (): void => {
+            if (!this.subscriptions.delete(subscription)) return;
+            if (this.subscriptions.size === 0) this.detach();
+        };
+    };
+
+    /** Set the current session client, or suspend delivery during logout. */
+    public setClient(client: MatrixClient | null): void {
+        this.detach();
+        this.client = client;
+        this.session = client && this.getSessionIdentity(client);
+        this.attach();
+    }
+
+    private onReceived(payload: ReceivedToDeviceMessage, client: MatrixClient, session: MatrixSessionIdentity): void {
+        if (this.client !== client || this.session !== session) return;
+        if (!this.isCurrentSession(client, session)) {
+            this.setClient(null);
+            return;
+        }
+
+        const message = payload?.message;
+        if (!message || typeof message.type !== "string" || typeof message.sender !== "string") return;
+
+        // A listener registered during delivery should start with the next message.
+        for (const subscription of Array.from(this.subscriptions)) {
+            if (this.client !== client || this.session !== session || !this.isCurrentSession(client, session)) break;
+            if (!this.subscriptions.has(subscription) || subscription.type !== message.type) continue;
+            try {
+                subscription.listener({ type: message.type, sender: message.sender, content: message.content });
+            } catch {
+                // A module listener must not interrupt delivery to other subscribers.
+                logger.error("To-device module listener failed");
+            }
+        }
+    }
+
+    private attach(): void {
+        if (this.receivedListener || this.subscriptions.size === 0 || !this.client || !this.session) return;
+        if (!this.isCurrentSession(this.client, this.session)) return;
+        const client = this.client;
+        const session = this.session;
+        const listener = (payload: ReceivedToDeviceMessage): void => this.onReceived(payload, client, session);
+        client.on(ClientEvent.ReceivedToDeviceMessage, listener);
+        this.receivedListener = listener;
+    }
+
+    private detach(): void {
+        if (!this.receivedListener || !this.client) return;
+        this.client.off(ClientEvent.ReceivedToDeviceMessage, this.receivedListener);
+        this.receivedListener = null;
+    }
+
+    private validateMessage(message: OutgoingToDeviceMessage): void {
+        if (!message || typeof message !== "object") {
+            throw new Error("Invalid to-device message");
+        }
+        if (typeof message.recipientUserId !== "string" || !/^@[^:\s]+:[^\s]+$/u.test(message.recipientUserId)) {
+            throw new Error("Invalid to-device recipient");
+        }
+        if (
+            typeof message.recipientDeviceId !== "string" ||
+            message.recipientDeviceId.length === 0 ||
+            message.recipientDeviceId.length > MAX_DEVICE_ID_LENGTH ||
+            (message.recipientDeviceId !== "*" && /[\p{Cc}\p{White_Space}]/u.test(message.recipientDeviceId))
+        ) {
+            throw new Error("Invalid to-device device");
+        }
+        if (!this.isValidEventType(message.type)) {
+            throw new Error("Invalid to-device event type");
+        }
+        if (!this.isPlainRecord(message.content)) {
+            throw new Error("Invalid to-device content");
+        }
     }
 
     private isValidEventType(eventType: unknown): eventType is string {
@@ -124,13 +159,9 @@ export class ToDeviceApi implements IToDeviceApi {
     }
 
     private isPlainRecord(value: unknown): value is Record<string, unknown> {
-        if (!this.isRecord(value)) return false;
+        if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
         const prototype = Object.getPrototypeOf(value);
         return prototype === Object.prototype || prototype === null;
-    }
-
-    private isRecord(value: unknown): value is Record<string, unknown> {
-        return typeof value === "object" && value !== null && !Array.isArray(value);
     }
 
     private getSessionIdentity(client: MatrixClient): MatrixSessionIdentity | null {

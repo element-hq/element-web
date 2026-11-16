@@ -8,12 +8,21 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi } from "vitest";
-import { stubClient } from "test-utils";
+import { ClientEvent, type MatrixClient, type ReceivedToDeviceMessage } from "matrix-js-sdk/src/matrix";
+import { createTestClient, stubClient } from "test-utils";
 
 import { ClientApi } from "./ClientApi";
 import { Room } from "./models/Room";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+
+function emitMessage(client: MatrixClient): void {
+    client.emit(ClientEvent.ReceivedToDeviceMessage, {
+        message: { type: "org.example.message", sender: "@sender:example.org", content: {} },
+        encryptionInfo: null,
+    } as ReceivedToDeviceMessage);
+}
 
 describe("ClientApi", () => {
     it("should return module room from getRoom()", () => {
@@ -22,6 +31,34 @@ describe("ClientApi", () => {
         const moduleRoom = client.getRoom("!foo:matrix.org");
         expect(moduleRoom).toBeInstanceOf(Room);
         expect(moduleRoom?.id).toStrictEqual("!foo:matrix.org");
+    });
+
+    it("keeps a receive-only subscription across login and logout", () => {
+        const firstClient = stubClient();
+        const get = vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
+        const dispatcher = new MatrixDispatcher();
+        const client = new ClientApi(dispatcher);
+        const listener = vi.fn();
+        const unsubscribe = client.toDevice.onMessage("org.example.message", listener);
+
+        get.mockReturnValue(firstClient);
+        dispatcher.dispatch({ action: Action.OnLoggedIn, client: firstClient }, true);
+        emitMessage(firstClient);
+        expect(listener).toHaveBeenCalledOnce();
+
+        dispatcher.dispatch({ action: Action.OnLoggedOut }, true);
+        emitMessage(firstClient);
+        expect(listener).toHaveBeenCalledOnce();
+
+        const secondClient = createTestClient();
+        get.mockReturnValue(secondClient);
+        dispatcher.dispatch({ action: Action.OnLoggedIn, client: secondClient }, true);
+        emitMessage(secondClient);
+        expect(listener).toHaveBeenCalledTimes(2);
+
+        unsubscribe();
+        emitMessage(secondClient);
+        expect(listener).toHaveBeenCalledTimes(2);
     });
 
     describe("waitForClientStarted", () => {
