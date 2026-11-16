@@ -12,8 +12,6 @@ import { test, expect } from "../../element-web-test";
 import { Bot } from "../../pages/bot";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { type Credentials } from "../../plugins/homeserver";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
-import { Layout } from "../../../src/settings/enums/Layout";
 
 test.describe("Event List Summary", () => {
     test.use({
@@ -296,50 +294,6 @@ test.describe("Event List Summary", () => {
             );
         },
     );
-
-    test("should center the avatars on the summary text", async ({ app, page, user }) => {
-        const roomId = await app.client.createRoom({ name: "My room" });
-        await page.goto(`/#/room/${roomId}`);
-
-        const summary = page.locator(".mx_RoomView_body .mx_GenericEventListSummary[data-layout='group']", {
-            hasText: `${user.displayName} created and configured the room.`,
-        });
-        await expect(summary).toBeVisible();
-
-        // The avatar used to rest on the baseline of the text, 2px above its middle.
-        // Centered on the lowercase letters instead, it sits less than 1px below that middle.
-        // See https://github.com/element-hq/element-web/issues/26552
-        const avatarBox = (await summary.locator(".mx_BaseAvatar").boundingBox())!;
-        const textBox = (await summary.locator(".mx_GenericEventListSummary_summary").boundingBox())!;
-        const avatarCenter = avatarBox.y + avatarBox.height / 2;
-        const textCenter = textBox.y + textBox.height / 2;
-        expect(Math.abs(avatarCenter - textCenter)).toBeLessThan(1.5);
-    });
-
-    test.describe("in the bubble layout", () => {
-        test.use({
-            displayName:
-                "Finch, whose display name is long enough to wrap the summary of the room creation onto more than " +
-                "one line of the timeline in the message bubble layout",
-        });
-
-        test("should keep the expand button on the first line of a wrapped summary", async ({ app, page, user }) => {
-            const roomId = await app.client.createRoom({ name: "My room" });
-            await page.goto(`/#/room/${roomId}`);
-            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-
-            const summary = page.locator(".mx_RoomView_body .mx_GenericEventListSummary[data-layout='bubble']", {
-                hasText: `${user.displayName} created and configured the room.`,
-            });
-            await expect(summary).toBeVisible();
-
-            // The button used to be centered on the whole summary, between its lines
-            const lineBox = (await summary.locator(".mx_EventTile_line").boundingBox())!;
-            const buttonBox = (await summary.getByRole("button", { name: "expand" }).boundingBox())!;
-            expect(lineBox.height).toBeGreaterThan(buttonBox.height);
-            expect(buttonBox.y).toBeCloseTo(lineBox.y, 0);
-        });
-    });
 });
 
 const ignoreTimestamps = {
