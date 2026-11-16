@@ -508,15 +508,15 @@ describe("ElementWidgetDriver", () => {
         });
 
         it("delegates the delayed leave event to the homeserver", async () => {
-            client._unstable_delegateDelayedLeave.mockResolvedValue({});
+            client.delegateDelayedLeave.mockResolvedValue({});
 
             await expect(driver.delegateRtcLivekitDelayedLeave(request)).resolves.toEqual({});
-            expect(client._unstable_delegateDelayedLeave).toHaveBeenCalledWith(request);
+            expect(client.delegateDelayedLeave).toHaveBeenCalledWith(request);
         });
 
         it("propagates errors from the homeserver", async () => {
             const error = new MatrixError({ errcode: "M_UNRECOGNIZED", error: "Unrecognized request" }, 404);
-            client._unstable_delegateDelayedLeave.mockRejectedValue(error);
+            client.delegateDelayedLeave.mockRejectedValue(error);
 
             await expect(driver.delegateRtcLivekitDelayedLeave(request)).rejects.toBe(error);
         });

@@ -322,7 +322,7 @@ export function createTestClient(): MatrixClient {
         _unstable_sendStickyDelayedEvent: vi.fn(),
         getRTCTransports: vi.fn(),
         _unstable_getLivekitToken: vi.fn(),
-        _unstable_delegateDelayedLeave: vi.fn(),
+        delegateDelayedLeave: vi.fn(),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
             get: vi.fn().mockReturnValue([]),

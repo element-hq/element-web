@@ -788,7 +788,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         data: IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
     ): Promise<IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData> {
         // Errors are re-thrown so that the widget can detect homeservers without support (M_UNRECOGNIZED)
-        await MatrixClientPeg.safeGet()._unstable_delegateDelayedLeave(data);
+        await MatrixClientPeg.safeGet().delegateDelayedLeave(data);
         return {};
     }
 
