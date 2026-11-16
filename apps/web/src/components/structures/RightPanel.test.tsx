@@ -21,7 +21,6 @@ import { Action } from "../../dispatcher/actions";
 import dis from "../../dispatcher/dispatcher";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -170,9 +169,6 @@ describe("RightPanel", () => {
             },
         });
 
-        // The card is only valid while the lab is on, so the store would otherwise drop it.
-        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
-
         await spinUpStores();
 
         render(
@@ -215,9 +211,6 @@ describe("RightPanel", () => {
             },
         });
 
-        // The card is only valid while the lab is on, so the store would otherwise drop it.
-        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
-
         await spinUpStores();
 
         render(
@@ -245,9 +238,6 @@ describe("RightPanel", () => {
     it("renders the document viewer for a file that does not come from an event", async () => {
         const room = mkRoom(cli, "r1");
         cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? room : null));
-
-        // The card is only valid while the lab is on, so the store would otherwise drop it.
-        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
 
         await spinUpStores();
 
