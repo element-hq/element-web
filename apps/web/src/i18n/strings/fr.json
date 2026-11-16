@@ -1509,6 +1509,8 @@
         "shift": "Maj",
         "space": "Espace",
         "switch_to_space": "Basculer vers l'espace par numéro",
+        "timeline_navigate_down": "Descendre dans la discussion",
+        "timeline_navigate_up": "Remonter dans la discussion",
         "toggle_hidden_events": "Changer la visibilité de l’évènement caché",
         "toggle_microphone_mute": "Activer/désactiver le micro",
         "toggle_right_panel": "Afficher/masquer le panneau de droite",
