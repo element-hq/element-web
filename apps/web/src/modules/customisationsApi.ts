@@ -5,10 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { UIComponent, CustomisationsApi as ICustomisationsApi } from "@element-hq/element-web-module-api";
+import type {
+    UIComponent,
+    CustomisationsApi as ICustomisationsApi,
+    Unregister,
+} from "@element-hq/element-web-module-api";
+
+import { createUnregister } from "./utils/unregister";
+
+type ShouldShowComponentFn = (component: UIComponent) => boolean | void;
 
 export class CustomisationsApi implements ICustomisationsApi {
-    private shouldShowComponentFunctions = new Set<(component: UIComponent) => boolean | void>();
+    // Each registration gets its own entry object rather than adding `fn` itself, so registering the
+    // same function twice gives two entries and unregistering one leaves the other in place.
+    private readonly shouldShowComponentFunctions = new Set<{ fn: ShouldShowComponentFn }>();
 
     /**
      * Method to register a callback which can affect whether a given component is drawn or not.
@@ -16,8 +26,12 @@ export class CustomisationsApi implements ICustomisationsApi {
      *   If undefined will defer to the next callback, ultimately falling through to `true` if none return false.
      *   The next callback is decided in FIFO call order to this register function.
      */
-    public registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void {
-        this.shouldShowComponentFunctions.add(fn);
+    public registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): Unregister {
+        const entry = { fn };
+        this.shouldShowComponentFunctions.add(entry);
+        return createUnregister(() => {
+            this.shouldShowComponentFunctions.delete(entry);
+        });
     }
 
     /**
@@ -25,7 +39,7 @@ export class CustomisationsApi implements ICustomisationsApi {
      * @param component - the component to check
      */
     public shouldShowComponent(component: UIComponent): boolean | void {
-        for (const fn of this.shouldShowComponentFunctions) {
+        for (const { fn } of this.shouldShowComponentFunctions) {
             const v = fn(component);
             if (typeof v === "boolean") {
                 return v;
