@@ -157,9 +157,9 @@ export type Container = "top" | "right" | "center";
 
 // @alpha
 export interface CustomComponentsApi {
-    registerComposerPreview(filterFn: (composerText: string, roomId: string) => boolean, renderer: CustomComposerPreviewRenderFunction): void;
+    registerComposerPreview(filterFn: (composerText: string, roomId: string) => boolean, renderer: CustomComposerPreviewRenderFunction): Unregister;
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
-    registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
+    registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): Unregister;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }
 
@@ -179,7 +179,7 @@ export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<
 
 // @alpha
 export interface CustomisationsApi {
-    registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): void;
+    registerShouldShowComponent(fn: (this: void, component: UIComponent) => boolean | void): Unregister;
 }
 
 // @alpha
@@ -288,7 +288,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
-    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): Unregister;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
@@ -517,9 +517,12 @@ export const enum UIComponent {
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
+// @public
+export type Unregister = () => void;
+
 // @alpha
 export interface UrlPreviewApi {
-    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): void;
+    registerPreviewHandler(regex: RegExp, handler: UrlPreviewHandler): Unregister;
 }
 
 // Warning: (ae-forgotten-export) The symbol "UrlPreview" needs to be exported by the entry point index.d.ts
