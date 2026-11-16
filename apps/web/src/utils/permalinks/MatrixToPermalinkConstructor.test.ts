@@ -12,7 +12,7 @@ import MatrixToPermalinkConstructor from "./MatrixToPermalinkConstructor";
 import { PermalinkParts } from "./PermalinkConstructor";
 
 describe("MatrixToPermalinkConstructor", () => {
-    const peramlinkConstructor = new MatrixToPermalinkConstructor();
+    const permalinkConstructor = new MatrixToPermalinkConstructor();
 
     describe("parsePermalink", () => {
         it.each([
@@ -20,7 +20,7 @@ describe("MatrixToPermalinkConstructor", () => {
             ["something that is not an URL", "hello"],
             ["should raise an error for a non-matrix.to URL", "https://example.com/#/@user:example.com"],
         ])("should raise an error for %s", (name: string, url: string) => {
-            expect(() => peramlinkConstructor.parsePermalink(url)).toThrow(
+            expect(() => permalinkConstructor.parsePermalink(url)).toThrow(
                 new Error("Does not appear to be a permalink"),
             );
         });
@@ -30,7 +30,7 @@ describe("MatrixToPermalinkConstructor", () => {
             ["(http)", "http://matrix.to/#/@user:example.com"],
             ["without protocol", "matrix.to/#/@user:example.com"],
         ])("should parse an MXID %s", (name: string, url: string) => {
-            expect(peramlinkConstructor.parsePermalink(url)).toEqual(
+            expect(permalinkConstructor.parsePermalink(url)).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
@@ -39,7 +39,7 @@ describe("MatrixToPermalinkConstructor", () => {
             ["an action", "?action=chat"],
             ["a custom parameter", "?org.example.key=value"],
         ])("should leave %s out of the MXID", (name: string, query: string) => {
-            expect(peramlinkConstructor.parsePermalink(`https://matrix.to/#/@user:example.com${query}`)).toEqual(
+            expect(permalinkConstructor.parsePermalink(`https://matrix.to/#/@user:example.com${query}`)).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
@@ -47,7 +47,7 @@ describe("MatrixToPermalinkConstructor", () => {
 
     describe("forRoom", () => {
         it("constructs a link given a room ID and via servers", () => {
-            expect(peramlinkConstructor.forRoom("!myroom:example.com", ["one.example.com", "two.example.com"])).toEqual(
+            expect(permalinkConstructor.forRoom("!myroom:example.com", ["one.example.com", "two.example.com"])).toEqual(
                 "https://matrix.to/#/!myroom:example.com?via=one.example.com&via=two.example.com",
             );
         });
@@ -56,7 +56,7 @@ describe("MatrixToPermalinkConstructor", () => {
     describe("forEvent", () => {
         it("constructs a link given an event ID, room ID and via servers", () => {
             expect(
-                peramlinkConstructor.forEvent("!myroom:example.com", "$event4", ["one.example.com", "two.example.com"]),
+                permalinkConstructor.forEvent("!myroom:example.com", "$event4", ["one.example.com", "two.example.com"]),
             ).toEqual("https://matrix.to/#/!myroom:example.com/$event4?via=one.example.com&via=two.example.com");
         });
     });
