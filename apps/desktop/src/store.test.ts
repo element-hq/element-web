@@ -275,19 +275,17 @@ describe("Store secret encryption (safeStorage)", () => {
 
     it("re-encrypts a secret when safeStorage reports the key has been rotated", async () => {
         await store.setSecret(KEY, "s3cr3t");
-        const stored = backing.get("safeStorage.@alice:example-org|DEVICEID");
 
         // safeStorage decrypted with the old key and wants the secret written back under the new one.
         vi.mocked(safeStorage.decryptStringAsync).mockImplementationOnce(() =>
             Promise.resolve({ result: "s3cr3t", shouldReEncrypt: true }),
         );
-        vi.mocked(safeStorage.encryptStringAsync).mockImplementationOnce(() =>
-            Promise.resolve(Buffer.from(`${PREFIX}rotated:s3cr3t`, "utf8")),
-        );
+        const rotated = Buffer.from("rotated", "utf8");
+        vi.mocked(safeStorage.encryptStringAsync).mockResolvedValueOnce(rotated);
 
         await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
-        expect(backing.get("safeStorage.@alice:example-org|DEVICEID")).not.toBe(stored);
-        await expect(store.getSecret(KEY)).resolves.toBe("rotated:s3cr3t");
+        expect(safeStorage.encryptStringAsync).toHaveBeenLastCalledWith("s3cr3t");
+        expect(backing.get(STORED_KEY)).toBe(rotated.toString("base64"));
     });
 
     it("still returns the secret when re-encrypting it fails", async () => {
@@ -300,6 +298,7 @@ describe("Store secret encryption (safeStorage)", () => {
         );
 
         await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+        expect(backing.get(STORED_KEY)).toBe(encrypted("s3cr3t"));
     });
 
     describe("isSecretUndecryptable", () => {
@@ -346,11 +345,14 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(safeStorage.decryptString).toHaveBeenCalled();
         });
 
-        it("leaves the stored ciphertext as it is, so earlier versions of the app can still read it", async () => {
+        it("re-encrypts them with the asynchronous API, which outlives the synchronous one", async () => {
             await store.getSecret(KEY);
 
-            expect(backing.get(STORED_KEY)).toBe(legacyEncrypted("s3cr3t"));
-            expect(safeStorage.encryptStringAsync).not.toHaveBeenCalled();
+            expect(backing.get(STORED_KEY)).toBe(encrypted("s3cr3t"));
+            // Now readable without the synchronous API.
+            vi.mocked(safeStorage.decryptString).mockClear();
+            await expect(store.getSecret(KEY)).resolves.toBe("s3cr3t");
+            expect(safeStorage.decryptString).not.toHaveBeenCalled();
         });
 
         it("is not reported as undecryptable", async () => {
@@ -585,6 +587,22 @@ describe("Store secret encryption (safeStorage)", () => {
             expect(backing.get("safeStorageBackendOverride")).toBe(true);
             expect(backing.has("safeStorageBackendMigrate")).toBe(false);
             expect(app.relaunch).toHaveBeenCalled();
+        });
+
+        it("does not re-encrypt any secret when the migration is deferred", async () => {
+            backing.set("safeStorage", { good: GOOD_CIPHERTEXT, bad: BAD_CIPHERTEXT });
+            backing.set("safeStorage.good", GOOD_CIPHERTEXT);
+            backing.set("safeStorage.bad", BAD_CIPHERTEXT);
+            // safeStorage asks for `good` to be re-encrypted, but `bad` aborts the migration.
+            vi.mocked(safeStorage.decryptStringAsync).mockResolvedValueOnce({
+                result: "goodsecret",
+                shouldReEncrypt: true,
+            });
+
+            await migrate();
+
+            expect(backing.get("safeStorage.good")).toBe(GOOD_CIPHERTEXT);
+            expect(safeStorage.encryptStringAsync).not.toHaveBeenCalled();
         });
     });
 

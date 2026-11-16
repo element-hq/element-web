@@ -221,7 +221,8 @@ class SafeStorageWriter extends StorageWriter {
         }
 
         const legacySecret = this.decryptLegacy(ciphertextBuffer);
-        if (legacySecret !== undefined) return legacySecret;
+        // Move the secret to the asynchronous API's key, as the synchronous API is going away.
+        if (legacySecret !== undefined) return { result: legacySecret, shouldReEncrypt: true };
 
         // The secret exists but cannot be decrypted in this session. Returning undefined here (as
         // we used to) is indistinguishable from "no secret stored", which makes callers create or
@@ -239,14 +240,16 @@ class SafeStorageWriter extends StorageWriter {
      * did (on KDE, "<app> Keys" rather than "Chromium Keys"), so it cannot decrypt secrets written by versions
      * of the app which used the synchronous API. See element-web#35802.
      *
-     * The stored ciphertext is left as it is, so earlier versions of the app can still read it.
+     * Secrets decrypted this way are re-encrypted with the asynchronous API when read through {@link get}, so
+     * they stay readable once the synchronous API is removed. Versions of the app which only use the
+     * synchronous API can no longer read them after that.
      *
      * @param ciphertext - The encrypted secret.
      * @returns The secret, or undefined if not on Linux or the synchronous API cannot decrypt it either.
      */
     private decryptLegacy(ciphertext: Buffer): string | undefined {
-        // TODO: the synchronous API is removed in Electron 46. Before upgrading, migrate these secrets to the
-        // asynchronous API, or they become unreadable.
+        // TODO: the synchronous API is removed in Electron 46. Secrets which have not been read (and so
+        // re-encrypted) by then become unreadable.
         if (process.platform !== "linux") return undefined;
         try {
             return safeStorage.decryptString(ciphertext);
