@@ -24,7 +24,7 @@ const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
 ];
 
 class RestrictedGuestsModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0 || ^2.0.0";
+    public static readonly moduleApiVersion = "^2.6.0";
 
     private config?: ModuleConfig;
 
