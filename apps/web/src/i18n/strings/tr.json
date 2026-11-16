@@ -1344,8 +1344,6 @@
         "bridge_state_workspace": "Çalışma alanı: <networkLink/>",
         "click_for_info": "Daha fazla bilgi için tıklayın",
         "currently_experimental": "Şu anda deneysel.",
-        "dynamic_room_predecessors": "Dinamik oda öncülleri",
-        "dynamic_room_predecessors_description": "MSC3946 etkinleştir (geç gelen oda arşivlerini desteklemek için)",
         "element_call_video_rooms": "Element Çağrısı video odaları",
         "exclude_insecure_devices": "Mesaj gönderirken/alırken güvenli olmayan cihazları hariç tut",
         "exclude_insecure_devices_description": "Bu mod etkinleştirildiğinde, şifrelenmiş mesajlar doğrulanmamış cihazlarla paylaşılmaz ve doğrulanmamış cihazlardan gelen mesajlar bir hata olarak gösterilir. Bu modu etkinleştirirseniz, cihazlarını doğrulamamış kullanıcılarla iletişim kuramayabileceğinizi unutmayın.",
@@ -2652,7 +2650,6 @@
             "web_session": "Ağ üzerinden oturum"
         },
         "show_avatar_changes": "Profil resmi değişikliklerini göster",
-        "show_breadcrumbs": "Oda listesinin üzerinde en son kullanılan odaları göster",
         "show_chat_effects": "Sohbet efektlerini göster (ör. konfeti animasyonları)",
         "show_displayname_changes": "Görüntü adı değişikliklerini göster",
         "show_join_leave": "Katılma/ayrılma mesajlarını göster (davetler/çıkarmalar/engellemeler etkilenmez)",

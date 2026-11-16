@@ -10,7 +10,7 @@
 import { it, describe, expect, vi } from "vitest";
 import { CallDirection, CallType } from "@element-hq/web-shared-components";
 import { EventType, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import { getMockedRtcDeclineEvent, getMockedRtcNotificationEvent } from "../../call-mocks";
 import { formatTime } from "../../../../../../../DateUtils";
@@ -22,7 +22,7 @@ describe("DmTombstoneCallTileViewModel", () => {
         const declineEvent = getMockedRtcDeclineEvent(mxEvent, "@alice:m.org");
         const getRelationsForEvent = vi.fn();
         const cli = stubClient();
-        const vm = new DmTombstoneCallTileViewModel({ mxEvent, getRelationsForEvent, cli });
+        const vm = tearDownAfterTest(new DmTombstoneCallTileViewModel({ mxEvent, getRelationsForEvent, cli }));
 
         // Without decline event, isCallDeclined = false
         expect(vm.getSnapshot().isCallDeclined).toStrictEqual(false);
@@ -44,7 +44,7 @@ describe("DmTombstoneCallTileViewModel", () => {
 
         const getRelationsForEvent = vi.fn();
         const cli = stubClient();
-        const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent });
+        const vm = tearDownAfterTest(new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent }));
         const { type } = vm.getSnapshot();
         expect(type).toStrictEqual(CallType.Voice);
     });
@@ -53,7 +53,7 @@ describe("DmTombstoneCallTileViewModel", () => {
         const mxEvent = getMockedRtcNotificationEvent("video", 1752583130365, 1752583130365);
         const getRelationsForEvent = vi.fn();
         const cli = stubClient();
-        const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent });
+        const vm = tearDownAfterTest(new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent }));
         const { type } = vm.getSnapshot();
         expect(type).toStrictEqual(CallType.Video);
     });
@@ -64,7 +64,7 @@ describe("DmTombstoneCallTileViewModel", () => {
             const getRelationsForEvent = vi.fn();
             const cli = stubClient();
             vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
-            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent });
+            const vm = tearDownAfterTest(new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent }));
             expect(vm.getSnapshot().callDirection).toStrictEqual(CallDirection.Outgoing);
         });
 
@@ -73,7 +73,7 @@ describe("DmTombstoneCallTileViewModel", () => {
             const getRelationsForEvent = vi.fn();
             const cli = stubClient();
             vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
-            const vm = new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent });
+            const vm = tearDownAfterTest(new DmTombstoneCallTileViewModel({ mxEvent, cli, getRelationsForEvent }));
             expect(vm.getSnapshot().callDirection).toStrictEqual(CallDirection.Incoming);
         });
     });

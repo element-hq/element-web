@@ -73,6 +73,15 @@ export const test = base.extend<TestFixtures>({
          * Ignore temporarily until we fix this.
          */
         axe = axe.exclude(".mx_Separator");
+        /**
+         * Enabled by default since axe-core 4.14. Many of our components (e.g. room list items) use an
+         * aria-label summary that cannot contain all of their visible text.
+         * Ignore temporarily until we rethink those accessible names.
+         */
+        const disableRules = axe.disableRules.bind(axe);
+        axe.disableRules = (rules: string | string[]) =>
+            disableRules([...(Array.isArray(rules) ? rules : [rules]), "label-content-name-mismatch"]);
+        axe = axe.disableRules([]);
         await use(axe);
     },
 

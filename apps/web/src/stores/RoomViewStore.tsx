@@ -679,6 +679,14 @@ export class RoomViewStore extends EventEmitter {
     }
 
     /**
+     * Stops the store listening to the dispatcher, so that nothing keeps it alive.
+     */
+    public destroy(): void {
+        this.dis?.unregister(this.dispatchToken);
+        this.dispatchToken = undefined;
+    }
+
+    /**
      * Reset which dispatcher should be used to listen for actions. The old dispatcher will be
      * unregistered.
      * @param dis The new dispatcher to use.

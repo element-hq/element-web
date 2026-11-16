@@ -12,3 +12,4 @@ export * from "./MessageEventPreview";
 export * from "./StickerEventPreview";
 export * from "./PollStartEventPreview";
 export * from "./ReactionEventPreview";
+export * from "./RTCNotificationEventPreview";

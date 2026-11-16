@@ -8,7 +8,7 @@
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from "vitest";
-import { createTestClient, flushPromises } from "test-utils";
+import { createTestClient, flushPromises, tearDownAfterTest } from "test-utils";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { DeleteKeyStorageViewModel } from "./DeleteKeyStorageViewModel";
@@ -27,7 +27,7 @@ describe("DeleteKeyStorageViewModel", () => {
     });
 
     it("starts idle", () => {
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         expect(vm.getSnapshot()).toEqual({ busy: false, failed: false });
     });
@@ -35,7 +35,7 @@ describe("DeleteKeyStorageViewModel", () => {
     it("stays busy until key storage is deleted, then finishes", async () => {
         const { promise, resolve } = Promise.withResolvers<void>();
         vi.mocked(matrixClient.getCrypto()!.disableKeyStorage).mockReturnValue(promise);
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         const confirmed = vm.confirm();
         expect(vm.getSnapshot().busy).toBe(true);
@@ -55,7 +55,7 @@ describe("DeleteKeyStorageViewModel", () => {
 
     it("fails without finishing if there is no crypto module", async () => {
         vi.spyOn(matrixClient, "getCrypto").mockReturnValue(undefined);
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         await vm.confirm();
 
@@ -66,7 +66,7 @@ describe("DeleteKeyStorageViewModel", () => {
     it("ignores cancel and a second confirm while busy", async () => {
         const { promise, resolve } = Promise.withResolvers<void>();
         const disable = vi.mocked(matrixClient.getCrypto()!.disableKeyStorage).mockReturnValue(promise);
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         const confirmed = vm.confirm();
         vm.cancel();
@@ -81,7 +81,7 @@ describe("DeleteKeyStorageViewModel", () => {
 
     it("shows the failure and stays open if deleting key storage fails", async () => {
         vi.mocked(matrixClient.getCrypto()!.disableKeyStorage).mockRejectedValue(new Error("boom"));
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         await vm.confirm();
 
@@ -93,7 +93,7 @@ describe("DeleteKeyStorageViewModel", () => {
 
     it("leaves key storage alone if recording the choice fails", async () => {
         vi.mocked(matrixClient.setAccountData).mockRejectedValue(new Error("boom"));
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         await vm.confirm();
 
@@ -102,7 +102,7 @@ describe("DeleteKeyStorageViewModel", () => {
     });
 
     it("finishes without deleting when cancelled", () => {
-        const vm = new DeleteKeyStorageViewModel({ matrixClient, onFinished });
+        const vm = tearDownAfterTest(new DeleteKeyStorageViewModel({ matrixClient, onFinished }));
 
         vm.cancel();
 

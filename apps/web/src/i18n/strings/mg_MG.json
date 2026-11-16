@@ -1207,8 +1207,6 @@
         "bridge_state_workspace": "Toeram-piasana:<networkLink/>",
         "click_for_info": "Tsindrio raha mila fanazavana fanampiny",
         "currently_experimental": "Andrana amin'izao fotoana izao.",
-        "dynamic_room_predecessors": "Efitrano dinamika taloha",
-        "dynamic_room_predecessors_description": "Alefaso ny MSC3946 (mba hanohanana ny tahirin'ny efitrano fahatongavana tara)",
         "element_call_video_rooms": "Efitrano fandraisan'orinan-tsary",
         "experimental_description": "Mahatsiaro andrana? Andramo ny hevitray farany amin'ny fampandrosoana. Tsy vita ireo endri-javatra ireo; mety hikorontana izy ireo, mety hiova, na mety ho latsaka tanteraka.<a> Hamantatra bebe kokoa</a> .",
         "experimental_section": "Fijery mialoha",
@@ -2372,7 +2370,6 @@
             "web_session": "Zotra amin'ny Web"
         },
         "show_avatar_changes": "Asehoy ny fanovana sari-mpahamatarana",
-        "show_breadcrumbs": "Asehoy ny hitsin-dàlana mankany amin'ireo efitrano hita vao haingana eo ambonin'ny lisitry ny efitrano",
         "show_chat_effects": "Asehoy ny fiantraikan'ny chat (anima rehefa mandray oh confetti)",
         "show_displayname_changes": "Asehoy ny fanovana anarana aseho",
         "show_join_leave": "Asehoy ny hafatra miaraka / miala (manasa / manala / mandrara tsy misy fiantraikany)",

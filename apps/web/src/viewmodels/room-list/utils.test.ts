@@ -10,7 +10,7 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { createTestClient, mkStubRoom } from "test-utils";
 
-import type { MatrixClient, Room, RoomState } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type Room, type RoomState } from "matrix-js-sdk/src/matrix";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -59,13 +59,22 @@ describe("utils", () => {
             expect(hasCreateRoomRights(matrixClient)).toBe(true);
         });
 
-        it("should return false in space when UIComponent.CreateRooms is enabled and the user doesn't have the rights", () => {
+        it("should return true in space when the user may add children to the space", () => {
             vi.mocked(shouldShowComponent).mockReturnValue(true);
             vi.spyOn(space.getLiveTimeline(), "getState").mockReturnValue({
-                maySendStateEvent: vi.fn().mockReturnValue(true),
+                maySendStateEvent: vi.fn((eventType: string) => eventType === EventType.SpaceChild),
             } as unknown as RoomState);
 
-            expect(hasCreateRoomRights(matrixClient)).toBe(true);
+            expect(hasCreateRoomRights(matrixClient, space)).toBe(true);
+        });
+
+        it("should return false in space when the user may not add children to the space", () => {
+            vi.mocked(shouldShowComponent).mockReturnValue(true);
+            vi.spyOn(space.getLiveTimeline(), "getState").mockReturnValue({
+                maySendStateEvent: vi.fn((eventType: string) => eventType !== EventType.SpaceChild),
+            } as unknown as RoomState);
+
+            expect(hasCreateRoomRights(matrixClient, space)).toBe(false);
         });
     });
 

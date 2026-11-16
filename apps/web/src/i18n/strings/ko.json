@@ -1459,8 +1459,6 @@
         "bridge_state_workspace": "작업 공간:<networkLink/>",
         "click_for_info": "자세한 내용을 보려면 클릭하세요",
         "currently_experimental": "현재 실험 중입니다.",
-        "dynamic_room_predecessors": "동적 채팅방 이전 항목",
-        "dynamic_room_predecessors_description": "MSC3946 활성화 (지연 도착 채팅방 아카이브 지원)",
         "element_call_video_rooms": "Element Call 영상 채팅방",
         "encrypted_state_events": "암호화된 상태 이벤트(MSC4362)",
         "encrypted_state_events_description": "상태 이벤트 암호화 실험 기능을 활성화하여 방 이름, 주제 등의 메타데이터를 서버로부터 숨깁니다. 단, 나중에 방에 참여하는 사용자나 MSC4362를 지원하지 않는 클라이언트 사용자에게는 이 정보가 표시되지 않습니다.",
@@ -2822,7 +2820,6 @@
             "web_session": "웹 세션"
         },
         "show_avatar_changes": "프로필 사진 변경 사항 표시",
-        "show_breadcrumbs": "채팅방 목록 위에 최근 본 채팅방 바로가기를 표시",
         "show_chat_effects": "채팅 효과 표시 (메세지 전송시 애니메이션 효과등)",
         "show_displayname_changes": "표시 이름 변경 사항 보이기",
         "show_join_leave": "입장/퇴장 메시지 표시 (초대/강제 퇴장/차단에는 영향 없음)",

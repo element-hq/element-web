@@ -188,7 +188,7 @@ describe("RightPanel", () => {
         await rpsUpdated;
 
         RightPanelStore.instance.setCard(
-            { phase: RightPanelPhases.DocumentViewer, state: { documentViewerEvent: pdfEvent } },
+            { phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { event: pdfEvent } } },
             true,
             "r1",
         );
@@ -233,12 +233,46 @@ describe("RightPanel", () => {
         await rpsUpdated;
 
         RightPanelStore.instance.setCard(
-            { phase: RightPanelPhases.DocumentViewer, state: { documentViewerEvent: markdownEvent } },
+            { phase: RightPanelPhases.DocumentViewer, state: { documentViewer: { event: markdownEvent } } },
             true,
             "r1",
         );
 
         // As above: the header proves the card picked up this event.
         await waitFor(() => expect(screen.getByRole("heading", { name: "README.md" })).toBeInTheDocument());
+    });
+
+    it("renders the document viewer for a file that does not come from an event", async () => {
+        const room = mkRoom(cli, "r1");
+        cli.getRoom.mockImplementation((roomId) => (roomId === "r1" ? room : null));
+
+        // The card is only valid while the lab is on, so the store would otherwise drop it.
+        await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true);
+
+        await spinUpStores();
+
+        render(
+            <RightPanel
+                room={room}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />,
+        );
+
+        const rpsUpdated = waitForRpsUpdate();
+        dis.dispatch({ action: Action.ViewRoom, room_id: "r1" });
+        await rpsUpdated;
+
+        RightPanelStore.instance.setCard(
+            {
+                phase: RightPanelPhases.DocumentViewer,
+                state: { documentViewer: { file: { mimetype: "application/pdf", name: "report.pdf", blob: vi.fn() } } },
+            },
+            true,
+            "r1",
+        );
+
+        // As above: the header proves the card picked up this file.
+        await waitFor(() => expect(screen.getByRole("heading", { name: "report.pdf" })).toBeInTheDocument());
     });
 });

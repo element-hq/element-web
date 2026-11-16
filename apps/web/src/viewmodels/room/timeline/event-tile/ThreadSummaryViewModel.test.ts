@@ -26,7 +26,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { waitFor } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
-import { mkEvent } from "test-utils";
+import { mkEvent, tearDownAfterTest } from "test-utils";
 
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
@@ -450,6 +450,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().isVisible).toBe(false);
         expect(vm.getSnapshot().avatar).toBeUndefined();
@@ -472,6 +473,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: true,
         });
+        tearDownAfterTest(vm);
 
         await waitFor(() => expect(vm.getSnapshot().isVisible).toBe(true));
 
@@ -546,6 +548,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: false,
         });
+        tearDownAfterTest(vm);
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("First reply"));
 
         thread.replyToEvent = makeEvent("Second reply");
@@ -723,6 +726,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: false,
         });
+        tearDownAfterTest(vm);
 
         thread.replyToEvent = makeEvent("Second reply");
         thread.emit(ThreadEvent.Update, thread);
@@ -755,6 +759,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             useOnlyCurrentProfiles: false,
             showDisplayName: false,
         });
+        tearDownAfterTest(vm);
 
         thread.replyToEvent = makeEvent("Second reply");
         thread.emit(ThreadEvent.Update, thread);

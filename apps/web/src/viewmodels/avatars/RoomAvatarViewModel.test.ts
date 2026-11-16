@@ -10,7 +10,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { type MatrixClient, RoomEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { act } from "react";
-import { createTestClient, mkStubRoom } from "test-utils";
+import { createTestClient, mkStubRoom, tearDownAfterTest } from "test-utils";
 
 import { RoomAvatarViewModel } from "./RoomAvatarViewModel";
 import { LocalRoom } from "../../models/LocalRoom";
@@ -42,7 +42,7 @@ describe("RoomAvatarViewModel", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
         room.name = "Room name";
 
-        const vm = new RoomAvatarViewModel({ room, size: "36px" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px" }));
 
         expect(vm.getSnapshot()).toMatchObject({
             name: "Room name",
@@ -56,7 +56,7 @@ describe("RoomAvatarViewModel", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
         room.name = "Room name";
 
-        const vm = new RoomAvatarViewModel({ room, size: "36px" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px" }));
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -74,7 +74,7 @@ describe("RoomAvatarViewModel", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
         room.name = "Room name";
 
-        const vm = new RoomAvatarViewModel({ room, size: "36px" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px" }));
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -92,7 +92,7 @@ describe("RoomAvatarViewModel", () => {
         vi.spyOn(room, "getMember").mockReturnValue(new RoomMember(room.roomId, userId));
 
         vi.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
-        const vm = new RoomAvatarViewModel({ room, size: "36px" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px" }));
 
         expect(vm.getSnapshot().idName).toBe(userId);
     });
@@ -101,7 +101,7 @@ describe("RoomAvatarViewModel", () => {
         const localRoom = new LocalRoom("local+room", client, client.getSafeUserId());
         localRoom.targets.push(new DirectoryMember({ user_id: "@local:example.com" }));
 
-        const vm = new RoomAvatarViewModel({ room: localRoom, size: "36px" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room: localRoom, size: "36px" }));
 
         expect(vm.getSnapshot().idName).toBe("@local:example.com");
     });
@@ -110,7 +110,7 @@ describe("RoomAvatarViewModel", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
         room.name = "Room name";
         const onClick = vi.fn();
-        const vm = new RoomAvatarViewModel({ room, size: "36px", onClick });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px", onClick }));
 
         vm.onClick();
 
@@ -120,7 +120,7 @@ describe("RoomAvatarViewModel", () => {
     it("respects an explicit type override", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
 
-        const vm = new RoomAvatarViewModel({ room, size: "36px", type: "square" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px", type: "square" }));
 
         expect(vm.getSnapshot().type).toBe("square");
     });
@@ -128,7 +128,7 @@ describe("RoomAvatarViewModel", () => {
     it("skips snapshot update when setType is called with the same value", () => {
         const room = mkStubRoom("!room:example.com", "Room name", client);
 
-        const vm = new RoomAvatarViewModel({ room, size: "36px", type: "square" });
+        const vm = tearDownAfterTest(new RoomAvatarViewModel({ room, size: "36px", type: "square" }));
         const listener = vi.fn();
         vm.subscribe(listener);
 

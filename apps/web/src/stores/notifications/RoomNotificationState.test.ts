@@ -20,7 +20,7 @@ import {
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { mkEvent, muteRoom, stubClient } from "test-utils";
+import { mkEvent, muteRoom, stubClient, tearDownAfterTest } from "test-utils";
 import { createMessageEventContent } from "test-utils/events";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -84,7 +84,7 @@ describe("RoomNotificationState", () => {
     }
 
     it("updates on event decryption", () => {
-        const roomNotifState = new RoomNotificationState(room, true);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, true));
         const listener = vi.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const testEvent = {
@@ -96,7 +96,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("does not update when a recomputation leaves the state unchanged", () => {
-        const roomNotifState = new RoomNotificationState(room, true);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, true));
         const testEvent = {
             getRoomId: () => room.roomId,
         } as unknown as MatrixEvent;
@@ -112,7 +112,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("emits an Update event on marked unread room account data", () => {
-        const roomNotifState = new RoomNotificationState(room, true);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, true));
         const listener = vi.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const accountDataEvent = {
@@ -127,7 +127,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("does not update on other account data", () => {
-        const roomNotifState = new RoomNotificationState(room, true);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, true));
         const listener = vi.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const accountDataEvent = {
@@ -142,12 +142,12 @@ describe("RoomNotificationState", () => {
     });
 
     it("removes listeners", () => {
-        const roomNotifState = new RoomNotificationState(room, false);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
         expect(() => roomNotifState.destroy()).not.toThrow();
     });
 
     it("suggests an 'unread' ! if there are unsent messages", () => {
-        const roomNotifState = new RoomNotificationState(room, false);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
 
         const event = mkEvent({
             event: true,
@@ -164,7 +164,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("suggests nothing if the room is muted", () => {
-        const roomNotifState = new RoomNotificationState(room, false);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
 
         muteRoom(room);
         setUnreads(room, 1234, 0);
@@ -176,7 +176,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("suggests a red ! if the user has been invited to a room", () => {
-        const roomNotifState = new RoomNotificationState(room, false);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
 
         room.updateMyMembership(KnownMembership.Invite); // emit
 
@@ -186,7 +186,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("returns a proper count and color for regular unreads", () => {
-        const roomNotifState = new RoomNotificationState(room, false);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
 
         setUnreads(room, 4321, 0);
         room.updateMyMembership(KnownMembership.Join); // emit
@@ -197,7 +197,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("returns a proper count and color for highlights", () => {
-        const roomNotifState = new RoomNotificationState(room, false);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
 
         setUnreads(room, 0, 69);
         room.updateMyMembership(KnownMembership.Join); // emit
@@ -208,7 +208,7 @@ describe("RoomNotificationState", () => {
     });
 
     it("includes threads", async () => {
-        const roomNotifState = new RoomNotificationState(room, true);
+        const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, true));
 
         room.timeline.push(
             new MatrixEvent({
@@ -234,7 +234,7 @@ describe("RoomNotificationState", () => {
 
         it("should has invited at true", () => {
             room.updateMyMembership(KnownMembership.Invite);
-            const roomNotifState = new RoomNotificationState(room, false);
+            const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
             expect(roomNotifState.invited).toBe(true);
         });
 
@@ -242,14 +242,14 @@ describe("RoomNotificationState", () => {
             vi.spyOn(room, "getPendingEvents").mockReturnValue([
                 mkEvent({ status: EventStatus.NOT_SENT, user: "@foobar:example.org", type: "any.event", content: {} }),
             ]);
-            const roomNotifState = new RoomNotificationState(room, false);
+            const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
             expect(roomNotifState.isUnsentMessage).toBe(true);
         });
 
         it("should has isMention at false if the notification is invitation, an unset message or a knock", () => {
             setUnreads(room, 0, 2);
 
-            const roomNotifState = new RoomNotificationState(room, false);
+            const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
             expect(roomNotifState.isMention).toBe(true);
 
             room.updateMyMembership(KnownMembership.Invite);
@@ -269,14 +269,14 @@ describe("RoomNotificationState", () => {
         it("should has isNotification at true", () => {
             setUnreads(room, 1, 0);
 
-            const roomNotifState = new RoomNotificationState(room, false);
+            const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
             expect(roomNotifState.isNotification).toBe(true);
         });
 
         it("should has isActivityNotification at true", () => {
             vi.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
 
-            const roomNotifState = new RoomNotificationState(room, false);
+            const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
             expect(roomNotifState.isActivityNotification).toBe(true);
         });
 
@@ -289,7 +289,7 @@ describe("RoomNotificationState", () => {
             setUnreads(room, 0, 1);
 
             // There is one highlight notification
-            const roomNotifState = new RoomNotificationState(room, false);
+            const roomNotifState = tearDownAfterTest(new RoomNotificationState(room, false));
             expect(roomNotifState.hasAnyNotificationOrActivity).toBe(true);
 
             // Activity notification

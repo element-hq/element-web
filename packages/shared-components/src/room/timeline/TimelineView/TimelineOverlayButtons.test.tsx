@@ -36,6 +36,7 @@ function makeActions(): TimelineViewActions {
         onJumpToReadMarker: vi.fn(),
         onMarkAllAsRead: vi.fn(),
         onJumpToLive: vi.fn(),
+        onJumpToStart: vi.fn(),
     } as unknown as TimelineViewActions;
 }
 

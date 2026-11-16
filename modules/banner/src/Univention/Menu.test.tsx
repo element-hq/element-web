@@ -91,6 +91,40 @@ describe("Univention Menu", () => {
         expect(logoLink).toHaveAttribute("href", "https://example.com/target");
     });
 
+    it("only renders the navigation links which are https URLs", async () => {
+        const entry = navigation.categories[0].entries[0];
+        const links = {
+            Https: "https://example.com/https",
+            Http: "http://example.com/http",
+            Javascript: "javascript:alert(1)",
+            Data: "data:text/html,<script>alert(1)</script>",
+            Relative: "/relative",
+        };
+        fetchMock.get(navigationUrl, {
+            categories: [
+                {
+                    ...navigation.categories[0],
+                    entries: Object.entries(links).map(([name, link]) => ({
+                        ...entry,
+                        identifier: name,
+                        display_name: name,
+                        link,
+                    })),
+                },
+            ],
+        });
+        const user = userEvent.setup();
+        renderMenu();
+
+        await user.click(screen.getByRole("button", { name: "trigger_label" }));
+
+        const link = await screen.findByRole("link", { name: "Https" });
+        expect(link).toHaveAttribute("href", "https://example.com/https");
+        for (const name of ["Http", "Javascript", "Data", "Relative"]) {
+            expect(screen.queryByRole("link", { name })).not.toBeInTheDocument();
+        }
+    });
+
     it("links the logo via logo_href even if the ICS navigation fails to load", async () => {
         fetchMock.get(navigationUrl, 500);
         const user = userEvent.setup();

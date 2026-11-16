@@ -9,7 +9,7 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { EventType, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
-import { stubClient, TestSDKContext } from "test-utils";
+import { stubClient, TestSDKContext, tearDownAfterTest } from "test-utils";
 
 import {
     getMockedMember,
@@ -39,6 +39,7 @@ describe("RoomOngoingCallTileViewModel", () => {
             const call = MockedCall.create().withParticipants([mxEvent.sender, bob, james]);
             const callStore = MockedCallStore.create(call);
             const vm = new RoomOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm);
 
             // Call has 3 participants now
             expect(vm.getSnapshot().totalParticipants).toStrictEqual(3);
@@ -70,6 +71,7 @@ describe("RoomOngoingCallTileViewModel", () => {
                 getRelationsForEvent,
                 legacyCallHandler,
             });
+            tearDownAfterTest(vm);
 
             // Call hasn't been ignored yet
             expect(vm.getSnapshot().isCallIgnored).toStrictEqual(false);

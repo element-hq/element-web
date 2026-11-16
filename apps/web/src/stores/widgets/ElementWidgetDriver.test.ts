@@ -39,7 +39,6 @@ import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { ModuleApi } from "../../modules/Api";
 import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
-import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import SdkConfig from "../../SdkConfig";
 
@@ -815,33 +814,6 @@ describe("ElementWidgetDriver", () => {
                 EventType.RoomMessage,
                 {},
             );
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors feature is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("passes the flag through to getVisibleRooms", () => {
-            const driver = mkDefaultDriver();
-            driver.getKnownRooms();
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("passes the flag through to getVisibleRooms", () => {
-            const driver = mkDefaultDriver();
-            driver.getKnownRooms();
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
 

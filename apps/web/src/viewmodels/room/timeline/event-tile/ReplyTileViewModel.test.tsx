@@ -10,7 +10,7 @@
 import React from "react";
 import { EventType, type MatrixClient, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import { FileBodyFactory, VideoBodyFactory } from "../../../../components/views/messages/MBodyFactory";
 import { type IBodyProps } from "../../../../components/views/messages/IBodyProps";
@@ -95,7 +95,7 @@ describe("ReplyTileViewModel", () => {
     it("renders regular text replies with the default reply body", () => {
         const mxEvent = createEvent();
 
-        const vm = new ReplyTileViewModel({ mxEvent, cli });
+        const vm = tearDownAfterTest(new ReplyTileViewModel({ mxEvent, cli }));
 
         const replyTileProps = getReplyTileProps();
         expect(replyTileProps.mxEvent).toBe(mxEvent);
@@ -123,7 +123,7 @@ describe("ReplyTileViewModel", () => {
             },
         });
 
-        const vm = new ReplyTileViewModel({ mxEvent, cli });
+        const vm = tearDownAfterTest(new ReplyTileViewModel({ mxEvent, cli }));
 
         expect(renderReplyTile).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -147,7 +147,7 @@ describe("ReplyTileViewModel", () => {
     it("renders media replies with reply-specific body overrides", () => {
         const audioEvent = createEvent({ msgtype: MsgType.Audio, body: "audio.ogg" });
 
-        new ReplyTileViewModel({ mxEvent: audioEvent, cli });
+        tearDownAfterTest(new ReplyTileViewModel({ mxEvent: audioEvent, cli }));
 
         const { overrideBodyTypes, overrideEventTypes } = getReplyTileOverrides();
         expect(overrideBodyTypes).toMatchObject({
@@ -179,7 +179,7 @@ describe("ReplyTileViewModel", () => {
             },
         });
 
-        new ReplyTileViewModel({ mxEvent: voiceEvent, cli });
+        tearDownAfterTest(new ReplyTileViewModel({ mxEvent: voiceEvent, cli }));
 
         expect(getReplyTileOverrides().overrideBodyTypes[MsgType.Audio]).toBe(MVoiceMessageBody);
     });
@@ -189,6 +189,7 @@ describe("ReplyTileViewModel", () => {
             mxEvent: createEvent({ msgtype: MsgType.Emote, body: "waves" }),
             cli,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().inline).toBe(true);
         expect(vm.getSnapshot().sender?.profileViewModel).toBeUndefined();

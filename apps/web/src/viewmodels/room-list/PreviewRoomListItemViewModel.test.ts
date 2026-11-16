@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, afterEach } from "vitest";
 
+import { tearDownAfterTest } from "test-utils/teardown";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { PreviewRoomListItemViewModel } from "./PreviewRoomListItemViewModel";
@@ -20,7 +21,7 @@ describe("PreviewRoomListItemViewModel", () => {
     });
 
     it("builds a snapshot from the room data with the menus hidden", () => {
-        const vm = new PreviewRoomListItemViewModel(props);
+        const vm = tearDownAfterTest(new PreviewRoomListItemViewModel(props));
 
         expect(vm.roomId).toBe(props.roomId);
         expect(vm.getSnapshot()).toMatchObject({
@@ -42,7 +43,7 @@ describe("PreviewRoomListItemViewModel", () => {
 
     it("opens the room", () => {
         const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
-        const vm = new PreviewRoomListItemViewModel(props);
+        const vm = tearDownAfterTest(new PreviewRoomListItemViewModel(props));
 
         vm.onOpenRoom();
 
@@ -55,7 +56,7 @@ describe("PreviewRoomListItemViewModel", () => {
 
     it("does nothing for the actions of the hidden menus", () => {
         const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
-        const vm = new PreviewRoomListItemViewModel(props);
+        const vm = tearDownAfterTest(new PreviewRoomListItemViewModel(props));
         const snapshot = vm.getSnapshot();
 
         vm.onMarkAsRead();

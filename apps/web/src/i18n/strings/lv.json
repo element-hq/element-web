@@ -1181,8 +1181,6 @@
         "bridge_state_workspace": "Darbavieta: <networkLink/>",
         "click_for_info": "Noklikšķiniet, lai iegūtu vairāk informācijas",
         "currently_experimental": "Pašlaik eksperimentāls.",
-        "dynamic_room_predecessors": "Dinamiski istabas priekšteči",
-        "dynamic_room_predecessors_description": "Iespējot MSC3946 (lai nodrošinātu vēlu ierašanās istabu arhīvu atbalstu)",
         "element_call_video_rooms": "Element Call video istabas",
         "experimental_description": "Vai jūtaties gatavs eksperimentiem? Izmēģiniet mūsu jaunākās idejas izstrādes stadijā. Šīs funkcijas nav pabeigtas un var būt nestabilas, var mainīties vai vispār var tikt atmestas. <a> Uzzināt vairāk</a> .",
         "experimental_section": "Agrīnie priekšskatījumi",
@@ -2314,7 +2312,6 @@
             "web_session": "Tīmekļa sesija"
         },
         "show_avatar_changes": "Rādīt profila attēla izmaiņas",
-        "show_breadcrumbs": "Rādīt saīsnes uz nesen skatītajām istabām istabu saraksta augšpusē",
         "show_chat_effects": "Rādīt tērzēšanas efektus (piemēram, animācijas, kad tiek saņemts konfeti)",
         "show_displayname_changes": "Rādīt parādāmā vārda izmaiņas",
         "show_join_leave": "Rādīt pievienošanās/atstāšanas ziņas (netiek ietekmēti uzaicinājumi/noņemšana/aizliegumi)",

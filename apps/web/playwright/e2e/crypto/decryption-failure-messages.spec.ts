@@ -84,7 +84,11 @@ test.describe("Cryptography", function () {
                 await app.viewRoomByName("Test room");
 
                 // In this case, the call to cryptoApi.isEncryptionEnabledInRoom is taking a long time to resolve
-                await page.waitForTimeout(1000);
+                await expect(
+                    page
+                        .locator(".mx_EventTile")
+                        .filter({ hasText: "You need to verify this device for access to historical messages" }),
+                ).toHaveCount(2);
 
                 // There should be two historical events in the timeline
                 const tiles = await page.locator(".mx_EventTile").all();

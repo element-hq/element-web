@@ -27,6 +27,8 @@ import { StorageHelperApi } from "./StorageHelperApi.ts";
 import { SettingsApi } from "./SettingsApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 import { UrlPreviewApi } from "./UrlPreviewApi.ts";
+import { DocumentPreviewApi } from "./DocumentPreviewApi.ts";
+import SettingController from "../settings/controllers/SettingController.ts";
 
 /**
  * Implementation of the @element-hq/element-web-module-api runtime module API.
@@ -38,6 +40,8 @@ export class ModuleApi implements Api {
         if (!ModuleApi._instance) {
             ModuleApi._instance = new ModuleApi();
             window.mxModuleApi = ModuleApi._instance;
+            // Settings can't import the ModuleApi directly without causing an import cycle
+            SettingController.moduleCustomisations = ModuleApi._instance.customisations;
         }
         return ModuleApi._instance;
     }
@@ -56,7 +60,7 @@ export class ModuleApi implements Api {
     public readonly widgetLifecycle = new WidgetLifecycleApi();
     public readonly widget = new WidgetApi();
     public readonly rootNode = document.getElementById("matrixchat")!;
-    public readonly client = new ClientApi();
+    public readonly client = new ClientApi(defaultDispatcher);
     // Element Desktop exposes this on the preload; on the web it is undefined and modules see no X.509 support.
     public readonly x509 = window.electron?.x509;
     public readonly stores = new StoresApi();
@@ -64,6 +68,7 @@ export class ModuleApi implements Api {
     public readonly storageHelper = new StorageHelperApi();
     public readonly settings = new SettingsApi();
     public readonly urlPreviews = new UrlPreviewApi();
+    public readonly documentPreviews = new DocumentPreviewApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);

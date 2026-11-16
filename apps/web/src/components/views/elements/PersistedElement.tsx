@@ -17,6 +17,16 @@ import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export const getPersistKey = (appId: string): string => "widget_" + appId;
 
+/**
+ * The z-index a persisted element sits at unless its owner asks for another:
+ *  - above the room content
+ *  - below Element Web's floating PiP (the floating one is higher 101 so it is drawn over the
+ * other persisted elements while dragged), dialogs and menus.
+ *
+ * The exact 9 is historic. anything between 1 - 100 should work.
+ */
+export const DEFAULT_PERSISTED_Z_INDEX = 9;
+
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
@@ -48,7 +58,7 @@ interface IProps {
     // the same DOM container.
     persistKey: string;
 
-    // z-index for the element. Defaults to 9.
+    // z-index for the element. Defaults to `DEFAULT_PERSISTED_Z_INDEX` (9).
     zIndex?: number;
 
     style?: React.StyleHTMLAttributes<HTMLDivElement>;
@@ -79,6 +89,20 @@ export default class PersistedElement extends React.Component<IProps> {
     private child?: HTMLDivElement;
 
     private static rootMap: Record<string, [root: Root, container: Element]> = {};
+    // The PersistedElements mounted for each persistKey, in mount order.
+    // On unmount: empty set -> leaving for good (hide it)
+    // The set holds the next position -> moving to another placeholder (dont hide it)
+    //
+    // The app does not move the tree as a clean unmount -> hide -> mount -> show. The old and new placeholders
+    // overlap, and the old one can re-render after the new one has mounted. Enforcing an order across RoomView
+    // and PipContainer would be a bigger and more fragile refactor.
+    // Coping with it here has less footguns, is more stable.
+    // (see `detach` for more context)
+    private static instances = new Map<string, Set<PersistedElement>>();
+    // The positioned child of each persistKey's tree, for when no PersistedElement is mounted.
+    private static children = new Map<string, HTMLDivElement>();
+    // Persist keys whose container currently lives in another document (see `detach`).
+    private static detached = new Set<string>();
 
     public constructor(props: IProps) {
         super(props);
@@ -102,6 +126,55 @@ export default class PersistedElement extends React.Component<IProps> {
             pair[1].remove();
         }
         delete PersistedElement.rootMap[persistKey];
+        PersistedElement.children.delete(persistKey);
+        PersistedElement.detached.delete(persistKey);
+    }
+
+    /**
+     * Moves the persisted DOM tree of the given persistKey into another element, typically the body of a
+     * Document Picture-in-Picture window. While detached the tree fills its host and stays visible even
+     * when no PersistedElement for it is mounted; the placeholders' positions are ignored. The React
+     * tree keeps running throughout: only the DOM moves.
+     *
+     * @returns false if nothing is mounted under this persistKey.
+     */
+    public static detach(persistKey: string, host: HTMLElement): boolean {
+        const pair = PersistedElement.rootMap[persistKey];
+        if (!pair) return false;
+        PersistedElement.detached.add(persistKey);
+        host.appendChild(pair[1]);
+        PersistedElement.refresh(persistKey);
+        return true;
+    }
+
+    /**
+     * Undoes `detach`: brings the DOM tree back into this document, where the mounted PersistedElements
+     * (if any) position it again.
+     *
+     * @returns false if the tree under this persistKey was not detached.
+     */
+    public static reattach(persistKey: string): boolean {
+        if (!PersistedElement.detached.delete(persistKey)) return false;
+        const pair = PersistedElement.rootMap[persistKey];
+        if (pair) getOrCreateMasterContainer().appendChild(pair[1]);
+        PersistedElement.refresh(persistKey);
+        return true;
+    }
+
+    public static isDetached(persistKey: string): boolean {
+        return PersistedElement.detached.has(persistKey);
+    }
+
+    private static refresh(persistKey: string): void {
+        const instances = PersistedElement.instances.get(persistKey);
+        if (instances?.size) {
+            for (const instance of instances) instance.updateChild();
+        } else {
+            // No PersistedElement is mounted to place the child over its placeholder, so there is no
+            // parent to pass: styleChild then fills the host while detached and hides the child otherwise.
+            const child = PersistedElement.children.get(persistKey);
+            if (child) PersistedElement.styleChild(child, persistKey, undefined, undefined);
+        }
     }
 
     public static isMounted(persistKey: string): boolean {
@@ -120,6 +193,7 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private collectChild = (ref: HTMLDivElement): void => {
         this.child = ref;
+        if (ref) PersistedElement.children.set(this.props.persistKey, ref);
         this.updateChild();
     };
 
@@ -131,6 +205,12 @@ export default class PersistedElement extends React.Component<IProps> {
         // the timeline_resize action.
         window.addEventListener("resize", this.repositionChild);
         this.dispatcherRef = dis.register(this.onAction);
+        let instances = PersistedElement.instances.get(this.props.persistKey);
+        if (!instances) {
+            instances = new Set();
+            PersistedElement.instances.set(this.props.persistKey, instances);
+        }
+        instances.add(this);
 
         this.updateChild();
         this.renderApp();
@@ -142,7 +222,18 @@ export default class PersistedElement extends React.Component<IProps> {
     }
 
     public componentWillUnmount(): void {
-        this.updateChildVisibility(this.child, false);
+        const instances = PersistedElement.instances.get(this.props.persistKey);
+        instances?.delete(this);
+        if (instances?.size) {
+            // Another placeholder for this tree is mounted: the content is moving between containers, and
+            // both were rendered in the same commit, so whichever rendered the tree last owns the child's
+            // ref, which may well be this one. Hand the tree over to the most recently mounted survivor by
+            // rendering it again with that one's wrapper, which then places the child; hiding it here would
+            // hide it for good.
+            [...instances].at(-1)!.renderApp();
+        } else {
+            this.updateChildVisibility(this.child, false);
+        }
         this.resizeObserver.disconnect();
         window.removeEventListener("resize", this.repositionChild);
         dis.unregister(this.dispatcherRef);
@@ -192,15 +283,55 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
         if (!child) return;
-        child.style.display = visible ? "block" : "none";
+        // The Picture-in-Picture sate (defined by it being "detached") will overwrite `visible`
+        // for the child (the actual persistent Element content. e.g. the element call component)
+        child.style.display = visible || PersistedElement.isDetached(this.props.persistKey) ? "block" : "none";
     }
 
     private updateChildPosition(child?: HTMLDivElement, parent?: HTMLDivElement): void {
-        if (!child || !parent) return;
+        if (!child || (!parent && !PersistedElement.isDetached(this.props.persistKey))) return;
+        PersistedElement.styleChild(child, this.props.persistKey, parent, this.props.zIndex);
+    }
+
+    /**
+     * Places the child: over the placeholder `parent` it belongs to, or filling its host while detached.
+     * Without either it is left hidden, since there is nowhere for it to be.
+     *
+     * @param child - The persisted DOM tree's container.
+     * @param parent - The placeholder of the mounted PersistedElement.
+     * @param zIndex - The `zIndex` prop of that PersistedElement. Defaults to `DEFAULT_PERSISTED_Z_INDEX`.
+     * DEFAULT_PERSISTED_Z_INDEX, allows it to be above the UI but below a potential PiP PersistedElement.
+     */
+    private static styleChild(
+        child: HTMLDivElement,
+        persistKey: string,
+        parent: HTMLDivElement | undefined,
+        zIndex: number | undefined,
+    ): void {
+        const z = isNullOrUndefined(zIndex) ? DEFAULT_PERSISTED_Z_INDEX : zIndex;
+        if (PersistedElement.isDetached(persistKey)) {
+            // Alone in its window, the tree has nothing to be stacked against, and a z-index here would
+            // put it over what gets portalled into that window's body after it: menus, tooltips.
+            Object.assign(child.style, {
+                zIndex: "auto",
+                position: "absolute",
+                top: "0",
+                left: "0",
+                transform: "none",
+                width: "100%",
+                height: "100%",
+                display: "block",
+            });
+            return;
+        }
+        if (!parent) {
+            child.style.display = "none";
+            return;
+        }
 
         const parentRect = parent.getBoundingClientRect();
         Object.assign(child.style, {
-            zIndex: isNullOrUndefined(this.props.zIndex) ? 9 : this.props.zIndex,
+            zIndex: z,
             position: "absolute",
             top: "0",
             left: "0",

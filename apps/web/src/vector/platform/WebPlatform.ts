@@ -38,6 +38,7 @@ export default class WebPlatform extends BasePlatform {
     // oxlint-disable-next-line node/no-process-env
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
     private readonly registerServiceWorkerPromise: Promise<void>;
+    private updateCheckInterval?: number;
 
     public constructor() {
         super();
@@ -197,7 +198,15 @@ export default class WebPlatform extends BasePlatform {
             console.log("Update reloading to " + url.toString());
             window.location.href = url.toString();
         });
-        setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
+        this.updateCheckInterval = setInterval(
+            () => this.pollForUpdate(showUpdateToast, hideUpdateToast),
+            POKE_RATE_MS,
+        );
+    }
+
+    public destroy(): void {
+        super.destroy();
+        clearInterval(this.updateCheckInterval);
     }
 
     public async canSelfUpdate(): Promise<boolean> {

@@ -53,17 +53,30 @@ const UniventionCentralNavigation = z.object({
 
 type UniventionCentralNavigation = z.infer<typeof UniventionCentralNavigation>;
 
+/**
+ * Whether a link from the ICS is an absolute https URL. Only these are shown.
+ */
+function isHttpsUrl(link: string): boolean {
+    try {
+        return new URL(link).protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
 function navigationToConfig(navigation: UniventionCentralNavigation): StaticConfig {
     return {
         type: "static",
         categories: navigation.categories.map((category) => ({
             name: category.display_name,
-            links: category.entries.map((entry) => ({
-                icon_uri: entry.icon_url,
-                name: entry.display_name,
-                link_url: entry.link,
-                target: entry.target,
-            })),
+            links: category.entries
+                .filter((entry) => isHttpsUrl(entry.link))
+                .map((entry) => ({
+                    icon_uri: entry.icon_url,
+                    name: entry.display_name,
+                    link_url: entry.link,
+                    target: entry.target,
+                })),
         })),
     };
 }

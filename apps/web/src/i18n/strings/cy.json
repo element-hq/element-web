@@ -1459,8 +1459,6 @@
         "bridge_state_workspace": "Gweithle: <networkLink/>",
         "click_for_info": "Cliciwch am fwy o wybodaeth",
         "currently_experimental": "Arbrofol ar hyn o bryd.",
-        "dynamic_room_predecessors": "Rhagflaenwyr ystafell deimaterig",
-        "dynamic_room_predecessors_description": "Galluogi MSC3946 (i gefnogi archifau ystafelloedd sy'n cyrraedd yn hwyr)",
         "element_call_video_rooms": "Ystafelloedd fideo Element Call",
         "encrypted_state_events": "Digwyddiadau cyflwr wedi'u hamgryptio (MSC4362)",
         "encrypted_state_events_description": "Yn galluogi cefnogaeth arbrofol ar gyfer amgryptio digwyddiadau cyflwr, sy'n cuddio metadata fel enwau ystafelloedd a phynciau o'r gweinydd. Bydd y metadata hwn hefyd yn cael ei guddio rhag pobl sy'n ymuno ag ystafelloedd yn ddiweddarach, a phobl nad yw eu cleientiaid yn cefnogi MSC4362.",
@@ -2863,7 +2861,6 @@
             "web_session": "Sesiwn we"
         },
         "show_avatar_changes": "Dangos newidiadau llun proffil",
-        "show_breadcrumbs": "Dangos llwybrau byr i ystafelloedd a welwyd yn ddiweddar uwchben y rhestr ystafelloedd",
         "show_chat_effects": "Dangos effeithiau sgwrsio (animeiddiadau wrth dderbyn e.e. conffeti)",
         "show_displayname_changes": "Dangos newidiadau enw dangos",
         "show_join_leave": "Dangos negeseuon ymuno/gadael (gwahoddiadau/dileu/gwaharddiadau heb eu heffeithio)",

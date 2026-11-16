@@ -7,13 +7,13 @@ Please see LICENSE in the repository root for full details.
 
 import { type KnipConfig } from "knip";
 
-// Specify this as knip loads config files which may conditionally load plugins
+// Specify these as knip loads config files which may conditionally load plugins or run commands
 process.env.GITHUB_ACTIONS = "1";
+process.env.CI = "1";
 
 export default {
     workspaces: {
         "packages/shared-components": {
-            entry: ["src/index.ts!", "scripts/**"],
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,pcss}!",
                 "!scripts/**!",
@@ -33,6 +33,7 @@ export default {
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!src/flaky-reporter.ts!",
+                "!src/flaky-assignee-finder.ts!",
                 "!src/stale-screenshot-reporter.ts!",
             ],
             ignoreDependencies: [
@@ -47,12 +48,13 @@ export default {
                 "src/workers/*.worker.ts!",
                 "src/utils/exportUtils/exportJS.js!",
                 "src/vector/localstorage-fix.ts!",
-                "scripts/**",
-                "playwright/**",
+                "playwright/sample-files/*.js",
+                "playwright/e2e/crypto/test_legacy_indexeddb_cryptostore_dump/load.js",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
+                "supportedBrowsers.ts!",
                 // Keep for now
                 "src/hooks/useLocalStorageState.ts!",
                 "src/hooks/useIsReleaseAnnouncementOpen.ts!",
@@ -70,6 +72,7 @@ export default {
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
+                "!playwright/**!",
                 "!recorder-worklet-loader.cjs!",
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
@@ -82,13 +85,10 @@ export default {
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
                 "@types/sdp-transform",
-
-                // Used by Playwright to serve the built web app.
-                "serve",
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**"],
+            entry: ["src/preload.cts!", "electron-builder.ts!"],
             project: ["**/*.{js,ts,pcss}"],
             ignoreBinaries: [
                 // Used by the fetch-package script (optional)
@@ -112,7 +112,8 @@ export default {
             ],
         },
         ".": {
-            entry: ["scripts/**", "docs/**"],
+            entry: ["docs/**"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!scripts/**!"],
         },
     },
     ignoreDependencies: [
