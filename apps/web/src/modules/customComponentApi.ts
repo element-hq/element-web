@@ -19,9 +19,11 @@ import type {
     CustomLoginRenderFunction,
     CustomComposerPreviewRenderFunction,
     CustomComposerPreviewComponentProps,
+    Unregister,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 import { getModuleMatrixEvent } from "./models/Event";
+import { createUnregister, removeFromArray } from "./utils/unregister";
 
 type EventTypeOrFilter = Parameters<ICustomComponentsApi["registerMessageRenderer"]>[0];
 type ComposerPreviewFilterFn = Parameters<ICustomComponentsApi["registerComposerPreview"]>[0];
@@ -68,8 +70,10 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         eventTypeOrFilter: EventTypeOrFilter,
         renderer: CustomMessageRenderFunction,
         hints: ModuleCustomCustomMessageRenderHints = {},
-    ): void {
-        this.registeredMessageRenderers.push({ eventTypeOrFilter: eventTypeOrFilter, renderer, hints });
+    ): Unregister {
+        const entry: EventRenderer = { eventTypeOrFilter: eventTypeOrFilter, renderer, hints };
+        this.registeredMessageRenderers.push(entry);
+        return createUnregister(() => removeFromArray(this.registeredMessageRenderers, entry));
     }
 
     /**
@@ -220,8 +224,10 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     public registerComposerPreview(
         filter: ComposerPreviewFilterFn,
         renderer: CustomComposerPreviewRenderFunction,
-    ): void {
-        this.registeredComposerPreviewRenderers.push({ filter, renderer });
+    ): Unregister {
+        const entry: ComposerPreviewRenderer = { filter, renderer };
+        this.registeredComposerPreviewRenderers.push(entry);
+        return createUnregister(() => removeFromArray(this.registeredComposerPreviewRenderers, entry));
     }
     /**
      * Render the component for a composer preview.
