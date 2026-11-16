@@ -92,7 +92,9 @@ export const transformTags = {
         if (requestedHeight) {
             attribs.style += "height: 100%;";
         }
-        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
+        // Custom emoticons are often animated, so ask for animated thumbnails for them.
+        const animated = "data-mx-emoticon" in attribs;
+        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height, "scale", animated)!;
         return { tagName, attribs };
     },
     "code": function (tagName: string, attribs: HtmlSanitizeAttributes) {

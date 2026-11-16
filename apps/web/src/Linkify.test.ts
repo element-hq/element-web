@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi } from "vitest";
+import { getMockClientWithEventEmitter } from "test-utils";
 
 import { roomAliasEventListeners, transformTags, userIdEventListeners } from "./Linkify";
 import dispatcher from "./dispatcher/dispatcher";
@@ -67,5 +68,22 @@ describe("linkify-matrix", () => {
             rel: "noreferrer noopener",
         });
         permalinkSpy.mockRestore();
+    });
+
+    it("requests animated thumbnails for custom emoticons only", () => {
+        const mxcUrlToHttp = vi.fn().mockReturnValue("https://server/static-thumbnail");
+        getMockClientWithEventEmitter({ baseUrl: "https://server", mxcUrlToHttp });
+
+        const emoticon = transformTags.img("img", {
+            "src": "mxc://server/emoticon",
+            "data-mx-emoticon": "",
+            "height": "32",
+        });
+        const image = transformTags.img("img", { src: "mxc://server/image" });
+
+        const emoticonUrl = new URL(emoticon.attribs.src!);
+        expect(emoticonUrl.pathname).toBe("/_matrix/media/v3/thumbnail/server/emoticon");
+        expect(emoticonUrl.searchParams.get("animated")).toBe("true");
+        expect(image.attribs.src).toBe("https://server/static-thumbnail");
     });
 });
