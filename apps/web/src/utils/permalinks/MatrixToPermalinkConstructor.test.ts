@@ -34,6 +34,15 @@ describe("MatrixToPermalinkConstructor", () => {
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
+
+        it.each([
+            ["an action", "?action=chat"],
+            ["a custom parameter", "?org.example.key=value"],
+        ])("should leave %s out of the MXID", (name: string, query: string) => {
+            expect(peramlinkConstructor.parsePermalink(`https://matrix.to/#/@user:example.com${query}`)).toEqual(
+                new PermalinkParts(null, null, "@user:example.com", null),
+            );
+        });
     });
 
     describe("forRoom", () => {
