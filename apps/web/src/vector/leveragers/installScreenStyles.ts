@@ -20,7 +20,7 @@ export const installScreenCss = `
 
 .lvgInstall{
   --navy:#0A082B; --cyan:#2CF8E5; --primary:#0A082B; --primary-hover:#25224f;
-  --ink:#0f172a; --ink-2:#475569; --ink-3:#64748b; --line:#e2e8f0; --soft:#f1f5f9; --soft-hover:#e2e8f0; --ok:#047857;
+  --ink:#0f172a; --ink-2:#475569; --ink-3:#64748b; --line:#e2e8f0; --soft:#f1f5f9; --ok:#047857;
   --sans:"Lvg Sora",Inter,system-ui,sans-serif; --display:"Lvg Mona Sans",Inter,system-ui,sans-serif;
   position:fixed;inset:0;z-index:2000;overflow-y:auto;display:flex;background:#fff;color:var(--ink);
   font-family:var(--sans);font-size:1rem;line-height:1.6;-webkit-font-smoothing:antialiased;text-align:left
@@ -46,12 +46,6 @@ export const installScreenCss = `
 .lvgInstall h1{margin:0;font-size:1.625rem;line-height:1.2;text-wrap:balance;color:var(--ink)}
 .lvgI-lead{margin-top:12px!important;margin-bottom:0!important;color:var(--ink-2);font-size:.9375rem;text-wrap:pretty}
 
-.lvgI-perks{list-style:none;margin-top:20px!important;display:grid;gap:8px;font-size:.875rem;color:var(--ink-2)}
-.lvgI-perks li{display:flex;gap:12px;align-items:center}
-.lvgI-ic{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:8px;background:#ededf5;color:var(--primary)}
-
-.lvgI-howto{margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
-.lvgI-howto h3{margin:0 0 16px;font:600 .9375rem/1.3 var(--sans);color:var(--ink)}
 .lvgI-steps{list-style:none;display:grid}
 .lvgI-lead + .lvgI-steps{margin-top:24px!important}
 .lvgI-steps li{position:relative;display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;padding-bottom:20px}
@@ -68,9 +62,6 @@ export const installScreenCss = `
 .lvgI-btn:disabled{cursor:not-allowed;opacity:.7}
 .lvgI-btn-primary{background:var(--primary);color:#fff}
 .lvgI-btn-primary:hover:not(:disabled){background:var(--primary-hover)}
-.lvgI-btn-secondary{background:var(--soft);color:var(--ink)}
-.lvgI-btn-secondary:hover{background:var(--soft-hover)}
-.lvgI-steps .lvgI-btn{margin-top:12px}
 .lvgI-more{margin-top:20px!important;text-align:center}
 .lvgI-link{background:none;border:0;padding:4px 2px;font-size:.8125rem;font-weight:500;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .lvgI-link:hover{color:var(--ink)}

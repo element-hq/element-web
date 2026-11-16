@@ -79,5 +79,8 @@
             "protocol": "web+leveragers",
             "url": "index.html?lvg_open=%s"
         }
-    ]
+    ],
+    "launch_handler": {
+        "client_mode": "focus-existing"
+    }
 }
