@@ -278,7 +278,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             {
                 key: "required",
                 // A name made only of whitespace would leave the room with no visible name.
-                test: async ({ value }) => !!value?.trim(),
+                test: ({ value }) => !!value?.trim(),
                 invalid: () => _t("create_room|name_validation_required"),
             },
         ],

@@ -106,7 +106,7 @@ const spaceNameValidator = withValidation({
         {
             key: "required",
             // A name made only of whitespace would leave the space with no visible name.
-            test: async ({ value }) => !!value?.trim(),
+            test: ({ value }) => !!value?.trim(),
             invalid: () => _t("create_space|name_required"),
         },
     ],
