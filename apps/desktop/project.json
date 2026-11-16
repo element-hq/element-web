@@ -47,12 +47,19 @@
             },
             "dependsOn": ["build:*"]
         },
+        "rebuild-native": {
+            "cache": false,
+            "command": "pnpm exec electron-builder install-app-deps",
+            "options": {
+                "cwd": "apps/desktop"
+            }
+        },
         "start": {
             "command": "electron .",
             "options": {
                 "cwd": "apps/desktop"
             },
-            "dependsOn": ["build:*"]
+            "dependsOn": ["build:*", "rebuild-native"]
         },
         "test:playwright": {
             "command": "playwright test",

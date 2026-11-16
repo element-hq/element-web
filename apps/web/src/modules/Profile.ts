@@ -29,6 +29,7 @@ export class WatchableProfile extends Watchable<Profile> {
             userId: client?.getUserId() ?? undefined,
             deviceId: client?.getDeviceId() ?? undefined,
             displayName: OwnProfileStore.instance.displayName ?? undefined,
+            homeserverUrl: client?.getHomeserverUrl() ?? undefined,
         };
     }
 

@@ -86,7 +86,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     if (step === Step.CheckKey) {
         card = (
             <CheckRecoveryKey
-                className="mx_EncryptionCard_noBorder"
+                dialog={true}
                 onCancelClick={() => setStep(Step.Start)}
                 onFinish={() => setStep(Step.KeyChecked)}
             />
@@ -95,7 +95,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         card = (
             <ChangeRecoveryKeyBody
                 userHasRecoveryKey={backupStatus === BackupStatus.BACKUP_ACTIVE}
-                className="mx_EncryptionCard_noBorder"
+                dialog={true}
                 onCancelClick={() => setStep(Step.Start)}
                 onFinish={() => setStep(Step.KeyActive)}
             />
@@ -110,7 +110,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                         ? _t("settings|encryption|recovery|key_active_title")
                         : _t("auth|logout_dialog|key_checked_title")
                 }
-                className="mx_EncryptionCard_noBorder"
+                dialog={true}
             >
                 <EncryptionCardEmphasisedContent>
                     <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
@@ -134,11 +134,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     } else if (backupStatus === BackupStatus.BACKUP_ACTIVE) {
         // Only device, but recovery is set up: make sure the user still has their recovery key
         card = (
-            <EncryptionCard
-                Icon={InfoIcon}
-                title={_t("auth|logout_dialog|check_recovery_key_title")}
-                className="mx_EncryptionCard_noBorder"
-            >
+            <EncryptionCard Icon={InfoIcon} title={_t("auth|logout_dialog|check_recovery_key_title")} dialog={true}>
                 <EncryptionCardEmphasisedContent>
                     <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
                 </EncryptionCardEmphasisedContent>
@@ -162,7 +158,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                 Icon={ErrorIcon}
                 destructive={true}
                 title={_t("auth|logout_dialog|setup_key_backup_title")}
-                className="mx_EncryptionCard_noBorder"
+                dialog={true}
             >
                 <EncryptionCardEmphasisedContent>
                     <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>

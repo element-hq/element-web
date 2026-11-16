@@ -4,8 +4,16 @@ For some features, the desktop version of Element can make use of native Node
 modules. These allow Element to integrate with the desktop in ways that a browser
 cannot.
 
-Currently the only native module is [Seshat](https://github.com/matrix-org/seshat),
-which adds support for local event indexing and full text search in E2E encrypted rooms.
+The native modules are:
+
+- [Seshat](https://github.com/matrix-org/seshat), which adds support for local event indexing and full text
+  search in E2E encrypted rooms. It ships prebuilt binaries, see below.
+- [pkcs11js](https://github.com/PeculiarVentures/pkcs11js), used by the experimental X.509 identity
+  verification. It is compiled from source, which needs a C++ toolchain.
+
+pnpm does not build pkcs11js on install. electron-builder compiles it for the target platform and
+architecture when packaging the app, and `pnpm start` compiles it for local development.
+Without it, Element Desktop still starts but X.509 support is disabled.
 
 ## Prebuilt binaries
 

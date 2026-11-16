@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import {
     getMockClientWithEventEmitter,
@@ -28,6 +28,7 @@ import { SDKContext } from "../../../../../contexts/SDKContext";
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import SettingsStore from "../../../../../settings/SettingsStore";
+import SdkConfig from "../../../../../SdkConfig";
 
 describe("<SecurityUserSettingsTab />", () => {
     const getIgnoredUsers = vi.fn();
@@ -91,6 +92,35 @@ describe("<SecurityUserSettingsTab />", () => {
             );
         });
         expect(getByText("You have no ignored users.")).toBeVisible();
+    });
+
+    describe("discovery section", () => {
+        afterEach(() => {
+            SdkConfig.reset();
+        });
+
+        it("is shown by default", () => {
+            render(getComponent());
+
+            expect(screen.getByTestId("discoverySection")).toBeInTheDocument();
+        });
+
+        it("is hidden if the identity server feature is disabled", () => {
+            SdkConfig.put({ setting_defaults: { [UIFeature.IdentityServer]: false } });
+
+            render(getComponent());
+
+            expect(screen.queryByTestId("discoverySection")).toBeNull();
+            expect(screen.queryByText(/^Identity server/)).toBeNull();
+        });
+
+        it("is hidden if 3pid features are disabled", () => {
+            SdkConfig.put({ setting_defaults: { [UIFeature.ThirdPartyID]: false } });
+
+            render(getComponent());
+
+            expect(screen.queryByTestId("discoverySection")).toBeNull();
+        });
     });
 
     it("does not render privacy header if 3pid features are disabled", async () => {

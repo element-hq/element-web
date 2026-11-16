@@ -1509,6 +1509,8 @@
         "shift": "Shift",
         "space": "Space",
         "switch_to_space": "Switch to space by number",
+        "timeline_navigate_down": "Navigate down in the timeline",
+        "timeline_navigate_up": "Navigate up in the timeline",
         "toggle_hidden_events": "Toggle hidden event visibility",
         "toggle_microphone_mute": "Toggle microphone mute",
         "toggle_right_panel": "Toggle right panel",
@@ -2565,6 +2567,9 @@
                 "title": "Key storage"
             },
             "recovery": {
+                "backup_set_up_hint": "To change your recovery key, go to <b>Settings → Encryption → Backup</b>",
+                "backup_set_up_title": "Your backup is now fully set up",
+                "backup_set_up_toast": "Backup is now fully set up",
                 "change_recovery_confirm_button": "Confirm new recovery key",
                 "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
                 "change_recovery_confirm_title": "Enter your new recovery key",

@@ -401,6 +401,7 @@ export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean
 export interface Profile {
     deviceId?: string;
     displayName?: string;
+    homeserverUrl?: string;
     isGuest?: boolean;
     userId?: string;
 }
@@ -498,6 +499,7 @@ export const enum UIComponent {
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
     PublicRooms = "UIComponent.publicRooms",
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 

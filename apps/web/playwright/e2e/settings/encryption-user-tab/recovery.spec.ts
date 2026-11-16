@@ -45,11 +45,12 @@ test.describe("Recovery section in Encryption tab", () => {
             await dialog.getByRole("button", { name: "Copy" }).click();
             await dialog.getByRole("button", { name: "Continue" }).click();
 
-            // Confirm the recovery key
+            // Confirm the recovery key; a confirmation toast is shown in the settings dialog
             await util.confirmRecoveryKey(
                 "Enter your new recovery key",
                 "Confirm new recovery key",
                 "change-key-2-encryption-tab.png",
+                "Your new recovery key is now active",
             );
         },
     );
@@ -73,14 +74,15 @@ test.describe("Recovery section in Encryption tab", () => {
         await dialog.getByRole("button", { name: "Copy" }).click();
         await dialog.getByRole("button", { name: "Continue" }).click();
 
-        // Confirm the recovery key
+        // Confirm the recovery key; a confirmation toast is shown
         await util.confirmRecoveryKey(
             "Enter your recovery key to confirm",
             "Finish set up",
             "set-up-key-3-encryption-tab.png",
+            "Backup is now fully set up",
         );
 
-        // The recovery key is now set up and the user can change it
+        // The user can now change the recovery key
         await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();
 
         // Check that the current device is connected to key backup and the backup version is the expected one
