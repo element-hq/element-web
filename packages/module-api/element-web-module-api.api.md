@@ -317,6 +317,7 @@ export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticat
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
+    namespaced(this: void, namespace: string): I18nApi;
     register(this: void, translations: Partial<Translations>): void;
     translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;

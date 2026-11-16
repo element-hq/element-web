@@ -71,7 +71,8 @@ export interface I18nApi {
     get language(): string;
 
     /**
-     * Register translations for the module, may override app's existing translations
+     * Register translations for the module, may override app's existing translations.
+     * Modules should namespace their translations to avoid being stepped on.
      */
     register(this: void, translations: Partial<Translations>): void;
 
@@ -95,4 +96,11 @@ export interface I18nApi {
      * @param timeMillis - The time in milliseconds since epoch
      */
     humanizeTime(this: void, timeMillis: number): string;
+
+    /**
+     * Get a copy of this API whose `register` and `translate` prefix every key with the given namespace,
+     * so that a module's translations cannot clash with those of the app or of other modules.
+     * @param namespace - The prefix for every key, such as the module's config key
+     */
+    namespaced(this: void, namespace: string): I18nApi;
 }
