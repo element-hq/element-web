@@ -35,7 +35,10 @@ class WidgetToggleModule implements Module {
         }
 
         const i18n = this.api.i18n.namespaced(CONFIG_KEY);
-        i18n.register(Translations);
+        for (const [language, translations] of Object.entries(Translations)) {
+            i18n.registerLanguage(language, translations);
+        }
+
         this.api.extras.addRoomHeaderButtonCallback((roomId: string) => {
             const widgets = this.api.widget.getWidgetsInRoom(roomId);
             const toggleElements: JSX.Element[] = [];

@@ -31,7 +31,9 @@ class BannerModule implements Module {
         document.adoptedStyleSheets.push(style);
 
         const i18n = this.api.i18n.namespaced(CONFIG_KEY);
-        this.api.i18n.register(Translations);
+        for (const [language, translations] of Object.entries(Translations)) {
+            i18n.registerLanguage(language, translations);
+        }
 
         try {
             this.config = ModuleConfig.parse(rawConfig);
