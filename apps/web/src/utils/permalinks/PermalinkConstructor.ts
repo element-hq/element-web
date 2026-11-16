@@ -62,3 +62,13 @@ export class PermalinkParts {
         return this.roomIdOrAlias || this.userId;
     }
 }
+
+/**
+ * Read the via servers from a permalink's query string. Other parameters, such as `action` and custom ones, are
+ * ignored.
+ * @param query - The query string, with or without its leading `?`.
+ * @returns The via servers in the order given.
+ */
+export function parseViaServers(query: string): string[] {
+    return new URLSearchParams(query).getAll("via").filter((server) => !!server);
+}

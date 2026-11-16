@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
+import PermalinkConstructor, { parseViaServers, PermalinkParts } from "./PermalinkConstructor";
 
 /**
  * Generates permalinks that self-reference the running webapp
@@ -92,8 +92,7 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
         } else if (entityType === "room") {
             // Rejoin the rest because v3 events can have slashes (annoyingly)
             const eventId = parts.length > 2 ? parts.slice(2).join("/") : "";
-            const via = query.split(/&?via=/).filter((p) => !!p);
-            return PermalinkParts.forEvent(entity, eventId, via);
+            return PermalinkParts.forEvent(entity, eventId, parseViaServers(query));
         } else {
             throw new Error("Unknown entity type in permalink");
         }

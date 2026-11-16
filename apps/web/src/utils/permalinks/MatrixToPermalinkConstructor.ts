@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
+import PermalinkConstructor, { parseViaServers, PermalinkParts } from "./PermalinkConstructor";
 
 export const host = "matrix.to";
 export const baseUrl = `https://${host}`;
@@ -69,16 +69,14 @@ export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
             if (parts.length === 1) {
                 // room without event permalink
                 const [roomId, query = ""] = entity.split("?");
-                const via = query.split(/&?via=/g).filter((p) => !!p);
-                return PermalinkParts.forRoom(roomId, via);
+                return PermalinkParts.forRoom(roomId, parseViaServers(query));
             }
 
             // rejoin the rest because v3 events can have slashes (annoyingly)
             const eventIdAndQuery = parts.length > 1 ? parts.slice(1).join("/") : "";
             const [eventId, query = ""] = eventIdAndQuery.split("?");
-            const via = query.split(/&?via=/g).filter((p) => !!p);
 
-            return PermalinkParts.forEvent(entity, eventId, via);
+            return PermalinkParts.forEvent(entity, eventId, parseViaServers(query));
         } else {
             throw new Error("Unknown entity type in permalink");
         }
