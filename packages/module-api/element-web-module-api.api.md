@@ -328,6 +328,13 @@ export interface I18nApi {
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 
 // @alpha
+export interface IncomingToDeviceMessage {
+    readonly content: unknown;
+    readonly sender: string;
+    readonly type: string;
+}
+
+// @alpha
 export type LocationRenderFunction = () => JSX.Element;
 
 // @alpha
@@ -395,6 +402,14 @@ export interface OpenRoomOptions {
 export type OriginalMessageComponentProps = {
     showUrlPreview?: boolean;
 };
+
+// @alpha
+export interface OutgoingToDeviceMessage {
+    readonly content: Record<string, unknown>;
+    readonly recipientDeviceId: string;
+    readonly recipientUserId: string;
+    readonly type: string;
+}
 
 // @alpha
 export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
@@ -497,16 +512,8 @@ export type Tags = Record<string, SubstitutionValue>;
 
 // @alpha
 export interface ToDeviceApi {
-    request(request: ToDeviceRequest): Promise<unknown>;
-}
-
-// @alpha
-export interface ToDeviceRequest {
-    readonly content: Record<string, unknown>;
-    readonly recipientUserId: string;
-    readonly requestType: string;
-    readonly responseType: string;
-    readonly timeoutMs?: number;
+    onMessage(type: string, listener: (message: IncomingToDeviceMessage) => void): () => void;
+    sendMessage(message: OutgoingToDeviceMessage): Promise<void>;
 }
 
 // @public

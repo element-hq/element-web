@@ -9,37 +9,59 @@ import type { Room } from "../models/Room";
 import { type Watchable } from "./watchable";
 
 /**
- * A correlated to-device request sent through the current session.
+ * A to-device message sent through the current Matrix session.
  * @alpha
  */
-export interface ToDeviceRequest {
-    /** Matrix user that should receive the request. */
+export interface OutgoingToDeviceMessage {
+    /** Matrix user that should receive the message. */
     readonly recipientUserId: string;
-    /** Event type used for the outgoing request. */
-    readonly requestType: string;
-    /** Event type expected for the response. */
-    readonly responseType: string;
-    /** Request content. Element adds the correlation and requesting-device fields. */
+    /** A specific recipient device, or "*" to send to all of the user's devices. */
+    readonly recipientDeviceId: string;
+    /** Event type of the message. */
+    readonly type: string;
+    /** Message content. The caller owns any protocol fields, including correlation IDs. */
     readonly content: Record<string, unknown>;
-    /** Optional timeout in milliseconds. */
-    readonly timeoutMs?: number;
 }
 
 /**
- * Supported to-device request operations for modules.
+ * A to-device message received by the current Matrix session.
+ * @alpha
+ */
+export interface IncomingToDeviceMessage {
+    /** Event type of the message. */
+    readonly type: string;
+    /** Matrix user who sent the message. */
+    readonly sender: string;
+    /** Unvalidated message content; the caller must validate its protocol. */
+    readonly content: unknown;
+}
+
+/**
+ * Send messages through the current Matrix session and subscribe across sessions.
  * @alpha
  */
 export interface ToDeviceApi {
     /**
-     * Sends a correlated request from the current Matrix session.
+     * Sends one message through the current Matrix session.
      *
-     * The returned content is untrusted. The caller must validate its own protocol.
-     * The promise rejects on timeout, send failure, or a detected Matrix account/device change.
+     * Resolves when the send completes; it does not wait for a response.
      *
-     * @param request - Recipient, event types, content, and optional timeout for the request.
-     * @returns The untrusted content of the correlated response.
+     * @param message - Recipient, event type, and content.
      */
-    request(request: ToDeviceRequest): Promise<unknown>;
+    sendMessage(message: OutgoingToDeviceMessage): Promise<void>;
+
+    /**
+     * Listens for messages of one exact event type across Matrix sessions.
+     *
+     * Registration does not require an active session or a preceding send. Delivery pauses on logout and
+     * resumes for the next session until the caller unsubscribes. Callers must clear session-specific state
+     * when the profile changes.
+     *
+     * @param type - Event type to receive.
+     * @param listener - Called with untrusted message data.
+     * @returns An idempotent function that stops this listener.
+     */
+    onMessage(type: string, listener: (message: IncomingToDeviceMessage) => void): () => void;
 }
 
 /**
@@ -67,7 +89,7 @@ export interface AccountDataApi {
  */
 export interface ClientApi {
     /**
-     * Send correlated to-device requests through the current session.
+     * Send to the current session and subscribe to messages across sessions.
      * @alpha Subject to change.
      */
     readonly toDevice: ToDeviceApi;
