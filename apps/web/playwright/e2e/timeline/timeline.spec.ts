@@ -918,13 +918,13 @@ test.describe("Timeline", () => {
 
             const codeBlock = page.locator(".mx_EventTile").last().locator(".mx_EventTile_pre_container");
             const pre = codeBlock.locator("pre");
-            await expect(pre).toHaveClass("mx_EventTile_collapsedCodeBlock");
+            await expect(pre).toContainClass("mx_EventTile_collapsedCodeBlock");
             const collapsedPadding = await pre.evaluate((node) => window.getComputedStyle(node).paddingTop);
 
             await codeBlock.hover();
             await codeBlock.getByRole("button", { name: "Expand" }).click();
 
-            await expect(pre).not.toHaveClass("mx_EventTile_collapsedCodeBlock");
+            await expect(pre).not.toContainClass("mx_EventTile_collapsedCodeBlock");
             await expect(pre).toHaveCSS("padding-top", collapsedPadding);
         });
 

@@ -71,7 +71,7 @@ export default class ReplyPreview extends React.Component<IProps> {
         if (!this.props.replyToEvent) return null;
 
         return (
-            <div className="mx_ReplyPreview">
+            <div className="mx_ReplyPreview mx_ReplyQuote">
                 <div className="mx_ReplyPreview_section">
                     <div className="mx_ReplyPreview_header">
                         <span>{_t("composer|replying_title")}</span>

@@ -8,7 +8,7 @@ exports[`ReplyChain > should call setQuoteExpanded if chain is longer than 2 lin
     <div />
     <div>
       <blockquote
-        class="mx_ReplyChain mx_ReplyChain_color2"
+        class="mx_ReplyChain mx_ReplyQuote mx_ReplyChain_color2"
       >
         <div
           class="_root"

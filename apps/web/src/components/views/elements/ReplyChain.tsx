@@ -361,6 +361,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         const evTiles = this.state.events.map((ev) => {
             const classname = classNames({
                 "mx_ReplyChain": true,
+                "mx_ReplyQuote": true,
                 [this.getReplyChainColorClass(ev)]: true,
                 // We don't want to add the class if it's undefined, it should only be expanded/collapsed when it's true/false
                 "mx_ReplyChain--expanded": isQuoteExpanded === true,

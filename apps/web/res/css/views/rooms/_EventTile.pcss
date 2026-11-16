@@ -354,24 +354,24 @@ $left-gutter: 64px;
         }
 
         /* Put the line numbers beside the code, so that a block as wide as its content (as in the bubble layout)
-           makes room for them on every line, not just the first. Not in reply quotes, which clamp the block to two
-           lines and hide the numbers. */
-        > pre:has(> .mx_EventTile_lineNumbers):not(:is(.mx_ReplyChain, .mx_ReplyPreview) pre) {
+           makes room for them on every line, not just the first */
+        > .mx_EventTile_pre--lineNumbers {
             display: flex;
             /* Keep the numbers and the code as tall as their lines rather than the collapsed block's max-height, so
                that a block that scrolls still ends with its bottom padding */
             align-items: flex-start;
         }
 
-        /* ReplyTileView puts 4px under a quoted code block, but github-markdown-css's 16px wins from this later
-           cascade layer */
-        :is(.mx_ReplyChain, .mx_ReplyPreview) & > pre {
+        .mx_ReplyQuote & > pre {
+            /* ReplyTileView clamps a quoted code block to two lines and hides its line numbers */
+            display: -webkit-box;
+            /* ReplyTileView puts 4px under it, but github-markdown-css's 16px wins from this later cascade layer */
             margin-block-end: var(--cpd-space-1x);
         }
 
-        /* A collapsed reply quote clamps a code block to two lines, but the line after them is still laid out in the
+        /* A collapsed quote clamps a code block to two lines, but the line after them is still laid out in the
            block's bottom padding, so clip at the content box rather than the padding box */
-        :is(.mx_ReplyChain:not(.mx_ReplyChain--expanded), .mx_ReplyPreview) & > pre {
+        .mx_ReplyQuote:not(.mx_ReplyChain--expanded) & > pre {
             overflow: clip;
             overflow-clip-margin: content-box;
         }

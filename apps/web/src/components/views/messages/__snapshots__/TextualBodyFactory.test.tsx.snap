@@ -41,7 +41,7 @@ exports[`<TextualBody /> > renders formatted m.text correctly > linkification is
     class="mx_EventTile_pre_container"
   >
     <pre
-      class="mx_EventTile_collapsedCodeBlock"
+      class="mx_EventTile_collapsedCodeBlock mx_EventTile_pre--lineNumbers"
     >
       <span
         class="mx_EventTile_lineNumbers"
@@ -276,7 +276,7 @@ exports[`<TextualBody /> > renders formatted m.text correctly > pills do not app
     class="mx_EventTile_pre_container"
   >
     <pre
-      class="mx_EventTile_collapsedCodeBlock"
+      class="mx_EventTile_collapsedCodeBlock mx_EventTile_pre--lineNumbers"
     >
       <span
         class="mx_EventTile_lineNumbers"
@@ -388,7 +388,7 @@ exports[`<TextualBody /> > renders formatted m.text correctly > should syntax hi
     class="mx_EventTile_pre_container"
   >
     <pre
-      class="mx_EventTile_collapsedCodeBlock"
+      class="mx_EventTile_collapsedCodeBlock mx_EventTile_pre--lineNumbers"
     >
       <span
         class="mx_EventTile_lineNumbers"

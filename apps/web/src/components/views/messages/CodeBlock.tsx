@@ -130,7 +130,8 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
         <div className="mx_EventTile_pre_container">
             <pre
                 className={classNames({
-                    mx_EventTile_collapsedCodeBlock: !expanded,
+                    "mx_EventTile_collapsedCodeBlock": !expanded,
+                    "mx_EventTile_pre--lineNumbers": !!lineNumbers,
                 })}
             >
                 {lineNumbers}
