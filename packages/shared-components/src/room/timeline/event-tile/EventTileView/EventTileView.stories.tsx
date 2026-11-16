@@ -1108,7 +1108,7 @@ function EventTileViewStoryContent({
         isLast = false,
         bodyOverride?: React.ReactNode,
         showSenderAndAvatarOverride?: boolean,
-        slotsOverride?: EventTileViewProps["slots"],
+        slotsOverride?: Partial<EventTileViewProps["slots"]>,
     ): React.ReactElement => {
         const tileState = {
             previewClamped: shape === "ThreadsList" || shape === "Notification",
@@ -1126,7 +1126,8 @@ function EventTileViewStoryContent({
         const sender = createStorySender(isOwnEvent, showSenderAndAvatar && !tileState.noSender && !tileState.info);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
         const tileSlots = {
-            ...(slotsOverride ?? props.slots),
+            ...props.slots,
+            ...slotsOverride,
             ...(bodyOverride === undefined ? {} : { body: bodyOverride }),
         };
         const slots =
@@ -1293,8 +1294,8 @@ function EventTileViewStoryContent({
                         <StoryInformationalBody>Alex changed the room name.</StoryInformationalBody>,
                     )}
                     {renderTile(
-                        false,
-                        "informational-second",
+                        true,
+                        "informational-notifications-own",
                         { info: true, continuation: false, lastInSection: false },
                         false,
                         <StoryInformationalBody>Notifications are enabled.</StoryInformationalBody>,
@@ -1302,12 +1303,30 @@ function EventTileViewStoryContent({
                     {renderTile(
                         false,
                         "informational-last",
-                        { info: true, continuation: false, lastInSection: true },
-                        true,
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
                         <StoryInformationalBody>
                             This longer informational event demonstrates how shared textual event styling handles a
                             detailed message that wraps across two rows in the timeline.
                         </StoryInformationalBody>,
+                    )}
+                    {renderTile(
+                        true,
+                        "informational-reaction-own",
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
+                        <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                        undefined,
+                        { footer: <StoryFooter /> },
+                    )}
+                    {renderTile(
+                        false,
+                        "informational-reaction-received",
+                        { info: true, continuation: false, lastInSection: true },
+                        true,
+                        <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                        undefined,
+                        { footer: <StoryFooter /> },
                     )}
                 </>
             );
@@ -1478,6 +1497,7 @@ const storyHelpers = {
     StoryEditedMessageBody,
     StoryMessageComposer,
     StoryEmoteBody,
+    StoryFooter,
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,

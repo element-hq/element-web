@@ -357,6 +357,7 @@
 
         .line {
             padding-block: 3px 2px;
+            line-height: normal;
         }
 
         .slotTimestamp,
@@ -833,12 +834,12 @@
         z-index: 9;
         inset-block-start: 6px;
         inset-inline-start: -36px;
-        line-height: 0;
         border: 4px solid var(--cpd-color-bg-canvas-default);
         border-radius: 50%;
     }
 
     .slotAvatar > * {
+        display: block;
         border-radius: 50%;
         box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default);
     }
@@ -1111,11 +1112,16 @@
         --event-tile-body-padding: 0;
 
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: flex-start;
         margin-block: 0;
         margin-inline-end: 0;
         padding-block: 0;
+
+        &.hasReceiptSlot {
+            margin-inline-end: var(--event-tile-bubble-margin-inline-end);
+        }
 
         &.stateContinuation {
             margin-block-start: 2px;
@@ -1131,25 +1137,28 @@
             margin-inline-end: var(--event-tile-bubble-gap);
             border: 0;
             flex-shrink: 0;
-            line-height: 1;
         }
 
         .slotAvatar > *,
         .slotAvatar > * > * {
-            /* Compound Avatar sets its own fallback line-height; override it
-               so initials remain vertically centred in the 14px avatar. */
-            line-height: 1 !important;
             box-shadow: none;
         }
 
         .line {
-            width: 100%;
-            min-width: 100%;
+            flex: 1 1 0;
+            width: auto;
+            min-width: 0;
             max-width: 100%;
             margin: 0;
             padding-block: 0;
             padding-inline: 0 60px;
             background: transparent;
+        }
+
+        /* Keep reactions below the info row instead of beside the message. */
+        .slotFooter {
+            flex: 0 0 calc(100% - 14px - var(--event-tile-bubble-gap));
+            margin-inline: calc(14px + var(--event-tile-bubble-gap)) 0;
         }
 
         .slotTimestamp {
@@ -1726,6 +1735,10 @@
            the body must not reserve the external timestamp gutter. */
         .slotBody {
             --event-tile-bubble-max-width: min(100%, 600px);
+        }
+
+        &.stateInfo.hasReceiptSlot {
+            margin-inline-end: 0;
         }
     }
 
