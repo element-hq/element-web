@@ -291,7 +291,7 @@ describe("MessagePreviewStore", () => {
         );
     });
 
-    it("should drop the preview of a message that a retention policy expires", async () => {
+    it("should drop the preview of a message redacted without a redaction in the timeline", async () => {
         const message = mkMessage({
             user: "@sender:server",
             event: true,
@@ -301,7 +301,7 @@ describe("MessagePreviewStore", () => {
         await addEvent(store, room, message);
         expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toContain("Expiring message");
 
-        // A retention policy redacts expired events locally: nothing new reaches the timeline.
+        // This is how a retention policy expires a message: it redacts it locally and adds nothing to the timeline.
         const redaction = new MatrixEvent({
             type: EventType.RoomRedaction,
             redacts: message.getId(),
