@@ -66,6 +66,8 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
 
         const url = new URL(fullUrl);
         const parts = url.pathname.split("/");
+        // The query is not part of the pathname. Other parameters, such as `action` and custom ones, are not used.
+        const via = url.searchParams.getAll("via").filter((server) => !!server);
 
         const identifier = parts[0];
         const entityNoSigil = parts[1];
@@ -77,16 +79,12 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
 
             if (parts.length === 2) {
                 // room without event permalink
-                const [roomId, query = ""] = entityNoSigil.split("?");
-                const via = query.split(/&?via=/g).filter((p) => !!p);
-                return PermalinkParts.forRoom(`${sigil}${roomId}`, via);
+                return PermalinkParts.forRoom(`${sigil}${entityNoSigil}`, via);
             }
 
             if (parts[2] === "e") {
                 // event permalink
-                const eventIdAndQuery = parts.length > 3 ? parts.slice(3).join("/") : "";
-                const [eventId, query = ""] = eventIdAndQuery.split("?");
-                const via = query.split(/&?via=/g).filter((p) => !!p);
+                const eventId = parts.slice(3).join("/");
                 return PermalinkParts.forEvent(`${sigil}${entityNoSigil}`, `$${eventId}`, via);
             }
 
