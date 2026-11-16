@@ -12,6 +12,8 @@
     gap: var(--cpd-space-1x);
     padding: var(--cpd-space-1x) var(--cpd-space-3x) var(--cpd-space-1x) var(--cpd-space-1x);
     font: var(--cpd-font-body-xs-medium);
+    /* Keep the label on one line; in a narrow footer the reactions wrap instead */
+    white-space: nowrap;
     background-color: var(--cpd-color-bg-subtle-secondary);
     color: var(--cpd-color-text-secondary);
     border: 1px solid var(--cpd-color-alpha-gray-400);

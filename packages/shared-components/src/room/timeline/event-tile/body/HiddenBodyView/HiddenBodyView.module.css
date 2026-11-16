@@ -14,6 +14,12 @@
     gap: var(--cpd-space-1-5x);
 }
 
+/* The label is a Compound Text, which brings its own line height. Keep the surrounding text's line height so the
+   row is as tall as a one-line message. */
+.content > span {
+    line-height: inherit;
+}
+
 .icon {
     width: 14px;
     height: 14px;

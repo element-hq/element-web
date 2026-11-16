@@ -45,6 +45,8 @@
     display: flex;
     height: 100%;
     aspect-ratio: 1;
+    /* Keep the border inside the row's height so the tile does not hang below the text */
+    box-sizing: border-box;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;

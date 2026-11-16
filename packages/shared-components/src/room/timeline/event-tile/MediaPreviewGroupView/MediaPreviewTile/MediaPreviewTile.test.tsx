@@ -138,6 +138,21 @@ describe("TextPreviewTile", () => {
 
         expect(container.querySelector("img, video, audio")).toBeNull();
     });
+
+    it("keeps the icon, border included, as tall as the text beside it", () => {
+        // Unit tests do not load Compound's tokens, and the icon only has a border when its color token is set.
+        render(
+            <div style={{ "--cpd-color-icon-quaternary": "black" } as React.CSSProperties}>
+                <DefaultText />
+            </div>,
+        );
+
+        const icon = screen.getByRole("button", { name: "View file" }).parentElement!;
+        const iconBox = icon.getBoundingClientRect();
+        const rowBox = icon.parentElement!.getBoundingClientRect();
+        expect(iconBox.top).toBe(rowBox.top);
+        expect(iconBox.bottom).toBe(rowBox.bottom);
+    });
 });
 
 describe("ImagePreviewTile", () => {

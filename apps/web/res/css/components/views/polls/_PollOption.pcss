@@ -12,14 +12,26 @@ Please see LICENSE files in the repository root for full details.
     padding: 6px 12px;
     background-color: $background;
 
-    .mx_StyledRadioButton_content,
+    /* The extra .mx_StyledRadioButton outweighs the 8px end margin from _StyledRadioButton.pcss, which loads
+       later, so the vote count ends where the bar does */
+    .mx_StyledRadioButton > .mx_StyledRadioButton_content,
     .mx_PollOption_endedOption {
         padding-top: 2px;
-        margin-right: 0px;
+        margin-inline-end: 0;
     }
 
     .mx_StyledRadioButton_spacer {
         display: none;
+    }
+
+    /* Center the radio on the first line of the option text rather than resting it on the text's baseline */
+    .mx_StyledRadioButton {
+        align-items: flex-start;
+    }
+
+    .mx_StyledRadioButton input[type="radio"] + div {
+        /* 2px matches the content's top padding set above; 1lh is the height of one line of the option text */
+        margin-block-start: calc(2px + (1lh - $font-16px) / 2);
     }
 }
 

@@ -141,6 +141,19 @@ test.describe("Polls", () => {
         // both me and bot have voted Maybe
         await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2);
 
+        // the vote count ends where the results bar below it ends
+        const maybeOption = getPollTile(page, pollId)
+            .locator(".mx_PollOption")
+            .filter({ hasText: pollParams.options[2] });
+        const voteCountBox = (await maybeOption.locator(".mx_PollOption_optionVoteCount").boundingBox())!;
+        const barBox = (await maybeOption.locator(".mx_PollOption_popularityBackground").boundingBox())!;
+        expect(voteCountBox.x + voteCountBox.width).toBeCloseTo(barBox.x + barBox.width, 0);
+
+        // the radio is centered on the line of the option text
+        const radioBox = (await maybeOption.locator('input[type="radio"] + div').boundingBox())!;
+        const optionTextBox = (await maybeOption.locator(".mx_PollOption_optionText").boundingBox())!;
+        expect(radioBox.y + radioBox.height / 2).toBeCloseTo(optionTextBox.y + optionTextBox.height / 2, 0);
+
         // change my vote to 'Yes'
         await getPollOption(page, pollId, pollParams.options[0]).click();
 

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { render } from "@test-utils";
+import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
 import React from "react";
@@ -33,5 +33,19 @@ describe("EventTileBubble", () => {
     it("renders the event tile bubble as crypto event bubble", () => {
         const { container } = render(<IsCryptoEventBubble />);
         expect(container).toMatchSnapshot();
+    });
+
+    // The bubble inherits the line height of the timeline layout: 22px in the modern layout, 18px in bubble and IRC.
+    it.each(["22px", "18px"])("centers the icon on the title with a %s line height", (lineHeight) => {
+        render(
+            <div style={{ lineHeight }}>
+                <IsCryptoEventBubble />
+            </div>,
+        );
+
+        const title = screen.getByText("Encryption enabled");
+        const iconBox = title.parentElement!.querySelector("svg")!.getBoundingClientRect();
+        const titleLineCenter = title.getBoundingClientRect().top + Number.parseFloat(lineHeight) / 2;
+        expect(iconBox.top + iconBox.height / 2).toBe(titleLineCenter);
     });
 });
