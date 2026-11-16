@@ -139,7 +139,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         const opts: IOpts = {};
         const createOpts: IOpts["createOpts"] = (opts.createOpts = {});
         opts.roomType = this.props.type;
-        opts.name = this.state.name;
+        // Leading and trailing whitespace is not part of the name.
+        opts.name = this.state.name.trim();
 
         if (this.state.joinRule === JoinRule.Public) {
             createOpts.visibility = Visibility.Public;
@@ -276,7 +277,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         rules: [
             {
                 key: "required",
-                test: async ({ value }) => !!value,
+                // A name made only of whitespace would leave the room with no visible name.
+                test: async ({ value }) => !!value?.trim(),
                 invalid: () => _t("create_room|name_validation_required"),
             },
         ],
