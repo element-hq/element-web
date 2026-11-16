@@ -162,6 +162,34 @@ test.describe("Retention", () => {
         await expect(thread.getByText("Thread reply")).toBeHidden();
     });
 
+    test("should keep the replies of an open thread after its root expires", async ({ app, page, bot }) => {
+        const roomId = await openRoomWithRetention({ app, bot });
+        const { event_id: rootId } = await bot.sendMessage(roomId, "Thread root");
+        // Leave a gap between the root and the reply, so that there is a moment when only the root has expired.
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        const { event_id: replyId } = await bot.sendMessage(roomId, "Thread reply", rootId);
+        await page.locator(".mx_EventTile", { hasText: "Thread root" }).getByText("1 reply").click();
+        const thread = page.locator(".mx_ThreadView");
+        await expect(thread.getByText("Thread reply")).toBeVisible();
+
+        // Move the clock to 1.5s before the reply expires, which is after the root has.
+        const replyExpiry =
+            (await app.client.evaluate(
+                (cli, { roomId, replyId }) => cli.getRoom(roomId)!.findEventById(replyId)!.getTs(),
+                { roomId, replyId },
+            )) + ONE_MINUTE;
+        await page.clock.fastForward(replyExpiry - 1500 - (await page.evaluate(() => Date.now())));
+
+        // The thread stays open with the root shown as deleted, as it would be after a redaction.
+        await expect(thread.getByText("Thread root")).toBeHidden();
+        await expect(thread.getByText("Message deleted")).toBeVisible();
+        await expect(thread.getByText("Thread reply")).toBeVisible();
+
+        await page.clock.fastForward(3000);
+
+        await expect(thread.getByText("Thread reply")).toBeHidden();
+    });
+
     test("should expire messages loaded from the sync cache after a reload", async ({ app, page, bot }) => {
         const roomId = await openRoomWithRetention({ app, bot });
         const tiles = (await Promise.all([1, 2, 3].map((index) => bot.sendMessage(roomId, `Message ${index}`)))).map(
