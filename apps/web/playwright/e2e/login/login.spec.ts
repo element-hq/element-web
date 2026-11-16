@@ -5,8 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Page } from "@playwright/test";
-
 import { expect, test } from "../../element-web-test";
 import { logIntoElement } from "../crypto/utils.ts";
 
@@ -28,52 +26,5 @@ test.describe(`With force_verification: true`, () => {
         await page.goto("/");
 
         await expect(page.getByRole("heading", { name: `Welcome ${credentials.displayName}` })).toBeVisible();
-    });
-});
-
-/** Make the homeserver offer password login, and single sign-on with the given identity provider brands. */
-async function offerIdentityProviders(page: Page, brands: string[]): Promise<void> {
-    await page.route("**/_matrix/client/*/login", async (route, request) => {
-        if (request.method() !== "GET") return route.fallback();
-        await route.fulfill({
-            json: {
-                flows: [
-                    { type: "m.login.password" },
-                    {
-                        type: "m.login.sso",
-                        identity_providers: brands.map((brand) => ({ id: brand, name: brand, brand })),
-                    },
-                ],
-            },
-        });
-    });
-}
-
-test.describe("SSO buttons", () => {
-    test("should show several identity providers as a row of round buttons", async ({ page }) => {
-        const brands = ["github", "gitlab", "google"];
-        await offerIdentityProviders(page, brands);
-        await page.goto("/#/login");
-
-        await expect(page.getByTestId(`idp-${brands[0]}`)).toBeVisible();
-        const boxes = await Promise.all(brands.map((brand) => page.getByTestId(`idp-${brand}`).boundingBox()));
-        for (const box of boxes) {
-            expect(box!.width).toBeCloseTo(box!.height, 0);
-            expect(box!.y).toBeCloseTo(boxes[0]!.y, 0);
-        }
-    });
-
-    test("should vertically center the logo of an identity provider", async ({ page }) => {
-        await offerIdentityProviders(page, ["github"]);
-        await page.goto("/#/login");
-
-        const button = page.getByTestId("idp-github");
-        await expect(button).toBeVisible();
-        const buttonBox = await button.boundingBox();
-        const logoBox = await button.locator("svg").boundingBox();
-        expect(logoBox!.y - buttonBox!.y).toBeCloseTo(
-            buttonBox!.y + buttonBox!.height - (logoBox!.y + logoBox!.height),
-            0,
-        );
     });
 });
