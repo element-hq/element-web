@@ -98,12 +98,6 @@ jobs:
             _CL_: -Brepro
             _LINK_: -Brepro -PDBALTPATH:%_PDB%
         steps:
-            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
-            - name: Configure git line endings
-              run: |
-                  git config --system core.autocrlf false
-                  git config --system core.eol lf
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
@@ -119,6 +113,8 @@ jobs:
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             # Ensure the prebuilt seshat binaries for the target architecture get installed when cross-building
