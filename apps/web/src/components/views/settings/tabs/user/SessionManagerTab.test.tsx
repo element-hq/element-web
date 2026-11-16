@@ -796,6 +796,11 @@ describe("<SessionManagerTab />", () => {
             expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true, {
                 onBeforeClose: expect.any(Function),
             });
+
+            // the dialog must not close on background click, only via its own buttons
+            const { onBeforeClose } = modalSpy.mock.lastCall![5]!;
+            await expect(onBeforeClose!("backgroundClick")).resolves.toBe(false);
+            await expect(onBeforeClose!()).resolves.toBe(true);
         });
 
         it("Signs out of current device from kebab menu", async () => {

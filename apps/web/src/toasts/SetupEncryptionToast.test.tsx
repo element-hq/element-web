@@ -67,6 +67,11 @@ describe("SetupEncryptionToast", () => {
                 false,
                 { onBeforeClose: expect.any(Function) },
             );
+
+            // the dialog must not close on background click, only via its own buttons
+            const { onBeforeClose } = vi.mocked(Modal.createDialog).mock.lastCall![5]!;
+            await expect(onBeforeClose!("backgroundClick")).resolves.toBe(false);
+            await expect(onBeforeClose!()).resolves.toBe(true);
         });
 
         it("should dismiss the toast when 'Dismiss' button clicked, and remember it", async () => {
