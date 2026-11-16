@@ -776,7 +776,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         data: IRtcLivekitGetTokenFromWidgetRequestData,
     ): Promise<IRtcLivekitGetTokenFromWidgetResponseData> {
         // Errors are re-thrown so that MatrixErrors reach the widget as matrix_api_error details
-        return { ...(await MatrixClientPeg.safeGet()._unstable_getLivekitToken(data)) };
+        return { ...(await MatrixClientPeg.safeGet().getLivekitToken(data)) };
     }
 
     /**

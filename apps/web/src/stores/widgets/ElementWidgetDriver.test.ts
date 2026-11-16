@@ -479,15 +479,15 @@ describe("ElementWidgetDriver", () => {
         });
 
         it("gets a LiveKit token from the homeserver", async () => {
-            client._unstable_getLivekitToken.mockResolvedValue({ jwt: "the-jwt" });
+            client.getLivekitToken.mockResolvedValue({ jwt: "the-jwt" });
 
             await expect(driver.getRtcLivekitToken(request)).resolves.toEqual({ jwt: "the-jwt" });
-            expect(client._unstable_getLivekitToken).toHaveBeenCalledWith(request);
+            expect(client.getLivekitToken).toHaveBeenCalledWith(request);
         });
 
         it("propagates errors from the homeserver", async () => {
             const error = new MatrixError({ errcode: "M_FORBIDDEN", error: "Not in room" }, 403);
-            client._unstable_getLivekitToken.mockRejectedValue(error);
+            client.getLivekitToken.mockRejectedValue(error);
 
             await expect(driver.getRtcLivekitToken(request)).rejects.toBe(error);
         });
