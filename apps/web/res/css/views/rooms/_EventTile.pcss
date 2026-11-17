@@ -151,6 +151,10 @@ $left-gutter: 64px;
         color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
         flex: 1;
 
+        > p:last-child {
+            margin-block-end: 0;
+        }
+
         pre,
         code {
             font-family: $monospace-font-family !important;
