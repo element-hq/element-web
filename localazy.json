@@ -76,7 +76,11 @@
         "actions": {
             "conditions": "startsWith: modules/, ${path}",
             "type": "json-multilingual",
-            "output": "${path}/${file}"
+            "output": "${path}/${file}",
+            "params": {
+                "filter_untranslated": true,
+                "lang_format": "ll_rr_scrp"
+            }
         }
     }
 }
