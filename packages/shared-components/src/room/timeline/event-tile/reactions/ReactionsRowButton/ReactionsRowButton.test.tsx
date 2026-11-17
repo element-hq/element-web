@@ -6,7 +6,7 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render } from "@test-utils";
+import { fireEvent, render } from "@test-utils";
 import React from "react";
 import { describe, it, expect } from "vitest";
 
@@ -23,5 +23,24 @@ describe("ReactionsRowButton", () => {
     it("renders the selected reaction button", () => {
         const { container } = render(<Selected />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("shows the animated reaction image only while hovered or focused", () => {
+        const { container } = render(
+            <Default imageSrc="https://server/static" animatedImageSrc="https://server/animated" imageAlt="party" />,
+        );
+        const button = container.querySelector("button")!;
+        const img = container.querySelector("img")!;
+        expect(img.getAttribute("src")).toBe("https://server/static");
+
+        fireEvent.mouseEnter(button);
+        expect(img.getAttribute("src")).toBe("https://server/animated");
+        fireEvent.mouseLeave(button);
+        expect(img.getAttribute("src")).toBe("https://server/static");
+
+        fireEvent.focus(button);
+        expect(img.getAttribute("src")).toBe("https://server/animated");
+        fireEvent.blur(button);
+        expect(img.getAttribute("src")).toBe("https://server/static");
     });
 });

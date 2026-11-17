@@ -130,6 +130,9 @@ describe("ReactionsRowButtonViewModel", () => {
 
             expect(vm.getSnapshot()).toMatchObject({
                 imageSrc: `https://example.org/_matrix/media/reaction.png?16x16&scale&animated=${autoplayGifs}`,
+                animatedImageSrc: autoplayGifs
+                    ? undefined
+                    : "https://example.org/_matrix/media/reaction.png?16x16&scale&animated=true",
                 imageAlt: "party",
             });
             expect(getAriaLabel(vm)).toContain("reacted with party");

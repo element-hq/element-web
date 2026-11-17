@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type HTMLAttributes, type JSX } from "react";
+import React, { type HTMLAttributes, type JSX, useState } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
@@ -37,6 +37,11 @@ export interface ReactionsRowButtonViewSnapshot extends Pick<
      * The image URL to render when using a custom reaction image.
      */
     imageSrc?: string;
+    /**
+     * The image URL to render instead of `imageSrc` while the button is hovered or focused, to animate the custom
+     * reaction image only then.
+     */
+    animatedImageSrc?: string;
     /**
      * The alt text for the custom reaction image.
      */
@@ -71,7 +76,9 @@ interface ReactionsRowButtonViewProps {
  */
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
     const snapshot = useViewModel(vm) as ReactionsRowButtonViewSnapshot & { ariaLabel?: string };
-    const { content, count, className, isSelected, isDisabled, imageSrc, imageAlt, tooltipVm } = snapshot;
+    const { content, count, className, isSelected, isDisabled, imageSrc, animatedImageSrc, imageAlt, tooltipVm } =
+        snapshot;
+    const [hoveredOrFocused, setHoveredOrFocused] = useState(false);
     const ariaLabel = snapshot["aria-label"] ?? snapshot.ariaLabel;
     const ariaDisabled = isDisabled ? true : undefined;
     const classes = classNames(className, styles.reactionsRowButton, {
@@ -80,7 +87,13 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
     });
 
     const reactionContent = imageSrc ? (
-        <img className={styles.reactionsRowButtonContent} alt={imageAlt ?? ""} src={imageSrc} width="16" height="16" />
+        <img
+            className={styles.reactionsRowButtonContent}
+            alt={imageAlt ?? ""}
+            src={(hoveredOrFocused && animatedImageSrc) || imageSrc}
+            width="16"
+            height="16"
+        />
     ) : (
         <span className={styles.reactionsRowButtonContent} aria-hidden="true">
             {content ?? ""}
@@ -96,6 +109,10 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
                 aria-label={ariaLabel}
                 aria-disabled={ariaDisabled}
                 onClick={isDisabled ? undefined : vm.onClick}
+                onMouseEnter={() => setHoveredOrFocused(true)}
+                onMouseLeave={() => setHoveredOrFocused(false)}
+                onFocus={() => setHoveredOrFocused(true)}
+                onBlur={() => setHoveredOrFocused(false)}
             >
                 {reactionContent}
                 <span className={styles.reactionsRowButtonCount} aria-hidden="true">
