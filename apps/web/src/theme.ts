@@ -147,8 +147,8 @@ function clearCustomTheme(): void {
     }
 
     // remove the custom style sheets
-    document.querySelector("head > style[title='custom-theme-font-faces']")?.remove();
-    document.querySelector("head > style[title='custom-theme-compound']")?.remove();
+    document.querySelector("head > style[data-mx-custom-theme='font-faces']")?.remove();
+    document.querySelector("head > style[data-mx-custom-theme='compound']")?.remove();
 }
 
 const allowedFontFaceProps = [
@@ -281,7 +281,7 @@ function setCustomThemeVars(customTheme: CustomTheme): void {
         if (fonts.faces) {
             const css = generateCustomFontFaceCSS(fonts.faces);
             const style = document.createElement("style");
-            style.setAttribute("title", "custom-theme-font-faces");
+            style.setAttribute("data-mx-custom-theme", "font-faces");
             style.setAttribute("type", "text/css");
             style.appendChild(document.createTextNode(css));
             document.head.appendChild(style);
@@ -296,7 +296,7 @@ function setCustomThemeVars(customTheme: CustomTheme): void {
     if (customTheme.compound) {
         const css = generateCustomCompoundCSS(customTheme.compound);
         const style = document.createElement("style");
-        style.setAttribute("title", "custom-theme-compound");
+        style.setAttribute("data-mx-custom-theme", "compound");
         style.setAttribute("type", "text/css");
         style.appendChild(document.createTextNode(css));
         document.head.appendChild(style);
