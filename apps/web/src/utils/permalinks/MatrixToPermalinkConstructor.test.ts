@@ -44,6 +44,12 @@ describe("MatrixToPermalinkConstructor", () => {
             );
         });
 
+        it("should keep slashes in the localpart of an MXID", () => {
+            expect(permalinkConstructor.parsePermalink("https://matrix.to/#/@us/er:example.com?action=chat")).toEqual(
+                new PermalinkParts(null, null, "@us/er:example.com", null),
+            );
+        });
+
         it.each([
             ["repeated via servers", "?via=one.example.com&via=two.example.com"],
             ["an action after the via servers", "?via=one.example.com&via=two.example.com&action=join"],
