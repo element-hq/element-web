@@ -18,8 +18,13 @@ import {
     type ToDeviceApi as IToDeviceApi,
 } from "@element-hq/element-web-module-api";
 
+// Matrix event types are limited to 255 bytes: https://spec.matrix.org/v1.17/client-server-api/#size-limits
 const MAX_EVENT_TYPE_LENGTH = 255;
 const MAX_DEVICE_ID_LENGTH = 255;
+// Example match: @alice:example.org.
+// Matrix user ID format: https://spec.matrix.org/v1.17/appendices/#user-identifiers
+const MATRIX_USER_ID_REGEX = /^@[^\s:]+:[^\s:]+$/u;
+const MATRIX_DEVICE_ID_INVALID_CHARACTERS_REGEX = /[\p{Cc}\p{White_Space}]/u;
 
 type MatrixSessionIdentity = { readonly userId: string; readonly deviceId: string };
 type Subscription = {
@@ -133,14 +138,15 @@ export class ToDeviceApi implements IToDeviceApi {
         if (!message || typeof message !== "object") {
             throw new Error("Invalid to-device message");
         }
-        if (typeof message.recipientUserId !== "string" || !/^@[^:\s]+:[^\s]+$/u.test(message.recipientUserId)) {
+        if (typeof message.recipientUserId !== "string" || !MATRIX_USER_ID_REGEX.test(message.recipientUserId)) {
             throw new Error("Invalid to-device recipient");
         }
         if (
             typeof message.recipientDeviceId !== "string" ||
             message.recipientDeviceId.length === 0 ||
             message.recipientDeviceId.length > MAX_DEVICE_ID_LENGTH ||
-            (message.recipientDeviceId !== "*" && /[\p{Cc}\p{White_Space}]/u.test(message.recipientDeviceId))
+            (message.recipientDeviceId !== "*" &&
+                MATRIX_DEVICE_ID_INVALID_CHARACTERS_REGEX.test(message.recipientDeviceId))
         ) {
             throw new Error("Invalid to-device device");
         }
@@ -153,12 +159,15 @@ export class ToDeviceApi implements IToDeviceApi {
     }
 
     private isValidEventType(eventType: unknown): eventType is string {
-        return (
-            typeof eventType === "string" &&
-            eventType.trim() === eventType &&
-            eventType.length > 0 &&
-            eventType.length <= MAX_EVENT_TYPE_LENGTH
-        );
+        if (
+            typeof eventType !== "string" ||
+            eventType.trim() !== eventType ||
+            eventType.length === 0 ||
+            eventType.length > MAX_EVENT_TYPE_LENGTH
+        ) {
+            return false;
+        }
+        return new TextEncoder().encode(eventType).byteLength <= MAX_EVENT_TYPE_LENGTH;
     }
 
     private isPlainRecord(value: unknown): value is Record<string, unknown> {

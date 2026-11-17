@@ -93,6 +93,7 @@ describe("ToDeviceApi", () => {
             outgoing({ recipientDeviceId: "x".repeat(256) }),
             outgoing({ type: " " }),
             outgoing({ type: "x".repeat(256) }),
+            outgoing({ type: "é".repeat(128) }),
             outgoing({ content: [] as unknown as Record<string, unknown> }),
             outgoing({ content: new Date() as unknown as Record<string, unknown> }),
         ];
