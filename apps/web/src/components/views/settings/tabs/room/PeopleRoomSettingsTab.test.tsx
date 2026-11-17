@@ -33,6 +33,7 @@ describe("PeopleRoomSettingsTab", () => {
         getUserId: vi.fn(),
         invite: vi.fn(),
         kick: vi.fn(),
+        baseUrl: "https://server",
         mxcUrlToHttp: (mxcUrl: string) => mxcUrl,
     });
     const roomId = "#ask-to-join:example.org";
@@ -85,7 +86,7 @@ describe("PeopleRoomSettingsTab", () => {
             knockMember.setMembershipEvent(
                 new MatrixEvent({
                     content: {
-                        avatar_url: "mxc://example.org/albert-einstein.png",
+                        avatar_url: "mxc://example.org/albert-einstein",
                         displayname: "Albert Einstein",
                         membership: KnownMembership.Knock,
                         reason,

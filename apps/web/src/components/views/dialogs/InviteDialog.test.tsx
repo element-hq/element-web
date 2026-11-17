@@ -136,6 +136,7 @@ describe("InviteDialog", () => {
             getRooms: vi.fn(),
             getAccountData: vi.fn(),
             getPushActionsForEvent: vi.fn(),
+            baseUrl: "https://server",
             mxcUrlToHttp: vi.fn().mockReturnValue(""),
             isRoomEncrypted: vi.fn().mockReturnValue(false),
             getProfileInfo: vi.fn().mockImplementation(async (userId: string) => {

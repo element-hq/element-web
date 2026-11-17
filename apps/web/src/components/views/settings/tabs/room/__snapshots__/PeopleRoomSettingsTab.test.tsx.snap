@@ -31,7 +31,7 @@ exports[`PeopleRoomSettingsTab > with requests to join > renders requests fully 
           height="42px"
           loading="lazy"
           referrerpolicy="no-referrer"
-          src="mxc://example.org/albert-einstein.png"
+          src="https://server/_matrix/media/v3/thumbnail/example.org/albert-einstein?width=42&height=42&method=crop&allow_redirect=true"
           width="42px"
         />
       </span>

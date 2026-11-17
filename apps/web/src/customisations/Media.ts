@@ -120,22 +120,18 @@ class MediaImplementation {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
-        if (animated) {
-            // `mxcUrlToHttp` can't request animated thumbnails.
-            return getHttpUriForMxc(
-                this.client.baseUrl,
-                this.srcMxc,
-                width,
-                height,
-                mode,
-                false,
-                true,
-                undefined,
-                true,
-            );
-        }
-        // eslint-disable-next-line no-restricted-properties
-        return this.client.mxcUrlToHttp(this.srcMxc, width, height, mode, false, true);
+        // `mxcUrlToHttp` can't request animated thumbnails. Static ones leave `animated` out of the URL entirely.
+        return getHttpUriForMxc(
+            this.client.baseUrl,
+            this.srcMxc,
+            width,
+            height,
+            mode,
+            false,
+            true,
+            undefined,
+            animated || undefined,
+        );
     }
 
     /**

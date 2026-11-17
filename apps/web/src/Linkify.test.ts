@@ -78,8 +78,7 @@ describe("linkify-matrix", () => {
                 .spyOn(SettingsStore, "getValue")
                 .mockImplementation((name) => name === "autoplayGifs" && autoplayGifs);
             onTestFinished(() => getValue.mockRestore());
-            const mxcUrlToHttp = vi.fn().mockReturnValue("https://server/static-thumbnail");
-            getMockClientWithEventEmitter({ baseUrl: "https://server", mxcUrlToHttp });
+            getMockClientWithEventEmitter({ baseUrl: "https://server" });
 
             const emoticon = transformTags.img("img", {
                 "src": "mxc://server/emoticon",
@@ -88,14 +87,12 @@ describe("linkify-matrix", () => {
             });
             const image = transformTags.img("img", { src: "mxc://server/image" });
 
-            if (autoplayGifs) {
-                const emoticonUrl = new URL(emoticon.attribs.src!);
-                expect(emoticonUrl.pathname).toBe("/_matrix/media/v3/thumbnail/server/emoticon");
-                expect(emoticonUrl.searchParams.get("animated")).toBe("true");
-            } else {
-                expect(emoticon.attribs.src).toBe("https://server/static-thumbnail");
-            }
-            expect(image.attribs.src).toBe("https://server/static-thumbnail");
+            const emoticonUrl = new URL(emoticon.attribs.src!);
+            expect(emoticonUrl.pathname).toBe("/_matrix/media/v3/thumbnail/server/emoticon");
+            expect(emoticonUrl.searchParams.get("animated")).toBe(autoplayGifs ? "true" : null);
+            const imageUrl = new URL(image.attribs.src!);
+            expect(imageUrl.pathname).toBe("/_matrix/media/v3/thumbnail/server/image");
+            expect(imageUrl.searchParams.has("animated")).toBe(false);
         },
     );
 });

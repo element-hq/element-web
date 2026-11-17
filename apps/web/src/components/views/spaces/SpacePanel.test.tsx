@@ -113,6 +113,7 @@ describe("<SpacePanel />", () => {
         getUserId: vi.fn().mockReturnValue("@test:test"),
         getSafeUserId: vi.fn().mockReturnValue("@test:test"),
         getClientWellKnown: vi.fn(),
+        baseUrl: "https://server",
         mxcUrlToHttp: vi.fn(),
         getRoom: vi.fn(),
         isGuest: vi.fn(),
