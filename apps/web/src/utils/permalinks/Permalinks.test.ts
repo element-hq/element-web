@@ -444,6 +444,14 @@ describe("Permalinks", function () {
             expect(result?.viaServers).toEqual(["m1.org", "m2.org"]);
         });
 
+        it("should read via servers from a matrix.to link whose other parameters contain encoded slashes", () => {
+            expect(
+                parsePermalink(
+                    "https://matrix.to/#/!room:example.com?via=one.example.com&org.example.url=https%3A%2F%2Fx%2Fy",
+                ),
+            ).toEqual(PermalinkParts.forRoom("!room:example.com", ["one.example.com"]));
+        });
+
         it("should correctly parse permalinks with http protocol", () => {
             expect(parsePermalink("http://matrix.to/#/@user:example.com")).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),

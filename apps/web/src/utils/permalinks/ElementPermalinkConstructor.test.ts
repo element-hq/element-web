@@ -34,5 +34,21 @@ describe("ElementPermalinkConstructor", () => {
                 ),
             ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
         });
+
+        it("should read a room link whose other parameters contain slashes", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "https://app.element.io/#/room/!room:example.com?via=one.example.com&org.example.path=a/b",
+                ),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "", ["one.example.com"]));
+        });
+
+        it("should read an event link whose other parameters contain slashes", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "https://app.element.io/#/room/!room:example.com/$event?via=one.example.com&org.example.path=a/b",
+                ),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
+        });
     });
 });
