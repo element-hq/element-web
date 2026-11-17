@@ -100,7 +100,7 @@ export default class SpaceInvaders implements ICanvasEffect {
         if (!this.context || !this.context.canvas) {
             return;
         }
-        this.context.font = "50px Twemoji";
+        this.context.font = '50px "Bundled Noto Color Emoji"';
         for (const particle of arrayFastClone(this.particles)) {
             particle.y += particle.gravity;
 

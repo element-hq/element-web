@@ -513,6 +513,9 @@ importers:
       '@fontsource/inter':
         specifier: 'catalog:'
         version: 5.3.0
+      '@fontsource/noto-color-emoji':
+        specifier: ^5.3.2
+        version: 5.3.2
       '@formatjs/intl-segmenter':
         specifier: ^12.0.0
         version: 12.3.2
@@ -3141,6 +3144,9 @@ packages:
 
   '@fontsource/inter@5.3.0':
     resolution: {integrity: sha512-RofMylZmjlJEfELXeNHFWBRcSs75rGU/6bV2S2jfnvv/3rPXPGe0LgUJTklcHZ9lM4OZmAVFhcJPnACfb91A3g==}
+
+  '@fontsource/noto-color-emoji@5.3.2':
+    resolution: {integrity: sha512-rO15sQ45Dc28hMAMz1X1oSOWxcbqNL+CiHHJ7JPn1gmfiGIuR/QyLuHqBrXivSYHsHVTXGT/m6/DuQ42s5xQkw==}
 
   '@formatjs/fast-memoize@3.1.7':
     resolution: {integrity: sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA==}
@@ -15385,6 +15391,8 @@ snapshots:
   '@fontsource/inconsolata@5.3.0': {}
 
   '@fontsource/inter@5.3.0': {}
+
+  '@fontsource/noto-color-emoji@5.3.2': {}
 
   '@formatjs/fast-memoize@3.1.7': {}
 

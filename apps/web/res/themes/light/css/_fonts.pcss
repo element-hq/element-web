@@ -1,21 +1,26 @@
-/* the 'src' links are relative to the bundle.css, which is in a subdirectory.
+/*
+ * Noto Color Emoji, bundled from @fontsource/noto-color-emoji.
+ *
+ * We declare the font ourselves rather than importing the package's CSS:
+ * - The package's default CSS splits the font into SVG-only files, which Chromium does not render in colour.
+ *   The single `emoji` file carries both COLRv1 (Chromium, Firefox) and SVG (Safari) glyphs.
+ * - It uses its own family name so that it does not replace a system-installed "Noto Color Emoji",
+ *   which the themes list as a fallback for users who turn off the bundled emoji font.
  */
-
-/* Twemoji COLR */
 @font-face {
-    font-family: Twemoji;
+    font-family: "Bundled Noto Color Emoji";
     font-weight: 400;
-    src: url("/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+    src: url("@fontsource/noto-color-emoji/files/noto-color-emoji-emoji-400-normal.woff2") format("woff2");
 }
 /* For at least Chrome on Windows 10, we have to explictly add extra weights for the emoji to appear in bold messages, etc. */
 @font-face {
-    font-family: Twemoji;
+    font-family: "Bundled Noto Color Emoji";
     font-weight: 600;
-    src: url("/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+    src: url("@fontsource/noto-color-emoji/files/noto-color-emoji-emoji-400-normal.woff2") format("woff2");
 }
 
 @font-face {
-    font-family: Twemoji;
+    font-family: "Bundled Noto Color Emoji";
     font-weight: 700;
-    src: url("/res/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+    src: url("@fontsource/noto-color-emoji/files/noto-color-emoji-emoji-400-normal.woff2") format("woff2");
 }
