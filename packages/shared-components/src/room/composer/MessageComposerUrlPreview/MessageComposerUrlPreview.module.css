@@ -75,10 +75,6 @@
     object-fit: contain;
 }
 
-.thumbnailFailed {
-    color: var(--cpd-color-icon-critical-primary);
-}
-
 .text {
     display: flex;
     flex-direction: column;
@@ -95,7 +91,10 @@
     text-overflow: ellipsis;
 }
 
-.title {
+/* The link states are listed so the title wins over the app's global `a:link` / `a:visited` link colour. */
+.title,
+.title:link,
+.title:visited {
     color: var(--cpd-color-text-primary);
     text-decoration: none;
 

@@ -57,9 +57,10 @@ describe("MessageComposerUrlPreview", () => {
     it("renders loading and failed entries", () => {
         const { container } = render(<LoadingAndFailed />);
         expect(screen.getByText("Fetching preview…")).toBeInTheDocument();
-        expect(screen.getByText("Failed to fetch preview")).toBeInTheDocument();
         expect(screen.getByText("element.io")).toBeInTheDocument();
-        expect(screen.getByText("example.com")).toBeInTheDocument();
+        // A failed preview links its host and says there is no preview below it
+        expect(screen.getByRole("link", { name: "example.com" })).toHaveAttribute("href", "https://example.com");
+        expect(screen.getByText("No preview available")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
     });
 

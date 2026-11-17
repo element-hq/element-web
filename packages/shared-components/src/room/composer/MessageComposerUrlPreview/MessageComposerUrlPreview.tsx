@@ -8,7 +8,6 @@
 import React, { type JSX, useCallback } from "react";
 import { IconButton, InlineSpinner, Text, Tooltip } from "@vector-im/compound-web";
 import classNames from "classnames";
-import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
@@ -90,7 +89,7 @@ function linkHost(link: string): string {
 
 /**
  * The square box on the left of a preview card: the preview image, else the site logo, else a link icon.
- * Loading and failed entries show a spinner and an error icon instead.
+ * Loading entries show a spinner, and failed entries the link icon.
  */
 function Thumbnail({ entry }: { entry: MessageComposerUrlPreviewSnapshotEntry }): JSX.Element {
     switch (entry.status) {
@@ -98,12 +97,6 @@ function Thumbnail({ entry }: { entry: MessageComposerUrlPreviewSnapshotEntry })
             return (
                 <div className={styles.thumbnail}>
                     <InlineSpinner />
-                </div>
-            );
-        case "failed":
-            return (
-                <div className={classNames(styles.thumbnail, styles.thumbnailFailed)}>
-                    <ErrorSolidIcon aria-hidden={true} />
                 </div>
             );
         case "loaded": {
@@ -122,13 +115,14 @@ function Thumbnail({ entry }: { entry: MessageComposerUrlPreviewSnapshotEntry })
                     </div>
                 );
             }
-            return (
-                <div className={styles.thumbnail}>
-                    <LinkIcon aria-hidden={true} />
-                </div>
-            );
+            break;
         }
     }
+    return (
+        <div className={styles.thumbnail}>
+            <LinkIcon aria-hidden={true} />
+        </div>
+    );
 }
 
 /** A single preview card, with its remove button at the right end of the card. */
@@ -144,7 +138,10 @@ function UrlPreviewEntry({
         removePreview?.(entry.matched_url);
     }, [removePreview, entry.matched_url]);
 
+    // A failed preview has no title of its own, so it shows the host as its title and says why below it.
+    const host = linkHost(entry.matched_url);
     let title: string;
+    let subtitle = host;
     let showTooltipOnLink = false;
     switch (entry.status) {
         case "loaded":
@@ -155,7 +152,8 @@ function UrlPreviewEntry({
             title = _t("composer|url_preview|loading");
             break;
         case "failed":
-            title = _t("composer|url_preview|failed");
+            title = host;
+            subtitle = _t("composer|url_preview|failed");
             break;
     }
 
@@ -180,7 +178,7 @@ function UrlPreviewEntry({
             <div className={styles.text}>
                 {showTooltipOnLink ? <Tooltip label={entry.matched_url}>{anchor}</Tooltip> : anchor}
                 <Text as="span" size="sm" className={styles.host}>
-                    {linkHost(entry.matched_url)}
+                    {subtitle}
                 </Text>
             </div>
             {removePreview && (

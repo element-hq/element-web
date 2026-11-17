@@ -49,7 +49,7 @@
     "composer": {
         "url_preview": {
             "clear_all": "Clear all",
-            "failed": "Failed to fetch preview",
+            "failed": "No preview available",
             "loading": "Fetching preview…",
             "n_links": {
                 "one": "%(count)s link",
