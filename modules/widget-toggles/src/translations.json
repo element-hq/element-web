@@ -1,0 +1,10 @@
+{
+    "en": {
+        "hide_widget": "Hide %(name)s",
+        "show_widget": "Show %(name)s"
+    },
+    "sv": {
+        "hide_widget": "Dölj %(name)s",
+        "show_widget": "Visa %(name)s"
+    }
+}

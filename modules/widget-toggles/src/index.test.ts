@@ -13,6 +13,7 @@ import { type IWidget } from "matrix-widget-api";
 import WidgetToggleModule from "./index";
 import { CONFIG_KEY, WidgetTogglesConfig } from "./config";
 import { mockWidget, mockWidgetApi } from "./tests/mocks";
+import Translations from "./translations.json";
 
 const makeApi = (widgets: IWidget[] = []): Api => {
     const addRoomHeaderButtonCallback = vi.fn();
@@ -27,6 +28,8 @@ const makeApi = (widgets: IWidget[] = []): Api => {
             getWidgetsInRoom: vi.fn().mockReturnValue(widgets),
         }),
         i18n: {
+            registerLanguage: vi.fn(),
+            namespaced: vi.fn().mockReturnThis(),
             translate: vi.fn().mockImplementation((key: string) => key),
         },
     } as unknown as Api;
@@ -75,6 +78,17 @@ describe("WidgetToggleModule", () => {
             await module.load();
 
             expect(api.extras.addRoomHeaderButtonCallback).toHaveBeenCalledOnce();
+        });
+
+        test("registers translations under CONFIG_KEY", async () => {
+            const api = makeApi();
+            (WidgetTogglesConfig.parse as ReturnType<typeof vi.fn>).mockReturnValue({ types: ["m.custom"] });
+
+            const module = new WidgetToggleModule(api);
+            await module.load();
+
+            expect(api.i18n.namespaced).toHaveBeenCalledWith(CONFIG_KEY);
+            expect(api.i18n.registerLanguage).toHaveBeenCalledWith("en", Translations.en);
         });
 
         test("throws error when config parsing fails", async () => {

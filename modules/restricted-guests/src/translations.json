@@ -1,38 +1,35 @@
 {
-    "register_dialog_register_username_label": {
-        "en": "Username",
-        "de": "Benutzername"
+    "de_DE": {
+        "join_cta": "Als Gast beitreten",
+        "join_message": "Treten Sie dem Raum bei, um teilzunehmen",
+        "register_dialog_busy": "Erstelle dein Konto...",
+        "register_dialog_continue_label": "Als Gast fortfahren",
+        "register_dialog_error": "Die Anmeldung als Gastnutzer ist fehlgeschlagen.",
+        "register_dialog_existing_account": "Ich habe bereits einen Account.",
+        "register_dialog_field_label": "Name",
+        "register_dialog_register_username_label": "Benutzername",
+        "register_dialog_title": "Zugriff anfordern"
     },
-    "register_dialog_title": {
-        "en": "Request access",
-        "de": "Zugriff anfordern"
+    "en": {
+        "join_cta": "Join as guest",
+        "join_message": "Join the room to participate",
+        "register_dialog_busy": "Creating your account...",
+        "register_dialog_continue_label": "Continue as guest",
+        "register_dialog_error": "The account creation failed.",
+        "register_dialog_existing_account": "I already have an account.",
+        "register_dialog_field_label": "Name",
+        "register_dialog_register_username_label": "Username",
+        "register_dialog_title": "Request access"
     },
-    "register_dialog_busy": {
-        "en": "Creating your account...",
-        "de": "Erstelle dein Konto..."
-    },
-    "register_dialog_continue_label": {
-        "en": "Continue as guest",
-        "de": "Als Gast fortfahren"
-    },
-    "register_dialog_field_label": {
-        "en": "Name",
-        "de": "Name"
-    },
-    "register_dialog_existing_account": {
-        "en": "I already have an account.",
-        "de": "Ich habe bereits einen Account."
-    },
-    "register_dialog_error": {
-        "en": "The account creation failed.",
-        "de": "Die Anmeldung als Gastnutzer ist fehlgeschlagen."
-    },
-    "join_message": {
-        "en": "Join the room to participate",
-        "de": "Treten Sie dem Raum bei, um teilzunehmen"
-    },
-    "join_cta": {
-        "en": "Join as guest",
-        "de": "Als Gast beitreten"
+    "sv": {
+        "join_cta": "Gå med som gäst",
+        "join_message": "Gå med i rummet för att delta",
+        "register_dialog_busy": "Skapar ditt konto...",
+        "register_dialog_continue_label": "Fortsätt som gäst",
+        "register_dialog_error": "Det gick inte att skapa kontot.",
+        "register_dialog_existing_account": "Jag har redan ett konto.",
+        "register_dialog_field_label": "Namn",
+        "register_dialog_register_username_label": "Användarnamn",
+        "register_dialog_title": "Begär åtkomst"
     }
 }

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type FC } from "react";
 import styled from "styled-components";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 const Image = styled.img<{
     height?: string;
@@ -17,13 +17,13 @@ const Image = styled.img<{
 `;
 
 interface Props {
-    api: Api;
+    i18n: I18nApi;
     src: string;
     height?: string;
 }
 
-const Logo: FC<Props> = ({ api, src, height }) => {
-    return <Image alt={api.i18n.translate("logo_alt")} src={src} height={height} />;
+const Logo: FC<Props> = ({ i18n, src, height }) => {
+    return <Image alt={i18n.translate("logo_alt")} src={src} height={height} />;
 };
 
 export default Logo;

@@ -15,7 +15,7 @@ import { name as ModuleName } from "../package.json";
 import style from "./style.css" with { type: "css" };
 
 class BannerModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0 || ^2.0.0";
+    public static readonly moduleApiVersion = "^2.6.0";
 
     private config?: ModuleConfig;
 
@@ -30,7 +30,10 @@ class BannerModule implements Module {
 
         document.adoptedStyleSheets.push(style);
 
-        this.api.i18n.register(Translations);
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
+        for (const [language, translations] of Object.entries(Translations)) {
+            i18n.registerLanguage(language, translations);
+        }
 
         try {
             this.config = ModuleConfig.parse(rawConfig);
@@ -47,7 +50,7 @@ class BannerModule implements Module {
         root.render(
             <ThemeProvider theme={this.config.theme}>
                 <Banner
-                    api={this.api}
+                    i18n={i18n}
                     logoUrl={this.config.logo_url}
                     logoHeight={this.config.logo_height}
                     href={this.config.heading_href}
