@@ -246,6 +246,17 @@ describe("<RoomPreviewBar />", () => {
         expect(getMessage(component)).toMatchSnapshot();
     });
 
+    it("names an unknown room from its out-of-band name over its alias", () => {
+        const component = getComponent({
+            room: undefined,
+            canPreview: false,
+            roomAlias: "#alias:test.com",
+            oobData: { name: "Room name" },
+        });
+
+        expect(getMessage(component)?.textContent).toContain("Room name can't be previewed");
+    });
+
     describe("with an invite", () => {
         const inviterName = inviterUserId;
         const userMember = makeMockRoomMember({ userId });

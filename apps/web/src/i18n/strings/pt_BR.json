@@ -1441,8 +1441,6 @@
         "bridge_state_workspace": "Espaço de trabalho: <networkLink/>",
         "click_for_info": "Clique para mais informações",
         "currently_experimental": "Atualmente experimental.",
-        "dynamic_room_predecessors": "Predecessores de salas dinâmicas",
-        "dynamic_room_predecessors_description": "Habilitar MSC3946 (para dar suporte a arquivos de chat para quem chegar mais tarde)",
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "exclude_insecure_devices": "Excluir dispositivos inseguros ao enviar/receber mensagens",
         "exclude_insecure_devices_description": "Quando esse modo estiver ativado, as mensagens criptografadas não serão compartilhadas com dispositivos não verificados e as mensagens de dispositivos não verificados serão mostradas como um erro. Observe que, se você ativar esse modo, talvez não consiga se comunicar com usuários que não verificaram seus dispositivos.",
@@ -2802,7 +2800,6 @@
             "web_session": "Sessão web"
         },
         "show_avatar_changes": "Mostrar alterações na foto do perfil",
-        "show_breadcrumbs": "Mostrar atalhos para salas recentemente visualizadas acima da lista de salas",
         "show_chat_effects": "Mostrar efeitos na conversa (por exemplo: animações ao receber confetes)",
         "show_displayname_changes": "Mostrar alterações de nome e sobrenome",
         "show_join_leave": "Mostrar mensagens de entrada/saída (convites/remoções/bans não são afetados)",

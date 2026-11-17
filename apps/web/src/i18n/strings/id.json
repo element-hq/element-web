@@ -1446,8 +1446,6 @@
         "bridge_state_workspace": "Ruang kerja: <networkLink/>",
         "click_for_info": "Klik untuk info lanjut",
         "currently_experimental": "Saat ini masih dalam uji coba.",
-        "dynamic_room_predecessors": "Pendahulu ruang dinamis",
-        "dynamic_room_predecessors_description": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
         "element_call_video_rooms": "Ruangan video Element Call",
         "encrypted_state_events": "Peristiwa status terenkripsi (MSC4362)",
         "encrypted_state_events_description": "Memungkinkan dukungan eksperimental untuk mengenkripsi peristiwa status, yang menyembunyikan metadata seperti nama ruangan dan topik dari server. Metadata ini juga akan disembunyikan dari orang-orang yang bergabung ke ruangan nanti, serta orang-orang yang kliennya tidak mendukung MSC4362.",
@@ -2819,7 +2817,6 @@
             "web_session": "Sesi web"
         },
         "show_avatar_changes": "Tampilkan perubahan foto profil",
-        "show_breadcrumbs": "Tampilkan jalan pintas ke ruangan yang baru saja ditampilkan di atas daftar ruangan",
         "show_chat_effects": "Tampilkan efek (animasi ketika menerima konfeti, misalnya)",
         "show_displayname_changes": "Tampilkan perubahan nama tampilan",
         "show_join_leave": "Tampilkan pesan-pesan gabung/keluar (undangan/pengeluaran/cekalan tidak terpengaruh)",

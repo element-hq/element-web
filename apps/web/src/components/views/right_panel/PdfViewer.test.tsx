@@ -154,6 +154,16 @@ describe("PdfViewer", () => {
             expect(iframe.port.postMessage).toHaveBeenCalledWith(load, [load.data]);
         });
 
+        it("gives each file without a URI its own iframe", () => {
+            const { rerender } = render(<PdfViewer media={{ ...media("a.pdf"), uri: undefined }} />);
+            const first = screen.getByTestId("pdf-iframe");
+
+            rerender(<PdfViewer media={{ ...media("b.pdf"), uri: undefined }} />);
+
+            // Otherwise the old iframe could still be showing the first file.
+            expect(screen.getByTestId("pdf-iframe")).not.toBe(first);
+        });
+
         it("does not send the document again if the iframe says it is ready twice", async () => {
             const { iframe } = await renderLoaded();
             const again: FakeIframe = { window: iframe.window, port: fakePort() };
@@ -489,6 +499,19 @@ describe("PdfViewer", () => {
 
             const stored = SettingsStore.getValue("pdfViewerState")["mxc://example.org/spec.pdf"];
             expect(Object.keys(stored).sort()).toEqual(["left", "page", "scale", "top", "updatedAt"]);
+        });
+
+        it("keeps no reading position for a file that did not come from Matrix", async () => {
+            const setValue = vi.spyOn(SettingsStore, "setValue");
+            const { iframe, unmount } = await renderLoaded({ ...media(), uri: undefined });
+
+            fromIframe(iframe, {
+                type: "position",
+                position: { page: 12, scale: 150, left: 40, top: 260 },
+            } satisfies PdfUsercontentMessage);
+            unmount();
+
+            expect(setValue).not.toHaveBeenCalled();
         });
     });
 });

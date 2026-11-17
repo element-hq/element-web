@@ -19,7 +19,6 @@ import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
-import SettingsStore from "../../settings/SettingsStore";
 
 export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 
@@ -33,27 +32,13 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
 
     private listMap = new Map<TagID, ListNotificationState>();
     private _globalState = new SummarizedNotificationState();
-    private dynamicRoomPredecessorsWatcherRef?: string;
 
     private constructor(dispatcher = defaultDispatcher) {
         super(dispatcher, {});
-        this.dynamicRoomPredecessorsWatcherRef = SettingsStore.watchSetting(
-            "feature_dynamic_room_predecessors",
-            null,
-            () => {
-                // We pass SyncState.Syncing here to "simulate" a sync happening.
-                // The code that receives these events actually doesn't care
-                // what state we pass, except that it behaves differently if we
-                // pass SyncState.Error.
-                this.emitUpdateIfStateChanged(SyncState.Syncing, false);
-            },
-        );
     }
 
     public destroy(): void {
         super.destroy();
-        SettingsStore.unwatchSetting(this.dynamicRoomPredecessorsWatcherRef);
-        this.dynamicRoomPredecessorsWatcherRef = undefined;
         this.clearRoomStates();
         this._globalState.destroy();
     }
@@ -157,9 +142,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         if (!this.matrixClient) return;
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         const globalState = new SummarizedNotificationState();
-        const visibleRooms = this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
+        const visibleRooms = this.matrixClient.getVisibleRooms();
 
         let numFavourites = 0;
         for (const room of visibleRooms) {

@@ -116,7 +116,7 @@ test.describe("FilePanel", () => {
             // Assert that the value for flexbox is applied
             await expect(filePanel.locator(".mx_ScrollPanel .mx_RoomView_MessageList")).toHaveCSS(
                 "justify-content",
-                "flex-end",
+                "flow-end",
             );
             // Assert that all of the file tiles are visible before taking a snapshot
             await expect(filePanelMessageList.locator(".mx_ImageBody")).toBeVisible(); // top

@@ -48,7 +48,7 @@ export class EventPreviewViewModel
         super(props, EventPreviewViewModel.hiddenSnapshot);
 
         this.disposables.track(() => this.eventContentListener.teardown());
-        this.eventContentListener.setEvent(props.mxEvent, this.onEventContentChanged);
+        this.watchEvent();
         this.updatePreviewSafely();
     }
 
@@ -59,7 +59,7 @@ export class EventPreviewViewModel
             ...this.props,
             mxEvent,
         };
-        this.eventContentListener.setEvent(mxEvent, this.onEventContentChanged);
+        this.watchEvent();
         this.updatePreviewSafely();
     }
 
@@ -70,7 +70,15 @@ export class EventPreviewViewModel
             ...this.props,
             cli,
         };
+        this.watchEvent();
         this.updatePreviewSafely();
+    }
+
+    /** Follow changes to the event's content, including its redaction, which its room reports. */
+    private watchEvent(): void {
+        const { cli, mxEvent } = this.props;
+        const room = mxEvent ? (cli.getRoom(mxEvent.getRoomId()) ?? undefined) : undefined;
+        this.eventContentListener.setEvent(mxEvent, this.onEventContentChanged, room);
     }
 
     private onEventContentChanged = (): void => {

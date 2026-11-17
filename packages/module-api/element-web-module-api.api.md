@@ -46,6 +46,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     // @alpha
     readonly customisations: CustomisationsApi;
     // @alpha
+    readonly documentPreviews: DocumentPreviewApi;
+    // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
@@ -97,6 +99,7 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    waitForClientStarted(): Promise<void>;
 }
 
 // @public
@@ -260,6 +263,25 @@ export type DialogProps<M> = {
 };
 
 // @alpha
+export interface DocumentPreviewApi {
+    getPreviewOpener(file: DocumentPreviewFileInfo): DocumentPreviewOpener | null;
+}
+
+// @alpha
+export interface DocumentPreviewFile {
+    blob: () => Promise<Blob>;
+}
+
+// @alpha
+export interface DocumentPreviewFileInfo {
+    mimetype: string;
+    name?: string;
+}
+
+// @alpha
+export type DocumentPreviewOpener = (file: DocumentPreviewFile) => void;
+
+// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
@@ -268,6 +290,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 export interface ExtrasApi {
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+    setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
@@ -376,7 +399,9 @@ export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean
 
 // @public
 export interface Profile {
+    deviceId?: string;
     displayName?: string;
+    homeserverUrl?: string;
     isGuest?: boolean;
     userId?: string;
 }
@@ -397,7 +422,10 @@ export interface RichVariables {
 // @public
 export interface Room {
     getLastActiveTimestamp: () => number;
+    // @alpha
+    getStateEvents(eventType: string): Watchable<RoomStateEvent[]>;
     id: string;
+    isEncrypted: Watchable<boolean | undefined>;
     name: Watchable<string>;
 }
 
@@ -408,6 +436,12 @@ export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefi
 export interface RoomListStoreApi {
     getRooms(): Watchable<Room[]>;
     waitForReady(): Promise<void>;
+}
+
+// @alpha
+export interface RoomStateEvent {
+    content: Record<string, unknown>;
+    stateKey: string;
 }
 
 // @alpha
@@ -473,6 +507,7 @@ export const enum UIComponent {
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
     PublicRooms = "UIComponent.publicRooms",
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 

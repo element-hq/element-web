@@ -102,13 +102,11 @@ test.use({
         const credentials = await homeserver.registerUser(username, password, displayName);
         console.log(`Registered test user @user:localhost with displayname ${displayName}`);
 
+        // No need to restart the homeserver afterwards: the context fixture above restarts it before each test
         await use({
             ...credentials,
             displayName,
         });
-
-        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
-        await homeserver.restart();
     },
 });
 
@@ -328,9 +326,6 @@ test.describe("Login", () => {
                     // Create a different device which is cross-signed, meaning we need to verify this device
                     await createBot(page, homeserver, credentials, true);
 
-                    // Wait to avoid homeserver rate limit on logins
-                    await page.waitForTimeout(100);
-
                     // Load the page and see that we are asked to verify
                     await page.goto("/#/welcome");
                     await login(page, homeserver, credentials);
@@ -413,7 +408,8 @@ test.describe("Login", () => {
                     // Given we have an encrypted chat
                     await page.goto("/#/welcome");
                     await login(page, homeserver, credentials);
-                    await page.waitForTimeout(5000);
+                    await expect(page).toHaveURL(/\/#\/home$/);
+                    await expect(page.getByRole("navigation", { name: "Room list" })).toBeVisible();
                     await createRoom(page, "My encrypted room", true);
                     await logOutOfElement(page, true);
 
@@ -442,7 +438,6 @@ test.describe("Login", () => {
                 async ({ page, homeserver, credentials }) => {
                     // Given we have another device
                     await createBot(page, homeserver, credentials, true);
-                    await page.waitForTimeout(100); // Avoid server rate limit
 
                     // When we log in and ask to reset our identity
                     await page.goto("/#/welcome");

@@ -74,9 +74,11 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             - name: Fetch layered build
@@ -101,7 +103,7 @@ jobs:
               run: pnpm run build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -161,9 +163,11 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: true
                   require-lockfile: true
 
@@ -171,7 +175,7 @@ jobs:
               uses: ./.github/actions/setup-playwright
               with:
                   needs-webkit: ${{ matrix.project == 'WebKit' }}
-                  write-cache: ${{ github.event_name != 'merge_group' }}
+                  write-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
@@ -186,7 +190,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
                   path: apps/web/blob-report
@@ -210,9 +214,11 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               with:
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: true
                   require-lockfile: true
 
@@ -220,7 +226,7 @@ jobs:
               uses: ./.github/actions/setup-playwright
               with:
                   needs-webkit: false
-                  write-cache: ${{ github.event_name != 'merge_group' }}
+                  write-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
 
             - name: Run Playwright tests
               run: pnpm test:playwright
@@ -230,7 +236,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: blob-report-modules
                   path: modules/blob-report
@@ -301,6 +307,9 @@ jobs:
             - build_ed_macos
         if: always()
         runs-on: ubuntu-26.04
+        env:
+            # Only some deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.prepare.outputs.skip == 'false'
@@ -308,12 +317,19 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
               if: needs.prepare.outputs.skip == 'false'
               with:
                   cache: true
-                  install: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: false
                   require-lockfile: true
+
+            # Merging the reports needs Playwright, from the workspace root's deps, and playwright-common's reporters
+            - name: Install Deps
+              if: needs.prepare.outputs.skip == 'false'
+              run: "pnpm install --frozen-lockfile --filter @element-hq/element-web-playwright-common"
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: needs.prepare.outputs.skip == 'false'
@@ -338,7 +354,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && needs.prepare.outputs.skip == 'false'
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: html-report
                   path: playwright-report

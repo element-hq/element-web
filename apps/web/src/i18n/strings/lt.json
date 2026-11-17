@@ -839,7 +839,6 @@
         "bridge_state_manager": "Šis tiltas yra tvarkomas <user />.",
         "bridge_state_workspace": "Darbo aplinka: <networkLink/>",
         "currently_experimental": "Šiuo metu eksperimentinė.",
-        "dynamic_room_predecessors": "Dinaminiai kambario pirmtakai",
         "element_call_video_rooms": "Element skambučio vaizdo kambariai",
         "feature_wysiwyg_composer_description": "Naudoti raiškųjį tekstą vietoj ženklinimo žinučių rengyklėje.",
         "group_developer": "Kūrėjas",
@@ -1610,7 +1609,6 @@
             "verify_session": "Patvirtinti seansą"
         },
         "show_avatar_changes": "Rodyti profilio nuotraukos pakeitimus",
-        "show_breadcrumbs": "Rodyti neseniai peržiūrėtų kambarių nuorodas virš kambarių sąrašo",
         "show_chat_effects": "Rodyti pokalbių efektus (animaciją, kai gaunate, pvz., konfeti)",
         "show_displayname_changes": "Rodyti rodomo vardo pakeitimus",
         "show_join_leave": "Rodyti prisijungimo/išėjimo žinutes (kvietimai/pašalinimai/blokavimai neturi įtakos)",

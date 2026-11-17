@@ -5,12 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useRef, type JSX, type ReactNode } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, type JSX, type ReactNode, type Ref } from "react";
 import {
     TimelineView,
     useCreateAutoDisposedViewModel,
     useViewModel,
     type TimelineItem,
+    type TimelineViewHandle,
     ReadMarker,
 } from "@element-hq/web-shared-components";
 import { InlineSpinner } from "@vector-im/compound-web";
@@ -24,14 +25,44 @@ import type { GetRelationsForEvent, IReadReceiptProps } from "../views/rooms/Eve
 import { Layout } from "../../settings/enums/Layout";
 import { useSettingValue } from "../../hooks/useSettings";
 import { _t } from "../../languageHandler";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
 import type { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 
+/**
+ * Lets a parent component drive the timeline imperatively. The method names match
+ * TimelinePanel's, so a parent can treat either panel alike.
+ */
+export interface NewTimelinePanelHandle {
+    /** Page up/down scroll the timeline; ctrl+home/end go to the start of the room and the live end. */
+    handleScrollKey(ev: React.KeyboardEvent | KeyboardEvent): void;
+    /** Go to the live end of the room (ctrl+end, escape). */
+    jumpToLiveTimeline(): void;
+    /** Go to the read marker, loading around it if it is not in the window (shift+page up). */
+    jumpToReadMarker(): void;
+    /** Mark everything read and drop the read marker (escape). */
+    forgetReadMarker(): void;
+}
+
 interface NewTimelinePanelProps {
+    /** Receives the panel's {@link NewTimelinePanelHandle} once it has mounted. */
+    ref?: Ref<NewTimelinePanelHandle>;
     room: Room;
+    /** The message to show highlighted. A change after mount jumps to it, as a permalink does. */
     highlightedEventId?: string;
+    /**
+     * Whether `highlightedEventId` still has to be scrolled into view. RoomView clears it
+     * once we report the jump through `onEventScrolledIntoView`, and sets it again when the
+     * same message is asked for again, so a second click on it jumps too.
+     *
+     * Default: true
+     */
+    eventScrollIntoView?: boolean;
+    /** Called once we have gone to `highlightedEventId`. */
+    onEventScrolledIntoView?: (eventId?: string) => void;
     /**
      * How messages are laid out. RoomView watches this setting for us, so a change
      * arrives here as a new prop.
@@ -145,8 +176,11 @@ function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNo
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
  */
 export function NewTimelinePanel({
+    ref,
     room,
     highlightedEventId,
+    eventScrollIntoView,
+    onEventScrolledIntoView,
     layout,
     hidden,
     permalinkCreator,
@@ -247,13 +281,79 @@ export function NewTimelinePanel({
         ],
     );
 
+    const viewRef = useRef<TimelineViewHandle>(null);
+
+    // RoomView drives the timeline's keyboard shortcuts through this; see
+    // NewTimelinePanelHandle. Plain scrolling goes to the view. Jumping to the start of the
+    // room, the live end or the read marker may need messages loaded first, so those go to
+    // the view model, handed the view's own immediate scroll so it can scroll straight away
+    // when nothing needs loading.
+    useImperativeHandle<NewTimelinePanelHandle, NewTimelinePanelHandle>(
+        ref,
+        () => ({
+            handleScrollKey: (ev) => {
+                const view = viewRef.current;
+                if (!view) return;
+                switch (getKeyBindingsManager().getRoomAction(ev)) {
+                    case KeyBindingAction.ScrollUp:
+                        view.scrollByPage(-1);
+                        break;
+                    case KeyBindingAction.ScrollDown:
+                        view.scrollByPage(1);
+                        break;
+                    case KeyBindingAction.JumpToFirstMessage:
+                        // The start of the room, not just the top of what is loaded.
+                        vm.onJumpToStart(view.scrollNow);
+                        break;
+                    case KeyBindingAction.JumpToLatestMessage:
+                        // The live end of the room, not just the end of what is loaded — the
+                        // same distinction TimelinePanel makes for ctrl+end.
+                        vm.onJumpToLive(view.scrollNow);
+                        break;
+                }
+            },
+            jumpToLiveTimeline: () => {
+                if (viewRef.current) vm.onJumpToLive(viewRef.current.scrollNow);
+            },
+            jumpToReadMarker: () => {
+                if (viewRef.current) vm.onJumpToReadMarker(viewRef.current.scrollNow);
+            },
+            forgetReadMarker: () => vm.onMarkAllAsRead(),
+        }),
+        [vm],
+    );
+
+    // RoomView asks for a message after the timeline is open (a pinned message, a link to this
+    // room) by changing `highlightedEventId`, or by setting `eventScrollIntoView` again for the
+    // same one. The message the panel mounted with was loaded when the view model was created,
+    // so that one is only reported, not jumped to.
+    const lastRequestRef = useRef<{ eventId?: string; scrollIntoView: boolean } | null>(null);
+    useEffect(() => {
+        const scrollIntoView = eventScrollIntoView ?? true;
+        const last = lastRequestRef.current;
+        lastRequestRef.current = { eventId: highlightedEventId, scrollIntoView };
+        if (last && last.eventId === highlightedEventId && last.scrollIntoView === scrollIntoView) return;
+        const view = viewRef.current;
+        if (!highlightedEventId) {
+            // The highlighted message was dropped: back to the live end, as the old timeline does.
+            if (last?.eventId) {
+                vm.clearHighlight();
+                if (view) vm.onJumpToLive(view.scrollNow);
+            }
+            return;
+        }
+        if (!scrollIntoView) return;
+        if (last !== null && view) vm.jumpToEvent(highlightedEventId, view.scrollNow);
+        onEventScrolledIntoView?.(highlightedEventId);
+    }, [vm, highlightedEventId, eventScrollIntoView, onEventScrolledIntoView]);
+
     return (
         <div
             className={classNames("mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper", {
                 mx_NewTimelinePanel_hidden: hidden,
             })}
         >
-            <TimelineView vm={vm} renderItem={renderItem} />
+            <TimelineView ref={viewRef} vm={vm} renderItem={renderItem} />
         </div>
     );
 }

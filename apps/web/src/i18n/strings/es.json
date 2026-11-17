@@ -1226,7 +1226,6 @@
         "bridge_state_workspace": "Entorno de trabajo: <networkLink/>",
         "click_for_info": "Haz clic para más info.",
         "currently_experimental": "Actualmente en fase experimental.",
-        "dynamic_room_predecessors": "Predecesores dinámicos de la sala",
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "experimental_description": "¿Te apetece probar cosas experimentales? Aquí encontrarás nuestras ideas en desarrollo. No están terminadas, pueden ser inestables, cambiar o dejar de estar disponibles. <a>Más información</a>.",
         "feature_wysiwyg_composer_description": "Usar texto con formato en lugar de Markdown en el editor de mensajes.",
@@ -2264,7 +2263,6 @@
             "verify_session": "Verificar sesión",
             "web_session": "Sesión web"
         },
-        "show_breadcrumbs": "Incluir encima de la lista de salas unos atajos a las últimas salas que hayas visto",
         "show_chat_effects": "Mostrar efectos de chat (animaciones al recibir ciertos mensajes, como confeti)",
         "show_displayname_changes": "Muestra cambios en los nombres",
         "show_join_leave": "Mostrar mensajes de entrada y salida de la sala (seguirás viendo invitaciones, gente quitada y vetos)",

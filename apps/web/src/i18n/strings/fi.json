@@ -1232,7 +1232,6 @@
         "bridge_state_workspace": "Työtila: <networkLink/>",
         "click_for_info": "Napsauta tästä saadaksesi lisätietoja",
         "currently_experimental": "Tällä hetkellä kokeellinen.",
-        "dynamic_room_predecessors_description": "Ota käyttöön MSC3946 (viiveellä saapuvien huonearkistojen tukemiseksi)",
         "element_call_video_rooms": "Element Call -videohuoneet",
         "experimental_section": "Ennakot",
         "extended_profiles_msc_support": "Edellyttää, että palvelimesi tukee MSC4133:a",
@@ -2411,7 +2410,6 @@
             "web_session": "Web-istunto"
         },
         "show_avatar_changes": "Näytä profiilikuvan muutokset",
-        "show_breadcrumbs": "Näytä oikotiet viimeksi katsottuihin huoneisiin huoneluettelon yläpuolella",
         "show_chat_effects": "Näytä keskustelutehosteet (animaatiot, kun saat esim. konfettia)",
         "show_displayname_changes": "Näytä näyttönimien muutokset",
         "show_join_leave": "Näytä liittymis- ja poistumisviestit (ei vaikutusta kutsuihin, poistamisiin ja porttikieltoihin)",

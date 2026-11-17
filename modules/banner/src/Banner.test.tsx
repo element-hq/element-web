@@ -56,4 +56,31 @@ describe("Banner", () => {
         expect(link).not.toBeNull();
         expect(within(link as HTMLElement).getByRole("heading", { name: "My Portal" })).toBeInTheDocument();
     });
+
+    it("renders the logo at 35px high by default", () => {
+        render(
+            <ThemeProvider theme={Theme.parse({})}>
+                <Banner api={makeApi()} logoUrl="https://example.com/logo.png" href="" menu={menu} title="My Portal" />
+            </ThemeProvider>,
+        );
+
+        expect(screen.getByRole("img", { name: "logo_alt" })).toHaveStyle({ height: "35px" });
+    });
+
+    it("renders the logo at the configured height", () => {
+        render(
+            <ThemeProvider theme={Theme.parse({})}>
+                <Banner
+                    api={makeApi()}
+                    logoUrl="https://example.com/logo.png"
+                    logoHeight={48}
+                    href=""
+                    menu={menu}
+                    title="My Portal"
+                />
+            </ThemeProvider>,
+        );
+
+        expect(screen.getByRole("img", { name: "logo_alt" })).toHaveStyle({ height: "48px" });
+    });
 });

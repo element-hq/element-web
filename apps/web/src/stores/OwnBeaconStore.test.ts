@@ -33,7 +33,6 @@ import { makeBeaconInfoEvent, mockGeolocation, watchPositionMockImplementation }
 import { getMockClientWithEventEmitter } from "test-utils/client";
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "./OwnBeaconStore";
-import SettingsStore from "../settings/SettingsStore";
 
 // modern fake timers and lodash.debounce are a faff
 // short circuit it
@@ -1215,43 +1214,6 @@ describe("OwnBeaconStore", () => {
 
             // new beacon created
             expect(mockClient.unstable_createLiveBeacon).toHaveBeenCalledWith(room1Id, content);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            mockClient.getVisibleRooms.mockReset();
-            mockClient.getVisibleRooms.mockReturnValue([]);
-            await makeOwnBeaconStore();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            mockClient.getVisibleRooms.mockReset();
-            mockClient.getVisibleRooms.mockReturnValue([]);
-            await makeOwnBeaconStore();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
-
-        it("Passes through the dynamic predecessor when reinitialised", async () => {
-            const store = await makeOwnBeaconStore();
-            mockClient.getVisibleRooms.mockReset();
-            mockClient.getVisibleRooms.mockReturnValue([]);
-            store.reinitialiseBeaconState();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
 });

@@ -5,7 +5,13 @@
         "build": {
             "cache": true,
             "command": "vite build",
-            "inputs": ["src"],
+            "inputs": [
+                "production",
+                "buildConfig",
+                "{workspaceRoot}/modules/tsconfig.json",
+                "{workspaceRoot}/packages/module-api/vite.base.ts",
+                { "dependentTasksOutputFiles": "**/*" }
+            ],
             "outputs": ["{projectRoot}/lib"],
             "options": { "cwd": "modules/widget-toggles" },
             "dependsOn": ["^build"]

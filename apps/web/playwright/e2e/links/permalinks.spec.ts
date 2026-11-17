@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Locator } from "@playwright/test";
+import type { Visibility } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 import { Bot } from "../../pages/bot";
 
@@ -104,6 +105,20 @@ test.describe("permalinks", () => {
                 }
             `,
         });
+    });
+
+    test("should name an unknown room from its summary", async ({ page, user, bot }) => {
+        // Not world readable, so the client doesn't peek and the join prompt relies on the room summary
+        const roomId = await bot.createRoom({
+            name: "Summary room",
+            room_alias_name: "summaryroom",
+            visibility: "public" as Visibility,
+        });
+        const { event_id: eventId } = await bot.sendMessage(roomId, "Hello");
+
+        await page.goto(`/#/room/#summaryroom:${user.homeServer}/${eventId}`);
+
+        await expect(page.getByText("Summary room can't be previewed. Do you want to join it?")).toBeVisible();
     });
 });
 
