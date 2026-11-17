@@ -38,14 +38,13 @@
         },
         {
             "groupName": "oxc",
-            "matchDepNames": ["oxlint", "oxfmt"]
+            "matchDepNames": ["oxlint", "oxlint-tsgolint", "oxfmt"]
         },
         {
             "description": "Group all Dockerfile bundled module updates",
             "groupName": "Dockerfile bundled modules",
             "groupSlug": "dockerfile-modules",
             "matchDepTypes": ["dockerfile-module"]
-            "matchDepNames": ["oxlint", "oxlint-tsgolint", "oxfmt"]
         },
         {
             "description": "Keep TanStack Virtual out of the react group, updates usually need the @tanstack/virtual-core patch rebased by hand",
