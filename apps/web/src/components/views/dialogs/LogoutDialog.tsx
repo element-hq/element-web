@@ -181,8 +181,9 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     return (
         <BaseDialog
             contentId="mx_Dialog_content"
-            // Recovery key steps must be cancelled via their own buttons
-            hasCancel={step === Step.Start}
+            // Recovery key steps must be cancelled via their own buttons, but Escape must still
+            // work for accessibility, so only the "X" button is hidden.
+            hideCloseButton={step !== Step.Start}
             onFinished={onFinished}
             className="mx_LogoutDialog"
             aria-label={_t("action|sign_out")}

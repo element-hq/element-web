@@ -48,7 +48,10 @@ export function ChangeRecoveryKeyDialog({
     return (
         <BaseDialog
             className="mx_ChangeRecoveryKeyDialog"
-            hasCancel={false}
+            // Recovery key steps must be cancelled via their own buttons, but Escape must still
+            // work for accessibility, so only the "X" button is hidden.
+            hideCloseButton={true}
+            onFinished={() => onFinished(state === "confirmation")}
             aria-label={
                 userHasRecoveryKey
                     ? _t("settings|encryption|recovery|change_recovery_key")

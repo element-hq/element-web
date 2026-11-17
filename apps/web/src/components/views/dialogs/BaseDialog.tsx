@@ -37,6 +37,15 @@ interface IProps {
     "hasCancel"?: boolean;
 
     /**
+     * Whether to hide the 'close' button while keeping the 'Escape' handler (if `hasCancel` is
+     * true). Used by dialogs whose flows must be cancelled via their own buttons, where
+     * accessibility still requires Escape to work.
+     *
+     * Default: `false`.
+     */
+    "hideCloseButton"?: boolean;
+
+    /**
      * Callback that will be called when the 'close' button is clicked or 'Escape' is pressed.
      *
      * Not used if `hasCancel` is false.
@@ -130,7 +139,7 @@ export default class BaseDialog extends React.Component<IProps> {
 
     public render(): React.ReactNode {
         let cancelButton;
-        if (this.props.hasCancel) {
+        if (this.props.hasCancel && !this.props.hideCloseButton) {
             cancelButton = (
                 <AccessibleButton
                     onClick={this.onCancelClick}
