@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type FC } from "react";
 import styled from "styled-components";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 import { Heading } from "@vector-im/compound-web";
 
 import { type ModuleConfig } from "./config";
@@ -34,7 +34,7 @@ const Root = styled.nav`
 `;
 
 interface Props {
-    api: Api;
+    i18n: I18nApi;
     logoUrl: string;
     /** Height of the logo in pixels, defaults to 35 */
     logoHeight?: number;
@@ -43,22 +43,22 @@ interface Props {
     title: string;
 }
 
-const Banner: FC<Props> = ({ api, logoUrl, logoHeight = 35, href, menu, title }) => {
+const Banner: FC<Props> = ({ i18n, logoUrl, logoHeight = 35, href, menu, title }) => {
     let menuJsx;
     switch (menu.type) {
         case "static": {
-            menuJsx = <Menu api={api} config={menu} data={menu} fallbackLogoUrl={logoUrl} />;
+            menuJsx = <Menu i18n={i18n} config={menu} data={menu} fallbackLogoUrl={logoUrl} />;
             break;
         }
         case "univention": {
-            menuJsx = <UniventionMenu api={api} config={menu} fallbackLogoUrl={logoUrl} />;
+            menuJsx = <UniventionMenu i18n={i18n} config={menu} fallbackLogoUrl={logoUrl} />;
             break;
         }
     }
 
     let headingJsx = (
         <>
-            <Logo api={api} src={logoUrl} height={`${logoHeight}px`} />
+            <Logo i18n={i18n} src={logoUrl} height={`${logoHeight}px`} />
             <Heading size="sm" weight="medium" as="h1">
                 {title}
             </Heading>
@@ -66,7 +66,7 @@ const Banner: FC<Props> = ({ api, logoUrl, logoHeight = 35, href, menu, title })
     );
     if (href) {
         headingJsx = (
-            <a href={href} aria-label={api.i18n.translate("logo_link_label")}>
+            <a href={href} aria-label={i18n.translate("logo_link_label")}>
                 {headingJsx}
             </a>
         );

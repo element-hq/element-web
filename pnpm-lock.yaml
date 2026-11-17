@@ -1077,7 +1077,7 @@ importers:
         specifier: ^21.0.0
         version: 21.0.4
       matrix-web-i18n:
-        specifier: ^3.6.0
+        specifier: 'catalog:'
         version: 3.6.0(supports-color@10.2.2)
       matrix-widget-api:
         specifier: ^1.20.0
@@ -1131,6 +1131,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: 'catalog:'
         version: 6.3.0(vite@8.3.6)
+      matrix-web-i18n:
+        specifier: 'catalog:'
+        version: 3.6.0(supports-color@10.2.2)
       react:
         specifier: 'catalog:'
         version: 19.3.1
@@ -1214,6 +1217,9 @@ importers:
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 5.1.0(playwright@1.65.0)(vite@8.3.6)(vitest@5.1.0)
+      matrix-web-i18n:
+        specifier: 'catalog:'
+        version: 3.6.0(supports-color@10.2.2)
       react:
         specifier: 'catalog:'
         version: 19.3.1

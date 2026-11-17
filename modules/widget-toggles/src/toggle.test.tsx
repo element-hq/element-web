@@ -49,15 +49,17 @@ describe("WidgetToggle", () => {
     test("shows 'Show' label when widget is not in container", () => {
         (widgetApi.isAppInContainer as ReturnType<typeof vi.fn>).mockReturnValue(false);
         render(<WidgetToggle app={app} roomId={roomId} widgetApi={widgetApi} i18nApi={i18nApi} />, { wrapper });
-        const button = screen.getByRole("button", { name: "Show My Widget" });
+        const button = screen.getByRole("button", { name: "show_widget" });
         expect(button).toBeDefined();
+        expect(i18nApi.translate).toHaveBeenCalledWith("show_widget", { name: app.name });
     });
 
     test("shows 'Hide' label when widget is in container", () => {
         (widgetApi.isAppInContainer as ReturnType<typeof vi.fn>).mockReturnValue(true);
         render(<WidgetToggle app={app} roomId={roomId} widgetApi={widgetApi} i18nApi={i18nApi} />, { wrapper });
-        const button = screen.getByRole("button", { name: "Hide My Widget" });
+        const button = screen.getByRole("button", { name: "hide_widget" });
         expect(button).toBeDefined();
+        expect(i18nApi.translate).toHaveBeenCalledWith("hide_widget", { name: app.name });
     });
 
     test("calls moveAppToContainer with 'top' when widget is not in container and button is clicked", async () => {
@@ -65,7 +67,7 @@ describe("WidgetToggle", () => {
 
         (widgetApi.isAppInContainer as ReturnType<typeof vi.fn>).mockReturnValue(false);
         render(<WidgetToggle app={app} roomId={roomId} widgetApi={widgetApi} i18nApi={i18nApi} />, { wrapper });
-        const button = screen.getByRole("button", { name: "Show My Widget" });
+        const button = screen.getByRole("button", { name: "show_widget" });
         await user.click(button);
         expect(widgetApi.moveAppToContainer).toHaveBeenCalledWith(app, "top", roomId);
     });
@@ -75,7 +77,7 @@ describe("WidgetToggle", () => {
 
         (widgetApi.isAppInContainer as ReturnType<typeof vi.fn>).mockReturnValue(true);
         render(<WidgetToggle app={app} roomId={roomId} widgetApi={widgetApi} i18nApi={i18nApi} />, { wrapper });
-        const button = screen.getByRole("button", { name: "Hide My Widget" });
+        const button = screen.getByRole("button", { name: "hide_widget" });
         await user.click(button);
         expect(widgetApi.moveAppToContainer).toHaveBeenCalledWith(app, "right", roomId);
     });
