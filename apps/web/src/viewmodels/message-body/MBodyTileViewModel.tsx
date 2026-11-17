@@ -22,35 +22,15 @@ import { fileSize } from "../../utils/FileUtils";
 import { documentViewerForEvent, openDocumentViewer } from "../../utils/documentViewer";
 
 export class MBodyTileViewModel extends MediaPreviewGroupViewModel {
-    private readonly mxEvent: MatrixEvent;
-    private readonly mediaEventHelper: MediaEventHelper;
-
-    public constructor(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper, documentPreviewsEnabled = false) {
-        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper, documentPreviewsEnabled));
-        this.mxEvent = mxEvent;
-        this.mediaEventHelper = mediaEventHelper;
+    public constructor(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper) {
+        super(MBodyTileViewModel.buildSnapshot(mxEvent, mediaEventHelper));
     }
 
-    /**
-     * Re-derive the tile for a new value of the document previews lab. The setting can be toggled while
-     * the tile is already on screen, so the entry has to be rebuilt rather than only built on construction.
-     *
-     * @param documentPreviewsEnabled Whether the document previews lab is currently enabled.
-     */
-    public setDocumentPreviewsEnabled(documentPreviewsEnabled: boolean): void {
-        this.setProps(MBodyTileViewModel.buildSnapshot(this.mxEvent, this.mediaEventHelper, documentPreviewsEnabled));
-    }
-
-    private static buildSnapshot(
-        mxEvent: MatrixEvent,
-        mediaEventHelper: MediaEventHelper,
-        documentPreviewsEnabled: boolean,
-    ): MediaPreviewGroupSnapshot {
+    private static buildSnapshot(mxEvent: MatrixEvent, mediaEventHelper: MediaEventHelper): MediaPreviewGroupSnapshot {
         const downloader = new FileDownloader();
         const content = mxEvent.getContent<MediaEventContent>();
         const size = content.info?.size;
-        // Behind the same lab as the legacy file body's viewers.
-        const viewer = documentPreviewsEnabled ? documentViewerForEvent(mxEvent) : undefined;
+        const viewer = documentViewerForEvent(mxEvent);
         // includes the download buttonn if mediaEventHelper is not undefined
         const buttons: MediaPreviewEntryButton[] | undefined = mediaEventHelper && [
             ...(viewer

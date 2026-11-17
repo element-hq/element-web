@@ -23,7 +23,6 @@ async function selectModuleOption(page: Page, app: ElementAppPage, name: string)
 test.describe("Document Preview API", () => {
     test.use({
         displayName: "Manny",
-        labsFlags: ["feature_pdf_viewer"],
         config: {
             modules: ["/modules/document-preview-module.js"],
         },
