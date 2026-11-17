@@ -12,7 +12,8 @@ import os from "node:os";
 import path from "node:path";
 import type { CustomWindowsSignTaskConfiguration, WinPackager } from "app-builder-lib";
 
-import { createCachedSign, type Exec, getAuthenticodeSignature } from "./sign-cache.ts";
+import type { Exec } from "./exec.ts";
+import { createCachedSign, getAuthenticodeSignature } from "./sign-cache.ts";
 
 const THUMBPRINT = "ABCDEF0123456789";
 const UNSIGNED = "unsigned contents";
