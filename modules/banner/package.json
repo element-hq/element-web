@@ -24,7 +24,7 @@
         "@types/react-dom": "catalog:",
         "@vitejs/plugin-react": "catalog:",
         "happy-dom": "^21.0.0",
-        "matrix-web-i18n": "^3.6.0",
+        "matrix-web-i18n": "catalog:",
         "matrix-widget-api": "^1.17.0",
         "react": "catalog:",
         "react-dom": "catalog:",

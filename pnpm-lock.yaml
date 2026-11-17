@@ -1077,7 +1077,7 @@ importers:
         specifier: ^21.0.0
         version: 21.0.4
       matrix-web-i18n:
-        specifier: ^3.6.0
+        specifier: 'catalog:'
         version: 3.6.0(supports-color@10.2.2)
       matrix-widget-api:
         specifier: ^1.20.0
