@@ -25,6 +25,19 @@ function emitMessage(client: MatrixClient): void {
 }
 
 describe("ClientApi", () => {
+    it("does not inspect the device identity before to-device communication is used", () => {
+        const getUserId = vi.fn().mockReturnValue("@alice:example.org");
+        const partialClient = { getUserId } as unknown as MatrixClient;
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(partialClient);
+        const dispatcher = new MatrixDispatcher();
+
+        expect(() => {
+            new ClientApi(dispatcher);
+            dispatcher.dispatch({ action: Action.OnLoggedIn, client: partialClient }, true);
+        }).not.toThrow();
+        expect(getUserId).not.toHaveBeenCalled();
+    });
+
     it("should return module room from getRoom()", () => {
         stubClient();
         const client = new ClientApi(new MatrixDispatcher());

@@ -33,14 +33,14 @@ type Subscription = {
 export class ToDeviceApi implements IToDeviceApi {
     private readonly subscriptions = new Set<Subscription>();
     private client: MatrixClient | null = MatrixClientPeg.get();
-    private session: MatrixSessionIdentity | null = this.client && this.getSessionIdentity(this.client);
+    private session: MatrixSessionIdentity | null = null;
     private receivedListener: ((payload: ReceivedToDeviceMessage) => void) | null = null;
 
     /** Send one message without waiting for a response. */
     public sendMessage = async (message: OutgoingToDeviceMessage): Promise<void> => {
         this.validateMessage(message);
         const client = this.client;
-        const session = this.session;
+        const session = this.getSession();
         if (!client || !session || !this.isCurrentSession(client, session)) {
             throw new Error("No active Matrix session");
         }
@@ -83,7 +83,7 @@ export class ToDeviceApi implements IToDeviceApi {
     public setClient(client: MatrixClient | null): void {
         this.detach();
         this.client = client;
-        this.session = client && this.getSessionIdentity(client);
+        this.session = null;
         this.attach();
     }
 
@@ -111,10 +111,10 @@ export class ToDeviceApi implements IToDeviceApi {
     }
 
     private attach(): void {
-        if (this.receivedListener || this.subscriptions.size === 0 || !this.client || !this.session) return;
-        if (!this.isCurrentSession(this.client, this.session)) return;
+        if (this.receivedListener || this.subscriptions.size === 0 || !this.client) return;
         const client = this.client;
-        const session = this.session;
+        const session = this.getSession();
+        if (!session || !this.isCurrentSession(client, session)) return;
         const listener = (payload: ReceivedToDeviceMessage): void => this.onReceived(payload, client, session);
         client.on(ClientEvent.ReceivedToDeviceMessage, listener);
         this.receivedListener = listener;
@@ -169,6 +169,11 @@ export class ToDeviceApi implements IToDeviceApi {
         const deviceId = client.getDeviceId();
         if (!userId || !deviceId) return null;
         return { userId, deviceId };
+    }
+
+    private getSession(): MatrixSessionIdentity | null {
+        if (this.client && !this.session) this.session = this.getSessionIdentity(this.client);
+        return this.session;
     }
 
     private isCurrentSession(client: MatrixClient, session: MatrixSessionIdentity): boolean {
