@@ -27,6 +27,7 @@ import {
     type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, PublicIcon, ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -105,8 +106,8 @@ const spaceNameValidator = withValidation({
     rules: [
         {
             key: "required",
-            // A name made only of whitespace would leave the space with no visible name.
-            test: ({ value }) => !!value?.trim(),
+            // A name made only of whitespace or zero-width characters would leave the space with no visible name.
+            test: ({ value }) => !!removeHiddenChars(value ?? ""),
             invalid: () => _t("create_space|name_required"),
         },
     ],

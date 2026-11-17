@@ -16,6 +16,7 @@ import React, {
     type ChangeEventHandler,
 } from "react";
 import { type Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
@@ -277,8 +278,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         rules: [
             {
                 key: "required",
-                // A name made only of whitespace would leave the room with no visible name.
-                test: ({ value }) => !!value?.trim(),
+                // A name made only of whitespace or zero-width characters would leave the room with no visible name.
+                test: ({ value }) => !!removeHiddenChars(value ?? ""),
                 invalid: () => _t("create_room|name_validation_required"),
             },
         ],

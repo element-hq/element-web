@@ -533,6 +533,8 @@ describe("<CreateRoomDialog />", () => {
             ["several spaces", "   "],
             ["a tab", "\t"],
             ["a non-breaking space", "\u00a0"],
+            ["a zero-width space", "\u200b"],
+            ["spaces mixed with zero-width characters", " \u200b\u200d "],
         ])("should not create a room when the name is only %s", async (_description, roomName) => {
             const onFinished = vi.fn();
             getComponent({ onFinished });
@@ -557,6 +559,20 @@ describe("<CreateRoomDialog />", () => {
             await flushPromises();
 
             expect(onFinished).toHaveBeenCalledWith(true, expect.objectContaining({ name: "Test Room Name" }));
+        });
+
+        it("should keep zero-width characters and combining marks inside a visible room name", async () => {
+            const onFinished = vi.fn();
+            getComponent({ onFinished });
+            await flushPromises();
+
+            // An accent written as a combining mark, and an emoji made of parts joined by zero-width joiners
+            const roomName = "Cafe\u0301 \u{1F468}\u200d\u{1F469}\u200d\u{1F467}";
+            fireEvent.change(screen.getByLabelText("Name"), { target: { value: roomName } });
+            fireEvent.click(screen.getByText("Create room"));
+            await flushPromises();
+
+            expect(onFinished).toHaveBeenCalledWith(true, expect.objectContaining({ name: roomName }));
         });
     });
 });
