@@ -11,7 +11,6 @@ import type {
     DocumentPreviewOpener,
 } from "@element-hq/element-web-module-api";
 
-import SettingsStore from "../settings/SettingsStore";
 import type { SDKContextClass } from "../contexts/SDKContextClass";
 import { documentViewerForFile, openDocumentViewerForFile } from "../utils/documentViewer";
 
@@ -33,15 +32,9 @@ export class DocumentPreviewApi implements IDocumentPreviewApi {
     }
 
     public getPreviewOpener({ mimetype, name }: DocumentPreviewFileInfo): DocumentPreviewOpener | null {
-        // The viewers sit behind a lab, and the right panel drops their card while it is off.
-        if (!SettingsStore.getValue("feature_pdf_viewer")) return null;
         if (!documentViewerForFile({ mimetype, name })) return null;
 
         return ({ blob }) => {
-            // The lab may have been turned off since the opener was returned.
-            if (!SettingsStore.getValue("feature_pdf_viewer")) {
-                throw new Error("Document previews are disabled");
-            }
             // The card opens in the viewed room, and the right panel drops it if there is none.
             // If the context has not loaded yet, no room can have been viewed.
             if (!this.sdkContext?.roomViewStore.getRoomId()) {
