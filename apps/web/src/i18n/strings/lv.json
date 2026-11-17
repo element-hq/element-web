@@ -1452,7 +1452,6 @@
         "enter_key_title": "Ievadiet drošības atslēgu",
         "incorrect_security_phrase_title": "Nepareiza slepenā frāze",
         "key_forgotten_text": "Ja ir aizmirsta drošības atslēga, tad var <button>iestatīt jaunas atkopšanas iespējas</button>",
-        "phrase_forgotten_text": "Ja ir aizmirsta drošības vārdkopa, var <button1>izmantot savu drošības atslēgu</button1> vai <button2>iestatīt jaunas atkopšanas iespējas</button2>",
         "recovery_key_mismatch_title": "Drošības atslēgas atšķiras"
     },
     "right_panel": {

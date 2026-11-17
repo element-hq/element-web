@@ -20,5 +20,16 @@
         "register_dialog_field_label": "Name",
         "register_dialog_register_username_label": "Username",
         "register_dialog_title": "Request access"
+    },
+    "sv": {
+        "join_cta": "Gå med som gäst",
+        "join_message": "Gå med i rummet för att delta",
+        "register_dialog_busy": "Skapar ditt konto...",
+        "register_dialog_continue_label": "Fortsätt som gäst",
+        "register_dialog_error": "Det gick inte att skapa kontot.",
+        "register_dialog_existing_account": "Jag har redan ett konto.",
+        "register_dialog_field_label": "Namn",
+        "register_dialog_register_username_label": "Användarnamn",
+        "register_dialog_title": "Begär åtkomst"
     }
 }

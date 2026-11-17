@@ -1793,8 +1793,6 @@
         "count_of_successfully_restored_keys": "Úspešne obnovených %(sessionCount)s kľúčov",
         "enter_key_description": "Získajte prístup k histórii zabezpečených správ a nastavte bezpečné zasielanie správ zadaním kľúča na obnovenie.",
         "enter_key_title": "Zadajte kľúč na obnovenie",
-        "enter_phrase_description": "Získajte prístup k histórii zabezpečených správ a nastavte bezpečné zasielanie správ zadaním bezpečnostnej frázy.",
-        "enter_phrase_title": "Zadať bezpečnostnú frázu",
         "incorrect_security_phrase_dialog": "Zálohovanie nebolo možné dešifrovať pomocou tejto bezpečnostnej frázy: overte, či ste zadali správnu bezpečnostnú frázu.",
         "incorrect_security_phrase_title": "Nesprávna bezpečnostná fráza",
         "key_backup_warning": "<b>Varovanie</b>: zálohovanie šifrovacích kľúčov by ste mali nastavovať na dôveryhodnom počítači.",
@@ -1806,7 +1804,6 @@
         "load_error_content": "Nie je možné načítať stav zálohy",
         "load_keys_progress": "%(completed)s z %(total)s obnovených kľúčov",
         "no_backup_error": "Nebola nájdená žiadna záloha!",
-        "phrase_forgotten_text": "Ak ste zabudli svoju bezpečnostnú frázu, môžete <button1>použiť kľúč na obnovenie</button1> alebo <button2>nastaviť nové možnosti obnovenia</button2>",
         "recovery_key_mismatch_description": "Zálohovanie nebolo možné dešifrovať pomocou tohto kľúča na obnovenie: overte, či ste zadali správny kľúč na obnovenie.",
         "recovery_key_mismatch_title": "Nezhoda kľúča na obnovenie",
         "restore_failed_error": "Nie je možné obnoviť zo zálohy"
