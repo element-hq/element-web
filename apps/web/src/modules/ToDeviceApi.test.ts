@@ -315,6 +315,27 @@ describe("ToDeviceApi", () => {
         unsubscribe();
     });
 
+    it("removes a subscription when attaching its client listener fails", () => {
+        const client = stubClient();
+        const api = new ToDeviceApi(client);
+        const failedListener = vi.fn();
+        const error = new Error("listener registration failed");
+        const on = vi.spyOn(client, "on").mockImplementation(() => {
+            throw error;
+        });
+
+        expect(() => api.onMessage(MESSAGE_TYPE, failedListener)).toThrow(error);
+
+        on.mockRestore();
+        const listener = vi.fn();
+        const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
+        emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
+
+        expect(failedListener).not.toHaveBeenCalled();
+        expect(listener).toHaveBeenCalledOnce();
+        unsubscribe();
+    });
+
     it("validates subscription inputs while allowing a missing session", async () => {
         const client = stubClient();
         const api = new ToDeviceApi(null);
