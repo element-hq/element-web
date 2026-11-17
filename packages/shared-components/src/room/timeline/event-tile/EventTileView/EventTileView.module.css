@@ -844,7 +844,7 @@
         box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default);
         /* Keep fallback initials centered when host styles (button.mx_BaseAvatar)
            override the avatar's size-based line-height. */
-        line-height: calc(var(--cpd-avatar-size) - 2px);
+        line-height: calc(var(--cpd-avatar-size) - 2px) !important;
     }
 
     > .slotReceipt {
