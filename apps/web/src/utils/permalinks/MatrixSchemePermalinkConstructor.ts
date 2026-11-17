@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
+import PermalinkConstructor, { parseViaServers, PermalinkParts } from "./PermalinkConstructor";
 
 /**
  * Generates matrix: scheme permalinks
@@ -66,8 +66,8 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
 
         const url = new URL(fullUrl);
         const parts = url.pathname.split("/");
-        // The query is not part of the pathname. Other parameters, such as `action` and custom ones, are not used.
-        const via = url.searchParams.getAll("via").filter((server) => !!server);
+        // The query is not part of the pathname, so read the via servers from it separately.
+        const via = parseViaServers(url.search);
 
         const identifier = parts[0];
         const entityNoSigil = parts[1];
