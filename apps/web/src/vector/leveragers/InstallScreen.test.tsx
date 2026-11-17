@@ -100,6 +100,34 @@ describe("renderInstallScreen", () => {
         expect(document.body.childElementCount).toBe(before);
     });
 
+    it("steps aside, without remembering a choice, when the tab becomes the installed app", async () => {
+        // Chrome and Edge move the tab into the app window after install, without reloading it.
+        let standalone = false;
+        const listeners = new Set<() => void>();
+        const query = {
+            get matches() {
+                return standalone;
+            },
+            addEventListener: (_: string, cb: () => void) => listeners.add(cb),
+            removeEventListener: (_: string, cb: () => void) => listeners.delete(cb),
+        };
+        const matchMedia = vi.spyOn(window, "matchMedia").mockReturnValue(query as unknown as MediaQueryList);
+        document.cookie = "lvg_install_screen_dismissed=; Max-Age=0; Path=/";
+        const before = document.body.childElementCount;
+        const shown = renderInstallScreen("chromium", "win");
+        await screen.findAllByRole("button");
+        expect(listeners.size).toBe(1);
+
+        standalone = true;
+        act(() => listeners.forEach((cb) => cb()));
+
+        await expect(shown).resolves.toBeUndefined();
+        expect(document.body.childElementCount).toBe(before);
+        expect(listeners.size).toBe(0);
+        expect(document.cookie).not.toContain("lvg_install_screen_dismissed=1");
+        matchMedia.mockRestore();
+    });
+
     it("hands over to the app when the screen fails to render", async () => {
         vi.spyOn(console, "error").mockImplementation(() => {});
         failRender = true;

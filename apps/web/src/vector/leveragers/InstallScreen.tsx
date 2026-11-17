@@ -516,10 +516,18 @@ export function renderInstallScreen(initialCase: InstallCase, os: InstallOs): Pr
         const container = document.createElement("div");
         let root: Root | undefined;
         let finished = false;
+        // Once installed, Chrome and Edge move this very tab into the app window without reloading
+        // it: the check made at start (`display-mode`) no longer holds. Step aside as soon as the page
+        // becomes the app, without remembering a « stay in the browser » choice.
+        const standalone = window.matchMedia?.("(display-mode: standalone)");
+        const onDisplayMode = (): void => {
+            if (standalone?.matches) done();
+        };
         // Safe to call more than once; always hands over to the app, whatever went wrong.
         const done = (): void => {
             if (finished) return;
             finished = true;
+            standalone?.removeEventListener?.("change", onDisplayMode);
             try {
                 root?.unmount();
             } catch (e) {
@@ -530,6 +538,7 @@ export function renderInstallScreen(initialCase: InstallCase, os: InstallOs): Pr
             resolve();
         };
         try {
+            standalone?.addEventListener?.("change", onDisplayMode);
             document.head.appendChild(style);
             document.body.appendChild(container);
             root = createRoot(container, {
