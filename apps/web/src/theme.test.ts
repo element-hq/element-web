@@ -145,6 +145,36 @@ describe("theme", () => {
             spy.mockRestore();
         });
 
+        it("does not give custom theme style sheets a title", async () => {
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue([
+                {
+                    name: "blue",
+                    fonts: {
+                        faces: [
+                            {
+                                "font-family": "Blue",
+                                "src": [{ url: "https://example.org/blue.woff2", format: "woff2" }],
+                            },
+                        ],
+                    },
+                    compound: {
+                        "--cpd-color-text-action-accent": "var(--cpd-color-blue-900)",
+                    },
+                },
+            ] as any);
+
+            const spy = vi.spyOn(document.head, "appendChild").mockImplementation(() => undefined as any);
+            await new Promise((resolve) => {
+                void setTheme("custom-blue").then(resolve);
+                lightCustomTheme.onload!({} as Event);
+            });
+            expect(spy).toHaveBeenCalledTimes(2);
+            for (const [style] of spy.mock.calls) {
+                expect((style as HTMLStyleElement).hasAttribute("title")).toBe(false);
+            }
+            spy.mockRestore();
+        });
+
         it("should handle 4-char rgba hex strings", async () => {
             vi.spyOn(SettingsStore, "getValue").mockReturnValue([
                 {
@@ -231,7 +261,7 @@ describe("theme", () => {
         beforeEach(() => {
             // Reset document state
             document.body.style.cssText = "";
-            document.head.querySelectorAll("style[title^='custom-theme-']").forEach((el) => el.remove());
+            document.head.querySelectorAll("style[data-mx-custom-theme]").forEach((el) => el.remove());
         });
 
         it("should not remove font family custom properties", async () => {
