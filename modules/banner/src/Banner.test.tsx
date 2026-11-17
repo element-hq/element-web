@@ -64,7 +64,13 @@ describe("Banner", () => {
     it("renders the logo at 35px high by default", () => {
         render(
             <ThemeProvider theme={Theme.parse({})}>
-                <Banner api={makeApi()} logoUrl="https://example.com/logo.png" href="" menu={menu} title="My Portal" />
+                <Banner
+                    i18n={makeI18n()}
+                    logoUrl="https://example.com/logo.png"
+                    href=""
+                    menu={menu}
+                    title="My Portal"
+                />
             </ThemeProvider>,
         );
 
@@ -75,7 +81,7 @@ describe("Banner", () => {
         render(
             <ThemeProvider theme={Theme.parse({})}>
                 <Banner
-                    api={makeApi()}
+                    i18n={makeI18n()}
                     logoUrl="https://example.com/logo.png"
                     logoHeight={48}
                     href=""
