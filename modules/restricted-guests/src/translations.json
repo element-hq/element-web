@@ -1,24 +1,24 @@
 {
-    "en": {
-        "register_dialog_register_username_label": "Username",
-        "register_dialog_title": "Request access",
-        "register_dialog_busy": "Creating your account...",
-        "register_dialog_continue_label": "Continue as guest",
-        "register_dialog_field_label": "Name",
-        "register_dialog_existing_account": "I already have an account.",
-        "register_dialog_error": "The account creation failed.",
-        "join_message": "Join the room to participate",
-        "join_cta": "Join as guest"
-    },
     "de-DE": {
-        "register_dialog_register_username_label": "Benutzername",
-        "register_dialog_title": "Zugriff anfordern",
+        "join_cta": "Als Gast beitreten",
+        "join_message": "Treten Sie dem Raum bei, um teilzunehmen",
         "register_dialog_busy": "Erstelle dein Konto...",
         "register_dialog_continue_label": "Als Gast fortfahren",
-        "register_dialog_field_label": "Name",
-        "register_dialog_existing_account": "Ich habe bereits einen Account.",
         "register_dialog_error": "Die Anmeldung als Gastnutzer ist fehlgeschlagen.",
-        "join_message": "Treten Sie dem Raum bei, um teilzunehmen",
-        "join_cta": "Als Gast beitreten"
+        "register_dialog_existing_account": "Ich habe bereits einen Account.",
+        "register_dialog_field_label": "Name",
+        "register_dialog_register_username_label": "Benutzername",
+        "register_dialog_title": "Zugriff anfordern"
+    },
+    "en": {
+        "join_cta": "Join as guest",
+        "join_message": "Join the room to participate",
+        "register_dialog_busy": "Creating your account...",
+        "register_dialog_continue_label": "Continue as guest",
+        "register_dialog_error": "The account creation failed.",
+        "register_dialog_existing_account": "I already have an account.",
+        "register_dialog_field_label": "Name",
+        "register_dialog_register_username_label": "Username",
+        "register_dialog_title": "Request access"
     }
 }
