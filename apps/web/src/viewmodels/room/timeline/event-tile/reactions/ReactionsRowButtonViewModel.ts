@@ -14,6 +14,7 @@ import {
 
 import { mediaFromMxc } from "../../../../../customisations/Media";
 import { _t } from "../../../../../languageHandler";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import { formatList } from "../../../../../utils/FormattingUtils";
 import dis from "../../../../../dispatcher/dispatcher";
 import { ReactionsRowButtonTooltipViewModel } from "./ReactionsRowButtonTooltipViewModel";
@@ -111,7 +112,8 @@ export class ReactionsRowButtonViewModel
         let imageAlt: string | undefined;
         if (customReactionImagesEnabled && content.startsWith("mxc://")) {
             // A thumbnail keeps the size of the download bounded, unlike the original media.
-            const resolved = mediaFromMxc(content).getThumbnailOfSourceHttp(16, 16, "scale", true);
+            const animated = SettingsStore.getValue("autoplayGifs");
+            const resolved = mediaFromMxc(content).getThumbnailOfSourceHttp(16, 16, "scale", animated);
             if (resolved) {
                 imageSrc = resolved;
                 imageAlt = customReactionName || _t("timeline|reactions|custom_reaction_fallback_label");

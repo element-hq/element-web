@@ -8,12 +8,13 @@
 // @vitest-environment happy-dom
 
 import { EventType, type MatrixClient, type MatrixEvent, RelationType, type Room } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, onTestFinished } from "vitest";
 import { createTestClient, mkEvent, mkStubRoom, tearDownAfterTest } from "test-utils";
 
 import { ReactionsRowButtonViewModel, type ReactionsRowButtonViewModelProps } from "./ReactionsRowButtonViewModel";
 import { type ReactionsRowButtonTooltipViewModel } from "./ReactionsRowButtonTooltipViewModel";
 import dis from "../../../../../dispatcher/dispatcher";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 vi.mock("../../../../../dispatcher/dispatcher");
 vi.mock("../../../../../customisations/Media", () => ({
@@ -107,25 +108,33 @@ describe("ReactionsRowButtonViewModel", () => {
         expect(vm.getSnapshot().count).toBe(2);
     });
 
-    it("renders custom reaction images with shortcode labels when enabled", () => {
-        const reactionEvent = createReactionEvent("@alice:example.org", "mxc://example.org/reaction");
-        reactionEvent.getContent()["shortcode"] = "party";
+    it.each([true, false])(
+        "renders custom reaction images with shortcode labels when enabled, autoplayGifs: %s",
+        (autoplayGifs) => {
+            const getValue = vi
+                .spyOn(SettingsStore, "getValue")
+                .mockImplementation((name) => name === "autoplayGifs" && autoplayGifs);
+            onTestFinished(() => getValue.mockRestore());
 
-        const vm = new ReactionsRowButtonViewModel(
-            createProps({
-                content: "mxc://example.org/reaction",
-                reactionEvents: [reactionEvent],
-                customReactionImagesEnabled: true,
-            }),
-        );
-        tearDownAfterTest(vm);
+            const reactionEvent = createReactionEvent("@alice:example.org", "mxc://example.org/reaction");
+            reactionEvent.getContent()["shortcode"] = "party";
 
-        expect(vm.getSnapshot()).toMatchObject({
-            imageSrc: "https://example.org/_matrix/media/reaction.png?16x16&scale&animated=true",
-            imageAlt: "party",
-        });
-        expect(getAriaLabel(vm)).toContain("reacted with party");
-    });
+            const vm = new ReactionsRowButtonViewModel(
+                createProps({
+                    content: "mxc://example.org/reaction",
+                    reactionEvents: [reactionEvent],
+                    customReactionImagesEnabled: true,
+                }),
+            );
+            tearDownAfterTest(vm);
+
+            expect(vm.getSnapshot()).toMatchObject({
+                imageSrc: `https://example.org/_matrix/media/reaction.png?16x16&scale&animated=${autoplayGifs}`,
+                imageAlt: "party",
+            });
+            expect(getAriaLabel(vm)).toContain("reacted with party");
+        },
+    );
 
     it("updates selected state with myReactionEvent without touching tooltip props", () => {
         const vm = tearDownAfterTest(new ReactionsRowButtonViewModel(createProps()));
