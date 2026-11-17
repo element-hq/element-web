@@ -18,7 +18,7 @@ import type { OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload
 export class ClientApi implements IClientApi {
     public readonly accountData = new AccountDataApi();
     public readonly creationManagement = new ClientCreationManagementApi();
-    public readonly toDevice = new ToDeviceApi();
+    public readonly toDevice = new ToDeviceApi(null);
 
     // Resolves when the client next starts; replaced on logout so later callers wait for the next start.
     private clientStarted = Promise.withResolvers<void>();

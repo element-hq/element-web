@@ -12,7 +12,6 @@ import { ClientEvent, type MatrixClient, type ReceivedToDeviceMessage } from "ma
 import { logger } from "matrix-js-sdk/src/logger";
 import { createTestClient, stubClient } from "test-utils";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ToDeviceApi } from "./ToDeviceApi";
 
 const MESSAGE_TYPE = "org.example.message";
@@ -43,7 +42,7 @@ describe("ToDeviceApi", () => {
         "sends to recipient device %s without changing the content or adding a listener",
         async (recipientDeviceId) => {
             const client = stubClient();
-            const api = new ToDeviceApi();
+            const api = new ToDeviceApi(client);
             const on = vi.spyOn(client, "on");
             const content = { request_id: "module-id", requesting_device_id: "module-device" };
 
@@ -62,7 +61,7 @@ describe("ToDeviceApi", () => {
 
     it("resolves after the send succeeds without waiting for a response", async () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const pendingSend = Promise.withResolvers<{}>();
         vi.mocked(client.sendToDevice).mockReturnValue(pendingSend.promise);
         const settled = vi.fn();
@@ -78,7 +77,7 @@ describe("ToDeviceApi", () => {
 
     it("rejects send failures without exposing upstream error details", async () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         vi.mocked(client.sendToDevice).mockRejectedValue(new Error("sensitive upstream details"));
 
         await expect(api.sendMessage(outgoing())).rejects.toThrow("Failed to send to-device message");
@@ -86,7 +85,7 @@ describe("ToDeviceApi", () => {
 
     it("validates outgoing messages before sending", async () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const invalidMessages = [
             outgoing({ recipientUserId: "not-a-user-id" }),
             outgoing({ recipientDeviceId: "" }),
@@ -106,7 +105,7 @@ describe("ToDeviceApi", () => {
 
     it("supports a receive-only subscription and passes only message data", () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const listener = vi.fn();
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
         const content = ["unvalidated"];
@@ -128,13 +127,11 @@ describe("ToDeviceApi", () => {
     it("allows registration without a session, then delivers on login", () => {
         const client = stubClient();
         const on = vi.spyOn(client, "on");
-        const get = vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(null);
         const listener = vi.fn();
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
         expect(on).not.toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
 
-        get.mockReturnValue(client);
         api.setClient(client);
         emitMessage(client, MESSAGE_TYPE, RECIPIENT_USER_ID, { ready: true });
 
@@ -144,7 +141,7 @@ describe("ToDeviceApi", () => {
 
     it("suspends delivery on logout and resumes on a replacement session", async () => {
         const oldClient = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(oldClient);
         const listener = vi.fn();
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
         const oldOff = vi.spyOn(oldClient, "off");
@@ -156,7 +153,6 @@ describe("ToDeviceApi", () => {
         await expect(api.sendMessage(outgoing())).rejects.toThrow("No active Matrix session");
 
         const newClient = createTestClient();
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
         api.setClient(newClient);
         emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
         expect(listener).toHaveBeenCalledOnce();
@@ -167,7 +163,7 @@ describe("ToDeviceApi", () => {
     it("keeps subscriptions independent and makes unsubscribe permanent", () => {
         const oldClient = stubClient();
         const on = vi.spyOn(oldClient, "on");
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(oldClient);
         const first = vi.fn();
         const second = vi.fn();
         const unsubscribeFirst = api.onMessage(MESSAGE_TYPE, first);
@@ -182,7 +178,6 @@ describe("ToDeviceApi", () => {
 
         const newClient = createTestClient();
         const off = vi.spyOn(newClient, "off");
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
         api.setClient(newClient);
         emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, {});
         expect(first).not.toHaveBeenCalled();
@@ -194,7 +189,7 @@ describe("ToDeviceApi", () => {
 
     it("isolates a throwing module listener from other subscribers", () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const logError = vi.spyOn(logger, "error").mockImplementation(() => {});
         const unsubscribeThrowing = api.onMessage(MESSAGE_TYPE, () => {
             throw new Error("module details");
@@ -212,7 +207,7 @@ describe("ToDeviceApi", () => {
 
     it("stops delivery to remaining listeners if a callback logs out", () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const second = vi.fn();
         api.onMessage(MESSAGE_TYPE, () => api.setClient(null));
         api.onMessage(MESSAGE_TYPE, second);
@@ -224,7 +219,7 @@ describe("ToDeviceApi", () => {
 
     it("starts a listener added during delivery with the next message", () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const lateListener = vi.fn();
         api.onMessage(MESSAGE_TYPE, () => api.onMessage(MESSAGE_TYPE, lateListener));
 
@@ -236,7 +231,7 @@ describe("ToDeviceApi", () => {
 
     it.each(["user", "device"] as const)("stops old delivery when the session %s changes", (changedIdentity) => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const off = vi.spyOn(client, "off");
         const listener = vi.fn();
         api.onMessage(MESSAGE_TYPE, listener);
@@ -254,7 +249,7 @@ describe("ToDeviceApi", () => {
 
     it("reattaches a subscription when the device changes on the same client", () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const listener = vi.fn();
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
 
@@ -270,16 +265,15 @@ describe("ToDeviceApi", () => {
 
     it("does not deliver events from a replaced client", () => {
         const oldClient = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(oldClient);
         const listener = vi.fn();
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
         const newClient = createTestClient();
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(newClient);
+        api.setClient(newClient);
 
         emitMessage(oldClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { stale: true });
         expect(listener).not.toHaveBeenCalled();
 
-        api.setClient(newClient);
         emitMessage(newClient, MESSAGE_TYPE, RECIPIENT_USER_ID, { current: true });
         expect(listener).toHaveBeenCalledOnce();
         unsubscribe();
@@ -288,11 +282,9 @@ describe("ToDeviceApi", () => {
     it("ignores an old-client callback already queued during replacement", () => {
         const oldClient = stubClient();
         const newClient = createTestClient();
-        const get = vi.spyOn(MatrixClientPeg, "get");
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(oldClient);
         const listener = vi.fn();
         oldClient.once(ClientEvent.ReceivedToDeviceMessage, () => {
-            get.mockReturnValue(newClient);
             api.setClient(newClient);
         });
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
@@ -308,7 +300,7 @@ describe("ToDeviceApi", () => {
 
     it("ignores a callback from an earlier attachment to the same client", () => {
         const client = stubClient();
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(client);
         const listener = vi.fn();
         client.once(ClientEvent.ReceivedToDeviceMessage, () => api.setClient(client));
         const unsubscribe = api.onMessage(MESSAGE_TYPE, listener);
@@ -324,12 +316,11 @@ describe("ToDeviceApi", () => {
 
     it("validates subscription inputs while allowing a missing session", async () => {
         const client = stubClient();
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
-        const api = new ToDeviceApi();
+        const api = new ToDeviceApi(null);
         const on = vi.spyOn(client, "on");
         expect(() => api.onMessage(" ", vi.fn())).toThrow("Invalid to-device event type");
         expect(() => api.onMessage("x".repeat(256), vi.fn())).toThrow("Invalid to-device event type");
-        expect(() => api.onMessage(MESSAGE_TYPE, null as unknown as () => void)).toThrow("Invalid to-device listener");
+        expect(() => api.onMessage(MESSAGE_TYPE, null as unknown as () => void)).toThrow(TypeError);
         expect(() => api.onMessage(MESSAGE_TYPE, vi.fn())).not.toThrow();
         expect(on).not.toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
         await expect(api.sendMessage(outgoing())).rejects.toThrow("No active Matrix session");

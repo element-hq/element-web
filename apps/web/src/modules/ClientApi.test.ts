@@ -15,7 +15,6 @@ import { ClientApi } from "./ClientApi";
 import { Room } from "./models/Room";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 
 function emitMessage(client: MatrixClient): void {
     client.emit(ClientEvent.ReceivedToDeviceMessage, {
@@ -28,7 +27,6 @@ describe("ClientApi", () => {
     it("does not inspect the device identity before to-device communication is used", () => {
         const getUserId = vi.fn().mockReturnValue("@alice:example.org");
         const partialClient = { getUserId } as unknown as MatrixClient;
-        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(partialClient);
         const dispatcher = new MatrixDispatcher();
 
         expect(() => {
@@ -48,13 +46,11 @@ describe("ClientApi", () => {
 
     it("keeps a receive-only subscription across login and logout", () => {
         const firstClient = stubClient();
-        const get = vi.spyOn(MatrixClientPeg, "get").mockReturnValue(null);
         const dispatcher = new MatrixDispatcher();
         const client = new ClientApi(dispatcher);
         const listener = vi.fn();
         const unsubscribe = client.toDevice.onMessage("org.example.message", listener);
 
-        get.mockReturnValue(firstClient);
         dispatcher.dispatch({ action: Action.OnLoggedIn, client: firstClient }, true);
         emitMessage(firstClient);
         expect(listener).toHaveBeenCalledOnce();
@@ -64,7 +60,6 @@ describe("ClientApi", () => {
         expect(listener).toHaveBeenCalledOnce();
 
         const secondClient = createTestClient();
-        get.mockReturnValue(secondClient);
         dispatcher.dispatch({ action: Action.OnLoggedIn, client: secondClient }, true);
         emitMessage(secondClient);
         expect(listener).toHaveBeenCalledTimes(2);

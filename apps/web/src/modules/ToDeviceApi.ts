@@ -18,8 +18,6 @@ import {
     type ToDeviceApi as IToDeviceApi,
 } from "@element-hq/element-web-module-api";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
-
 const MAX_EVENT_TYPE_LENGTH = 255;
 const MAX_DEVICE_ID_LENGTH = 255;
 
@@ -32,9 +30,14 @@ type Subscription = {
 /** Sends to-device messages and keeps module subscriptions across Matrix sessions. */
 export class ToDeviceApi implements IToDeviceApi {
     private readonly subscriptions = new Set<Subscription>();
-    private client: MatrixClient | null = MatrixClientPeg.get();
+    private client: MatrixClient | null;
     private session: MatrixSessionIdentity | null = null;
     private receivedListener: ((payload: ReceivedToDeviceMessage) => void) | null = null;
+
+    /** Create the transport with its current client, or null when no session is active. */
+    public constructor(client: MatrixClient | null) {
+        this.client = client;
+    }
 
     /** Send one message without waiting for a response. */
     public sendMessage = async (message: OutgoingToDeviceMessage): Promise<void> => {
@@ -61,7 +64,7 @@ export class ToDeviceApi implements IToDeviceApi {
             throw new Error("Invalid to-device event type");
         }
         if (typeof listener !== "function") {
-            throw new Error("Invalid to-device listener");
+            throw new TypeError("Invalid to-device listener");
         }
 
         const subscription: Subscription = { type, listener };
@@ -177,7 +180,7 @@ export class ToDeviceApi implements IToDeviceApi {
     }
 
     private isCurrentSession(client: MatrixClient, session: MatrixSessionIdentity): boolean {
-        if (MatrixClientPeg.get() !== client) return false;
+        if (this.client !== client) return false;
         const current = this.getSessionIdentity(client);
         return current?.userId === session.userId && current.deviceId === session.deviceId;
     }
