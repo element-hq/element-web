@@ -8,6 +8,7 @@
     "scripts": {
         "build": "nx build",
         "lint:types": "nx lint:types",
+        "i18n:sort": "matrix-sort-i18n src/translations.json",
         "i18n:lint": "oxfmt src/translations.json"
     },
     "devDependencies": {
