@@ -583,8 +583,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.2
       emojibase-regex:
-        specifier: ^17.0.0
-        version: 17.0.0
+        specifier: ^18.0.0
+        version: 18.0.0
       escape-html:
         specifier: ^1.0.3
         version: 1.0.3
@@ -8492,8 +8492,8 @@ packages:
     peerDependencies:
       emojibase: '*'
 
-  emojibase-regex@17.0.0:
-    resolution: {integrity: sha512-iWlqiz2l2zNf2lDqgN/7qjqKHVUX6H4D+8F5vDZkgjyWyRFXcA5K4rxkoTl7AJmyjHnoytw0m/do2SrGByui+g==}
+  emojibase-regex@18.0.0:
+    resolution: {integrity: sha512-Gx9SR51rwwoGscvpMTL7P82/3nSTQUrmNGHkb1JYW8IG3TLGwmGJ2UuB8b01sKDzr0E2pHJKk7rM00FFGeYxWw==}
 
   emojibase@17.0.0:
     resolution: {integrity: sha512-bXdpf4HPY3p41zK5swVKZdC/VynsMZ4LoLxdYDE+GucqkFwzcM1GVc4ODfYAlwoKaf2U2oNNUoOO78N96ovpBA==}
@@ -20729,7 +20729,7 @@ snapshots:
     dependencies:
       emojibase: 17.0.0
 
-  emojibase-regex@17.0.0: {}
+  emojibase-regex@18.0.0: {}
 
   emojibase@17.0.0: {}
 
