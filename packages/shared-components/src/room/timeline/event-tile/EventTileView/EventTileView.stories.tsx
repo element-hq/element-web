@@ -1108,7 +1108,7 @@ function EventTileViewStoryContent({
         isLast = false,
         bodyOverride?: React.ReactNode,
         showSenderAndAvatarOverride?: boolean,
-        slotsOverride?: Partial<EventTileViewProps["slots"]>,
+        slotsOverride?: EventTileViewProps["slots"],
     ): React.ReactElement => {
         const tileState = {
             previewClamped: shape === "ThreadsList" || shape === "Notification",
@@ -1126,8 +1126,7 @@ function EventTileViewStoryContent({
         const sender = createStorySender(isOwnEvent, showSenderAndAvatar && !tileState.noSender && !tileState.info);
         const avatar = createStoryAvatar(isOwnEvent, layout, showSenderAndAvatar, tileState.info ? "14px" : undefined);
         const tileSlots = {
-            ...props.slots,
-            ...slotsOverride,
+            ...(slotsOverride ?? props.slots),
             ...(bodyOverride === undefined ? {} : { body: bodyOverride }),
         };
         const slots =
@@ -1317,7 +1316,11 @@ function EventTileViewStoryContent({
                         false,
                         <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
                         undefined,
-                        { footer: <StoryFooter /> },
+                        {
+                            ...props.slots,
+                            body: <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                            footer: <StoryFooter />,
+                        },
                     )}
                     {renderTile(
                         false,
@@ -1326,7 +1329,11 @@ function EventTileViewStoryContent({
                         true,
                         <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
                         undefined,
-                        { footer: <StoryFooter /> },
+                        {
+                            ...props.slots,
+                            body: <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                            footer: <StoryFooter />,
+                        },
                     )}
                 </>
             );

@@ -1161,6 +1161,13 @@
             margin-inline: calc(14px + var(--event-tile-bubble-gap)) 0;
         }
 
+        /* Informational rows stay left-aligned even for own events. Keep the
+           reaction controls in their natural order, with add-reaction last. */
+        &.stateOwnEvent .slotFooter {
+            justify-content: flex-start;
+            --event-tile-reactions-add-button-order: 0;
+        }
+
         .slotTimestamp {
             inset-block: auto;
             inset-inline: -77px auto;
