@@ -28,6 +28,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 import { hasAccessToNotificationMenu, hasAccessToOptionsMenu } from "./utils";
 import { EchoChamber } from "../../stores/local-echo/EchoChamber";
+import { PROPERTY_UPDATED } from "../../stores/local-echo/GenericEchoChamber";
+import { CachedRoomKey } from "../../stores/local-echo/RoomEchoChamber";
 import { RoomNotifState as ElementRoomNotifState } from "../../RoomNotifs";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
@@ -101,6 +103,14 @@ export class RoomListItemViewModel
         // Subscribe to notification state changes for this room
         this.disposables.trackListener(this.notifState, NotificationStateEvents.Update, this.onNotificationChanged);
 
+        // Subscribe to changes of the room's notification setting (all messages, mentions only, ...).
+        // The notification state above does not report a change between the non-mute settings.
+        this.disposables.trackListener(
+            EchoChamber.forRoom(props.room),
+            PROPERTY_UPDATED,
+            this.onEchoChamberPropertyUpdated,
+        );
+
         // Subscribe to message preview changes for this specific room
         this.disposables.trackListener(
             MessagePreviewStore.instance,
@@ -170,6 +180,10 @@ export class RoomListItemViewModel
 
     private onNotificationChanged = (): void => {
         this.updateItem();
+    };
+
+    private onEchoChamberPropertyUpdated = (key: unknown): void => {
+        if (key === CachedRoomKey.NotificationVolume) this.updateItem();
     };
 
     private onMessagePreviewChanged = (): void => {

@@ -52,6 +52,7 @@ class BannerModule implements Module {
                 <Banner
                     i18n={i18n}
                     logoUrl={this.config.logo_url}
+                    logoHeight={this.config.logo_height}
                     href={this.config.heading_href}
                     menu={this.config.menu}
                     title={this.config.title ?? this.api.config.get("brand")}

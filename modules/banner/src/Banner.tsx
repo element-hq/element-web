@@ -36,12 +36,14 @@ const Root = styled.nav`
 interface Props {
     i18n: I18nApi;
     logoUrl: string;
+    /** Height of the logo in pixels, defaults to 35 */
+    logoHeight?: number;
     href: string;
     menu: ModuleConfig["menu"];
     title: string;
 }
 
-const Banner: FC<Props> = ({ i18n, logoUrl, href, menu, title }) => {
+const Banner: FC<Props> = ({ i18n, logoUrl, logoHeight = 35, href, menu, title }) => {
     let menuJsx;
     switch (menu.type) {
         case "static": {
@@ -56,7 +58,7 @@ const Banner: FC<Props> = ({ i18n, logoUrl, href, menu, title }) => {
 
     let headingJsx = (
         <>
-            <Logo i18n={i18n} src={logoUrl} height="35px" />
+            <Logo i18n={i18n} src={logoUrl} height={`${logoHeight}px`} />
             <Heading size="sm" weight="medium" as="h1">
                 {title}
             </Heading>
