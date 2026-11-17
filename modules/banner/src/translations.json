@@ -14,5 +14,12 @@
         "menu_label": "Menu",
         "trigger_label": "Show menu",
         "univention_error": "Could not fetch central navigation from the portal"
+    },
+    "sv": {
+        "close_label": "Stäng menyn",
+        "logo_alt": "Portalens logotyp",
+        "logo_link_label": "Visa portal",
+        "menu_label": "Meny",
+        "trigger_label": "Visa meny"
     }
 }

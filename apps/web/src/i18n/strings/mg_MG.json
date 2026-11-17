@@ -1496,8 +1496,6 @@
         "count_of_successfully_restored_keys": "Naverina tamin&#39;ny laoniny%(sessionCount)s lakilen'ilay",
         "enter_key_description": "Midira amin'ny tantarany hafatrao azo antoka ary manangana hafatra azo antoka amin'ny alàlany fampidiranao ny Key Security.",
         "enter_key_title": "Ampidiro ny fiarovana Key",
-        "enter_phrase_description": "Midira aminy tantaran'ny hafatrao azo antoka ary manangana hafatra azo antoka amin'ny alàlan'ny fampidirana ny fehezan-teny fiarovana anao.",
-        "enter_phrase_title": "Ampidiro ny Security Phrase",
         "incorrect_security_phrase_dialog": "Ny vakorakitra dia tsy azo vakiana amin'ity fehezan-teny fiarovana ity: azafady, hamarino fa nampiditra ny fehezan-teny fiarovana marina ianao.",
         "incorrect_security_phrase_title": "Andian-teny fiarovana diso",
         "key_backup_warning": "<b>FAMPITANDREMANA</b> : tokony hametraka famandrihana fanalahidy avy amin'ny solosaina azo itokisana ihany ianao.",
@@ -1509,7 +1507,6 @@
         "load_error_content": "Tsy afaka mampiditra sata backup",
         "load_keys_progress": "%(completed)snY%(total)s naverina tamin'ny laoniny ny fanalahidy",
         "no_backup_error": "Tsy misy vakorakitra hita!",
-        "phrase_forgotten_text": "Raha adinonao ny fehezan-teny fiarovana anao dia azonao atao<button1> ampiasao ny Security Key</button1> na<button2> manangana safidy fanarenana vaovao</button2>",
         "recovery_key_mismatch_description": "Nomaniny ho solon'izay dia tsy azo crypted amin'ny fiarovana ity Key: azafady manamarina fa niditra ny marina Security Key.",
         "recovery_key_mismatch_title": "Tsy mifanaraka amin'ny fiarovana ny Key",
         "restore_failed_error": "Tsy afaka namerina ny vakorakitra"
