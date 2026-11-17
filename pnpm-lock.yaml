@@ -497,7 +497,7 @@ importers:
         version: 7.29.10
       '@element-hq/element-call-component':
         specifier: 0.28.2
-        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa)(react-dom@19.3.1)(react@19.3.1)
+        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3)(react-dom@19.3.1)(react@19.3.1)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -626,7 +626,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -1424,11 +1424,11 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(react@19.3.1)
       react-resizable-panels:
-        specifier: 4.21.0
-        version: 4.21.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+        specifier: 4.23.0
+        version: 4.23.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       react-virtuoso:
         specifier: ^4.14.0
-        version: 4.18.21(react-dom@19.3.1)(react@19.3.1)
+        version: 4.18.22(react-dom@19.3.1)(react@19.3.1)
       temporal-polyfill:
         specifier: ^1.0.0
         version: 1.0.8
@@ -3479,8 +3479,8 @@ packages:
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.9.2':
-    resolution: {integrity: sha512-GHeuSeb5Fj6Wg2+NE/WoLJJs9U3nOzttO+2sj7lOaS5gNBpGIksc48N/Q/kK/Z+Lxh7YMhopB7M8b6HyASXnGQ==}
+  '@matrix-org/matrix-sdk-crypto-wasm@19.0.1':
+    resolution: {integrity: sha512-8KtzFk8xGxUGVVCAK4FWB1poOQoKLzy2Z98iudD7cbaciZ6UIkxivYgMA4/f2z3L0nVSAPiWaBp4mwWv2BBocQ==}
     engines: {node: '>= 18'}
 
   '@matrix-org/seshat-darwin-arm64@6.0.1':
@@ -9928,8 +9928,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa:
-    resolution: {gitHosted: true, integrity: sha512-jdVXGe3X5eBJd9GpMBTxAkyITkkgqoDaevf0hOx5h/5tCYVKzJMb2x3xvkkPzeh136k4F5p6QotharKo1qGlhg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3:
+    resolution: {gitHosted: true, integrity: sha512-qLJi5TDIGrDWsN52LGlG3eDSvFuBvXZ6lRj4s0+M/NUY4Jvk+VNzHSefdR/aRVb6VWt/clgbDyCwGpzYkCOIoQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3}
     version: 45.1.0
     engines: {node: '>=22.0.0'}
 
@@ -11392,8 +11392,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.21.0:
-    resolution: {integrity: sha512-SzNEQNH/xIn3aKKLSdv48h0eu1gF1bkvozIVStow2hRmh/d9jkyoZR7dF8GUx39Wc2TAJTmfSUr4y/wwtvMoRQ==}
+  react-resizable-panels@4.23.0:
+    resolution: {integrity: sha512-Sz0KOymTxzygc2Awsj2v8obODogb0aODeUQiv09FEKCxjtKSz2sZWhdRYRSf6WL/9u1rybFbX/7IWgp5h48f5g==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: ^18.0.0 || ^19.0.0
@@ -11421,8 +11421,8 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react-virtuoso@4.18.21:
-    resolution: {integrity: sha512-2F7utTLDpzc0MjIRfN1ObU1K7UgwDuNs420iPA9Jqg0QxpHi2AnTF1ir7YIhk44Xj4hgi+7iY8krCMOUbKhnXA==}
+  react-virtuoso@4.18.22:
+    resolution: {integrity: sha512-0Jga1NmJsAwhxZlEyE6xN1HtEHePgsWbuzYcJokanaIDVTbc59ocm3MocQ6yJIYTJICaWqYY3+Z4FQ3mnGuD+w==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -15100,11 +15100,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa)(react-dom@19.3.1)(react@19.3.1)':
+  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
@@ -15762,7 +15762,7 @@ snapshots:
       emojibase: 17.0.0
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.9.2': {}
+  '@matrix-org/matrix-sdk-crypto-wasm@19.0.1': {}
 
   '@matrix-org/seshat-darwin-arm64@6.0.1':
     optional: true
@@ -22300,10 +22300,10 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6e78e7ef08486fbc9b1da7483a257dd3b4ecebaa:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3:
     dependencies:
       '@babel/runtime': 8.0.7
-      '@matrix-org/matrix-sdk-crypto-wasm': 18.9.2
+      '@matrix-org/matrix-sdk-crypto-wasm': 19.0.1
       another-json: 0.2.0
       bs58: 6.0.0
       content-type: 3.1.1
@@ -24053,7 +24053,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  react-resizable-panels@4.21.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1):
+  react-resizable-panels@4.23.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
@@ -24079,7 +24079,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  react-virtuoso@4.18.21(react-dom@19.3.1)(react@19.3.1):
+  react-virtuoso@4.18.22(react-dom@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
