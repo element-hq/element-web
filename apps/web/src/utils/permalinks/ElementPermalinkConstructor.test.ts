@@ -35,6 +35,14 @@ describe("ElementPermalinkConstructor", () => {
             ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
         });
 
+        it("should percent-decode via servers", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "https://app.element.io/#/room/!room:example.com?via=example.com%3A8448",
+                ),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "", ["example.com:8448"]));
+        });
+
         it("should read a room link whose other parameters contain slashes", () => {
             expect(
                 permalinkConstructor.parsePermalink(

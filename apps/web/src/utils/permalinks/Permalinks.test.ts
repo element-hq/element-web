@@ -16,7 +16,13 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { PermalinkParts } from "./PermalinkConstructor";
-import { makeRoomPermalink, makeUserPermalink, parsePermalink, RoomPermalinkCreator } from "./Permalinks";
+import {
+    makeRoomPermalink,
+    makeUserPermalink,
+    parsePermalink,
+    RoomPermalinkCreator,
+    tryTransformPermalinkToLocalHref,
+} from "./Permalinks";
 import { type IConfigOptions } from "../../IConfigOptions";
 import SdkConfig from "../../SdkConfig";
 
@@ -450,6 +456,17 @@ describe("Permalinks", function () {
                     "https://matrix.to/#/!room:example.com?via=one.example.com&org.example.url=https%3A%2F%2Fx%2Fy",
                 ),
             ).toEqual(PermalinkParts.forRoom("!room:example.com", ["one.example.com"]));
+        });
+    });
+
+    describe("tryTransformPermalinkToLocalHref", () => {
+        it.each([
+            ["matrix.to", "https://matrix.to/#/!room:example.com/$event?via=example.com%3A8448&action=join"],
+            ["matrix:", "matrix:roomid/room:example.com/e/event?via=example.com%3A8448&action=join"],
+        ])("should encode the via servers of a %s link exactly once", (name: string, permalink: string) => {
+            expect(tryTransformPermalinkToLocalHref(permalink)).toBe(
+                "#/room/!room:example.com/$event?via=example.com%3A8448",
+            );
         });
 
         it("should correctly parse permalinks with http protocol", () => {

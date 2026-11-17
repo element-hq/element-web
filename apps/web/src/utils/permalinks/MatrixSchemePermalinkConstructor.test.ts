@@ -59,6 +59,12 @@ describe("MatrixSchemePermalinkConstructor", () => {
             ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
         });
 
+        it("should percent-decode via servers", () => {
+            expect(
+                permalinkConstructor.parsePermalink("matrix:roomid/room:example.com?via=example.com%3A8448"),
+            ).toEqual(PermalinkParts.forRoom("!room:example.com", ["example.com:8448"]));
+        });
+
         it("should ignore an action and custom parameters on user links", () => {
             expect(
                 permalinkConstructor.parsePermalink("matrix:u/user:example.com?action=chat&org.example.key=value"),
