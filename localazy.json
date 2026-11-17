@@ -5,6 +5,7 @@
         "type": "json",
         "keySeparator": "|",
         "deprecate": "file",
+        "filterSource": false,
         "features": ["plural_object", "filter_untranslated"],
         "files": [
             {
