@@ -17,7 +17,10 @@ import dis from "../../../../../dispatcher/dispatcher";
 
 vi.mock("../../../../../dispatcher/dispatcher");
 vi.mock("../../../../../customisations/Media", () => ({
-    mediaFromMxc: vi.fn(() => ({ srcHttp: "https://example.org/_matrix/media/reaction.png" })),
+    mediaFromMxc: vi.fn(() => ({
+        getThumbnailOfSourceHttp: (width: number, height: number, mode: string, animated: boolean) =>
+            `https://example.org/_matrix/media/reaction.png?${width}x${height}&${mode}&animated=${animated}`,
+    })),
 }));
 
 describe("ReactionsRowButtonViewModel", () => {
@@ -118,7 +121,7 @@ describe("ReactionsRowButtonViewModel", () => {
         tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
-            imageSrc: "https://example.org/_matrix/media/reaction.png",
+            imageSrc: "https://example.org/_matrix/media/reaction.png?16x16&scale&animated=true",
             imageAlt: "party",
         });
         expect(getAriaLabel(vm)).toContain("reacted with party");

@@ -110,7 +110,8 @@ export class ReactionsRowButtonViewModel
         let imageSrc: string | undefined;
         let imageAlt: string | undefined;
         if (customReactionImagesEnabled && content.startsWith("mxc://")) {
-            const resolved = mediaFromMxc(content).srcHttp;
+            // A thumbnail keeps the size of the download bounded, unlike the original media.
+            const resolved = mediaFromMxc(content).getThumbnailOfSourceHttp(16, 16, "scale", true);
             if (resolved) {
                 imageSrc = resolved;
                 imageAlt = customReactionName || _t("timeline|reactions|custom_reaction_fallback_label");
