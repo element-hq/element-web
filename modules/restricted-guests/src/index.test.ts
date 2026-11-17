@@ -60,7 +60,7 @@ describe("RestrictedGuestsModule", () => {
 
             expect(api.i18n.namespaced).toHaveBeenCalledWith(CONFIG_KEY);
             expect(api.i18n.registerLanguage).toHaveBeenCalledWith("en", Translations.en);
-            expect(api.i18n.registerLanguage).toHaveBeenCalledWith("de-DE", Translations["de-DE"]);
+            expect(api.i18n.registerLanguage).toHaveBeenCalledWith("de_DE", Translations.de_DE);
         });
     });
 
