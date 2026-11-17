@@ -10,7 +10,13 @@
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { waitFor } from "test-utils-rtl";
-import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "test-utils";
+import {
+    getMockClientWithEventEmitter,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+    TestSDKContext,
+    tearDownAfterTest,
+} from "test-utils";
 
 import { UserMenuViewModel } from "./UserMenuViewModel";
 import { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -21,7 +27,6 @@ import { UserTab } from "../../components/views/dialogs/UserTab";
 import Modal from "../../Modal";
 import FeedbackDialog from "../../components/views/dialogs/FeedbackDialog";
 import { type OwnProfileStore } from "../../stores/OwnProfileStore";
-import { TestSDKContext } from "../../../test/unit-tests/TestSDKContext.ts";
 
 describe("UserMenuViewModel", () => {
     let dispatcher: MatrixDispatcher;
@@ -37,6 +42,8 @@ describe("UserMenuViewModel", () => {
             getAuthMetadata: vi.fn(),
             getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
             setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
         sdkContext = new TestSDKContext();
         // @ts-ignore UserMenuViewModel uses SDKContext in the constructor
@@ -48,6 +55,7 @@ describe("UserMenuViewModel", () => {
             userStatus: undefined,
             getHttpAvatarUrl: vi.fn().mockReturnValue("https://foo.dummy/avatar.png"),
             on: vi.fn(),
+            off: vi.fn(),
         } as unknown as OwnProfileStore;
     });
     afterEach(() => {
@@ -58,6 +66,7 @@ describe("UserMenuViewModel", () => {
 
     it("should generate a menu options for a logged in client", () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         expect(vm.getSnapshot().userId).toEqual("@alice:domain");
         expect(vm.getSnapshot().displayName).toEqual("Sally Sanderson");
@@ -68,6 +77,7 @@ describe("UserMenuViewModel", () => {
 
     it("should not call the auth metadata endpoint", () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         expect(client.getAuthMetadata).not.toHaveBeenCalled();
         expect(vm.getSnapshot()).not.toHaveProperty("manageAccountHref");
@@ -76,6 +86,7 @@ describe("UserMenuViewModel", () => {
     it("should generate a menu options for a guest", () => {
         client.isGuest.mockReturnValue(true);
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         expect(vm.getSnapshot().displayName).toEqual("Sally Sanderson");
         expect(vm.getSnapshot().showAvatar).toEqual(false);
@@ -85,6 +96,7 @@ describe("UserMenuViewModel", () => {
     it("should generate a menu options that include feedback", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         expect(vm.getSnapshot().actions.openFeedback).toEqual(true);
     });
@@ -92,12 +104,14 @@ describe("UserMenuViewModel", () => {
     it("should generate a menu options that includes a home page", () => {
         SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         expect(vm.getSnapshot().actions.openHomePage).toEqual(true);
     });
 
     it("can toggle menu", () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         expect(vm.getSnapshot().open).toEqual(true);
         vm.setOpen(false);
@@ -106,6 +120,7 @@ describe("UserMenuViewModel", () => {
 
     it("can toggle expanded state", () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setExpanded(true);
         expect(vm.getSnapshot().expanded).toEqual(true);
         vm.setExpanded(false);
@@ -115,6 +130,7 @@ describe("UserMenuViewModel", () => {
     it("can open the home menu", async () => {
         SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
@@ -128,6 +144,7 @@ describe("UserMenuViewModel", () => {
 
     it("can open the 'link new device' settings menu", async () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
@@ -143,6 +160,7 @@ describe("UserMenuViewModel", () => {
 
     it("can open the 'security' settings menu", async () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
@@ -159,6 +177,7 @@ describe("UserMenuViewModel", () => {
         vi.spyOn(Modal, "createDialog");
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
@@ -168,6 +187,7 @@ describe("UserMenuViewModel", () => {
 
     it("can open the settings menu", async () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
@@ -182,10 +202,11 @@ describe("UserMenuViewModel", () => {
     it("can clear a user status", async () => {
         client.getExtendedProfileProperty.mockResolvedValue({ emoji: "🧪", text: "Testing" });
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         vm.clearStatus();
         await waitFor(() =>
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status"),
         );
     });
 
@@ -194,6 +215,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         vm.createAccount();
         await waitFor(() =>
@@ -208,6 +230,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = vi.fn();
         dispatcher.register(dispatcherSpy);
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
+        tearDownAfterTest(vm);
         vm.setOpen(true);
         vm.signIn();
         await waitFor(() =>

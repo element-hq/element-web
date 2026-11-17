@@ -8,10 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect, vi } from "vitest";
 
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
+import { Action } from "../dispatcher/actions.ts";
 import { overwriteAccountAuth } from "./Auth.ts";
 
 describe("overwriteAccountAuth", () => {
-    it("should call overwrite login with accountInfo", () => {
+    it("should call overwrite login with accountInfo", async () => {
         const spy = vi.spyOn(defaultDispatcher, "dispatch");
 
         const accountInfo = {
@@ -20,7 +21,7 @@ describe("overwriteAccountAuth", () => {
             accessToken: "TOKEN",
             homeserverUrl: "https://server.com",
         };
-        overwriteAccountAuth(accountInfo);
+        const prom = overwriteAccountAuth(accountInfo);
         expect(spy).toHaveBeenCalledWith(
             {
                 action: "overwrite_login",
@@ -28,5 +29,9 @@ describe("overwriteAccountAuth", () => {
             },
             true,
         );
+
+        // overwriteAccountAuth only settles once the new login has completed
+        defaultDispatcher.dispatch({ action: Action.OnLoggedIn });
+        await prom;
     });
 });

@@ -25,6 +25,8 @@ import { type ComposerApi } from "./composer.ts";
 import { type StorageHelperApi } from "./storage-helper.ts";
 import { type SettingsApi } from "./settings.ts";
 import { type UrlPreviewApi } from "./urlpreview.ts";
+import { type DocumentPreviewApi } from "./document-preview.ts";
+import { type X509Api } from "./x509.ts";
 
 /**
  * Module interface for modules to implement.
@@ -137,6 +139,13 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly client: ClientApi;
 
     /**
+     * Allows modules to access hardware keys attached to the user's device as part of experimental
+     * X.509-based identity verification.
+     * @alpha Subject to change.
+     */
+    readonly x509?: X509Api;
+
+    /**
      * API for modules to auto-approve widget preloading, identity token requests, and capability requests.
      * @alpha Subject to change.
      */
@@ -176,6 +185,12 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
      * @alpha Subject to change.
      */
     readonly urlPreviews: UrlPreviewApi;
+
+    /**
+     * Allows modules to show files in Element Web's document previews.
+     * @alpha Subject to change.
+     */
+    readonly documentPreviews: DocumentPreviewApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

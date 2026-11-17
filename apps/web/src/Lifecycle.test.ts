@@ -38,6 +38,7 @@ import * as createMatrixClientModule from "./utils/createMatrixClient";
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
 describe("Lifecycle", () => {
+    const realLocalStorage = localStorage;
     const homeserverUrl = "https://domain";
     const identityServerUrl = "https://is.org";
     const userId = "@alice:domain";
@@ -71,6 +72,7 @@ describe("Lifecycle", () => {
             setNotifTimelineSet: vi.fn(),
             getRooms: vi.fn().mockReturnValue([]),
             matrixRTC: { on: vi.fn(), off: vi.fn() },
+            whoami: vi.fn(),
         });
         // stub this
         vi.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
@@ -81,13 +83,30 @@ describe("Lifecycle", () => {
         localStorage.clear();
         sessionStorage.clear();
 
+        // Spy on the real localStorage rather than replacing it: `getItem` returns what was
+        // actually written, and `expect(localStorage.setItem).toHaveBeenCalledWith(...)` works.
+        vi.spyOn(localStorage, "getItem");
+        vi.spyOn(localStorage, "setItem");
+        vi.spyOn(localStorage, "removeItem");
+        vi.spyOn(localStorage, "clear");
+
         localStorage.setItem("mx_oidc_client_id", "test-client-id");
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
+        // undo any `vi.stubGlobal("localStorage", ...)` a test installed. Note we cannot use
+        // vi.unstubAllGlobals() here: that would also drop globals stubbed by the shared setup.
+        vi.stubGlobal("localStorage", realLocalStorage);
     });
 
+    /**
+     * Install the IndexedDB mocks, backed by `mockStore`.
+     *
+     * The mocks mutate the store, so each test must supply its own. Seed data is provided by
+     * factories (eg `idbStorageSession()`) rather than shared objects for exactly that reason:
+     * otherwise a write in one test leaks into every test that runs after it.
+     */
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
         vi.spyOn(StorageAccess, "idbLoad")
             .mockClear()
@@ -124,11 +143,13 @@ describe("Lifecycle", () => {
         mx_user_id: userId,
         mx_device_id: deviceId,
     };
-    const idbStorageSession = {
+    // A factory, not a shared object: initIdbMock takes ownership of what it is given and the
+    // mocks write into it, so every test needs its own.
+    const idbStorageSession = (): Record<string, Record<string, unknown>> => ({
         account: {
             mx_access_token: accessToken,
         },
-    };
+    });
     const credentials = {
         homeserverUrl,
         identityServerUrl,
@@ -161,7 +182,6 @@ describe("Lifecycle", () => {
             const prom = Lifecycle.loadSession({
                 enableGuest: true,
                 guestHsUrl: "https://guest.server",
-                urlParams: { guest: { guest_user_id: "a", guest_access_token: "b" } },
                 abortSignal: abortController.signal,
             });
             abortController.abort();
@@ -172,8 +192,6 @@ describe("Lifecycle", () => {
     });
 
     describe("restoreSessionFromStorage()", () => {
-        const realLocalStorage = localStorage;
-
         beforeEach(() => {
             initIdbMock();
 
@@ -187,10 +205,6 @@ describe("Lifecycle", () => {
                 // @ts-ignore allow bad mock
                 { finished: Promise.resolve([true]) },
             );
-        });
-
-        afterEach(() => {
-            vi.stubGlobal("localStorage", realLocalStorage);
         });
 
         it("should return false when localStorage is not available", async () => {
@@ -219,7 +233,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should ignore guest accounts when ignoreGuest is true", async () => {
@@ -246,7 +260,7 @@ describe("Lifecycle", () => {
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
-                    initIdbMock(idbStorageSession);
+                    initIdbMock(idbStorageSession());
                 });
 
                 it("should persist credentials", async () => {
@@ -267,8 +281,12 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key, which takes precedence
+                    // over anything left in indexeddb
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
+                    // but leave the indexeddb entry alone: the service worker can only read the
+                    // token from there, so removing it would break authenticated media
+                    await expect(StorageAccess.idbLoad("account", "mx_access_token")).resolves.toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -309,7 +327,7 @@ describe("Lifecycle", () => {
                         for (const key in localStorageSession) {
                             localStorage.setItem(key, localStorageSession[key]);
                         }
-                        initIdbMock(idbStorageSession);
+                        initIdbMock(idbStorageSession());
                     });
 
                     it("should persist credentials", async () => {
@@ -391,8 +409,9 @@ describe("Lifecycle", () => {
                         "mx_access_token",
                         encryptedTokenShapedObject,
                     );
-                    // put accessToken in localstorage as fallback
-                    expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
+                    // put accessToken in localstorage at the fallback key. Note this is the plain
+                    // token: localStorage can only hold strings.
+                    expect(localStorage.getItem("mx_access_token_fallback")).toEqual(accessToken);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -520,7 +539,7 @@ describe("Lifecycle", () => {
                 for (const key in localStorageSession) {
                     localStorage.setItem(key, localStorageSession[key]);
                 }
-                initIdbMock(idbStorageSession);
+                initIdbMock(idbStorageSession());
                 mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
                 expect(await restoreSessionFromStorage()).toEqual(true);
@@ -544,6 +563,108 @@ describe("Lifecycle", () => {
                     "Error decrypting secret access_token: no pickle key found.",
                 );
             });
+
+            it("should keep a plaintext token in localStorage when the idb token cannot be decrypted", async () => {
+                // When the pickle key has gone missing, a plaintext copy left at the primary key by
+                // an older version is the only way back into the account, so nothing on the read
+                // path may throw it away.
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                initIdbMock({});
+
+                // Create a pickle key, and store the token encrypted with it.
+                const pickleKey = (await PlatformPeg.get()!.createPickleKey(credentials.userId, credentials.deviceId))!;
+                localStorage.setItem("mx_has_pickle_key", "true");
+                await persistTokens(pickleKey, credentials);
+
+                // Residue at the primary key, left behind by an older version's fallback.
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                // Now destroy the pickle key, making the idb token undecryptable.
+                await PlatformPeg.get()!.destroyPickleKey(credentials.userId, credentials.deviceId);
+
+                await expect(restoreSessionFromStorage()).rejects.toThrow(
+                    "Error decrypting secret access_token: no pickle key found.",
+                );
+
+                expect(localStorage.getItem("mx_access_token")).toEqual("old-plaintext-token");
+            });
+
+            it("should prefer the localStorage fallback over a stale token in idb", async () => {
+                // A previous write failed, leaving the new token in localStorage and an outdated
+                // one behind in idb. Reading must return the fallback, not the stale value:
+                // otherwise a rotated refresh token is lost and the session dies on next start.
+                initIdbMock({ account: { mx_refresh_token: "stale-refresh-token" } });
+                localStorage.setItem("mx_refresh_token_fallback", "fresh-refresh-token");
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_has_access_token", "true");
+                await idbSave("account", "mx_access_token", accessToken);
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ refreshToken: "fresh-refresh-token" }),
+                    "test-client-id",
+                );
+                // having recovered it, the fallback is migrated back into idb and cleared
+                expect(StorageAccess.idbSave).toHaveBeenCalledWith(
+                    "account",
+                    "mx_refresh_token",
+                    "fresh-refresh-token",
+                );
+                expect(localStorage.getItem("mx_refresh_token_fallback")).toBeNull();
+            });
+
+            it("should discard an unreachable plaintext token left at the primary key by an older version", async () => {
+                // Older versions wrote their fallback to the primary key rather than the fallback
+                // key, and never cleared it on a later successful write. We cannot tell whether it
+                // is newer or older than the idb copy, so it must not be used - but it must not be
+                // left sitting in localStorage in the clear either.
+                initIdbMock(idbStorageSession());
+                for (const key in localStorageSession) {
+                    localStorage.setItem(key, localStorageSession[key]);
+                }
+                localStorage.setItem("mx_access_token", "old-plaintext-token");
+
+                expect(await restoreSessionFromStorage()).toEqual(true);
+
+                // the idb token wins...
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
+                    expect.objectContaining({ accessToken }),
+                    undefined,
+                );
+                // ...and the unreachable plaintext copy is swept up, once the restore has
+                // written a token of its own to idb and thereby proved the copy is spare
+                expect(localStorage.getItem("mx_access_token")).toBeNull();
+            });
+        });
+    });
+
+    describe("configureFromCompletedOAuthLogin()", () => {
+        beforeEach(() => {
+            initIdbMock();
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        });
+
+        it.each([
+            [true, "true"],
+            [undefined, "false"],
+        ])("should forward is_guest=%s from whoami as the guest flag", async (isGuest, stored) => {
+            mockClient.whoami.mockResolvedValue({ user_id: userId, device_id: deviceId, is_guest: isGuest });
+
+            const creds = await Lifecycle.configureFromCompletedOAuthLogin({
+                accessToken,
+                refreshToken,
+                homeserverUrl,
+                identityServerUrl,
+                clientId: "test-client-id",
+            });
+
+            expect(creds.guest).toBe(isGuest === true);
+            expect(localStorage.getItem("mx_is_guest")).toBe(stored);
         });
     });
 
@@ -558,16 +679,6 @@ describe("Lifecycle", () => {
             vi.spyOn(mockPlatform, "createPickleKey").mockRestore();
             // but still spy and call through
             vi.spyOn(mockPlatform, "createPickleKey");
-
-            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
-            vi.stubGlobal("localStorage", {
-                getItem: vi
-                    .fn()
-                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            });
         });
 
         const refreshToken = "test-refresh-token";
@@ -582,6 +693,42 @@ describe("Lifecycle", () => {
             await setLoggedIn(credentials);
 
             expect(MatrixClientPeg.start).toHaveBeenCalled();
+        });
+
+        it("should not let a logout which is still clearing storage wipe the new session", async () => {
+            // Hold the logout at its last step, which clears localStorage
+            const platformCleared = Promise.withResolvers<void>();
+            mockPlatform.clearStorage = vi.fn(async () => {
+                await platformCleared.promise;
+                localStorage.clear();
+            });
+
+            const loggedOut = Lifecycle.onLoggedOut();
+            const loggedIn = setLoggedIn(credentials);
+            // Give the login every chance to persist its session before the logout finishes
+            await Promise.race([loggedIn, new Promise((resolve) => setTimeout(resolve, 100))]);
+            platformCleared.resolve();
+            await Promise.all([loggedOut, loggedIn]);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should still log in after a logout failed to clear storage", async () => {
+            mockPlatform.clearStorage = vi.fn().mockRejectedValue(new Error("storage broke"));
+
+            await expect(Lifecycle.onLoggedOut()).rejects.toThrow("storage broke");
+            await setLoggedIn(credentials);
+
+            expect(localStorage.getItem("mx_user_id")).toEqual(userId);
+        });
+
+        it("should not let a logout which is still clearing storage wipe sessionStorage written meanwhile", async () => {
+            const loggedOut = Lifecycle.onLoggedOut();
+            // Like an OAuth login storing the context it needs when the issuer sends us back
+            sessionStorage.setItem("mx_oidc_test", "value");
+            await loggedOut;
+
+            expect(sessionStorage.getItem("mx_oidc_test")).toEqual("value");
         });
 
         describe("after a soft-logout", () => {
@@ -659,6 +806,8 @@ describe("Lifecycle", () => {
 
                 expect(localStorage.removeItem).toHaveBeenCalledWith("mx_has_access_token");
                 expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token_fallback");
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token_fallback", expect.anything());
             });
 
             it("should clear stores", async () => {
@@ -742,8 +891,8 @@ describe("Lifecycle", () => {
                 });
                 await setLoggedIn(credentials);
 
-                // put plain accessToken in localstorage when we dont have idb
-                expect(localStorage.setItem).toHaveBeenCalledWith("mx_access_token", accessToken);
+                // put plain accessToken in localstorage at the fallback key when we dont have idb
+                expect(localStorage.setItem).toHaveBeenCalledWith("mx_access_token_fallback", accessToken);
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
@@ -761,6 +910,8 @@ describe("Lifecycle", () => {
 
                 expect(localStorage.removeItem).toHaveBeenCalledWith("mx_has_access_token");
                 expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token");
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_access_token_fallback");
+                expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_access_token_fallback", expect.anything());
             });
 
             it("should create new matrix client with credentials", async () => {
@@ -786,7 +937,7 @@ describe("Lifecycle", () => {
 
     describe("logout()", () => {
         it("should call logout on the client", async () => {
-            logout();
+            await logout();
 
             await flushPromises();
 
@@ -797,16 +948,6 @@ describe("Lifecycle", () => {
     describe("overwritelogin", () => {
         beforeEach(async () => {
             vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
-
-            // Mock localstorage here to always return the client ID because part setLoggedIn clears storage
-            vi.stubGlobal("localStorage", {
-                getItem: vi
-                    .fn()
-                    .mockImplementation((key: string) => (key === "mx_oidc_client_id" ? "test-client-id" : null)),
-                setItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            });
         });
 
         it("should replace the current login with a new one", async () => {

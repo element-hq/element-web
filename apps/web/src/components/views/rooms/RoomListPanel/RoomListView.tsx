@@ -11,9 +11,11 @@ import {
     useCreateAutoDisposedViewModel,
     type Room as SharedRoom,
 } from "@element-hq/web-shared-components";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { DecoratedRoomAvatarView } from "../../avatars/DecoratedRoomAvatarView";
+import RoomAvatar from "../../avatars/RoomAvatar";
+import { PreviewRoomAvatarData } from "../../../../viewmodels/room-list/PreviewRoomAvatarData";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
@@ -38,7 +40,10 @@ export function RoomListView(): JSX.Element {
 
     // Render avatar for each room - memoized to prevent re-renders
     const renderAvatar = useCallback((room: SharedRoom): ReactNode => {
-        return <DecoratedRoomAvatarView room={room as Room} />;
+        if (room instanceof Room) return <DecoratedRoomAvatarView room={room} />;
+        // A preview item has no `Room`, only the data needed for its avatar
+        if (room instanceof PreviewRoomAvatarData) return <RoomAvatar size="32px" oobData={room} />;
+        return null;
     }, []);
 
     // Handle keyboard navigation for landmarks

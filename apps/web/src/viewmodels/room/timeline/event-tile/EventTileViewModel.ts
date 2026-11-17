@@ -49,7 +49,6 @@ import {
 import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
 import { getEventTileReplyChainState } from "./EventTileReplyChainState";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
-import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
@@ -547,7 +546,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewModelRenderSt
         const replyChainState = getEventTileReplyChainState({
             mxEvent,
             // Replacement events have a fallback tile but must not show their own reply chain
-            hasRenderer: haveRendererForEvent(mxEvent, dependencies.matrixClient, dependencies.showHiddenEvents),
+            hasRenderer: displayInfo.hasRendererForReplyChain,
         });
 
         return {
@@ -577,6 +576,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewModelRenderSt
                 ...props.sender,
                 senderId: mxEvent.getSender() ?? undefined,
                 isEmote: mxEvent.getContent().msgtype === MsgType.Emote,
+                hideSender: displayInfo.hideSender || props.sender.hideSender,
             },
         };
     }

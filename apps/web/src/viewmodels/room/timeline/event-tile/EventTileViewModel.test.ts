@@ -12,6 +12,7 @@ import { mkEvent, stubClient } from "test-utils";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { Layout } from "../../../../settings/enums/Layout";
+import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import {
     EventTileViewModel,
     type EventTileViewModelDependencies,
@@ -723,6 +724,21 @@ describe("EventTileViewModel", () => {
         expect(vm.getSnapshot().snapshot.root.state.hasReply).toBe(false);
 
         vm.dispose();
+    });
+
+    it("distinguishes the hidden-event fallback from a supported renderer", () => {
+        const event = mkEvent({
+            event: true,
+            room: "!room:example.org",
+            type: "org.example.unsupported",
+            user: "@alice:example.org",
+            content: {},
+        });
+
+        expect(getEventDisplayInfo(matrixClient, event, true)).toMatchObject({
+            hasRenderer: true,
+            hasRendererForReplyChain: false,
+        });
     });
 
     it("derives an unavailable renderer for unsupported events", () => {

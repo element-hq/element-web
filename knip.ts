@@ -7,13 +7,13 @@ Please see LICENSE in the repository root for full details.
 
 import { type KnipConfig } from "knip";
 
-// Specify this as knip loads config files which may conditionally load plugins
+// Specify these as knip loads config files which may conditionally load plugins or run commands
 process.env.GITHUB_ACTIONS = "1";
+process.env.CI = "1";
 
 export default {
     workspaces: {
         "packages/shared-components": {
-            entry: ["src/index.ts!", "scripts/**"],
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,pcss}!",
                 "!scripts/**!",
@@ -21,12 +21,19 @@ export default {
                 "!src/**/test-*!",
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
+            ignoreDependencies: [
+                // Not imported directly, but @fetch-mock/vitest's own type declarations reference
+                // `expect`'s types without declaring it as a dependency themselves. It has to be a
+                // direct dependency here for that .d.ts to resolve under pnpm's strict node_modules.
+                "expect",
+            ],
         },
         "packages/playwright-common": {
             entry: ["src/fixtures/index.ts!", "src/testcontainers/index.ts!"],
             project: [
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!src/flaky-reporter.ts!",
+                "!src/flaky-assignee-finder.ts!",
                 "!src/stale-screenshot-reporter.ts!",
             ],
             ignoreDependencies: [
@@ -41,13 +48,13 @@ export default {
                 "src/workers/*.worker.ts!",
                 "src/utils/exportUtils/exportJS.js!",
                 "src/vector/localstorage-fix.ts!",
-                "scripts/**",
-                "playwright/**",
-                "test/**",
+                "playwright/sample-files/*.js",
+                "playwright/e2e/crypto/test_legacy_indexeddb_cryptostore_dump/load.js",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss!",
                 "I18nWebpackPlugin.ts!",
+                "supportedBrowsers.ts!",
                 // Keep for now
                 "src/hooks/useLocalStorageState.ts!",
                 "src/hooks/useIsReleaseAnnouncementOpen.ts!",
@@ -65,6 +72,7 @@ export default {
                 "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!",
                 "!scripts/**!",
                 "!src/test/**!",
+                "!playwright/**!",
                 "!recorder-worklet-loader.cjs!",
                 "!src/**/*-{mock,mocks,snapshot,actions}.*!",
             ],
@@ -77,31 +85,14 @@ export default {
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
                 "@types/sdp-transform",
-
-                // Referenced as a tsconfig `types` entry rather than imported, so knip
-                // cannot see it. It has to be a direct dependency for
-                // `@vitest/browser/matchers` to resolve under pnpm's strict node_modules.
-                // See apps/web/tsconfig.browser-test.json.
-                "@vitest/browser",
-
-                // Used by Playwright to serve the built web app.
-                "serve",
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
+            entry: ["src/preload.cts!", "electron-builder.ts!"],
             project: ["**/*.{js,ts,pcss}"],
-            ignoreDependencies: [
-                // Brought in via hak scripts
-                "matrix-seshat",
-            ],
             ignoreBinaries: [
-                // Used to build seshat (optional)
-                "rustc",
                 // Used by the fetch-package script (optional)
                 "gpg",
-                // Used for the macOS universal builds
-                "lipo",
             ],
         },
         "modules": {
@@ -121,7 +112,8 @@ export default {
             ],
         },
         ".": {
-            entry: ["scripts/**", "docs/**"],
+            entry: ["docs/**"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,pcss}!", "!scripts/**!"],
         },
     },
     ignoreDependencies: [

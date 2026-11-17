@@ -1,0 +1,62 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { render } from "test-utils-rtl";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+import { mkRoom, mkSpace, stubClient } from "test-utils";
+import AddExistingToSpaceDialog from "./AddExistingToSpaceDialog";
+import DMRoomMap from "../../../utils/DMRoomMap";
+
+describe("<AddExistingToSpaceDialog />", () => {
+    beforeEach(() => {
+        vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
+    });
+
+    it("looks as expected", () => {
+        const client = stubClient();
+        const dialog = renderAddExistingToSpaceDialog(client);
+        expect(dialog.asFragment()).toMatchSnapshot();
+    });
+
+    it("should show 'no results' if appropriate", () => {
+        const client = stubClient();
+        const { getByText } = renderAddExistingToSpaceDialog(client);
+        expect(getByText("No results")).toBeInTheDocument();
+    });
+
+    it("should not show 'no results' if we have results to show", () => {
+        const client = stubClient();
+        vi.mocked(client.getVisibleRooms).mockReturnValue([
+            mkSpace(client, "!space2:example.com"),
+            mkRoom(client, "!room2:example.com"),
+        ]);
+        const { queryByText, getByText } = renderAddExistingToSpaceDialog(client);
+        expect(queryByText("No results")).not.toBeInTheDocument();
+        expect(getByText("!room2:example.com")).toBeInTheDocument();
+    });
+});
+
+function renderAddExistingToSpaceDialog(client: MatrixClient) {
+    const dmRoomMap = new DMRoomMap(client);
+    vi.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+    const space = mkSpace(client, "!spaceid:example.com");
+    const dialog = render(
+        <AddExistingToSpaceDialog
+            space={space}
+            onCreateRoomClick={vi.fn()}
+            onAddSubspaceClick={vi.fn()}
+            onFinished={vi.fn()}
+        />,
+    );
+    return dialog;
+}

@@ -60,13 +60,13 @@ describe("Modal", () => {
         const modal1OnFinished = vi.fn();
         const modal2OnFinished = vi.fn();
 
-        Modal.createDialog(QuestionDialog, {
+        void Modal.createDialog(QuestionDialog, {
             title: "Test dialog 1",
             description: "This is a test dialog",
             button: "Word",
         }).finished.then(modal1OnFinished);
 
-        Modal.createDialog(QuestionDialog, {
+        void Modal.createDialog(QuestionDialog, {
             title: "Test dialog 2",
             description: "This is a test dialog",
             button: "Word",

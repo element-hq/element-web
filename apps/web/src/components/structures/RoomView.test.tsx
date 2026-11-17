@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock, type MockedObject } from "vitest";
-import React, { createRef, type RefObject } from "react";
+import React, { createRef, useImperativeHandle, type RefObject } from "react";
 import {
     EventTimeline,
     EventType,
@@ -35,6 +35,7 @@ import {
     filterConsole,
     flushPromises,
     mkEvent,
+    mkMessage,
     mkRoomMemberJoinEvent,
     mkThirdPartyInviteEvent,
     mockPlatformPeg,
@@ -84,6 +85,27 @@ vi.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.VideoInput]: [],
     [MediaDeviceKindEnum.AudioOutput]: [],
 });
+
+// The new timeline panel has its own tests. Here it is a stub that records the props RoomView
+// passes it and exposes a handle recording what RoomView asks of it. Only rendered with
+// feature_new_timeline on, which only the last describe in this file turns on.
+const { newTimelinePanelHandle, newTimelinePanelProps } = vi.hoisted(() => ({
+    newTimelinePanelHandle: {
+        handleScrollKey: vi.fn(),
+        jumpToLiveTimeline: vi.fn(),
+        jumpToReadMarker: vi.fn(),
+        forgetReadMarker: vi.fn(),
+    },
+    /** The props the stub was last rendered with. */
+    newTimelinePanelProps: { current: {} as Record<string, any> },
+}));
+vi.mock("./NewTimelinePanel", () => ({
+    NewTimelinePanel: (props: { ref?: React.Ref<unknown> }) => {
+        newTimelinePanelProps.current = props;
+        useImperativeHandle(props.ref, () => newTimelinePanelHandle, []);
+        return <div data-testid="new-timeline-stub" />;
+    },
+}));
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -492,28 +514,11 @@ describe("RoomView", () => {
         it("and it has 0 unreads, getHiddenHighlightCount should return 0", async () => {
             vi.spyOn(oldRoom, "getUnreadNotificationCount").mockReturnValue(0);
             expect(instance.getHiddenHighlightCount()).toBe(0);
-            // assert that msc3946ProcessDynamicPredecessor is false by default
-            expect(room.findPredecessor).toHaveBeenCalledWith(false);
         });
 
         it("and it has 23 unreads, getHiddenHighlightCount should return 23", async () => {
             vi.spyOn(oldRoom, "getUnreadNotificationCount").mockReturnValue(23);
             expect(instance.getHiddenHighlightCount()).toBe(23);
-        });
-
-        describe("and feature_dynamic_room_predecessors is enabled", () => {
-            beforeEach(() => {
-                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: true }));
-            });
-
-            afterEach(() => {
-                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: false }));
-            });
-
-            it("should pass the setting to findPredecessor", async () => {
-                expect(instance.getHiddenHighlightCount()).toBe(0);
-                expect(room.findPredecessor).toHaveBeenCalledWith(true);
-            });
         });
     });
 
@@ -865,6 +870,83 @@ describe("RoomView", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
+    describe("rooms the client does not know about", () => {
+        beforeEach(() => {
+            // All we know about the room is what its summary tells us
+            rooms.delete(room.roomId);
+        });
+
+        it("peeks into a world readable room", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                world_readable: true,
+                guest_can_join: true,
+                num_joined_members: 1,
+            });
+            cli.peekInRoom.mockResolvedValue(room);
+
+            const instance = await getRoomViewInstance();
+
+            expect(cli.peekInRoom).toHaveBeenCalledWith(room.roomId);
+            expect(instance.state.room).toBe(room);
+            expect(instance.state.isPeeking).toBe(true);
+            expect(instance.state.peekAndSummaryLoading).toBe(false);
+        });
+
+        it("shows the join prompt when peeking fails", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                name: "Summary name",
+                world_readable: true,
+                guest_can_join: true,
+                num_joined_members: 1,
+            });
+            cli.peekInRoom.mockRejectedValue(new MatrixError({ errcode: "M_FORBIDDEN" }));
+
+            const ref = createRef<RoomView>();
+            await mountRoomView(ref, { oobData: { name: undefined } });
+            const instance = ref.current!;
+
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+            expect(screen.getByText("Summary name can't be previewed. Do you want to join it?")).toBeInTheDocument();
+            expect(instance.state.isPeeking).toBe(false);
+        });
+
+        it("does not peek into a room which is not world readable and hands the summary to the store", async () => {
+            const summary = {
+                room_id: room.roomId,
+                membership: KnownMembership.Leave,
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            };
+            cli.getRoomSummary.mockResolvedValue(summary);
+
+            await mountRoomView();
+
+            expect(cli.peekInRoom).not.toHaveBeenCalled();
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+            expect(stores.roomViewStore.getRoomSummary()).toEqual(summary);
+        });
+
+        it("peeks into a room we have already joined", async () => {
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                membership: KnownMembership.Join,
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            });
+            cli.peekInRoom.mockResolvedValue(room);
+
+            const instance = await getRoomViewInstance();
+
+            expect(cli.peekInRoom).toHaveBeenCalledWith(room.roomId);
+            expect(instance.state.room).toBe(room);
+            expect(instance.state.peekAndSummaryLoading).toBe(false);
+        });
+    });
+
     describe("knock rooms", () => {
         const client = createTestClient();
 
@@ -879,7 +961,7 @@ describe("RoomView", () => {
             vi.spyOn(client, "knockRoom").mockResolvedValue({ room_id: room.roomId });
 
             await mountRoomView();
-            fireEvent.click(screen.getByRole("button", { name: "Request access" }));
+            fireEvent.click(screen.getByRole("button", { name: "Request to join" }));
             await untilDispatch(Action.SubmitAskToJoin, defaultDispatcher);
 
             expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
@@ -887,6 +969,31 @@ describe("RoomView", () => {
                 roomId: room.roomId,
                 opts: { reason: undefined },
             });
+        });
+
+        it("allows to request to join a room we don't know about yet", async () => {
+            rooms.delete(room.roomId);
+            cli.getRoomSummary.mockResolvedValue({
+                room_id: room.roomId,
+                join_rule: JoinRule.Knock,
+                world_readable: false,
+                guest_can_join: false,
+                num_joined_members: 1,
+            });
+
+            await mountRoomView();
+
+            expect(screen.getByRole("heading", { name: "Ask to join?" })).toBeInTheDocument();
+            expect(cli.peekInRoom).not.toHaveBeenCalled();
+        });
+
+        it("shows the join prompt when the room summary cannot be fetched", async () => {
+            rooms.delete(room.roomId);
+            cli.getRoomSummary.mockRejectedValue(new MatrixError({ errcode: "M_NOT_FOUND" }));
+
+            await mountRoomView();
+
+            expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
         });
 
         it("allows to cancel a join request", async () => {
@@ -1218,7 +1325,7 @@ describe("RoomView", () => {
                 skey: id,
                 ts,
             });
-            room.addLiveEvents([widgetEvent], { addToState: false });
+            await room.addLiveEvents([widgetEvent], { addToState: false });
             room.currentState.setStateEvents([widgetEvent]);
             cli.emit(RoomStateEvent.Events, widgetEvent, room.currentState, null);
             await flushPromises();
@@ -1228,7 +1335,7 @@ describe("RoomView", () => {
             vi.spyOn(WidgetUtils, "setRoomWidget");
             const widgetStore = WidgetStore.instance;
             await setupAsyncStoreWithClient(widgetStore, cli);
-            getRoomViewInstance();
+            await getRoomViewInstance();
         });
 
         const itShouldNotRemoveTheLastWidget = (): void => {
@@ -1330,5 +1437,115 @@ describe("RoomView", () => {
                 room_id: room2.roomId,
             }),
         );
+    });
+
+    describe("with the new timeline", () => {
+        beforeEach(() => {
+            // Earlier describes leave SettingsStore.getValue spied with a narrow implementation
+            // (this file deliberately avoids restoreAllMocks), which would hide the flag. Put the
+            // real implementation back and layer the flag on top of it.
+            if (vi.isMockFunction(SettingsStore.getValue)) vi.mocked(SettingsStore.getValue).mockRestore();
+            const realGetValue = SettingsStore.getValue.bind(SettingsStore) as (...args: unknown[]) => unknown;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(((name: string, ...rest: unknown[]) =>
+                name === "feature_new_timeline" ? true : realGetValue(name, ...rest)) as typeof SettingsStore.getValue);
+            room.getMyMembership = vi.fn().mockReturnValue(KnownMembership.Join);
+            // The top-level beforeEach hides crypto, which leaves the room's encryption state
+            // loading and neither timeline mounted; the timeline is the point here.
+            vi.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+        });
+
+        afterEach(() => {
+            vi.mocked(SettingsStore.getValue).mockRestore();
+        });
+
+        it("mounts the new panel in place of the old timeline", async () => {
+            await mountRoomView();
+
+            expect(await screen.findByTestId("new-timeline-stub")).toBeInTheDocument();
+            expect(document.querySelector(".mx_ScrollPanel")).toBeNull();
+        });
+
+        it("forwards the timeline's keyboard shortcuts to the new panel", async () => {
+            const ref = createRef<RoomView>();
+            await mountRoomView(ref);
+            await screen.findByTestId("new-timeline-stub");
+            const ev = new KeyboardEvent("keydown", { key: "PageUp" });
+
+            ref.current!.handleScrollKey(ev);
+
+            expect(newTimelinePanelHandle.handleScrollKey).toHaveBeenCalledWith(ev);
+        });
+
+        it("dismisses the read marker and jumps to the live end on escape", async () => {
+            await mountRoomView();
+            const stub = await screen.findByTestId("new-timeline-stub");
+
+            fireEvent.keyDown(stub, { key: "Escape" });
+
+            expect(newTimelinePanelHandle.forgetReadMarker).toHaveBeenCalled();
+            expect(newTimelinePanelHandle.jumpToLiveTimeline).toHaveBeenCalled();
+        });
+
+        it("jumps to the oldest unread message on shift+page up", async () => {
+            await mountRoomView();
+            const stub = await screen.findByTestId("new-timeline-stub");
+
+            fireEvent.keyDown(stub, { key: "PageUp", shiftKey: true });
+
+            expect(newTimelinePanelHandle.jumpToReadMarker).toHaveBeenCalled();
+        });
+
+        it("passes a message asked for after opening to the new panel, and clears the scroll flag once told", async () => {
+            const pinned = mkMessage({ room: room.roomId, user: "@alice:example.org", msg: "pinned", event: true });
+            room.getUnfilteredTimelineSet().addLiveEvent(pinned, { addToState: false });
+            await mountRoomView();
+            await screen.findByTestId("new-timeline-stub");
+
+            // As clicking a pinned message does.
+            await act(() =>
+                stores.roomViewStore.viewRoom({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    event_id: pinned.getId(),
+                    highlighted: true,
+                    metricsTrigger: undefined,
+                }),
+            );
+            await waitFor(() => expect(newTimelinePanelProps.current.highlightedEventId).toBe(pinned.getId()));
+            expect(newTimelinePanelProps.current.eventScrollIntoView).toBe(true);
+
+            // The panel reports the jump; RoomView clears the flag so the same message can be asked for again.
+            await act(() => newTimelinePanelProps.current.onEventScrolledIntoView(pinned.getId()));
+
+            await waitFor(() => expect(newTimelinePanelProps.current.eventScrollIntoView).toBe(false));
+            expect(newTimelinePanelProps.current.highlightedEventId).toBe(pinned.getId());
+        });
+
+        describe("when a message is sent", () => {
+            // The composer announces a send with a dispatch rather than by calling the timeline.
+            const sendFrom = (timelineRenderingType: TimelineRenderingType): void => {
+                defaultDispatcher.dispatch({ action: "scroll_to_bottom", timelineRenderingType }, true);
+            };
+
+            beforeEach(() => newTimelinePanelHandle.jumpToLiveTimeline.mockClear());
+
+            it("scrolls the new timeline to the live end when the room composer sent it", async () => {
+                await mountRoomView();
+                await screen.findByTestId("new-timeline-stub");
+
+                sendFrom(TimelineRenderingType.Room);
+
+                expect(newTimelinePanelHandle.jumpToLiveTimeline).toHaveBeenCalledTimes(1);
+            });
+
+            it("leaves it alone when a thread composer sent it", async () => {
+                await mountRoomView();
+                await screen.findByTestId("new-timeline-stub");
+
+                sendFrom(TimelineRenderingType.Thread);
+
+                expect(newTimelinePanelHandle.jumpToLiveTimeline).not.toHaveBeenCalled();
+            });
+        });
     });
 });

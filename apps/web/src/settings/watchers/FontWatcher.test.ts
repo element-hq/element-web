@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { waitFor } from "test-utils-rtl";
-import { untilDispatch } from "test-utils";
+import { untilDispatch, tearDownAfterTest } from "test-utils";
 
 import SettingsStore from "../SettingsStore";
 import { SettingLevel } from "../SettingLevel";
@@ -42,7 +42,7 @@ const getEmojiFontFamily = () => {
 
 describe("FontWatcher", function () {
     it("should load font on start()", async () => {
-        const watcher = new FontWatcher();
+        const watcher = tearDownAfterTest(new FontWatcher());
         await setSystemFont("Font Name");
         expect(getFontFamily()).toMatchInlineSnapshot(`""`);
         await watcher.start();
@@ -51,7 +51,7 @@ describe("FontWatcher", function () {
 
     it("should load font on Action.OnLoggedIn", async () => {
         await setSystemFont("Font Name");
-        await new FontWatcher().start();
+        await tearDownAfterTest(new FontWatcher()).start();
         document.body.style.removeProperty(FontWatcher.FONT_FAMILY_CUSTOM_PROPERTY); // clear the fontFamily which was  by start which we tested already
         defaultDispatcher.fire(Action.OnLoggedIn, true);
         expect(getFontFamily()).toMatchInlineSnapshot(`""Font Name", Twemoji"`);
@@ -59,7 +59,7 @@ describe("FontWatcher", function () {
 
     it("should reset font on Action.OnLoggedOut", async () => {
         await setSystemFont("Font Name");
-        const watcher = new FontWatcher();
+        const watcher = tearDownAfterTest(new FontWatcher());
         await watcher.start();
         expect(getFontFamily()).toMatchInlineSnapshot(`""Font Name", Twemoji"`);
         defaultDispatcher.fire(Action.OnLoggedOut, true);
@@ -118,7 +118,7 @@ describe("FontWatcher", function () {
     it("should update root font size with positive delta", async () => {
         const root = document.querySelector<HTMLElement>(":root")!;
 
-        await new FontWatcher().start();
+        await tearDownAfterTest(new FontWatcher()).start();
 
         defaultDispatcher.dispatch({
             action: Action.UpdateFontSizeDelta,

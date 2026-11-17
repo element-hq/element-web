@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, afterEach, beforeEach, type MockedObject } from "vitest";
-import { type MatrixClient, type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -19,15 +19,15 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
 import RightPanelStore from "./RightPanelStore";
 import { RightPanelPhases } from "./RightPanelStorePhases";
+import { convertToStatePanel, convertToStorePanel } from "./RightPanelStoreIPanelState";
 import SettingsStore from "../../settings/SettingsStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { pendingVerificationRequestForUser } from "../../verification.ts";
 
 vi.mock("../../verification");
 
 describe("RightPanelStore", () => {
     // The store persists its own phase history, which would otherwise carry across rooms and tests.
-    // Everything else is left alone so tests can write real settings, e.g. the labs flags below.
+    // Everything else is left alone so tests can write real settings.
     const realSetValue = SettingsStore.setValue.bind(SettingsStore);
     vi.spyOn(SettingsStore, "setValue").mockImplementation((name, ...args) =>
         name === "RightPanel.phases" ? Promise.resolve() : realSetValue(name, ...args),
@@ -145,56 +145,121 @@ describe("RightPanelStore", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").state?.initialEvent?.getId()).toEqual("$two");
         });
-        describe("PdfViewer", () => {
-            const pdfCard = {
-                phase: RightPanelPhases.PdfViewer,
-                state: { pdfViewerEvent: { getId: () => "$pdf" } as unknown as MatrixEvent },
+        describe("DocumentViewer", () => {
+            const documentCard = {
+                phase: RightPanelPhases.DocumentViewer,
+                state: { documentViewer: { event: { getId: () => "$document" } as unknown as MatrixEvent } },
             };
 
-            /** The viewer sits behind a lab, so the card is only valid while that is on. */
-            const setPdfViewerLab = (enabled: boolean): Promise<void> =>
-                SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, enabled);
-
             it("drops a card with no event to display", async () => {
-                await setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
 
-                store.setCard({ phase: RightPanelPhases.PdfViewer }, true, "!1:example.org");
+                store.setCard({ phase: RightPanelPhases.DocumentViewer }, true, "!1:example.org");
 
                 expect(store.roomPhaseHistory).toEqual([]);
             });
 
             it("opens the card for the event when the open action is dispatched", async () => {
-                await setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
                 const event = {
-                    getId: () => "$pdf",
+                    getId: () => "$document",
                     getRoomId: () => "!1:example.org",
                 } as unknown as MatrixEvent;
 
-                defaultDispatcher.dispatch({ action: Action.OpenPdfViewer, event }, true);
+                defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, event }, true);
 
-                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
-                expect(store.currentCardForRoom("!1:example.org").state?.pdfViewerEvent).toBe(event);
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.DocumentViewer);
+                expect(store.currentCardForRoom("!1:example.org").state?.documentViewer).toEqual({ event });
+                expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            });
+
+            it("opens the card for a file in the viewed room when the open action is dispatched", async () => {
+                await viewRoom("!1:example.org");
+                const file = { mimetype: "application/pdf", name: "spec.pdf", blob: vi.fn() };
+
+                defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, file }, true);
+
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.DocumentViewer);
+                expect(store.currentCardForRoom("!1:example.org").state?.documentViewer).toEqual({ file });
+                expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
+            });
+
+            it("does not restore a file card, since the file cannot be persisted", () => {
+                const fileCard = {
+                    phase: RightPanelPhases.DocumentViewer,
+                    state: { documentViewer: { file: { mimetype: "application/pdf", blob: vi.fn() } } },
+                };
+                const room = { findEventById: vi.fn(), getMember: vi.fn() } as unknown as Room;
+
+                const restored = convertToStatePanel(convertToStorePanel({ isOpen: true, history: [fileCard] }), room);
+
+                // With neither an event nor a file, the store drops the card on load.
+                expect(restored?.history[0].state?.documentViewer).toBeUndefined();
+            });
+
+            it("stacks the viewer on an open thread so back returns to it", async () => {
+                await viewRoom("!1:example.org");
+                const threadHeadEvent = { getId: () => "$thread" } as unknown as MatrixEvent;
+                store.setCard(
+                    { phase: RightPanelPhases.ThreadView, state: { threadHeadEvent } },
+                    true,
+                    "!1:example.org",
+                );
+                const event = {
+                    getId: () => "$document",
+                    getRoomId: () => "!1:example.org",
+                } as unknown as MatrixEvent;
+
+                defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, event }, true);
+
+                expect(store.roomPhaseHistory.map((card) => card.phase)).toEqual([
+                    RightPanelPhases.ThreadView,
+                    RightPanelPhases.DocumentViewer,
+                ]);
+
+                store.popCard("!1:example.org");
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.ThreadView);
+                expect(store.currentCardForRoom("!1:example.org").state?.threadHeadEvent).toBe(threadHeadEvent);
+            });
+
+            it("replaces the document rather than stacking a second viewer", async () => {
+                await viewRoom("!1:example.org");
+                store.setCard({ phase: RightPanelPhases.FilePanel }, true, "!1:example.org");
+                const mkEvent = (id: string): MatrixEvent =>
+                    ({ getId: () => id, getRoomId: () => "!1:example.org" }) as unknown as MatrixEvent;
+
+                defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, event: mkEvent("$one") }, true);
+                const second = mkEvent("$two");
+                defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, event: second }, true);
+
+                expect(store.roomPhaseHistory.map((card) => card.phase)).toEqual([
+                    RightPanelPhases.FilePanel,
+                    RightPanelPhases.DocumentViewer,
+                ]);
+                expect(store.currentCardForRoom("!1:example.org").state?.documentViewer).toEqual({ event: second });
+            });
+
+            it("does not stack the viewer on a closed panel", async () => {
+                await viewRoom("!1:example.org");
+                store.setCard({ phase: RightPanelPhases.FilePanel }, true, "!1:example.org");
+                store.hide("!1:example.org");
+                const event = {
+                    getId: () => "$document",
+                    getRoomId: () => "!1:example.org",
+                } as unknown as MatrixEvent;
+
+                defaultDispatcher.dispatch({ action: Action.OpenDocumentViewer, event }, true);
+
+                expect(store.roomPhaseHistory.map((card) => card.phase)).toEqual([RightPanelPhases.DocumentViewer]);
                 expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             });
 
             it("keeps a card with an event to display", async () => {
-                await setPdfViewerLab(true);
                 await viewRoom("!1:example.org");
 
-                store.setCard(pdfCard, true, "!1:example.org");
+                store.setCard(documentCard, true, "!1:example.org");
 
-                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.PdfViewer);
-            });
-
-            it("drops an otherwise valid card while the lab is off", async () => {
-                await setPdfViewerLab(false);
-                await viewRoom("!1:example.org");
-
-                store.setCard(pdfCard, true, "!1:example.org");
-
-                expect(store.roomPhaseHistory).toEqual([]);
+                expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.DocumentViewer);
             });
         });
         it("history is generated for certain phases", async () => {

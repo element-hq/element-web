@@ -13,7 +13,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type PostHog } from "posthog-js";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { getMockClientWithEventEmitter } from "test-utils";
+import { getMockClientWithEventEmitter, tearDownAfterTest } from "test-utils";
 
 import { Anonymity, getRedactedCurrentLocation, type IPosthogEvent, PosthogAnalytics } from "./PosthogAnalytics";
 import SdkConfig from "./SdkConfig";
@@ -82,7 +82,7 @@ describe("PosthogAnalytics", () => {
         it("Should not be enabled without config being set", () => {
             // force empty/invalid state for posthog options
             SdkConfig.put({ brand: "Testing" });
-            const analytics = new PosthogAnalytics(fakePosthog);
+            const analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             expect(analytics.isEnabled()).toBe(false);
         });
 
@@ -94,10 +94,64 @@ describe("PosthogAnalytics", () => {
                     api_host: "bar",
                 },
             });
-            const analytics = new PosthogAnalytics(fakePosthog);
+            const analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             analytics.setAnonymity(Anonymity.Pseudonymous);
             expect(analytics.isEnabled()).toBe(true);
         });
+    });
+
+    describe("Loading posthog-js", () => {
+        const enableAnalytics = (): void =>
+            SdkConfig.put({ brand: "Testing", posthog: { project_api_key: "foo", api_host: "bar" } });
+
+        it("does not load posthog-js if analytics are not configured", () => {
+            SdkConfig.put({ brand: "Testing" });
+            const loadPosthog = vi.fn().mockResolvedValue(fakePosthog);
+
+            const analytics = tearDownAfterTest(new PosthogAnalytics(loadPosthog));
+
+            expect(loadPosthog).not.toHaveBeenCalled();
+            expect(analytics.isEnabled()).toBe(false);
+        });
+
+        it("sends calls made while posthog-js is loading once it has loaded, in order", async () => {
+            enableAnalytics();
+            const { promise, resolve } = Promise.withResolvers<PostHog>();
+            const analytics = tearDownAfterTest(new PosthogAnalytics(() => promise));
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            analytics.trackEvent<ITestEvent>({ eventName: "TestEvents", foo: "first" });
+            analytics.trackEvent<ITestEvent>({ eventName: "TestEvents", foo: "second" });
+            expect(fakePosthog.capture).not.toHaveBeenCalled();
+
+            resolve(fakePosthog);
+
+            await vi.waitFor(() => expect(fakePosthog.capture).toHaveBeenCalledTimes(2));
+            expect(fakePosthog.init).toHaveBeenCalledWith("foo", expect.objectContaining({ api_host: "bar" }));
+            expect(vi.mocked(fakePosthog.capture).mock.calls.map((call) => call[1]?.foo)).toEqual(["first", "second"]);
+        });
+
+        it("disables analytics if posthog-js fails to load", async () => {
+            enableAnalytics();
+            const analytics = tearDownAfterTest(
+                new PosthogAnalytics(() => Promise.reject(new Error("Failed to fetch dynamically imported module"))),
+            );
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            analytics.trackEvent<ITestEvent>({ eventName: "TestEvents" });
+
+            await vi.waitFor(() => expect(analytics.isEnabled()).toBe(false));
+            expect(fakePosthog.capture).not.toHaveBeenCalled();
+        });
+    });
+
+    it("Stops listening to the dispatcher when destroyed", () => {
+        SdkConfig.put({ brand: "Testing" });
+        const analytics = new PosthogAnalytics(fakePosthog);
+        const unregisterSpy = vi.spyOn(defaultDispatcher, "unregister");
+
+        analytics.destroy();
+
+        expect(unregisterSpy).toHaveBeenCalledWith(expect.any(String));
+        unregisterSpy.mockRestore();
     });
 
     describe("Tracking", () => {
@@ -112,7 +166,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
         });
 
         it("Should pass event to posthog", () => {
@@ -199,7 +253,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             analytics.setAnonymity(Anonymity.Pseudonymous);
         });
 
@@ -290,7 +344,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
             analytics.setAnonymity(Anonymity.Pseudonymous);
         });
 
@@ -338,7 +392,7 @@ describe("PosthogAnalytics", () => {
                 },
             });
 
-            analytics = new PosthogAnalytics(fakePosthog);
+            analytics = tearDownAfterTest(new PosthogAnalytics(fakePosthog));
         });
 
         // `updateAnonymityFromSettings` is called On page load / login / account data change.

@@ -73,6 +73,15 @@ export const test = base.extend<TestFixtures>({
          * Ignore temporarily until we fix this.
          */
         axe = axe.exclude(".mx_Separator");
+        /**
+         * Enabled by default since axe-core 4.14. Many of our components (e.g. room list items) use an
+         * aria-label summary that cannot contain all of their visible text.
+         * Ignore temporarily until we rethink those accessible names.
+         */
+        const disableRules = axe.disableRules.bind(axe);
+        axe.disableRules = (rules: string | string[]) =>
+            disableRules([...(Array.isArray(rules) ? rules : [rules]), "label-content-name-mismatch"]);
+        axe = axe.disableRules([]);
         await use(axe);
     },
 
@@ -128,7 +137,10 @@ export const expect = baseExpect.extend<Expectations>({
             .mx_DisambiguatedProfile_displayName {
                 color: var(--cpd-color-blue-1200) !important;
             }
-            .mx_BaseAvatar {
+            /* Avatar colours are derived from the random MXID, so pin them. */
+            /* Compound avatars rendered by shared components don't have the mx_BaseAvatar class so use a loose Compound class selector */
+            .mx_BaseAvatar,
+            [class*="_avatar-imageless_"] {
                 background-color: var(--cpd-color-fuchsia-1200) !important;
                 border-color: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;

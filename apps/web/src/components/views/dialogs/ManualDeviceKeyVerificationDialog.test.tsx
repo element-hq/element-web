@@ -43,7 +43,7 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         const { dialog, onFinished } = populateDialog("DEVICEID", "FINGERPRINT");
 
         // When we click Verify session
-        dialog.getByRole("button", { name: "Verify session" }).click();
+        dialog.getByRole("button", { name: "Verify device" }).click();
 
         // Then crossSignDevice is called
         await waitFor(async () => {
@@ -57,7 +57,7 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         const { dialog, onFinished } = populateDialog("DEVICEID", "WRONG_FINGERPRINT");
 
         // When we click Verify session
-        act(() => dialog.getByRole("button", { name: "Verify session" }).click());
+        act(() => dialog.getByRole("button", { name: "Verify device" }).click());
 
         // Then crossSignDevice is not called
         await waitFor(async () => {
@@ -79,7 +79,7 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         const { dialog, onFinished } = populateDialog("VERIFIED_DEVICEID", "VERIFIED_FINGERPRINT");
 
         // When we click Verify session
-        act(() => dialog.getByRole("button", { name: "Verify session" }).click());
+        act(() => dialog.getByRole("button", { name: "Verify device" }).click());
 
         // Then crossSignDevice is not called
         await waitFor(async () => {
@@ -98,7 +98,7 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         const { dialog, onFinished } = populateDialog("VERIFIED_DEVICEID", "WRONG_FINGERPRINT");
 
         // When we click Verify session
-        act(() => dialog.getByRole("button", { name: "Verify session" }).click());
+        act(() => dialog.getByRole("button", { name: "Verify device" }).click());
 
         // Then crossSignDevice is not called
         await waitFor(async () => {
@@ -119,7 +119,7 @@ describe("ManualDeviceKeyVerificationDialog", () => {
         const { dialog, onFinished } = populateDialog("WRONG_DEVICE_ID", "FINGERPRINT");
 
         // When we click Verify session
-        act(() => dialog.getByRole("button", { name: "Verify session" }).click());
+        act(() => dialog.getByRole("button", { name: "Verify device" }).click());
 
         // Then crossSignDevice is not called
         await waitFor(async () => {

@@ -11,9 +11,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 
 import SmartMarker from "./SmartMarker";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

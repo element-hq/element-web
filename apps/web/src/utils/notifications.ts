@@ -180,7 +180,7 @@ export function notificationLevelToIndicator(
     } else if (level <= NotificationLevel.Activity) {
         return "default";
     } else if (level <= NotificationLevel.Notification) {
-        return "success";
+        return "accent";
     } else {
         return "critical";
     }

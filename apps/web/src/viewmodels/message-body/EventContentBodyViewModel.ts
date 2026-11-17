@@ -15,6 +15,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { logger } from "matrix-js-sdk/src/logger";
 import {
     BaseViewModel,
     type EventContentBodyViewSnapshot,
@@ -35,6 +36,7 @@ import {
 } from "../../renderer";
 import { filterBoolean } from "../../utils/arrays";
 import SettingsStore from "../../settings/SettingsStore";
+import { getKatex, loadKatex } from "../../utils/katex";
 
 /**
  * Options for configuring which renderers to apply.
@@ -79,6 +81,12 @@ export interface EventContentBodyViewModelProps extends ReplacerOptions {
      * The Matrix event to render, required for renderMentionPills & renderKeywordPills.
      */
     mxEvent?: MatrixEvent;
+    /**
+     * Whether to keep rendering the given content when `mxEvent` is replaced by an edit,
+     * rather than switching to the edited content.
+     * @default false
+     */
+    ignoreReplacements?: boolean;
     /**
      * Whether to strip reply fallbacks from the content before rendering.
      * @default false
@@ -236,6 +244,7 @@ export class EventContentBodyViewModel
 
         super(propsWithSettingDefaults, EventContentBodyViewModel.computeSnapshot(propsWithSettingDefaults));
         this.watchEvent(propsWithSettingDefaults.mxEvent);
+        this.loadKatexIfNeeded();
         this.disposables.track(this.unwatchEvent);
 
         const enableBigEmojiWatcherRef = SettingsStore.watchSetting(
@@ -257,6 +266,25 @@ export class EventContentBodyViewModel
         this.disposables.track(() => SettingsStore.unwatchSetting(shouldShowPillAvatarWatcherRef));
     }
 
+    /**
+     * If the body contains maths which could not be rendered because KaTeX has not been loaded yet, load it and then
+     * render the body again.
+     */
+    private loadKatexIfNeeded(): void {
+        if (getKatex() || !SettingsStore.getValue("feature_latex_maths")) return;
+        const formattedBody = this.props.content.formatted_body;
+        if (typeof formattedBody !== "string" || !formattedBody.includes("data-mx-maths")) return;
+
+        loadKatex().then(
+            () => {
+                if (this.isDisposed) return;
+                const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);
+                this.snapshot.merge({ body, formattedBody, className });
+            },
+            (e) => logger.error("Failed to load KaTeX", e),
+        );
+    }
+
     private readonly onEventContentChanged = (): void => {
         const mxEvent = this.props.mxEvent;
         if (!mxEvent) return;
@@ -266,6 +294,7 @@ export class EventContentBodyViewModel
     private watchEvent(mxEvent?: MatrixEvent): void {
         if (this.watchedEvent === mxEvent) return;
         this.unwatchEvent();
+        if (this.props.ignoreReplacements) return;
         this.watchedEvent = mxEvent;
         this.watchedEvent?.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
     }
@@ -283,6 +312,7 @@ export class EventContentBodyViewModel
         const replacer = createReplacer(this.props);
 
         this.snapshot.merge({ body, formattedBody, replacer, className });
+        this.loadKatexIfNeeded();
     };
 
     public setStripReply = (stripReply?: boolean): void => {

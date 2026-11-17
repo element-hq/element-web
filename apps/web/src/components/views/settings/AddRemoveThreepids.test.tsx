@@ -183,7 +183,7 @@ describe("AddRemoveThreepids", () => {
         await userEvent.type(input, PHONE1_LOCALNUM);
 
         const addButton = screen.getByRole("button", { name: /Add/ });
-        userEvent.click(addButton);
+        await userEvent.click(addButton);
 
         const continueButton = await screen.findByRole("button", { name: /Continue/ });
 
@@ -206,7 +206,7 @@ describe("AddRemoveThreepids", () => {
         await userEvent.type(verificationInput, "123456");
 
         expect(continueButton).not.toHaveAttribute("aria-disabled", "true");
-        userEvent.click(continueButton);
+        await userEvent.click(continueButton);
 
         await waitFor(() => expect(continueButton).toHaveAttribute("aria-disabled", "true"));
 

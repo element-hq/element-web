@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`link-tooltip > does nothing for empty element 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
+exports[`link-tooltip > wraps single anchor 1`] = `
+<DocumentFragment>
+  
+            
+  <div>
+    
+                
+    <span
+      aria-labelledby="react-use-id-1"
+      tabindex="0"
+    >
+      <a
+        href="/foo"
+      >
+        click
+      </a>
+    </span>
+    
+            
+  </div>
+  
+        
+</DocumentFragment>
+`;

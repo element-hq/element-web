@@ -25,7 +25,7 @@ exports[`EncryptionEventView > renders Default story 1`] = `
     <div
       class="EventTileBubble-module_subtitle"
     >
-      Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.
+      Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.
     </div>
   </div>
 </div>
@@ -87,7 +87,7 @@ exports[`EncryptionEventView > renders EnabledDirectMessage story 1`] = `
     <div
       class="EventTileBubble-module_subtitle"
     >
-      Messages here are end-to-end encrypted. Verify Alice in their profile - tap on their profile picture.
+      Messages here are end-to-end encrypted. Verify Alice in their profile — select their profile picture.
     </div>
   </div>
 </div>
@@ -180,7 +180,7 @@ exports[`EncryptionEventView > renders StateEncryptionEnabled story 1`] = `
     <div
       class="EventTileBubble-module_subtitle"
     >
-      Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.
+      Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.
     </div>
   </div>
 </div>
@@ -242,7 +242,7 @@ exports[`EncryptionEventView > renders WithTimestamp story 1`] = `
     <div
       class="EventTileBubble-module_subtitle"
     >
-      Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.
+      Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just select their profile picture.
     </div>
     <span>
       14:56

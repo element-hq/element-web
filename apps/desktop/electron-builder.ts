@@ -9,8 +9,18 @@ import * as os from "node:os";
 import * as fs from "node:fs";
 import * as fsp from "node:fs/promises";
 import path from "node:path";
-import { type Configuration as BaseConfiguration, type BeforeBuildContext, log } from "electron-builder";
+import {
+    type Configuration as BaseConfiguration,
+    type AfterPackContext,
+    type BeforeBuildContext,
+    type CustomWindowsSign,
+    Arch,
+    log,
+} from "electron-builder";
+import type { WindowsSignToolManager } from "app-builder-lib";
 import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/moduleManager.js";
+
+import { createCachedSign, getAuthenticodeSignature } from "./scripts/sign-cache.ts";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -18,10 +28,11 @@ import { LogMessageByKey } from "app-builder-lib/out/node-module-collector/modul
  * On Windows:
  *  Passes $ED_SIGNTOOL_THUMBPRINT and $ED_SIGNTOOL_SUBJECT_NAME to
  *      build.win.signtoolOptions.signingHashAlgorithms and build.win.signtoolOptions.certificateSubjectName respectively if specified.
+ *  Reuses previously signed DLLs, native modules & Squirrel.exe from $ED_SIGN_CACHE_URL if specified,
+ *      writing newly signed ones to $ED_SIGN_CACHE_DIR for uploading to the cache.
  *
  * On Linux:
  *  Replaces spaces in the product name with dashes as spaces in paths can cause issues
- *  Removes libsqlcipher0 recommended dependency if env SQLCIPHER_BUNDLED is asserted.
  *  Passes $ED_DEBIAN_CHANGELOG to build.deb.fpm if specified
  */
 
@@ -45,6 +56,7 @@ interface Metadata {
  * Extra metadata fields that are injected into the build to pass to the app at runtime.
  */
 interface ExtraMetadata extends Metadata {
+    desktopName: string;
     electron_appId: string;
     electron_protocol: string;
     electron_windows_cert_sn?: string;
@@ -123,17 +135,22 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     },
     files: [
         "package.json",
-        {
-            from: ".hak/hakModules",
-            to: "node_modules",
-        },
         "lib/**",
+        // electron-builder strips node-gyp's Make build leftovers from native modules but not MSBuild's on Windows
+        "!**/node_modules/*/build/*.{vcxproj,vcxproj.filters}",
+        "!**/node_modules/*/build/Release/{obj,*.iobj,*.ipdb,*.exp,*.lib}",
+        // pkcs11js is compiled from source on install, its sources are not needed at runtime
+        "!**/node_modules/pkcs11js/{src,includes}",
     ],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
         name: variant.name,
         productName: variant.productName,
         description: variant.description,
+        // Read by Electron to set the Wayland app_id / X11 WM_CLASS, so compositors
+        // can associate our windows with the desktop file of the same name.
+        // https://www.electron.build/linux#window-association-desktopname--syncdesktopname
+        desktopName: `${variant.name}.desktop`,
         electron_appId: variant.appId,
         electron_protocol: variant.protocols[0],
     },
@@ -142,6 +159,8 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         category: "Network;InstantMessaging;Chat",
         icon: "icon.png",
         executableName: variant.name, // element-desktop or element-desktop-nightly
+        // Name the desktop file after desktopName and set its StartupWMClass to match
+        syncDesktopName: true,
     },
     deb: {
         packageCategory: "net",
@@ -158,7 +177,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             "libasound2",
             "libgbm1",
         ],
-        recommends: ["libsqlcipher0", "element-io-archive-keyring"],
+        recommends: ["element-io-archive-keyring"],
         fpm: ["--deb-pre-depends", "libc6 (>= 2.35)"],
     },
     mac: {
@@ -171,7 +190,9 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         entitlements: "./build/entitlements.mac.plist",
         icon: "build/icon.icon",
         mergeASARs: true,
-        x64ArchFiles: "**/matrix-seshat/*.node", // hak already runs lipo
+        // The prebuilt seshat binaries are single-arch and present in both halves of the universal build,
+        // the loader picks the right one at runtime so they must not be lipo'd together.
+        x64ArchFiles: "**/@matrix-org/seshat-darwin-*/*.node",
     },
     dmg: {
         badgeIcon: "build/icon.icon",
@@ -182,6 +203,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             signingHashAlgorithms: ["sha256"],
         },
         icon: "build/icon.ico",
+        signExts: [".msi", ".exe", ".dll", ".node"],
     },
     msi: {
         perMachine: true,
@@ -209,6 +231,34 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         }
         return true; // Continue build
     },
+    afterPack: async (context: AfterPackContext) => {
+        // @matrix-org/seshat pulls in a prebuilt binary package per platform+arch as optional dependencies.
+        // CI installs more than one of them so that cross-arch builds work, so prune the ones we don't need
+        // from the packaged app. We always keep both darwin architectures as electron-builder packs each half
+        // of a universal build separately, and @electron/universal requires them to contain the same files.
+        const platform = context.electronPlatformName;
+        const arch = Arch[context.arch];
+        const keep = platform === "darwin" ? /^seshat-darwin-/ : new RegExp(`^seshat-${platform}-${arch}$`);
+
+        const modulesDir = path.join(
+            context.packager.getResourcesDir(context.appOutDir),
+            "app.asar.unpacked",
+            "node_modules",
+            "@matrix-org",
+        );
+        let entries: string[];
+        try {
+            entries = await fsp.readdir(modulesDir);
+        } catch {
+            return; // No unpacked seshat binaries in this build
+        }
+        for (const entry of entries) {
+            if (entry.startsWith("seshat-") && !keep.test(entry)) {
+                console.log(`Pruning ${entry} from ${platform}-${arch} build`);
+                await fsp.rm(path.join(modulesDir, entry), { recursive: true, force: true });
+            }
+        }
+    },
 };
 
 /**
@@ -224,6 +274,31 @@ if (variant["linux.deb.name"]) {
     config.deb.fpm.push("--name", variant["linux.deb.name"]);
 }
 
+const cachedSign = createCachedSign();
+
+/**
+ * Signs a file with signtool, unless it already carries a valid signature, e.g. Microsoft's DirectX DLLs bundled
+ * with Electron, or a signed copy can be reused from the sign cache, as EV code signing is charged per signature.
+ */
+async function signUnlessSigned(...[config, packager]: Parameters<CustomWindowsSign>): Promise<void> {
+    // Nested signatures are appended to the one we just made, so the file is expected to be signed already
+    if (!config.isNest) {
+        try {
+            if ((await getAuthenticodeSignature(config.path)).status === "Valid") {
+                log.info({ file: log.filePath(config.path) }, "skipped signing as file is already signed");
+                return;
+            }
+        } catch (e) {
+            log.warn({ file: log.filePath(config.path), error: String(e) }, "failed to check existing signature");
+        }
+    }
+
+    if (cachedSign) return cachedSign(config, packager);
+
+    const manager = (await packager!.signingManager.value) as WindowsSignToolManager;
+    await manager.doSign(config, packager!);
+}
+
 /**
  * Allow specifying windows signing cert via env vars
  * @param {string} process.env.ED_SIGNTOOL_SUBJECT_NAME
@@ -233,6 +308,7 @@ if (process.env.ED_SIGNTOOL_SUBJECT_NAME && process.env.ED_SIGNTOOL_THUMBPRINT) 
     config.win.signtoolOptions!.certificateSubjectName = process.env.ED_SIGNTOOL_SUBJECT_NAME;
     config.win.signtoolOptions!.certificateSha1 = process.env.ED_SIGNTOOL_THUMBPRINT;
     config.extraMetadata.electron_windows_cert_sn = config.win.signtoolOptions!.certificateSubjectName;
+    config.win.signtoolOptions!.sign = signUnlessSigned;
 }
 
 if (os.platform() === "linux") {
@@ -246,11 +322,6 @@ if (os.platform() === "linux") {
      */
     if (process.env.ED_DEBIAN_CHANGELOG) {
         config.deb.fpm.push(`--deb-changelog=${process.env.ED_DEBIAN_CHANGELOG}`);
-    }
-
-    if (process.env.SQLCIPHER_BUNDLED) {
-        // Remove sqlcipher dependency when using bundled
-        config.deb.recommends = config.deb.recommends?.filter((d) => d !== "libsqlcipher0");
     }
 }
 

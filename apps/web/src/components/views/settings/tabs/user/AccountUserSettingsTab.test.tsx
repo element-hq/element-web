@@ -78,6 +78,7 @@ describe("<AccountUserSettingsTab />", () => {
             deleteThreePid: vi.fn(),
             getMediaConfig: vi.fn(),
             getAuthMetadata: vi.fn().mockRejectedValue(new Error("not implemented")),
+            getSyncState: vi.fn().mockReturnValue("SYNCING"),
         });
 
         mockClient.getCapabilities.mockResolvedValue({});
@@ -387,7 +388,7 @@ describe("<AccountUserSettingsTab />", () => {
             render(getComponent());
 
             const changeButton = await screen.findByRole("button", { name: "Mock change password" });
-            userEvent.click(changeButton);
+            await userEvent.click(changeButton);
 
             expect(changePasswordOnFinished).toBeDefined();
             changePasswordOnFinished();
@@ -408,7 +409,7 @@ describe("<AccountUserSettingsTab />", () => {
             render(getComponent());
 
             const changeButton = await screen.findByRole("button", { name: "Mock change password" });
-            userEvent.click(changeButton);
+            await userEvent.click(changeButton);
 
             expect(changePasswordOnError).toBeDefined();
             changePasswordOnError(new Error(ERROR_STRING));

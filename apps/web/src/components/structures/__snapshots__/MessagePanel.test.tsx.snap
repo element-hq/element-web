@@ -3,7 +3,7 @@
 exports[`MessagePanel > should handle large numbers of hidden events quickly 1`] = `
 <DocumentFragment>
   <div
-    class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel cls"
+    class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel cls"
     tabindex="-1"
   >
     <div
@@ -22,7 +22,7 @@ exports[`MessagePanel > should handle large numbers of hidden events quickly 1`]
 exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
 <DocumentFragment>
   <div
-    class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel cls"
+    class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel cls"
     tabindex="-1"
   >
     <div
@@ -39,7 +39,7 @@ exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
         >
           <div
             aria-label="Thu, Jan 1, 1970"
-            class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_yq5ye_8"
+            class="_flex mx_TimelineSeparator _timelineSeparator"
             role="separator"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
@@ -47,12 +47,12 @@ exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
               role="none"
             />
             <div
-              class="_flex_4dswl_9 _content_u6fft_8"
+              class="_flex _content"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             >
               <h2
                 aria-hidden="true"
-                class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
+                class="_typography _font-heading-lg-regular"
               >
                 Thu, Jan 1, 1970
               </h2>
@@ -63,7 +63,7 @@ exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
           </div>
         </li>
         <div
-          class="_container_1mzk4_8 mx_EventTileBubble mx_HistoryTile"
+          class="_container mx_EventTileBubble mx_HistoryTile"
         >
           <svg
             fill="currentColor"
@@ -77,7 +77,7 @@ exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
             />
           </svg>
           <div
-            class="_title_1mzk4_34"
+            class="_title"
           >
             You can't see earlier messages
           </div>
@@ -107,7 +107,7 @@ exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
                 class="mx_GenericEventListSummary_avatars"
               >
                 <span
-                  class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
+                  class="_avatar mx_BaseAvatar _avatar-imageless"
                   data-color="1"
                   data-testid="avatar-img"
                   data-type="round"
@@ -137,7 +137,7 @@ exports[`MessagePanel > should handle lots of membership events quickly 1`] = `
 exports[`MessagePanel > should handle lots of room creation events quickly 1`] = `
 <DocumentFragment>
   <div
-    class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel cls"
+    class="_scrollbar mx_AutoHideScrollbar mx_ScrollPanel cls"
     tabindex="-1"
   >
     <div

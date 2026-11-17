@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as maplibregl from "maplibre-gl";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../languageHandler";
 import { findMapStyleUrl } from "./findMapStyleUrl";
 import { LocationShareError } from "./LocationShareErrors";
+import * as maplibregl from "./maplibre";
 
 export const createMap = (
     client: MatrixClient,
@@ -43,6 +43,13 @@ export const createMap = (
             },
         });
         map.addControl(new maplibregl.AttributionControl(), "top-right");
+
+        // Mark the map region busy while it loads data, until maplibre reports every tile loaded and drawn, so a
+        // half-drawn map can be told apart from a finished one.
+        const canvas = map.getCanvas();
+        canvas.setAttribute("aria-busy", "true");
+        map.on("dataloading", () => canvas.setAttribute("aria-busy", "true"));
+        map.on("idle", () => canvas.removeAttribute("aria-busy"));
 
         map.on("error", (e) => {
             logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key", e.error);

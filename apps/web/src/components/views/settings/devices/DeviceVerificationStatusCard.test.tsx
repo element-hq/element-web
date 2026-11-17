@@ -43,7 +43,7 @@ describe("<DeviceVerificationStatusCard />", () => {
         // current device uses different copy
         it("renders an unverified device", () => {
             const { getByText } = render(getComponent({ isCurrentDevice: true }));
-            expect(getByText("Verify your current session for enhanced secure messaging.")).toBeTruthy();
+            expect(getByText("Verify your current device for enhanced secure messaging.")).toBeTruthy();
         });
 
         it("renders an unverifiable device", () => {
@@ -53,7 +53,7 @@ describe("<DeviceVerificationStatusCard />", () => {
                     isCurrentDevice: true,
                 }),
             );
-            expect(getByText("This session doesn't support encryption and thus can't be verified.")).toBeTruthy();
+            expect(getByText("This device doesn't support encryption and thus can't be verified.")).toBeTruthy();
         });
 
         it("renders a verified device", () => {
@@ -63,7 +63,7 @@ describe("<DeviceVerificationStatusCard />", () => {
                     isCurrentDevice: true,
                 }),
             );
-            expect(getByText("Your current session is ready for secure messaging.")).toBeTruthy();
+            expect(getByText("Your current device is ready for secure messaging.")).toBeTruthy();
         });
     });
 

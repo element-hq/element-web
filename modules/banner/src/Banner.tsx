@@ -36,16 +36,18 @@ const Root = styled.nav`
 interface Props {
     api: Api;
     logoUrl: string;
+    /** Height of the logo in pixels, defaults to 35 */
+    logoHeight?: number;
     href: string;
     menu: ModuleConfig["menu"];
     title: string;
 }
 
-const Banner: FC<Props> = ({ api, logoUrl, href, menu, title }) => {
+const Banner: FC<Props> = ({ api, logoUrl, logoHeight = 35, href, menu, title }) => {
     let menuJsx;
     switch (menu.type) {
         case "static": {
-            menuJsx = <Menu api={api} config={menu} fallbackLogoUrl={logoUrl} />;
+            menuJsx = <Menu api={api} config={menu} data={menu} fallbackLogoUrl={logoUrl} />;
             break;
         }
         case "univention": {
@@ -56,7 +58,7 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu, title }) => {
 
     let headingJsx = (
         <>
-            <Logo api={api} src={logoUrl} height="35px" />
+            <Logo api={api} src={logoUrl} height={`${logoHeight}px`} />
             <Heading size="sm" weight="medium" as="h1">
                 {title}
             </Heading>

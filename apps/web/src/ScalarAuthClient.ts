@@ -206,7 +206,7 @@ export default class ScalarAuthClient {
     }
 
     public async getScalarPageTitle(url: string): Promise<string> {
-        const scalarPageLookupUrl = new URL(this.getStarterLink(this.apiUrl + "/widgets/title_lookup"));
+        const scalarPageLookupUrl = new URL(this.appendScalarToken(this.apiUrl + "/widgets/title_lookup"));
         scalarPageLookupUrl.searchParams.set("curl", encodeURIComponent(url));
 
         const res = await fetch(scalarPageLookupUrl, {
@@ -230,7 +230,7 @@ export default class ScalarAuthClient {
      * @returns {Promise}           Resolves on completion
      */
     public async disableWidgetAssets(widgetType: WidgetType, widgetId: string): Promise<void> {
-        const url = new URL(this.getStarterLink(this.apiUrl + "/widgets/set_assets_state"));
+        const url = new URL(this.appendScalarToken(this.apiUrl + "/widgets/set_assets_state"));
         url.searchParams.set("widget_type", widgetType.preferred);
         url.searchParams.set("widget_id", widgetId);
         url.searchParams.set("state", "disable");
@@ -266,8 +266,13 @@ export default class ScalarAuthClient {
         return url;
     }
 
-    public getStarterLink(starterLinkUrl: string): string {
-        if (!this.scalarToken) return starterLinkUrl;
-        return starterLinkUrl + "?scalar_token=" + encodeURIComponent(this.scalarToken);
+    /**
+     * Add the scalar token, if we have one, as the query string of an integration manager API URL.
+     * @param url - URL without an existing query string.
+     * @returns The URL with the token appended.
+     */
+    public appendScalarToken(url: string): string {
+        if (!this.scalarToken) return url;
+        return url + "?scalar_token=" + encodeURIComponent(this.scalarToken);
     }
 }

@@ -1,0 +1,473 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import React, { useImperativeHandle } from "react";
+import { render, screen } from "test-utils-rtl";
+import { describe, expect, it, vi, beforeEach } from "vitest";
+import { type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import type { TimelineItem, TimelineViewHandle } from "@element-hq/web-shared-components";
+import { createTestClient, mkMessage, TestSDKContext } from "test-utils";
+
+import { NewTimelinePanel, type NewTimelinePanelHandle } from "./NewTimelinePanel";
+import { Layout } from "../../settings/enums/Layout";
+import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { SDKContext } from "../../contexts/SDKContext";
+
+const ROOM_ID = "!room:example.org";
+const USER_ID = "@alice:example.org";
+
+// The virtualised TimelineView needs real layout, which this environment has none
+// of, and it has its own tests in shared-components. Stand in a stub that simply
+// draws every row, so these tests cover how this panel renders each kind of row,
+// and that hands out a fake scroll handle so the panel's own handle can be checked.
+const { rowsRendered, viewHandle } = vi.hoisted(() => ({
+    rowsRendered: { current: [] as unknown[] },
+    viewHandle: {
+        scrollByPage: vi.fn(),
+        scrollNow: vi.fn(),
+    },
+}));
+
+vi.mock("@element-hq/web-shared-components", async () => {
+    const actual = await vi.importActual<typeof import("@element-hq/web-shared-components")>(
+        "@element-hq/web-shared-components",
+    );
+    return {
+        ...actual,
+        TimelineView: ({
+            vm,
+            renderItem,
+            ref,
+        }: {
+            vm: { getSnapshot: () => { items: TimelineItem[] } };
+            renderItem: (item: TimelineItem) => React.ReactNode;
+            ref?: React.Ref<TimelineViewHandle>;
+        }) => {
+            useImperativeHandle(ref, () => viewHandle, []);
+            const items = vm.getSnapshot().items;
+            rowsRendered.current = items;
+            return <div data-testid="timeline-stub">{items.map((item) => renderItem(item))}</div>;
+        },
+    };
+});
+
+// The view model has its own tests; here it only needs to hand the view a set of
+// rows, so stand in a fake whose rows each test controls.
+const { vmState } = vi.hoisted(() => ({
+    // One snapshot object, replaced only by setRows: useSyncExternalStore compares
+    // snapshots by identity, so handing back a fresh object each call would loop.
+    vmState: {
+        snapshot: {} as Record<string, unknown>,
+        setRows(items: unknown[], extra: Record<string, unknown> = {}) {
+            this.snapshot = {
+                items,
+                atLiveEnd: true,
+                pendingAnchor: null,
+                highlightedEventId: null,
+                isAtBottom: true,
+                canJumpToReadMarker: false,
+                numUnreadMessages: 0,
+                hasHighlights: false,
+                readReceiptsByEvent: new Map(),
+                lastSuccessfulEventId: null,
+                ...extra,
+            };
+        },
+    },
+}));
+
+// Records what the panel asks of the view model.
+const { vmSpies } = vi.hoisted(() => ({
+    vmSpies: {
+        setShowReadReceipts: vi.fn(),
+        constructorOpts: [] as Record<string, unknown>[],
+        onJumpToLive: vi.fn(),
+        onJumpToStart: vi.fn(),
+        onJumpToReadMarker: vi.fn(),
+        onMarkAllAsRead: vi.fn(),
+        jumpToEvent: vi.fn(),
+        clearHighlight: vi.fn(),
+    },
+}));
+
+vi.mock("../../viewmodels/room/timeline/RoomTimelineViewModel", () => ({
+    RoomTimelineViewModel: class {
+        public constructor(opts: Record<string, unknown>) {
+            vmSpies.constructorOpts.push(opts);
+        }
+        public setShowReadReceipts = vmSpies.setShowReadReceipts;
+        public start = (): void => {};
+        public dispose = (): void => {};
+        public subscribe = (): (() => void) => (): void => {};
+        public getSnapshot = (): Record<string, unknown> => vmState.snapshot;
+        public onJumpToLive = vmSpies.onJumpToLive;
+        public onJumpToStart = vmSpies.onJumpToStart;
+        public onJumpToReadMarker = vmSpies.onJumpToReadMarker;
+        public onMarkAllAsRead = vmSpies.onMarkAllAsRead;
+        public jumpToEvent = vmSpies.jumpToEvent;
+        public clearHighlight = vmSpies.clearHighlight;
+    },
+}));
+
+// EventTile pulls in a large tree that isn't what these tests are about; record
+// what the row asked for instead.
+const { tileProps } = vi.hoisted(() => ({ tileProps: { current: [] as Record<string, unknown>[] } }));
+
+vi.mock("../views/rooms/LegacyEventTileAdapter", () => ({
+    LegacyEventTileAdapter: (props: Record<string, unknown>) => {
+        tileProps.current.push(props);
+        return <div data-testid="event-row" />;
+    },
+}));
+
+describe("<NewTimelinePanel />", () => {
+    let client: MatrixClient;
+    let room: Room;
+    let event: MatrixEvent;
+
+    const renderPanel = (props: Partial<React.ComponentProps<typeof NewTimelinePanel>> = {}) =>
+        render(
+            <MatrixClientContext.Provider value={client}>
+                <SDKContext.Provider value={new TestSDKContext()}>
+                    <NewTimelinePanel room={room} {...props} />
+                </SDKContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
+
+    /** Set the rows the timeline is given to draw. */
+    const withItems = (items: TimelineItem[], extra: Record<string, unknown> = {}): void => {
+        vmState.setRows(items, extra);
+    };
+
+    /** A row for `mxEvent`, carrying the event as the view model's rows do. */
+    const eventRow = (mxEvent: MatrixEvent, extra: Partial<TimelineItem> = {}): TimelineItem =>
+        ({
+            key: mxEvent.getId()!,
+            kind: "event",
+            event: mxEvent,
+            continuation: false,
+            lastInSection: true,
+            ...extra,
+        }) as TimelineItem;
+
+    beforeEach(() => {
+        vi.restoreAllMocks();
+        // restoreAllMocks only touches spies; the hoisted vi.fn() fakes keep their
+        // call history unless cleared.
+        vi.clearAllMocks();
+        tileProps.current = [];
+        rowsRendered.current = [];
+        vmState.setRows([]);
+        vmSpies.setShowReadReceipts.mockReset();
+        vmSpies.constructorOpts = [];
+        client = createTestClient();
+        room = new Room(ROOM_ID, client, USER_ID, { pendingEventOrdering: PendingEventOrdering.Detached });
+        vi.spyOn(client, "getRoom").mockReturnValue(room);
+        event = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "hello", event: true });
+        room.getUnfilteredTimelineSet().addLiveEvent(event, { addToState: false });
+    });
+
+    it("draws the event the row carries", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel();
+
+        expect(screen.getByTestId("event-row")).toBeInTheDocument();
+        expect(tileProps.current[0].mxEvent).toBe(event);
+    });
+
+    it("draws a row whose event the room no longer has", () => {
+        // A gappy sync resets the room's timeline, dropping every loaded event; the rows the view
+        // model last published still hold theirs, and are drawn until it publishes new ones.
+        const gone = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "gone", event: true });
+        expect(room.findEventById(gone.getId()!)).toBeUndefined();
+        withItems([eventRow(gone)]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].mxEvent).toBe(gone);
+    });
+
+    it("passes the row's send state to the tile", () => {
+        withItems([eventRow(event, { sendState: "failed" })]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].sendState).toBe("failed");
+    });
+
+    it("gives a delivered message no send state", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel();
+
+        expect(tileProps.current[0].sendState).toBeUndefined();
+    });
+
+    it('labels the read marker "New"', () => {
+        withItems([{ key: "$marker", kind: "read-marker" } as TimelineItem]);
+
+        renderPanel();
+
+        expect(screen.getByText("New")).toBeInTheDocument();
+    });
+
+    it("announces the loading row to screen readers", () => {
+        withItems([{ key: "loading", kind: "loading" } as TimelineItem]);
+
+        renderPanel();
+
+        expect(screen.getByRole("progressbar")).toBeInTheDocument();
+    });
+
+    it("labels a date separator the way the old timeline does", () => {
+        withItems([{ key: "$sep", kind: "date-separator", ts: Date.now() } as TimelineItem]);
+
+        renderPanel();
+
+        // A relative label, from the shared DateSeparatorViewModel.
+        expect(screen.getByText(/today/i)).toBeInTheDocument();
+    });
+
+    it("draws nothing for a gap, matching the old timeline", () => {
+        withItems([{ key: "$gap", kind: "gap" } as TimelineItem]);
+
+        renderPanel();
+
+        expect(screen.getByTestId("timeline-stub")).toBeEmptyDOMElement();
+    });
+
+    it("falls back to the modern layout when IRC is selected", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel({ layout: Layout.IRC });
+
+        expect(tileProps.current[0].layout).toBe(Layout.Group);
+    });
+
+    it("passes the message layout through unchanged", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel({ layout: Layout.Bubble });
+
+        expect(tileProps.current[0].layout).toBe(Layout.Bubble);
+    });
+
+    it("gives the edit state only to the message being edited", () => {
+        const other = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "other", event: true });
+        room.getUnfilteredTimelineSet().addLiveEvent(other, { addToState: false });
+        const editState = new EditorStateTransfer(event);
+        withItems([eventRow(event), eventRow(other)]);
+
+        renderPanel({ editState });
+
+        expect(tileProps.current[0].editState).toBe(editState);
+        expect(tileProps.current[1].editState).toBeUndefined();
+    });
+
+    it("hides the panel without unmounting it", () => {
+        withItems([]);
+
+        const { container } = renderPanel({ hidden: true });
+
+        expect(container.querySelector(".mx_NewTimelinePanel")).toHaveClass("mx_NewTimelinePanel_hidden");
+        expect(screen.getByTestId("timeline-stub")).toBeInTheDocument();
+    });
+
+    it("lets tiles look up relations, so reactions can render", () => {
+        withItems([eventRow(event)]);
+
+        renderPanel();
+
+        const getRelationsForEvent = tileProps.current[0].getRelationsForEvent as (
+            id: string,
+            rel: string,
+            type: string,
+        ) => unknown;
+        expect(typeof getRelationsForEvent).toBe("function");
+        // Nothing has reacted, so there are no relations to find — but the lookup
+        // has to reach the room without throwing.
+        expect(getRelationsForEvent(event.getId()!, "m.annotation", "m.reaction")).toBeUndefined();
+    });
+
+    describe("read receipts", () => {
+        const eventRow = (): TimelineItem =>
+            ({ key: event.getId()!, kind: "event", continuation: false, lastInSection: true }) as TimelineItem;
+
+        it("renders receipts provided by the view model", () => {
+            const receipts = [{ userId: "@bob:example.org", roomMember: null, ts: 1000 }];
+            withItems([eventRow()], { readReceiptsByEvent: new Map([[event.getId()!, receipts]]) });
+
+            renderPanel();
+
+            expect(tileProps.current[0].readReceipts).toBe(receipts);
+            expect(tileProps.current[0].showReadReceipts).toBe(true);
+            // Shared by every tile so an avatar can animate from its old row to its new one.
+            expect(tileProps.current[0].readReceiptMap).toEqual({});
+        });
+
+        it('puts the "Sent" tick only on the message the view model chose', () => {
+            const other = mkMessage({ room: ROOM_ID, user: USER_ID, msg: "other", event: true });
+            room.getUnfilteredTimelineSet().addLiveEvent(other, { addToState: false });
+            withItems(
+                [
+                    eventRow(),
+                    { key: other.getId()!, kind: "event", continuation: false, lastInSection: true } as TimelineItem,
+                ],
+                { lastSuccessfulEventId: other.getId() },
+            );
+
+            renderPanel();
+
+            expect(tileProps.current[0].lastSuccessful).toBe(false);
+            expect(tileProps.current[1].lastSuccessful).toBe(true);
+        });
+
+        it("follows the room's read receipts setting", () => {
+            withItems([eventRow()]);
+
+            const { rerender } = renderPanel({ showReadReceipts: false });
+            expect(vmSpies.constructorOpts[0].showReadReceipts).toBe(false);
+            expect(tileProps.current[0].showReadReceipts).toBe(false);
+
+            rerender(
+                <MatrixClientContext.Provider value={client}>
+                    <SDKContext.Provider value={new TestSDKContext()}>
+                        <NewTimelinePanel room={room} showReadReceipts={true} />
+                    </SDKContext.Provider>
+                </MatrixClientContext.Provider>,
+            );
+
+            expect(vmSpies.setShowReadReceipts).toHaveBeenLastCalledWith(true);
+        });
+    });
+
+    describe("keyboard shortcuts from RoomView", () => {
+        const renderWithHandle = (): NewTimelinePanelHandle => {
+            const ref = React.createRef<NewTimelinePanelHandle>();
+            withItems([]);
+            renderPanel({ ref });
+            return ref.current!;
+        };
+
+        // KeyBindingsManager reads `key` and the modifier flags off the event.
+        const keyDown = (init: KeyboardEventInit): KeyboardEvent => new KeyboardEvent("keydown", init);
+
+        it("pages the view up and down", () => {
+            const handle = renderWithHandle();
+
+            handle.handleScrollKey(keyDown({ key: "PageUp" }));
+            expect(viewHandle.scrollByPage).toHaveBeenLastCalledWith(-1);
+
+            handle.handleScrollKey(keyDown({ key: "PageDown" }));
+            expect(viewHandle.scrollByPage).toHaveBeenLastCalledWith(1);
+        });
+
+        it("jumps to the live end, to the read marker, and forgets the read marker on request", () => {
+            const handle = renderWithHandle();
+
+            handle.jumpToLiveTimeline();
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+
+            handle.jumpToReadMarker();
+            expect(vmSpies.onJumpToReadMarker).toHaveBeenCalledWith(viewHandle.scrollNow);
+
+            handle.forgetReadMarker();
+            expect(vmSpies.onMarkAllAsRead).toHaveBeenCalled();
+        });
+
+        it("goes to the start of the room for ctrl+home, and to the live end for ctrl+end", () => {
+            const handle = renderWithHandle();
+
+            // Either end may need loading first, so both go through the view model, handed
+            // the view's own scroll for when they do not.
+            handle.handleScrollKey(keyDown({ key: "Home", ctrlKey: true }));
+            expect(vmSpies.onJumpToStart).toHaveBeenCalledWith(viewHandle.scrollNow);
+            expect(vmSpies.onJumpToLive).not.toHaveBeenCalled();
+
+            handle.handleScrollKey(keyDown({ key: "End", ctrlKey: true }));
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+        });
+
+        it("leaves keys that are not timeline shortcuts alone", () => {
+            const handle = renderWithHandle();
+
+            handle.handleScrollKey(keyDown({ key: "Home" }));
+            handle.handleScrollKey(keyDown({ key: "a" }));
+
+            expect(viewHandle.scrollByPage).not.toHaveBeenCalled();
+            expect(vmSpies.onJumpToStart).not.toHaveBeenCalled();
+            expect(vmSpies.onJumpToLive).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("when RoomView asks for a message after the timeline is open", () => {
+        // As RoomView passes them: the message to highlight, whether it still has to be scrolled
+        // into view, and the callback that clears that flag once we report the jump.
+        const renderAsked = (eventId: string | undefined, scrollIntoView?: boolean) => {
+            const onEventScrolledIntoView = vi.fn();
+            const panel = (id: string | undefined, scroll?: boolean): React.ReactElement => (
+                <MatrixClientContext.Provider value={client}>
+                    <SDKContext.Provider value={new TestSDKContext()}>
+                        <NewTimelinePanel
+                            room={room}
+                            highlightedEventId={id}
+                            eventScrollIntoView={scroll}
+                            onEventScrolledIntoView={onEventScrolledIntoView}
+                        />
+                    </SDKContext.Provider>
+                </MatrixClientContext.Provider>
+            );
+            const { rerender } = render(panel(eventId, scrollIntoView));
+            return {
+                onEventScrolledIntoView,
+                ask: (id: string | undefined, scroll?: boolean) => rerender(panel(id, scroll)),
+            };
+        };
+
+        it("does not jump to the message it opened on, which is already loaded there, but reports it", () => {
+            const { onEventScrolledIntoView } = renderAsked("$pinned");
+
+            expect(vmSpies.jumpToEvent).not.toHaveBeenCalled();
+            expect(onEventScrolledIntoView).toHaveBeenCalledWith("$pinned");
+        });
+
+        it("jumps to a newly asked-for message, such as a clicked pinned message", () => {
+            const { ask, onEventScrolledIntoView } = renderAsked(undefined);
+
+            ask("$pinned");
+
+            expect(vmSpies.jumpToEvent).toHaveBeenCalledWith("$pinned", viewHandle.scrollNow);
+            expect(onEventScrolledIntoView).toHaveBeenCalledWith("$pinned");
+        });
+
+        it("jumps again when the same message is asked for again", () => {
+            const { ask } = renderAsked("$pinned");
+            // RoomView clears the flag once told the jump happened...
+            ask("$pinned", false);
+            expect(vmSpies.jumpToEvent).not.toHaveBeenCalled();
+
+            // ...and sets it again on the next click of the same message.
+            ask("$pinned", true);
+
+            expect(vmSpies.jumpToEvent).toHaveBeenCalledTimes(1);
+            expect(vmSpies.jumpToEvent).toHaveBeenCalledWith("$pinned", viewHandle.scrollNow);
+        });
+
+        it("drops the highlight and goes to the live end when no message is asked for any more", () => {
+            const { ask } = renderAsked("$pinned");
+
+            ask(undefined);
+
+            expect(vmSpies.clearHighlight).toHaveBeenCalled();
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+        });
+    });
+});

@@ -13,7 +13,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { RoomMember, RelationType, type MatrixClient, M_ASSET, LocationAssetType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { act, fireEvent, render, type RenderResult } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import {
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
@@ -32,6 +31,7 @@ import { DEFAULT_DURATION_MS } from "./LiveDurationDropdown";
 import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 
@@ -153,7 +153,7 @@ describe("<LocationShareMenu />", () => {
         act(() => onGeolocateCallback(position as maplibregl.GeolocatePositionEvent));
     };
 
-    const setLocationClick = () => {
+    const setLocationClick = async () => {
         // get the callback LocationShareMenu registered for geolocate
         expect(vi.mocked(mockMap.on)).toHaveBeenCalledWith("click", expect.any(Function));
         const [, onMapClickCallback] = vi.mocked(mockMap.on).mock.calls.find(([event]) => event === "click")!;
@@ -162,7 +162,7 @@ describe("<LocationShareMenu />", () => {
             lngLat: { lng: position.coords.longitude, lat: position.coords.latitude },
         } as unknown as maplibregl.MapMouseEvent;
         // set the location
-        act(() => onMapClickCallback(event));
+        await act(async () => onMapClickCallback(event));
     };
 
     const shareTypeLabels: Record<LocationShareType, string> = {
@@ -269,14 +269,14 @@ describe("<LocationShareMenu />", () => {
             expect(getByText("What location type do you want to share?")).toBeInTheDocument();
         });
 
-        it("creates pin drop location share event on submission", () => {
+        it("creates pin drop location share event on submission", async () => {
             const onFinished = vi.fn();
             const { getByText } = getComponent({ onFinished });
 
             // advance to location picker
             setShareType(getByText, LocationShareType.Pin);
 
-            setLocationClick();
+            await setLocationClick();
 
             fireEvent.click(getByText("Share location"));
 

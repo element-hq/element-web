@@ -23,6 +23,10 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+.disabledTrigger {
+    color: var(--cpd-color-text-disabled);
+}
+
 .menuItem {
     place-items: start;
     gap: var(--cpd-space-1x);

@@ -91,6 +91,13 @@ Please see LICENSE files in the repository root for full details.
         order: 2;
     }
 
+    /* Fill the space the messages will occupy, so this spinner is centred like the
+       timeline's own. Otherwise it sits near the top and then appears to jump down
+       when the timeline takes over. */
+    .mx_RoomView_messagePanelSpinner {
+        flex: 1 1 0;
+    }
+
     .mx_RoomView_timeline {
         /* offset parent for mx_RoomView_topUnreadMessagesBar  */
         position: relative;

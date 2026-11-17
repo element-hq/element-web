@@ -64,7 +64,56 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
             },
             displayName: _td("keyboard|search"),
         },
+        // The room list panel keys below are handled by react-resizable-panels inside
+        // SeparatorView, so they need no mirroring in KeyBindingDefaults.
+        [KeyBindingAction.ToggleRoomListPanel]: {
+            default: {
+                key: Key.ENTER,
+            },
+            displayName: _td("keyboard|room_list_panel_toggle"),
+        },
+        [KeyBindingAction.ShrinkRoomListPanel]: {
+            default: {
+                key: Key.ARROW_LEFT,
+            },
+            displayName: _td("keyboard|room_list_panel_shrink"),
+        },
+        [KeyBindingAction.GrowRoomListPanel]: {
+            default: {
+                key: Key.ARROW_RIGHT,
+            },
+            displayName: _td("keyboard|room_list_panel_grow"),
+        },
+        [KeyBindingAction.CollapseRoomListPanel]: {
+            default: {
+                key: Key.HOME,
+            },
+            displayName: _td("keyboard|room_list_panel_collapse"),
+        },
+        [KeyBindingAction.ExpandRoomListPanel]: {
+            default: {
+                key: Key.END,
+            },
+            displayName: _td("keyboard|room_list_panel_expand"),
+        },
     };
+
+    // Listed in settings but handled by the new timeline itself, so not bound. Only shown
+    // while the Labs new timeline is enabled.
+    if (SettingsStore.getValue("feature_new_timeline")) {
+        keyboardShortcuts[KeyBindingAction.PrevMessage] = {
+            default: {
+                key: Key.ARROW_UP,
+            },
+            displayName: _td("keyboard|timeline_navigate_up"),
+        };
+        keyboardShortcuts[KeyBindingAction.NextMessage] = {
+            default: {
+                key: Key.ARROW_DOWN,
+            },
+            displayName: _td("keyboard|timeline_navigate_down"),
+        };
+    }
 
     if (PlatformPeg.get()?.overrideBrowserShortcuts()) {
         // XXX: This keyboard shortcut isn't manually added to

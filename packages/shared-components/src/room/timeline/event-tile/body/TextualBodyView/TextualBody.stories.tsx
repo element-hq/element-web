@@ -31,14 +31,12 @@ const TextualBodyViewWrapperImpl = ({
     urlPreviews,
     className,
     onRootClick,
-    onBodyActionClick,
     onEditedMarkerClick,
     onEmoteSenderClick,
     ...snapshotProps
 }: WrapperProps): JSX.Element => {
     const vm = useMockedViewModel(snapshotProps, {
         onRootClick: onRootClick ?? fn(),
-        onBodyActionClick: onBodyActionClick ?? fn(),
         onEditedMarkerClick: onEditedMarkerClick ?? fn(),
         onEmoteSenderClick: onEmoteSenderClick ?? fn(),
     });
@@ -72,7 +70,6 @@ const TEXTUAL_BODY_VIEW_KIND_OPTIONS = [
 const TEXTUAL_BODY_VIEW_BODY_WRAPPER_KIND_OPTIONS = [
     TextualBodyViewBodyWrapperKind.NONE,
     TextualBodyViewBodyWrapperKind.LINK,
-    TextualBodyViewBodyWrapperKind.ACTION,
 ];
 
 const meta = {
@@ -101,7 +98,6 @@ const meta = {
         showPendingModerationMarker: false,
         pendingModerationText: "(Visible to you while moderation is pending)",
         emoteSenderName: "Alice",
-        bodyActionAriaLabel: "Open starter link",
     },
 } satisfies Meta<typeof TextualBodyViewWrapper>;
 
@@ -131,6 +127,50 @@ export const Edited: Story = {
     },
 };
 
+/**
+ * An edited message whose code block is wider than the timeline, as when the right panel is open.
+ * The text must wrap within the container and only the code block may scroll horizontally.
+ */
+export const EditedWithWideCodeBlock: Story = {
+    args: {
+        showEditedMarker: true,
+        body: (
+            <div>
+                <p>Text before the code block should wrap within the timeline instead of being cut off.</p>
+                {/* The host app gives code blocks horizontal scrolling; mirror that here. */}
+                <pre style={{ overflowX: "auto" }}>
+                    <code>
+                        {"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n"}
+                        {"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip"}
+                    </code>
+                </pre>
+                <p>Text after the code block should wrap too.</p>
+            </div>
+        ),
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: [
+                    {
+                        // Browsers make overflowing scroll containers keyboard-focusable themselves, but axe
+                        // only accepts an explicit tabindex, which the no-noninteractive-tabindex lint rule forbids.
+                        id: "scrollable-region-focusable",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
+    },
+    decorators: [
+        (Story): JSX.Element => (
+            <div style={{ width: 320 }}>
+                <Story />
+            </div>
+        ),
+    ],
+};
+
 export const PendingModeration: Story = {
     args: {
         showPendingModerationMarker: true,
@@ -141,13 +181,6 @@ export const HighlightLink: Story = {
     args: {
         bodyWrapper: TextualBodyViewBodyWrapperKind.LINK,
         bodyLinkHref: "https://example.org/#/room/!room:example.org/$event",
-    },
-};
-
-export const StarterLink: Story = {
-    args: {
-        bodyWrapper: TextualBodyViewBodyWrapperKind.ACTION,
-        body: <div>Launch the integration flow.</div>,
     },
 };
 

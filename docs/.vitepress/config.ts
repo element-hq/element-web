@@ -101,13 +101,6 @@ export default withMermaid({
                 text: "Build",
                 items: [
                     {
-                        text: "Web",
-                        items: [
-                            { text: "Customisations", link: "/customisations" },
-                            { text: "Deprecated Modules", link: "/deprecated-modules" },
-                        ],
-                    },
-                    {
                         text: "Desktop",
                         items: [
                             { text: "Native Node modules", link: "/native-node-modules" },
@@ -145,7 +138,8 @@ export default withMermaid({
                     { text: "Jitsi", link: "/jitsi-dev.md" },
                     { text: "Feature flags", link: "/feature-flags.md" },
                     { text: "OAuth and delegated authentication", link: "/oauth.md" },
-                    { text: "Release Process", link: "/release.md" },
+                    { text: "Release Process (main app)", link: "/release.md" },
+                    { text: "Module Release Process", link: "/moduleRelease.md" },
                     { text: "MVVM", link: "/MVVM.md" },
                     { text: "Settings", link: "/settings.md" },
                 ],

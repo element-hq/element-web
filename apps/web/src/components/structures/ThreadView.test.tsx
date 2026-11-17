@@ -196,7 +196,7 @@ describe("ThreadView", () => {
     it("sets the correct thread in the room view store", async () => {
         // expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBeNull();
         const { unmount } = await getComponent();
-        waitFor(() => {
+        await waitFor(() => {
             expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId());
         });
 

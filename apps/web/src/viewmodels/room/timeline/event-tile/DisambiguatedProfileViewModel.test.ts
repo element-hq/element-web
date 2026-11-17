@@ -7,6 +7,7 @@
 
 import { vi, describe, it, expect } from "vitest";
 
+import { tearDownAfterTest } from "test-utils/teardown";
 import { DisambiguatedProfileViewModel } from "./DisambiguatedProfileViewModel";
 
 describe("DisambiguatedProfileViewModel", () => {
@@ -29,6 +30,7 @@ describe("DisambiguatedProfileViewModel", () => {
             emphasizeDisplayName: true,
             withTooltip: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toEqual({
             displayName: "Alice",
@@ -44,6 +46,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             displayName: "Fallback",
@@ -61,6 +64,7 @@ describe("DisambiguatedProfileViewModel", () => {
             fallbackName: "Fallback",
             onClick,
         });
+        tearDownAfterTest(vm);
         const prevSnapshot = vm.getSnapshot();
         const subscriber = vi.fn();
 
@@ -79,6 +83,7 @@ describe("DisambiguatedProfileViewModel", () => {
             fallbackName: "Fallback",
             onClick,
         });
+        tearDownAfterTest(vm);
 
         const clickHandler = vm.onClick;
 
@@ -91,6 +96,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
+        tearDownAfterTest(vm);
         const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
@@ -105,6 +111,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
+        tearDownAfterTest(vm);
         const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
@@ -119,6 +126,7 @@ describe("DisambiguatedProfileViewModel", () => {
             fallbackName: "Fallback",
             withTooltip: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().title).toBe("Alice (@alice:example.org)");
     });
@@ -129,6 +137,7 @@ describe("DisambiguatedProfileViewModel", () => {
             fallbackName: "Fallback",
             withTooltip: true,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().title).toBe("Alice (@alice:example.org)");
     });
@@ -138,6 +147,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
+        tearDownAfterTest(vm);
         const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
@@ -152,6 +162,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member,
             fallbackName: "Fallback",
         });
+        tearDownAfterTest(vm);
         const subscriber = vi.fn();
 
         vm.subscribe(subscriber);

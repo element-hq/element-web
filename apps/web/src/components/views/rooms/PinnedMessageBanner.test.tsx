@@ -10,10 +10,10 @@
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { act, screen, render } from "test-utils-rtl";
+import { act, screen, render, waitFor } from "test-utils-rtl";
 import { EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions } from "test-utils";
+import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions, TestSDKContext } from "test-utils";
 
 import * as pinnedEventHooks from "../../../hooks/usePinnedEvents";
 import { PinnedMessageBanner } from "./PinnedMessageBanner";
@@ -37,7 +37,7 @@ describe("<PinnedMessageBanner />", () => {
         mockClient = stubClient();
         room = new Room(roomId, mockClient, userId);
         permalinkCreator = new RoomPermalinkCreator(room);
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
         vi.spyOn(dis, "dispatch").mockReturnValue(undefined);
     });
 
@@ -113,7 +113,7 @@ describe("<PinnedMessageBanner />", () => {
         const { asFragment } = renderBanner();
 
         await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 pinned messages");
         expect(screen.getAllByTestId("banner-indicator")).toHaveLength(2);
         expect(screen.queryByRole("button", { name: "View all" })).toBeVisible();
         expect(asFragment()).toMatchSnapshot();
@@ -131,7 +131,7 @@ describe("<PinnedMessageBanner />", () => {
         const { asFragment } = renderBanner();
 
         await expect(screen.findByText("Fourth pinned message")).resolves.toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("4 of 4 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("4 of 4 pinned messages");
         expect(screen.getAllByTestId("banner-indicator")).toHaveLength(3);
         expect(screen.queryByRole("button", { name: "View all" })).toBeVisible();
         expect(asFragment()).toMatchSnapshot();
@@ -174,7 +174,7 @@ describe("<PinnedMessageBanner />", () => {
             }),
         );
         expect(screen.getByText("First pinned message")).toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("1 of 2 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("1 of 2 pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
             action: Action.ViewRoom,
             event_id: event2.getId(),
@@ -189,7 +189,7 @@ describe("<PinnedMessageBanner />", () => {
             }),
         );
         expect(screen.getByText("Second pinned message")).toBeVisible();
-        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 Pinned messages");
+        expect(screen.getByTestId("banner-counter")).toHaveTextContent("2 of 2 pinned messages");
         expect(dis.dispatch).toHaveBeenCalledWith({
             action: Action.ViewRoom,
             event_id: event1.getId(),
@@ -334,6 +334,75 @@ describe("<PinnedMessageBanner />", () => {
                 RightPanelStore.instance.emit(UPDATE_EVENT);
             });
             expect(screen.getByRole("button", { name: "View all" })).toBeVisible();
+        });
+    });
+
+    describe("Redaction", () => {
+        let pinnedEvent: MatrixEvent;
+
+        beforeEach(async () => {
+            vi.mocked(mockClient.getRoom).mockReturnValue(room);
+            // A fresh event, as redacting it mutates it.
+            pinnedEvent = makePinEvent();
+            const pinnedEventsState = new MatrixEvent({
+                type: EventType.RoomPinnedEvents,
+                state_key: "",
+                content: { pinned: [pinnedEvent.getId()] },
+                sender: userId,
+                room_id: roomId,
+                origin_server_ts: 0,
+                event_id: "$pinnedEventsState",
+            });
+            await room.addLiveEvents([pinnedEventsState], { addToState: true });
+        });
+
+        function makeRedaction(eventId: string, reason?: string): MatrixEvent {
+            return new MatrixEvent({
+                type: EventType.RoomRedaction,
+                redacts: pinnedEvent.getId(),
+                content: { reason },
+                sender: userId,
+                room_id: roomId,
+                origin_server_ts: 1,
+                event_id: eventId,
+            });
+        }
+
+        it("should stop showing a pinned message the room has loaded once it is redacted", async () => {
+            await room.addLiveEvents([pinnedEvent], { addToState: false });
+            renderBanner();
+            await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
+
+            // The room redacts its own copy and emits RoomEvent.Redaction. Retention calls tryApplyRedaction directly,
+            // without adding anything to the timeline, so this is the only signal the banner gets.
+            act(() => {
+                room.tryApplyRedaction(makeRedaction("$synthetic_redaction", "Retention policy"));
+            });
+
+            await waitFor(() => expect(screen.queryByText("First pinned message")).toBeNull());
+            expect(screen.getByText("Message deleted")).toBeVisible();
+        });
+
+        it("should stop showing a pinned message fetched from the server once it is redacted", async () => {
+            const redaction = makeRedaction("$redaction");
+            // The room does not have the pinned message, so the banner fetches it, and fetches it again on redaction.
+            let redacted = false;
+            vi.mocked(mockClient.fetchRoomEvent).mockImplementation(async () =>
+                redacted
+                    ? { ...pinnedEvent.event, content: {}, unsigned: { redacted_because: redaction.event as IEvent } }
+                    : pinnedEvent.event,
+            );
+            renderBanner();
+            await expect(screen.findByText("First pinned message")).resolves.toBeVisible();
+
+            // The room has no copy to redact, so there is no RoomEvent.Redaction: only the redaction in the timeline.
+            redacted = true;
+            await act(async () => {
+                await room.addLiveEvents([redaction], { addToState: false });
+            });
+
+            await waitFor(() => expect(screen.queryByText("First pinned message")).toBeNull());
+            expect(screen.getByText("Message deleted")).toBeVisible();
         });
     });
 });

@@ -63,7 +63,7 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import { type Caret } from "../../../editor/caret";
 import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
-import { EMOJI_REGEX } from "../../../HtmlUtils";
+import { getEmojiRegex } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
@@ -123,7 +123,7 @@ export function isQuickReaction(model: EditorModel): boolean {
     // can be in 1 or 2 parts
     if (parts.length <= 2) {
         const hasShortcut = text.startsWith("+") || text.startsWith("+ ");
-        const emojiMatch = text.match(EMOJI_REGEX);
+        const emojiMatch = text.match(getEmojiRegex());
         if (hasShortcut && emojiMatch && emojiMatch.length == 1) {
             return emojiMatch[0] === text.substring(1) || emojiMatch[0] === text.substring(2);
         }
@@ -172,14 +172,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
 
         const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
-        const parts = this.restoreStoredEditorState(partCreator) || [];
-        this.model = new EditorModel(parts, partCreator);
+        this.model = new EditorModel([], partCreator);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
     }
 
     public componentDidMount(): void {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
+
+        // Restore the draft here rather than in the constructor, as another composer for the same room
+        // may be unmounting in this same render (e.g. the right panel timeline when a call ends), and it
+        // only saves its draft in componentWillUnmount, which React runs before componentDidMount,
+        // but after our constructor.
+        const parts = this.restoreStoredEditorState(this.model.partCreator);
+        if (parts) {
+            this.model.reset(parts);
+        }
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {

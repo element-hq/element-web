@@ -71,10 +71,20 @@ export default abstract class BasePlatform {
     protected errorDidOccur = false;
     protected _favicon?: Favicon;
     public readonly initialised = Promise.resolve<void>(undefined);
+    private dispatcherRef?: string;
 
     protected constructor() {
-        dis.register(this.onAction.bind(this));
+        this.dispatcherRef = dis.register(this.onAction.bind(this));
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
+    }
+
+    /**
+     * Stops the platform listening to the dispatcher, and to anything else it subscribed to.
+     * Only expected to be called in tests, as the platform otherwise lives as long as the app.
+     */
+    public destroy(): void {
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
     }
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
@@ -366,13 +376,20 @@ export default abstract class BasePlatform {
      * @param {string} deviceId the device ID that the pickle key is for.
      * @returns {string|null} the previously stored pickle key, or null if no
      *     pickle key has been stored.
+     * @throws if the pickle key could not be read, e.g. because the OS keychain is unavailable
+     *     or WebCrypto is not available. This is distinct from returning null: it means we do not
+     *     know whether a pickle key exists, so the caller must not create a new one (that would
+     *     destroy the existing session), and retrying may succeed.
      */
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        let data: { encrypted?: BufferSource; iv?: BufferSource; cryptoKey?: CryptoKey } | undefined;
-        try {
-            data = await idbLoad("pickleKey", [userId, deviceId]);
-        } catch (e) {
-            logger.error("idbLoad for pickleKey failed", e);
+        const data: { encrypted?: BufferSource; iv?: BufferSource; cryptoKey?: CryptoKey } | undefined = await idbLoad(
+            "pickleKey",
+            [userId, deviceId],
+        );
+
+        if (!data) {
+            // no pickle key was found in storage
+            return null;
         }
 
         return (await buildAndEncodePickleKey(data, userId, deviceId)) ?? null;
@@ -416,12 +433,11 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Clear app storage, called when logging out to perform data clean up.
+     * Clear any storage specific to this platform, called when logging out to perform data clean up.
+     * localStorage and sessionStorage have already been cleared by then, and must not be cleared again as a new
+     * login may have started using them in the meantime.
      */
-    public async clearStorage(): Promise<void> {
-        window.sessionStorage.clear();
-        window.localStorage.clear();
-    }
+    public async clearStorage(): Promise<void> {}
 
     /**
      * Base URL to use when generating external links for this client, for platforms e.g. Desktop this will be a different instance

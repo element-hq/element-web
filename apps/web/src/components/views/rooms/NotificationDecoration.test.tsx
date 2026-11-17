@@ -11,7 +11,7 @@ import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "test-utils-rtl";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { createTestClient, mkStubRoom } from "test-utils";
+import { createTestClient, mkStubRoom, tearDownAfterTest } from "test-utils";
 
 import { RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { NotificationDecoration } from "./NotificationDecoration";
@@ -21,7 +21,7 @@ describe("<NotificationDecoration />", () => {
     beforeEach(() => {
         const matrixClient = createTestClient();
         const room = mkStubRoom("roomId", "roomName", matrixClient);
-        roomNotificationState = new RoomNotificationState(room, false);
+        roomNotificationState = tearDownAfterTest(new RoomNotificationState(room, false));
     });
 
     it("should not render if RoomNotificationState.hasAnyNotificationOrActivity=true", () => {

@@ -22,7 +22,7 @@ exports[`<ServerPickerDialog /> > should render dialog 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Sign into your homeserver
+        Choose your account provider
       </h1>
     </div>
     <form
@@ -30,9 +30,9 @@ exports[`<ServerPickerDialog /> > should render dialog 1`] = `
       id="mx_ServerPickerDialog"
     >
       <p>
-        We call the places where you can host your account 'homeservers'.
+        We call the services where you can host your account 'account providers'.
          
-        Matrix.org is the biggest public homeserver in the world, so it's a good place for many.
+        Matrix.org is the biggest public account provider in the world, so it's a good place for many.
       </p>
       <label
         class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
@@ -69,7 +69,7 @@ exports[`<ServerPickerDialog /> > should render dialog 1`] = `
           class="mx_StyledRadioButton_innerLabel"
         >
           <input
-            aria-label="Other homeserver"
+            aria-label="Other account provider"
             name="defaultChosen"
             type="radio"
             value="false"
@@ -86,15 +86,15 @@ exports[`<ServerPickerDialog /> > should render dialog 1`] = `
           >
             <input
               id="mx_homeserverInput"
-              label="Other homeserver"
-              placeholder="Other homeserver"
+              label="Other account provider"
+              placeholder="Other account provider"
               type="text"
               value=""
             />
             <label
               for="mx_homeserverInput"
             >
-              Other homeserver
+              Other account provider
             </label>
           </div>
         </div>
@@ -103,7 +103,7 @@ exports[`<ServerPickerDialog /> > should render dialog 1`] = `
         />
       </div>
       <p>
-        Use your preferred Matrix homeserver if you have one, or host your own.
+        Use your preferred account provider if you have one, or host your own Matrix homeserver.
       </p>
       <div
         class="mx_AccessibleButton mx_ServerPickerDialog_continue mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
@@ -121,7 +121,7 @@ exports[`<ServerPickerDialog /> > should render dialog 1`] = `
         rel="noreferrer noopener"
         target="_blank"
       >
-        About homeservers
+        About account providers
         <svg
           class="mx_ExternalLink_icon"
           fill="currentColor"

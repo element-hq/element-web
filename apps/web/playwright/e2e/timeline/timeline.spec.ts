@@ -53,6 +53,21 @@ const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise
     await expect(e.locator(".mx_BaseAvatar img")).toHaveAttribute("src", url!);
 };
 
+/** Wait for the app's client to have seen its own profile change in the room's member state. */
+const waitForOwnProfile = async (app: ElementAppPage, roomId: string, displayName: string, avatarUrl: string) => {
+    await expect
+        .poll(() =>
+            app.client.evaluate(
+                (client, { roomId, displayName, avatarUrl }) => {
+                    const member = client.getRoom(roomId)?.getMember(client.getSafeUserId());
+                    return member?.rawDisplayName === displayName && member.getMxcAvatarUrl() === avatarUrl;
+                },
+                { roomId, displayName, avatarUrl },
+            ),
+        )
+        .toBe(true);
+};
+
 const sendEvent = async (client: Client, roomId: string, html = false): Promise<ISendEventResponse> => {
     const content: IContent = {
         msgtype: "m.text" as MsgType,
@@ -105,9 +120,9 @@ test.describe("Timeline", () => {
             await sendEvent(app.client, room.roomId);
             await app.client.setDisplayName("Alan (away)");
             await app.client.setAvatarUrl(newAvatarUrl);
-            // XXX: If we send the second event too quickly, there won't be
+            // If we send the second event too quickly, there won't be
             // enough time for the client to register the profile change
-            await page.waitForTimeout(500);
+            await waitForOwnProfile(app, room.roomId, NEW_NAME, newAvatarUrl);
             await sendEvent(app.client, room.roomId);
             await app.viewRoomByName(ROOM_NAME);
 
@@ -124,9 +139,9 @@ test.describe("Timeline", () => {
             await sendEvent(app.client, room.roomId);
             await app.client.setDisplayName(NEW_NAME);
             await app.client.setAvatarUrl(newAvatarUrl);
-            // XXX: If we send the second event too quickly, there won't be
+            // If we send the second event too quickly, there won't be
             // enough time for the client to register the profile change
-            await page.waitForTimeout(500);
+            await waitForOwnProfile(app, room.roomId, NEW_NAME, newAvatarUrl);
             await sendEvent(app.client, room.roomId);
             await app.viewRoomByName(ROOM_NAME);
 
@@ -350,7 +365,7 @@ test.describe("Timeline", () => {
             // Regex patterns due to the edited date
             await expect(
                 page.locator(".mx_EventTile .mx_EventTile_line", { hasText: "MessageEdit" }).getByRole("button", {
-                    name: /Edited at .*? Click to view edits./,
+                    name: /Edited at .*? Select to view edit history./,
                 }),
             ).toBeVisible();
         };
@@ -650,14 +665,14 @@ test.describe("Timeline", () => {
             const viewSourceEventGroup = page.locator(".mx_EventTile").last().locator(".mx_ViewSourceEvent");
             await viewSourceEventGroup.hover();
             await viewSourceEventGroup
-                .getByRole("button", { name: "toggle event" })
+                .getByRole("button", { name: "Event source" })
                 .click({ position: { x: 0, y: 0 } });
 
             // Make sure the expand toggle works
             const viewSourceEventExpanded = page.locator(".mx_EventTile");
             const viewSourceEventExpandedContent = viewSourceEventExpanded.locator(".mx_ViewSourceEvent_expanded");
             await viewSourceEventExpandedContent.hover();
-            const toggleEventButton = viewSourceEventExpandedContent.getByRole("button", { name: "toggle event" });
+            const toggleEventButton = viewSourceEventExpandedContent.getByRole("button", { name: "Event source" });
             // Click again to collapse the source
             await toggleEventButton.click({ position: { x: 0, y: 0 } });
 
@@ -682,7 +697,7 @@ test.describe("Timeline", () => {
             );
 
             // Click view source event toggle
-            await viewSourceEventIrc.getByRole("button", { name: "toggle event" }).click({ position: { x: 8, y: 8 } });
+            await viewSourceEventIrc.getByRole("button", { name: "Event source" }).click({ position: { x: 8, y: 8 } });
 
             // Make sure the expand toggle worked
             await expect(
@@ -956,8 +971,14 @@ test.describe("Timeline", () => {
         // For clicking the reply button on the last line
         const clickButtonReply = async (page: Page): Promise<void> => {
             const lastTile = getEventTilesWithBodies(page).last();
-            await lastTile.getByTestId("event-tile-slot-body").hover();
+            const status = lastTile.getByRole("status");
+            if (await status.count()) {
+                await expect(status).toHaveAccessibleName("Your message was sent");
+            }
+
             const replyButton = lastTile.getByRole("button", { name: "Reply", exact: true });
+            await page.mouse.move(0, 0);
+            await lastTile.getByTestId("event-tile-slot-body").hover();
             await expect(replyButton).toBeVisible();
             await replyButton.click();
         };
@@ -980,7 +1001,7 @@ test.describe("Timeline", () => {
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
-            await page.waitForTimeout(2000);
+            await expect(app.getComposer().getByText(/^0?0:0[2-9]$/)).toBeVisible();
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             await roomViewBody
@@ -998,7 +1019,7 @@ test.describe("Timeline", () => {
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
-            await page.waitForTimeout(3000);
+            await expect(app.getComposer().getByText(/^0?0:0[3-9]$/)).toBeVisible();
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             await roomViewBody

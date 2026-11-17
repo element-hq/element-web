@@ -46,6 +46,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     // @alpha
     readonly customisations: CustomisationsApi;
     // @alpha
+    readonly documentPreviews: DocumentPreviewApi;
+    // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
@@ -61,6 +63,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     readonly widget: WidgetApi;
     // @alpha
     readonly widgetLifecycle: WidgetLifecycleApi;
+    // @alpha
+    readonly x509?: X509Api;
 }
 
 // @alpha
@@ -73,17 +77,36 @@ export interface BuiltinsApi {
 // @alpha
 export type CapabilitiesApprover = (widget: WidgetDescriptor, requestedCapabilities: Set<string>) => MaybePromise<Set<string> | undefined>;
 
+// @alpha
+export interface CertificateInfo {
+    // (undocumented)
+    issuer: string;
+    // (undocumented)
+    serialNumber: string;
+    // (undocumented)
+    subject: string;
+    // (undocumented)
+    subjectAltName?: string;
+    // (undocumented)
+    validFrom: Date;
+    // (undocumented)
+    validTo: Date;
+}
+
 // @public
 export interface ClientApi {
     accountData: AccountDataApi;
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    waitForClientStarted(): Promise<void>;
 }
 
 // @public
 export interface ClientCreationManagementApi {
+    // @deprecated
     setUserVerificationCaCertsPem(pem: string | null): void;
+    setX509ClientInitOpts(opts: X509ClientInitOpts): void;
 }
 
 // @alpha
@@ -183,6 +206,12 @@ export type CustomMessageComponentProps = {
 };
 
 // @alpha
+export interface CustomMessageGrouping {
+    getKey?: (mxEvent: MatrixEvent) => string;
+    getSummary: (events: readonly MatrixEvent[]) => string;
+}
+
+// @alpha
 export type CustomMessageRenderFunction = (
 props: CustomMessageComponentProps,
 originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element) => JSX.Element;
@@ -191,6 +220,9 @@ originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element
 export type CustomMessageRenderHints = {
     allowEditingEvent?: boolean;
     allowDownloadingMedia?: (mxEvent: MatrixEvent) => Promise<boolean>;
+    renderAsInfoMessage?: boolean;
+    renderSenderProfile?: boolean;
+    renderGroupSummary?: CustomMessageGrouping;
 };
 
 // @alpha
@@ -220,7 +252,8 @@ export type DialogHandle<M> = {
 
 // @public
 export interface DialogOptions {
-    title: string;
+    ariaLabel?: string;
+    title?: string;
 }
 
 // @public
@@ -228,6 +261,25 @@ export type DialogProps<M> = {
     onSubmit(this: void, model: M): void;
     onCancel(this: void): void;
 };
+
+// @alpha
+export interface DocumentPreviewApi {
+    getPreviewOpener(file: DocumentPreviewFileInfo): DocumentPreviewOpener | null;
+}
+
+// @alpha
+export interface DocumentPreviewFile {
+    blob: () => Promise<Blob>;
+}
+
+// @alpha
+export interface DocumentPreviewFileInfo {
+    mimetype: string;
+    name?: string;
+}
+
+// @alpha
+export type DocumentPreviewOpener = (file: DocumentPreviewFile) => void;
 
 // @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
@@ -238,8 +290,28 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 export interface ExtrasApi {
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+    setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
+
+// @alpha
+export interface HardwareKey {
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    manufacturerID: string;
+    // (undocumented)
+    maxPinLength: number;
+    // (undocumented)
+    minPinLength: number;
+    // (undocumented)
+    model: string;
+    // (undocumented)
+    serialNumber: string;
+}
+
+// @alpha
+export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticated";
 
 // @public
 export interface I18nApi {
@@ -327,7 +399,9 @@ export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean
 
 // @public
 export interface Profile {
+    deviceId?: string;
     displayName?: string;
+    homeserverUrl?: string;
     isGuest?: boolean;
     userId?: string;
 }
@@ -348,7 +422,10 @@ export interface RichVariables {
 // @public
 export interface Room {
     getLastActiveTimestamp: () => number;
+    // @alpha
+    getStateEvents(eventType: string): Watchable<RoomStateEvent[]>;
     id: string;
+    isEncrypted: Watchable<boolean | undefined>;
     name: Watchable<string>;
 }
 
@@ -359,6 +436,12 @@ export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefi
 export interface RoomListStoreApi {
     getRooms(): Watchable<Room[]>;
     waitForReady(): Promise<void>;
+}
+
+// @alpha
+export interface RoomStateEvent {
+    content: Record<string, unknown>;
+    stateKey: string;
 }
 
 // @alpha
@@ -423,6 +506,8 @@ export const enum UIComponent {
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
+    PublicRooms = "UIComponent.publicRooms",
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
@@ -435,6 +520,13 @@ export interface UrlPreviewApi {
 //
 // @alpha
 export type UrlPreviewHandler = (url: string, mxEvent?: MatrixEvent) => Promise<UrlPreview | null>;
+
+// @alpha
+export interface UserCertificate {
+    certificate: CertificateInfo;
+    chain: string;
+    chainValidTo: Date;
+}
 
 // @public
 export function useWatchable<T>(watchable: Watchable<T>): T;
@@ -483,6 +575,66 @@ export interface WidgetLifecycleApi {
     registerIdentityApprover(approver: IdentityApprover): void;
     registerPreloadApprover(approver: PreloadApprover): void;
 }
+
+// @alpha
+export interface X509Api {
+    getKeyState(serialNumber: string): Promise<X509Result<HardwareKeyState>>;
+    getUserCertificate(): Promise<X509Result<UserCertificate>>;
+    listHardwareKeys(): Promise<X509Result<HardwareKey[]>>;
+    logIntoKey(serialNumber: string, pin: string): Promise<X509LoginResult>;
+    signData(serialNumber: string, data: Uint8Array): Promise<X509Result<Uint8Array>>;
+}
+
+// @public
+export interface X509ClientInitOpts {
+    signer?: (item: Uint8Array) => Promise<{
+        signature_bytes: Uint8Array;
+        certificate_chain: string;
+        signature_scheme: "RsaPssSha512";
+    }>;
+    userVerificationCaCertsPem?: string;
+    validity?: () => number;
+}
+
+// @alpha
+export interface X509IpcError {
+    // (undocumented)
+    code: X509IpcErrorCode;
+    // (undocumented)
+    message?: string;
+    pkcs11Code?: number;
+}
+
+// @alpha
+export type X509IpcErrorCode =
+/**
+* No PKCS#11 library is configured or it could not be loaded.
+*/
+| "MODULE_NOT_LOADED"
+| "KEY_NOT_FOUND"
+| "CERTIFICATE_NOT_FOUND"
+| "CERTIFICATE_INVALID"
+| "PRIVATE_KEY_NOT_FOUND"
+/**
+* `signData` was called before `logIntoKey`, or the session was invalidated since.
+*/
+| "LOGIN_REQUIRED"
+/**
+* An upstream error from the PKCS#11 library. Carries a `CKR_*` code.
+*/
+| "UPSTREAM_PKCS11"
+| "UNKNOWN";
+
+// @alpha
+export interface X509LoginError extends X509IpcError {
+    triesRemaining?: number;
+}
+
+// @alpha
+export type X509LoginResult = X509Result<void, X509LoginError>;
+
+// @alpha
+export type X509Result<T, E extends X509IpcError = X509IpcError> = { ok: true; data: T } | { ok: false; error: E };
 
 // (No @packageDocumentation comment for this package)
 

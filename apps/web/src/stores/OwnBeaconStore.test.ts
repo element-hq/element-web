@@ -33,13 +33,16 @@ import { makeBeaconInfoEvent, mockGeolocation, watchPositionMockImplementation }
 import { getMockClientWithEventEmitter } from "test-utils/client";
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "./OwnBeaconStore";
-import SettingsStore from "../settings/SettingsStore";
 
 // modern fake timers and lodash.debounce are a faff
 // short circuit it
 vi.mock("lodash", async () => ({
     ...(await vi.importActual("lodash")),
-    debounce: vi.fn().mockImplementation((callback) => callback),
+    debounce: vi
+        .fn()
+        .mockImplementation((callback) =>
+            Object.assign((...args: unknown[]) => callback(...args), { cancel: vi.fn() }),
+        ),
 }));
 
 vi.useFakeTimers();
@@ -249,7 +252,7 @@ describe("OwnBeaconStore", () => {
             const store = await makeOwnBeaconStore();
             const removeSpy = vi.spyOn(mockClient, "removeListener");
             // @ts-ignore
-            store.onNotReady();
+            await store.onNotReady();
 
             expect(removeSpy.mock.calls[0]).toEqual(expect.arrayContaining([BeaconEvent.LivenessChange]));
             expect(removeSpy.mock.calls[1]).toEqual(expect.arrayContaining([BeaconEvent.New]));
@@ -264,9 +267,19 @@ describe("OwnBeaconStore", () => {
             const beacon = room1.currentState.beacons.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))!;
             const destroySpy = vi.spyOn(beacon, "destroy");
             // @ts-ignore
-            store.onNotReady();
+            await store.onNotReady();
 
             expect(destroySpy).toHaveBeenCalled();
+        });
+
+        it("cancels a pending location publish", async () => {
+            const store = await makeOwnBeaconStore();
+            // @ts-ignore
+            const cancelSpy = vi.spyOn(store.debouncedPublishLocationToBeacons, "cancel");
+            // @ts-ignore
+            await store.onNotReady();
+
+            expect(cancelSpy).toHaveBeenCalled();
         });
     });
 
@@ -1201,43 +1214,6 @@ describe("OwnBeaconStore", () => {
 
             // new beacon created
             expect(mockClient.unstable_createLiveBeacon).toHaveBeenCalledWith(room1Id, content);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            mockClient.getVisibleRooms.mockReset();
-            mockClient.getVisibleRooms.mockReturnValue([]);
-            await makeOwnBeaconStore();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            mockClient.getVisibleRooms.mockReset();
-            mockClient.getVisibleRooms.mockReturnValue([]);
-            await makeOwnBeaconStore();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
-
-        it("Passes through the dynamic predecessor when reinitialised", async () => {
-            const store = await makeOwnBeaconStore();
-            mockClient.getVisibleRooms.mockReset();
-            mockClient.getVisibleRooms.mockReturnValue([]);
-            store.reinitialiseBeaconState();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
 });

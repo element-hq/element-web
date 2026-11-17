@@ -13,5 +13,5 @@ import crypto from "node:crypto";
  * @param numBytes - The number of bytes to generate.
  */
 export function randB64Bytes(numBytes: number): string {
-    return crypto.randomBytes(numBytes).toString("base64").replace(/=*$/, "");
+    return crypto.randomBytes(numBytes).toString("base64").replace(/[=]*$/, "");
 }

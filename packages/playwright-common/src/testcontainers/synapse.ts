@@ -110,6 +110,7 @@ export interface SynapseConfig {
     dynamic_thumbnails: boolean;
     enable_registration: boolean;
     enable_registration_without_verification: boolean;
+    bcrypt_rounds?: number;
     disable_msisdn_registration: boolean;
     registrations_require_3pid: string[];
     enable_metrics: boolean;
@@ -190,6 +191,9 @@ export interface SynapseConfig {
         allowed_lifetime_min?: string;
         allowed_lifetime_max?: string;
     };
+    // If this is blanked out, Synapse skips out a whole ton of federation
+    // work which we don't exercise in tests by default.
+    federation_sender_instances?: never[];
 }
 
 const DEFAULT_CONFIG: SynapseConfig = {
@@ -279,6 +283,8 @@ const DEFAULT_CONFIG: SynapseConfig = {
     max_upload_size: "50M",
     max_image_pixels: "32M",
     dynamic_thumbnails: false,
+    // Minimum supported value. 4 represents about 1ms of work, rather than the default of 12 with 250ms of work.
+    bcrypt_rounds: 4,
     enable_registration: true,
     enable_registration_without_verification: true,
     disable_msisdn_registration: false,
@@ -312,6 +318,9 @@ const DEFAULT_CONFIG: SynapseConfig = {
     },
     room_list_publication_rules: [{ action: "allow" }],
     modules: [],
+    // No federation in e2e tests: stop the main process running the federation
+    // sender, which otherwise works out destinations for every event.
+    federation_sender_instances: [],
 };
 
 /**
@@ -352,7 +361,7 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
                     },
                     loggers: {
                         "synapse.storage.SQL": {
-                            level: "DEBUG",
+                            level: "INFO",
                         },
                         "twisted": {
                             handlers: ["console"],
@@ -360,7 +369,7 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
                         },
                     },
                     root: {
-                        level: "DEBUG",
+                        level: "INFO",
                         handlers: ["console"],
                     },
                     disable_existing_loggers: false,
@@ -616,9 +625,35 @@ export class StartedSynapseWithMasContainer extends StartedSynapseContainer {
 
     protected async getAdminToken(): Promise<string> {
         if (this.adminTokenPromise === undefined) {
-            this.adminTokenPromise = this.mas.getAdminToken();
+            const tokenPromise = this.mas.getAdminToken().then((token) => this.waitForTokenAccepted(token));
+            this.adminTokenPromise = tokenPromise;
+            // Don't hold on to a token the homeserver never accepted, so the next call issues a new one
+            tokenPromise.catch(() => {
+                if (this.adminTokenPromise === tokenPromise) this.adminTokenPromise = undefined;
+                this.mas.clearAdminToken();
+            });
         }
         return this.adminTokenPromise;
+    }
+
+    /**
+     * Wait until the homeserver accepts a token MAS has just issued.
+     * The homeserver can briefly report a freshly issued token as inactive.
+     * @param token - the access token to check
+     * @returns the token, once the homeserver accepts it
+     */
+    private async waitForTokenAccepted(token: string): Promise<string> {
+        // Uses fetch rather than csApi, as this may run in a worker fixture before any test has set a request context
+        const url = `${this.baseUrl}/_matrix/client/v3/account/whoami`;
+        const deadline = Date.now() + 10_000;
+        for (;;) {
+            const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+            if (res.ok) return token;
+            if (Date.now() >= deadline) {
+                throw new Error(`Homeserver did not accept a token issued by MAS: ${res.status} ${await res.text()}`);
+            }
+            await new Promise((resolve) => setTimeout(resolve, 250));
+        }
     }
 
     /**
@@ -629,6 +664,7 @@ export class StartedSynapseWithMasContainer extends StartedSynapseContainer {
      */
     public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
         const registered = await this.mas.registerUser(username, password, displayName);
+        await this.waitForTokenAccepted(registered.accessToken);
         return { ...registered, homeserverBaseUrl: this.baseUrl, oauthClientId: this.mas.staticClientId };
     }
 

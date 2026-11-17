@@ -74,16 +74,18 @@ describe("MessageComposer", () => {
         vi.useRealTimers();
 
         // restore settings
-        act(() => {
-            (
-                [
-                    "MessageComposerInput.showStickersButton",
-                    "MessageComposerInput.showPollsButton",
-                    "feature_wysiwyg_composer",
-                ] as const
-            ).forEach((setting): void => {
-                SettingsStore.setValue(setting, null, SettingLevel.DEVICE, SettingsStore.getDefaultValue(setting));
-            });
+        await act(async () => {
+            await Promise.all(
+                (
+                    [
+                        "MessageComposerInput.showStickersButton",
+                        "MessageComposerInput.showPollsButton",
+                        "feature_wysiwyg_composer",
+                    ] as const
+                ).map((setting) =>
+                    SettingsStore.setValue(setting, null, SettingLevel.DEVICE, SettingsStore.getDefaultValue(setting)),
+                ),
+            );
         });
     });
 

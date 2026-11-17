@@ -28,8 +28,15 @@ export function parseQsFromFragment(url: Location | URL): { location: string; pa
         };
     }
 
+    let location = main;
+    try {
+        location = decodeURIComponent(main);
+    } catch {
+        // The fragment has a malformed percent-encoding, which we leave as it is rather than failing to load
+    }
+
     return {
-        location: decodeURIComponent(main),
+        location,
         params: query ? new URLSearchParams(query) : undefined,
     };
 }
@@ -67,11 +74,6 @@ const urlParameterConfig = {
     // XXX: unclear where, if anywhere, this is set
     defaults: {
         keys: ["defaultUsername"],
-        location: "fragment",
-    },
-    // XXX: Fragment params seemingly relating to 3pid invites, though the code in the area doubts they are ever specified
-    guest: {
-        keys: ["guest_user_id", "guest_access_token"],
         location: "fragment",
     },
 } as const satisfies Record<

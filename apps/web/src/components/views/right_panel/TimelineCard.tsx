@@ -32,6 +32,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import ContentMessages from "../../../ContentMessages";
 import UploadBar from "../../structures/UploadBar";
+import FileDropTarget from "../../structures/FileDropTarget";
 import SettingsStore from "../../../settings/SettingsStore";
 import JumpToBottomButton from "../rooms/JumpToBottomButton";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -218,6 +219,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     <RoomUploadContextProvider>
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <div className="mx_TimelineCard_timeline">
+                            <FileDropTarget parent={this.card.current} />
                             {jumpToBottom}
                             <EventPresentationContextProvider layout={layout}>
                                 <TimelinePanel

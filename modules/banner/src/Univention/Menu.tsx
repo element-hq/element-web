@@ -46,7 +46,12 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     return (
         <>
             {!loggedIn && <SilentLogin onLoggedIn={setLoggedIn} icsUrl={config.ics_url} />}
-            <StaticMenu api={api} config={data ?? null} fallbackLogoUrl={config.logo_url ?? fallbackLogoUrl} />
+            <StaticMenu
+                api={api}
+                config={config}
+                data={data ?? null}
+                fallbackLogoUrl={config.logo_url ?? fallbackLogoUrl}
+            />
         </>
     );
 };

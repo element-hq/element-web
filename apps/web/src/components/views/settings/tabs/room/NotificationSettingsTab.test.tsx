@@ -59,7 +59,7 @@ describe("NotificationSettingsTab", () => {
     });
 
     it("should show the currently chosen custom notification sound", async () => {
-        SettingsStore.setValue("notificationSound", roomId, SettingLevel.ACCOUNT, {
+        void SettingsStore.setValue("notificationSound", roomId, SettingLevel.ACCOUNT, {
             url: "mxc://server/custom-sound-123",
             name: "custom-sound-123",
         });
@@ -69,7 +69,7 @@ describe("NotificationSettingsTab", () => {
     });
 
     it("should show the currently chosen custom notification sound url if no name", async () => {
-        SettingsStore.setValue("notificationSound", roomId, SettingLevel.ACCOUNT, {
+        void SettingsStore.setValue("notificationSound", roomId, SettingLevel.ACCOUNT, {
             url: "mxc://server/custom-sound-123",
         });
         renderTab();

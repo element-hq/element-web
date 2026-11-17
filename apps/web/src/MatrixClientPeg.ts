@@ -12,6 +12,7 @@ Please see LICENSE files in the repository root for full details.
 import { type IStartClientOpts, type MatrixClient, MemoryStore, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import * as utils from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import type { X509ClientInitOpts } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "./settings/SettingsStore";
 import MatrixActionCreators from "./actions/MatrixActionCreators";
@@ -26,6 +27,7 @@ import PlatformPeg from "./PlatformPeg";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
+import { LegacyCryptoStoreError } from "./utils/LegacyCryptoStoreError.ts";
 
 export interface MatrixClientPegAssignOpts {
     /**
@@ -48,11 +50,9 @@ export interface MatrixClientPegAssignOpts {
     rustCryptoStorePassword?: string;
 
     /**
-     * Optional PEM-formatted string that provides CA certificates. These will be used to check
-     * X.509 signatures on user identities. Any user identity that has a valid signature according to the supplied
-     * CAs will be considered verified, without any manual verification taking place.
+     * Options for X.509 signing.
      */
-    userVerificationCaCertsPem?: string;
+    x509?: X509ClientInitOpts;
 }
 
 /**
@@ -312,10 +312,18 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
 
+        // Sessions which still hold a legacy (libolm) crypto store were never migrated to the rust
+        // crypto stack, and we no longer have any way to migrate them. Bail out.
+        if (await StorageManager.hasUnmigratedLegacyCryptoStore()) {
+            throw new LegacyCryptoStoreError();
+        }
+
         await this.matrixClient.initRustCrypto({
             storageKey: opts.rustCryptoStoreKey,
             storagePassword: opts.rustCryptoStorePassword,
-            caCertsPem: opts.userVerificationCaCertsPem,
+            caCertsPem: opts.x509?.userVerificationCaCertsPem,
+            x509Signer: opts.x509?.signer,
+            x509Validity: opts.x509?.validity,
         });
 
         StorageManager.setCryptoInitialised(true);

@@ -9,6 +9,8 @@ import React from "react";
 import { type MatrixClient, MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
+import { tearDownAfterTest } from "test-utils/teardown";
+
 import { MKeyVerificationRequestViewModel } from "./MKeyVerificationRequestViewModel";
 
 describe("MKeyVerificationRequestViewModel", () => {
@@ -65,6 +67,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             cli,
             mxEvent: createEvent(myUserId, "@alice:example.org"),
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             title: "You sent a verification request",
@@ -81,6 +84,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             cli,
             mxEvent: createEvent("@alice:example.org"),
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             title: "Alice wants to verify",
@@ -93,6 +97,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             cli,
             mxEvent: createEvent("@alice:example.org"),
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             title: "@alice:example.org wants to verify",
@@ -105,6 +110,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             cli,
             mxEvent: createEvent("@alice:example.org"),
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -123,6 +129,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             cli,
             mxEvent: createEvent("@alice:example.org"),
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -137,6 +144,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             cli,
             mxEvent: createEvent("@alice:example.org"),
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 
@@ -152,6 +160,7 @@ describe("MKeyVerificationRequestViewModel", () => {
             mxEvent: createEvent("@alice:example.org"),
             timestamp,
         });
+        tearDownAfterTest(vm);
         const listener = vi.fn();
         vm.subscribe(listener);
 

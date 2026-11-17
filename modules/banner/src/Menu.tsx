@@ -12,7 +12,7 @@ import styled, { useTheme } from "styled-components";
 import { InlineSpinner } from "@vector-im/compound-web";
 import { type Api } from "@element-hq/element-web-module-api";
 
-import { type StaticConfig } from "./config";
+import { type MenuConfig, type StaticConfig } from "./config";
 import Logo from "./Logo.tsx";
 import TriggerIcon from "./trigger.svg?react";
 
@@ -152,14 +152,17 @@ const Overlay = styled(motion.div)`
     left: 0;
 `;
 
+type Data = Omit<StaticConfig, keyof MenuConfig>;
+
 interface Props {
     api: Api;
-    config: StaticConfig | Error | null; // null for loading
+    config: MenuConfig;
+    data: Data | Error | null; // null for loading
     fallbackLogoUrl: string;
 }
 
 const Category: FC<{
-    data: StaticConfig["categories"][number];
+    data: Data["categories"][number];
 }> = ({ data }) => {
     return (
         <div>
@@ -173,34 +176,33 @@ const Category: FC<{
     );
 };
 
-const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
+const Menu: FC<Props> = ({ api, config, data, fallbackLogoUrl }) => {
     const theme = useTheme();
     const width = parseInt(theme.menuWidth.slice(0, -2), 10);
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
-    let logoJsx: JSX.Element = <Logo src={fallbackLogoUrl} api={api} />;
+    let logoJsx: JSX.Element = (
+        <Logo
+            src={config.logo_url ?? fallbackLogoUrl}
+            height={config.logo_height !== undefined ? `${config.logo_height}px` : undefined}
+            api={api}
+        />
+    );
+    if (config.logo_href) {
+        logoJsx = <a href={config.logo_href}>{logoJsx}</a>;
+    }
 
-    if (config instanceof Error) {
+    if (data instanceof Error) {
         content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
-    } else if (config) {
+    } else if (data) {
         content = (
             <>
-                {config.categories.map((category) => (
+                {data.categories.map((category) => (
                     <Category key={category.name} data={category} />
                 ))}
             </>
         );
-        logoJsx = (
-            <Logo
-                src={config.logo_url ?? fallbackLogoUrl}
-                height={config.logo_height !== undefined ? `${config.logo_height}px` : undefined}
-                api={api}
-            />
-        );
-        if (config.logo_href) {
-            logoJsx = <a href={config.logo_href}>{logoJsx}</a>;
-        }
     } else {
         content = (
             <CentredContainer>

@@ -1,38 +1,73 @@
 diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
-index 387489bd25c9ebcf6afd97df5e741706fbdec65d..0e9961bb69b411824ba91f56694774e801d599c4 100644
+index 0524d9a..4c350d4 100644
 --- a/dist/esm/index.d.ts
 +++ b/dist/esm/index.d.ts
-@@ -78,6 +78,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
+@@ -83,6 +83,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
      initialMeasurementsCache?: Array<VirtualItem>;
      lanes?: number;
      anchorTo?: ScrollAnchor;
 +    /**
-+     * With `anchorTo: "end"`, reject an item as the scroll anchor (e.g. a transient
-+     * placeholder/sentinel row whose key does not survive the update); anchoring
-+     * steps inward to the nearest accepted item. Element-web patch, pending upstream.
++     * With `anchorTo: 'end'`, reject an item as the scroll anchor (a loading
++     * spinner, a "load more" row): anchoring steps inward to the nearest
++     * accepted item. Element-web patch, pending upstream.
 +     */
 +    isValidAnchorItem?: (item: VirtualItem) => boolean;
      followOnAppend?: FollowOnAppend;
      scrollEndThreshold?: number;
      isScrollingResetDelay?: number;
+@@ -196,6 +202,9 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
+     private _momentumStop;
+     private _stopMomentum;
+     private _clampedBy;
++    private _readDefaultRect;
++    private _setScrollRect;
++    private isPinnedToEnd;
+     private getVirtualDistanceFromEnd;
+     getDistanceFromEnd: () => number;
+     isAtEnd: (threshold?: number) => boolean;
 diff --git a/dist/esm/index.js b/dist/esm/index.js
-index 00fd4a4b0a0049193f8862c2604cb76013d605d5..37c058b25d30f42f82617d9cc4c2831bc0b13704 100644
+index abe4b49..3018fe4 100644
 --- a/dist/esm/index.js
 +++ b/dist/esm/index.js
-@@ -295,7 +295,24 @@ class Virtualizer {
+@@ -5,8 +5,12 @@ import { IosGesture, isIOSWebKit, momentumOverridesWrites } from "./ios-gesture.
+ import { _resetIOSDetectionForTests } from "./ios-gesture.js";
+ const getRect = (element) => {
+   const { clientWidth, clientHeight } = element;
+-  return { width: clientWidth, height: clientHeight };
++  return { width: Math.round(clientWidth), height: Math.round(clientHeight) };
+ };
++const getWindowRect = (win) => ({
++  width: win.innerWidth,
++  height: win.innerHeight
++});
+ const createFrameQueue = (targetWindow) => {
+   const ids = /* @__PURE__ */ new Set();
+   return {
+@@ -45,8 +49,7 @@ const observeElementRect = (instance, cb) => {
+     return;
+   }
+   const handler = (rect) => {
+-    const { width, height } = rect;
+-    cb({ width: Math.round(width), height: Math.round(height) });
++    cb(rect);
+   };
+   handler(getRect(element));
+   if (!targetWindow.ResizeObserver) {
+@@ -75,7 +78,7 @@ const observeWindowRect = (instance, cb) => {
+     return;
+   }
+   const handler = () => {
+-    cb({ width: element.innerWidth, height: element.innerHeight });
++    cb(getWindowRect(element));
+   };
+   handler();
+   element.addEventListener("resize", handler, addEventListenerOptions);
+@@ -406,7 +409,16 @@ class Virtualizer {
          const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
          if (didEdgeKeysChange) {
            edgeKeysChanged = true;
 -          const item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
 +          let item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
-+          // With anchorTo: "end" the scroll is re-pinned by the key of the item
-+          // under the current offset. If the consumer rejects that item as an
-+          // anchor via isValidAnchorItem — e.g. a transient placeholder/sentinel
-+          // row (loading spinner, "load more", skeleton) whose key does not
-+          // survive the update — re-pinning by its key would fail and the
-+          // prepend would go uncompensated (the list jumps to the edge). Such
-+          // rows only sit at the extreme edges, so step one index inward to the
-+          // nearest accepted item, whose key persists across the update.
 +          const isValidAnchorItem = merged.isValidAnchorItem;
 +          if (item && isValidAnchorItem && !isValidAnchorItem(item)) {
 +            const step = item.index === 0 ? 1 : -1;
@@ -45,3 +80,65 @@ index 00fd4a4b0a0049193f8862c2604cb76013d605d5..37c058b25d30f42f82617d9cc4c2831b
            if (item) {
              anchor = [item.key, this.getScrollOffset() - item.start];
            }
+@@ -529,9 +541,11 @@ class Virtualizer {
+         this.elementsCache.forEach((cached) => {
+           this.observer.observe(cached);
+         });
++        let isFirstRect = true;
+         this.unsubs.push(
+           this.options.observeElementRect(this, (rect) => {
+-            this.scrollRect = rect;
++            this._setScrollRect(rect, isFirstRect);
++            isFirstRect = false;
+             this.maybeNotify();
+           })
+         );
+@@ -601,6 +615,8 @@ class Virtualizer {
+             ((_d = this.scrollState) == null ? void 0 : _d.phase) === "queued") {
+               this.scrollState = null;
+             }
++            const liveRect = this._readDefaultRect();
++            if (liveRect !== null) this._setScrollRect(liveRect, false);
+             this._flushHoldIfReady(true);
+             if (this.scrollState) {
+               this.scheduleScrollReconcile();
+@@ -1049,7 +1065,7 @@ class Virtualizer {
+       const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
+       const delta = size - itemSize;
+       if (delta !== 0) {
+-        const wasAtEnd = this.options.anchorTo === "end" && !isSmoothScroll(this.scrollState) && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
++        const wasAtEnd = this.isPinnedToEnd();
+         const prevTotalSize = wasAtEnd ? this._getLayoutTotalSize() : 0;
+         const scrollOffset = this.getScrollOffset();
+         const isFirstMeasure = !this.itemSizeCache.has(key);
+@@ -1226,6 +1242,30 @@ class Virtualizer {
+       const maxAtWrite = elementMax + this._holdOffset;
+       return target > maxAtWrite + 0.5 ? { target, maxAtWrite } : null;
+     };
++    this._readDefaultRect = () => {
++      const el = this.scrollElement;
++      const observe = this.options.observeElementRect;
++      if (el == null) return null;
++      if (observe === observeElementRect) return getRect(el);
++      if (observe === observeWindowRect) return getWindowRect(el);
++      return null;
++    };
++    this._setScrollRect = (rect, isFirst) => {
++      const prev = this.scrollRect;
++      if (prev !== null && prev.width === rect.width && prev.height === rect.height) {
++        return;
++      }
++      const prevSize = !isFirst && prev !== null ? this.getSize() : null;
++      const wasAtEnd = prevSize !== null && this.scrollDirection !== "backward" && this.isPinnedToEnd();
++      this.scrollRect = rect;
++      if (wasAtEnd && prevSize > this.getSize() && !this._awaitingCommandReadBack()) {
++        const shrink = prevSize - this.getSize();
++        this.applyScrollAdjustment(
++          this._clampedAdjustment !== null ? shrink : Math.min(shrink, this.getDistanceFromEnd())
++        );
++      }
++    };
++    this.isPinnedToEnd = () => this.options.anchorTo === "end" && !isSmoothScroll(this.scrollState) && this.getVirtualDistanceFromEnd() <= this.options.scrollEndThreshold;
+     this.getVirtualDistanceFromEnd = () => {
+       return Math.max(
+         this._getLayoutTotalSize() + this.options.scrollMargin - this.getSize() - this.getScrollOffset(),

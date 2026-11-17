@@ -19,10 +19,6 @@ export interface IThreepidInviteWireFormat {
     room_name: string;
     room_avatar_url: string;
     inviter_name: string;
-
-    // TODO: Figure out if these are ever populated
-    guest_access_token?: string;
-    guest_user_id?: string;
 }
 
 interface IPersistedThreepidInvite extends IThreepidInviteWireFormat {

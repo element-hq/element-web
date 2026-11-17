@@ -18,7 +18,7 @@ import BasicMessageComposer from "./BasicMessageComposer";
 import * as TestUtils from "test-utils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EditorModel from "../../../editor/model";
-import { createPartCreator, createRenderer } from "../../../../test/unit-tests/editor/mock";
+import { createPartCreator, createRenderer } from "../../../editor/__mocks__";
 import { CommandPartCreator } from "../../../editor/parts";
 import DocumentOffset from "../../../editor/offset";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";

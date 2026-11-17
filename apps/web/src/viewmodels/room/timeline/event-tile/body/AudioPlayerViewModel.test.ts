@@ -12,6 +12,7 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { waitFor } from "@testing-library/dom";
 
+import { tearDownAfterTest } from "test-utils";
 import { type Playback, PlaybackState } from "../../../../../audio/Playback";
 import { AudioPlayerViewModel } from "./AudioPlayerViewModel";
 import { MockedPlayback } from "../../../../../audio/__mocks__";
@@ -23,7 +24,7 @@ describe("AudioPlayerViewModel", () => {
     });
 
     it("should return the snapshot", () => {
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "mediaName" }));
         expect(vm.getSnapshot()).toMatchObject({
             mediaName: "mediaName",
             sizeBytes: 8000,
@@ -36,26 +37,26 @@ describe("AudioPlayerViewModel", () => {
     });
 
     it("should toggle the playback state", async () => {
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "mediaName" }));
 
         await vm.togglePlay();
         expect(playback.toggle).toHaveBeenCalled();
     });
 
     it("should move the playback on seekbar change", async () => {
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "mediaName" }));
         await vm.onSeekbarChange({ target: { value: "20" } } as ChangeEvent<HTMLInputElement>);
         expect(playback.skipTo).toHaveBeenCalledWith(10); // 20% of 50 seconds
     });
 
     it("should has error=true when playback.prepare fails", async () => {
         vi.spyOn(playback, "prepare").mockRejectedValue(new Error("Failed to prepare playback"));
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "mediaName" }));
         await waitFor(() => expect(vm.getSnapshot().error).toBe(true));
     });
 
     it("should handle key down events", () => {
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "mediaName" }));
         let event = new KeyboardEvent("keydown", { key: " " }) as unknown as ReactKeyboardEvent<HTMLDivElement>;
         vm.onKeyDown(event);
         expect(playback.toggle).toHaveBeenCalled();
@@ -70,7 +71,7 @@ describe("AudioPlayerViewModel", () => {
     });
 
     it("does not stop propagation for unhandled key down events", () => {
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "mediaName" }));
         const event = new KeyboardEvent("keydown", { key: "a" });
         const stopPropagationSpy = vi.spyOn(event, "stopPropagation");
 
@@ -82,7 +83,7 @@ describe("AudioPlayerViewModel", () => {
     });
 
     it("should update snapshot when setProps is called with new mediaName", () => {
-        const vm = new AudioPlayerViewModel({ playback, mediaName: "oldName" });
+        const vm = tearDownAfterTest(new AudioPlayerViewModel({ playback, mediaName: "oldName" }));
         expect(vm.getSnapshot().mediaName).toBe("oldName");
 
         vm.setProps({ mediaName: "newName" });

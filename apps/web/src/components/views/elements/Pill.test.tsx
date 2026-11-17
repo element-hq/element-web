@@ -84,7 +84,7 @@ describe("<Pill>", () => {
         "Room !space1:example.com does not have an m.room.create event",
     );
 
-    beforeEach(() => {
+    beforeEach(async () => {
         client = vi.mocked(stubClient());
         sdkContext = new TestSDKContext();
         // @ts-ignore Pill uses the SDKContext global
@@ -108,7 +108,7 @@ describe("<Pill>", () => {
             room: room1Id,
             msg: "Room 1 Message",
         });
-        room1.addLiveEvents([room1Message], { addToState: true });
+        await room1.addLiveEvents([room1Message], { addToState: true });
 
         room2 = new Room(room2Id, client, user1Id);
         room2.currentState.setStateEvents([mkRoomMemberJoinEvent(user2Id, room2Id)]);

@@ -12,8 +12,14 @@ import { getConfig } from "./config.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import { clearData } from "./store.js";
 
-const { ipcHandlers, mockStore, send, randomArray } = vi.hoisted(() => ({
+const { ipcHandlers, mockStore, send, randomArray, defaultSession } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
+    defaultSession: {
+        setSpellCheckerEnabled: vi.fn<(enable: boolean) => void>(),
+        setSpellCheckerLanguages: vi.fn<(languages: string[]) => void>(),
+        getSpellCheckerLanguages: vi.fn<() => string[]>(),
+        availableSpellCheckerLanguages: [] as string[],
+    },
     mockStore: {
         isSecretUndecryptable: vi.fn<(key: string) => Promise<boolean>>(),
         setSecret: vi.fn<(key: string, secret: string) => Promise<void>>(),
@@ -47,12 +53,15 @@ vi.mock("electron", () => ({
         static TouchBarButton = vi.fn(function () {});
     },
     nativeImage: { createFromBuffer: vi.fn() },
+    session: { defaultSession },
 }));
 
 vi.mock("./store.js", () => ({
     default: { instance: mockStore },
     clearData: vi.fn(),
-    SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {},
+    SafeStorageDecryptionError: class SafeStorageDecryptionError extends Error {
+        public override name = "SafeStorageDecryptionError";
+    },
 }));
 vi.mock("./utils.js", () => ({ randomArray }));
 vi.mock("./displayMediaCallback.js", () => ({
@@ -96,23 +105,56 @@ describe("ipc pickle key handling", () => {
     });
 
     describe("getPickleKey", () => {
-        it("returns null when getSecret throws", async () => {
-            mockStore.getSecret.mockRejectedValue(new Error("safeStorage unavailable"));
+        beforeEach(() => {
+            vi.spyOn(console, "error").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            vi.mocked(console.error).mockRestore();
+        });
+
+        it("returns the stored pickle key", async () => {
+            mockStore.getSecret.mockResolvedValue("STOREDKEY");
 
             await callIpc("getPickleKey", 9);
 
-            expect(send).toHaveBeenCalledWith("ipcReply", { id: 9, reply: null });
+            expect(send).toHaveBeenCalledWith("ipcReply", { id: 9, reply: "STOREDKEY" });
         });
 
-        it("returns null when the secret is present but cannot be decrypted", async () => {
+        it("returns null when no pickle key is stored", async () => {
+            mockStore.getSecret.mockResolvedValue(undefined);
+
+            await callIpc("getPickleKey", 10);
+
+            expect(send).toHaveBeenCalledWith("ipcReply", { id: 10, reply: null });
+        });
+
+        it("replies with an error, rather than null, when getSecret throws", async () => {
+            mockStore.getSecret.mockRejectedValue(new Error("safeStorage unavailable"));
+
+            await callIpc("getPickleKey", 11);
+
+            expect(send).toHaveBeenCalledWith("ipcReply", {
+                id: 11,
+                error: { name: "Error", message: "safeStorage unavailable" },
+            });
+        });
+
+        it("replies with an error when the secret is present but cannot be decrypted", async () => {
             const { SafeStorageDecryptionError } = await import("./store.js");
             mockStore.getSecret.mockRejectedValue(
                 new SafeStorageDecryptionError("Failed to decrypt safeStorage secret"),
             );
 
-            await callIpc("getPickleKey", 10);
+            await callIpc("getPickleKey", 12);
 
-            expect(send).toHaveBeenCalledWith("ipcReply", { id: 10, reply: null });
+            expect(send).toHaveBeenCalledWith("ipcReply", {
+                id: 12,
+                error: {
+                    name: "SafeStorageDecryptionError",
+                    message: "Failed to decrypt safeStorage secret",
+                },
+            });
         });
     });
 });
@@ -245,5 +287,66 @@ describe("ipcCall: callDisplayMediaCallback", () => {
         await callIpc("callDisplayMediaCallback", 14, [{}]);
 
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 14, reply: null });
+    });
+});
+
+describe("ipcCall: spellchecker", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (global as unknown as { mainWindow: unknown }).mainWindow = { webContents: { send } };
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("turns the spellchecker on or off and remembers the choice", async () => {
+        await callIpc("setSpellCheckEnabled", 17, [false]);
+
+        expect(defaultSession.setSpellCheckerEnabled).toHaveBeenCalledExactlyOnceWith(false);
+        expect(mockStore.set).toHaveBeenCalledExactlyOnceWith("spellCheckerEnabled", false);
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 17, reply: undefined, error: undefined });
+    });
+
+    it("ignores a request to turn the spellchecker on or off without a boolean", async () => {
+        await callIpc("setSpellCheckEnabled", 18, ["yes"]);
+
+        expect(defaultSession.setSpellCheckerEnabled).not.toHaveBeenCalled();
+        expect(mockStore.set).not.toHaveBeenCalled();
+        expect(send).not.toHaveBeenCalled();
+    });
+
+    it("sets the spellchecker languages", async () => {
+        await callIpc("setSpellCheckLanguages", 19, [["en-GB", "fr"]]);
+
+        expect(defaultSession.setSpellCheckerLanguages).toHaveBeenCalledExactlyOnceWith(["en-GB", "fr"]);
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 19, reply: undefined, error: undefined });
+    });
+
+    it("still replies when the spellchecker languages cannot be set", async () => {
+        vi.spyOn(console, "log").mockImplementation(() => {});
+        defaultSession.setSpellCheckerLanguages.mockImplementationOnce(() => {
+            throw new Error("Unsupported language");
+        });
+
+        await callIpc("setSpellCheckLanguages", 20, [["xx"]]);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 20, reply: undefined, error: undefined });
+    });
+
+    it("returns the spellchecker languages", async () => {
+        defaultSession.getSpellCheckerLanguages.mockReturnValue(["en-GB"]);
+
+        await callIpc("getSpellCheckLanguages", 21, []);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 21, reply: ["en-GB"], error: undefined });
+    });
+
+    it("returns the languages the spellchecker supports", async () => {
+        defaultSession.availableSpellCheckerLanguages = ["en-GB", "en-US"];
+
+        await callIpc("getAvailableSpellCheckLanguages", 22, []);
+
+        expect(send).toHaveBeenCalledWith("ipcReply", { id: 22, reply: ["en-GB", "en-US"], error: undefined });
     });
 });

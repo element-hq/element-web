@@ -106,7 +106,7 @@ exports[`<TabbedView /> > renders tabs 1`] = `
       id="mx_tabpanel_GENERAL"
     >
       <div
-        class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_TabbedView_tabPanelContent"
+        class="_scrollbar mx_AutoHideScrollbar mx_TabbedView_tabPanelContent"
         tabindex="-1"
       >
         <div>

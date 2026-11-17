@@ -25,6 +25,16 @@ describe("parseQsFromFragment", () => {
             }),
         });
     });
+
+    it("should leave a malformed percent-encoding as it is", () => {
+        location.hash = "#/room/%E0%A4%A?foo=bar";
+        expect(parseQsFromFragment(location)).toEqual({
+            location: "/room/%E0%A4%A",
+            params: new URLSearchParams({
+                foo: "bar",
+            }),
+        });
+    });
 });
 
 describe("searchParamsToQueryDict", () => {
@@ -50,11 +60,5 @@ describe("parseUrlParameters", () => {
         const parsed = parseAppUrl(u);
         expect(parsed.params.oauth2?.code).toEqual("foobar");
         expect(parsed.params.oauth2?.state).toEqual("barfoo");
-    });
-
-    it("should parse guest parameters", () => {
-        const u = new URL("https://app.element.io?foo=bar#/room/!roomId:server?guest_access_token=foobar");
-        const parsed = parseAppUrl(u);
-        expect(parsed.params.guest?.guest_access_token).toEqual("foobar");
     });
 });

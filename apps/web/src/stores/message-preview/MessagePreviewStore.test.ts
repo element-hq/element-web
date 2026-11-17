@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import {
     EventStatus,
     EventTimeline,
@@ -17,16 +17,19 @@ import {
     M_POLL_START,
     M_TEXT,
     type MatrixClient,
-    type MatrixEvent,
+    MatrixEvent,
     PendingEventOrdering,
     RelationType,
     Room,
+    RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "test-utils";
 import { mkThread } from "test-utils/threads";
 
 import { MessagePreviewStore } from ".";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
+import { CallStore, CallStoreEvent } from "../CallStore";
+import { ElementCall } from "../../models/Call";
 
 describe("MessagePreviewStore", () => {
     let client: Mocked<MatrixClient>;
@@ -40,7 +43,7 @@ describe("MessagePreviewStore", () => {
         event: MatrixEvent,
         fireAction = true,
     ): Promise<void> {
-        room.addLiveEvents([event], { addToState: true });
+        await room.addLiveEvents([event], { addToState: true });
         if (fireAction) {
             // @ts-ignore private access
             await store.onAction({
@@ -87,6 +90,11 @@ describe("MessagePreviewStore", () => {
         store = MessagePreviewStore.testInstance();
         await store.start();
         await setupAsyncStoreWithClient(store, client);
+    });
+
+    afterEach(() => {
+        store.destroy();
+        vi.restoreAllMocks();
     });
 
     it("should ignore edits for events other than the latest one", async () => {
@@ -283,6 +291,35 @@ describe("MessagePreviewStore", () => {
         );
     });
 
+    it("should drop the preview of a message redacted without a redaction in the timeline", async () => {
+        const message = mkMessage({
+            user: "@sender:server",
+            event: true,
+            room: room.roomId,
+            msg: "Expiring message",
+        });
+        await addEvent(store, room, message);
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toContain("Expiring message");
+
+        // This is how a retention policy expires a message: it redacts it locally and adds nothing to the timeline.
+        const redaction = new MatrixEvent({
+            type: EventType.RoomRedaction,
+            redacts: message.getId(),
+            content: { reason: "Retention policy" },
+            sender: "@sender:server",
+            room_id: room.roomId,
+            event_id: "$synthetic_redaction",
+        });
+        room.tryApplyRedaction(redaction);
+        client.emit(RoomEvent.Redaction, redaction, room);
+
+        await vi.waitFor(async () =>
+            expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text ?? "").not.toContain(
+                "Expiring message",
+            ),
+        );
+    });
+
     it("should generate the correct preview for a reaction", async () => {
         const firstMessage = mkMessage({
             user: "@sender:server",
@@ -443,6 +480,29 @@ describe("MessagePreviewStore", () => {
                 expect(store.generatePreviewForEvent(callEvent)).toBeTruthy();
             },
         );
+
+        it("should switch the rtc notification preview from 'Call started' to 'Call ended' when the call ends", async () => {
+            const getCall = vi
+                .spyOn(CallStore.instance, "getCall")
+                .mockReturnValue(Object.create(ElementCall.prototype));
+            const notification = mkEvent({
+                event: true,
+                type: EventType.RTCNotification,
+                user: "@sender:server",
+                room: room.roomId,
+                content: {},
+            });
+            await addEvent(store, room, notification);
+            expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toBe("Call started");
+
+            const onChange = vi.fn();
+            store.on(MessagePreviewStore.getPreviewChangedEventName(room), onChange);
+            getCall.mockReturnValue(null);
+            CallStore.instance.emit(CallStoreEvent.Call, null, room.roomId);
+
+            await vi.waitFor(() => expect(onChange).toHaveBeenCalled());
+            expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toBe("Call ended");
+        });
 
         it("should return an empty string for an event type without a previewer", () => {
             const topicEvent = mkEvent({

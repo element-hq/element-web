@@ -56,6 +56,7 @@ class FilePanel extends React.Component<IProps, IState> {
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.
     private decryptingEvents = new Set<string>();
+    private unmounted = false;
     public noRoom = false;
     private card = createRef<HTMLDivElement>();
 
@@ -116,6 +117,7 @@ class FilePanel extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.safeGet();
 
         await this.updateTimelineSet(this.props.roomId);
+        if (this.unmounted) return;
 
         if (!client.isRoomEncrypted(this.props.roomId)) return;
 
@@ -134,6 +136,7 @@ class FilePanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
         const client = MatrixClientPeg.get();
         if (client === null) return;
 

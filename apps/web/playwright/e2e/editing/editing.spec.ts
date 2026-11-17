@@ -50,7 +50,7 @@ test.describe("Editing", () => {
         const eventTile = page.locator(".mx_EventTile", { hasText: edited });
         await expect(eventTile).toBeVisible();
         // Click to display the message edit history dialog
-        await eventTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ }).click();
+        await eventTile.getByRole("button", { name: /Edited at .*? Select to view edit history\./ }).click();
     };
 
     const clickButtonViewSource = async (locator: Locator) => {
@@ -89,7 +89,9 @@ test.describe("Editing", () => {
             await editLastMessage(page, "Massage");
 
             // Assert that the edit label is visible
-            await expect(page.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
+            await expect(
+                page.getByRole("button", { name: /Edited at .*? Select to view edit history\./ }),
+            ).toBeVisible();
 
             await clickEditedMessage(page, "Massage");
 
@@ -215,7 +217,7 @@ test.describe("Editing", () => {
         await editLastMessage(page, "Massage");
 
         // Assert that the edit label is visible
-        await expect(page.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
+        await expect(page.getByRole("button", { name: /Edited at .*? Select to view edit history\./ })).toBeVisible();
 
         await clickEditedMessage(page, "Massage");
 
@@ -305,6 +307,28 @@ test.describe("Editing", () => {
         await expect(page.getByRole("textbox", { name: "Edit message" })).not.toBeVisible();
     });
 
+    test("should show the emoji autocomplete above the edit composer", async ({ page, app, room }) => {
+        await page.goto(`#/room/${room.roomId}`);
+
+        await sendEvent(app, room.roomId);
+
+        const tile = page.locator(".mx_RoomView_body .mx_EventTile").last();
+        await expect(tile.getByText("Message", { exact: true })).toBeVisible();
+        const line = tile.locator(".mx_EventTile_line");
+        await line.hover();
+        await line.getByRole("button", { name: "Edit", exact: true }).click();
+
+        const editComposer = page.getByRole("textbox", { name: "Edit message" });
+        await editComposer.press("End");
+        await editComposer.pressSequentially(" :+1");
+
+        const autocomplete = page.locator("#mx_Autocomplete");
+        await expect(autocomplete).toBeVisible();
+        await autocomplete.locator(".mx_Autocomplete_Completion_title", { hasText: ":+1:" }).click();
+        // The inserted emoji may carry a trailing variation selector, so match on the emoji alone.
+        await expect(editComposer).toContainText("Message 👍");
+    });
+
     test("should correctly display events which are edited, where we lack the edit event", async ({
         page,
         user,
@@ -381,6 +405,8 @@ test.describe("Editing", () => {
                 .getByTestId("event-tile-slot-body")
                 .locator(".mx_MTextBody [data-textual-body-annotation-wrapper] > :first-child"),
         ).toHaveText("Edited body");
-        await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
+        await expect(
+            messageTile.getByRole("button", { name: /Edited at .*? Select to view edit history/ }),
+        ).toBeVisible();
     });
 });

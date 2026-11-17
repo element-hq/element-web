@@ -106,6 +106,19 @@ describe("<RoomSummaryCard />", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("renders the encrypted badge when the room is encrypted", () => {
+        vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({ ...vmDefaultValues, isRoomEncrypted: true });
+        getComponent();
+        expect(screen.getByText("Encrypted")).toBeInTheDocument();
+    });
+
+    it("renders no encryption badge while the encryption state is loading", () => {
+        vi.mocked(useRoomSummaryCardViewModel).mockReturnValue({ ...vmDefaultValues, isRoomEncrypted: null });
+        getComponent();
+        expect(screen.queryByText("Encrypted")).not.toBeInTheDocument();
+        expect(screen.queryByText("Not encrypted")).not.toBeInTheDocument();
+    });
+
     it("renders the room topic in the summary", () => {
         room.currentState.setStateEvents([
             new MatrixEvent({

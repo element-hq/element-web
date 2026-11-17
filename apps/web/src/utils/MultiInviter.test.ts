@@ -338,6 +338,26 @@ describe("MultiInviter", () => {
             expect(client.invite).toHaveBeenCalledWith(ROOMID, MXID2, { shareEncryptedHistory: true });
         });
 
+        it("should not blame permissions for a refusal of an invite we are allowed to send", async () => {
+            vi.mocked(client.invite).mockRejectedValueOnce(
+                new MatrixError({
+                    errcode: "M_INVITE_BLOCKED",
+                    error: "This user does not want to be invited",
+                }),
+            );
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            room.updateMyMembership(KnownMembership.Join);
+            vi.mocked(client.getRoom).mockReturnValue(room);
+
+            await inviter.invite([MXID1, MXID2]);
+
+            expect(inviter.getErrorText(MXID1)).toMatchInlineSnapshot(`"Not accepting invites"`);
+            // The server's own wording is untranslated, so it must not reach the user.
+            expect(inviter.getErrorText(MXID1)).not.toContain("This user does not want to be invited");
+            // The refusal was about one invitee, so the rest of the batch is still worth trying.
+            expect(client.invite).toHaveBeenCalledWith(ROOMID, MXID2, { shareEncryptedHistory: true });
+        });
+
         it("should blame permissions only when the user really cannot invite", async () => {
             vi.mocked(client.invite).mockRejectedValue(
                 new MatrixError({

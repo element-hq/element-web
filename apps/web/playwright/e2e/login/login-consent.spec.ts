@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import { buildConfigJson } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
-import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { createBot } from "../crypto/utils.ts";
+import { createBot, createRoom, logOutOfElement } from "../crypto/utils.ts";
 
 // This test requires fixed credentials for the device signing keys below to work
 const username = "user1234";
@@ -82,7 +82,6 @@ async function login(page: Page, homeserver: HomeserverInstance, credentials: Cr
 // This test suite uses the same userId for all tests in the suite
 // due to DEVICE_SIGNING_KEYS_BODY being specific to that userId,
 // so we restart the Synapse container to make it forget everything.
-test.use(consentHomeserver);
 test.use({
     config: {
         // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
@@ -103,13 +102,11 @@ test.use({
         const credentials = await homeserver.registerUser(username, password, displayName);
         console.log(`Registered test user @user:localhost with displayname ${displayName}`);
 
+        // No need to restart the homeserver afterwards: the context fixture above restarts it before each test
         await use({
             ...credentials,
             displayName,
         });
-
-        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
-        await homeserver.restart();
     },
 });
 
@@ -149,11 +146,16 @@ test.describe("Login", () => {
             await selectHomeserver(page, homeserver.baseUrl);
 
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
+            // The Sign in button is disabled whilst the homeserver is checked, wait for it to finish transitioning
+            // back to its enabled colours, otherwise axe may flag the intermediate colours as having too low contrast
+            const signInButton = page.getByRole("button", { name: "Sign in" });
+            await expect(signInButton).toBeEnabled();
+            await expect.poll(() => signInButton.evaluate((el) => el.getAnimations().length)).toBe(0);
             await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
             await page.getByPlaceholder("Password").fill(credentials.password!);
-            await page.getByRole("button", { name: "Sign in" }).click();
+            await signInButton.click();
 
             await expect(page).toHaveURL(/\/#\/home$/);
         });
@@ -167,7 +169,7 @@ test.describe("Login", () => {
         });
 
         test.describe("verification after login", () => {
-            test("Shows verification prompt after login if signing keys are set up, skippable by default", async ({
+            test("Shows verification prompt after login if signing keys are set up, not skippable by default", async ({
                 page,
                 homeserver,
                 request,
@@ -189,7 +191,7 @@ test.describe("Login", () => {
                     page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
                 ).toBeVisible();
 
-                await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
             });
 
             test.describe("with force_verification off", () => {
@@ -225,6 +227,59 @@ test.describe("Login", () => {
                     ).toBeVisible();
 
                     await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
+                });
+
+                test("should not force verification on reload if force_verification is enabled after login", async ({
+                    page,
+                    homeserver,
+                    request,
+                    credentials,
+                }) => {
+                    const res = await request.post(
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
+                    );
+                    expect(res.status() / 100).toEqual(2);
+
+                    // Log in while force_verification is off, and skip verification
+                    await page.goto("/");
+                    await login(page, homeserver, credentials);
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Skip verification for now" }).click();
+                    await page.getByRole("button", { name: "I'll verify later" }).click();
+                    await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+
+                    // The deployment now turns force_verification on. A page-level route takes
+                    // precedence over the context-level one registered by the `config` fixture.
+                    await page.route("/config.json*", (route) =>
+                        route.fulfill({ json: buildConfigJson(homeserver.baseUrl, { force_verification: true }) }),
+                    );
+
+                    await page.reload();
+
+                    // The session existed before enforcement was enabled, so it goes straight
+                    // to the logged-in view rather than the verification screen
+                    await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).not.toBeVisible();
+
+                    // To validate that the config actually changed (e.g. force_verification == true),
+                    // simulate as if the session was logged with force_verification == true and check
+                    // if the identity confirmation screen is now shown without the ability to skip
+                    await page.evaluate(() => localStorage.setItem("force_verification_on_at_login", "true"));
+                    await page.reload();
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
                 });
             });
 
@@ -271,9 +326,6 @@ test.describe("Login", () => {
                     // Create a different device which is cross-signed, meaning we need to verify this device
                     await createBot(page, homeserver, credentials, true);
 
-                    // Wait to avoid homeserver rate limit on logins
-                    await page.waitForTimeout(100);
-
                     // Load the page and see that we are asked to verify
                     await page.goto("/#/welcome");
                     await login(page, homeserver, credentials);
@@ -292,44 +344,121 @@ test.describe("Login", () => {
                 });
             });
 
-            test("Can reset identity to become verified", async ({ page, homeserver, request, credentials }) => {
-                // Log in
-                const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
-                    headers: { Authorization: `Bearer ${credentials.accessToken}` },
-                    data: DEVICE_SIGNING_KEYS_BODY,
-                });
-                if (!res.ok()) {
-                    console.log(`Uploading dummy keys failed with HTTP status ${res.status}`, await res.json());
-                    throw new Error("Uploading dummy keys failed");
-                }
+            test(
+                "Can reset identity to become verified",
+                { tag: ["@screenshot"] },
+                async ({ page, homeserver, request, credentials }) => {
+                    // Log in
+                    const res = await request.post(
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
+                    );
+                    if (!res.ok()) {
+                        console.log(`Uploading dummy keys failed with HTTP status ${res.status}`, await res.json());
+                        throw new Error("Uploading dummy keys failed");
+                    }
 
-                await page.goto("/");
-                await login(page, homeserver, credentials);
+                    await page.goto("/");
+                    await login(page, homeserver, credentials);
 
-                await expect(
-                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
-                ).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
 
-                // Start the reset process
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    // Start the reset process
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
 
-                // First try cancelling and restarting
-                await page.getByRole("button", { name: "Cancel" }).click();
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    await expect(
+                        page.getByRole("heading", { name: "You need to reset your digital identity" }),
+                    ).toBeVisible();
 
-                // Then click outside the dialog and restart
-                await page.getByRole("link", { name: "Powered by Matrix" }).click({ force: true });
-                await page.getByRole("button", { name: "Can't confirm?" }).click();
+                    await expect(page).toMatchScreenshot("no_chats.png");
 
-                // Finally we actually continue
-                await page.getByRole("button", { name: "Continue" }).click();
-                await page.getByPlaceholder("Password").fill(credentials.password!);
-                await page.getByRole("button", { name: "Continue" }).click();
+                    // First sign out and start again
+                    await page.locator("#mx_Dialog_Container").getByRole("button", { name: "Sign out" }).click();
 
-                // We end up at the Home screen
-                await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
-                await expect(page.getByRole("heading", { name: "Welcome Dave", exact: true })).toBeVisible();
-            });
+                    await login(page, homeserver, credentials);
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
+
+                    // Then click outside the dialog and restart
+                    await page.locator("body").click({ force: true, position: { x: 1, y: 1 } });
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
+
+                    // Finally we actually continue
+                    await page.getByRole("button", { name: "Continue" }).click();
+                    await page.getByPlaceholder("Password").fill(credentials.password!);
+                    await page.getByRole("button", { name: "Continue" }).click();
+
+                    // We end up at the Home screen
+                    await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
+                    await expect(page.getByRole("heading", { name: "Welcome Dave", exact: true })).toBeVisible();
+                },
+            );
+
+            test(
+                "Reset identity warning is slightly more alarming if we have encrypted chats",
+                { tag: ["@screenshot"] },
+                async ({ page, homeserver, credentials }) => {
+                    // Given we have an encrypted chat
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
+                    await expect(page).toHaveURL(/\/#\/home$/);
+                    await expect(page.getByRole("navigation", { name: "Room list" })).toBeVisible();
+                    await createRoom(page, "My encrypted room", true);
+                    await logOutOfElement(page, true);
+
+                    // When we log in and ask to reset our identity
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
+
+                    // Then we see the standard warning saying we have no other
+                    // devices, but we do have encrypted chats.
+                    await expect(
+                        page.getByRole("heading", { name: "You need to reset your digital identity" }),
+                    ).toBeVisible();
+
+                    await expect(page).toMatchScreenshot("you_need_to_reset.png");
+                },
+            );
+
+            test(
+                "Reset identity warning is more alarming if we have other devices",
+                { tag: ["@screenshot"] },
+                async ({ page, homeserver, credentials }) => {
+                    // Given we have another device
+                    await createBot(page, homeserver, credentials, true);
+
+                    // When we log in and ask to reset our identity
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
+
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
+                    await page.getByRole("button", { name: "Can't confirm?" }).click();
+
+                    // Then we see the warning about the damage this could do
+                    // because we have other devices.
+                    await expect(
+                        page.getByRole("heading", {
+                            name: "Can't confirm? You’ll need to reset your digital identity.",
+                        }),
+                    ).toBeVisible();
+
+                    await expect(page).toMatchScreenshot("cant_confirm.png");
+                },
+            );
         });
     });
 

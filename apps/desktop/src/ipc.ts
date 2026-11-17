@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar, nativeImage } from "electron";
+import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar, nativeImage, session } from "electron";
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
@@ -52,6 +52,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
 
     const args = payload.args || [];
     let ret: any;
+    let error: string | { message: string; name?: string } | undefined;
 
     switch (payload.name) {
         case "getUpdateFeedUrl":
@@ -85,7 +86,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
         case "setSpellCheckEnabled":
             if (typeof args[0] !== "boolean") return;
 
-            global.mainWindow.webContents.session.setSpellCheckerEnabled(args[0]);
+            session.defaultSession.setSpellCheckerEnabled(args[0]);
             store.set("spellCheckerEnabled", args[0]);
             break;
 
@@ -95,29 +96,35 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
 
         case "setSpellCheckLanguages":
             try {
-                global.mainWindow.webContents.session.setSpellCheckerLanguages(args[0]);
+                session.defaultSession.setSpellCheckerLanguages(args[0]);
             } catch (er) {
                 console.log("There were problems setting the spellcheck languages", er);
             }
             break;
 
         case "getSpellCheckLanguages":
-            ret = global.mainWindow.webContents.session.getSpellCheckerLanguages();
+            ret = session.defaultSession.getSpellCheckerLanguages();
             break;
         case "getAvailableSpellCheckLanguages":
-            ret = global.mainWindow.webContents.session.availableSpellCheckerLanguages;
+            ret = session.defaultSession.availableSpellCheckerLanguages;
             break;
 
         case "getPickleKey":
             try {
-                ret = await store.getSecret(`${args[0]}|${args[1]}`);
-            } catch {
+                ret = (await store.getSecret(`${args[0]}|${args[1]}`)) ?? null;
+            } catch (e) {
                 // An error is thrown if we can't initialise safeStorage, or if a stored secret exists
                 // but can't be decrypted this launch (SafeStorageDecryptionError, e.g. the OS keychain
-                // is temporarily unavailable). In both cases return null so the default pickle key is
-                // used; we must NOT destroy the existing secret (see createPickleKey below) so the
-                // session can recover on a later launch. See element-web#32521 / #32715.
-                ret = null;
+                // is temporarily unavailable). Report this to the renderer as an error rather than as
+                // an absent pickle key: the two need very different handling. An absent key means a
+                // new one can safely be created, whereas here we must NOT destroy the existing secret
+                // (see createPickleKey below) and the read may well succeed if retried once the
+                // keychain is readable again. See element-web#32521 / #32715.
+                console.error("Failed to get pickle key", e);
+                error = {
+                    name: e instanceof Error ? e.name : "Error",
+                    message: e instanceof Error ? e.message : String(e),
+                };
             }
             break;
 
@@ -233,6 +240,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
     global.mainWindow?.webContents.send("ipcReply", {
         id: payload.id,
         reply: ret,
+        error,
     });
 });
 

@@ -40,7 +40,7 @@ import dis from "../../../dispatcher/dispatcher";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ContextMenuButton } from "../../structures/ContextMenu";
-import PersistedElement, { getPersistKey } from "./PersistedElement";
+import PersistedElement, { DEFAULT_PERSISTED_Z_INDEX, getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
 import WidgetAvatar from "../avatars/WidgetAvatar";
@@ -153,6 +153,8 @@ export default class AppTile extends React.Component<IProps, IState> {
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
     private messaging?: WidgetMessaging;
+    // The widget API whose events we are listening to, which the messaging hands us when it starts
+    private listenedWidgetApi: ClientWidgetApi | null = null;
     private dispatcherRef?: string;
     private unmounted = false;
 
@@ -420,6 +422,11 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
+
+        // The messaging can outlive this tile, e.g. while another container keeps the widget alive,
+        // so stop listening to it and to its widget API rather than relying on it to stop
+        if (this.listenedWidgetApi) this.onMessagingStop(this.listenedWidgetApi);
+        this.stopMessagingListeners();
     }
 
     private setupMessagingListeners(): void {
@@ -433,6 +440,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private readonly onMessagingStart = (widgetApi: ClientWidgetApi): void => {
+        this.listenedWidgetApi = widgetApi;
         widgetApi.on("ready", this.onWidgetReady);
         widgetApi.on("error:preparing", this.updateRequiresClient);
         // emits when the capabilities have been set up or changed
@@ -440,6 +448,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private readonly onMessagingStop = (widgetApi: ClientWidgetApi): void => {
+        if (this.listenedWidgetApi === widgetApi) this.listenedWidgetApi = null;
         widgetApi.off("ready", this.onWidgetReady);
         widgetApi.off("error:preparing", this.updateRequiresClient);
         widgetApi.off("capabilitiesNotified", this.updateRequiresClient);
@@ -784,7 +793,9 @@ export default class AppTile extends React.Component<IProps, IState> {
                     appTileBody = (
                         <div className="mx_AppTile_persistedWrapper">
                             <PersistedElement
-                                zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9}
+                                zIndex={
+                                    this.props.miniMode ? zIndexAboveOtherPersistentElements : DEFAULT_PERSISTED_Z_INDEX
+                                }
                                 persistKey={this.persistKey}
                                 moveRef={this.props.movePersistedElement}
                             >

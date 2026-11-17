@@ -20,7 +20,7 @@ Please see LICENSE files in the repository root for full details.
  * a canvas mock in the much cheaper favicon.test.ts.
  */
 
-import { afterEach, beforeEach, describe, expect, inject, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, inject, it } from "vitest";
 
 import Favicon, { BadgeOverlayRenderer } from "./favicon";
 import baseFaviconUrl from "../res/vector-icons/144.png";
@@ -155,6 +155,10 @@ describe("Favicon", () => {
     function iconLink(): HTMLLinkElement {
         return document.head.querySelector<HTMLLinkElement>("link[rel~='icon' i]")!;
     }
+
+    beforeAll(async () => {
+        await load(baseFaviconUrl);
+    });
 
     beforeEach(() => {
         document.head.querySelectorAll("link[rel~='icon' i]").forEach((link) => link.remove());

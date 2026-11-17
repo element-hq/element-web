@@ -27,7 +27,7 @@ exports[`SpaceButton > metaspace > should render notificationState if one is pro
         >
           <button
             aria-label="Jump to first unread room."
-            class="mx_SpacePanel_notificationBadge _notificationBadge_19whq_8 _visible_19whq_16 _notification_19whq_8 _badge2Char_19whq_57 cpd-theme-light"
+            class="mx_SpacePanel_notificationBadge _notificationBadge _visible _notification _badge2Char cpd-theme-light"
             data-badge-type="badge_2char"
             data-notification-level="notification"
             data-testid="notification-badge"
@@ -35,7 +35,7 @@ exports[`SpaceButton > metaspace > should render notificationState if one is pro
             type="button"
           >
             <span
-              class="_count_19whq_40"
+              class="_count"
             >
               8
             </span>
@@ -92,7 +92,7 @@ exports[`SpaceItem > should render a space with subspaces 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_va14e_8 mx_BaseAvatar"
+            class="_avatar mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
             data-type="square"
@@ -101,7 +101,7 @@ exports[`SpaceItem > should render a space with subspaces 1`] = `
           >
             <img
               alt=""
-              class="_image_va14e_43"
+              class="_image"
               data-type="square"
               height="32px"
               loading="lazy"
@@ -182,7 +182,7 @@ exports[`SpaceItem > should render a space with subspaces 2`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_va14e_8 mx_BaseAvatar"
+            class="_avatar mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
             data-type="square"
@@ -191,7 +191,7 @@ exports[`SpaceItem > should render a space with subspaces 2`] = `
           >
             <img
               alt=""
-              class="_image_va14e_43"
+              class="_image"
               data-type="square"
               height="32px"
               loading="lazy"
@@ -251,7 +251,7 @@ exports[`SpaceItem > should render a space with subspaces 2`] = `
             >
               <span
                 aria-label="Avatar"
-                class="_avatar_va14e_8 mx_BaseAvatar"
+                class="_avatar mx_BaseAvatar"
                 data-color="4"
                 data-testid="avatar-img"
                 data-type="square"
@@ -260,7 +260,7 @@ exports[`SpaceItem > should render a space with subspaces 2`] = `
               >
                 <img
                   alt=""
-                  class="_image_va14e_43"
+                  class="_image"
                   data-type="square"
                   height="24px"
                   loading="lazy"

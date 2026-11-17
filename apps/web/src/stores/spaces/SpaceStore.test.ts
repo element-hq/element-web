@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type EventEmitter } from "node:events";
 import {
     EventType,
@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as testUtils from "test-utils";
-import { mkEvent, setupAsyncStoreWithClient, stubClient } from "test-utils";
+import { mkEvent, setupAsyncStoreWithClient, stubClient, TestSDKContext } from "test-utils";
 
 import SpaceStore from "./SpaceStore";
 import {
@@ -45,7 +45,6 @@ import { RoomNotificationStateStore } from "../notifications/RoomNotificationSta
 import { type SummarizedNotificationState } from "../notifications/SummarizedNotificationState";
 import { NotificationLevel } from "../notifications/NotificationLevel";
 import { storeRoomAliasInCache } from "../../RoomAliasCache.ts";
-import { TestSDKContext } from "../../../test/unit-tests/TestSDKContext.ts";
 
 vi.useFakeTimers();
 
@@ -146,6 +145,7 @@ describe("SpaceStore", () => {
 
     afterEach(async () => {
         await testUtils.resetAsyncStoreWithClient(store);
+        RoomNotificationStateStore.instance.clearRoomStates();
     });
 
     describe("static hierarchy resolution tests", () => {
@@ -1347,113 +1347,6 @@ describe("SpaceStore", () => {
         expect(sdkContext.spaceStore.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);
     });
 
-    describe("when feature_dynamic_room_predecessors is not enabled", () => {
-        beforeAll(() => {
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "Spaces.allRoomsInHome",
-            );
-            // @ts-ignore calling a private function
-            sdkContext.spaceStore.onAction({
-                action: Action.SettingUpdated,
-                settingName: "feature_dynamic_room_predecessors",
-                roomId: null,
-                level: SettingLevel.ACCOUNT,
-                newValueAtLevel: SettingLevel.ACCOUNT,
-                newValue: false,
-            });
-        });
-
-        beforeEach(() => {
-            vi.clearAllMocks();
-        });
-
-        it("passes that value in calls to getVisibleRooms and getRoomUpgradeHistory during startup", async () => {
-            // When we create an instance, which calls onReady and rebuildSpaceHierarchy
-            mkSpace("!dynspace:example.com", [mkRoom("!dynroom:example.com").roomId]);
-            await run();
-
-            // Then we pass through the correct value of the feature flag to
-            // everywhere that needs it.
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith(true);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith();
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(expect.anything(), expect.anything(), false);
-            expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything(), true);
-            expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
-        });
-
-        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
-            const sdkContext = new TestSDKContext();
-            sdkContext._client = client;
-            // Given a store
-            const store = new SpaceStore(defaultDispatcher, sdkContext);
-            sdkContext._SpaceStore = store;
-            setupAsyncStoreWithClient(store, client);
-
-            // When we ask for filtered room ids
-            store.getSpaceFilteredRoomIds(MetaSpace.Home);
-
-            // Then we pass the correct feature flag
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith(true);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith();
-        });
-    });
-
-    describe("when feature_dynamic_room_predecessors is enabled", () => {
-        beforeAll(() => {
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) =>
-                    settingName === "Spaces.allRoomsInHome" || settingName === "feature_dynamic_room_predecessors",
-            );
-            // @ts-ignore calling a private function
-            sdkContext.spaceStore.onAction({
-                action: Action.SettingUpdated,
-                settingName: "feature_dynamic_room_predecessors",
-                roomId: null,
-                level: SettingLevel.ACCOUNT,
-                newValueAtLevel: SettingLevel.ACCOUNT,
-                newValue: true,
-            });
-        });
-
-        beforeEach(() => {
-            vi.clearAllMocks();
-        });
-
-        it("passes that value in calls to getVisibleRooms and getRoomUpgradeHistory during startup", async () => {
-            // When we create an instance, which calls onReady and rebuildSpaceHierarchy
-            mkSpace("!dynspace:example.com", [mkRoom("!dynroom:example.com").roomId]);
-            await run();
-
-            // Then we pass through the correct value of the feature flag to
-            // everywhere that needs it.
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith(false);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith();
-            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(expect.anything(), expect.anything(), true);
-            expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything(), false);
-            expect(client.getRoomUpgradeHistory).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
-        });
-
-        it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
-            const sdkContext = new TestSDKContext();
-            sdkContext._client = client;
-            // Given a store
-            const store = new SpaceStore(defaultDispatcher, sdkContext);
-            sdkContext._SpaceStore = store;
-            setupAsyncStoreWithClient(store, client);
-
-            // When we ask for filtered room ids
-            store.getSpaceFilteredRoomIds(MetaSpace.Home);
-
-            // Then we pass the correct feature flag
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith(false);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith();
-        });
-    });
-
     describe("setActiveRoomInSpace", () => {
         it("should work with Home as all rooms space", async () => {
             const room = mkRoom(room1);
@@ -1554,6 +1447,33 @@ describe("SpaceStore", () => {
             store.setActiveRoomInSpace(MetaSpace.Home);
 
             expect(spyDispatcher).not.toHaveBeenCalledWith(expect.objectContaining({ action: "view_room" }));
+        });
+    });
+
+    describe("notification states", () => {
+        it("destroys the notification states it handed out when the store is destroyed", async () => {
+            const store = new SpaceStore(defaultDispatcher, sdkContext);
+            await setupAsyncStoreWithClient(store, client);
+            const homeState = store.getNotificationState(MetaSpace.Home);
+            const spaceState = store.getNotificationState(space1);
+            const homeDestroySpy = vi.spyOn(homeState, "destroy");
+            const spaceDestroySpy = vi.spyOn(spaceState, "destroy");
+
+            store.destroy();
+
+            expect(homeDestroySpy).toHaveBeenCalled();
+            expect(spaceDestroySpy).toHaveBeenCalled();
+        });
+
+        it("destroys the notification states it handed out on logout", async () => {
+            await run();
+            const state = store.getNotificationState(MetaSpace.Home);
+            const destroySpy = vi.spyOn(state, "destroy");
+
+            await testUtils.resetAsyncStoreWithClient(store);
+
+            expect(destroySpy).toHaveBeenCalled();
+            expect(store.getNotificationState(MetaSpace.Home)).not.toBe(state);
         });
     });
 });

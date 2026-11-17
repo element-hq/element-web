@@ -9,6 +9,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, useState } from "react";
 import { Button, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
+import { useToastContext } from "@element-hq/web-shared-components";
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
@@ -24,7 +26,6 @@ import { type ResetIdentityBodyVariant } from "../../encryption/ResetIdentityBod
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
-import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
@@ -39,7 +40,6 @@ import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/enc
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
  *  - "reset_identity_cant_recover": The panel to show when the user is resetting their identity, in the case where they can't use recovery.
- *  - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
  */
 export type State =
     | "main"
@@ -48,8 +48,7 @@ export type State =
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "reset_identity_sync_failed"
-    | "reset_identity_cant_recover"
-    | "key_storage_delete";
+    | "reset_identity_cant_recover";
 
 interface Props {
     /**
@@ -59,10 +58,28 @@ interface Props {
 }
 
 /**
+ * How long the recovery confirmation toast stays visible.
+ */
+const BACKUP_SET_UP_TOAST_TIMEOUT_MS = 5000;
+
+/**
  * The encryption settings tab.
  */
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
+
+    const toastRack = useToastContext();
+    // Briefly confirm success after the user finishes the recovery key flow. The rack outlives this tab
+    // and the remover is a no-op once another toast replaces it, so the timer is left to fire on its own.
+    const showRecoveryConfirmationToast = (label: string): void => {
+        const removeToast = toastRack.displayToast(
+            <>
+                <CheckIcon width="20px" height="20px" />
+                {label}
+            </>,
+        );
+        window.setTimeout(removeToast, BACKUP_SET_UP_TOAST_TIMEOUT_MS);
+    };
 
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
@@ -81,21 +98,35 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
             switch (deviceState) {
                 // some device states require action from the user rather than showing the main settings screen
                 case "verify_this_session":
-                    content = <SetUpEncryptionPanel onFinish={() => setState("main")} />;
+                    content = (
+                        <>
+                            <SetUpEncryptionPanel onFinish={() => setState("main")} />
+                            <Separator kind="section" />
+                            {/* Keep "Export keys" reachable so users can save their keys before resetting their identity. */}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        </>
+                    );
                     break;
                 case "key_storage_out_of_sync":
                     content = (
-                        <RecoveryPanelOutOfSync
-                            onFinish={() => setState("main")}
-                            onForgotRecoveryKey={async () => {
-                                setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
-                            }}
-                            onAccessSecretStorageFailed={async () => {
-                                const needsCrossSigningReset =
-                                    await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
-                                setState(needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key");
-                            }}
-                        />
+                        <>
+                            <RecoveryPanelOutOfSync
+                                onFinish={() => setState("main")}
+                                onForgotRecoveryKey={async () => {
+                                    setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
+                                }}
+                                onAccessSecretStorageFailed={async () => {
+                                    const needsCrossSigningReset =
+                                        await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
+                                    setState(
+                                        needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key",
+                                    );
+                                }}
+                            />
+                            <Separator kind="section" />
+                            {/* Keep "Export keys" reachable so users can save their keys before resetting recovery. */}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        </>
                     );
                     break;
                 case "identity_needs_reset":
@@ -106,7 +137,7 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                 default:
                     content = (
                         <>
-                            <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
+                            <KeyStoragePanel />
                             <Separator kind="section" />
                             {/* We only show the "Recovery" panel if key storage is enabled.*/}
                             {isBackupEnabled && (
@@ -131,7 +162,14 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                 <ChangeRecoveryKey
                     userHasRecoveryKey={state === "change_recovery_key"}
                     onCancelClick={() => setState("main")}
-                    onFinish={() => setState("main")}
+                    onFinish={() => {
+                        showRecoveryConfirmationToast(
+                            state === "change_recovery_key"
+                                ? _t("settings|encryption|recovery|key_active_title")
+                                : _t("settings|encryption|recovery|backup_set_up_toast"),
+                        );
+                        setState("main");
+                    }}
                 />
             );
             break;
@@ -146,9 +184,6 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                     onReset={() => setState("main")}
                 />
             );
-            break;
-        case "key_storage_delete":
-            content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
             break;
     }
 

@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { act, fireEvent, getByTestId, render } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { getMockClientWithEventEmitter, getMockGeolocationPositionError } from "test-utils";
@@ -21,6 +20,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

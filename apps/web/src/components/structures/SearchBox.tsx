@@ -47,6 +47,10 @@ export default class SearchBox extends React.Component<IProps, IState> {
         };
     }
 
+    public componentWillUnmount(): void {
+        this.onSearch.cancel();
+    }
+
     private onChange = (): void => {
         if (!this.search.current) return;
         this.setState({ searchTerm: this.search.current.value });

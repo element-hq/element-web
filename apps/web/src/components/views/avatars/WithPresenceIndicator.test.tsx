@@ -12,9 +12,9 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { act, render, renderHook, waitFor } from "test-utils-rtl";
 import { type MatrixClient, PendingEventOrdering, Room, RoomMember, User, UserEvent } from "matrix-js-sdk/src/matrix";
 import React from "react";
+import { getMockClientWithEventEmitter, stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { getMockClientWithEventEmitter, stubClient } from "../../../../test/test-utils";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import WithPresenceIndicator, { Presence, usePresence } from "./WithPresenceIndicator";
 import { isPresenceEnabled } from "../../../utils/presence";

@@ -64,6 +64,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
                 vm.getSnapshot(),
                 newContent,
                 linksIn(newContent.body).size !== 0,
+                vm.getEncryptedImageCache(),
             );
         },
         [vm, props.mxClient, props.editState],
@@ -89,7 +90,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
     );
 
     return (
-        <div>
+        <div className="mx_EditMessageComposerWrapper">
             <MessageComposerUrlPreviewWrapper urlPreviewVm={vm} />
             {editor}
         </div>

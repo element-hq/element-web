@@ -32,6 +32,13 @@ type EventRenderer = {
     hints: ModuleCustomCustomMessageRenderHints;
 };
 
+/** Grouping selected for a timeline event. */
+export interface MessageGrouping {
+    renderer: object;
+    key: string;
+    summarize: (events: readonly MatrixEvent[]) => string | null;
+}
+
 interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentProps, "mxEvent"> {
     mxEvent: MatrixEvent;
 }
@@ -39,6 +46,13 @@ interface CustomMessageComponentProps extends Omit<ModuleCustomMessageComponentP
 interface CustomMessageRenderHints extends Omit<ModuleCustomCustomMessageRenderHints, "allowDownloadingMedia"> {
     // Note. This just makes it easier to use this API on Element Web as we already have the moduleized event stored.
     allowDownloadingMedia?: () => Promise<boolean>;
+}
+
+/** The selected renderer and hints for one event during a render pass. */
+export interface MessageRenderInfo {
+    hints: CustomMessageRenderHints;
+    hasGrouping: boolean;
+    getGrouping: () => MessageGrouping | null;
 }
 
 type ComposerPreviewRenderer = {
@@ -88,7 +102,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         props: CustomMessageComponentProps,
         originalComponent?: (props?: OriginalMessageComponentProps) => React.JSX.Element,
     ): React.JSX.Element | null {
-        const moduleEv = getModuleMatrixEvent(props.mxEvent);
+        const moduleEv = this.registeredMessageRenderers.length ? getModuleMatrixEvent(props.mxEvent) : null;
         const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
         if (renderer) {
             try {
@@ -102,23 +116,71 @@ export class CustomComponentsApi implements ICustomComponentsApi {
     }
 
     /**
-     * Get hints about an message before rendering it.
+     * Resolve one event's custom renderer for reuse during a render pass.
      * @param mxEvent The message event being rendered.
-     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     * @returns The selected renderer's hints and lazy grouping, or null.
      */
-    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
+    public getMessageRenderInfo(mxEvent: MatrixEvent): MessageRenderInfo | null {
+        if (!this.registeredMessageRenderers.length) return null;
         const moduleEv = getModuleMatrixEvent(mxEvent);
         const renderer = moduleEv && this.selectMessageRenderer(moduleEv);
-        if (renderer) {
-            return {
+        if (!moduleEv || !renderer) return null;
+
+        let resolvedGrouping: MessageGrouping | null | undefined;
+        return {
+            hints: {
                 ...renderer.hints,
                 // Convert from js-sdk style events to module events automatically.
                 allowDownloadingMedia: renderer.hints.allowDownloadingMedia
                     ? () => renderer.hints.allowDownloadingMedia!(moduleEv)
                     : undefined,
-            };
+            },
+            hasGrouping: !!renderer.hints.renderGroupSummary && !mxEvent.isRedacted(),
+            getGrouping: () => {
+                if (resolvedGrouping === undefined) {
+                    resolvedGrouping = this.createGrouping(mxEvent, moduleEv, renderer);
+                }
+                return resolvedGrouping;
+            },
+        };
+    }
+
+    /** Get hints about a message before rendering it. */
+    public getHintsForMessage(mxEvent: MatrixEvent): CustomMessageRenderHints | null {
+        return this.getMessageRenderInfo(mxEvent)?.hints ?? null;
+    }
+
+    private createGrouping(
+        mxEvent: MatrixEvent,
+        moduleEv: ModuleMatrixEvent,
+        renderer: EventRenderer,
+    ): MessageGrouping | null {
+        const grouping = renderer.hints.renderGroupSummary;
+        if (!grouping || mxEvent.isRedacted()) return null;
+
+        let key = "";
+        try {
+            key = grouping.getKey?.(moduleEv) ?? "";
+        } catch (ex) {
+            logger.warn("Message grouping failed to determine key", ex);
+            key = moduleEv.eventId;
         }
-        return null;
+
+        return {
+            renderer,
+            key,
+            summarize: (events) => {
+                const moduleEvents = events.map(getModuleMatrixEvent);
+                if (!moduleEvents.every((event): event is ModuleMatrixEvent => event !== null)) return null;
+                try {
+                    const summary = grouping.getSummary(moduleEvents);
+                    return typeof summary === "string" && summary.trim() ? summary : null;
+                } catch (ex) {
+                    logger.warn("Message grouping failed to generate summary", ex);
+                    return null;
+                }
+            },
+        };
     }
 
     private _roomPreviewBarRenderer?: CustomRoomPreviewBarRenderFunction;

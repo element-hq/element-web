@@ -99,6 +99,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             // Assert that the play button can be found and is visible
             await expect(locator.getByRole("button", { name: "Play" })).toBeVisible();
 
+            // Assert that any reply chain has finished loading
+            await expect(locator.getByRole("progressbar", { name: "Loading…" })).toHaveCount(0);
+
             if (monospace) {
                 // Assert that the monospace timer is visible
                 await expect(locator.locator("[role='timer']")).toHaveCSS("font-family", '"Fira Code"');
@@ -113,7 +116,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         }
 
         // Check the status of the seek bar
-        expect(await page.getByRole("region", { name: "Audio player" }).getByRole("slider").count()).toBeGreaterThan(0);
+        await expect(
+            page.locator(".mx_EventTile").last().getByRole("slider", { name: "Audio seek bar" }),
+        ).toBeVisible();
 
         // Enable IRC layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);

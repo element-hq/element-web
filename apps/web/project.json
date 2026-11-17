@@ -9,7 +9,11 @@
                 "script": "rethemendex",
                 "cwd": "apps/web"
             },
-            "inputs": ["{projectRoot}/res/css/**/*"],
+            // The generated index depends only on which partials exist, so hash the file list rather than contents.
+            "inputs": [
+                "{projectRoot}/res/css/rethemendex.sh",
+                { "runtime": "find apps/web/res/css -iname '_*.pcss' | LC_ALL=C sort" }
+            ],
             "outputs": ["{projectRoot}/res/css/_components.pcss"]
         },
         "build": {
@@ -47,12 +51,6 @@
             "dependsOn": ["^build"]
         },
         "test:unit": {
-            // We avoid the jest executor because it doesn't seem to give any benefit, and it mangles the summary of failing tests.
-            "command": "jest",
-            "options": { "cwd": "apps/web" },
-            "dependsOn": ["test:unit:prepare"]
-        },
-        "test:vitest": {
             "command": "vitest run",
             "options": { "cwd": "apps/web" },
             "dependsOn": ["test:unit:prepare"]

@@ -60,7 +60,7 @@ describe("<NewRecoveryMethodDialog />", () => {
         const { asFragment } = renderComponent(onFinished);
         await waitFor(() =>
             expect(
-                screen.getByText("This session is encrypting history using the new recovery method."),
+                screen.getByText("This device is encrypting history using the new recovery method."),
             ).toBeInTheDocument(),
         );
         expect(asFragment()).toMatchSnapshot();

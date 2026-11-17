@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventEmitter } from "node:events";
 import { vi } from "vitest";
+// oxlint-disable-next-line no-restricted-imports -- the mock reuses the real maplibre-gl classes
 import { LngLat, LngLatBounds, NavigationControl } from "maplibre-gl";
 
 class MockMap extends EventEmitter {
@@ -19,6 +20,13 @@ class MockMap extends EventEmitter {
     setStyle = vi.fn();
     fitBounds = vi.fn();
     remove = vi.fn();
+
+    // A plain method rather than vi.fn() so tests which reset all mocks still get a canvas back
+    private canvas?: HTMLCanvasElement;
+    public getCanvas(): HTMLCanvasElement {
+        this.canvas ??= document.createElement("canvas");
+        return this.canvas;
+    }
 }
 const mockMapInstance = new MockMap();
 
@@ -48,6 +56,7 @@ export const Marker = vi.fn().mockImplementation(function () {
 });
 export { LngLat, LngLatBounds, NavigationControl };
 export const AttributionControl = MockAttributionControl;
+export const setWorkerUrl = vi.fn();
 
 export default {
     Map,

@@ -30,6 +30,8 @@ const MenuConfig = z.object({
     logo_href: z.optional(z.url()),
 });
 
+export type MenuConfig = z.infer<typeof MenuConfig>;
+
 const StaticConfig = z.extend(MenuConfig, {
     type: z.literal("static"),
 
@@ -89,6 +91,12 @@ export const ModuleConfig = z.object({
      * @example `https://example.com/logo.svg`
      */
     logo_url: z.url(),
+
+    /**
+     * Height in pixels to use when rendering the logo in the banner, defaults to 35px.
+     * The width will be set automatically to maintain the original aspect ratio.
+     */
+    logo_height: z.optional(z.number()),
 
     /**
      * The URL to linkify the logo + title heading with.

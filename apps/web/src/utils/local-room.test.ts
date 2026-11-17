@@ -50,14 +50,14 @@ describe("local-room", () => {
             localRoom.actualRoomId = "@new:example.com";
         });
 
-        it("should invoke the callback for a non-local room", () => {
-            localRoomModule.doMaybeLocalRoomAction("!room:example.com", callback, client);
+        it("should invoke the callback for a non-local room", async () => {
+            await localRoomModule.doMaybeLocalRoomAction("!room:example.com", callback, client);
             expect(callback).toHaveBeenCalled();
         });
 
-        it("should invoke the callback with the new room ID for a created room", () => {
+        it("should invoke the callback with the new room ID for a created room", async () => {
             localRoom.state = LocalRoomState.CREATED;
-            localRoomModule.doMaybeLocalRoomAction(localRoom.roomId, callback, client);
+            await localRoomModule.doMaybeLocalRoomAction(localRoom.roomId, callback, client);
             expect(callback).toHaveBeenCalledWith(localRoom.actualRoomId);
         });
 

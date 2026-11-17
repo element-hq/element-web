@@ -18,7 +18,6 @@ import AdvancedRoomSettingsTab from "./AdvancedRoomSettingsTab";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import SettingsStore from "../../../../../settings/SettingsStore";
 
 vi.mock("../../../../../dispatcher/dispatcher");
 
@@ -37,11 +36,7 @@ describe("AdvancedRoomSettingsTab", () => {
         room = mkStubRoom(roomId, "test room", cli);
         vi.mocked(cli.getRoom).mockReturnValue(room);
         vi.mocked(dis.dispatch).mockReset();
-        vi.mocked(room.findPredecessor).mockImplementation((msc3946?: boolean) =>
-            msc3946
-                ? { roomId: "old_room_id_via_predecessor", viaServers: ["one.example.com", "two.example.com"] }
-                : { roomId: "old_room_id", eventId: "tombstone_event_id" },
-        );
+        vi.mocked(room.findPredecessor).mockReturnValue({ roomId: "old_room_id", eventId: "tombstone_event_id" });
     });
 
     it("should render as expected", () => {
@@ -130,37 +125,14 @@ describe("AdvancedRoomSettingsTab", () => {
         });
     });
 
-    describe("When MSC3946 support is enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue")
-                .mockReset()
-                .mockImplementation((settingName) => settingName === "feature_dynamic_room_predecessors");
-        });
+    it("handles when room is a space", async () => {
+        mockStateEvents(room);
+        vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
 
-        it("should link to predecessor room via MSC3946 if enabled", async () => {
-            mockStateEvents(room);
-            const tab = renderTab();
-            const link = await tab.findByText("View older messages in test room.");
-            fireEvent.click(link);
-            expect(dis.dispatch).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                event_id: undefined,
-                room_id: "old_room_id_via_predecessor",
-                via_servers: ["one.example.com", "two.example.com"],
-                metricsTrigger: "WebPredecessorSettings",
-                metricsViaKeyboard: false,
-            });
-        });
-
-        it("handles when room is a space", async () => {
-            mockStateEvents(room);
-            vi.spyOn(room, "isSpaceRoom").mockReturnValue(true);
-
-            mockStateEvents(room);
-            const tab = renderTab();
-            const link = await tab.findByText("View older version of test room.");
-            expect(link).toBeInTheDocument();
-            expect(screen.getByText("Space information")).toBeInTheDocument();
-        });
+        mockStateEvents(room);
+        const tab = renderTab();
+        const link = await tab.findByText("View older version of test room.");
+        expect(link).toBeInTheDocument();
+        expect(screen.getByText("Space information")).toBeInTheDocument();
     });
 });

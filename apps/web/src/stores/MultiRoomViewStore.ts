@@ -53,6 +53,7 @@ export class MultiRoomViewStore {
      * Remove a RVS instance that was created by {@link getRoomViewStoreForRoom}.
      */
     public removeRoomViewStore(roomId: string): void {
+        this.stores.get(roomId)?.destroy();
         const didRemove = this.stores.delete(roomId);
         if (!didRemove) {
             logger.warn(`removeRoomViewStore called with ${roomId} but no store exists for this room.`);

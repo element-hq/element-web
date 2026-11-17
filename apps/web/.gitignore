@@ -6,7 +6,6 @@
 /src/component-index.js
 # Auto-generated file
 /src/modules.js
-/build_config.yaml
 
 # Vitest browser-mode screenshots. Only the linux baselines are committed, as linux
 # is what CI renders with; regenerate them with `pnpm test:unit:screenshots`, which
@@ -15,4 +14,3 @@
 # are the diffs vitest writes alongside it.
 /src/**/__screenshots__/*
 !/src/**/__screenshots__/linux/
-/.vitest-attachments/

@@ -38,6 +38,7 @@ import {
     type ISearchResults,
     THREAD_RELATION_TYPE,
     type MatrixClient,
+    type RoomSummary,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -75,6 +76,7 @@ import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
+import { NewTimelinePanel, type NewTimelinePanelHandle } from "./NewTimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
@@ -209,7 +211,8 @@ export interface IRoomState {
     roomId?: string;
     roomAlias?: string;
     roomLoading: boolean;
-    peekLoading: boolean;
+    /** Fetching room summary and peeking */
+    peekAndSummaryLoading: boolean;
     shouldPeek: boolean;
     // used to trigger a rerender in TimelinePanel once the members are loaded,
     // so RR are rendered again (now with the members available), ...
@@ -280,14 +283,17 @@ export interface IRoomState {
     timelineRenderingType: TimelineRenderingType;
     liveTimeline?: EventTimeline;
     narrow: boolean;
-    msc3946ProcessDynamicPredecessor: boolean;
     /**
      * Whether the room is encrypted or not.
      * If null, we are still determining the encryption status.
      */
     isRoomEncrypted: boolean | null;
 
-    canAskToJoin: boolean;
+    /**
+     * Room summary for the room
+     * See https://spec.matrix.org/latest/client-server-api/#room-summaries
+     */
+    roomSummary?: RoomSummary;
     promptAskToJoin: boolean;
 }
 
@@ -434,6 +440,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
     private messagePanel: TimelinePanel | null = null;
+    /** Set instead of `messagePanel` while the Labs new timeline is mounted. */
+    private newTimelinePanel = createRef<NewTimelinePanelHandle>();
+
+    /**
+     * Whichever timeline panel is mounted, for the requests both of them answer (page keys,
+     * escape, shift+page up, scrolling down after a send): the old TimelinePanel, or the new
+     * panel's handle.
+     */
+    private get activeTimelinePanel(): TimelinePanel | NewTimelinePanelHandle | null {
+        return this.messagePanel ?? this.newTimelinePanel.current;
+    }
     private roomViewBody = createRef<HTMLDivElement>();
 
     private roomViewStore: RoomViewStore;
@@ -464,7 +481,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.state = {
             roomId: undefined,
             roomLoading: true,
-            peekLoading: false,
+            peekAndSummaryLoading: false,
             shouldPeek: true,
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
@@ -500,10 +517,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             timelineRenderingType: TimelineRenderingType.Room,
             liveTimeline: undefined,
             narrow: false,
-            msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
-            canAskToJoin: this.askToJoinEnabled,
-            promptAskToJoin: false,
             isRoomEncrypted: null,
+            roomSummary: undefined,
+            promptAskToJoin: false,
         };
     }
 
@@ -680,6 +696,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // becomes available to fetch a whole thread
             if (!initialEvent && this.context.client && roomId) {
                 initialEvent = (await fetchInitialEvent(this.context.client, roomId, initialEventId)) ?? undefined;
+                if (this.unmounted) return;
             }
 
             // If we have an initial event, we want to reset the event pixel offset to ensure it ends up visible
@@ -795,8 +812,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // observe the new state but we don't want to put it in the setState
         // callback because this would prevent the setStates from being batched,
         // ie. cause it to render RoomView twice rather than the once that is necessary.
-        if (initial) {
-            this.setupRoom(newState.room, newState.roomId, !!newState.joining, !!newState.shouldPeek);
+        if (initial && !newState.joining) {
+            await this.setupRoom(newState.room, newState.roomId, !!newState.shouldPeek);
         }
 
         // We don't block the initial setup but we want to make it early to not block the timeline rendering
@@ -865,73 +882,86 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     }
 
-    private setupRoom(room: Room | undefined, roomId: string | undefined, joining: boolean, shouldPeek: boolean): void {
-        // if this is an unknown room then we're in one of three states:
-        // - This is a room we can peek into (search engine) (we can /peek)
+    private async setupRoom(room: Room | undefined, roomId: string | undefined, shouldPeek: boolean): Promise<void> {
+        const client = this.context.client;
+        if (!client) return;
+
+        if (room) {
+            // We already know about this room, so there is nothing to set up.
+            // Stop peeking in case we were peeking into it before.
+            client.stopPeeking();
+            this.setState({ isPeeking: false });
+            return;
+        }
+        // We don't have a roomId to set up a room for, so we can't do anything
+        if (!roomId) return;
+
+        // if this is an unknown room then we're in one of these states:
+        // - We are already joined, but sync has not caught up with the room yet. (we can /peek)
+        // - This is a room whose history is world readable. (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
         // - This is a room we cannot join at all. (no action can help us)
         // We can't try to /join because this may implicitly accept invites (!)
-        // We can /peek though. If it fails then we present the join UI. If it
-        // succeeds then great, show the preview (but we still may be able to /join!).
+        // The room summary tells us which one we are in. If we can't get it, or it says we cannot
+        // peek, we present the join UI. If we can peek then great, show the preview (but we still
+        // may be able to /join!).
         // Note that peeking works by room ID and room ID only, as opposed to joining
         // which must be by alias or invite wherever possible (peeking currently does
         // not work over federation).
 
-        // NB. We peek if we have never seen the room before (i.e. js-sdk does not know
-        // about it). We don't peek in the historical case where we were joined but are
-        // now not joined because the js-sdk peeking API will clobber our historical room,
-        // making it impossible to indicate a newly joined room.
-        if (!joining && roomId) {
-            if (!room && shouldPeek) {
-                logger.info(`Attempting to peek into room ${roomId}`);
-                this.setState({
-                    peekLoading: true,
-                    isPeeking: true, // this will change to false if peeking fails
-                });
-                this.context.client
-                    ?.peekInRoom(roomId)
-                    .then((room) => {
-                        if (this.unmounted) {
-                            return;
-                        }
-                        this.setState({
-                            room: room,
-                            peekLoading: false,
-                            canAskToJoin: this.askToJoinEnabled && room.getJoinRule() === JoinRule.Knock,
-                        });
-                        this.onRoomLoaded(room);
-                    })
-                    .catch((err) => {
-                        if (this.unmounted) {
-                            return;
-                        }
+        // NB. We only reach here when the js-sdk does not know about the room. We don't peek in the
+        // historical case where we were joined but are now not joined - the early return above
+        // covers it - because the js-sdk peeking API will clobber our historical room, making it
+        // impossible to indicate a newly joined room.
 
-                        // Stop peeking if anything went wrong
-                        this.setState({
-                            isPeeking: false,
-                        });
+        this.setState({ peekAndSummaryLoading: true });
 
-                        // This won't necessarily be a MatrixError, but we duck-type
-                        // here and say if it's got an 'errcode' key with the right value,
-                        // it means we can't peek.
-                        if (err.errcode === "M_GUEST_ACCESS_FORBIDDEN" || err.errcode === "M_FORBIDDEN") {
-                            // This is fine: the room just isn't peekable (we assume).
-                            this.setState({
-                                peekLoading: false,
-                            });
-                        } else {
-                            throw err;
-                        }
-                    });
-            } else if (room) {
-                // Stop peeking because we have joined this room previously
-                this.context.client?.stopPeeking();
-                this.setState({
-                    isPeeking: false,
-                    canAskToJoin: this.askToJoinEnabled && room.getJoinRule() === JoinRule.Knock,
-                });
-            }
+        let roomSummary: RoomSummary | undefined;
+        try {
+            logger.info(`Attempting to get the room summary of ${roomId}`);
+            roomSummary = await client.getRoomSummary(roomId, this.roomViewStore.getViaServers());
+        } catch (err) {
+            logger.warn(`Failed to get the room summary of ${roomId}`, err);
         }
+
+        // Room changed while we were fetching the summary, so ignore it.
+        if (this.unmounted || this.state.roomId !== roomId) return;
+        // Share the summary so the room list can show the room before the user joins it.
+        this.roomViewStore.setRoomSummary(roomId, roomSummary);
+
+        const alreadyJoined = roomSummary?.membership === KnownMembership.Join;
+        if (!shouldPeek || !(roomSummary?.world_readable || alreadyJoined)) {
+            this.setState({ roomSummary, peekAndSummaryLoading: false, isPeeking: false });
+            return;
+        }
+
+        this.setState({ roomSummary, isPeeking: true }); // this will change to false if peeking fails
+
+        try {
+            logger.info(`Attempting to peek into room ${roomId}`);
+            const peekedRoom = await client.peekInRoom(roomId);
+            if (this.unmounted || this.state.roomId !== roomId) return;
+
+            this.setState({ room: peekedRoom, peekAndSummaryLoading: false });
+            this.onRoomLoaded(peekedRoom);
+        } catch (err) {
+            if (this.unmounted) return;
+            // Stop peeking if anything went wrong and show the join UI instead.
+            logger.warn(`Failed to peek into room ${roomId}`, err);
+            this.setState({ peekAndSummaryLoading: false, isPeeking: false });
+        }
+    }
+
+    /**
+     * Whether the user can ask to join the room. This is true if the room is knockable and the feature is enabled.
+     * Look first at the room object, then the room summary if the room is not available.
+     */
+    private get canAskToJoin(): boolean {
+        if (!this.askToJoinEnabled) return false;
+
+        const room = this.state.room;
+        const joinRule = room ? room.getJoinRule() : this.state.roomSummary?.join_rule;
+        return joinRule === JoinRule.Knock;
     }
 
     private shouldShowApps(room: Room): boolean {
@@ -1003,9 +1033,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
-            SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
-                this.setState({ msc3946ProcessDynamicPredecessor: value! }),
-            ),
         ];
 
         void this.onRoomViewStoreUpdate(true);
@@ -1103,6 +1130,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         // cancel any pending calls to the throttled updated
         this.updateRoomMembers.cancel();
+        // cancel any pending calls to the debounced search
+        this.onSearchChange.cancel();
 
         for (const watcher of this.settingWatchers) {
             SettingsStore.unwatchSetting(watcher);
@@ -1137,7 +1166,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const action = getKeyBindingsManager().getRoomAction(ev);
         switch (action) {
             case KeyBindingAction.DismissReadMarker:
-                void this.messagePanel?.forgetReadMarker();
+                void this.activeTimelinePanel?.forgetReadMarker();
                 this.jumpToLiveTimeline();
                 handled = true;
                 break;
@@ -1317,7 +1346,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             case "scroll_to_bottom":
                 if (payload.timelineRenderingType === TimelineRenderingType.Room) {
-                    this.messagePanel?.jumpToLiveTimeline();
+                    this.activeTimelinePanel?.jumpToLiveTimeline();
                 }
                 break;
             case Action.ViewUser:
@@ -1717,7 +1746,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         opts: { inviteSignUrl: signUrl },
                         metricsTrigger:
                             this.state.room?.getMyMembership() === KnownMembership.Invite ? "Invite" : "RoomPreview",
-                        canAskToJoin: this.state.canAskToJoin,
+                        canAskToJoin: this.canAskToJoin,
                     });
                 }
 
@@ -1962,14 +1991,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             });
         } else {
             // Otherwise we have to jump manually
-            this.messagePanel?.jumpToLiveTimeline();
+            this.activeTimelinePanel?.jumpToLiveTimeline();
             defaultDispatcher.fire(Action.FocusSendMessageComposer);
         }
     };
 
     // jump up to wherever our read marker is
     private jumpToReadMarker = (): void => {
-        this.messagePanel?.jumpToReadMarker();
+        this.activeTimelinePanel?.jumpToReadMarker();
     };
 
     // update the read marker to match the read-receipt
@@ -2044,16 +2073,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
      *
-     * We pass it down to the scroll panel.
+     * We pass it down to the scroll panel: the search results while they are showing,
+     * otherwise whichever timeline panel is mounted.
      */
     public handleScrollKey = (ev: React.KeyboardEvent | KeyboardEvent): void => {
-        let panel: ScrollPanel | TimelinePanel | undefined;
-        if (this.searchResultsPanel.current) {
-            panel = this.searchResultsPanel.current;
-        } else if (this.messagePanel) {
-            panel = this.messagePanel;
-        }
-
+        const panel: ScrollPanel | TimelinePanel | NewTimelinePanelHandle | null =
+            this.searchResultsPanel.current ?? this.activeTimelinePanel;
         panel?.handleScrollKey(ev);
     };
 
@@ -2074,7 +2099,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getOldRoom(): Room | null {
-        const { roomId } = this.state.room?.findPredecessor(this.state.msc3946ProcessDynamicPredecessor) || {};
+        const { roomId } = this.state.room?.findPredecessor() || {};
         return this.context.client?.getRoom(roomId) || null;
     }
 
@@ -2217,10 +2242,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         if (!this.state.room) {
-            const loading = !this.state.matrixClientIsReady || this.state.roomLoading || this.state.peekLoading;
+            const loading =
+                !this.state.matrixClientIsReady || this.state.roomLoading || this.state.peekAndSummaryLoading;
             if (loading) {
                 // Assume preview loading if we don't have a ready client or a room ID (still resolving the alias)
-                const previewLoading = !this.state.matrixClientIsReady || !this.state.roomId || this.state.peekLoading;
+                const previewLoading =
+                    !this.state.matrixClientIsReady || !this.state.roomId || this.state.peekAndSummaryLoading;
                 return (
                     <div className="mx_RoomView">
                         <ErrorBoundary>
@@ -2259,10 +2286,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 joining={this.state.joining}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
-                                oobData={this.props.oobData}
+                                oobData={{
+                                    ...this.props.oobData,
+                                    name: this.props.oobData?.name ?? this.state.roomSummary?.name,
+                                }}
                                 signUrl={this.props.threepidInvite?.signUrl}
                                 roomId={this.state.roomId}
-                                promptAskToJoin={this.state.promptAskToJoin}
+                                promptAskToJoin={this.canAskToJoin || this.state.promptAskToJoin}
                                 onSubmitAskToJoin={this.onSubmitAskToJoin}
                                 onCancelAskToJoin={this.onCancelAskToJoin}
                             />
@@ -2337,7 +2367,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         if (
-            this.state.canAskToJoin &&
+            this.canAskToJoin &&
             ([KnownMembership.Knock, KnownMembership.Leave] as Array<string>).includes(myMembership)
         ) {
             return (
@@ -2540,7 +2570,31 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         let messagePanel: JSX.Element | undefined;
-        if (!isRoomEncryptionLoading) {
+        if (!isRoomEncryptionLoading && SettingsStore.getValue("feature_new_timeline")) {
+            // New MVVM timeline behind the Labs flag. It manages its own scrolling, read
+            // receipts and read marker, so none of TimelinePanel's plumbing is mounted.
+            // The `messagePanel` ref stays null; every RoomView use of it is null-guarded.
+            // Keyboard shortcuts reach this panel through `newTimelinePanel` instead.
+            messagePanel = (
+                <EventPresentationContextProvider layout={this.state.layout}>
+                    <NewTimelinePanel
+                        key={this.state.room.roomId}
+                        ref={this.newTimelinePanel}
+                        room={this.state.room}
+                        hidden={hideMessagePanel}
+                        highlightedEventId={highlightedEventId}
+                        eventScrollIntoView={this.state.initialEventScrollIntoView}
+                        onEventScrolledIntoView={this.resetJumpToEvent}
+                        layout={this.state.layout}
+                        permalinkCreator={this.permalinkCreator}
+                        showUrlPreview={this.state.showUrlPreview}
+                        showReactions={true}
+                        editState={this.state.editState}
+                        showReadReceipts={this.state.showReadReceipts}
+                    />
+                </EventPresentationContextProvider>
+            );
+        } else if (!isRoomEncryptionLoading) {
             messagePanel = (
                 <EventPresentationContextProvider layout={this.state.layout}>
                     <TimelinePanel

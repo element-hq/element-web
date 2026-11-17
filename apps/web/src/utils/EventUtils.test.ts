@@ -22,6 +22,7 @@ import {
     Thread,
 } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
+import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import {
@@ -35,12 +36,6 @@ import {
     isLocationEvent,
     isVoiceMessage,
 } from "./EventUtils";
-import {
-    getMockClientWithEventEmitter,
-    makeBeaconInfoEvent,
-    makePollStartEvent,
-    stubClient,
-} from "../../test/test-utils";
 import dis from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 
@@ -184,8 +179,8 @@ describe("EventUtils", () => {
             type: EventType.RoomMessage,
             sender: userId,
             content: {
-                "msgtype": MsgType.Text,
-                "body": "Hello",
+                msgtype: MsgType.Text,
+                body: "Hello",
                 ["m.relates_to"]: {
                     rel_type: RelationType.Replace,
                     event_id: "1",
@@ -197,8 +192,8 @@ describe("EventUtils", () => {
             type: EventType.RoomMessage,
             sender: userId,
             content: {
-                "msgtype": MsgType.Text,
-                "body": "Hello",
+                msgtype: MsgType.Text,
+                body: "Hello",
                 ["m.relates_to"]: {
                     rel_type: RelationType.Reference,
                     event_id: "1",

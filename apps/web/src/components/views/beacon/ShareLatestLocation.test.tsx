@@ -12,12 +12,13 @@ import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { fireEvent, render } from "test-utils-rtl";
 import { flushPromises } from "test-utils";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import ShareLatestLocation from "./ShareLatestLocation";
-import { copyPlaintext } from "../../../utils/strings";
 
-vi.mock("../../../utils/strings", () => ({
-    copyPlaintext: vi.fn().mockResolvedValue(undefined),
+vi.mock("@element-hq/element-web-shared-utils", async () => ({
+    ...(await vi.importActual("@element-hq/element-web-shared-utils")),
+    copyPlainTextToClipboard: vi.fn().mockResolvedValue(undefined),
 }));
 
 describe("<ShareLatestLocation />", () => {
@@ -45,6 +46,6 @@ describe("<ShareLatestLocation />", () => {
         fireEvent.click(container.querySelector(".mx_CopyableText_copyButton")!);
         await flushPromises();
 
-        expect(copyPlaintext).toHaveBeenCalledWith("51,42");
+        expect(copyPlainTextToClipboard).toHaveBeenCalledWith("51,42");
     });
 });

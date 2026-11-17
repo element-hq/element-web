@@ -38,7 +38,8 @@ test.describe("Collapsible Room list", () => {
 
         await page.mouse.move(mouseX, mouseY);
         await page.mouse.down();
-        await page.mouse.move(mouseX + pixels, mouseY);
+        await page.mouse.move(mouseX + pixels, mouseY, { steps: 10 });
+        await page.mouse.up();
 
         return boundingBox;
     }

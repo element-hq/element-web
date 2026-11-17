@@ -8,6 +8,7 @@ Supports the following configuration options:
 | Key          | Type   | Description                                                                                    |
 | ------------ | ------ | ---------------------------------------------------------------------------------------------- |
 | logo_url     | string | URL to the logo to render in the banner                                                        |
+| logo_height  | number | Height of the banner logo in pixels, defaults to 35 if omitted                                 |
 | heading_href | string | URL to send the user to when clicking the logo or title in the banner                          |
 | title        | string | The title to render next to the logo, falls back to top level `brand` variable if unspecified. |
 | menu         | `Menu` | Data to render in the banner menu                                                              |

@@ -169,7 +169,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         } else {
             content = {
                 type: "image",
-                image: preview.image.imageFull,
+                // The thumbnail, not the original: the original may be large and animated.
+                image: preview.image.imageThumb,
                 imageAlt: preview.title,
                 imageSize: "banner",
                 imageOnClick: () => {
@@ -321,7 +322,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             vm={textualBodyVm}
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
-            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} />}
+            urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} className="mx_TextualBody_urlPreviews" />}
             className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
         />
     );

@@ -23,7 +23,6 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
     const spotlight = await app.openSpotlight();
     await spotlight.filter(Filter.People);
     await spotlight.search(name);
-    await page.waitForTimeout(1000); // wait for the dialog code to settle
     await expect(spotlight.dialog.locator(".mx_Spinner")).not.toBeAttached();
     const result = spotlight.results;
     await expect(result).toHaveCount(1);
@@ -107,7 +106,6 @@ test.describe("Spotlight", () => {
 
     test("should be able to add and remove filters via keyboard", async ({ page, app }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(1000); // wait for the dialog to settle, otherwise our keypresses might race with an update
 
         // initially, public spaces should be highlighted (because there are no other suggestions)
         await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_explorePublicSpaces")).toHaveAttribute(
@@ -120,7 +118,11 @@ test.describe("Spotlight", () => {
         await expect(spotlight.dialog.locator(".mx_SpotlightDialog_filter")).toHaveText("Public spaces");
         await spotlight.searchBox.press("Backspace");
         await expect(spotlight.dialog.locator(".mx_SpotlightDialog_filter")).not.toBeAttached();
-        await page.waitForTimeout(200); // Again, wait to settle so keypresses arrive correctly
+        // Wait for the default selection to return so the next keypress isn't lost to a re-render
+        await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_explorePublicSpaces")).toHaveAttribute(
+            "aria-selected",
+            "true",
+        );
 
         await spotlight.searchBox.press("ArrowDown");
         await expect(spotlight.dialog.locator("#mx_SpotlightDialog_button_explorePublicRooms")).toHaveAttribute(
@@ -135,7 +137,6 @@ test.describe("Spotlight", () => {
 
     test("should find joined rooms", async ({ page, app, room1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.search(room1.name);
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -147,7 +148,6 @@ test.describe("Spotlight", () => {
 
     test("should find known public rooms", async ({ page, app, room1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room1.name);
         const resultLocator = spotlight.results;
@@ -161,7 +161,6 @@ test.describe("Spotlight", () => {
 
     test("should find unknown public rooms", async ({ page, app, room2 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room2.name);
         const resultLocator = spotlight.results;
@@ -176,7 +175,6 @@ test.describe("Spotlight", () => {
 
     test("should find unknown public world readable rooms", async ({ page, app, room3 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room3.name);
         const resultLocator = spotlight.results;
@@ -193,7 +191,6 @@ test.describe("Spotlight", () => {
     // We obviously don’t have federation or bridges in local e2e tests
     test.skip("should find unknown public rooms on other homeservers", async ({ page, app, room3 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.PublicRooms);
         await spotlight.search(room3.name);
         await page.locator("[aria-haspopup=true][role=button]").click();
@@ -204,7 +201,6 @@ test.describe("Spotlight", () => {
             .locator("..")
             .locator("[role=menuitemradio]")
             .click();
-        await page.waitForTimeout(500); // wait for the dialog to settle
 
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -214,7 +210,6 @@ test.describe("Spotlight", () => {
 
     test("should find known people", async ({ page, app, bot1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot1.credentials!.displayName!);
         const resultLocator = spotlight.results;
@@ -233,7 +228,6 @@ test.describe("Spotlight", () => {
      */
     test("should find unknown people", async ({ page, app, bot2 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.displayName!);
         const resultLocator = spotlight.results;
@@ -249,7 +243,6 @@ test.describe("Spotlight", () => {
 
         // Starting a DM with ByteBot (will be turned into a group dm later)
         let spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.displayName!);
         let resultLocator = spotlight.results;
@@ -290,7 +283,6 @@ test.describe("Spotlight", () => {
         spotlight = await app.openSpotlight();
         await spotlight.filter(Filter.People);
         await spotlight.search(bot1.credentials!.userId);
-        await page.waitForTimeout(1000); // wait for the dialog to settle
         resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(2);
         await expect(
@@ -303,7 +295,6 @@ test.describe("Spotlight", () => {
         spotlight = await app.openSpotlight();
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.userId);
-        await page.waitForTimeout(1000); // wait for the dialog to settle
         resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(2);
         await expect(
@@ -317,7 +308,6 @@ test.describe("Spotlight", () => {
     // Test against https://github.com/vector-im/element-web/issues/22851
     test("should show each person result only once", async ({ page, app, bot1 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
 
         // 2 rounds of search to simulate the bug conditions. Specifically, the first search
@@ -328,7 +318,6 @@ test.describe("Spotlight", () => {
         for (let i = 0; i < 2; i++) {
             console.log("Iteration: " + i);
             await spotlight.search(bot1.credentials!.userId);
-            await page.waitForTimeout(1000); // wait for the dialog to settle
             const resultLocator = spotlight.results;
             await expect(resultLocator).toHaveCount(1);
             await expect(resultLocator.first()).toContainText(bot1.credentials!.userId);
@@ -337,10 +326,8 @@ test.describe("Spotlight", () => {
 
     test("should allow opening group chat dialog", async ({ page, app, bot2 }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot2.credentials!.displayName!);
-        await page.waitForTimeout(3000); // wait for the dialog to settle
 
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -362,10 +349,8 @@ test.describe("Spotlight", () => {
         await startDM(app, page, bot1.credentials!.displayName!);
         await page.goto("/#/home");
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search(bot1.credentials!.displayName!);
-        await page.waitForTimeout(3000); // wait for the dialog to settle
         await expect(spotlight.dialog.locator(".mx_Spinner")).not.toBeAttached();
         const resultLocator = spotlight.results;
         await expect(resultLocator).toHaveCount(1);
@@ -373,7 +358,6 @@ test.describe("Spotlight", () => {
 
     test("should be able to navigate results via keyboard", async ({ page, app }) => {
         const spotlight = await app.openSpotlight();
-        await page.waitForTimeout(500); // wait for the dialog to settle
         await spotlight.filter(Filter.People);
         await spotlight.search("b");
 
@@ -414,53 +398,117 @@ test.describe("Spotlight", () => {
                 await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, theme);
             });
 
-            test("should have legible text across Spotlight surfaces", async ({ page, app, room1, axe }) => {
-                // room1 is already open (see room1 fixture); navigate away from it so it
-                // shows up in the "recently viewed" section (the current room is excluded from it).
-                await page.goto("/#/home");
-                await expect(page.locator(".mx_RoomSublist_skeletonUI")).not.toBeAttached();
+            test(
+                "should have legible text across Spotlight surfaces",
+                { tag: "@screenshot" },
+                async ({ page, app, user, room1, bot1, bot2, axe }) => {
+                    // Every scan below needs a selected row and a row at rest side by side, so each
+                    // search has to return at least two results: a second joined room and a second
+                    // public room whose names match room1's. The joined room sits in a space so its row shows
+                    // context details (the space name) in the small secondary text, and bot1 (already in
+                    // room1, see the top-level beforeEach) leaves an unread mention there so one row carries
+                    // a badge with a count.
+                    const notesRoomId = await app.client.createRoom({ name: `${room1.name} notes` });
+                    await app.client.createSpace({
+                        name: "Element Web and Clients",
+                        initial_state: [
+                            { type: "m.space.child", state_key: notesRoomId, content: { via: [user.homeServer] } },
+                        ],
+                    });
+                    await bot2.createRoom({ name: `${room1.name} annex`, visibility: "public" as Visibility });
+                    await bot1.sendMessage(room1.roomId, {
+                        "msgtype": "m.text",
+                        "body": `Hey ${user.displayName}`,
+                        "m.mentions": { user_ids: [user.userId] },
+                    });
 
-                const spotlight = await app.openSpotlight();
-                // Wait for the dialog to settle: the search box is only focused once the
-                // open animation has finished and results have had a chance to render.
-                await expect(spotlight.searchBox.getByRole("textbox", { name: "Search" })).toBeFocused();
+                    // room1 is already open (see room1 fixture); navigate away from it so it
+                    // shows up in the "recently viewed" section (the current room is excluded from it).
+                    await page.goto("/#/home");
+                    await expect(page.locator(".mx_RoomSublist_skeletonUI")).not.toBeAttached();
 
-                // #mx_SpotlightDialog_keyboardPrompt is a sibling of the [role=dialog] element,
-                // not a descendant, so it must be located from the page rather than spotlight.dialog.
-                const kbdHint = page.locator("#mx_SpotlightDialog_keyboardPrompt kbd").first();
-                await expect(kbdHint).toBeAttached();
+                    const spotlight = await app.openSpotlight();
+                    // Wait for the dialog to settle: the search box is only focused once the
+                    // open animation has finished and results have had a chance to render.
+                    await expect(spotlight.searchBox.getByRole("textbox", { name: "Search" })).toBeFocused();
 
-                const recentlyViewed = spotlight.dialog.locator(
-                    ".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option",
-                );
-                await expect(recentlyViewed.first()).toBeAttached();
-                await recentlyViewed.first().hover();
+                    // #mx_SpotlightDialog_keyboardPrompt is a sibling of the [role=dialog] element,
+                    // not a descendant, so it must be located from the page rather than spotlight.dialog.
+                    const kbdHint = page.locator("#mx_SpotlightDialog_keyboardPrompt kbd").first();
+                    await expect(kbdHint).toBeAttached();
 
-                axe.include("#mx_SpotlightDialog_keyboardPrompt");
-                axe.include(".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option");
-                // XXX: Result rows nest a focusable endAdornment (here, RoomResultContextMenus) inside
-                // the option row itself, which is a pre-existing structural issue unrelated to the
-                // colour-contrast regression under test here.
-                axe.disableRules("nested-interactive");
-                await expect(axe).toHaveNoViolations();
+                    const recentlyViewed = spotlight.dialog.locator(
+                        ".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option",
+                    );
+                    await expect(recentlyViewed.first()).toBeAttached();
+                    await recentlyViewed.first().hover();
 
-                await spotlight.filter(Filter.PublicRooms);
-                await spotlight.search(room1.name);
+                    axe.include("#mx_SpotlightDialog_keyboardPrompt");
+                    axe.include(".mx_SpotlightDialog_recentlyViewed .mx_SpotlightDialog_option");
+                    // XXX: Result rows nest a focusable endAdornment (here, RoomResultContextMenus) inside
+                    // the option row itself, which is a pre-existing structural issue unrelated to the
+                    // colour-contrast regression under test here.
+                    axe.disableRules("nested-interactive");
+                    await expect(axe).toHaveNoViolations();
 
-                const filterChip = spotlight.dialog.locator(".mx_SpotlightDialog_filter");
-                await expect(filterChip).toHaveText("Public rooms");
+                    // Park the pointer: it is still over the results area from the hover above, and once the
+                    // list re-renders under it the row there is hovered too, which is the very styling the
+                    // checks below need to see switched off for rows at rest.
+                    await page.mouse.move(0, 0);
 
-                const resultLocator = spotlight.results;
-                await expect(resultLocator).toHaveCount(1);
-                await resultLocator.first().hover();
+                    // Joined-room results: room name, context details and the notification badge.
+                    // The first result is selected by default, which is the same styling as hover, so
+                    // one scan covers a selected row and rows at rest without needing the pointer.
+                    await spotlight.search(room1.name);
+                    let results = spotlight.results;
+                    await expect.poll(() => results.count()).toBeGreaterThanOrEqual(2);
+                    await expect(results.first()).toHaveAttribute("aria-selected", "true");
+                    await expect(results.nth(1)).toHaveAttribute("aria-selected", "false");
 
-                axe.include(".mx_SpotlightDialog_filter");
-                axe.include(".mx_SpotlightDialog_option");
-                // XXX: same nested-interactive issue as above; here the endAdornment is the
-                // View/Join button rather than RoomResultContextMenus.
-                axe.disableRules("nested-interactive");
-                await expect(axe).toHaveNoViolations();
-            });
+                    // room1 holds the unread mention, so it sorts first - and the first result is the one
+                    // selected by default. That gives a selected row carrying a badge with a count, beside a
+                    // row at rest, with no hovering.
+                    const badgedRow = results.first();
+                    await expect(badgedRow.locator(".mx_SpotlightDialog_notificationBadge")).toHaveText("1");
+                    await expect(results.locator(".mx_SpotlightDialog_result_details")).toContainText([
+                        "Element Web and Clients",
+                    ]);
+
+                    axe.include(".mx_SpotlightDialog_option");
+                    await expect(axe).toHaveNoViolations();
+
+                    // axe files the badge as "incomplete" rather than a violation (it overlaps its row, so the
+                    // background cannot be resolved), so check the selected row's appearance directly. In high
+                    // contrast mode the badge used to be painted over with the dialog background here.
+                    await expect(badgedRow).toMatchScreenshot(`spotlight-selected-row-with-badge-${theme}.png`);
+
+                    // And a row at rest, so the resting colours are pinned as well as measured. This is the
+                    // joined room in the space: its text is deterministic, unlike a public-room row whose
+                    // alias falls back to the (random) room ID.
+                    const restingRow = results.filter({ hasText: `${room1.name} notes` });
+                    await expect(restingRow).toHaveAttribute("aria-selected", "false");
+                    await expect(restingRow).toMatchScreenshot(`spotlight-row-at-rest-${theme}.png`);
+
+                    // Public-room results: the alias is rendered small and, at rest, in a secondary colour,
+                    // so both the selected row and the row at rest have to clear WCAG AA.
+                    await spotlight.filter(Filter.PublicRooms);
+                    await spotlight.search(room1.name);
+
+                    const filterChip = spotlight.dialog.locator(".mx_SpotlightDialog_filter");
+                    await expect(filterChip).toHaveText("Public rooms");
+
+                    results = spotlight.results;
+                    await expect(results).toHaveCount(2);
+                    await expect(results.first()).toHaveAttribute("aria-selected", "true");
+                    await expect(results.nth(1)).toHaveAttribute("aria-selected", "false");
+                    await expect(results.locator(".mx_SpotlightDialog_result_publicRoomAlias")).toHaveCount(2);
+
+                    axe.include(".mx_SpotlightDialog_filter");
+                    // XXX: same nested-interactive issue as above; here the endAdornment is the
+                    // View/Join button rather than RoomResultContextMenus.
+                    await expect(axe).toHaveNoViolations();
+                },
+            );
         });
     }
 });

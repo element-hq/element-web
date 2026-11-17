@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { act, fireEvent, render, type RenderResult } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import { RoomMember, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "test-utils";
@@ -21,6 +20,7 @@ import { LocationShareType } from "./shareLocation";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { findMapStyleUrl, LocationShareError } from "../../../utils/location";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 
@@ -95,7 +95,7 @@ describe("LocationPicker", () => {
             expect(getByTestId("map-rendering-error")).toBeInTheDocument();
             expect(
                 getByText(
-                    "This homeserver is not configured correctly to display maps, " +
+                    "This account provider has not configured the display of maps correctly, " +
                         "or the configured map server may be unreachable.",
                 ),
             ).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe("LocationPicker", () => {
 
             const { getByText } = getComponent();
 
-            expect(getByText("This homeserver is not configured to display maps.")).toBeInTheDocument();
+            expect(getByText("This account provider has not enabled maps.")).toBeInTheDocument();
         });
 
         it("displays error when WebGl is not enabled", () => {
@@ -140,7 +140,7 @@ describe("LocationPicker", () => {
 
             expect(
                 getByText(
-                    "This homeserver is not configured correctly to display maps, " +
+                    "This account provider has not configured the display of maps correctly, " +
                         "or the configured map server may be unreachable.",
                 ),
             ).toBeInTheDocument();

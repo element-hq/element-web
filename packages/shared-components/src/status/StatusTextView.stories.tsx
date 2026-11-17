@@ -22,3 +22,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const WithLongText: Story = {
+    args: {
+        status: {
+            emoji: "🐈",
+            text: "This is a very long status text in order to test that the component truncates it appropriately when it inevitably overflows the available space on account of being really unnecessary verbose, to the extent that one might think it will never end.",
+        },
+    },
+};

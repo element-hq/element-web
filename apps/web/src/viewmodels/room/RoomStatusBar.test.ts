@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { RoomStatusBarState } from "@element-hq/web-shared-components";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
-import { mkEvent, mkRoom, stubClient } from "test-utils";
+import { mkEvent, mkRoom, stubClient, tearDownAfterTest } from "test-utils";
 
 import { RoomStatusBarViewModel } from "./RoomStatusBar";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
@@ -52,6 +52,7 @@ describe("RoomStatusBarViewModel", () => {
         vm = new RoomStatusBarViewModel({
             room,
         });
+        tearDownAfterTest(vm);
     });
 
     afterEach(() => {
@@ -154,6 +155,7 @@ describe("RoomStatusBarViewModel", () => {
             vm = new RoomStatusBarViewModel({
                 room: localRoom,
             });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot()).toEqual({ state: RoomStatusBarState.LocalRoomFailed });
         });
         it("should resolve state to nothing for any other state for localroom", () => {
@@ -162,6 +164,7 @@ describe("RoomStatusBarViewModel", () => {
             vm = new RoomStatusBarViewModel({
                 room: localRoom,
             });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot()).toEqual({ state: null });
         });
     });

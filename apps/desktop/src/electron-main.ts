@@ -31,6 +31,7 @@ import "./ipc.js";
 import "./seshat.js";
 import "./settings.js";
 import "./badge.js";
+import "./x509.js";
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { buildMenuTemplate } from "./vectormenu.js";
@@ -47,6 +48,7 @@ import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
 import { getArgs } from "./args.js";
+import { configureSpellChecker } from "./spellcheck.js";
 import { type ConfigOptions, loadConfig } from "./config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -97,11 +99,6 @@ void configureSentry();
 process.on("uncaughtException", function (error: Error): void {
     console.log("Unhandled exception", error);
 });
-
-app.commandLine.appendSwitch("--enable-usermedia-screen-capturing");
-if (!app.commandLine.hasSwitch("enable-features")) {
-    app.commandLine.appendSwitch("enable-features", "WebRTCPipeWireCapturer");
-}
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
@@ -237,6 +234,12 @@ app.on("ready", async () => {
         console.log("No update_base_url is defined: auto update is disabled");
     }
 
+    configureSpellChecker(session.defaultSession, {
+        // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
+        enabled: store.get("spellCheckerEnabled", true),
+        dictionaryDownloadUrl: config.spell_checker_dictionary_download_url,
+    });
+
     // Set up i18n before loading storage as we need translations for dialogs
     global.appLocalization = new AppLocalization({
         components: [(): void => tray.initApplicationMenu(), (): void => Menu.setApplicationMenu(buildMenuTemplate())],
@@ -294,10 +297,6 @@ app.on("ready", async () => {
     if (process.platform === "darwin") {
         setupMacosTitleBar(global.mainWindow);
     }
-
-    // Handle spellchecker
-    // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
-    global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
 
     // Create trayIcon icon
     if (store.get("minimizeToTray")) await tray.create();

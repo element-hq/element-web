@@ -236,7 +236,7 @@ describe("message", () => {
 
         it("Should scroll to bottom after sending a html message", async () => {
             // When
-            SettingsStore.setValue("scrollToBottomOnMessageSent", null, SettingLevel.DEVICE, true);
+            await SettingsStore.setValue("scrollToBottomOnMessageSent", null, SettingLevel.DEVICE, true);
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,

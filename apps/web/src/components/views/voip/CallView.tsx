@@ -10,7 +10,7 @@ import React, { type FC, useContext, useEffect, type AriaRole, useCallback } fro
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Call, CallEvent } from "../../../models/Call";
-import AppTile from "../elements/AppTile";
+import { CallAppTile } from "./CallAppTile";
 import { CallStore } from "../../../stores/CallStore";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";
@@ -26,7 +26,11 @@ interface JoinCallViewProps {
 
 const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClose }) => {
     const sdkContext = useContext(SDKContext);
-    useTypedEventEmitter(call, CallEvent.Close, onClose);
+    useTypedEventEmitter(call, CallEvent.Close, () => {
+        // A call that is no longer presented closes because the user is already leaving its room, so there is nothing
+        // to stop viewing: doing so anyway would bring them back, from inside the room switch's own dispatch.
+        if (call.presented) onClose();
+    });
 
     useEffect(() => {
         // We'll take this opportunity to tidy up our room state
@@ -44,7 +48,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
 
     return (
         <div className="mx_CallView" role={role}>
-            <AppTile
+            <CallAppTile
                 app={call.widget}
                 room={room}
                 userId={sdkContext.client?.credentials.userId ?? undefined}

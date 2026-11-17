@@ -11,7 +11,7 @@ import { type ElectronChannel } from "../../@types/global";
 
 interface IPCPayload {
     id?: number;
-    error?: string | { message: string };
+    error?: string | { message: string; name?: string };
     reply?: any;
 }
 
@@ -56,7 +56,11 @@ export class IPCManager {
             // `seshat.ts` sends a JavaScript object with a `message` property. Turn it into a proper Error.
             let error = payload.error;
             if (typeof error === "object" && error.message) {
-                error = new Error(error.message);
+                const e = new Error(error.message);
+                // Errors cannot be structured-cloned over IPC, so the main process sends the name
+                // separately; preserve it so callers can tell the different failures apart.
+                if (error.name) e.name = error.name;
+                error = e;
             }
             callbacks.reject(error);
         } else {

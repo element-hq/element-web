@@ -1,0 +1,54 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ElementCallAppTileView > puts the application's class names on the tile's elements 1`] = `
+<div>
+  <div
+    class="tile"
+  >
+    <div
+      class="persistedWrapper"
+    >
+      <div
+        class="body"
+      >
+        <div
+          style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ElementCallAppTileView > renders the call in a persisted root 1`] = `
+<div>
+  <div>
+    <div>
+      <div>
+        <div
+          style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ElementCallAppTileView > renders the overlay inside the persisted root 1`] = `
+<div>
+  <div>
+    <div>
+      <div>
+        <div
+          style="height: 100%; min-height: 240px; background-color: grey; border-radius: 8px;"
+        />
+      </div>
+      <div
+        data-testid="overlay"
+      >
+        Overlay
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -182,6 +182,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
             ),
         [sdkContext.memberListStore, roomId, room, memberCountWithout3Pid],
     );
+    // Drop any pending trailing call so it cannot run after unmount or against a stale room
+    useEffect(() => () => loadMembers.cancel(), [loadMembers]);
 
     const isPresenceEnabled = useMemo(
         () => sdkContext.memberListStore.isPresenceEnabled(),

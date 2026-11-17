@@ -298,7 +298,7 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
-        const roomName = this.props.room?.name ?? this.props.roomAlias ?? "";
+        const roomName = this.props.room?.name ?? this.props.oobData?.name ?? this.props.roomAlias ?? "";
         const isSpace = this.props.room?.isSpaceRoom() ?? this.props.oobData?.roomType === RoomType.Space;
 
         let showSpinner = false;

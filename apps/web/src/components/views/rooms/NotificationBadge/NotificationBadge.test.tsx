@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect } from "vitest";
 import { fireEvent, render } from "test-utils-rtl";
+import { tearDownAfterTest } from "test-utils";
 import React from "react";
 
 import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
@@ -27,7 +28,7 @@ class DummyNotificationState extends NotificationState {
 
 describe("NotificationBadge", () => {
     it("shows a dot if the level is activity", () => {
-        const notif = new DummyNotificationState(NotificationLevel.Activity);
+        const notif = tearDownAfterTest(new DummyNotificationState(NotificationLevel.Activity));
 
         const { container } = render(<NotificationBadge notification={notif} />);
         expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
@@ -35,7 +36,7 @@ describe("NotificationBadge", () => {
     });
 
     it("does not show a dot if the level is activity and hideIfDot is true", () => {
-        const notif = new DummyNotificationState(NotificationLevel.Activity);
+        const notif = tearDownAfterTest(new DummyNotificationState(NotificationLevel.Activity));
 
         const { container } = render(<NotificationBadge notification={notif} hideIfDot={true} />);
         expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
@@ -43,7 +44,7 @@ describe("NotificationBadge", () => {
     });
 
     it("still shows an empty badge if hideIfDot us true", () => {
-        const notif = new DummyNotificationState(NotificationLevel.Notification);
+        const notif = tearDownAfterTest(new DummyNotificationState(NotificationLevel.Notification));
 
         const { container } = render(<NotificationBadge notification={notif} hideIfDot={true} />);
         expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();

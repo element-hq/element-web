@@ -15,7 +15,7 @@ import { mkEvent, mkMessage, mkRoom, stubClient } from "test-utils";
 import { getLastTimestamp } from "./getLastTimestamp";
 
 describe("getLastTimestamp", () => {
-    it("should return last timestamp", () => {
+    it("should return last timestamp", async () => {
         const cli = stubClient();
         const room = new Room("room123", cli, "@john:matrix.org");
 
@@ -36,11 +36,11 @@ describe("getLastTimestamp", () => {
 
         room.getMyMembership = () => KnownMembership.Join;
 
-        room.addLiveEvents([event1], { addToState: true });
+        await room.addLiveEvents([event1], { addToState: true });
         expect(getLastTimestamp(room, "@jane:matrix.org")).toBe(5);
         expect(getLastTimestamp(room, "@john:matrix.org")).toBe(5);
 
-        room.addLiveEvents([event2], { addToState: true });
+        await room.addLiveEvents([event2], { addToState: true });
 
         expect(getLastTimestamp(room, "@jane:matrix.org")).toBe(10);
         expect(getLastTimestamp(room, "@john:matrix.org")).toBe(10);
@@ -66,7 +66,7 @@ describe("getLastTimestamp", () => {
         expect(getLastTimestamp(room, "@john:matrix.org")).toBe(500);
     });
 
-    it("should return bump stamp when using sliding sync", () => {
+    it("should return bump stamp when using sliding sync", async () => {
         const cli = stubClient();
         const room = new Room("room123", cli, "@john:matrix.org");
 
@@ -87,12 +87,12 @@ describe("getLastTimestamp", () => {
 
         vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
         vi.spyOn(room, "getBumpStamp").mockReturnValue(314);
-        room.addLiveEvents([event1, event2], { addToState: true });
+        await room.addLiveEvents([event1, event2], { addToState: true });
         expect(getLastTimestamp(room, "@john:matrix.org")).toBe(314);
     });
 
     describe("membership event special cases", () => {
-        it("should consider event if membership has changed", () => {
+        it("should consider event if membership has changed", async () => {
             const cli = stubClient();
             const room = new Room("room123", cli, "@john:matrix.org");
 
@@ -118,12 +118,12 @@ describe("getLastTimestamp", () => {
             });
 
             vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
-            room.addLiveEvents([event1, event2], { addToState: true });
+            await room.addLiveEvents([event1, event2], { addToState: true });
 
             expect(getLastTimestamp(room, "@john:matrix.org")).toBe(400);
         });
 
-        it("should skip display name changes", () => {
+        it("should skip display name changes", async () => {
             const cli = stubClient();
             const room = new Room("room123", cli, "@john:matrix.org");
 
@@ -149,12 +149,12 @@ describe("getLastTimestamp", () => {
             });
 
             vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
-            room.addLiveEvents([event1, event2], { addToState: true });
+            await room.addLiveEvents([event1, event2], { addToState: true });
 
             expect(getLastTimestamp(room, "@john:matrix.org")).toBe(5);
         });
 
-        it("should skip avatar changes", () => {
+        it("should skip avatar changes", async () => {
             const cli = stubClient();
             const room = new Room("room123", cli, "@john:matrix.org");
 
@@ -180,7 +180,7 @@ describe("getLastTimestamp", () => {
             });
 
             vi.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
-            room.addLiveEvents([event1, event2], { addToState: true });
+            await room.addLiveEvents([event1, event2], { addToState: true });
 
             expect(getLastTimestamp(room, "@john:matrix.org")).toBe(5);
         });

@@ -205,11 +205,8 @@ export class ReplyTileViewModel
         const mxEvent = props.mxEvent;
         const msgType = mxEvent.getContent().msgtype;
         const evType = mxEvent.getType();
-        const { hasRenderer, isInfoMessage, isSeeingThroughMessageHiddenForModeration } = getEventDisplayInfo(
-            props.cli,
-            mxEvent,
-            false,
-        );
+        const { hasRenderer, isInfoMessage, hideSender, isSeeingThroughMessageHiddenForModeration } =
+            getEventDisplayInfo(props.cli, mxEvent, false);
 
         if (!hasRenderer) {
             logger.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
@@ -220,7 +217,7 @@ export class ReplyTileViewModel
             };
         }
 
-        const hasOwnSender = isInfoMessage || evType === EventType.RoomCreate;
+        const hasOwnSender = hideSender || isInfoMessage || evType === EventType.RoomCreate;
 
         return {
             href: ReplyTileViewModel.getPermalink(props),

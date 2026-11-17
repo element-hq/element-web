@@ -303,7 +303,7 @@ describe("createRoom", () => {
     });
 
     it("sets up Jitsi video rooms correctly", async () => {
-        setupAsyncStoreWithClient(WidgetStore.instance, client);
+        await setupAsyncStoreWithClient(WidgetStore.instance, client);
         vi.spyOn(WidgetUtils, "waitForRoomWidget").mockResolvedValue();
         const createCallSpy = vi.spyOn(JitsiCall, "create");
 

@@ -45,10 +45,10 @@ describe("<RecoveryPanel />", () => {
         const onChangeRecoveryKeyClick = vi.fn();
         const { asFragment } = renderRecoverPanel(onChangeRecoveryKeyClick);
 
-        await waitFor(() => screen.getByRole("button", { name: "Get recovery key" }));
+        await waitFor(() => screen.getByRole("button", { name: "Create recovery key" }));
         expect(asFragment()).toMatchSnapshot();
 
-        await user.click(screen.getByRole("button", { name: "Get recovery key" }));
+        await user.click(screen.getByRole("button", { name: "Create recovery key" }));
         expect(onChangeRecoveryKeyClick).toHaveBeenCalledWith(true);
     });
 

@@ -15,9 +15,9 @@ describe("WorkerManager", () => {
         const postMessage = vi.fn();
         const manager = new WorkerManager({ postMessage } as unknown as Worker);
 
-        manager.call({ data: "One" });
-        manager.call({ data: "Two" });
-        manager.call({ data: "Three" });
+        void manager.call({ data: "One" });
+        void manager.call({ data: "Two" });
+        void manager.call({ data: "Three" });
 
         const one = postMessage.mock.calls.find((c) => c[0].data === "One")!;
         const two = postMessage.mock.calls.find((c) => c[0].data === "Two")!;

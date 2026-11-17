@@ -37,7 +37,7 @@ exports[`RoomListHeaderView > renders collapse button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -74,7 +74,7 @@ exports[`RoomListHeaderView > renders collapse button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -99,7 +99,7 @@ exports[`RoomListHeaderView > renders collapse button 1`] = `
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -132,7 +132,7 @@ exports[`RoomListHeaderView > renders collapse button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -193,7 +193,7 @@ exports[`RoomListHeaderView > renders expand button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -230,7 +230,7 @@ exports[`RoomListHeaderView > renders expand button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -255,7 +255,7 @@ exports[`RoomListHeaderView > renders expand button 1`] = `
           tabindex="0"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -288,7 +288,7 @@ exports[`RoomListHeaderView > renders expand button 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -349,7 +349,7 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -386,7 +386,7 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -417,7 +417,7 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -484,7 +484,7 @@ exports[`RoomListHeaderView > renders without space menu 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
@@ -515,7 +515,7 @@ exports[`RoomListHeaderView > renders without space menu 1`] = `
           type="button"
         >
           <div
-            class="_indicator-icon_147l5_17"
+            class="_indicator-icon_j097f_17"
             style="--cpd-icon-button-size: 100%;"
           >
             <svg
