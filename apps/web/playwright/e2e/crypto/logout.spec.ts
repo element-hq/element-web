@@ -103,7 +103,7 @@ test.describe("Logout tests", () => {
         await page
             .locator("#mx_Dialog_Container")
             .getByTestId("dialog-background")
-            .click({ force: true, position: { x: 10, y: 10 } });
+            .click({ position: { x: 10, y: 10 } });
         await page.waitForTimeout(500);
         await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
 

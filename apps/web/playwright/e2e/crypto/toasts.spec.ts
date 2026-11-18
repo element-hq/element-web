@@ -231,7 +231,7 @@ test.describe("'Set up recovery' toast", () => {
         await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
 
         // When we click the dialog background
-        await page.getByTestId("dialog-background").click({ force: true, position: { x: 10, y: 10 } });
+        await page.getByTestId("dialog-background").click({ position: { x: 10, y: 10 } });
         await page.waitForTimeout(500);
 
         // Then the dialog is still shown
