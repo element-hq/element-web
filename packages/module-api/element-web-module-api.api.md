@@ -68,6 +68,12 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
 }
 
 // @alpha
+export interface BaseSettings<T extends SettingValueType = SettingValueType> {
+    default: T;
+    supportedLevels: Level[];
+}
+
+// @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
@@ -334,6 +340,12 @@ export interface LanguageTranslations {
 }
 
 // @alpha
+export enum Level {
+    // (undocumented)
+    DEVICE = "device"
+}
+
+// @alpha
 export type LocationRenderFunction = () => JSX.Element;
 
 // @alpha
@@ -381,6 +393,10 @@ export class ModuleLoader {
     load(moduleExport: ModuleExport): Promise<void>;
     // (undocumented)
     start(): Promise<void>;
+}
+
+// @alpha
+export interface ModuleSettingValues {
 }
 
 // @public
@@ -463,9 +479,22 @@ export interface RoomViewProps {
 }
 
 // @alpha
+export type SettingName<K extends string> = K extends `module.${string}` ? K extends keyof ModuleSettingValues ? K : never : K;
+
+// @alpha
 export interface SettingsApi {
-    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+    getValue<K extends string>(settingName: SettingName<K>, roomId?: string | null, excludeDefault?: boolean): Watchable<SettingValue<K>>;
+    registerSettings(settings: {
+        [K in keyof ModuleSettingValues]: BaseSettings<ModuleSettingValues[K]>;
+    }): void;
+    setValue<K extends string>(settingName: SettingName<K>, roomId: string | null, level: Level, value: SettingValue<K>): Promise<void>;
 }
+
+// @alpha
+export type SettingValue<K extends string> = K extends keyof ModuleSettingValues ? ModuleSettingValues[K] : any;
+
+// @alpha
+export type SettingValueType = null | string | number | boolean;
 
 // @alpha
 export interface SpacePanelItemProps {

@@ -50,6 +50,68 @@ class ExampleModule implements Module {
 // ...
 ```
 
+### Using settings
+
+Modules can register their own settings and read or write them through `api.settings`.
+
+Declare the type of each setting using declaration merging on `ModuleSettingValues`. The usual place for this is an
+`index.d.ts` file in your module's source folder:
+
+```typescript
+// index.d.ts
+import "@element-hq/element-web-module-api";
+
+declare module "@element-hq/element-web-module-api" {
+    interface ModuleSettingValues {
+        "module.exampleModule.enabled": boolean;
+    }
+}
+```
+
+Then register the settings with their default values in `load`:
+
+```typescript
+import { Level } from "@element-hq/element-web-module-api";
+// ...
+class ExampleModule implements Module {
+    // ...
+    public async load(): Promise<void> {
+        this.api.settings.registerSettings({
+            "module.exampleModule.enabled": { default: false, supportedLevels: [Level.DEVICE] },
+        });
+    }
+}
+// ...
+```
+
+- Setting names must start with `module.`. Include your module's name to avoid clashing with other modules.
+- Each setting can only be registered once. Registering a name that is already registered throws an error.
+- Settings must be registered before they are read or written.
+
+Once declared, settings are typed wherever you use `api.settings`:
+
+```typescript
+// Watchable<boolean>
+const enabled = this.api.settings.getValue("module.exampleModule.enabled");
+console.log(enabled.value);
+enabled.watch((value) => console.log("Setting changed to", value));
+
+await this.api.settings.setValue("module.exampleModule.enabled", null, Level.DEVICE, true);
+
+// Type errors: the value must be a boolean, and undeclared module settings are rejected
+await this.api.settings.setValue("module.exampleModule.enabled", null, Level.DEVICE, "yes");
+this.api.settings.getValue("module.exampleModule.typo");
+```
+
+`getValue` returns a `Watchable` that updates when the setting changes.
+
+Element Web's own settings can be read and written too, by name. They are not typed by this package, so their values
+are `any`:
+
+```typescript
+const language: Watchable<string> = this.api.settings.getValue("language");
+```
+
 ## Releases
 
 The API is versioned using semver, with the major version incremented for breaking changes.
