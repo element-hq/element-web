@@ -3,8 +3,16 @@
         "hide_widget": "Hide %(name)s",
         "show_widget": "Show %(name)s"
     },
+    "fr": {
+        "hide_widget": "Cacher %(name)s",
+        "show_widget": "Afficher %(name)s"
+    },
     "sv": {
         "hide_widget": "Dölj %(name)s",
         "show_widget": "Visa %(name)s"
+    },
+    "zh_Hans": {
+        "hide_widget": "隐藏 %(name)s",
+        "show_widget": "显示 %(name)s"
     }
 }

@@ -21,6 +21,17 @@
         "register_dialog_register_username_label": "Username",
         "register_dialog_title": "Request access"
     },
+    "fr": {
+        "join_cta": "Rejoindre en tant qu'invité",
+        "join_message": "Rejoindre le salon pour participer",
+        "register_dialog_busy": "Création de votre compte...",
+        "register_dialog_continue_label": "Continuer en tant qu'invité",
+        "register_dialog_error": "La création du compte a echoué",
+        "register_dialog_existing_account": "J'ai déjà un compte.",
+        "register_dialog_field_label": "Nom",
+        "register_dialog_register_username_label": "Nom d'utilisateur",
+        "register_dialog_title": "Demander l'accès"
+    },
     "sv": {
         "join_cta": "Gå med som gäst",
         "join_message": "Gå med i rummet för att delta",
@@ -31,5 +42,16 @@
         "register_dialog_field_label": "Namn",
         "register_dialog_register_username_label": "Användarnamn",
         "register_dialog_title": "Begär åtkomst"
+    },
+    "zh_Hans": {
+        "join_cta": "以访客身份加入",
+        "join_message": "加入房间以参与",
+        "register_dialog_busy": "正在创建账户…",
+        "register_dialog_continue_label": "以访客身份继续",
+        "register_dialog_error": "账户创建失败。",
+        "register_dialog_existing_account": "我已有账户。",
+        "register_dialog_field_label": "名称",
+        "register_dialog_register_username_label": "用户名",
+        "register_dialog_title": "请求访问"
     }
 }
