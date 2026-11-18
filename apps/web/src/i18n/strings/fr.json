@@ -1646,7 +1646,7 @@
         "leave_space_title": "Quitter « %(spaceName)s » ?",
         "room_leave_admin_warning": "Vous êtes le seul administrateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
         "room_leave_mod_warning": "Vous êtes le seul modérateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
-        "room_rejoin_warning": "Ce salon est privé et ne peut être rejoins sans invitation.",
+        "room_rejoin_warning": "Ce salon est privé et ne peut être rejoint sans invitation.",
         "room_rejoin_warning_restricted": "L'accès à ce salon est limité et vous ne pourrez y accéder uniquement si vous être présent dans un espace autorisé ou si vous y êtes invité.",
         "space_rejoin_warning": "Cet espace est privé et l'accès est impossible sans invitation.",
         "space_rejoin_warning_restricted": "Cet espace est réservé et vous ne pourrez y accéder uniquement si vous êtes dans un espace autorisé ou si vous y êtes invité."

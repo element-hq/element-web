@@ -12,11 +12,11 @@ import { PermalinkParts } from "./PermalinkConstructor";
 import MatrixSchemePermalinkConstructor from "./MatrixSchemePermalinkConstructor";
 
 describe("MatrixSchemePermalinkConstructor", () => {
-    const peramlinkConstructor = new MatrixSchemePermalinkConstructor();
+    const permalinkConstructor = new MatrixSchemePermalinkConstructor();
 
     describe("parsePermalink", () => {
         it("should strip ?action=chat from user links", () => {
-            expect(peramlinkConstructor.parsePermalink("matrix:u/user:example.com?action=chat")).toEqual(
+            expect(permalinkConstructor.parsePermalink("matrix:u/user:example.com?action=chat")).toEqual(
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
