@@ -70,7 +70,7 @@ const BACKUP_SET_UP_TOAST_TIMEOUT_MS = 5000;
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
-    const secureBackup = <SecureBackup />;
+    const offlineDevice = <OfflineDevice />;
 
     const toastRack = useToastContext();
     // Briefly confirm success after the user finishes the recovery key flow. The rack outlives this tab
@@ -152,9 +152,9 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         }
                                     />
                                     <Separator kind="section" />
-                                    {secureBackup && (
+                                    {offlineDevice && (
                                         <>
-                                            {secureBackup}
+                                            {offlineDevice}
                                             <Separator kind="section" />
                                         </>
                                     )}
@@ -311,7 +311,7 @@ export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecover
     }
 }
 
-const SecureBackup: React.FC = () => {
+const OfflineDevice: React.FC = () => {
     const { dehydratedDeviceId } = useOwnDevices();
     if (!dehydratedDeviceId) return null;
 
