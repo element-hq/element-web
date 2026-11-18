@@ -41,9 +41,9 @@ describe("<RoomListPanel />", () => {
     const sdkContext = new TestSDKContext();
     sdkContext._client = client;
 
-    function renderComponent() {
+    function renderComponent(activeSpace: string = MetaSpace.Home) {
         return render(
-            <RoomListPanel activeSpace={MetaSpace.Home} />,
+            <RoomListPanel activeSpace={activeSpace} />,
             clientAndSDKContextRenderOptions(client, sdkContext),
         );
     }
@@ -53,6 +53,13 @@ describe("<RoomListPanel />", () => {
 
         // By default, we consider shouldShowComponent(UIComponent.FilterContainer) should return true
         vi.mocked(shouldShowComponent).mockReturnValue(true);
+    });
+
+    it("should render the notification list in the notifications metaspace", () => {
+        client.getNotifTimelineSet = vi.fn().mockReturnValue(null);
+        renderComponent(MetaSpace.Notifications);
+        expect(screen.getByText("You're all caught up")).toBeInTheDocument();
+        expect(screen.queryByRole("listbox", { name: "Room list" })).toBeNull();
     });
 
     it("should render the RoomListSearch component when UIComponent.FilterContainer is at true", () => {

@@ -12,6 +12,7 @@ import { shouldShowComponent } from "../../../../customisations/helpers/UICompon
 import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListView } from "./RoomListView";
+import { NotificationListView } from "./NotificationListView";
 import { _t } from "../../../../languageHandler";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -20,6 +21,7 @@ import { type IState as IRovingTabIndexState } from "../../../../accessibility/R
 import { RoomListHeaderViewModel } from "../../../../viewmodels/room-list/RoomListHeaderViewModel";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { SDKContext } from "../../../../contexts/SDKContext.ts";
+import { MetaSpace } from "../../../../stores/spaces";
 
 type RoomListPanelProps = {
     /**
@@ -79,7 +81,7 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
         >
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
             <RoomListHeaderView vm={vm} />
-            <RoomListView />
+            {activeSpace === MetaSpace.Notifications ? <NotificationListView /> : <RoomListView />}
         </Flex>
     );
 };
