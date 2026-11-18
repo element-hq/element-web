@@ -66,6 +66,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     const backupStatus = useKeyBackupStatus(client);
     const hasOtherVerifiedDevices = useHasOtherVerifiedDevices(client);
     const [step, setStep] = useState<Step>(Step.Start);
+    const userHasRecoveryKey = backupStatus === BackupStatus.BACKUP_ACTIVE;
 
     const onFinished = (confirmed?: boolean): void => {
         if (confirmed) {
@@ -94,7 +95,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     } else if (step === Step.GenerateKey) {
         card = (
             <ChangeRecoveryKeyBody
-                userHasRecoveryKey={backupStatus === BackupStatus.BACKUP_ACTIVE}
+                userHasRecoveryKey={userHasRecoveryKey}
                 dialog={true}
                 onCancelClick={() => setStep(Step.Start)}
                 onFinish={() => setStep(Step.KeyActive)}
@@ -105,15 +106,18 @@ export default function LogoutDialog(props: IProps): JSX.Element {
             <EncryptionCard
                 Icon={CheckCircleIcon}
                 success={true}
-                title={
-                    step === Step.KeyActive
-                        ? _t("settings|encryption|recovery|key_active_title")
-                        : _t("auth|logout_dialog|key_checked_title")
-                }
+                title={successTitle(step, userHasRecoveryKey)}
                 dialog={true}
             >
                 <EncryptionCardEmphasisedContent>
                     <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
+                    {step === Step.KeyActive && !userHasRecoveryKey && (
+                        <Text>
+                            {_t("settings|encryption|recovery|backup_set_up_hint", undefined, {
+                                b: (sub) => <strong>{sub}</strong>,
+                            })}
+                        </Text>
+                    )}
                 </EncryptionCardEmphasisedContent>
                 <EncryptionCardButtons>
                     <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
@@ -190,6 +194,16 @@ export default function LogoutDialog(props: IProps): JSX.Element {
             <MatrixClientContext.Provider value={client}>{card}</MatrixClientContext.Provider>
         </BaseDialog>
     );
+}
+
+/**
+ * The title of the success card: a first recovery key sets up the backup, otherwise the key was replaced or checked.
+ */
+function successTitle(step: Step.KeyActive | Step.KeyChecked, userHasRecoveryKey: boolean): string {
+    if (step === Step.KeyChecked) return _t("auth|logout_dialog|key_checked_title");
+    return userHasRecoveryKey
+        ? _t("settings|encryption|recovery|key_active_title")
+        : _t("settings|encryption|recovery|backup_set_up_title");
 }
 
 interface SubComponentProps {
