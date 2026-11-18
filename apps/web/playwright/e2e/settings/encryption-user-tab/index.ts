@@ -96,13 +96,13 @@ class Helpers {
      * @param title - The title of the dialog
      * @param confirmButtonLabel - The label of the confirm button
      * @param screenshot
-     * @param confirmationToast - The expected text of the confirmation toast shown after confirming
+     * @param confirmationTitle - The title of the confirmation screen shown after confirming
      */
     async confirmRecoveryKey(
         title: string,
         confirmButtonLabel: string,
         screenshot: `${string}.png`,
-        confirmationToast: string,
+        confirmationTitle: string,
     ) {
         const dialog = this.getEncryptionTabContent();
         await expect(dialog.getByText(title, { exact: true })).toBeVisible();
@@ -114,17 +114,9 @@ class Helpers {
         await button.click();
         // Button should disable immediately after clicking.
         await expect(button).toBeDisabled();
-        // Assert the toast before the screenshot below: the toast expires after a few seconds,
-        // while the screenshot can retry past that budget on a slow runner.
-        await expect(this.page.locator(".mx_SettingsDialog_toastContainer").getByText(confirmationToast)).toBeVisible();
-        // The confirmation toast overlapping the dialog changes the text anti-aliasing of the recovery
-        // section, so hide it to keep the capture comparable with the one taken before the flow.
-        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png", {
-            css: `
-                .mx_SettingsDialog_toastContainer {
-                    display: none !important;
-                }
-            `,
-        });
+        // The confirmation screen is shown, and Done goes back to the main panel
+        await expect(dialog.getByRole("heading", { name: confirmationTitle })).toBeVisible();
+        await dialog.getByRole("button", { name: "Done" }).click();
+        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
     }
 }

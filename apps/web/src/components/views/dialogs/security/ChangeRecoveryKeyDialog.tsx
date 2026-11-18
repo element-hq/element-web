@@ -6,14 +6,10 @@ Please see LICENSE in the repository root for full details.
 */
 
 import React, { type JSX, useState } from "react";
-import { Button, Text } from "@vector-im/compound-web";
-import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
 
 import { _t } from "../../../../languageHandler";
 import { ChangeRecoveryKeyBody } from "../../settings/encryption/ChangeRecoveryKeyBody";
-import { EncryptionCard } from "../../settings/encryption/EncryptionCard";
-import { EncryptionCardButtons } from "../../settings/encryption/EncryptionCardButtons";
-import { EncryptionCardEmphasisedContent } from "../../settings/encryption/EncryptionCardEmphasisedContent";
+import { RecoveryKeyConfirmationCard } from "../../settings/encryption/RecoveryKeyConfirmationCard";
 import BaseDialog from "../BaseDialog";
 
 /**
@@ -66,52 +62,12 @@ export function ChangeRecoveryKeyDialog({
                     onCancelClick={() => onFinished(false)}
                 />
             ) : (
-                <ConfirmationCard userHasRecoveryKey={userHasRecoveryKey} onFinish={() => onFinished(true)} />
+                <RecoveryKeyConfirmationCard
+                    userHasRecoveryKey={userHasRecoveryKey}
+                    dialog={true}
+                    onFinish={() => onFinished(true)}
+                />
             )}
         </BaseDialog>
-    );
-}
-
-interface ConfirmationCardProps {
-    /**
-     * Whether the user already had a recovery key: a rotated key gets "key is now active" copy,
-     * a first-time setup gets "backup is now fully set up" plus a hint on where to change the key.
-     */
-    userHasRecoveryKey: boolean;
-    /**
-     * Called when the done button is clicked.
-     */
-    onFinish: () => void;
-}
-
-/**
- * The confirmation screen shown after the recovery key was successfully changed.
- */
-function ConfirmationCard({ userHasRecoveryKey, onFinish }: Readonly<ConfirmationCardProps>): JSX.Element {
-    return (
-        <EncryptionCard
-            Icon={CheckCircleIcon}
-            success={true}
-            title={
-                userHasRecoveryKey
-                    ? _t("settings|encryption|recovery|key_active_title")
-                    : _t("settings|encryption|recovery|backup_set_up_title")
-            }
-            dialog={true}
-        >
-            <EncryptionCardEmphasisedContent>
-                <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
-                {!userHasRecoveryKey && (
-                    <Text>
-                        {_t("settings|encryption|recovery|backup_set_up_hint", undefined, {
-                            b: (sub) => <strong>{sub}</strong>,
-                        })}
-                    </Text>
-                )}
-            </EncryptionCardEmphasisedContent>
-            <EncryptionCardButtons>
-                <Button onClick={onFinish}>{_t("action|done")}</Button>
-            </EncryptionCardButtons>
-        </EncryptionCard>
     );
 }

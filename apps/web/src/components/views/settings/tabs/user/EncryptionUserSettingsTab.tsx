@@ -9,12 +9,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 import React, { type JSX, useState } from "react";
 import { Button, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
-import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
-import { useToastContext } from "@element-hq/web-shared-components";
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
 import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
+import { RecoveryKeyConfirmationCard } from "../../encryption/RecoveryKeyConfirmationCard";
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
@@ -36,6 +35,8 @@ import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/enc
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
+ *  - "recovery_key_changed": The confirmation shown once the user has changed their recovery key.
+ *  - "recovery_key_set_up": The confirmation shown once the user has set up their recovery key.
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in the case where their key is compromised.
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
@@ -45,6 +46,8 @@ export type State =
     | "main"
     | "change_recovery_key"
     | "set_recovery_key"
+    | "recovery_key_changed"
+    | "recovery_key_set_up"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "reset_identity_sync_failed"
@@ -58,28 +61,10 @@ interface Props {
 }
 
 /**
- * How long the recovery confirmation toast stays visible.
- */
-const BACKUP_SET_UP_TOAST_TIMEOUT_MS = 5000;
-
-/**
  * The encryption settings tab.
  */
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
-
-    const toastRack = useToastContext();
-    // Briefly confirm success after the user finishes the recovery key flow. The rack outlives this tab
-    // and the remover is a no-op once another toast replaces it, so the timer is left to fire on its own.
-    const showRecoveryConfirmationToast = (label: string): void => {
-        const removeToast = toastRack.displayToast(
-            <>
-                <CheckIcon width="20px" height="20px" />
-                {label}
-            </>,
-        );
-        window.setTimeout(removeToast, BACKUP_SET_UP_TOAST_TIMEOUT_MS);
-    };
 
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
@@ -162,14 +147,18 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                 <ChangeRecoveryKey
                     userHasRecoveryKey={state === "change_recovery_key"}
                     onCancelClick={() => setState("main")}
-                    onFinish={() => {
-                        showRecoveryConfirmationToast(
-                            state === "change_recovery_key"
-                                ? _t("settings|encryption|recovery|key_active_title")
-                                : _t("settings|encryption|recovery|backup_set_up_toast"),
-                        );
-                        setState("main");
-                    }}
+                    onFinish={() =>
+                        setState(state === "change_recovery_key" ? "recovery_key_changed" : "recovery_key_set_up")
+                    }
+                />
+            );
+            break;
+        case "recovery_key_changed":
+        case "recovery_key_set_up":
+            content = (
+                <RecoveryKeyConfirmationCard
+                    userHasRecoveryKey={state === "recovery_key_changed"}
+                    onFinish={() => setState("main")}
                 />
             );
             break;
