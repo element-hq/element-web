@@ -1226,7 +1226,6 @@
         "bridge_state_workspace": "Entorno de trabajo: <networkLink/>",
         "click_for_info": "Haz clic para más info.",
         "currently_experimental": "Actualmente en fase experimental.",
-        "dynamic_room_predecessors": "Predecesores dinámicos de la sala",
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "experimental_description": "¿Te apetece probar cosas experimentales? Aquí encontrarás nuestras ideas en desarrollo. No están terminadas, pueden ser inestables, cambiar o dejar de estar disponibles. <a>Más información</a>.",
         "feature_wysiwyg_composer_description": "Usar texto con formato en lugar de Markdown en el editor de mensajes.",
@@ -1497,8 +1496,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s claves restauradas con éxito",
         "enter_key_description": "Accede a tu historial de mensajes seguros y configúralos introduciendo tu clave de seguridad.",
         "enter_key_title": "Introduce la clave de seguridad",
-        "enter_phrase_description": "Accede a tu historia de mensajes seguros o configúralos escribiendo tu frase de seguridad.",
-        "enter_phrase_title": "Introducir la frase de seguridad",
         "incorrect_security_phrase_dialog": "No se ha podido descifrar la copia de seguridad con esa frase. Por favor, comprueba que hayas escrito bien la frase de seguridad.",
         "incorrect_security_phrase_title": "Frase de seguridad incorrecta",
         "key_backup_warning": "<b>Advertencia</b>: deberías configurar la copia de seguridad de claves solamente usando un ordenador de confianza.",
@@ -1510,7 +1507,6 @@
         "load_error_content": "No se puede cargar el estado de la copia de seguridad",
         "load_keys_progress": "%(completed)s de %(total)s llaves restauradas",
         "no_backup_error": "¡No se encontró una copia de seguridad!",
-        "phrase_forgotten_text": "Si has olvidado tu frase de seguridad puedes usar tu <button1>clave de seguridad</button1> o <button2>configurar nuevos métodos de recuperación</button2>",
         "recovery_key_mismatch_description": "La copia de seguridad no se ha podido descifrar con esta clave: por favor, comprueba que la que has introducido es correcta.",
         "recovery_key_mismatch_title": "Las claves de seguridad no coinciden",
         "restore_failed_error": "No se pudo restaurar la copia de seguridad"
@@ -2264,7 +2260,6 @@
             "verify_session": "Verificar sesión",
             "web_session": "Sesión web"
         },
-        "show_breadcrumbs": "Incluir encima de la lista de salas unos atajos a las últimas salas que hayas visto",
         "show_chat_effects": "Mostrar efectos de chat (animaciones al recibir ciertos mensajes, como confeti)",
         "show_displayname_changes": "Muestra cambios en los nombres",
         "show_join_leave": "Mostrar mensajes de entrada y salida de la sala (seguirás viendo invitaciones, gente quitada y vetos)",

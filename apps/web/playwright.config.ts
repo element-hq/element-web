@@ -86,12 +86,12 @@ export default defineConfig<{}, WorkerOptions>({
     use: {
         viewport: { width: 1280, height: 720 },
         ignoreHTTPSErrors: true,
-        video: "retain-on-failure",
+        video: "on-first-retry",
         baseURL,
         trace: "on-first-retry",
     },
     webServer: {
-        command: process.env.CI ? "pnpm exec serve -p 8080 -L ./webapp" : "nx --outputStyle stream start",
+        command: process.env.CI ? "pnpm exec serve -p 8080 -L -u ./webapp" : "nx --outputStyle stream start",
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,
         timeout: (process.env.CI ? 30 : 120) * 1000,

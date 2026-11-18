@@ -10,6 +10,21 @@ import type { Page } from "@playwright/test";
 
 export const ONE_MINUTE = 60 * 1000;
 
+/**
+ * Create a room whose messages expire after a minute, have the bot join it, and open it.
+ * @returns The ID of the room.
+ */
+export async function openRoomWithRetention({ app, bot }: Pick<TestFixtures, "app" | "bot">): Promise<string> {
+    const roomId = await app.client.createRoom({
+        name: "Test",
+        invite: [bot.credentials!.userId],
+        initial_state: [{ state_key: "", type: "org.matrix.msc1763.retention", content: { max_lifetime: ONE_MINUTE } }],
+    });
+    await bot.joinRoom(roomId);
+    await app.viewRoomByName("Test");
+    return roomId;
+}
+
 export async function checkRetentionInRoom(
     { bot, app, page }: Pick<TestFixtures, "app" | "bot"> & { page: Page },
     roomId: string,

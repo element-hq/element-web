@@ -40,6 +40,11 @@ interface EncryptionCardProps {
      * The icon to display.
      */
     Icon: ComponentType<SVGAttributes<SVGElement>>;
+    /**
+     * Whether the card is hosted in a dialog (logout and recovery key dialogs), which drops the
+     * border and centers the copy.
+     */
+    dialog?: boolean;
 }
 
 /**
@@ -52,6 +57,7 @@ export function EncryptionCard({
     destructive = false,
     success = false,
     Icon,
+    dialog = false,
     children,
 }: PropsWithChildren<EncryptionCardProps>): JSX.Element {
     let iconKind: ComponentProps<typeof BigIcon>["kind"] = "primary";
@@ -62,7 +68,11 @@ export function EncryptionCard({
     }
 
     return (
-        <div className={classNames("mx_EncryptionCard", className)}>
+        <div
+            className={classNames("mx_EncryptionCard", className, {
+                "mx_EncryptionCard_noBorder mx_EncryptionCard_dialog": dialog,
+            })}
+        >
             <div className="mx_EncryptionCard_header">
                 <BigIcon kind={iconKind}>
                     <Icon />

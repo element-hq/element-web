@@ -69,5 +69,9 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_SettingsSubsection_dropdown {
         min-width: 360px;
+        /* Space the label, dropdown and hint like Compound's form fields */
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-1x);
     }
 }

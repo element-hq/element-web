@@ -26,7 +26,10 @@ export class MessageEventPreview implements Preview {
 
         if (!eventContent?.["body"]) return null; // invalid for our purposes
 
-        let body = eventContent["body"].trim();
+        // The body of a decryption failure is an English placeholder set by the js-sdk
+        let body = event.isDecryptionFailure()
+            ? _t("timeline|decryption_failure|unable_to_decrypt")
+            : eventContent["body"].trim();
         if (!body) return null; // invalid event, no preview
         // A msgtype is actually required in the spec but the app is a bit softer on this requirement
         const msgtype = eventContent["msgtype"] ?? MsgType.Text;

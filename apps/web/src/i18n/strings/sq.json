@@ -1421,8 +1421,6 @@
         "count_of_successfully_restored_keys": "U rikthyen me sukses %(sessionCount)s kyçe",
         "enter_key_description": "Hyni te historiku i mesazheve tuaj të siguruar dhe rregulloni shkëmbim mesazhesh të sigurt duke dhënë Kyçin tuaj të Sigurisë.",
         "enter_key_title": "Jepni Kyç Sigurie",
-        "enter_phrase_description": "Hyni te historiku i mesazheve tuaj të siguruara dhe ujdisni shkëmbim të sigurt mesazhesh duke dhënë Frazën tuaj të Sigurisë.",
-        "enter_phrase_title": "Jepni Frazën e Sigurisë",
         "incorrect_security_phrase_dialog": "Kopjeruajtja s’u shfshehtëzua dot me këtë Frazë Sigurie: ju lutemi, verifikoni se keni dhënë Frazën e saktë të Sigurisë.",
         "incorrect_security_phrase_title": "Frazë e Pasaktë Sigurie",
         "key_backup_warning": "<b>Kujdes</b>: duhet të ujdisni kopjeruajtje kyçesh vetëm nga një kompjuter i besuar.",
@@ -1434,7 +1432,6 @@
         "load_error_content": "S’arrihet të ngarkohet gjendje kopjeruajtjeje",
         "load_keys_progress": "U rikthyen %(completed)s nga %(total)s kyçe",
         "no_backup_error": "S’u gjet kopjeruajtje!",
-        "phrase_forgotten_text": "Nëse keni harruar Frazën tuaj të Sigurisë, mund të <button1>përdorni Kyçin tuaj të Sigurisë</button1> ose të <button2>ujdisni mundësi të reja rikthimi</button2>",
         "recovery_key_mismatch_description": "Kopjeruajtja s’mund të shfshehtëzohej me Kyçin e Sigurisë: ju lutemi, verifikoni se keni dhënë Kyçin e saktë të Sigurisë.",
         "recovery_key_mismatch_title": "Mospërputhje Kyçesh Sigurie",
         "restore_failed_error": "S’arrihet të rikthehet kopjeruajtje"
@@ -2225,7 +2222,6 @@
             "verify_session": "Verifiko sesion",
             "web_session": "Sesion Web"
         },
-        "show_breadcrumbs": "Shfaq te lista e dhomave shkurtore për te dhoma të para së fundi",
         "show_chat_effects": "Shfaq efekte fjalosjeje (animacione kur merren bonbone, për shembull)",
         "show_displayname_changes": "Shfaq ndryshime emrash ekrani",
         "show_join_leave": "Shfaq mesazhe hyrjesh/daljesh (kjo nuk prek mesazhe ftesash/heqjesh/dëbimesh )",

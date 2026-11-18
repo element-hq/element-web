@@ -26,6 +26,7 @@ const TimelineOverlayButtonsWrapper = ({
     onJumpToReadMarker,
     onMarkAllAsRead,
     onJumpToLive,
+    onJumpToStart,
     scrollNow,
     ...snapshot
 }: OverlayStoryProps): JSX.Element => {
@@ -38,6 +39,7 @@ const TimelineOverlayButtonsWrapper = ({
         onJumpToReadMarker,
         onMarkAllAsRead,
         onJumpToLive,
+        onJumpToStart,
     };
     return <TimelineOverlayButtons snapshot={snapshot} vm={vm} scrollNow={scrollNow} />;
 };
@@ -65,6 +67,7 @@ const meta = {
         onJumpToReadMarker: fn(),
         onMarkAllAsRead: fn(),
         onJumpToLive: fn(),
+        onJumpToStart: fn(),
         scrollNow: fn(),
     },
     // The overlay absolutely fills its positioned parent; give it a sized box to sit in.

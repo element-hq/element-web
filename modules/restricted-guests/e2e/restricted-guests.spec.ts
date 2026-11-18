@@ -297,14 +297,8 @@ for (const auth of ["mas", "legacy"] as const) {
 
                             await expect(page.getByText("Ask to join?")).toBeVisible();
 
-                            // Guests keep the room list search but lose the explore rooms button
-                            const roomListSearch = page.getByRole("search");
-                            await expect(
-                                roomListSearch.getByRole("button", { name: "Search", exact: false }),
-                            ).toBeVisible();
-                            await expect(
-                                roomListSearch.getByRole("button", { name: "Explore rooms" }),
-                            ).not.toBeVisible();
+                            // Guests don't get the room list search panel
+                            await expect(page.getByRole("search")).not.toBeVisible();
                         },
                     );
                 } else {

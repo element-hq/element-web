@@ -449,6 +449,7 @@ describe("RoomListViewModel", () => {
                 expect(() => (viewModel as any).previewRoom.getPendingEvents()).not.toThrow();
 
                 // The user has knocked, so the room is now in the room list
+                const sectionsBeforeKnock = viewModel.getSnapshot().sections;
                 const knockRoom = mkStubRoom(previewRoomId, "Knock room", matrixClient);
                 vi.mocked(knockRoom.getMyMembership).mockReturnValue(KnownMembership.Knock);
                 vi.mocked(matrixClient.getRoom).mockReturnValue(knockRoom);
@@ -464,6 +465,8 @@ describe("RoomListViewModel", () => {
                     "!room3:server",
                 ]);
                 expect(viewModel.getRoomItemViewModel(previewRoomId)).not.toBeInstanceOf(PreviewRoomListItemViewModel);
+                // The room ids are the same, but the sections must change so the view fetches the new item
+                expect(viewModel.getSnapshot().sections).not.toBe(sectionsBeforeKnock);
             });
 
             it("doesn't show a joined room", async () => {

@@ -42,7 +42,7 @@ describe("useRoomCall", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsRooms(),
         matrixRTC,
-        _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        getRTCTransports: vi.fn().mockResolvedValue([]),
         getCrypto: () => null,
     });
 
@@ -172,7 +172,7 @@ describe("useRoomCall", () => {
     describe("Slot handling", () => {
         beforeEach(async () => {
             await SettingsStore.setValue("feature_matrixrtc_slots", null, SettingLevel.DEVICE, true);
-            client._unstable_getRTCTransports.mockResolvedValue([
+            client.getRTCTransports.mockResolvedValue([
                 { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
             await setupAsyncStoreWithClient(CallStore.instance, client);

@@ -6,14 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type FC, useState, type JSX, type FormEvent } from "react";
-import { type Api, type AccountAuthInfo, type DialogProps } from "@element-hq/element-web-module-api";
+import { type I18nApi, type AccountAuthInfo, type DialogProps } from "@element-hq/element-web-module-api";
 import { Form } from "@vector-im/compound-web";
 import styled from "styled-components";
 
 import { type ModuleConfig } from "./config.ts";
 
 interface RegisterDialogProps extends DialogProps<AccountAuthInfo> {
-    api: Api;
+    i18n: I18nApi;
     config: ModuleConfig;
     showLoginLink?: boolean;
 }
@@ -30,7 +30,7 @@ const StyledFormRoot = styled(Form.Root)`
     font-feature-settings: normal;
 `;
 
-const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubmit, showLoginLink }) => {
+const RegisterDialog: FC<RegisterDialogProps> = ({ i18n, config, onCancel, onSubmit, showLoginLink }) => {
     const [username, setUsername] = useState("");
     const [state, setState] = useState<State>(State.Idle);
 
@@ -61,9 +61,9 @@ const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubm
 
     let message: JSX.Element | undefined;
     if (state === State.Error) {
-        message = <Form.ErrorMessage>{api.i18n.translate("register_dialog_error")}</Form.ErrorMessage>;
+        message = <Form.ErrorMessage>{i18n.translate("register_dialog_error")}</Form.ErrorMessage>;
     } else if (state === State.Busy) {
-        message = <Form.LoadingMessage>{api.i18n.translate("register_dialog_busy")}</Form.LoadingMessage>;
+        message = <Form.LoadingMessage>{i18n.translate("register_dialog_busy")}</Form.LoadingMessage>;
     }
 
     const disabled = state !== State.Idle;
@@ -71,26 +71,26 @@ const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubm
     return (
         <StyledFormRoot onSubmit={trySubmit}>
             <Form.Field name="name">
-                <Form.Label>{api.i18n.translate("register_dialog_register_username_label")}</Form.Label>
+                <Form.Label>{i18n.translate("register_dialog_register_username_label")}</Form.Label>
                 <Form.TextControl
                     disabled={disabled}
                     value={username}
                     onChange={(event) => {
                         setUsername(event.currentTarget.value);
                     }}
-                    placeholder={api.i18n.translate("register_dialog_field_label")}
+                    placeholder={i18n.translate("register_dialog_field_label")}
                 />
                 {message}
             </Form.Field>
 
             {showLoginLink && (
                 <a href={config.skip_single_sign_on ? "/#/login" : "/#/start_sso"} onClick={onCancel}>
-                    {api.i18n.translate("register_dialog_existing_account")}
+                    {i18n.translate("register_dialog_existing_account")}
                 </a>
             )}
 
             <Form.Submit disabled={disabled || !username}>
-                {api.i18n.translate("register_dialog_continue_label")}
+                {i18n.translate("register_dialog_continue_label")}
             </Form.Submit>
         </StyledFormRoot>
     );

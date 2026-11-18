@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type FC } from "react";
 import { Button } from "@vector-im/compound-web";
-import { type AccountAuthInfo, type Api } from "@element-hq/element-web-module-api";
+import { type AccountAuthInfo, type Api, type I18nApi } from "@element-hq/element-web-module-api";
 import styled from "styled-components";
 
 import { type ModuleConfig } from "./config.ts";
@@ -15,6 +15,8 @@ import RegisterDialog from "./RegisterDialog.tsx";
 
 interface Props {
     api: Api;
+    /** The module's translations, namespaced with its config key */
+    i18n: I18nApi;
     config: ModuleConfig;
     onLoggedIn(this: void, data: AccountAuthInfo): void;
 }
@@ -27,15 +29,15 @@ const Container = styled.aside`
     }
 `;
 
-const AuthFooter: FC<Props> = ({ api, config, onLoggedIn }) => {
+const AuthFooter: FC<Props> = ({ api, i18n, config, onLoggedIn }) => {
     const onTryJoin = async (): Promise<void> => {
         const { finished } = api.openDialog(
             {
-                title: api.i18n.translate("register_dialog_title"),
+                title: i18n.translate("register_dialog_title"),
             },
             RegisterDialog,
             {
-                api,
+                i18n,
                 config,
             },
         );
@@ -50,7 +52,7 @@ const AuthFooter: FC<Props> = ({ api, config, onLoggedIn }) => {
     return (
         <Container>
             <Button onClick={onTryJoin} size="md" kind="secondary">
-                {api.i18n.translate("join_cta")}
+                {i18n.translate("join_cta")}
             </Button>
         </Container>
     );

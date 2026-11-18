@@ -37,8 +37,6 @@ export interface FileBodyViewModelProps {
     timelineRenderingType: TimelineRenderingType;
     refIFrame: RefObject<HTMLIFrameElement>;
     refLink: RefObject<HTMLAnchorElement>;
-    /** Whether the document previews lab is on. Read by the view, so this model needs no settings access. */
-    documentPreviewsEnabled: boolean;
 }
 
 // Cached copy of the download.svg asset for the sandboxed iframe.
@@ -159,7 +157,7 @@ export class FileBodyViewModel
         // Offer a viewer wherever the file is presented as a file, i.e. not in an export and not in
         // the download-only panels. Needs the media helper, since opening has to fetch the bytes.
         const viewer =
-            showFileInfo && !props.forExport && !!props.mediaEventHelper && props.documentPreviewsEnabled
+            showFileInfo && !props.forExport && !!props.mediaEventHelper
                 ? documentViewerForEvent(props.mxEvent)
                 : undefined;
         const showOpen = !!viewer;

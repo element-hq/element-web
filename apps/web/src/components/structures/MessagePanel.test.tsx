@@ -359,11 +359,12 @@ describe("MessagePanel", function () {
         expect(summaryTiles.length).toEqual(1);
     });
 
-    it("groups custom messages without an informational hint by renderer and grouping key", function () {
+    it("groups custom messages by renderer and key across intervening events", function () {
         const api = new CustomComponentsApi();
         const summarize = vi.fn((events: readonly ModuleMatrixEvent[]) => {
             return `${String(events[0].content.kind)}/${String(events[0].content.group)}: ${events.length} events`;
         });
+        const summarizeSecond = vi.fn((events: readonly ModuleMatrixEvent[]) => `second/two: ${events.length} events`);
         for (const kind of ["first", "second"]) {
             api.registerMessageRenderer(
                 (event) => event.content.kind === kind,
@@ -372,7 +373,7 @@ describe("MessagePanel", function () {
                     renderAsInfoMessage: kind === "second",
                     renderGroupSummary: {
                         getKey: (event) => String(event.content.group),
-                        getSummary: summarize,
+                        getSummary: kind === "first" ? summarize : summarizeSecond,
                     },
                 },
             );
@@ -386,6 +387,7 @@ describe("MessagePanel", function () {
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "one" })),
             ...Array.from({ length: 3 }, () => ({ kind: "first", group: "two" })),
             ...Array.from({ length: 3 }, () => ({ kind: "second", group: "two" })),
+            { kind: "first", group: "one" },
         ].map(({ kind, group }) => {
             const event = TestUtilsMatrix.mkMessage({ event: true, room: roomId, user: userId, ts: Date.now() });
             event.event.content!.kind = kind;
@@ -409,13 +411,16 @@ describe("MessagePanel", function () {
         const [summary] = container.querySelectorAll(".mx_GenericEventListSummary_summary");
         expect(container.querySelectorAll(".mx_GenericEventListSummary")).toHaveLength(1);
         expect(container.getElementsByClassName("mx_EventTile")).toHaveLength(1);
-        expect(summary).toHaveTextContent("first/one: 3 events");
+        expect(summary).toHaveTextContent("first/one: 4 events");
         expect(summary).toHaveTextContent("first/two: 3 events");
         expect(summary).toHaveTextContent("second/two: 3 events");
         const text = summary.textContent!;
         expect(text.indexOf("first/one")).toBeLessThan(text.indexOf("first/two"));
         expect(text.indexOf("first/two")).toBeLessThan(text.indexOf("second/two"));
-        expect(summarize.mock.calls.every(([events]) => events.length === 3)).toBe(true);
+        expect(summarize.mock.calls.every(([events]) => events.length === 4 || events.length === 3)).toBe(true);
+        expect(summarizeSecond).toHaveBeenCalledWith(
+            expect.arrayContaining([expect.objectContaining({ eventId: customEvents[6].getId() })]),
+        );
         expect(summarize).toHaveBeenCalledWith(
             expect.arrayContaining([expect.objectContaining({ eventId: customEvents[0].getId(), sender: userId })]),
         );

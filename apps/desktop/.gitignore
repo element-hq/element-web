@@ -4,6 +4,7 @@
 /webapp.asar
 /packages
 /deploys
+/sign-cache
 node_modules/
 /pkg/control
 /.yarnrc

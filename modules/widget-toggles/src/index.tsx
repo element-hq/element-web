@@ -11,10 +11,11 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import { CONFIG_KEY, WidgetTogglesConfig } from "./config";
 import { WidgetToggle } from "./toggle";
+import Translations from "./translations.json";
 import { name as ModuleName } from "../package.json";
 
 class WidgetToggleModule implements Module {
-    public static readonly moduleApiVersion = "^1.12.0 || ^2.0.0";
+    public static readonly moduleApiVersion = "^2.6.0";
     private config?: WidgetTogglesConfig;
 
     public constructor(private api: Api) {}
@@ -33,6 +34,11 @@ class WidgetToggleModule implements Module {
             throw new Error(`Errors in module configuration for widget toggles module`);
         }
 
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
+        for (const [language, translations] of Object.entries(Translations)) {
+            i18n.registerLanguage(language, translations);
+        }
+
         this.api.extras.addRoomHeaderButtonCallback((roomId: string) => {
             const widgets = this.api.widget.getWidgetsInRoom(roomId);
             const toggleElements: JSX.Element[] = [];
@@ -40,12 +46,7 @@ class WidgetToggleModule implements Module {
             for (const widget of widgets) {
                 if (this.config?.types.includes(widget.type)) {
                     toggleElements.push(
-                        <WidgetToggle
-                            app={widget}
-                            roomId={roomId}
-                            widgetApi={this.api.widget}
-                            i18nApi={this.api.i18n}
-                        />,
+                        <WidgetToggle app={widget} roomId={roomId} widgetApi={this.api.widget} i18nApi={i18n} />,
                     );
                 }
             }

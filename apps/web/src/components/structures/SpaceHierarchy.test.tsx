@@ -22,7 +22,6 @@ import SpaceHierarchy, { showRoom, toLocalRoom, joinRoom } from "./SpaceHierarch
 import { Action } from "../../dispatcher/actions";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import DMRoomMap from "../../utils/DMRoomMap";
-import SettingsStore from "../../settings/SettingsStore";
 import { type RoomViewStore } from "../../stores/RoomViewStore";
 
 describe("SpaceHierarchy", () => {
@@ -169,34 +168,6 @@ describe("SpaceHierarchy", () => {
             expect(localRoomV2.room_id).toEqual(roomV2.roomId);
             const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV3.roomId);
-        });
-
-        describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-            beforeEach(() => {
-                vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-            });
-            it("Passes through the dynamic predecessor setting", async () => {
-                vi.mocked(client.getRoomUpgradeHistory).mockClear();
-                const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
-                toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
-                expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(roomV1.roomId, true, false);
-            });
-        });
-
-        describe("If the feature_dynamic_room_predecessors is enabled", () => {
-            beforeEach(() => {
-                // Turn on feature_dynamic_room_predecessors setting
-                vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === "feature_dynamic_room_predecessors",
-                );
-            });
-
-            it("Passes through the dynamic predecessor setting", async () => {
-                vi.mocked(client.getRoomUpgradeHistory).mockClear();
-                const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
-                toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
-                expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(roomV1.roomId, true, true);
-            });
         });
     });
 

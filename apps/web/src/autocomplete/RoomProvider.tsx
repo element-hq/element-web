@@ -21,7 +21,6 @@ import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
-import SettingsStore from "../settings/SettingsStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -63,9 +62,7 @@ export default class RoomProvider extends AutocompleteProvider {
         const cli = MatrixClientPeg.safeGet();
 
         // filter out spaces here as they get their own autocomplete provider
-        return cli
-            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
-            .filter((r) => !r.isSpaceRoom());
+        return cli.getVisibleRooms().filter((r) => !r.isSpaceRoom());
     }
 
     public async getCompletions(

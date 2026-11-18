@@ -5,7 +5,7 @@
     "targets": {
         "build": {
             "cache": true,
-            "inputs": ["src"],
+            "inputs": ["production", "buildConfig"],
             "outputs": ["{projectRoot}/lib"],
             "command": "vite build",
             "options": { "cwd": "packages/shared-utils" }

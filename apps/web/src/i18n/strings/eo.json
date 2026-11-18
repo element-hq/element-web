@@ -1127,8 +1127,6 @@
         "count_of_successfully_restored_keys": "Sukcese rehavis %(sessionCount)s ŝlosilojn",
         "enter_key_description": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurajn mesaĝojn per enigo de via Sekureca ŝlosio.",
         "enter_key_title": "Enigu Sekurecan ŝlosilon",
-        "enter_phrase_description": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurigitajn mesaĝojn per enigo de via Sekureca frazo.",
-        "enter_phrase_title": "Enigu Sekurecan frazon",
         "incorrect_security_phrase_dialog": "Ne povis malĉifri savkopion per ĉi tiu Sekureca frazo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
         "incorrect_security_phrase_title": "Malĝusta Sekureca frazo",
         "key_backup_warning": "<b>Averto</b>: vi agordu ŝlosilan savkopion nur per fidata komputilo.",
@@ -1139,7 +1137,6 @@
         "load_error_content": "Ne povas legi staton de savkopio",
         "load_keys_progress": "%(completed)s el %(total)s ŝlosiloj rehaviĝis",
         "no_backup_error": "Neniu savkopio troviĝis!",
-        "phrase_forgotten_text": "Se vi forgesis vian Sekurecan frazon, vi povas <button1>uzi vian Sekurecan ŝlosilon</button1> aŭ <button2>agordi novajn elekteblojn de rehavo</button2>",
         "recovery_key_mismatch_description": "Ne povis malĉifri savkopion per ĉi tiu Sekureca ŝlosilo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan ŝlosilon.",
         "recovery_key_mismatch_title": "Malakordo de Sekureca ŝlosilo",
         "restore_failed_error": "Ne povas rehavi savkopion"
@@ -1714,7 +1711,6 @@
             "verified_sessions": "Kontrolitaj salutaĵoj",
             "verify_session": "Kontroli salutaĵon"
         },
-        "show_breadcrumbs": "Montri tujirilojn al freŝe rigarditaj ĉambroj super la listo de ĉambroj",
         "show_chat_effects": "Montri grafikaĵojn en babilujo (ekz. movbildojn, ricevante konfetojn)",
         "show_displayname_changes": "Montri ŝanĝojn de vidigaj nomoj",
         "show_read_receipts": "Montri legokonfirmojn senditajn de aliaj uzantoj",

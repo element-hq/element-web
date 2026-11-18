@@ -5,6 +5,7 @@
         "type": "json",
         "keySeparator": "|",
         "deprecate": "file",
+        "filterSource": false,
         "features": ["plural_object", "filter_untranslated"],
         "files": [
             {
@@ -42,6 +43,11 @@
                 "file": "shared-components.json",
                 "excludes": ["packages/shared-components/src/i18n/strings/en_EN.json"],
                 "lang": "${autodetectLang}"
+            },
+            {
+                "pattern": "modules/*/src/translations.json",
+                "path": "${path}",
+                "features": ["multilingual", "plural_object", "filter_untranslated"]
             }
         ]
     },
@@ -64,6 +70,18 @@
         "includeSourceLang": "${includeSourceLang|false}",
         "langAliases": {
             "en": "en-EN"
+        }
+    },
+
+    "conversion": {
+        "actions": {
+            "conditions": "startsWith: modules/, ${path}",
+            "type": "json-multilingual",
+            "output": "${path}/${file}",
+            "params": {
+                "filter_untranslated": true,
+                "lang_format": "ll_rr_scrp"
+            }
         }
     }
 }

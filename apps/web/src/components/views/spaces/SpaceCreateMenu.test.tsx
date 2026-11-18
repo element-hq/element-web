@@ -155,4 +155,30 @@ describe("<SpaceCreateMenu />", () => {
         expect(createRoomSpy.mock.calls[0][1]?.createOpts).not.toHaveProperty("name");
         expect(createRoomSpy.mock.calls[0][1]?.createOpts).not.toHaveProperty("topic");
     });
+
+    it.each([
+        ["whitespace", "   "],
+        ["zero-width characters", "\u200b\u200d"],
+    ])("should not create a space when the name is only %s", async (_description, spaceName) => {
+        const onFinished = vi.fn();
+        const { getByText, getByLabelText, findByText } = render(
+            <SpaceCreateMenu onFinished={onFinished} />,
+            withClientContextRenderOptions(client),
+        );
+        await userEvent.click(getByText("Private"));
+        await userEvent.type(getByLabelText("Name"), spaceName);
+        await userEvent.click(getByText("Create"));
+
+        expect(client.createRoom).not.toHaveBeenCalled();
+        expect(onFinished).not.toHaveBeenCalled();
+        await expect(findByText("Please enter a name for the space")).resolves.toBeInTheDocument();
+    });
+
+    it("should trim whitespace around the space name", async () => {
+        const createRoomSpy = vi.spyOn(createRoomModule, "default").mockResolvedValue("!room:id");
+
+        await createSpace(client, "  My Name  ", false);
+
+        expect(createRoomSpy).toHaveBeenCalledWith(client, expect.objectContaining({ name: "My Name" }));
+    });
 });

@@ -61,6 +61,12 @@ type ElectronChannel =
     | "showToast";
 
 declare global {
+    /**
+     * The oldest supported major version of each browser, keyed by lower-case browser name.
+     * Defined at build time from our browserslist query, see `getMinimumBrowserVersions` in supportedBrowsers.ts.
+     */
+    const __MINIMUM_BROWSER_VERSIONS__: Record<string, number>;
+
     // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
     // so we don't accidentally use the methods on NodeJS.Timeout - they only exist in a subset of environments.
     // The overload for clear{Interval,Timeout} is resolved as expected.

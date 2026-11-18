@@ -10,6 +10,7 @@
         "types": [],
         "skipLibCheck": true,
         "noEmit": true,
+        "allowImportingTsExtensions": true,
         "strict": true
     },
     "include": ["./electron-builder.ts", "./vitest.config.ts", "./src/**/*.d.ts", "./src/**/*.test.ts"]

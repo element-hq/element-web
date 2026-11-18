@@ -48,6 +48,13 @@
     list-style: none;
 }
 
+/* The row the arrow keys have landed on (see "Keyboard navigation" in TimelineView.tsx). The
+   ring is drawn inside the row so the scroller's hidden horizontal overflow cannot clip it. */
+.tile:focus-visible {
+    outline: var(--cpd-border-width-2) solid var(--cpd-color-border-focused);
+    outline-offset: calc(-1 * var(--cpd-border-width-2));
+}
+
 /* Holds the spinner shown in the middle of the panel while the timeline is still hidden. */
 .cover {
     position: absolute;

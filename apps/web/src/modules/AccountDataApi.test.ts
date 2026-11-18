@@ -57,6 +57,33 @@ describe("AccountDataApi", () => {
             watchable.unwatch(fn);
             expect(cli.off).toHaveBeenCalledTimes(1);
         });
+
+        it("should refresh the value when first watched", () => {
+            const cli = stubClient();
+            const api = new AccountDataApi();
+            const initialEvent = mkEvent({
+                content: { foo: "before" },
+                type: "m.test",
+                user: "@a:matrix.org",
+                event: true,
+            });
+            const currentEvent = mkEvent({
+                content: { foo: "after" },
+                type: "m.test",
+                user: "@a:matrix.org",
+                event: true,
+            });
+            cli.getAccountData = () => initialEvent;
+
+            const watchable = api.get("m.test");
+            const listener = vi.fn();
+            cli.getAccountData = () => currentEvent;
+
+            watchable.watch(listener);
+
+            expect(listener).toHaveBeenCalledExactlyOnceWith({ foo: "after" });
+            watchable.unwatch(listener);
+        });
     });
 
     it("should set account data via js-sdk on set()", async () => {

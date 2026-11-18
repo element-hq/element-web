@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import browserlist from "browserslist";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import memoizeOne from "memoize-one";
 
@@ -21,8 +20,6 @@ export const LOCAL_STORAGE_KEY = "mx_accepts_unsupported_browser";
 const TOAST_KEY = "unsupportedbrowser";
 
 const SUPPORTED_DEVICE_TYPES = [DeviceType.Web, DeviceType.Desktop];
-const SUPPORTED_BROWSER_QUERY =
-    "last 2 Chrome versions, last 2 Firefox versions, last 2 Safari versions, last 2 Edge versions";
 const LEARN_MORE_URL = "https://github.com/element-hq/element-web#supported-environments";
 
 function onLearnMoreClick(): void {
@@ -42,15 +39,6 @@ function getBrowserNameVersion(browser: string): [name: string, version: number]
 }
 
 function calculateBrowserSupport(): boolean {
-    const browsers = browserlist(SUPPORTED_BROWSER_QUERY).sort();
-    const minimumBrowserVersions = new Map<string, number>();
-    for (const browser of browsers) {
-        const [browserName, browserVersion] = getBrowserNameVersion(browser);
-        // We sorted the browsers so will encounter the minimum version first
-        if (minimumBrowserVersions.has(browserName)) continue;
-        minimumBrowserVersions.set(browserName, browserVersion);
-    }
-
     const details = parseUserAgent(navigator.userAgent);
 
     if (!details.client) {
@@ -70,7 +58,8 @@ function calculateBrowserSupport(): boolean {
     }
 
     const [browserName, browserVersion] = getBrowserNameVersion(details.client);
-    const minimumVersion = minimumBrowserVersions.get(browserName);
+    // Worked out from our browserslist query at build time, see supportedBrowsers.ts
+    const minimumVersion = __MINIMUM_BROWSER_VERSIONS__[browserName];
     // Check both with the sub-version cut off and without as some browsers have less granular versioning e.g. Safari
     if (!minimumVersion || browserVersion < minimumVersion) {
         logger.warn("Browser unsupported, unsupported user agent", details.client);

@@ -100,6 +100,49 @@ describe("PosthogAnalytics", () => {
         });
     });
 
+    describe("Loading posthog-js", () => {
+        const enableAnalytics = (): void =>
+            SdkConfig.put({ brand: "Testing", posthog: { project_api_key: "foo", api_host: "bar" } });
+
+        it("does not load posthog-js if analytics are not configured", () => {
+            SdkConfig.put({ brand: "Testing" });
+            const loadPosthog = vi.fn().mockResolvedValue(fakePosthog);
+
+            const analytics = tearDownAfterTest(new PosthogAnalytics(loadPosthog));
+
+            expect(loadPosthog).not.toHaveBeenCalled();
+            expect(analytics.isEnabled()).toBe(false);
+        });
+
+        it("sends calls made while posthog-js is loading once it has loaded, in order", async () => {
+            enableAnalytics();
+            const { promise, resolve } = Promise.withResolvers<PostHog>();
+            const analytics = tearDownAfterTest(new PosthogAnalytics(() => promise));
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            analytics.trackEvent<ITestEvent>({ eventName: "TestEvents", foo: "first" });
+            analytics.trackEvent<ITestEvent>({ eventName: "TestEvents", foo: "second" });
+            expect(fakePosthog.capture).not.toHaveBeenCalled();
+
+            resolve(fakePosthog);
+
+            await vi.waitFor(() => expect(fakePosthog.capture).toHaveBeenCalledTimes(2));
+            expect(fakePosthog.init).toHaveBeenCalledWith("foo", expect.objectContaining({ api_host: "bar" }));
+            expect(vi.mocked(fakePosthog.capture).mock.calls.map((call) => call[1]?.foo)).toEqual(["first", "second"]);
+        });
+
+        it("disables analytics if posthog-js fails to load", async () => {
+            enableAnalytics();
+            const analytics = tearDownAfterTest(
+                new PosthogAnalytics(() => Promise.reject(new Error("Failed to fetch dynamically imported module"))),
+            );
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+            analytics.trackEvent<ITestEvent>({ eventName: "TestEvents" });
+
+            await vi.waitFor(() => expect(analytics.isEnabled()).toBe(false));
+            expect(fakePosthog.capture).not.toHaveBeenCalled();
+        });
+    });
+
     it("Stops listening to the dispatcher when destroyed", () => {
         SdkConfig.put({ brand: "Testing" });
         const analytics = new PosthogAnalytics(fakePosthog);

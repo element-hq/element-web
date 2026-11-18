@@ -53,6 +53,21 @@ const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise
     await expect(e.locator(".mx_BaseAvatar img")).toHaveAttribute("src", url!);
 };
 
+/** Wait for the app's client to have seen its own profile change in the room's member state. */
+const waitForOwnProfile = async (app: ElementAppPage, roomId: string, displayName: string, avatarUrl: string) => {
+    await expect
+        .poll(() =>
+            app.client.evaluate(
+                (client, { roomId, displayName, avatarUrl }) => {
+                    const member = client.getRoom(roomId)?.getMember(client.getSafeUserId());
+                    return member?.rawDisplayName === displayName && member.getMxcAvatarUrl() === avatarUrl;
+                },
+                { roomId, displayName, avatarUrl },
+            ),
+        )
+        .toBe(true);
+};
+
 const sendEvent = async (client: Client, roomId: string, html = false): Promise<ISendEventResponse> => {
     const content: IContent = {
         msgtype: "m.text" as MsgType,
@@ -105,9 +120,9 @@ test.describe("Timeline", () => {
             await sendEvent(app.client, room.roomId);
             await app.client.setDisplayName("Alan (away)");
             await app.client.setAvatarUrl(newAvatarUrl);
-            // XXX: If we send the second event too quickly, there won't be
+            // If we send the second event too quickly, there won't be
             // enough time for the client to register the profile change
-            await page.waitForTimeout(500);
+            await waitForOwnProfile(app, room.roomId, NEW_NAME, newAvatarUrl);
             await sendEvent(app.client, room.roomId);
             await app.viewRoomByName(ROOM_NAME);
 
@@ -124,9 +139,9 @@ test.describe("Timeline", () => {
             await sendEvent(app.client, room.roomId);
             await app.client.setDisplayName(NEW_NAME);
             await app.client.setAvatarUrl(newAvatarUrl);
-            // XXX: If we send the second event too quickly, there won't be
+            // If we send the second event too quickly, there won't be
             // enough time for the client to register the profile change
-            await page.waitForTimeout(500);
+            await waitForOwnProfile(app, room.roomId, NEW_NAME, newAvatarUrl);
             await sendEvent(app.client, room.roomId);
             await app.viewRoomByName(ROOM_NAME);
 
@@ -986,7 +1001,7 @@ test.describe("Timeline", () => {
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
-            await page.waitForTimeout(2000);
+            await expect(app.getComposer().getByText(/^0?0:0[2-9]$/)).toBeVisible();
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             await roomViewBody
@@ -1004,7 +1019,7 @@ test.describe("Timeline", () => {
             await composerOptions.getByRole("menuitem", { name: "Voice Message" }).click();
 
             // Record an empty message
-            await page.waitForTimeout(3000);
+            await expect(app.getComposer().getByText(/^0?0:0[3-9]$/)).toBeVisible();
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             await roomViewBody

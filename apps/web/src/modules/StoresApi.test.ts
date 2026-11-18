@@ -78,6 +78,28 @@ describe("StoresApi", () => {
                 expect(fn).toHaveBeenCalledTimes(1);
                 expect(watchable.value).toHaveLength(3);
             });
+
+            it("should refresh from RLS when first watched", async () => {
+                const cli = stubClient();
+                const room1 = mkRoom(cli, "!foo1:m.org");
+                const room2 = mkRoom(cli, "!foo2:m.org");
+                let rooms = [room1];
+
+                vi.spyOn(RoomListStoreV3.instance, "getSortedRooms").mockImplementation(() => rooms);
+                vi.spyOn(RoomListStoreV3.instance, "isLoadingRooms", "get").mockReturnValue(false);
+
+                const store = new StoresApi();
+                await store.roomListStore.waitForReady();
+                const watchable = store.roomListStore.getRooms();
+                const listener = vi.fn();
+                rooms = [room1, room2];
+
+                watchable.watch(listener);
+
+                expect(listener).toHaveBeenCalledExactlyOnceWith([expect.any(Room), expect.any(Room)]);
+                expect(watchable.value).toHaveLength(2);
+                watchable.unwatch(listener);
+            });
         });
     });
 });

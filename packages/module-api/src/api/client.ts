@@ -49,6 +49,14 @@ export interface ClientApi {
      * @returns Room object from SDK
      */
     getRoom: (id: string) => Room | null;
+
+    /**
+     * Wait for the client to be started.
+     * Resolves immediately if the client has already started. If the user logs out, the next call waits for the
+     * client to start again.
+     * @returns A promise that resolves once the client has started.
+     */
+    waitForClientStarted(): Promise<void>;
 }
 
 /**

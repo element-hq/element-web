@@ -16,7 +16,7 @@ const makeApi = (config: unknown): Api => {
             get: vi.fn().mockReturnValue(config),
         },
         i18n: {
-            register: vi.fn(),
+            registerLanguage: vi.fn(),
         },
     } as unknown as Api;
 };
@@ -29,7 +29,7 @@ describe("BannerModule", () => {
             const module = new BannerModule(api);
             await module.load();
 
-            expect(api.i18n.register).not.toHaveBeenCalled();
+            expect(api.i18n.registerLanguage).not.toHaveBeenCalled();
         });
     });
 });

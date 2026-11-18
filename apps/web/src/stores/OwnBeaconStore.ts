@@ -37,7 +37,6 @@ import {
     getCurrentPosition,
 } from "../utils/beacon";
 import { doMaybeLocalRoomAction } from "../utils/local-room";
-import SettingsStore from "../settings/SettingsStore";
 
 const isOwnBeacon = (beacon: Beacon, userId: string): boolean => beacon.beaconInfoOwner === userId;
 
@@ -113,10 +112,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * when the target is stationary
      */
     private lastPublishedPositionTimestamp?: number;
-    /**
-     * Ref returned from watchSetting for the MSC3946 labs flag
-     */
-    private dynamicWatcherRef: string | undefined;
 
     public constructor() {
         super(defaultDispatcher);
@@ -142,7 +137,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             this.matrixClient.removeListener(BeaconEvent.Destroy, this.onDestroyBeacon);
             this.matrixClient.removeListener(RoomStateEvent.Members, this.onRoomStateMembers);
         }
-        SettingsStore.unwatchSetting(this.dynamicWatcherRef);
         this.debouncedPublishLocationToBeacons.cancel();
 
         this.clearBeacons();
@@ -167,12 +161,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             this.matrixClient.on(BeaconEvent.Destroy, this.onDestroyBeacon);
             this.matrixClient.on(RoomStateEvent.Members, this.onRoomStateMembers);
         }
-        this.dynamicWatcherRef = SettingsStore.watchSetting(
-            "feature_dynamic_room_predecessors",
-            null,
-            this.reinitialiseBeaconState,
-        );
-
         this.initialiseBeaconState();
     }
 
@@ -326,20 +314,10 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         );
     }
 
-    /**
-     * @internal public for test only
-     */
-    public reinitialiseBeaconState = (): void => {
-        this.clearBeacons();
-        this.initialiseBeaconState();
-    };
-
     private initialiseBeaconState = (): void => {
         if (!this.matrixClient) return;
         const userId = this.matrixClient.getSafeUserId();
-        const visibleRooms = this.matrixClient.getVisibleRooms(
-            SettingsStore.getValue("feature_dynamic_room_predecessors"),
-        );
+        const visibleRooms = this.matrixClient.getVisibleRooms();
 
         visibleRooms.forEach((room) => {
             const roomState = room.currentState;

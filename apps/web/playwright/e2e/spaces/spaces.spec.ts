@@ -220,6 +220,10 @@ test.describe("Spaces", () => {
             await expect(
                 page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Sample Room" }),
             ).toBeVisible();
+
+            await page.getByRole("main").getByRole("button", { name: "Add" }).click();
+            await page.getByRole("menuitem", { name: "Add space" }).click();
+            await expect(page.locator(".mx_CreateSubspaceDialog")).toMatchScreenshot("add-subspace-dialog.png");
         },
     );
 

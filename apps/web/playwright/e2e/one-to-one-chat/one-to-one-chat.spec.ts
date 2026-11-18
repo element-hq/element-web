@@ -40,7 +40,8 @@ test.describe("1:1 chat room", () => {
         await expect(
             page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile").getByText(user2.displayName!),
         ).not.toBeVisible();
-        await page.waitForTimeout(500); // avoid race condition with routing
+        // avoid race condition with routing: wait for the app to navigate away from the left room
+        await expect(page).toHaveURL(/#\/home/);
 
         // open new 1:1 chat room
         await page.goto(`/#/user/${user2.userId}?action=chat`);

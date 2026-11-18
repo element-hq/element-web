@@ -11,13 +11,17 @@ import EventEmitter from "node:events";
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
 import {
     type MatrixClient,
-    type MatrixEvent,
+    MatrixEvent,
+    ClientEvent,
+    EventType,
     KnownMembership,
     Room,
     RoomEvent,
     PendingEventOrdering,
+    PushRuleActionName,
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
+import { RoomNotifState } from "@element-hq/web-shared-components";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { createTestClient, flushPromises, tearDownAfterTest } from "test-utils";
 
@@ -36,6 +40,9 @@ import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import * as tagRoomModule from "../../utils/room/tagRoom";
 import { CHATS_TAG } from "../../stores/room-list-v3/section";
+import { EchoChamber } from "../../stores/local-echo/EchoChamber";
+import { RoomEchoChamber } from "../../stores/local-echo/RoomEchoChamber";
+import { RoomEchoContext } from "../../stores/local-echo/RoomEchoContext";
 
 vi.mock("./utils", () => ({
     hasAccessToOptionsMenu: vi.fn().mockReturnValue(true),
@@ -191,6 +198,44 @@ describe("RoomListItemViewModel", () => {
             await flushPromises();
 
             expect(viewModel.getSnapshot().notification.invited).toBe(true);
+        });
+
+        describe("Notification setting", () => {
+            beforeEach(() => {
+                matrixClient.getRoomPushRule = vi.fn().mockReturnValue(undefined);
+                matrixClient.addPushRule = vi.fn().mockResolvedValue({});
+
+                const echoChamber = new RoomEchoChamber(new RoomEchoContext(room));
+                echoChamber.setClient(matrixClient);
+                vi.spyOn(EchoChamber, "forRoom").mockReturnValue(echoChamber);
+            });
+
+            it("should update when the setting is changed between non-mute options", () => {
+                viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+                expect(viewModel.getSnapshot().roomNotifState).toBe(RoomNotifState.AllMessages);
+
+                viewModel.onSetRoomNotifState(RoomNotifState.MentionsOnly);
+                expect(viewModel.getSnapshot().roomNotifState).toBe(RoomNotifState.MentionsOnly);
+
+                viewModel.onSetRoomNotifState(RoomNotifState.AllMessagesLoud);
+                expect(viewModel.getSnapshot().roomNotifState).toBe(RoomNotifState.AllMessagesLoud);
+            });
+
+            it("should update when the push rules change outside of this view model", () => {
+                viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+                expect(viewModel.getSnapshot().roomNotifState).toBe(RoomNotifState.AllMessages);
+
+                // e.g. another session sets "Mentions and keywords" and the rule arrives over sync
+                vi.mocked(matrixClient.getRoomPushRule).mockReturnValue({
+                    rule_id: room.roomId,
+                    enabled: true,
+                    default: false,
+                    actions: [PushRuleActionName.DontNotify],
+                });
+                matrixClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: EventType.PushRules, content: {} }));
+
+                expect(viewModel.getSnapshot().roomNotifState).toBe(RoomNotifState.MentionsOnly);
+            });
         });
     });
 

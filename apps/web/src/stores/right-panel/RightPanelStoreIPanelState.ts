@@ -10,6 +10,7 @@ import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-
 import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
+import { type DocumentFile } from "../../@types/document-viewer";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
@@ -25,8 +26,8 @@ export interface IRightPanelCardState {
     initialEventScrollIntoView?: boolean;
     // room summary
     focusRoomSearch?: boolean;
-    // document viewer: the m.file event whose attachment is being read
-    documentViewerEvent?: MatrixEvent;
+    // document viewer: Either an event or file that's been attached.
+    documentViewer?: { event: MatrixEvent } | { file: DocumentFile };
 }
 
 export interface IRightPanelCardStateStored {
@@ -86,7 +87,8 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        documentViewerEventId: state?.documentViewerEvent?.getId(),
+        documentViewerEventId:
+            state?.documentViewer && "event" in state.documentViewer ? state.documentViewer.event.getId() : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -94,6 +96,9 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
 
 function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room): IRightPanelCard {
     const stateStored = panelStateStore.state ?? {};
+    const documentViewerEvent = !!stateStored?.documentViewerEventId
+        ? room.findEventById(stateStored.documentViewerEventId)
+        : undefined;
     const state: IRightPanelCardState = {
         widgetId: stateStored.widgetId,
         isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
@@ -106,9 +111,7 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
-        documentViewerEvent: !!stateStored?.documentViewerEventId
-            ? room.findEventById(stateStored.documentViewerEventId)
-            : undefined,
+        documentViewer: documentViewerEvent ? { event: documentViewerEvent } : undefined,
     };
 
     return { state: state, phase: panelStateStore.phase };

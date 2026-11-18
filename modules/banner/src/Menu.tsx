@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled, { useTheme } from "styled-components";
 import { InlineSpinner } from "@vector-im/compound-web";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 import { type MenuConfig, type StaticConfig } from "./config";
 import Logo from "./Logo.tsx";
@@ -155,7 +155,7 @@ const Overlay = styled(motion.div)`
 type Data = Omit<StaticConfig, keyof MenuConfig>;
 
 interface Props {
-    api: Api;
+    i18n: I18nApi;
     config: MenuConfig;
     data: Data | Error | null; // null for loading
     fallbackLogoUrl: string;
@@ -176,7 +176,7 @@ const Category: FC<{
     );
 };
 
-const Menu: FC<Props> = ({ api, config, data, fallbackLogoUrl }) => {
+const Menu: FC<Props> = ({ i18n, config, data, fallbackLogoUrl }) => {
     const theme = useTheme();
     const width = parseInt(theme.menuWidth.slice(0, -2), 10);
     const [open, setOpen] = useState(false);
@@ -186,7 +186,7 @@ const Menu: FC<Props> = ({ api, config, data, fallbackLogoUrl }) => {
         <Logo
             src={config.logo_url ?? fallbackLogoUrl}
             height={config.logo_height !== undefined ? `${config.logo_height}px` : undefined}
-            api={api}
+            i18n={i18n}
         />
     );
     if (config.logo_href) {
@@ -194,7 +194,7 @@ const Menu: FC<Props> = ({ api, config, data, fallbackLogoUrl }) => {
     }
 
     if (data instanceof Error) {
-        content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
+        content = <CentredContainer>{i18n.translate("univention_error")}</CentredContainer>;
     } else if (data) {
         content = (
             <>
@@ -214,7 +214,7 @@ const Menu: FC<Props> = ({ api, config, data, fallbackLogoUrl }) => {
     return (
         <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
-                <Trigger aria-haspopup={true} aria-expanded={open} aria-label={api.i18n.translate("trigger_label")}>
+                <Trigger aria-haspopup={true} aria-expanded={open} aria-label={i18n.translate("trigger_label")}>
                     <TriggerIcon />
                 </Trigger>
             </Dialog.Trigger>
@@ -237,14 +237,14 @@ const Menu: FC<Props> = ({ api, config, data, fallbackLogoUrl }) => {
                                 animate={{ x: 0 }}
                                 exit={{ x: -width }}
                                 transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-                                aria-label={api.i18n.translate("menu_label")}
+                                aria-label={i18n.translate("menu_label")}
                             >
                                 <Dialog.Title>
                                     <SidebarHeading>
                                         {logoJsx}
                                         <Dialog.Close asChild>
                                             <CloseButton
-                                                aria-label={api.i18n.translate("close_label")}
+                                                aria-label={i18n.translate("close_label")}
                                                 onClick={() => setOpen(false)}
                                             >
                                                 <svg

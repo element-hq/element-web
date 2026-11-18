@@ -95,6 +95,12 @@
         "cancel_search_label": "Keresés megszakítása",
         "emoji_picker": "Emodzsiválasztó"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Ha eltávolítja az összes eszközét, elveszíti titkosított csevegési előzményeit, és újra be kell állítania digitális személyazonosságát.",
+            "error": "Nem sikerült törölni a kulcstárolót. Próbálja újra."
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "Először álljon vissza erre a verzióra: <b>%(version)s</b>, vagy távolítsa el ezt az eszközt.",

@@ -14,9 +14,11 @@ import SettingsStore, { type CallbackFn } from "../settings/SettingsStore";
 import { type Feature, ReleaseAnnouncementStore } from "./ReleaseAnnouncementStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import ToastStore from "./ToastStore";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 
 vi.mock("../settings/SettingsStore");
 vi.mock("./ToastStore");
+vi.mock("../customisations/helpers/UIComponents", () => ({ shouldShowComponent: vi.fn() }));
 
 describe("ReleaseAnnouncementStore", () => {
     let releaseAnnouncementStore: ReleaseAnnouncementStore;
@@ -64,6 +66,8 @@ describe("ReleaseAnnouncementStore", () => {
             }) as any,
         );
 
+        vi.mocked(shouldShowComponent).mockReturnValue(true);
+
         releaseAnnouncementStore = tearDownAfterTest(new ReleaseAnnouncementStore());
     });
 
@@ -78,6 +82,11 @@ describe("ReleaseAnnouncementStore", () => {
 
     it("should be a singleton", () => {
         expect(ReleaseAnnouncementStore.instance).toBeDefined();
+    });
+
+    it("should return null when a module hides the release announcements", () => {
+        vi.mocked(shouldShowComponent).mockReturnValue(false);
+        expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
     });
 
     it("should return null when the release announcement is disabled", async () => {

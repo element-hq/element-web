@@ -1014,9 +1014,9 @@ describe("ElementCall", () => {
 
             // Change call type to voice
             roomSession.memberships = [
-                { sender: alice.userId, deviceId: "alices_device", callIntent: "audio" },
+                { sender: alice.userId, deviceId: "alices_device", intent: "m.audio" },
             ] as unknown as typeof roomSession.memberships;
-            roomSession.getConsensusCallIntent.mockReturnValue("audio");
+            roomSession.getConsensusIntent.mockReturnValue("m.audio");
             roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
 
             expect(call.callType).toBe(CallType.Voice);
@@ -1024,9 +1024,9 @@ describe("ElementCall", () => {
 
             // Change call type back to video
             roomSession.memberships = [
-                { sender: alice.userId, deviceId: "alices_device", callIntent: "video" },
+                { sender: alice.userId, deviceId: "alices_device", intent: "m.video" },
             ] as unknown as typeof roomSession.memberships;
-            roomSession.getConsensusCallIntent.mockReturnValue("video");
+            roomSession.getConsensusIntent.mockReturnValue("m.video");
             roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
 
             expect(call.callType).toBe(CallType.Video);

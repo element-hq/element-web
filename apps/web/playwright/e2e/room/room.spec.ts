@@ -86,7 +86,7 @@ test.describe("Room Directory", () => {
         await app.viewRoomById(roomBId);
 
         // Let the app settle to avoid flakiness
-        await page.waitForTimeout(500);
+        await expect(page.locator(".mx_RoomHeader").getByRole("heading", { level: 1 })).toHaveText("Room B");
 
         // Display Room A
         await app.viewRoomById(roomAId);

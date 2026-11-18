@@ -20,10 +20,12 @@ const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
     UIComponent.ExploreRooms,
     UIComponent.RoomOptionsMenu,
     UIComponent.AddIntegrations,
+    UIComponent.ReleaseAnnouncements,
+    UIComponent.FilterContainer,
 ];
 
 class RestrictedGuestsModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0 || ^2.0.0";
+    public static readonly moduleApiVersion = "^2.6.0";
 
     private config?: ModuleConfig;
 
@@ -38,7 +40,10 @@ class RestrictedGuestsModule implements Module {
 
         document.adoptedStyleSheets.push(style);
 
-        this.api.i18n.register(Translations);
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
+        for (const [language, translations] of Object.entries(Translations)) {
+            i18n.registerLanguage(language, translations);
+        }
 
         try {
             this.config = ModuleConfig.parse(rawConfig);
@@ -55,7 +60,7 @@ class RestrictedGuestsModule implements Module {
 
         // Room preview bar customisations (for Matrix guest support)
         this.api.customComponents.registerRoomPreviewBar((props, OriginalComponent) => (
-            <RoomPreviewBar {...props} api={this.api} config={this.config!}>
+            <RoomPreviewBar {...props} api={this.api} i18n={i18n} config={this.config!}>
                 <OriginalComponent {...props} />
             </RoomPreviewBar>
         ));
@@ -64,7 +69,7 @@ class RestrictedGuestsModule implements Module {
         // Login component customisations (for no guest support)
         this.api.customComponents.registerLoginComponent((props, OriginalComponent) => (
             <OriginalComponent {...props}>
-                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} config={this.config!} />
+                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} i18n={i18n} config={this.config!} />
             </OriginalComponent>
         ));
     }

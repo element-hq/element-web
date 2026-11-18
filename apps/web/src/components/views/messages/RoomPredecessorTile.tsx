@@ -20,7 +20,6 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { useRoomState } from "../../../hooks/useRoomState";
-import SettingsStore from "../../../settings/SettingsStore";
 import MatrixToPermalinkConstructor from "../../../utils/permalinks/MatrixToPermalinkConstructor";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
@@ -35,19 +34,14 @@ interface IProps {
  * room.
  */
 export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) => {
-    const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-
     // Note: we ask the room for its predecessor here, instead of directly using
     // the information inside mxEvent. This allows us the flexibility later to
-    // use a different predecessor (e.g. through MSC3946) and still display it
-    // in the timeline location of the create event.
+    // use a different predecessor and still display it in the timeline location
+    // of the create event.
     const roomContext = useScopedRoomContext("room");
     const predecessor = useRoomState(
         roomContext.room,
-        useCallback(
-            (state: RoomState) => state.findPredecessor(msc3946ProcessDynamicPredecessor),
-            [msc3946ProcessDynamicPredecessor],
-        ),
+        useCallback((state: RoomState) => state.findPredecessor(), []),
     );
 
     const onLinkClicked = useCallback(

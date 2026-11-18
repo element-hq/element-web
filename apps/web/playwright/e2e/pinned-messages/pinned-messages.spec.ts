@@ -149,6 +149,19 @@ test.describe("Pinned messages", () => {
         await expect(util.getCloseListButton()).toBeVisible();
     });
 
+    test("should stop showing a pinned message in the banner once it is deleted", async ({ room1, util, bot }) => {
+        await util.goTo(room1);
+        const { event_id: eventId } = await bot.sendMessage(room1.roomId, "Msg1");
+        await expect(util.getEventTile("Msg1")).toBeVisible();
+        await util.pinMessages(["Msg1"]);
+        await util.assertMessageInBanner("Msg1");
+
+        await bot.redactEvent(room1.roomId, eventId);
+
+        await expect(util.getBanner().getByText("Message deleted")).toBeVisible();
+        await expect(util.getBanner().getByText("Msg1")).toBeHidden();
+    });
+
     test("banner should listen to pinned message list", async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", "Msg2"]);

@@ -1447,8 +1447,6 @@
         "bridge_state_workspace": "Arbeidsområde: <networkLink/>",
         "click_for_info": "Klikk for mer info",
         "currently_experimental": "For tiden eksperimentell.",
-        "dynamic_room_predecessors": "Dynamiske romforgjengere",
-        "dynamic_room_predecessors_description": "Aktiver MSC3946 (for å støtte sent ankomne romarkiver)",
         "element_call_video_rooms": "Element Call videorom",
         "encrypted_state_events": "Krypterte tilstandshendelser (MSC4362)",
         "encrypted_state_events_description": "Aktiverer eksperimentell støtte for kryptering av tilstands hendelser, som skjuler metadata som rom navn og temaer fra serveren. Disse metadataene vil også være skjult for personer som blir med i rom senere, og personer med klient er som ikke støtter MSC4362.",
@@ -1770,8 +1768,6 @@
         "count_of_successfully_restored_keys": "Vellykket gjenoppretting av %(sessionCount)s nøkler",
         "enter_key_description": "Få tilgang til den sikre meldingsloggen din og konfigurer sikker melding ved å skrive inn sikkerhetsnøkkelen.",
         "enter_key_title": "Skriv inn gjenopprettingsnøkkel",
-        "enter_phrase_description": "Få tilgang til den sikre meldingsloggen din og sett opp sikre meldinger ved å skrive inn sikkerhetsfrasen.",
-        "enter_phrase_title": "Skriv inn sikkerhetsfrase",
         "incorrect_security_phrase_dialog": "Sikkerhetskopiering kunne ikke dekrypteres med denne sikkerhetsfrasen: Kontroller at du skrev inn riktig sikkerhetsfrase.",
         "incorrect_security_phrase_title": "Feil sikkerhetsfrase",
         "key_backup_warning": "<b>Advarsel</b>: Du bør bare konfigurere sikkerhetskopiering av nøkler fra en pålitelig datamaskin.",
@@ -1783,7 +1779,6 @@
         "load_error_content": "Klarte ikke å laste sikkerhetskopi-status",
         "load_keys_progress": "%(completed)s av %(total)s nøkler gjenopprettet",
         "no_backup_error": "Ingen sikkerhetskopier ble funnet!",
-        "phrase_forgotten_text": "Hvis du har glemt sikkerhetsfrasen, kan du <button1>bruke sikkerhetsnøkkelen</button1> eller <button2>konfigurere nye gjenopprettingsalternativer</button2>",
         "recovery_key_mismatch_description": "Sikkerhetskopien kunne ikke dekrypteres med denne gjenopprettingsnøkkelen: Kontroller at du har angitt riktig gjenopprettingsnøkkel.",
         "recovery_key_mismatch_title": "Manglende samsvar mellom gjenopprettingsnøkler",
         "restore_failed_error": "Kan ikke gjenopprette sikkerhetskopien"
@@ -2830,7 +2825,6 @@
             "web_session": "Websesjon"
         },
         "show_avatar_changes": "Vis endringer i profilbilde",
-        "show_breadcrumbs": "Vis snarveier til de nyligst viste rommene ovenfor romlisten",
         "show_chat_effects": "Vis chatteffekter (animasjoner når du mottar f.eks. konfetti)",
         "show_displayname_changes": "Vis visningsnavnendringer",
         "show_join_leave": "Vis bli med/forlat meldinger (invitasjoner/fjernede/utestengte upåvirket)",

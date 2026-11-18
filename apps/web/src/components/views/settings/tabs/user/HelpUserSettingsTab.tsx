@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { _t } from "../../../../../languageHandler";
@@ -22,17 +21,22 @@ import { SettingsSubsection, SettingsSubsectionText } from "../../shared/Setting
 import ExternalLink from "../../../elements/ExternalLink";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { BugReportDialogButton } from "../../../elements/BugReportDialogButton";
+import type { ModuleApi } from "../../../../../modules/Api";
 
 interface IState {
     appVersion: string | null;
     canUpdate: boolean;
 }
 
-export default class HelpUserSettingsTab extends React.Component<EmptyObject, IState> {
+interface IProps {
+    moduleApi: ModuleApi;
+}
+
+export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: EmptyObject) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -100,8 +104,7 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
     }
 
     private renderCredits(): JSX.Element {
-        // Note: This is not translated because it is legal text.
-        // Also, &nbsp; is ugly but necessary.
+        const moduleCredits = [...this.props.moduleApi.extras.creditsAttributions];
         return (
             <SettingsSubsection heading={_t("common|credits")}>
                 <SettingsSubsectionText>
@@ -187,6 +190,9 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
                                 },
                             )}
                         </li>
+                        {moduleCredits.map(([id, renderCredit]) => (
+                            <li key={id}>{renderCredit()}</li>
+                        ))}
                     </ul>
                 </SettingsSubsectionText>
             </SettingsSubsection>

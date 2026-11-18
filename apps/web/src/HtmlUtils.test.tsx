@@ -14,10 +14,11 @@ import { render, screen } from "test-utils-rtl";
 import parse from "html-react-parser";
 import { getMockClientWithEventEmitter } from "test-utils";
 
-import { bodyToHtml, bodyToNode, formatEmojis, sanitizedHtmlNode, topicToHtml } from "./HtmlUtils";
+import { bodyToHtml, bodyToNode, formatEmojis, getEmojiRegex, sanitizedHtmlNode, topicToHtml } from "./HtmlUtils";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import SdkConfig from "./SdkConfig";
+import { getKatex, loadKatex } from "./utils/katex";
 
 describe("topicToHtml", () => {
     function getContent() {
@@ -183,7 +184,23 @@ describe("bodyToHtml", () => {
             SdkConfig.reset();
         });
 
-        it("should render inline katex", () => {
+        // Runs first, as once KaTeX is loaded it stays loaded for the rest of this file
+        it("should leave maths as the sender's fallback until KaTeX has loaded", () => {
+            expect(getKatex()).toBeUndefined();
+            const html = bodyToHtml(
+                {
+                    body: "hello \\xi world",
+                    msgtype: "m.text",
+                    formatted_body: 'hello <span data-mx-maths="\\xi"><code>\\xi</code></span> world',
+                    format: "org.matrix.custom.html",
+                },
+                [],
+            );
+            expect(html).toBe('hello <span data-mx-maths="\\xi"><code>\\xi</code></span> world');
+        });
+
+        it("should render inline katex", async () => {
+            await loadKatex();
             const html = bodyToHtml(
                 {
                     body: "hello \\xi world",
@@ -196,7 +213,8 @@ describe("bodyToHtml", () => {
             expect(html).toMatchSnapshot();
         });
 
-        it("should render block katex", () => {
+        it("should render block katex", async () => {
+            await loadKatex();
             const html = bodyToHtml(
                 {
                     body: "hello \\xi world",
@@ -250,6 +268,22 @@ describe("formatEmojis", () => {
             expect(res[i].props.children).toEqual(emoji);
             expect(res[i].props.title).toEqual(`:${title}:`);
         }
+    });
+});
+
+describe("getEmojiRegex", () => {
+    it("builds the regex once and reuses it", () => {
+        expect(getEmojiRegex()).toBe(getEmojiRegex());
+    });
+
+    it.each([
+        ["😀", true],
+        ["🇬🇧", true],
+        ["a", false],
+        // Text presentation selector: not an emoji
+        ["☺\uFE0E", false],
+    ])("matches %s: %s", (text, expected) => {
+        expect(getEmojiRegex().test(text)).toBe(expected);
     });
 });
 

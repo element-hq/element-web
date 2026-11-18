@@ -135,8 +135,6 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
     // The following properties are set by onReady as they live in account_data
     private _allRoomsInHome = false;
     private _enabledMetaSpaces: MetaSpace[] = [];
-    /** Whether the feature flag is set for MSC3946 */
-    private _msc3946ProcessDynamicPredecessor: boolean = SettingsStore.getValue("feature_dynamic_room_predecessors");
     private _storeReadyDeferred = Promise.withResolvers<void>();
 
     public constructor(
@@ -148,7 +146,6 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         SettingsStore.monitorSetting("Spaces.allRoomsInHome", null);
         SettingsStore.monitorSetting("Spaces.enabledMetaSpaces", null);
         SettingsStore.monitorSetting("Spaces.showPeopleInSpace", null);
-        SettingsStore.monitorSetting("feature_dynamic_room_predecessors", null);
     }
 
     /**
@@ -364,11 +361,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                 return getChildOrder(ev.getContent().order, ev.getTs(), ev.getStateKey()!);
             })
                 .map((ev) => {
-                    const history = this.matrixClient!.getRoomUpgradeHistory(
-                        ev.getStateKey()!,
-                        true,
-                        this._msc3946ProcessDynamicPredecessor,
-                    );
+                    const history = this.matrixClient!.getRoomUpgradeHistory(ev.getStateKey()!, true);
                     return history[history.length - 1];
                 })
                 .filter((room) => {
@@ -472,9 +465,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
         useCache = true,
     ): Set<string> => {
         if (space === MetaSpace.Home && this.allRoomsInHome) {
-            return new Set(
-                this.matrixClient!.getVisibleRooms(this._msc3946ProcessDynamicPredecessor).map((r) => r.roomId),
-            );
+            return new Set(this.matrixClient!.getVisibleRooms().map((r) => r.roomId));
         }
 
         // meta spaces never have descendants
@@ -564,9 +555,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
 
     private rebuildSpaceHierarchy = (): void => {
         if (!this.matrixClient) return;
-        const visibleSpaces = this.matrixClient
-            .getVisibleRooms(this._msc3946ProcessDynamicPredecessor)
-            .filter((r) => r.isSpaceRoom());
+        const visibleSpaces = this.matrixClient.getVisibleRooms().filter((r) => r.isSpaceRoom());
         const [joinedSpaces, invitedSpaces] = visibleSpaces.reduce(
             ([joined, invited], s) => {
                 switch (getEffectiveMembership(s.getMyMembership())) {
@@ -601,7 +590,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
 
     private rebuildParentMap = (): void => {
         if (!this.matrixClient) return;
-        const joinedSpaces = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor).filter((r) => {
+        const joinedSpaces = this.matrixClient.getVisibleRooms().filter((r) => {
             return r.isSpaceRoom() && r.getMyMembership() === KnownMembership.Join;
         });
 
@@ -622,7 +611,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
             this.roomIdsBySpace.delete(MetaSpace.Home);
         } else {
             const rooms = new Set(
-                this.matrixClient!.getVisibleRooms(this._msc3946ProcessDynamicPredecessor)
+                this.matrixClient!.getVisibleRooms()
                     .filter(this.showInHomeSpace)
                     .map((r) => r.roomId),
             );
@@ -637,7 +626,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
     private rebuildMetaSpaces = (): void => {
         if (!this.matrixClient) return;
         const enabledMetaSpaces = new Set(this.enabledMetaSpaces);
-        const visibleRooms = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor);
+        const visibleRooms = this.matrixClient.getVisibleRooms();
 
         if (enabledMetaSpaces.has(MetaSpace.Home)) {
             this.rebuildHomeSpace();
@@ -665,7 +654,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
     private updateNotificationStates = (spaces?: SpaceKey[]): void => {
         if (!this.matrixClient) return;
         const enabledMetaSpaces = new Set(this.enabledMetaSpaces);
-        const visibleRooms = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor);
+        const visibleRooms = this.matrixClient.getVisibleRooms();
 
         let dmBadgeSpace: MetaSpace | undefined;
         // only show badges on home
@@ -739,7 +728,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
 
     private onRoomsUpdate = (): void => {
         if (!this.matrixClient) return;
-        const visibleRooms = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor);
+        const visibleRooms = this.matrixClient.getVisibleRooms();
 
         const prevRoomsBySpace = this.roomIdsBySpace;
         const prevUsersBySpace = this.userIdsBySpace;
@@ -803,11 +792,7 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                 // Expand room IDs to all known versions of the given rooms
                 const expandedRoomIds = new Set(
                     Array.from(roomIds).flatMap((roomId) => {
-                        return this.matrixClient!.getRoomUpgradeHistory(
-                            roomId,
-                            true,
-                            this._msc3946ProcessDynamicPredecessor,
-                        ).map((r) => r.roomId);
+                        return this.matrixClient!.getRoomUpgradeHistory(roomId, true).map((r) => r.roomId);
                     }),
                 );
 
@@ -1270,13 +1255,6 @@ export default class SpaceStore extends AsyncStoreWithClient<EmptyObject> {
                                 this.updateNotificationStates([payload.roomId]);
                             }
                         }
-                        break;
-
-                    case "feature_dynamic_room_predecessors":
-                        this._msc3946ProcessDynamicPredecessor = SettingsStore.getValue(
-                            "feature_dynamic_room_predecessors",
-                        );
-                        this.rebuildSpaceHierarchy();
                         break;
                 }
             }

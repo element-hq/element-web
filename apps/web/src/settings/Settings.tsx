@@ -228,9 +228,7 @@ export interface Settings {
     "feature_element_call_react": IFeature;
     "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
-    "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
@@ -328,7 +326,6 @@ export interface Settings {
         allow?: string[];
         deny?: string[];
     }>;
-    "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     /**
      * This is the 2019-era low bandwidth that deals with disabling features of the
@@ -631,16 +628,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
     },
-    "feature_dynamic_room_predecessors": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|dynamic_room_predecessors"),
-        description: _td("labs|dynamic_room_predecessors_description"),
-        shouldWarn: true,
-        default: false,
-    },
     "feature_render_reaction_images": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -658,17 +645,6 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
         controller: new ReloadOnChangeController(),
-    },
-    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
-    // that people who already turned the lab on keep it, and only for as long as the lab exists.
-    "feature_pdf_viewer": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|document_previews"),
-        description: _td("labs|document_previews_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
     },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],
@@ -1238,11 +1214,6 @@ export const SETTINGS: Settings = {
         },
         // Expses widget information
         shouldExportToRageshake: false,
-    },
-    "breadcrumbs": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|show_breadcrumbs"),
-        default: true,
     },
     "showHiddenEventsInTimeline": {
         displayName: _td("devtools|show_hidden_events"),

@@ -56,12 +56,7 @@ export function makeInputToKey(
 ): (keyParams: KeyParams) => Promise<Uint8Array<ArrayBuffer>> {
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array<ArrayBuffer>> => {
         if (passphrase) {
-            return deriveRecoveryKeyFromPassphrase(
-                passphrase,
-                keyInfo.passphrase.salt,
-                keyInfo.passphrase.iterations,
-                keyInfo.passphrase.bits,
-            );
+            return deriveRecoveryKeyFromPassphrase(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
         } else if (recoveryKey) {
             return decodeRecoveryKey(recoveryKey);
         }

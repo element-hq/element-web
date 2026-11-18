@@ -53,9 +53,11 @@ export interface RoomSummaryCardState {
      */
     userStatus: UserStatus | undefined;
     /**
-     * Whether the room is encrypted, used to display the correct badge and icon
+     * Whether the room is encrypted, used to display the correct badge and icon.
+     * Null while the encryption state is still being determined, in which case
+     * no badge is shown.
      */
-    isRoomEncrypted: boolean;
+    isRoomEncrypted: boolean | null;
     /**
      * The e2e status of the room, used to display the correct badge and icon
      */
@@ -172,7 +174,7 @@ export function useRoomSummaryCardViewModel(
 ): RoomSummaryCardState {
     const cli = useMatrixClientContext();
 
-    const isRoomEncrypted = useIsEncrypted(cli, room) ?? false;
+    const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useScopedRoomContext("e2eStatus", "timelineRenderingType");
     const e2eStatus = roomContext.e2eStatus;
     const isVideoRoom = calcIsVideoRoom(room);

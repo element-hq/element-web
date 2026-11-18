@@ -19,7 +19,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is a backup on 
       class="mx_Dialog_header"
     />
     <div
-      class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+      class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
     >
       <div
         class="mx_EncryptionCard_header"
@@ -172,7 +172,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
       class="mx_Dialog_header"
     />
     <div
-      class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+      class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
     >
       <div
         class="mx_EncryptionCard_header"
@@ -325,7 +325,7 @@ exports[`LogoutDialog > Prompts user to set up recovery if there is no backup on
       class="mx_Dialog_header"
     />
     <div
-      class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+      class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
     >
       <div
         class="mx_EncryptionCard_header"
@@ -472,7 +472,7 @@ exports[`LogoutDialog > generating a recovery key inline > confirms the new key 
     class="mx_Dialog_header"
   />
   <div
-    class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+    class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
   >
     <div
       class="mx_EncryptionCard_header"
@@ -655,7 +655,7 @@ exports[`LogoutDialog > when this is the only device and backups and recovery ar
       class="mx_Dialog_header"
     />
     <div
-      class="mx_EncryptionCard mx_EncryptionCard_noBorder"
+      class="mx_EncryptionCard mx_EncryptionCard_noBorder mx_EncryptionCard_dialog"
     >
       <div
         class="mx_EncryptionCard_header"

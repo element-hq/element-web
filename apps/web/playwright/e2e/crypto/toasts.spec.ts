@@ -212,7 +212,12 @@ test.describe("'Set up recovery' toast", () => {
         await dialog.getByRole("textbox").fill(recoveryKey);
         await dialog.getByRole("button", { name: "Finish set up" }).click();
 
-        // Then the toast is gone and the device is connected to key backup
+        // Then the confirmation screen is shown, and dismissing it closes the dialog
+        await expect(dialog.getByText("Your backup is now fully set up")).toBeVisible();
+        await dialog.getByRole("button", { name: "Done" }).click();
+        await expect(dialog).not.toBeVisible();
+
+        // And the toast is gone and the device is connected to key backup
         await expect(page.locator(".mx_Toast_toast", { hasText: "Back up your chats" })).not.toBeVisible();
         await checkDeviceIsConnectedKeyBackup(app, "1", true);
     });

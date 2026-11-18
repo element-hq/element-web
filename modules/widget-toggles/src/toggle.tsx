@@ -63,7 +63,7 @@ export function WidgetToggle({ app, roomId, widgetApi, i18nApi }: WidgetTogglePr
     const appNameOrType = app.name ?? app.type;
     const inContainer = isInContainer(app, widgetApi, roomId);
 
-    const label = i18nApi.translate(inContainer ? "Hide %(name)s" : "Show %(name)s", { name: appNameOrType });
+    const label = i18nApi.translate(inContainer ? "hide_widget" : "show_widget", { name: appNameOrType });
 
     const onClick = React.useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -95,6 +95,12 @@
         "cancel_search_label": "Annuler la recherche",
         "emoji_picker": "Sélecteur d'emoji"
     },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Vous perdrez vos discussions chiffrées et devrez reconfigurer votre identité numérique si vous supprimer tous vos appareils.",
+            "error": "Impossible de supprimer le stockage de clés. Veuillez réessayer."
+        }
+    },
     "error": {
         "legacy_crypto_unsupported": {
             "actions": "Veuillez soit revenir à la version <b>%(version)s</b>, soit supprimer cet appareil.",

@@ -3,15 +3,76 @@
         "seek_bar_label": "Äänen siirtymispalkki"
     },
     "action": {
+        "back": "Takaisin",
+        "cancel": "Peruuta",
+        "click": "Valitse",
+        "close": "Sulje",
+        "collapse": "Supista",
         "delete": "Poista",
         "dismiss": "Hylkää",
+        "download": "Lataa",
+        "edit": "Muokkaa",
         "explore_rooms": "Selaa huoneita",
+        "go": "Mene",
+        "hide": "Piilota",
+        "invite": "Kutsu",
+        "new_conversation": "Uusi",
+        "new_room": "Uusi huone",
+        "new_section": "Uusi osio",
+        "new_video_room": "Uusi videohuone",
+        "no": "Ei",
+        "open_menu": "Avaa valikko",
         "pause": "Keskeytä",
+        "pin": "Kiinnitä",
         "play": "Toista",
-        "search": "Haku"
+        "react": "Reagoi",
+        "remove": "Poista",
+        "remove_this_device": "Poista tämä laite",
+        "reply": "Vastaa",
+        "reply_in_thread": "Vastaa ketjuun",
+        "retry": "Yritä uudelleen",
+        "save": "Tallenna",
+        "search": "Haku",
+        "start_chat": "Aloita keskustelu",
+        "unpin": "Poista kiinnitys",
+        "view_source": "Näytä lähdekoodi",
+        "yes": "Kyllä"
+    },
+    "common": {
+        "encryption_enabled": "Salaus käytössä",
+        "loading": "Ladataan…",
+        "options": "Vaihtoehdot",
+        "preferences": "Valinnat"
+    },
+    "emoji": {
+        "categories": "Luokat",
+        "category_activities": "Aktiviteetit",
+        "category_animals_nature": "Eläimet ja luonto",
+        "category_flags": "Liput",
+        "category_food_drink": "Ruoka ja juoma",
+        "category_frequently_used": "Usein käytetyt",
+        "category_objects": "Esineet",
+        "category_smileys_people": "Hymiöt ja ihmiset",
+        "category_symbols": "Symbolit",
+        "category_travel_places": "Matkustaminen ja paikat"
     },
     "left_panel": {
         "open_dial_pad": "Avaa näppäimistö"
+    },
+    "room_list": {
+        "appearance": "Ulkoasu",
+        "filters": {
+            "favourite": "Suosikit",
+            "invites": "Kutsut",
+            "mentions": "Maininnat",
+            "people": "Ihmiset",
+            "rooms": "Huoneet"
+        }
+    },
+    "status": {
+        "set_status": {
+            "away": "Poissa"
+        }
     },
     "time": {
         "about_day_ago": "noin päivä sitten",
@@ -37,5 +98,10 @@
     },
     "user_menu": {
         "link_new_device": "Yhdistä uusi laite"
+    },
+    "voip": {
+        "element_call_mock": {
+            "participants": "Osallistujat"
+        }
     }
 }

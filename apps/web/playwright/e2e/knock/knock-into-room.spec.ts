@@ -50,7 +50,7 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
 
@@ -140,7 +140,7 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
@@ -231,7 +231,7 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
@@ -274,7 +274,7 @@ test.describe("Knock Into Room", () => {
 
         // The client doesn't know the room, so it is shown from its summary while it is open
         await app.viewRoomById(room.roomId);
-        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(cybersecurityOption).toBeVisible();
 
         // and goes away when another room is opened
@@ -301,7 +301,7 @@ test.describe("Knock Into Room", () => {
         await app.viewRoomById(room.roomId);
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();
@@ -350,7 +350,7 @@ test.describe("Knock Into Room", () => {
         await spotlightDialog.results.nth(0).click();
 
         const roomPreviewBar = page.locator(".mx_RoomPreviewBar");
-        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join?" })).toBeVisible();
+        await expect(roomPreviewBar.getByRole("heading", { name: "Ask to join Cybersecurity?" })).toBeVisible();
         await expect(roomPreviewBar.getByRole("textbox")).toBeVisible();
         await roomPreviewBar.getByRole("button", { name: "Request to join" }).click();
         await expect(roomPreviewBar.getByRole("heading", { name: "Request to join sent" })).toBeVisible();

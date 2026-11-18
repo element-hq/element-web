@@ -12,7 +12,8 @@
             "matchPackageNames": ["*"],
             "dependencyDashboardApproval": false,
             "schedule": ["* 0-3 * * 1,3,5"],
-            "prConcurrentLimit": 0
+            "prConcurrentLimit": 0,
+            "draftPR": false
         },
         {
             "description": "Group all pnpm updates",
@@ -43,6 +44,18 @@
             "description": "Keep TanStack Virtual out of the react group, updates usually need the @tanstack/virtual-core patch rebased by hand",
             "groupName": "@tanstack/react-virtual",
             "matchDepNames": ["@tanstack/react-virtual", "@tanstack/virtual-core"]
+        },
+        {
+            "description": "Update Element Call together once a week",
+            "groupName": "Element Call",
+            "groupSlug": "element-call",
+            "matchDepNames": ["@element-hq/element-call-component", "@element-hq/element-call-embedded"],
+            "dependencyDashboardApproval": false,
+            "minimumReleaseAge": null,
+            "schedule": ["* 0-3 * * 2"],
+            "updateNotScheduled": false,
+            "prConcurrentLimit": 0,
+            "draftPR": false
         }
     ],
     "customManagers": [

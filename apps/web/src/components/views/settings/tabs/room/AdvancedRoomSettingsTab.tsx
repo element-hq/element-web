@@ -17,7 +17,6 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import CopyableText from "../../../elements/CopyableText";
 import { type ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
-import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
@@ -57,15 +56,13 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     public componentDidMount(): void {
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         const room = this.props.room;
         void room.getRecommendedVersion().then((v) => {
             const tombstone = room.currentState.getStateEvents(EventType.RoomTombstone, "");
 
             const additionalStateChanges: Partial<IState> = {};
-            const predecessor = room.findPredecessor(msc3946ProcessDynamicPredecessor);
+            const predecessor = room.findPredecessor();
             if (predecessor) {
                 additionalStateChanges.oldRoomId = predecessor.roomId;
                 additionalStateChanges.oldEventId = predecessor.eventId;

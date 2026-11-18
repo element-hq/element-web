@@ -13,7 +13,7 @@ import AutocompleteWrapperModel, {
     type UpdateCallback,
     type UpdateQuery,
 } from "./autocomplete";
-import { EMOJI_REGEX, unicodeToShortcode } from "../HtmlUtils";
+import { getEmojiRegex, unicodeToShortcode } from "../HtmlUtils";
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -191,7 +191,7 @@ abstract class BasePart {
 
 abstract class PlainBasePart extends BasePart {
     protected acceptsInsertion(chr: string, offset: number, inputType: string): boolean {
-        if (chr === "\n" || EMOJI_REGEX.test(chr)) {
+        if (chr === "\n" || getEmojiRegex().test(chr)) {
             return false;
         }
         // when not pasting or dropping text, reject characters that should start a pill candidate
@@ -377,7 +377,7 @@ class NewlinePart extends BasePart implements IBasePart {
 
 export class EmojiPart extends BasePart implements IBasePart {
     protected acceptsInsertion(chr: string, offset: number): boolean {
-        return EMOJI_REGEX.test(chr);
+        return getEmojiRegex().test(chr);
     }
 
     protected acceptsRemoval(position: number, chr: string): boolean {
@@ -579,7 +579,7 @@ export class PartCreator {
             case "\n":
                 return new NewlinePart();
             default:
-                if (EMOJI_REGEX.test(getFirstGrapheme(input))) {
+                if (getEmojiRegex().test(getFirstGrapheme(input))) {
                     return new EmojiPart();
                 }
                 return new PlainPart();
@@ -656,7 +656,7 @@ export class PartCreator {
         let plainText = "";
 
         for (const data of graphemeSegmenter.segment(text)) {
-            if (EMOJI_REGEX.test(data.segment)) {
+            if (getEmojiRegex().test(data.segment)) {
                 if (plainText) {
                     parts.push(this.plain(plainText));
                     plainText = "";

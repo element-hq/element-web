@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { logger } from "@sentry/browser";
+import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomMember, type IPowerLevelsContent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 

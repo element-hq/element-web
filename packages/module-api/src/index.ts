@@ -1,9 +1,10 @@
 /*
-Copyright 2025 New Vector Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2026 Element Creations Ltd.
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 export { ModuleLoader, ModuleIncompatibleError } from "./loader";
 export type { Api, Module, ModuleFactory } from "./api";
@@ -14,11 +15,13 @@ export type {
     StringVariables,
     RichVariables,
     Translations,
+    LanguageTranslations,
     SubstitutionValue,
     Tags,
 } from "./api/i18n";
 export type * from "./models/event";
 export type * from "./models/Room";
+export type * from "./models/RoomStateEvent";
 export type * from "./api/composer";
 export type * from "./api/custom-components";
 export type * from "./api/extras";
@@ -39,3 +42,4 @@ export type * from "./api/settings";
 export * from "./api/watchable";
 export type * from "./utils";
 export type * from "./api/urlpreview";
+export type * from "./api/document-preview";

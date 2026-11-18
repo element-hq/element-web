@@ -93,6 +93,12 @@ export const ModuleConfig = z.object({
     logo_url: z.url(),
 
     /**
+     * Height in pixels to use when rendering the logo in the banner, defaults to 35px.
+     * The width will be set automatically to maintain the original aspect ratio.
+     */
+    logo_height: z.optional(z.number()),
+
+    /**
      * The URL to linkify the logo + title heading with.
      * @example `https://example.com`
      */

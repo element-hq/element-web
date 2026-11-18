@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Locator, Page } from "@playwright/test";
+import { type Locator, type Page, expect } from "@playwright/test";
 import { CommandOrControl } from "../e2e/utils";
 
 export enum Filter {
@@ -27,6 +27,8 @@ export class Spotlight {
             await this.page.keyboard.press(`${CommandOrControl}+KeyK`);
         }
         await this.page.keyboard.press(`${CommandOrControl}+KeyK`);
+        // Wait for the dialog to finish opening, otherwise keypresses can race with its updates
+        await expect(this.searchBox.getByRole("textbox", { name: "Search" })).toBeFocused();
     }
 
     public async filter(filter: Filter) {

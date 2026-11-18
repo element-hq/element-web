@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
+import PermalinkConstructor, { parseViaServers, PermalinkParts, splitPathAndQuery } from "./PermalinkConstructor";
 
 /**
  * Generates permalinks that self-reference the running webapp
@@ -72,17 +72,13 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
      * @returns {PermalinkParts}
      */
     public static parseAppRoute(route: string): PermalinkParts {
-        const parts = route.split("/");
+        const [path, query] = splitPathAndQuery(route);
+        const parts = path.split("/");
 
         if (parts.length < 2) {
             // we're expecting an entity and an ID of some kind at least
             throw new Error("URL is missing parts");
         }
-
-        // Split optional query out of last part
-        const [lastPartMaybeWithQuery] = parts.splice(-1, 1);
-        const [lastPart, query = ""] = lastPartMaybeWithQuery.split("?");
-        parts.push(lastPart);
 
         const entityType = parts[0];
         const entity = parts[1];
@@ -92,8 +88,7 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
         } else if (entityType === "room") {
             // Rejoin the rest because v3 events can have slashes (annoyingly)
             const eventId = parts.length > 2 ? parts.slice(2).join("/") : "";
-            const via = query.split(/&?via=/).filter((p) => !!p);
-            return PermalinkParts.forEvent(entity, eventId, via);
+            return PermalinkParts.forEvent(entity, eventId, parseViaServers(query));
         } else {
             throw new Error("Unknown entity type in permalink");
         }

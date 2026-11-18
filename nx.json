@@ -7,7 +7,17 @@
         }
     },
     "namedInputs": {
-        "src": ["{projectRoot}/src/**/*"]
+        "src": ["{projectRoot}/src/**/*"],
+        // Source files that can end up in build output: excludes tests, their fixtures and stories
+        "production": [
+            "src",
+            "!{projectRoot}/src/**/*.test.*",
+            "!{projectRoot}/src/**/__snapshots__/**/*",
+            "!{projectRoot}/src/**/__fixtures__/**/*",
+            "!{projectRoot}/src/test/**/*",
+            "!{projectRoot}/src/**/*.stories.*"
+        ],
+        "buildConfig": ["{projectRoot}/package.json", "{projectRoot}/tsconfig*.json", "{projectRoot}/vite.config.ts"]
     },
     "analytics": false
 }

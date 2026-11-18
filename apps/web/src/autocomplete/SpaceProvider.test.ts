@@ -8,12 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mkRoom, mkSpace, stubClient } from "test-utils";
 
 import SpaceProvider from "./SpaceProvider";
-import SettingsStore from "../settings/SettingsStore";
 
 describe("SpaceProvider", () => {
     it("suggests a space whose alias matches a prefix", async () => {
@@ -74,45 +73,6 @@ describe("SpaceProvider", () => {
                 suffix: " ",
             },
         ]);
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            const client = stubClient();
-            const space = makeSpace(client, "space:e.com");
-            vi.mocked(client.getVisibleRooms).mockReturnValue([space]);
-            vi.mocked(client.getVisibleRooms).mockClear();
-
-            const spaceProvider = new SpaceProvider(space);
-            await spaceProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
-
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_space_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            const client = stubClient();
-            const space = makeSpace(client, "space:e.com");
-            vi.mocked(client.getVisibleRooms).mockReturnValue([space]);
-            vi.mocked(client.getVisibleRooms).mockClear();
-
-            const spaceProvider = new SpaceProvider(space);
-            await spaceProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
-
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-        });
     });
 });
 

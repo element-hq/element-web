@@ -9,7 +9,7 @@
 
 import React from "react";
 import { render, screen, waitFor } from "test-utils-rtl";
-import { EventType, type MatrixClient, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
 import { mkEvent, stubClient, tearDownAfterTest } from "test-utils";
 
@@ -104,6 +104,28 @@ describe("EventPreviewViewModel", () => {
         mxEvent.makeReplaced(replacementEvent);
 
         await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Edited"));
+    });
+
+    it("hides the preview when the event is redacted", async () => {
+        const room = new Room(roomId, cli, userId);
+        vi.mocked(cli.getRoom).mockReturnValue(room);
+        const mxEvent = makeMessageEvent({ body: "Secret" });
+        await room.addLiveEvents([mxEvent], { addToState: false });
+        const vm = tearDownAfterTest(new EventPreviewViewModel({ cli, mxEvent }));
+
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Secret"));
+
+        const redaction = new MatrixEvent({
+            type: EventType.RoomRedaction,
+            room_id: roomId,
+            sender: userId,
+            redacts: mxEvent.getId(),
+            content: {},
+        });
+        room.tryApplyRedaction(redaction);
+
+        await waitFor(() => expect(vm.getSnapshot().isVisible).toBe(false));
+        expect(vm.getSnapshot().previewContent).toBeUndefined();
     });
 
     it("skips unchanged setter inputs and updates for a different event", async () => {

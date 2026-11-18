@@ -10,17 +10,15 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ThemeProvider } from "styled-components";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 import Menu from "./Menu";
 import { Theme } from "./theme";
 
-const makeApi = (): Api => {
+const makeI18n = (): I18nApi => {
     return {
-        i18n: {
-            translate: vi.fn((key: string) => key),
-        },
-    } as unknown as Api;
+        translate: vi.fn((key: string) => key),
+    } as unknown as I18nApi;
 };
 
 const config: ComponentProps<typeof Menu>["config"] = {
@@ -44,7 +42,12 @@ describe("Menu", () => {
         const user = userEvent.setup();
         render(
             <ThemeProvider theme={Theme.parse({})}>
-                <Menu api={makeApi()} config={config} data={data} fallbackLogoUrl="https://example.com/fallback.png" />
+                <Menu
+                    i18n={makeI18n()}
+                    config={config}
+                    data={data}
+                    fallbackLogoUrl="https://example.com/fallback.png"
+                />
             </ThemeProvider>,
         );
 
@@ -62,7 +65,12 @@ describe("Menu", () => {
         const user = userEvent.setup();
         render(
             <ThemeProvider theme={Theme.parse({})}>
-                <Menu api={makeApi()} config={config} data={null} fallbackLogoUrl="https://example.com/fallback.png" />
+                <Menu
+                    i18n={makeI18n()}
+                    config={config}
+                    data={null}
+                    fallbackLogoUrl="https://example.com/fallback.png"
+                />
             </ThemeProvider>,
         );
 
@@ -78,7 +86,7 @@ describe("Menu", () => {
         render(
             <ThemeProvider theme={Theme.parse({})}>
                 <Menu
-                    api={makeApi()}
+                    i18n={makeI18n()}
                     config={configWithoutLogoHref}
                     data={data}
                     fallbackLogoUrl="https://example.com/fallback.png"

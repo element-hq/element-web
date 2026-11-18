@@ -93,7 +93,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
                 }
                 return true;
             }),
-            (member) => member.getMxcAvatarUrl(),
+            (member) => member.userId,
         );
         const avatars = uniqueMembers.map((m) => <MemberAvatar key={m.userId} member={m} size="14px" />);
         body = (

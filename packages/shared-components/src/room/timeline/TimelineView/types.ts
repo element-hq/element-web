@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 
 // ─── Timeline item: one renderable row ─────────────────────────────
@@ -99,6 +99,29 @@ export interface NavigationAnchor {
  */
 export type ImmediateScroll = (anchor: NavigationAnchor) => void;
 
+/**
+ * Controls the view exposes through its `ref`: paging for the app's page up/down shortcuts,
+ * and the immediate scroll that the view model's jump actions take. Everything here only
+ * moves the viewport over what is already loaded; fetching more history stays with the view
+ * model, which the view asks in the usual way once the scroll reaches an end.
+ *
+ * Moving between messages one at a time (arrow up/down, home/end) is not here: the view
+ * handles those keys itself.
+ */
+export interface TimelineViewHandle {
+    /**
+     * Move by a page of messages: `-1` towards older messages, `1` towards newer ones. A
+     * page is as many rows as are currently on screen.
+     */
+    scrollByPage(direction: -1 | 1): void;
+    /**
+     * Scroll to a loaded row straight away. This is the same handle the view gives the view
+     * model's actions, so an outside caller can drive those actions too, e.g.
+     * `vm.onJumpToLive(handle.scrollNow)`.
+     */
+    scrollNow: ImmediateScroll;
+}
+
 // ─── Timeline view model contract ──────────────────────────────────
 
 export interface TimelineViewSnapshot {
@@ -191,6 +214,16 @@ export interface TimelineViewActions {
     onMarkAllAsRead(): void;
 
     /**
+     * Navigate to the start of the room.
+     *
+     * `scrollNow` is invoked synchronously when the window already reaches the start.
+     * Otherwise the VM reloads the window at the start and the scroll happens via
+     * `pendingAnchor` after the load. If the start cannot be loaded, the VM goes to the
+     * top of the loaded window instead.
+     */
+    onJumpToStart(scrollNow: ImmediateScroll): void;
+
+    /**
      * Navigate to the live end of the timeline.
      *
      * `scrollNow` is invoked synchronously when the window already reaches
@@ -213,4 +246,7 @@ export interface TimelineViewProps {
      * The shared container calls this for every visible item.
      */
     renderItem: (item: TimelineItem) => ReactNode;
+
+    /** Receives the view's {@link TimelineViewHandle} once it has mounted. */
+    ref?: Ref<TimelineViewHandle>;
 }
