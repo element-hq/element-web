@@ -112,6 +112,7 @@ describe("renderInstallScreen", () => {
             removeEventListener: (_: string, cb: () => void) => listeners.delete(cb),
         };
         const matchMedia = vi.spyOn(window, "matchMedia").mockReturnValue(query as unknown as MediaQueryList);
+        // eslint-disable-next-line unicorn/no-document-cookie -- same cookie as the code under test
         document.cookie = "lvg_install_screen_dismissed=; Max-Age=0; Path=/";
         const before = document.body.childElementCount;
         const shown = renderInstallScreen("chromium", "win");
