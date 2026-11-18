@@ -316,11 +316,13 @@ const SecureBackup: React.FC = () => {
     if (!dehydratedDeviceId) return null;
 
     return (
-        <SettingsSubsection heading={_t("common|secure_backup")}>
+        <SettingsSubsection heading={_t("settings|encryption|offline_device|offline_device")}>
             <div className="mx_SettingsSubsection_content">
-                <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
+                <div className="mx_SettingsFlag_label">
+                    {_t("settings|encryption|offline_device|offline_device_enabled")}
+                </div>
                 <div className="mx_SettingsSubsection_text">
-                    {_t("settings|security|dehydrated_device_description")}
+                    {_t("settings|encryption|offline_device|offline_device_description")}
                 </div>
             </div>
         </SettingsSubsection>
