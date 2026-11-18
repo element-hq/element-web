@@ -23,6 +23,11 @@ export const enum UIComponent {
     CreateRooms = "UIComponent.roomCreation",
 
     /**
+     * Components that lead to a direct message being created, such as "Start chat".
+     */
+    CreateDM = "UIComponent.dmCreation",
+
+    /**
      * Components that lead to a Space being created that aren't already
      * guarded by some other condition (ie: "only if you can add subspaces"
      * is *not* guarded by this component, but "create new space" is).

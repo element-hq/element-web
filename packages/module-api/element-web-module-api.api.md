@@ -509,6 +509,7 @@ export type Translations = Record<string, {
 // @alpha
 export const enum UIComponent {
     AddIntegrations = "UIComponent.addIntegrations",
+    CreateDM = "UIComponent.dmCreation",
     CreateRooms = "UIComponent.roomCreation",
     CreateSpaces = "UIComponent.spaceCreation",
     ExploreRooms = "UIComponent.exploreRooms",
