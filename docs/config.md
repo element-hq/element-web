@@ -605,6 +605,8 @@ Each entry is a URL or path to a JavaScript module entry point that will be dyna
 }
 ```
 
+Paths must begin with `/`, and are relative to the top-level of the webapp.
+
 ## Undocumented / developer options
 
 The following are undocumented or intended for developer use only.

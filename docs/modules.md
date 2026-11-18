@@ -17,7 +17,11 @@ documentation for each module.
 
 ## Module API
 
-Modules are loaded from the URL or path listed in `config.json` using dynamic import (`import()`). The modules are loaded in order after Element Web initializes but before the application fully starts. Modules must be accessible from the browser and should export a compatible module format that works with the [Module API](https://github.com/element-hq/element-web/tree/develop/packages/module-api).
+Modules are loaded from the URL or path listed in `config.json` using dynamic
+import (`import()`). The modules are loaded in order after Element Web
+initializes but before the application fully starts. Modules must export a
+compatible module format that works with the [Module
+API](https://github.com/element-hq/element-web/tree/develop/packages/module-api).
 
 ## Module development
 
@@ -28,7 +32,15 @@ Element Web's build output directory. For example, within a working copy of the
 ```sh
 (cd modules/banner && pnpm build)
 mkdir app/web/webapp/modules
-ln -s ../../../../modules/banner app/web/webapp/modules/
+ln -s ../../../../modules/banner/lib app/web/webapp/modules/banner
+```
+
+This can then be enabled with the following in `config.json`:
+
+```json
+{
+    "modules": [ "/modules/banner/index.js" ]
+}
 ```
 
 # History
