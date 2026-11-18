@@ -151,6 +151,7 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                             setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
                                         }
                                     />
+                                    <Separator kind="section" />
                                     {secureBackup && (
                                         <>
                                             {secureBackup}
