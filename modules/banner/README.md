@@ -26,7 +26,6 @@ Configuration for the module should be provided via a
 
 ## Reference
 
-
 The following configuration options are supported within the
 `io.element.element-web-modules.banner` object:
 
