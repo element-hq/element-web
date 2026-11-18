@@ -15,6 +15,7 @@ export type {
     StringVariables,
     RichVariables,
     Translations,
+    LanguageTranslations,
     SubstitutionValue,
     Tags,
 } from "./api/i18n";

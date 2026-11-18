@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type FC, useEffect, useState } from "react";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 import { type StaticConfig, type UniventionConfig } from "../config";
 import StaticMenu from "../Menu";
@@ -14,15 +14,15 @@ import { fetchNavigation } from "./navigation";
 import SilentLogin from "./SilentLogin";
 
 interface Props {
-    api: Api;
+    i18n: I18nApi;
     config: UniventionConfig;
     fallbackLogoUrl: string;
 }
 
-const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
+const Menu: FC<Props> = ({ i18n, config, fallbackLogoUrl }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [data, setData] = useState<StaticConfig | Error>();
-    const language = api.i18n.language.toLowerCase().startsWith("de") ? "de-DE" : "en";
+    const language = i18n.language.toLowerCase().startsWith("de") ? "de-DE" : "en";
 
     useEffect(() => {
         let discard = false;
@@ -47,7 +47,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
         <>
             {!loggedIn && <SilentLogin onLoggedIn={setLoggedIn} icsUrl={config.ics_url} />}
             <StaticMenu
-                api={api}
+                i18n={i18n}
                 config={config}
                 data={data ?? null}
                 fallbackLogoUrl={config.logo_url ?? fallbackLogoUrl}
