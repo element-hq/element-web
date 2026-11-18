@@ -23,7 +23,9 @@ RUN pnpm install --frozen-lockfile
 RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 
 # Build
-COPY --link --exclude=.git --exclude=apps/web/docker . /src
+# Don't re-copy package.json and pnpm-lock.yaml here. The link step above may have changed these
+# and resetting them would cause the build step below to reinstall the non-linked versions.
+COPY --link --exclude=.git --exclude=apps/web/docker --exclude=pnpm-lock.yaml --exclude=apps/web/package.json . /src
 RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
