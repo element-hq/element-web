@@ -89,6 +89,7 @@ describe("RestrictedGuestsModule", () => {
             expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(false);
             expect(module.shouldShowComponent(UIComponent.ReleaseAnnouncements)).toBe(false);
             expect(module.shouldShowComponent(UIComponent.FilterContainer)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.CreateDM)).toBe(false);
         });
     });
 });
