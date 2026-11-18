@@ -68,7 +68,7 @@ interface Props {
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
-    const secureBackup = <SecureBackup />;
+    const offlineDevice = <OfflineDevice />;
 
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
@@ -137,9 +137,9 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         }
                                     />
                                     <Separator kind="section" />
-                                    {secureBackup && (
+                                    {offlineDevice && (
                                         <>
-                                            {secureBackup}
+                                            {offlineDevice}
                                             <Separator kind="section" />
                                         </>
                                     )}
@@ -307,7 +307,7 @@ export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecover
     }
 }
 
-const SecureBackup: React.FC = () => {
+const OfflineDevice: React.FC = () => {
     const { dehydratedDeviceId } = useOwnDevices();
     if (!dehydratedDeviceId) return null;
 
