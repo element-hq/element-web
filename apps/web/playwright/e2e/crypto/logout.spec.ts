@@ -83,7 +83,7 @@ test.describe("Logout tests", () => {
         await dialog.getByRole("button", { name: "Continue" }).click();
         await dialog.getByRole("textbox").fill(recoveryKey);
         await dialog.getByRole("button", { name: "Finish set up" }).click();
-        await expect(dialog.getByRole("heading", { name: "Your new recovery key is now active" })).toBeVisible();
+        await expect(dialog.getByRole("heading", { name: "Your backup is now fully set up" })).toBeVisible();
 
         await dialog.getByRole("button", { name: "Continue to remove this device" }).click();
         await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
