@@ -25,30 +25,37 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IProps {
     /**
-     * Whether the dialog should have a 'close' button and a keyDown handler which
-     * will intercept 'Escape'.
+     * If set to `true`, the dialog may be cancelled. A "close" button is rendered in
+     * the top corner, and pressing "Escape" allows users to dismiss it. If either of
+     * these is actioned, `onFinished` runs.
      *
-     * This should only be set to `false` if there is nothing the app can sensibly do if the
-     * dialog is cancelled, eg. "We can't restore your session and
-     * the app cannot work".
+     * Only set this to `false` if there is nothing the app can sensibly do when the dialog is
+     * cancelled, eg. "We can't restore your session and the app cannot work". This removes the
+     * "close" button AND the "Escape" handler. In this case, `onFinished` never runs at all.
+     *
+     * To remove only the "close" button while keeping "Escape", use `hideCloseButton`.
      *
      * Default: `true`.
      */
     "hasCancel"?: boolean;
 
     /**
-     * Whether to hide the 'close' button while keeping the 'Escape' handler (if `hasCancel` is
-     * true). Used by dialogs whose flows must be cancelled via their own buttons, where
-     * accessibility still requires Escape to work.
+     * If set to `true`, the 'close' button is hidden, but pressing 'Escape' still cancels
+     * the dialog.
+     *
+     * Use this for dialogs that must be cancelled through their own explicit buttons, since
+     * accessibility requires 'Escape' to keep working (per the WAI-ARIA modal dialog pattern).
+     *
+     * This has no effect when `hasCancel` is `false`.
      *
      * Default: `false`.
      */
     "hideCloseButton"?: boolean;
 
     /**
-     * Callback that will be called when the 'close' button is clicked or 'Escape' is pressed.
+     * Called when the dialog is cancelled, either by the 'close' button or by 'Escape'.
      *
-     * Not used if `hasCancel` is false.
+     * This method is never called if `hasCancel` is `false`.
      */
     "onFinished"?: () => void;
 
