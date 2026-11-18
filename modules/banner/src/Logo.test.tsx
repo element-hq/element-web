@@ -7,21 +7,19 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 import Logo from "./Logo";
 
-const makeApi = (): Api => {
+const makeI18n = (): I18nApi => {
     return {
-        i18n: {
-            translate: vi.fn((key: string) => key),
-        },
-    } as unknown as Api;
+        translate: vi.fn((key: string) => key),
+    } as unknown as I18nApi;
 };
 
 describe("Logo", () => {
     it("renders an image with the translated alt text", () => {
-        render(<Logo api={makeApi()} src="https://example.com/logo.png" height="40px" />);
+        render(<Logo i18n={makeI18n()} src="https://example.com/logo.png" height="40px" />);
 
         const img = screen.getByRole("img", { name: "logo_alt" });
         expect(img).toHaveAttribute("src", "https://example.com/logo.png");

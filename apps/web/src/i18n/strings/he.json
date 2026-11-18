@@ -1096,8 +1096,6 @@
         "count_of_successfully_restored_keys": "שוחזר בהצלחה %(sessionCount)s מפתחות",
         "enter_key_description": "גש להיסטוריית ההודעות המאובטחות שלך והגדר הודעות מאובטחות על ידי הזנת מפתח האבטחה שלך.",
         "enter_key_title": "הזן מפתח אבטחה",
-        "enter_phrase_description": "גש להיסטוריית ההודעות המאובטחת שלך והגדר הודעות מאובטחות על ידי הזנת ביטוי האבטחה שלך.",
-        "enter_phrase_title": "הזן ביטוי אבטחה",
         "incorrect_security_phrase_dialog": "לא ניתן לפענח גיבוי עם ביטוי אבטחה זה: אנא ודא שהזנת את ביטוי האבטחה הנכון.",
         "incorrect_security_phrase_title": "ביטוי אבטחה שגוי",
         "key_backup_warning": "<b>אזהרה</b>: עליך להגדיר גיבוי מפתחות הצפנה רק ממחשב מהימן.",

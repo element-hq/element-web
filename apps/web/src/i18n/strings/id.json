@@ -1764,8 +1764,6 @@
         "count_of_successfully_restored_keys": "Berhasil memulihkan %(sessionCount)s kunci",
         "enter_key_description": "Akses riwayat pesan aman Anda dan siapkan perpesanan aman dengan memasukkan Kunci Keamanan Anda.",
         "enter_key_title": "Masukkan Kunci Keamanan",
-        "enter_phrase_description": "Akses riwayat pesan aman Anda dan siapkan perpesanan aman dengan memasukkan Frasa Keamanan Anda.",
-        "enter_phrase_title": "Masukkan Frasa Keamanan",
         "incorrect_security_phrase_dialog": "Cadangan tidak dapat didekripsikan dengan Frasa Keamanan ini: mohon periksa jika Anda memasukkan Frasa Keamanan yang benar.",
         "incorrect_security_phrase_title": "Frasa Keamanan tidak benar",
         "key_backup_warning": "<b>Peringatan</b>: Anda seharusnya menyiapkan cadangan kunci di komputer yang dipercayai.",
@@ -1777,7 +1775,6 @@
         "load_error_content": "Tidak dapat memuat status cadangan",
         "load_keys_progress": "%(completed)s dari %(total)s kunci dipulihkan",
         "no_backup_error": "Tidak ada cadangan yang ditemukan!",
-        "phrase_forgotten_text": "Jika Anda lupa Frasa Keamanan Anda, Anda dapat <button1>menggunakan Kunci Pemulihan Anda</button1> atau <button2>mengatur opsi pemulihan baru</button2>",
         "recovery_key_mismatch_description": "Cadangan tidak dapat didekripsi dengan Kunci Pemulihan ini: mohon pastikan Anda memasukkan Kunci Pemulihan yang benar.",
         "recovery_key_mismatch_title": "Kunci Keamanan tidak cocok",
         "restore_failed_error": "Tidak dapat memulihkan cadangan"

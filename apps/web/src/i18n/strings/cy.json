@@ -1771,8 +1771,6 @@
         "count_of_successfully_restored_keys": "Wedi adfer %(sessionCount)s allwedd yn llwyddiannus",
         "enter_key_description": "Cyrchwch hanes eich negeseuon diogel a gosodwch negeseuon diogel trwy nodi'ch Allwedd Adfer.",
         "enter_key_title": "Rhowch Allwedd Adfer",
-        "enter_phrase_description": "Cyrchwch hanes eich neges ddiogel a gosodwch negeseuon diogel trwy nodi'ch Ymadrodd Diogelwch.",
-        "enter_phrase_title": "Rhowch Ymadrodd Diogelwch",
         "incorrect_security_phrase_dialog": "Nid oedd modd dadgryptio copi wrth gefn gyda'r Ymadrodd Diogelwch hwn: gwiriwch eich bod wedi rhoi'r Ymadrodd Diogelwch cywir.",
         "incorrect_security_phrase_title": "Ymadrodd Diogelwch Anghywir",
         "key_backup_warning": "<b>Rhybudd</b>: dim ond o gyfrifiadur rydych chi'n ymddiried ynddo y dylech chi greu allwedd wrth gefn.",
@@ -1784,7 +1782,6 @@
         "load_error_content": "Methu llwytho statws wrth gefn",
         "load_keys_progress": "%(completed)s o %(total)s allweddi wedi'u hadfer",
         "no_backup_error": "Heb ganfod copi wrth gefn!",
-        "phrase_forgotten_text": "Os ydych chi wedi anghofio eich Ymadrodd Diogelwch gallwch chi <button1>defnyddio eich Allwedd Adfer</button1> neu <button2>greu dewisiadau adfer newydd</button2>",
         "recovery_key_mismatch_description": "Nid oedd modd dadgryptio copi wrth gefn gyda'r Allwedd Adfer hon: gwiriwch eich bod wedi rhoi'r Allwedd Adfer cywir.",
         "recovery_key_mismatch_title": "Dim cyfatebiaeth Allwedd Adfer",
         "restore_failed_error": "Methu adfer copi wrth gefn"

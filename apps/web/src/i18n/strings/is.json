@@ -1250,7 +1250,6 @@
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Mistókst að afkóða %(failedCount)s setur!",
         "enter_key_title": "Settu inn öryggislykil",
-        "enter_phrase_title": "Settu inn öryggisfrasa",
         "incorrect_security_phrase_title": "Rangur öryggisfrasi",
         "key_is_invalid": "Ekki gildur öryggislykill",
         "key_is_valid": "Þetta lítur út eins og gildur öryggislykill!",
