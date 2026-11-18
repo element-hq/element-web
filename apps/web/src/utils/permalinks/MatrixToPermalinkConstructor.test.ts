@@ -43,6 +43,50 @@ describe("MatrixToPermalinkConstructor", () => {
                 new PermalinkParts(null, null, "@user:example.com", null),
             );
         });
+
+        it("should keep slashes in the localpart of an MXID", () => {
+            expect(permalinkConstructor.parsePermalink("https://matrix.to/#/@us/er:example.com?action=chat")).toEqual(
+                new PermalinkParts(null, null, "@us/er:example.com", null),
+            );
+        });
+
+        it.each([
+            ["repeated via servers", "?via=one.example.com&via=two.example.com"],
+            ["an action after the via servers", "?via=one.example.com&via=two.example.com&action=join"],
+            ["an action before the via servers", "?action=join&via=one.example.com&via=two.example.com"],
+            [
+                "a custom parameter between via servers",
+                "?via=one.example.com&org.example.key=value&via=two.example.com",
+            ],
+        ])("should read only the via servers from a room link with %s", (name: string, query: string) => {
+            expect(permalinkConstructor.parsePermalink(`https://matrix.to/#/!room:example.com${query}`)).toEqual(
+                PermalinkParts.forRoom("!room:example.com", ["one.example.com", "two.example.com"]),
+            );
+        });
+
+        it("should read only the via servers from an event link with other parameters", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "https://matrix.to/#/!room:example.com/$event?via=one.example.com&org.example.key=value",
+                ),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
+        });
+
+        it("should read a room link whose other parameters contain slashes", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "https://matrix.to/#/!room:example.com?via=one.example.com&org.example.url=https://x/y",
+                ),
+            ).toEqual(PermalinkParts.forRoom("!room:example.com", ["one.example.com"]));
+        });
+
+        it("should read an event link whose other parameters contain slashes", () => {
+            expect(
+                permalinkConstructor.parsePermalink(
+                    "https://matrix.to/#/!room:example.com/$event?via=one.example.com&org.example.url=https://x/y",
+                ),
+            ).toEqual(PermalinkParts.forEvent("!room:example.com", "$event", ["one.example.com"]));
+        });
     });
 
     describe("forRoom", () => {
