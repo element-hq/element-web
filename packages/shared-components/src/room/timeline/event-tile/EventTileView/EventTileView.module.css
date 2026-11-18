@@ -343,6 +343,10 @@
 
         padding-top: 0;
 
+        .slotFooter {
+            margin-inline-start: var(--event-tile-group-line-padding-inline-start);
+        }
+
         .slotAvatar,
         .slotPadlock {
             line-height: 1;
@@ -1132,6 +1136,7 @@
 
         .slotAvatar {
             position: static;
+            align-self: flex-start;
             order: -1;
             display: inline-flex;
             align-items: center;
@@ -1188,7 +1193,7 @@
             align-self: center;
         }
 
-        /* ThreadView's hidden-event rows retain the legacy bubble body inset. */
+        /* ThreadView's hidden-event rows retain the legacy bubble body padding. */
         &.shapeThread {
             --event-tile-body-padding: 1px;
         }
@@ -1440,21 +1445,24 @@
             }
         }
 
+        &.layoutGroup .slotFooter {
+            margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+        }
+
         &.layoutBubble {
             .senderDetails .slotAvatar {
                 inset-inline-start: 0;
             }
 
             .line .slotBody {
-                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+                margin-inline-start: calc(14px + 6px);
             }
 
-            /* Bubble body slots are display: contents, so their margin is not
-               rendered. Apply the state-info slot offset to each rendered
-               body, while preserving the slot wrapper's styling contract. */
+            /* Bubble body slots are display: contents, so also offset the
+               rendered body by the avatar width and gap. */
             .line .slotBody > * {
                 width: auto;
-                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+                margin-inline-start: calc(14px + 6px);
             }
         }
     }

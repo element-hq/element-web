@@ -173,10 +173,8 @@ test.describe("Threads", () => {
         // Make sure the CSS style for spacing is applied to the hidden event on bubble layout
         locator = page.locator(".mx_ThreadView .mx_GenericEventListSummary .mx_EventTile").last();
         await expect(locator.getByTestId("event-tile-slot-body"))
-            // 76px: ThreadViewGroupSpacingStart + 14px + 6px
-            // 14px: avatar width
-            // See: _EventTile.pcss
-            .toHaveCSS("margin-inline-start", "76px");
+            // 20px: 14px avatar width + 6px gap
+            .toHaveCSS("margin-inline-start", "20px");
         await expect(locator.locator(".mx_EventTile_line"))
             // Make sure the margin is NOT applied to mx_EventTile_line
             .toHaveCSS("margin-inline-start", "0px");
