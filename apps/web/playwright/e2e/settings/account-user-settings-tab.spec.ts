@@ -130,7 +130,14 @@ test.describe("Account user settings tab", () => {
         await expect(page.getByRole("tooltip")).toHaveText("Account");
     });
 
-    test("should support adding and removing a profile picture", async ({ uut, page }) => {
+    test("should support adding and removing a profile picture", async ({ uut, page, context }) => {
+        // The test homeserver only serves media to authenticated requests, so the avatar thumbnail
+        // gets a 404 and the avatar falls back to the initial, often before the check below sees the image.
+        // Serve the uploaded picture for it instead.
+        await context.route("**/_matrix/media/v3/thumbnail/**", (route) =>
+            route.fulfill({ path: getSampleFilePath("riot.png") }),
+        );
+
         const profileSettings = uut.locator(".mx_UserProfileSettings");
         // Upload a picture
         await profileSettings.getByAltText("Upload").setInputFiles(getSampleFilePath("riot.png"));
