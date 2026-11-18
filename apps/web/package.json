@@ -55,6 +55,7 @@
         "@zxcvbn-ts/core": "^4.0.0",
         "@zxcvbn-ts/language-common": "^4.0.0",
         "@zxcvbn-ts/language-en": "^4.0.0",
+        "age-encryption": "0.3.1",
         "await-lock": "^3.0.0",
         "bloom-filters": "^3.0.3",
         "blurhash": "^2.0.3",

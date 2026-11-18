@@ -16,6 +16,11 @@ import userEvent from "@testing-library/user-event";
 import { createTestClient, withClientContextRenderOptions } from "test-utils";
 
 import { ResetIdentityPanel } from "./ResetIdentityPanel";
+import { setUpRecoverySilently } from "../../../../utils/crypto/silentRecoverySetup";
+
+vi.mock("../../../../utils/crypto/silentRecoverySetup", () => ({
+    setUpRecoverySilently: vi.fn(),
+}));
 
 describe("<ResetIdentityPanel />", () => {
     let matrixClient: MatrixClient;
@@ -47,6 +52,29 @@ describe("<ResetIdentityPanel />", () => {
 
         expect(matrixClient.getCrypto()!.resetEncryption).toHaveBeenCalled();
         expect(onReset).toHaveBeenCalled();
+    });
+
+    it("sets up recovery silently after the reset, before calling onReset", async () => {
+        const user = userEvent.setup();
+        const steps: string[] = [];
+        vi.spyOn(matrixClient.getCrypto()!, "resetEncryption").mockImplementation(async () => {
+            steps.push("reset");
+        });
+        vi.mocked(setUpRecoverySilently).mockImplementation(async () => {
+            steps.push("recovery");
+            return true;
+        });
+        const onReset = vi.fn(() => steps.push("onReset"));
+
+        render(
+            <ResetIdentityPanel variant="compromised" onReset={onReset} onCancelClick={vi.fn()} />,
+            withClientContextRenderOptions(matrixClient),
+        );
+        await user.click(screen.getByRole("button", { name: "Continue" }));
+        await sleep(0);
+
+        expect(setUpRecoverySilently).toHaveBeenCalledWith(matrixClient);
+        expect(steps).toEqual(["reset", "recovery", "onReset"]);
     });
 
     it("should display the 'forgot recovery key' variant correctly", async () => {

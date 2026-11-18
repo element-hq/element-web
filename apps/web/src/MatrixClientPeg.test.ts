@@ -112,6 +112,28 @@ describe("MatrixClientPeg", () => {
             expect(mockStartDehydration).toHaveBeenCalledWith({ onlyIfKeyCached: true, rehydrate: false });
         });
 
+        it("wraps bootstrapSecretStorage once crypto is initialised, when a recovery key recipient is configured", async () => {
+            vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const crypto = testPeg.safeGet().getCrypto()!;
+            const originalBootstrap = crypto.bootstrapSecretStorage;
+            SdkConfig.put({
+                leveragers_recovery_key_recipient: "age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p",
+            });
+
+            await testPeg.start();
+            expect(crypto.bootstrapSecretStorage).not.toBe(originalBootstrap);
+            SdkConfig.reset();
+        });
+
+        it("leaves bootstrapSecretStorage alone without a recovery key recipient", async () => {
+            vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const crypto = testPeg.safeGet().getCrypto()!;
+            const originalBootstrap = crypto.bootstrapSecretStorage;
+
+            await testPeg.start();
+            expect(crypto.bootstrapSecretStorage).toBe(originalBootstrap);
+        });
+
         it("Should migrate existing login", async () => {
             const mockInitRustCrypto = vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 

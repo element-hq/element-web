@@ -14,10 +14,14 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { createTestClient } from "test-utils";
 
 import { createCrossSigning } from "../CreateCrossSigning";
+import { setUpRecoverySilently } from "../utils/crypto/silentRecoverySetup";
 import { InitialCryptoSetupStore } from "./InitialCryptoSetupStore";
 
 vi.mock("../CreateCrossSigning", () => ({
     createCrossSigning: vi.fn(),
+}));
+vi.mock("../utils/crypto/silentRecoverySetup", () => ({
+    setUpRecoverySilently: vi.fn(),
 }));
 
 describe("InitialCryptoSetupStore", () => {
@@ -37,6 +41,7 @@ describe("InitialCryptoSetupStore", () => {
                 createCrossSigningReject = reject;
             });
         });
+        vi.mocked(setUpRecoverySilently).mockReset().mockResolvedValue(false);
     });
 
     it("should call createCrossSigning when startInitialCryptoSetup is called", async () => {
@@ -74,6 +79,35 @@ describe("InitialCryptoSetupStore", () => {
         createCrossSigningResolve();
         await sleep(0); // await the next tick
         expect(testStore.retry()).toBeFalsy();
+    });
+
+    it("sets up recovery silently once the identity exists, before reporting success", async () => {
+        const steps: string[] = [];
+        vi.mocked(client.getCrypto()!.checkKeyBackupAndEnable).mockImplementation(async () => {
+            steps.push("backup");
+            return null;
+        });
+        vi.mocked(setUpRecoverySilently).mockImplementation(async () => {
+            steps.push("recovery");
+            return true;
+        });
+        const onFinished = vi.fn(() => steps.push("finished"));
+
+        testStore.startInitialCryptoSetup(client, onFinished);
+        createCrossSigningResolve();
+
+        await waitFor(() => expect(onFinished).toHaveBeenCalledWith(true));
+        expect(setUpRecoverySilently).toHaveBeenCalledWith(client);
+        expect(steps).toEqual(["backup", "recovery", "finished"]);
+        expect(testStore.getStatus()).toBe("complete");
+    });
+
+    it("does not set up recovery when creating the identity fails", async () => {
+        testStore.startInitialCryptoSetup(client, vi.fn());
+        createCrossSigningReject(new Error("Test error"));
+
+        await waitFor(() => expect(testStore.getStatus()).toBe("error"));
+        expect(setUpRecoverySilently).not.toHaveBeenCalled();
     });
 
     it("should retry if initial attempt failed", async () => {

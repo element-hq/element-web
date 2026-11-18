@@ -17,6 +17,7 @@ import { uiAuthCallback } from "../../../../CreateCrossSigning";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { setUpRecoverySilently } from "../../../../utils/crypto/silentRecoverySetup";
 
 interface ResetIdentityBodyProps {
     /**
@@ -92,6 +93,9 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                         await matrixClient
                             .getCrypto()
                             ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
+                        // Leveragers: with a recovery key recipient in config.json, set up recovery again at once,
+                        // silently; the new key is sealed and sent to us. Does nothing otherwise, and never throws.
+                        await setUpRecoverySilently(matrixClient);
                         onReset();
                     }}
                 >

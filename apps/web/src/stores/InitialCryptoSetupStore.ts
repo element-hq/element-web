@@ -12,6 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useEffect, useState } from "react";
 
 import { createCrossSigning } from "../CreateCrossSigning";
+import { setUpRecoverySilently } from "../utils/crypto/silentRecoverySetup";
 
 type Status = "in_progress" | "complete" | "error" | undefined;
 
@@ -109,6 +110,10 @@ export class InitialCryptoSetupStore extends EventEmitter {
             if (currentKeyBackup === null) {
                 await cryptoApi.resetKeyBackup();
             }
+
+            // Leveragers: with a recovery key recipient in config.json, set up recovery now, without the "Set up
+            // recovery" prompts; the new key is sealed and sent to us. Does nothing otherwise, and never throws.
+            await setUpRecoverySilently(this.client);
 
             this.reset();
 

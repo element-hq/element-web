@@ -27,6 +27,7 @@ import PlatformPeg from "./PlatformPeg";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
+import { installRecoveryKeyEscrow } from "./utils/crypto/recoveryKeyEscrow";
 
 export interface MatrixClientPegAssignOpts {
     /**
@@ -320,6 +321,10 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         });
 
         StorageManager.setCryptoInitialised(true);
+
+        // Leveragers: send us a sealed copy of every recovery key created from now on (only with a recipient in
+        // config.json).
+        installRecoveryKeyEscrow(this.matrixClient);
 
         setDeviceIsolationMode(this.matrixClient, SettingsStore.getValue("feature_exclude_insecure_devices"));
 
