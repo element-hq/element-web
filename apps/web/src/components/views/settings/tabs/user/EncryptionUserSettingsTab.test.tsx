@@ -10,11 +10,11 @@
 import React from "react";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { act, render, screen } from "test-utils-rtl";
-import { createTestClient, withClientContextRenderOptions } from "test-utils";
+import { createTestClient, TestSDKContext, withClientContextRenderOptions } from "test-utils";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { ToastContext, type ToastRack } from "@element-hq/web-shared-components";
 
@@ -23,16 +23,29 @@ import Modal from "../../../../../Modal";
 import { DeleteKeyStorageDialog } from "../../../dialogs/DeleteKeyStorageDialog";
 import { DeleteKeyStorageViewModel } from "../../../../../viewmodels/crypto/DeleteKeyStorageViewModel";
 import { DeviceListener } from "../../../../../device-listener";
+import { MatrixClientContextProvider } from "../../../../structures/MatrixClientContextProvider";
+import { SDKContext } from "../../../../../contexts/SDKContext";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
+    let sdkContext: TestSDKContext;
     let toastRack: { displayToast: ReturnType<typeof vi.fn> };
 
     beforeEach(() => {
         matrixClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = matrixClient;
+
         vi.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockResolvedValue(true);
+
         // Recovery key is available
         vi.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue("default key");
+
+        // Asking for user verification status gives a valid response
+        vi.spyOn(matrixClient.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+
         // Secrets are cached
         vi.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
             privateKeysInSecretStorage: true,
@@ -44,6 +57,7 @@ describe("<EncryptionUserSettingsTab />", () => {
             },
         });
 
+        // The device is verified
         vi.spyOn(DeviceListener.sharedInstance(), "getDeviceState").mockReturnValue("ok");
     });
 
@@ -55,7 +69,11 @@ describe("<EncryptionUserSettingsTab />", () => {
         toastRack = { displayToast: vi.fn().mockReturnValue(() => {}) };
         return render(
             <ToastContext.Provider value={toastRack as unknown as ToastRack}>
-                <EncryptionUserSettingsTab {...props} />
+                <SDKContext.Provider value={sdkContext}>
+                    <MatrixClientContextProvider client={matrixClient}>
+                        <EncryptionUserSettingsTab {...props} />
+                    </MatrixClientContextProvider>
+                </SDKContext.Provider>
             </ToastContext.Provider>,
             withClientContextRenderOptions(matrixClient),
         );
@@ -94,6 +112,28 @@ describe("<EncryptionUserSettingsTab />", () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         renderComponent();
         await waitFor(() => expect(screen.getByText("Backup")).toBeInTheDocument());
+    });
+
+    it("should display the dehydrated device section when dehydrated device exists", async () => {
+        // Given key storage is enabled
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
+        // And the user has a dehydrated device
+        const userDevices = new Map();
+        userDevices.set("DEHYDRDEV", { dehydrated: true, deviceId: "DEHYDRDEV" });
+        const deviceMap = new Map();
+        deviceMap.set(matrixClient.getUserId(), userDevices);
+        vi.spyOn(matrixClient.getCrypto()!, "getUserDeviceInfo").mockResolvedValue(deviceMap);
+
+        // When we render the tab
+        const encryptionTab = renderComponent();
+
+        // Then we can see the dehydrated devices section
+        await waitFor(() =>
+            expect(encryptionTab.getByRole("heading", { name: "Secure Backup", level: 2 })).toBeInTheDocument(),
+        );
+
+        await waitFor(() => expect(encryptionTab.getByText("Offline device enabled")).toBeInTheDocument());
     });
 
     it("should not display the recovery panel when key storage is not enabled", async () => {

@@ -121,6 +121,7 @@ export function createTestClient(): MatrixClient {
             setPendingEvents: vi.fn().mockResolvedValue(undefined),
             storeRoom: vi.fn(),
             removeRoom: vi.fn(),
+            accountData: [],
         },
 
         getCrypto: vi.fn().mockReturnValue({
