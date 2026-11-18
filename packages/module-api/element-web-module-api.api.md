@@ -329,17 +329,17 @@ export interface I18nApi {
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 
-// @public
-export interface LanguageTranslations {
-    // (undocumented)
-    [key: string]: string | LanguageTranslations;
-}
-
 // @alpha
 export interface IncomingToDeviceMessage {
     readonly content: unknown;
     readonly sender: string;
     readonly type: string;
+}
+
+// @public
+export interface LanguageTranslations {
+    // (undocumented)
+    [key: string]: string | LanguageTranslations;
 }
 
 // @alpha
