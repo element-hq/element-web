@@ -27,6 +27,8 @@ import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter"
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
+import { useOwnDevices } from "../../devices/useOwnDevices";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 
 /**
  * The state in the encryption settings tab.
@@ -65,6 +67,8 @@ interface Props {
  */
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
+
+    const secureBackup = <SecureBackup />;
 
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
@@ -132,7 +136,12 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                             setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
                                         }
                                     />
-                                    <Separator kind="section" />
+                                    {secureBackup && (
+                                        <>
+                                            {secureBackup}
+                                            <Separator kind="section" />
+                                        </>
+                                    )}
                                 </>
                             )}
                             <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
@@ -296,3 +305,19 @@ export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecover
         return "change_recovery_key";
     }
 }
+
+const SecureBackup: React.FC = () => {
+    const { dehydratedDeviceId } = useOwnDevices();
+    if (!dehydratedDeviceId) return null;
+
+    return (
+        <SettingsSubsection heading={_t("common|secure_backup")}>
+            <div className="mx_SettingsSubsection_content">
+                <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
+                <div className="mx_SettingsSubsection_text">
+                    {_t("settings|security|dehydrated_device_description")}
+                </div>
+            </div>
+        </SettingsSubsection>
+    );
+};
