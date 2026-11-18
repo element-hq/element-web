@@ -45,10 +45,12 @@ target end up in the package.
 
 ## Verifying a Linux package
 
-The Linux CI workflow checks every `.node` file in the packaged app with
-`apps/desktop/scripts/glibc-check.sh` to ensure it does not require a newer glibc than
-our oldest supported distribution ships. If you upgrade Seshat and this check fails,
-the `MAX_GLIBC` value in `.github/workflows/build_desktop_linux.yaml` documents the current ceiling.
+The electron-builder `afterPack` hook checks every `.node` file and the main executable in the
+packaged Linux app with `readelf`, to ensure they are built for the target architecture, do not
+dynamically link OpenSSL or SQLCipher, and do not require a newer glibc than our oldest supported
+distribution ships. Failures are fatal on CI and warnings otherwise, as local builds outside the
+Docker image link against the host's glibc. If you upgrade Seshat and this check fails,
+the `MAX_GLIBC` value in `apps/desktop/scripts/native-libraries.ts` documents the current ceiling.
 
 ## Building from source
 

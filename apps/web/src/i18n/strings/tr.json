@@ -1646,8 +1646,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s anahtarları başarıyla geri yüklendi",
         "enter_key_description": "Güvenlik Anahtarınızı girerek güvenli mesaj geçmişinize erişin ve güvenli mesajlaşmayı ayarlayın.",
         "enter_key_title": "Güvenlik Anahtarını Girin",
-        "enter_phrase_description": "Güvenli mesaj geçmişinize erişin ve Güvenlik İfadenizi girerek güvenli mesajlaşmayı ayarlayın.",
-        "enter_phrase_title": "Güvenlik İfadesini Girin",
         "incorrect_security_phrase_dialog": "Bu Güvenlik İfadesi ile yedeklemenin şifresi çözülemedi: lütfen doğru Güvenlik İfadesini girdiğinizden emin olun.",
         "incorrect_security_phrase_title": "Yanlış Güvenlik İfadesi",
         "key_backup_warning": "<b>Uyarı</b> : Anahtar yedeklemesini yalnızca güvenilir bir bilgisayardan ayarlamalısınız.",
@@ -1659,7 +1657,6 @@
         "load_error_content": "Yedek durumu yüklenemiyor",
         "load_keys_progress": "%(completed)s / %(total)s anahtarlar geri yüklendi",
         "no_backup_error": "Yedek bulunamadı!",
-        "phrase_forgotten_text": "Güvenlik İfadenizi unuttuysanız, <button1>Güvenlik Anahtarınızı kullanabilirsiniz</button1> veya <button2>yeni kurtarma seçeneklerini ayarlayın</button2>",
         "recovery_key_mismatch_description": "Bu Güvenlik Anahtarı ile yedeklemenin şifresi çözülemedi: lütfen doğru Güvenlik Anahtarı'nı girdiğinizden emin olun.",
         "recovery_key_mismatch_title": "Güvenlik Anahtarı uyuşmazlığı",
         "restore_failed_error": "Yedekleme geri yüklenemiyor"

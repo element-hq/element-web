@@ -8,6 +8,8 @@
     "scripts": {
         "build": "nx build",
         "lint:types": "nx lint:types",
+        "i18n:sort": "matrix-sort-i18n src/translations.json",
+        "i18n:lint": "oxfmt src/translations.json",
         "test:unit": "nx test:unit"
     },
     "devDependencies": {
@@ -20,6 +22,7 @@
         "@types/react": "^19",
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
+        "matrix-web-i18n": "catalog:",
         "react": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",

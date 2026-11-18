@@ -1296,8 +1296,6 @@
         "count_of_successfully_restored_keys": "Restablecidas correctamente %(sessionCount)s chaves",
         "enter_key_description": "Accede ao teu historial de mensaxes seguras e asegura a comunicación escribindo a Chave de Seguridade.",
         "enter_key_title": "Escribe a Chave de Seguridade",
-        "enter_phrase_description": "Accede ao teu historial de mensaxes seguras e configura a comunicación segura escribindo a túa Frase de Seguridade.",
-        "enter_phrase_title": "Escribe a Frase de Seguridade",
         "incorrect_security_phrase_dialog": "Non se puido descifrar a Copia con esta Frase de Seguridade: comproba que escribiches a Frase de Seguridade correcta.",
         "incorrect_security_phrase_title": "Frase de Seguridade incorrecta",
         "key_backup_warning": "<b>Aviso</b>: só deberías realizar a copia de apoio desde un ordenador de confianza.",
@@ -1308,7 +1306,6 @@
         "load_error_content": "Non cargou o estado da copia",
         "load_keys_progress": "%(completed)s de %(total)s chaves restablecidas",
         "no_backup_error": "Non se atopou copia!",
-        "phrase_forgotten_text": "Se esqueceches a túa Frase de Seguridade podes <button1>usar a túa Chave de Seguridade</button1> ou <button2>establecer novas opcións de recuperación</button2>",
         "recovery_key_mismatch_description": "Non se puido descifrar a Copia con esta Chave de Seguridade: comproba que aplicaches a Chave de Seguridade correcta.",
         "recovery_key_mismatch_title": "Non concorda a Chave de Seguridade",
         "restore_failed_error": "Non se restableceu a copia"

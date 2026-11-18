@@ -62,3 +62,25 @@ export class PermalinkParts {
         return this.roomIdOrAlias || this.userId;
     }
 }
+
+/**
+ * Split a permalink route into its path and query at the first `?`. Do this before splitting the path on `/`, as query
+ * values can contain slashes.
+ * @param route - The route, such as `!room:example.com/$event?via=example.com`.
+ * @returns The path and the query, without its leading `?`. The query is empty if there is none.
+ */
+export function splitPathAndQuery(route: string): [path: string, query: string] {
+    const queryStart = route.indexOf("?");
+    if (queryStart === -1) return [route, ""];
+    return [route.slice(0, queryStart), route.slice(queryStart + 1)];
+}
+
+/**
+ * Read the via servers from a permalink's query string. Other parameters, such as `action` and custom ones, are
+ * ignored.
+ * @param query - The query string, with or without its leading `?`.
+ * @returns The via servers in the order given.
+ */
+export function parseViaServers(query: string): string[] {
+    return new URLSearchParams(query).getAll("via").filter((server) => !!server);
+}
