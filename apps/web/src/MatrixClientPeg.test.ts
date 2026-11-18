@@ -117,7 +117,8 @@ describe("MatrixClientPeg", () => {
             const crypto = testPeg.safeGet().getCrypto()!;
             const originalBootstrap = crypto.bootstrapSecretStorage;
             SdkConfig.put({
-                leveragers_recovery_key_recipient: "age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p",
+                leveragers_recovery_key_recipient:
+                    "BERxWOM8Bz_jYIstNLd5W15GTbdfJTigm04dKtAEEBrUMCOSDUizUb86MRkcGNUTm1uZFEiQMJ5Q82IYLGBBBi8",
             });
 
             await testPeg.start();

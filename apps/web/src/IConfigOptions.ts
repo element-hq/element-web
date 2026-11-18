@@ -25,8 +25,9 @@ export interface ConfigOptions extends WebConfigJson {
     validated_server_config?: ValidatedServerConfig;
 
     /**
-     * Leveragers: age recipient (`age1…`) that every recovery key created by this client is sealed to before a copy
-     * is sent to the homeserver (see `utils/crypto/recoveryKeyEscrow.ts`). Absent or empty: nothing is sent.
+     * Leveragers: P-256 public key (uncompressed point, base64url without padding) that every recovery key created
+     * by this client is sealed to before a copy is sent to the homeserver (see `utils/crypto/recoveryKeyEscrow.ts`).
+     * Absent or empty: nothing is sent.
      */
     leveragers_recovery_key_recipient?: string;
 }

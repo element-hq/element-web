@@ -9,10 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, afterEach, beforeAll, type Mock, type Mocked } from "vitest";
 import fetchMock from "@fetch-mock/vitest";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, decodeBase64, encodeUnpaddedBase64Url } from "matrix-js-sdk/src/matrix";
 import { type CreateSecretStorageOpts, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { Decrypter, armor, generateX25519Identity, identityToRecipient } from "age-encryption";
 import { createTestClient } from "test-utils";
 
 import SdkConfig from "../../SdkConfig";
@@ -20,6 +19,7 @@ import {
     LATER_RETRY_DELAY_MS,
     RECOVERY_KEY_ESCROW_PATH,
     RETRY_DELAYS_MS,
+    type SealedRecoveryKey,
     getRecoveryKeyRecipient,
     installRecoveryKeyEscrow,
     sealRecoveryKey,
@@ -29,23 +29,54 @@ import {
 const HOMESERVER = "https://chat.example.com";
 const ESCROW_URL = HOMESERVER + RECOVERY_KEY_ESCROW_PATH;
 const RECOVERY_KEY = "EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d";
+const USER_ID = "@userId:matrix.org"; // the user of createTestClient()
+const SEALED: SealedRecoveryKey = { v: 1, epk: "epk", iv: "iv", ct: "ct" };
 
-let identity: string;
+let privateKey: CryptoKey;
 let recipient: string;
 
-async function unseal(sealed: string): Promise<string> {
-    const decrypter = new Decrypter();
-    decrypter.addIdentity(identity);
-    return decrypter.decrypt(armor.decode(sealed), "text");
+async function newKeyPair(): Promise<{ privateKey: CryptoKey; recipient: string }> {
+    const pair = (await globalThis.crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, [
+        "deriveBits",
+    ])) as CryptoKeyPair;
+    const publicKey = new Uint8Array(await globalThis.crypto.subtle.exportKey("raw", pair.publicKey));
+    return { privateKey: pair.privateKey, recipient: encodeUnpaddedBase64Url(publicKey) };
 }
 
-function sentBodies(): Array<{ key_id: string; sealed: string }> {
+/** Open a copy as hub2 does (tools/recovery_key.py in the monitor repo), written again here with WebCrypto. */
+async function unseal(sealed: SealedRecoveryKey, userId: string, keyId: string, key = privateKey): Promise<string> {
+    const subtle = globalThis.crypto.subtle;
+    const encoder = new TextEncoder();
+    const epk = decodeBase64(sealed.epk);
+    const oneTimePublic = await subtle.importKey("raw", epk, { name: "ECDH", namedCurve: "P-256" }, false, []);
+    const sharedSecret = await subtle.deriveBits({ name: "ECDH", public: oneTimePublic }, key, 256);
+    const hkdfKey = await subtle.importKey("raw", sharedSecret, "HKDF", false, ["deriveKey"]);
+    const aesKey = await subtle.deriveKey(
+        {
+            name: "HKDF",
+            hash: "SHA-256",
+            salt: new Uint8Array([...epk, ...decodeBase64(recipient)]),
+            info: encoder.encode("leveragers-recovery-key-v1"),
+        },
+        hkdfKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"],
+    );
+    const plaintext = await subtle.decrypt(
+        { name: "AES-GCM", iv: decodeBase64(sealed.iv), additionalData: encoder.encode(`${userId}\n${keyId}`) },
+        aesKey,
+        decodeBase64(sealed.ct),
+    );
+    return new TextDecoder().decode(plaintext);
+}
+
+function sentBodies(): Array<{ key_id: string; sealed: SealedRecoveryKey }> {
     return fetchMock.callHistory.calls(ESCROW_URL).map((call) => JSON.parse(call.options.body as string));
 }
 
 beforeAll(async () => {
-    identity = await generateX25519Identity();
-    recipient = await identityToRecipient(identity);
+    ({ privateKey, recipient } = await newKeyPair());
 });
 
 afterEach(() => {
@@ -70,21 +101,49 @@ describe("getRecoveryKeyRecipient", () => {
 });
 
 describe("sealRecoveryKey", () => {
-    it("seals the key into an armored age file that only the identity opens, to exactly the key", async () => {
-        const sealed = await sealRecoveryKey(RECOVERY_KEY, recipient);
+    it("seals the key in format v1, which the private key opens to exactly the key", async () => {
+        const sealed = await sealRecoveryKey(RECOVERY_KEY, recipient, USER_ID, "keyid");
 
-        expect(sealed.startsWith("-----BEGIN AGE ENCRYPTED FILE-----\n")).toBe(true);
-        expect(sealed.trimEnd().endsWith("-----END AGE ENCRYPTED FILE-----")).toBe(true);
-        expect(sealed).not.toContain(RECOVERY_KEY);
-        expect(await unseal(sealed)).toBe(RECOVERY_KEY);
+        expect(Object.keys(sealed).sort()).toEqual(["ct", "epk", "iv", "v"]);
+        expect(sealed.v).toBe(1);
+        const epk = decodeBase64(sealed.epk);
+        expect(epk).toHaveLength(65);
+        expect(epk[0]).toBe(4);
+        expect(decodeBase64(sealed.iv)).toHaveLength(12);
+        expect(decodeBase64(sealed.ct)).toHaveLength(RECOVERY_KEY.length + 16);
+        for (const value of [sealed.epk, sealed.iv, sealed.ct]) expect(value).toMatch(/^[A-Za-z0-9_-]+$/);
+        expect(JSON.stringify(sealed)).not.toContain("EsT");
 
-        const otherDecrypter = new Decrypter();
-        otherDecrypter.addIdentity(await generateX25519Identity());
-        await expect(otherDecrypter.decrypt(armor.decode(sealed), "text")).rejects.toThrow();
+        expect(await unseal(sealed, USER_ID, "keyid")).toBe(RECOVERY_KEY);
     });
 
-    it("refuses a malformed recipient", async () => {
-        await expect(sealRecoveryKey(RECOVERY_KEY, "not-a-recipient")).rejects.toThrow();
+    it("ties the copy to its account and key id", async () => {
+        const sealed = await sealRecoveryKey(RECOVERY_KEY, recipient, USER_ID, "keyid");
+
+        await expect(unseal(sealed, "@other:matrix.org", "keyid")).rejects.toThrow();
+        await expect(unseal(sealed, USER_ID, "otherkeyid")).rejects.toThrow();
+    });
+
+    it("does not open with another private key", async () => {
+        const sealed = await sealRecoveryKey(RECOVERY_KEY, recipient, USER_ID, "keyid");
+        const other = await newKeyPair();
+
+        await expect(unseal(sealed, USER_ID, "keyid", other.privateKey)).rejects.toThrow();
+    });
+
+    it("uses a new one-time key and IV for every copy", async () => {
+        const first = await sealRecoveryKey(RECOVERY_KEY, recipient, USER_ID, "keyid");
+        const second = await sealRecoveryKey(RECOVERY_KEY, recipient, USER_ID, "keyid");
+
+        expect(second.epk).not.toBe(first.epk);
+        expect(second.iv).not.toBe(first.iv);
+        expect(second.ct).not.toBe(first.ct);
+    });
+
+    it("refuses a recipient that is not a P-256 public key", async () => {
+        await expect(sealRecoveryKey(RECOVERY_KEY, "not-a-key", USER_ID, "keyid")).rejects.toThrow();
+        const notOnCurve = encodeUnpaddedBase64Url(new Uint8Array([4, ...new Uint8Array(64).fill(1)]));
+        await expect(sealRecoveryKey(RECOVERY_KEY, notOnCurve, USER_ID, "keyid")).rejects.toThrow();
     });
 });
 
@@ -100,26 +159,26 @@ describe("sendSealedRecoveryKey", () => {
     it("posts the key id and the sealed key with the access token", async () => {
         fetchMock.post(ESCROW_URL, 201);
 
-        expect(await sendSealedRecoveryKey(client, "keyid", "SEALED")).toBe(true);
+        expect(await sendSealedRecoveryKey(client, "keyid", SEALED)).toBe(true);
 
         const call = fetchMock.callHistory.lastCall(ESCROW_URL)!;
         const headers = new Headers(call.options.headers as HeadersInit);
         expect(headers.get("authorization")).toBe("Bearer token-of-this-account");
         expect(headers.get("content-type")).toBe("application/json");
-        expect(sentBodies()).toEqual([{ key_id: "keyid", sealed: "SEALED" }]);
+        expect(sentBodies()).toEqual([{ key_id: "keyid", sealed: SEALED }]);
     });
 
     it.each([400, 401, 403, 413])("gives up at once on HTTP %i", async (status) => {
         fetchMock.post(ESCROW_URL, status);
 
-        expect(await sendSealedRecoveryKey(client, "keyid", "SEALED")).toBe(false);
+        expect(await sendSealedRecoveryKey(client, "keyid", SEALED)).toBe(false);
         expect(fetchMock.callHistory.calls(ESCROW_URL)).toHaveLength(1);
     });
 
     it("does not send without an access token", async () => {
         client.getAccessToken.mockReturnValue(null);
 
-        expect(await sendSealedRecoveryKey(client, "keyid", "SEALED")).toBe(false);
+        expect(await sendSealedRecoveryKey(client, "keyid", SEALED)).toBe(false);
         expect(fetchMock.callHistory.calls(ESCROW_URL)).toHaveLength(0);
     });
 
@@ -137,7 +196,7 @@ describe("sendSealedRecoveryKey", () => {
         fetchMock.post(ESCROW_URL, () => answers.shift()!);
         const calls = (): number => fetchMock.callHistory.calls(ESCROW_URL).length;
 
-        const result = sendSealedRecoveryKey(client, "keyid", "SEALED");
+        const result = sendSealedRecoveryKey(client, "keyid", SEALED);
         await vi.advanceTimersByTimeAsync(0);
         expect(calls()).toBe(1);
 
@@ -157,7 +216,7 @@ describe("sendSealedRecoveryKey", () => {
         const answers = [503, 400];
         fetchMock.post(ESCROW_URL, () => answers.shift()!);
 
-        const result = sendSealedRecoveryKey(client, "keyid", "SEALED");
+        const result = sendSealedRecoveryKey(client, "keyid", SEALED);
         await vi.advanceTimersByTimeAsync(RETRY_DELAYS_MS[0]);
 
         expect(await result).toBe(false);
@@ -220,7 +279,7 @@ describe("installRecoveryKeyEscrow", () => {
             await vi.waitFor(() => expect(fetchMock.callHistory.calls(ESCROW_URL)).toHaveLength(1));
             const [body] = sentBodies();
             expect(body.key_id).toBe("newkeyid");
-            expect(await unseal(body.sealed)).toBe(RECOVERY_KEY);
+            expect(await unseal(body.sealed, USER_ID, "newkeyid")).toBe(RECOVERY_KEY);
             expect(client.secretStorage.checkKey).toHaveBeenCalledWith(newKey.privateKey, expect.anything());
         });
 
@@ -233,7 +292,9 @@ describe("installRecoveryKeyEscrow", () => {
             });
 
             await vi.waitFor(() => expect(fetchMock.callHistory.calls(ESCROW_URL)).toHaveLength(1));
-            expect(await unseal(sentBodies()[0].sealed)).toBe(encodeRecoveryKey(newKey.privateKey));
+            expect(await unseal(sentBodies()[0].sealed, USER_ID, "newkeyid")).toBe(
+                encodeRecoveryKey(newKey.privateKey),
+            );
         });
 
         it("sends nothing when no new key was needed", async () => {

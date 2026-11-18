@@ -5,20 +5,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, decodeBase64, encodeUnpaddedBase64Url } from "matrix-js-sdk/src/matrix";
 import {
     type CreateSecretStorageOpts,
     type GeneratedSecretStorageKey,
     encodeRecoveryKey,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { Encrypter, armor } from "age-encryption";
 
 import SdkConfig from "../../SdkConfig";
 
-// Leveragers: a copy of every recovery key this build creates is sealed (age, to a public key whose private half
-// only Leveragers holds) and sent to the homeserver, so that Leveragers can give it back to its owner. Nothing here
-// runs unless config.json names a recipient in `leveragers_recovery_key_recipient`.
+// Leveragers: a copy of every recovery key this build creates is sealed in the browser (WebCrypto, to a P-256 public
+// key whose private half only Leveragers holds) and sent to the homeserver, so that Leveragers can give it back to
+// its owner. Nothing here runs unless config.json names that public key in `leveragers_recovery_key_recipient`.
 //
 // Never log the recovery key nor the sealed copy: only HTTP statuses.
 //
@@ -36,10 +35,25 @@ export const RETRY_DELAYS_MS = [2_000, 5_000, 15_000, 30_000];
 export const LATER_RETRY_DELAY_MS = 60_000;
 const REQUEST_TIMEOUT_MS = 30_000;
 
+/** `info` of the HKDF step of format v1, which also names the format. */
+const SEAL_INFO = "leveragers-recovery-key-v1";
+
 /**
- * The age recipient (`age1…`) that recovery keys are sealed to, from config.json.
+ * A sealed recovery key, format v1: base64url (unpadded) of the one-time P-256 public key (uncompressed point),
+ * of the AES-GCM IV, and of the AES-GCM ciphertext followed by its tag.
+ */
+export interface SealedRecoveryKey {
+    v: 1;
+    epk: string;
+    iv: string;
+    ct: string;
+}
+
+/**
+ * The public key that recovery keys are sealed to, from config.json: an uncompressed P-256 point (65 bytes,
+ * `04‖X‖Y`), base64url without padding.
  *
- * @returns the recipient, or null when it is absent or empty (then nothing in this module does anything).
+ * @returns the public key, or null when it is absent or empty (then nothing in this module does anything).
  */
 export function getRecoveryKeyRecipient(): string | null {
     const recipient = SdkConfig.get("leveragers_recovery_key_recipient");
@@ -47,14 +61,61 @@ export function getRecoveryKeyRecipient(): string | null {
 }
 
 /**
- * Seal an encoded recovery key (`EsT…`) to an age recipient.
+ * Seal an encoded recovery key (`EsT…`, as Element shows it) to the recipient's P-256 public key, format v1:
+ * ECDH with a one-time P-256 key pair, HKDF-SHA-256 (salt = one-time public key ‖ recipient public key, info
+ * `leveragers-recovery-key-v1`) to an AES-256-GCM key, then AES-GCM with a random 12-byte IV and, as additional
+ * data, `<user_id>\n<key_id>`, so that a copy moved onto another account or key does not open.
  *
- * @returns the age file, ASCII-armored (`-----BEGIN AGE ENCRYPTED FILE-----…`).
+ * Throws if the recipient is not a valid P-256 public key, or if WebCrypto is unavailable.
  */
-export async function sealRecoveryKey(encodedRecoveryKey: string, recipient: string): Promise<string> {
-    const encrypter = new Encrypter();
-    encrypter.addRecipient(recipient);
-    return armor.encode(await encrypter.encrypt(encodedRecoveryKey));
+export async function sealRecoveryKey(
+    encodedRecoveryKey: string,
+    recipient: string,
+    userId: string,
+    keyId: string,
+): Promise<SealedRecoveryKey> {
+    const subtle = globalThis.crypto.subtle;
+    const encoder = new TextEncoder();
+
+    const recipientBytes = decodeBase64(recipient);
+    const recipientKey = await subtle.importKey(
+        "raw",
+        recipientBytes,
+        { name: "ECDH", namedCurve: "P-256" },
+        false,
+        [],
+    );
+    const oneTime = await subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, false, ["deriveBits"]);
+    const oneTimePublic = new Uint8Array(await subtle.exportKey("raw", oneTime.publicKey));
+
+    const sharedSecret = await subtle.deriveBits({ name: "ECDH", public: recipientKey }, oneTime.privateKey, 256);
+    const hkdfKey = await subtle.importKey("raw", sharedSecret, "HKDF", false, ["deriveKey"]);
+    const aesKey = await subtle.deriveKey(
+        {
+            name: "HKDF",
+            hash: "SHA-256",
+            salt: new Uint8Array([...oneTimePublic, ...recipientBytes]),
+            info: encoder.encode(SEAL_INFO),
+        },
+        hkdfKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt"],
+    );
+
+    const iv = globalThis.crypto.getRandomValues(new Uint8Array(12));
+    const ciphertext = await subtle.encrypt(
+        { name: "AES-GCM", iv, tagLength: 128, additionalData: encoder.encode(`${userId}\n${keyId}`) },
+        aesKey,
+        encoder.encode(encodedRecoveryKey),
+    );
+
+    return {
+        v: 1,
+        epk: encodeUnpaddedBase64Url(oneTimePublic),
+        iv: encodeUnpaddedBase64Url(iv),
+        ct: encodeUnpaddedBase64Url(new Uint8Array(ciphertext)),
+    };
 }
 
 /**
@@ -63,7 +124,11 @@ export async function sealRecoveryKey(encodedRecoveryKey: string, recipient: str
  *
  * @returns true once the homeserver has stored it, false if it refused it.
  */
-export async function sendSealedRecoveryKey(cli: MatrixClient, keyId: string, sealed: string): Promise<boolean> {
+export async function sendSealedRecoveryKey(
+    cli: MatrixClient,
+    keyId: string,
+    sealed: SealedRecoveryKey,
+): Promise<boolean> {
     const url = cli.getHomeserverUrl().replace(/\/+$/, "") + RECOVERY_KEY_ESCROW_PATH;
     const body = JSON.stringify({ key_id: keyId, sealed });
 
@@ -126,7 +191,7 @@ export async function escrowRecoveryKey(
 
         const encodedKey = recoveryKey.encodedPrivateKey ?? encodeRecoveryKey(recoveryKey.privateKey);
         if (!encodedKey) return;
-        const sealed = await sealRecoveryKey(encodedKey, recipient);
+        const sealed = await sealRecoveryKey(encodedKey, recipient, cli.getSafeUserId(), keyId);
         await sendSealedRecoveryKey(cli, keyId, sealed);
     } catch (e) {
         logger.warn("could not send a copy of the recovery key", e);

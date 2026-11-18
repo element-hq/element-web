@@ -9,38 +9,35 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, afterEach, beforeAll, type Mocked } from "vitest";
 import fetchMock from "@fetch-mock/vitest";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, encodeUnpaddedBase64Url } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
-import { Decrypter, armor, generateX25519Identity, identityToRecipient } from "age-encryption";
 import { createTestClient } from "test-utils";
 
 import SdkConfig from "../../SdkConfig";
 import { isSecretStorageBeingAccessed } from "../../SecurityManager";
 import { DeviceListener } from "../../device-listener";
 import ToastStore from "../../stores/ToastStore";
-import { RECOVERY_KEY_ESCROW_PATH, installRecoveryKeyEscrow } from "./recoveryKeyEscrow";
+import { RECOVERY_KEY_ESCROW_PATH, type SealedRecoveryKey, installRecoveryKeyEscrow } from "./recoveryKeyEscrow";
 import { setUpRecoverySilently } from "./silentRecoverySetup";
 
 const HOMESERVER = "https://chat.example.com";
 const ESCROW_URL = HOMESERVER + RECOVERY_KEY_ESCROW_PATH;
 const RECOVERY_KEY = "EsTc LW2K PGiF wKEA 3As5 g5c4 BXwk qeeJ ZJV8 Q9fu gUMN UE4d";
 
-let identity: string;
 let recipient: string;
 
-async function unseal(sealed: string): Promise<string> {
-    const decrypter = new Decrypter();
-    decrypter.addIdentity(identity);
-    return decrypter.decrypt(armor.decode(sealed), "text");
-}
-
-function sentBodies(): Array<{ key_id: string; sealed: string }> {
+function sentBodies(): Array<{ key_id: string; sealed: SealedRecoveryKey }> {
     return fetchMock.callHistory.calls(ESCROW_URL).map((call) => JSON.parse(call.options.body as string));
 }
 
 beforeAll(async () => {
-    identity = await generateX25519Identity();
-    recipient = await identityToRecipient(identity);
+    // opening the copy is tested in recoveryKeyEscrow.test.ts
+    const pair = (await globalThis.crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, [
+        "deriveBits",
+    ])) as CryptoKeyPair;
+    recipient = encodeUnpaddedBase64Url(
+        new Uint8Array(await globalThis.crypto.subtle.exportKey("raw", pair.publicKey)),
+    );
 });
 
 afterEach(() => {
@@ -129,7 +126,8 @@ describe("setUpRecoverySilently", () => {
             await vi.waitFor(() => expect(fetchMock.callHistory.calls(ESCROW_URL)).toHaveLength(1));
             const [body] = sentBodies();
             expect(body.key_id).toBe("newkeyid");
-            expect(await unseal(body.sealed)).toBe(RECOVERY_KEY);
+            expect(body.sealed.v).toBe(1);
+            expect(Object.keys(body.sealed).sort()).toEqual(["ct", "epk", "iv", "v"]);
         });
     });
 });

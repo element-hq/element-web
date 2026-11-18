@@ -16,7 +16,7 @@ d'Element qu'il touche.
 | `feat/retouches-ecran-installation` (`59106cc`) | Écran d'installation allégé : gauche identique sur tous les écrans (comme la connexion de Mission Control), à droite une illustration (mockup du Dock avant installation, animation « garder dans le Dock » après, animation des 2 étapes sur Safari) puis les consignes, « Continuer dans le navigateur » en petit lien, bouton « Ouvrir l'application » quand elle est déjà installée | `res/manifest.json` (`protocol_handlers` : lien `web+leveragers:` ouvert par l'app installée ; `launch_handler` `focus-existing` : l'app déjà ouverte passe au premier plan au lieu d'ouvrir une seconde fenêtre), `src/i18n/strings/{en_EN,fr}.json` (section `leveragers_install`) ; le reste dans `src/vector/leveragers/*` | s'appuie sur `feat/ecran-installation` |
 | `fix/ecran-installation-fenetre-app` (`53eb0b2`) | Juste après l'installation, Chrome et Edge déplacent l'onglet dans la fenêtre de l'app sans le recharger : l'écran d'installation s'efface dès que la page devient l'app, sans retenir « continuer dans le navigateur » | aucun fichier d'Element : `src/vector/leveragers/InstallScreen.tsx` (+ test) | s'appuie sur `feat/retouches-ecran-installation` |
 | `feat/legende-depuis-barre` (`4f90e5a`) | Le texte déjà écrit dans la barre devient le message du fichier ajouté (trombone, coller, glisser-déposer), la barre se vide à l'envoi, la fermeture de la fenêtre le laisse en place | `src/ContentMessages.ts` (type `ComposerDraft`, paramètre optionnel de `sendContentListToRoom`), `UploadConfirmDialog.tsx` (prop `initialCaption`), `SendMessageComposer.tsx` (se signale au VM), `RoomUploadViewModel.tsx` (`setComposerDraft`) | s'appuie sur `e0825ca` (légendes) |
-| `feat/cle-recuperation-gardee` | Comptes neufs : la récupération est mise en place sans rien demander, et une copie chiffrée (age) de chaque clé de récupération créée part chez Leveragers ; détail plus bas | `src/MatrixClientPeg.ts`, `src/stores/InitialCryptoSetupStore.ts`, `src/components/views/settings/encryption/ResetIdentityBody.tsx` (un import + un appel chacun), `src/IConfigOptions.ts` (un champ), `package.json` + `pnpm-lock.yaml` (`age-encryption`) ; le reste est neuf : `src/utils/crypto/{recoveryKeyEscrow,silentRecoverySetup}.ts` (+ tests) | aucune |
+| `feat/cle-recuperation-gardee` | Comptes neufs : la récupération est mise en place sans rien demander, et une copie chiffrée (WebCrypto) de chaque clé de récupération créée part chez Leveragers ; détail plus bas | `src/MatrixClientPeg.ts`, `src/stores/InitialCryptoSetupStore.ts`, `src/components/views/settings/encryption/ResetIdentityBody.tsx` (un import + un appel chacun), `src/IConfigOptions.ts` (un champ) ; aucune dépendance ajoutée ; le reste est neuf : `src/utils/crypto/{recoveryKeyEscrow,silentRecoverySetup}.ts` (+ tests) | aucune |
 
 Chemins relatifs à `apps/web/` sauf `modules/`.
 
@@ -24,16 +24,20 @@ Chemins relatifs à `apps/web/` sauf `modules/`.
 
 Pour un compte qui n'a pas encore d'identité de chiffrement, notre build met en place la récupération sans rien
 demander (pas de « Set up recovery » ni de « Back up your chats ») et envoie au serveur une copie de chaque clé de
-récupération qu'il crée, chiffrée dans le navigateur pour une clé publique age dont seule Leveragers détient la
-moitié privée. La personne confirme toujours ses nouveaux appareils de la façon habituelle. Rien n'est prévu pour les
+récupération qu'il crée, chiffrée dans le navigateur (WebCrypto) pour une clé publique P-256 dont seule Leveragers
+détient la moitié privée. La personne confirme toujours ses nouveaux appareils de la façon habituelle. Rien n'est prévu pour les
 comptes qui ont déjà une identité, sauf s'ils la réinitialisent.
 
-Réglage : `leveragers_recovery_key_recipient` dans config.json (destinataire age `age1…`). Absent ou vide : aucun
-code de ce patch ne s'exécute, Element se comporte comme l'original, avec ses propres invitations.
+Réglage : `leveragers_recovery_key_recipient` dans config.json (clé publique P-256, point non compressé de 65 octets
+en base64url sans remplissage). Absent ou vide : aucun code de ce patch ne s'exécute, Element se comporte comme
+l'original, avec ses propres invitations.
 
 Code neuf :
 
-- `src/utils/crypto/recoveryKeyEscrow.ts` : scellement (`age-encryption` 0.3.1, BSD-3, armure ASCII) ; envoi
+- `src/utils/crypto/recoveryKeyEscrow.ts` : scellement au format v1, avec le seul WebCrypto du navigateur (paire
+  P-256 à usage unique, ECDH avec la clé publique de config.json, HKDF-SHA-256 avec pour sel les deux clés
+  publiques et pour info `leveragers-recovery-key-v1`, AES-256-GCM avec un IV aléatoire de 12 octets et, en données
+  associées, `<user_id>\n<key_id>`), envoyé comme `{"v": 1, "epk", "iv", "ct"}` en base64url ; envoi
   `POST <serveur>/_leveragers/keys/v1/recovery-key` avec `Authorization: Bearer <jeton d'accès>` et
   `{"key_id", "sealed"}` ; nouvelles tentatives tant que l'onglet est ouvert (2 s, 5 s, 15 s, 30 s, puis toutes les
   60 s) sur erreur réseau, 429 et 5xx, abandon sur les autres réponses 4xx ; enveloppe de
