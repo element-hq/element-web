@@ -220,6 +220,19 @@ export function ReactionsRowAdapter({
         };
     }, [mxEvent, vm]);
 
+    useEffect(() => {
+        // The content of an edited event comes from its replacement. While that replacement is still encrypted
+        // the content is empty, so the event is not actionable until the decrypted replacement is applied.
+        const onReplaced = (): void => {
+            vm.setActionable(isContentActionable(mxEvent));
+        };
+
+        mxEvent.on(MatrixEventEvent.Replaced, onReplaced);
+        return () => {
+            mxEvent.off(MatrixEventEvent.Replaced, onReplaced);
+        };
+    }, [mxEvent, vm]);
+
     const snapshot = useViewModel(vm);
     const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
     const items = useMemo((): JSX.Element[] | undefined => {
