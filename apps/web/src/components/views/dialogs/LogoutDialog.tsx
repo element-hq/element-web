@@ -101,31 +101,36 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                 onFinish={() => setStep(Step.KeyActive)}
             />
         );
-    } else if (step === Step.KeyActive || step === Step.KeyChecked) {
+    } else if (step === Step.KeyActive && !userHasRecoveryKey) {
+        // First recovery key: the backup is now fully set up
         card = (
-            <EncryptionCard
-                Icon={CheckCircleIcon}
-                success={true}
-                title={successTitle(step, userHasRecoveryKey)}
-                dialog={true}
+            <SuccessCard
+                title={_t("settings|encryption|recovery|backup_set_up_title")}
+                onContinue={onLogoutConfirm}
+                onBack={() => props.onFinished(false)}
             >
-                <EncryptionCardEmphasisedContent>
-                    <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
-                    {step === Step.KeyActive && !userHasRecoveryKey && (
-                        <Text>
-                            {_t("settings|encryption|recovery|backup_set_up_hint", undefined, {
-                                b: (sub) => <strong>{sub}</strong>,
-                            })}
-                        </Text>
-                    )}
-                </EncryptionCardEmphasisedContent>
-                <EncryptionCardButtons>
-                    <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
-                    <Button kind="tertiary" onClick={() => props.onFinished(false)}>
-                        {_t("auth|logout_dialog|back_to_app")}
-                    </Button>
-                </EncryptionCardButtons>
-            </EncryptionCard>
+                <Text>
+                    {_t("settings|encryption|recovery|backup_set_up_hint", undefined, {
+                        b: (sub) => <strong>{sub}</strong>,
+                    })}
+                </Text>
+            </SuccessCard>
+        );
+    } else if (step === Step.KeyActive) {
+        card = (
+            <SuccessCard
+                title={_t("settings|encryption|recovery|key_active_title")}
+                onContinue={onLogoutConfirm}
+                onBack={() => props.onFinished(false)}
+            />
+        );
+    } else if (step === Step.KeyChecked) {
+        card = (
+            <SuccessCard
+                title={_t("auth|logout_dialog|key_checked_title")}
+                onContinue={onLogoutConfirm}
+                onBack={() => props.onFinished(false)}
+            />
         );
     } else if (hasOtherVerifiedDevices === undefined) {
         return <Loading onFinished={onFinished} />;
@@ -196,14 +201,35 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     );
 }
 
+interface SuccessCardProps {
+    /** The title of the card. */
+    title: string;
+    /** Called when the user continues to remove the device. */
+    onContinue: () => void;
+    /** Called when the user goes back to the app. */
+    onBack: () => void;
+    /** Extra content shown below the description. */
+    children?: React.ReactNode;
+}
+
 /**
- * The title of the success card: a first recovery key sets up the backup, otherwise the key was replaced or checked.
+ * The card shown once the recovery key is set up or checked, before the device is removed.
  */
-function successTitle(step: Step.KeyActive | Step.KeyChecked, userHasRecoveryKey: boolean): string {
-    if (step === Step.KeyChecked) return _t("auth|logout_dialog|key_checked_title");
-    return userHasRecoveryKey
-        ? _t("settings|encryption|recovery|key_active_title")
-        : _t("settings|encryption|recovery|backup_set_up_title");
+function SuccessCard({ title, onContinue, onBack, children }: Readonly<SuccessCardProps>): JSX.Element {
+    return (
+        <EncryptionCard Icon={CheckCircleIcon} success={true} title={title} dialog={true}>
+            <EncryptionCardEmphasisedContent>
+                <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
+                {children}
+            </EncryptionCardEmphasisedContent>
+            <EncryptionCardButtons>
+                <Button onClick={onContinue}>{_t("auth|logout_dialog|continue")}</Button>
+                <Button kind="tertiary" onClick={onBack}>
+                    {_t("auth|logout_dialog|back_to_app")}
+                </Button>
+            </EncryptionCardButtons>
+        </EncryptionCard>
+    );
 }
 
 interface SubComponentProps {
