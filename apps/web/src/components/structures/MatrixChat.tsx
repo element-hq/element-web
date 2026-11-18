@@ -80,7 +80,8 @@ import ThreepidInviteStore, {
     type IThreepidInvite,
     type IThreepidInviteWireFormat,
 } from "../../stores/ThreepidInviteStore";
-import { UIFeature } from "../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../settings/UIFeature";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
@@ -856,6 +857,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.chatCreateOrReuse(payload.user_id);
                 break;
             case Action.CreateChat:
+                if (!shouldShowComponent(UIComponent.CreateDM)) break;
                 showStartChatInviteDialog(payload.initialText || "");
 
                 // View the welcome or home page if we need something to look at

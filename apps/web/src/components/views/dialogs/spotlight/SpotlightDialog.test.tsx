@@ -37,10 +37,17 @@ import SdkConfig from "../../../../SdkConfig";
 import { Action } from "../../../../dispatcher/actions";
 import { MetaSpace } from "../../../../stores/spaces";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
 
 vi.useFakeTimers({ shouldAdvanceTime: true });
 
 vi.mock("../../../../utils/Feedback");
+
+vi.mock("../../../../customisations/helpers/UIComponents", async (importOriginal) => {
+    const original = await importOriginal<typeof import("../../../../customisations/helpers/UIComponents")>();
+    return { shouldShowComponent: vi.fn(original.shouldShowComponent) };
+});
 
 vi.mock("../../../../utils/direct-messages", async () => ({
     // @ts-ignore
@@ -252,7 +259,7 @@ describe("Spotlight Dialog", () => {
         });
 
         it("with people filter", async () => {
-            render(
+            const { unmount } = render(
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
@@ -273,6 +280,14 @@ describe("Spotlight Dialog", () => {
                 expect(options.length).toBeGreaterThanOrEqual(1);
                 expect(options[0]!.innerHTML).toContain(testPerson.display_name);
             });
+            expect(screen.getByText("Start a group chat")).toBeInTheDocument();
+
+            // The group chat option is not offered when DM creation is hidden
+            unmount();
+            vi.mocked(shouldShowComponent).mockImplementation((component) => component !== UIComponent.CreateDM);
+            render(<SpotlightDialog initialFilter={Filter.People} onFinished={() => null} />);
+            expect(screen.queryByText("Start a group chat")).not.toBeInTheDocument();
+            vi.mocked(shouldShowComponent).mockReset();
         });
     });
 
