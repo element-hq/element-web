@@ -206,6 +206,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await expect(screen.findByRole("heading", { name: "Your backup is now fully set up" })).resolves.toBeVisible();
         expect(screen.getByText("Settings → Encryption → Backup", { exact: false })).toBeVisible();
+        expect(screen.getByRole("navigation")).toHaveTextContent("Get recovery key");
 
         // Done goes back to the main panel
         await user.click(screen.getByRole("button", { name: "Done" }));
@@ -225,8 +226,17 @@ describe("<EncryptionUserSettingsTab />", () => {
             screen.findByRole("heading", { name: "Your new recovery key is now active" }),
         ).resolves.toBeVisible();
         expect(screen.queryByText("Settings → Encryption → Backup", { exact: false })).not.toBeInTheDocument();
+        expect(screen.getByRole("navigation")).toHaveTextContent("Change recovery key");
 
         await user.click(screen.getByRole("button", { name: "Done" }));
+        await expect(screen.findByRole("heading", { name: "Key storage" })).resolves.toBeVisible();
+    });
+
+    it("should go back to the main panel from the breadcrumbs of the confirmation screen", async () => {
+        const user = userEvent.setup();
+        renderComponent({ initialState: "recovery_key_changed" });
+
+        await user.click(screen.getByRole("button", { name: "Back" }));
         await expect(screen.findByRole("heading", { name: "Key storage" })).resolves.toBeVisible();
     });
 

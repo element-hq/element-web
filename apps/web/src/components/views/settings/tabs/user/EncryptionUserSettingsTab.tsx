@@ -12,7 +12,7 @@ import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/com
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
-import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
+import { ChangeRecoveryKey, ChangeRecoveryKeyBreadcrumb } from "../../encryption/ChangeRecoveryKey";
 import { RecoveryKeyConfirmationCard } from "../../encryption/RecoveryKeyConfirmationCard";
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
@@ -155,11 +155,18 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
             break;
         case "recovery_key_changed":
         case "recovery_key_set_up":
+            // The breadcrumbs stay, so the confirmation reads as the last step of the flow
             content = (
-                <RecoveryKeyConfirmationCard
-                    userHasRecoveryKey={state === "recovery_key_changed"}
-                    onFinish={() => setState("main")}
-                />
+                <>
+                    <ChangeRecoveryKeyBreadcrumb
+                        userHasRecoveryKey={state === "recovery_key_changed"}
+                        onClick={() => setState("main")}
+                    />
+                    <RecoveryKeyConfirmationCard
+                        userHasRecoveryKey={state === "recovery_key_changed"}
+                        onFinish={() => setState("main")}
+                    />
+                </>
             );
             break;
         case "reset_identity_compromised":
