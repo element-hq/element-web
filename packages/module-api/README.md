@@ -1,6 +1,8 @@
 # @element-hq/element-web-module-api
 
-API surface for extending Element Web in a safe & predictable way.
+[Modules](../../docs/modules.md) are a mechanism for extending Element Web in a
+safe & predictable way. This project defines the API which all modules must be
+based on.
 
 ## Using the API
 
