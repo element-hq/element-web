@@ -108,7 +108,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         return (
             <SettingsSubsection heading={_t("common|credits")}>
                 <SettingsSubsectionText>
-                    <ul>
+                    <ul className="mx_HelpUserSettingsTab_credits">
                         <li>
                             {_t(
                                 "credits|default_cover_photo",
