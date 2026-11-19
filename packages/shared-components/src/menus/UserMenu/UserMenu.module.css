@@ -143,7 +143,8 @@
     }
     margin-left: var(--cpd-space-3x);
     margin-right: var(--cpd-space-2x);
-    padding-inline-start: var(--cpd-space-1-5x);
+    /* Centers the 36px avatar on the same axis as the space panel's 32px space avatars */
+    padding-inline-start: var(--cpd-space-1x);
 }
 
 .displayName {
