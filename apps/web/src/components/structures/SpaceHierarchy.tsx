@@ -178,6 +178,7 @@ const Tile: React.FC<ITileProps> = ({
         if (hasPermissions) {
             checkbox = (
                 <StyledCheckbox
+                    className="mx_SpaceHierarchy_roomTile_checkbox"
                     aria-labelledby={checkboxLabelId}
                     checked={!!selected}
                     tabIndex={-1}
@@ -199,7 +200,12 @@ const Tile: React.FC<ITileProps> = ({
                         ev.stopPropagation();
                     }}
                 >
-                    <StyledCheckbox aria-labelledby={checkboxLabelId} disabled={true} tabIndex={-1} />
+                    <StyledCheckbox
+                        className="mx_SpaceHierarchy_roomTile_checkbox"
+                        aria-labelledby={checkboxLabelId}
+                        disabled={true}
+                        tabIndex={-1}
+                    />
                 </TextWithTooltip>
             );
         }

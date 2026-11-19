@@ -37,6 +37,25 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             await util.expandSpacePanel();
             // The buttons in the space panel should be aligned when expanded
             await expect(util.getSpacePanel()).toMatchScreenshot("tac-button-expanded.png");
+
+            // Threads and Settings line up with the Home button's icon and label, and stay inside the panel
+            const spacePanel = util.getSpacePanel();
+            const homeButton = spacePanel.getByRole("button", { name: "Home", exact: true });
+            const homeIcon = (await homeButton.locator("svg").first().boundingBox())!;
+            const homeLabel = (await homeButton.getByText("Home", { exact: true }).boundingBox())!;
+            const panel = (await spacePanel.boundingBox())!;
+            for (const [name, label] of [
+                ["Threads", "Threads"],
+                ["Quick settings", "Settings"],
+            ]) {
+                const button = spacePanel.getByRole("button", { name, exact: true });
+                const buttonBox = (await button.boundingBox())!;
+                const icon = (await button.locator("svg").boundingBox())!;
+                const text = (await button.getByText(label, { exact: true }).boundingBox())!;
+                expect(icon.x + icon.width / 2).toBeCloseTo(homeIcon.x + homeIcon.width / 2, 0);
+                expect(text.x).toBeCloseTo(homeLabel.x, 0);
+                expect(buttonBox.x + buttonBox.width).toBeLessThanOrEqual(panel.x + panel.width);
+            }
         },
     );
 

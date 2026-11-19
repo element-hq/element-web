@@ -22,9 +22,8 @@
          */
         background-color: transparent !important;
 
-        /* align with settings icon */
-        margin-left: 21px;
-        margin-right: 8px;
+        /* Start at the 32px space avatars' edge (gutter + their 4px selection padding), so the icon centers on them */
+        margin-inline: calc(var(--gutterSize) + var(--cpd-space-1x)) var(--cpd-space-2x);
         width: 100%;
 
         /**
@@ -43,8 +42,8 @@
         }
 
         & .mx_ThreadsActivityCentreButton_Icon {
-            /* align with settings label */
-            margin-right: 14px;
+            /* Align the label with the space names: the avatar's 4px overhang past the icon + the names' 8px margin */
+            margin-inline-end: var(--cpd-space-3x);
             /* required to set the icon width when into a flex container */
             width: 24px;
             flex-shrink: 0;

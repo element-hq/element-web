@@ -341,7 +341,9 @@ Please see LICENSE files in the repository root for full details.
     max-width: 360px;
 
     .mx_SpacePanel_contextMenu_header {
-        margin: 12px 16px 12px;
+        margin-block: var(--cpd-space-3x);
+        /* Match the compact menu items' 12px start and 16px end padding, so the name lines up with their icons */
+        margin-inline: var(--cpd-space-3x) var(--cpd-space-4x);
         font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-18px;

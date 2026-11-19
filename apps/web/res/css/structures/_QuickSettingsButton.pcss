@@ -35,10 +35,10 @@ Please see LICENSE files in the repository root for full details.
          */
         background-color: transparent !important;
 
-        /* align with settings icon */
-        margin-left: 21px;
-        margin-right: 8px;
-        width: 100%;
+        /* Start at the 32px space avatars' edge (gutter + their 4px selection padding), so the icon centers on them */
+        margin-inline: calc(var(--gutterSize) + var(--cpd-space-1x)) var(--cpd-space-2x);
+        /* Stretch between the margins: 100% would add them on top and run past the panel */
+        width: auto;
 
         /**
          * modify internal css of the compound component
@@ -50,8 +50,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         svg {
-            /* align with settings label */
-            margin-right: 14px;
+            /* Align the label with the space names: the avatar's 4px overhang past the icon + the names' 8px margin */
+            margin-inline-end: var(--cpd-space-3x);
             /* required to set the icon width when into a flex container */
             width: 24px;
             flex-shrink: 0;

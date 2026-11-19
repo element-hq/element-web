@@ -250,6 +250,15 @@ test.describe("Spaces", () => {
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
     });
 
+    test("should line up the space name with the options in the space menu", async ({ page, app }) => {
+        await app.client.createSpace({ name: "Test Space" });
+
+        const menu = await openSpaceContextMenu(page, app, "Test Space");
+        const name = (await menu.getByText("Test Space", { exact: true }).boundingBox())!;
+        const icon = (await menu.getByRole("menuitem", { name: "Space home" }).locator("svg").boundingBox())!;
+        expect(name.x).toBeCloseTo(icon.x, 0);
+    });
+
     test("should show space invites at the top of the space panel", async ({ page, app, user, bot }) => {
         await app.client.createSpace({
             name: "My Space",
@@ -456,6 +465,20 @@ test.describe("Spaces", () => {
         });
         await app.viewSpaceByName("Root Space");
         await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
+
+        const tile = page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Child Space 1" });
+        // The checkbox ends as far from the tile's end as the avatar starts from its start
+        const tileBox = (await tile.boundingBox())!;
+        const avatarBox = (await tile.getByTestId("avatar-img").boundingBox())!;
+        const checkboxBox = (await tile.getByRole("checkbox").boundingBox())!;
+        expect(tileBox.x + tileBox.width - (checkboxBox.x + checkboxBox.width)).toBeCloseTo(avatarBox.x - tileBox.x, 0);
+
+        // The subspace toggle's background must not show as a square on the hovered tile
+        await tile.hover();
+        await expect(tile.locator(".mx_SpaceHierarchy_subspace_toggle")).toHaveCSS(
+            "background-color",
+            "rgba(0, 0, 0, 0)",
+        );
     });
 
     test("should render spaces visibility settings", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {

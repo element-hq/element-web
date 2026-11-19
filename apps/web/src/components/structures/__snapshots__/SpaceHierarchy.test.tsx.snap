@@ -125,7 +125,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > renders 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
@@ -222,7 +222,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > renders 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
@@ -320,7 +320,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > renders 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
@@ -439,7 +439,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > renders 1`] = `
                   class="_root"
                 >
                   <div
-                    class="_inline-field"
+                    class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
                   >
                     <div
                       class="_inline-field-control"
@@ -540,7 +540,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > renders 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
@@ -710,7 +710,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > should not render cycles 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
@@ -807,7 +807,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > should not render cycles 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
@@ -905,7 +905,7 @@ exports[`SpaceHierarchy > <SpaceHierarchy /> > should not render cycles 1`] = `
             class="_root"
           >
             <div
-              class="_inline-field"
+              class="_inline-field mx_SpaceHierarchy_roomTile_checkbox"
             >
               <div
                 class="_inline-field-control"
