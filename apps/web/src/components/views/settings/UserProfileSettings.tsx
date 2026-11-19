@@ -85,7 +85,13 @@ const SignOutButton: React.FC = () => {
 
     const onClick = useCallback(async () => {
         if (await shouldShowLogoutDialog(client)) {
-            Modal.createDialog(LogoutDialog);
+            Modal.createDialog(LogoutDialog, undefined, undefined, false, false, {
+                onBeforeClose: async (reason) => {
+                    // Inhibit closure due to clicking in the background.
+                    // Recovery key steps must be cancelled via their own buttons (element-meta#3413)
+                    return reason !== "backgroundClick";
+                },
+            });
         } else {
             defaultDispatcher.dispatch({ action: "logout" });
         }

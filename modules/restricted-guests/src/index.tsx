@@ -16,6 +16,7 @@ import style from "./style.css" with { type: "css" };
 const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
     UIComponent.InviteUsers,
     UIComponent.CreateRooms,
+    UIComponent.CreateDM,
     UIComponent.CreateSpaces,
     UIComponent.ExploreRooms,
     UIComponent.RoomOptionsMenu,

@@ -8,7 +8,7 @@ permissions: {} # We use ELEMENT_BOT_TOKEN instead
 
 jobs:
     automate-project-columns:
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         steps:
             - uses: actions/add-to-project@f2c1f1fa649a891be84948ea89b5dfba1526ef05 # v2.0.1
               with:

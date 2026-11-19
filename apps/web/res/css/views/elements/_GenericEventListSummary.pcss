@@ -36,8 +36,9 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    &[data-layout="group"] {
-        margin-top: var(--cpd-space-2x);
+    &[data-layout="group"][data-expanded="false"] .mx_GenericEventListSummary_summary {
+        /* Match the expanded group row after the collapsed avatar overlap. */
+        margin-inline-start: var(--cpd-space-0-5x);
     }
 
     &[data-layout="bubble"] {

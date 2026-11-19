@@ -49,6 +49,8 @@ import {
     RovingTabIndexProvider,
 } from "../../../../accessibility/RovingTabIndex";
 import { mediaFromMxc } from "../../../../customisations/Media";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
 import { Action } from "../../../../dispatcher/actions";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
@@ -1019,7 +1021,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         let groupChatSection: JSX.Element | undefined;
-        if (filter === Filter.People) {
+        if (filter === Filter.People && shouldShowComponent(UIComponent.CreateDM)) {
             groupChatSection = (
                 <div
                     className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches"

@@ -99,6 +99,8 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    // @alpha
+    readonly toDevice: ToDeviceApi;
     waitForClientStarted(): Promise<void>;
 }
 
@@ -327,6 +329,13 @@ export interface I18nApi {
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 
+// @alpha
+export interface IncomingToDeviceMessage {
+    readonly content: unknown;
+    readonly sender: string;
+    readonly type: string;
+}
+
 // @public
 export interface LanguageTranslations {
     // (undocumented)
@@ -401,6 +410,14 @@ export interface OpenRoomOptions {
 export type OriginalMessageComponentProps = {
     showUrlPreview?: boolean;
 };
+
+// @alpha
+export interface OutgoingToDeviceMessage {
+    readonly content: Record<string, unknown>;
+    readonly recipientDeviceId: string;
+    readonly recipientUserId: string;
+    readonly type: string;
+}
 
 // @alpha
 export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
@@ -501,6 +518,12 @@ export type SubstitutionValue = number | string | ReactNode | ((sub: string) => 
 // @public
 export type Tags = Record<string, SubstitutionValue>;
 
+// @alpha
+export interface ToDeviceApi {
+    onMessage(type: string, listener: (message: IncomingToDeviceMessage) => void): () => void;
+    sendMessage(message: OutgoingToDeviceMessage): Promise<void>;
+}
+
 // @public
 export type Translations = Record<string, {
     [ietfLanguageTag: string]: string;
@@ -509,6 +532,7 @@ export type Translations = Record<string, {
 // @alpha
 export const enum UIComponent {
     AddIntegrations = "UIComponent.addIntegrations",
+    CreateDM = "UIComponent.dmCreation",
     CreateRooms = "UIComponent.roomCreation",
     CreateSpaces = "UIComponent.spaceCreation",
     ExploreRooms = "UIComponent.exploreRooms",

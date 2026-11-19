@@ -662,7 +662,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
         }
 
         // XXX: Should use parseCallNotificationContent once the types are exported.
-        const content = ev.getContent() as IRTCNotificationContent;
+        const content = ev.getContent<IRTCNotificationContent>();
         const roomId = ev.getRoomId();
         const referencedMembershipEventId = ev.getRelation()?.event_id;
 

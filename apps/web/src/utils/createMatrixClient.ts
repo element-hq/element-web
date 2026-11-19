@@ -143,7 +143,8 @@ export function createClientWithCreds(creds: IMatrixClientCreds, oauthClientId?:
         // These are always installed regardless of the labs flag so that cross-signing features
         // can toggle on without reloading and also be accessed immediately after login.
         cryptoCallbacks: { ...crossSigningCallbacks },
-        enableEncryptedStateEvents: SettingsStore.getValue("feature_msc4362_encrypted_state_events"),
+        // MSC4362; we removed support for this feature due to lack of progress
+        enableEncryptedStateEvents: false,
         unstableMSC1763Retention: SettingsStore.getValue("feature_retention"),
         roomNameGenerator,
     };

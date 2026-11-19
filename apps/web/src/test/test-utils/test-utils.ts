@@ -131,7 +131,6 @@ export function createTestClient(): MatrixClient {
             getDeviceVerificationStatus: vi.fn(),
             resetKeyBackup: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
-            isStateEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
             getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
             setDeviceIsolationMode: vi.fn(),
             prepareToEncrypt: vi.fn(),

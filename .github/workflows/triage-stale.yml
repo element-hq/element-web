@@ -6,7 +6,7 @@ on:
 permissions: {}
 jobs:
     close:
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         permissions:
             actions: write
             issues: write
@@ -32,7 +32,7 @@ jobs:
     # which have seen no activity in 14 days are marked as draft.
     draft-inactive-prs:
         name: Mark inactive X-Needs-Iteration PRs as draft
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         steps:
             - name: Mark inactive labelled PRs as draft
               uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9

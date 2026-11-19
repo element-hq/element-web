@@ -59,7 +59,19 @@ describe("SetupEncryptionToast", () => {
             const user = userEvent.setup();
             await user.click(await screen.findByRole("button", { name: "Create recovery key" }));
 
-            expect(Modal.createDialog).toHaveBeenCalledWith(ChangeRecoveryKeyDialog, { userHasRecoveryKey: false });
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                ChangeRecoveryKeyDialog,
+                { userHasRecoveryKey: false },
+                undefined,
+                false,
+                false,
+                { onBeforeClose: expect.any(Function) },
+            );
+
+            // the dialog must not close on background click, only via its own buttons
+            const { onBeforeClose } = vi.mocked(Modal.createDialog).mock.lastCall![5]!;
+            await expect(onBeforeClose!("backgroundClick")).resolves.toBe(false);
+            await expect(onBeforeClose!()).resolves.toBe(true);
         });
 
         it("should dismiss the toast when 'Dismiss' button clicked, and remember it", async () => {
