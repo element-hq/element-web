@@ -267,8 +267,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 {cryptoVersion}
                                 <br />
                             </CopyableText>
-                            {updateButton}
                         </SettingsSubsectionText>
+                        {updateButton && <SettingsSubsectionText>{updateButton}</SettingsSubsectionText>}
                     </SettingsSubsection>
                     {this.renderLegal()}
                     {this.renderCredits()}
