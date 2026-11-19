@@ -820,3 +820,77 @@ describe("EventTileView bubble layout reactions", () => {
         expect(getComputedStyle(renderAddReactionButton(false)).order).toBe("0");
     });
 });
+
+describe("EventTileView bubble layout in a thread", () => {
+    const threadTile = (id: string, isOwnEvent: boolean, body: string): React.JSX.Element => (
+        <EventTileView
+            key={id}
+            root={{ ...renderState, id, eventId: `$${id}`, shape: "Thread", state: { isOwnEvent, hasReply: false } }}
+            slots={{
+                body: <span>{body}</span>,
+                receipt: <span style={{ display: "block", width: "34px", height: "24px" }} />,
+            }}
+        />
+    );
+
+    // ThreadView's message list in the narrowest right panel, with its 8px inline padding.
+    const renderThread = (...tiles: React.JSX.Element[]): ReturnType<typeof render> =>
+        render(
+            <ol
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    boxSizing: "border-box",
+                    width: "320px",
+                    margin: 0,
+                    paddingInline: "8px",
+                    listStyle: "none",
+                }}
+            >
+                {tiles}
+            </ol>,
+            { presentation: { layout: "bubble" } },
+        );
+
+    it("ends every read receipt at the end of the thread's content box, clear of your own bubble", () => {
+        const { getByRole, getAllByTestId } = renderThread(
+            threadTile("short", false, "Can you review the draft?"),
+            threadTile("long", false, "The second section still needs a date for the venue booking"),
+            threadTile("own", true, "Sure, on it"),
+        );
+        const contentEnd = getByRole("list").getBoundingClientRect().right - 8;
+        const receipts = getAllByTestId("event-tile-slot-receipt");
+
+        expect(receipts).toHaveLength(3);
+        for (const receipt of receipts) {
+            expect(receipt.getBoundingClientRect().right).toBeCloseTo(contentEnd, 0);
+        }
+        expect(getAllByTestId("event-tile-line")[2].getBoundingClientRect().right).toBeLessThanOrEqual(
+            receipts[2].getBoundingClientRect().left,
+        );
+    });
+
+    it.each([
+        ["another user's", false],
+        ["your own", true],
+    ])("keeps the time of %s hidden event in the thread and its avatar beside the text", (_, isOwnEvent) => {
+        const { getByRole, getByTestId } = renderThread(
+            <EventTileView
+                root={{ ...renderState, shape: "Thread", state: { isOwnEvent, hasReply: false, info: true } }}
+                slots={{
+                    avatar: <span data-testid="avatar" style={{ display: "block", width: "14px", height: "14px" }} />,
+                    body: <span data-testid="body">{'{ "type": m.reaction }'}</span>,
+                    timestamp: <span data-testid="time">12:41</span>,
+                }}
+            />,
+        );
+        const contentStart = getByRole("list").getBoundingClientRect().left + 8;
+        const time = getByTestId("time").getBoundingClientRect();
+        const avatar = getByTestId("avatar").getBoundingClientRect();
+
+        expect(time.left).toBeGreaterThanOrEqual(contentStart);
+        expect(time.right).toBeLessThanOrEqual(avatar.left);
+        // The avatar ends 6px before the text, as in the group layout.
+        expect(getByTestId("body").getBoundingClientRect().left - avatar.right).toBeCloseTo(6, 0);
+    });
+});

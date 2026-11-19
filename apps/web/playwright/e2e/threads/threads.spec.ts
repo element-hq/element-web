@@ -106,13 +106,8 @@ test.describe("Threads", () => {
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
 
         locator = page.locator(".mx_ThreadView .mx_EventTile").last();
-        // TODO: remove this after fixing the issue of ReadReceiptGroup being hidden on the bubble layout
-        // See: https://github.com/vector-im/element-web/issues/23569
-        await expect(locator.locator(".mx_ReadReceiptGroup .mx_BaseAvatar")).toBeAttached();
-        // Make sure the avatar inside ReadReceiptGroup is visible on bubble layout
-        // TODO: enable this after fixing the issue of ReadReceiptGroup being hidden on the bubble layout
-        // See: https://github.com/vector-im/element-web/issues/23569
-        // expect(locator.locator(".mx_ReadReceiptGroup .mx_BaseAvatar")).toBeVisible();
+        // toBeVisible ignores clipping, so check that the thread panel does not clip the receipt on bubble layout
+        await expect(locator.locator(".mx_ReadReceiptGroup .mx_BaseAvatar")).toBeInViewport();
 
         // Re-enable the group layout
         await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
