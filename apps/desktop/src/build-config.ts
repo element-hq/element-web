@@ -27,7 +27,7 @@ interface BuildConfig {
 
 export function getBuildConfig(): BuildConfig {
     if (!buildConfig) {
-        const packageJson = loadJsonFile(path.join(__dirname, "..", "package.json")) as JsonObject;
+        const packageJson = loadJsonFile<JsonObject>(path.join(__dirname, "..", "package.json"));
         buildConfig = {
             appId: (packageJson["electron_appId"] as string) || "im.riot.app",
             protocol: (packageJson["electron_protocol"] as string) || "io.element.desktop",
