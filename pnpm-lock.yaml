@@ -1433,11 +1433,11 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(react@19.3.1)
       react-resizable-panels:
-        specifier: 4.23.0
-        version: 4.23.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+        specifier: 4.24.0
+        version: 4.24.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       react-virtuoso:
         specifier: ^4.14.0
-        version: 4.18.22(react-dom@19.3.1)(react@19.3.1)
+        version: 4.18.23(react-dom@19.3.1)(react@19.3.1)
       temporal-polyfill:
         specifier: ^1.0.0
         version: 1.0.8
@@ -11421,8 +11421,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.23.0:
-    resolution: {integrity: sha512-Sz0KOymTxzygc2Awsj2v8obODogb0aODeUQiv09FEKCxjtKSz2sZWhdRYRSf6WL/9u1rybFbX/7IWgp5h48f5g==}
+  react-resizable-panels@4.24.0:
+    resolution: {integrity: sha512-u2v5CzyeDSLZ94+itR1CYVbzT+Hql4uIsqUXbsE3wZ0vUN7tNxBZUXKaVeryDSxRKo2/a0rfVopdijv/dUbqfw==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: ^18.0.0 || ^19.0.0
@@ -11450,8 +11450,8 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react-virtuoso@4.18.22:
-    resolution: {integrity: sha512-0Jga1NmJsAwhxZlEyE6xN1HtEHePgsWbuzYcJokanaIDVTbc59ocm3MocQ6yJIYTJICaWqYY3+Z4FQ3mnGuD+w==}
+  react-virtuoso@4.18.23:
+    resolution: {integrity: sha512-J/FpyeLUbU6uEXiMsTKjlJaSMqpjxPCanjSYRxFKobLhP73Wo4gloFldDD7osmFUEv2VMF8Ki/YScofwa3ymyw==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -24133,7 +24133,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  react-resizable-panels@4.23.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1):
+  react-resizable-panels@4.24.0(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
@@ -24159,7 +24159,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  react-virtuoso@4.18.22(react-dom@19.3.1)(react@19.3.1):
+  react-virtuoso@4.18.23(react-dom@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
