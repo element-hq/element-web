@@ -24,8 +24,8 @@ import { type UrlPreview, type UrlPreviewImage, type UrlPreviewImageBundled } fr
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
-import SettingsStore from "../settings/SettingsStore";
+import { type BundledUrlPreview, type RoomMessageEventContent } from "../../@types/url-preview";
+import { BUNDLED_URL_PREVIEWS } from "./bundledUrlPreviews";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
@@ -150,8 +150,6 @@ export async function attachUrlPreviews(
     messageHasLinks: boolean,
     encryptedImageCache: ReadonlyMap<string, EncryptedFile> = new Map(),
 ): Promise<boolean> {
-    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
-
     const isRoomEncrypted = room.hasEncryptionStateEvent();
     const previewsToAttach = urlPreviewSnapshot.entries
         .filter((entry) => entry.include && entry.status === "loaded")
@@ -199,9 +197,9 @@ export async function attachUrlPreviews(
      * if the UrlPreview contains an image and we are in an encrypted room, it uploads
      * the image to create a bundled with an EncryptedFile
      */
-    async function bundleFromPreview(preview: UrlPreview): Promise<UnstableBundledUrlPreviewSingle> {
-        const out: UnstableBundledUrlPreviewSingle = {
-            "matched_url": preview.link,
+    async function bundleFromPreview(preview: UrlPreview): Promise<BundledUrlPreview> {
+        const out: BundledUrlPreview = {
+            "matrix:matched_url": preview.link,
             "og:url": preview.ogUrl,
             "og:title": preview.title,
             "og:description": preview.description,
@@ -228,7 +226,7 @@ export async function attachUrlPreviews(
         // the image a second time and produce an undecryptable image.
         const alreadyEncrypted = encryptedImageCache.get(preview.link);
         if (alreadyEncrypted !== undefined) {
-            out["beeper:image:encryption"] = alreadyEncrypted;
+            out["matrix:image:encrypted"] = alreadyEncrypted;
             return out;
         }
 
@@ -244,7 +242,7 @@ export async function attachUrlPreviews(
                 return out;
             }
 
-            out["beeper:image:encryption"] = file;
+            out["matrix:image:encrypted"] = file;
         } catch (e) {
             // do not print error if it exited because of the message sending was aborted
             if (!abortController.signal.aborted) console.error(e);
@@ -259,7 +257,7 @@ export async function attachUrlPreviews(
 
     const bundle = await Promise.all(previewsToAttach.map(bundleFromPreview));
 
-    if (messageHasLinks) content["com.beeper.linkpreviews"] = bundle;
+    if (messageHasLinks) content[BUNDLED_URL_PREVIEWS] = bundle;
 
     // by this point the image has already uploaded, and a real message is already in timeline
     // so remove the fake message

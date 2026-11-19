@@ -236,7 +236,6 @@ export interface Settings {
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
-    "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -651,15 +650,6 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Ui,
         displayName: _td("labs|login_with_qr"),
         description: _td("labs|config_only"),
-        isFeature: true,
-        default: false,
-    },
-    "feature_msc4095_url_preview_bundle": {
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|url_preview_bundle"),
-        description: _td("labs|url_preview_bundle_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
         isFeature: true,
         default: false,
     },
@@ -1162,11 +1152,7 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_encrypted_bundled_only"),
         default: true,
-        controller: new RequiresSettingsController([
-            UIFeature.URLPreviews,
-            "feature_msc4095_url_preview_bundle",
-            "urlPreviewsEnabled_e2ee",
-        ]),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled_e2ee"]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

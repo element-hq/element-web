@@ -16,11 +16,11 @@ import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { linksIn } from "../../utils/UrlUtils";
-import { type RoomMessageEventContent, type UnstableBundledUrlPreviewSingle } from "../../../@types/url-preview";
+import { type BundledUrlPreview, type RoomMessageEventContent } from "../../../@types/url-preview";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import PlatformPeg from "../../PlatformPeg";
-import SettingsStore from "../../settings/SettingsStore";
+import { getBundledUrlPreviews } from "../../utils/bundledUrlPreviews";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -90,7 +90,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     private content: string;
 
     /**
-     * Maps `matched_url` to the {@link EncryptedFile} carrying its preview image, for previews
+     * Maps a matched URL to the {@link EncryptedFile} carrying its preview image, for previews
      * seeded from an event's existing bundle.
      *
      * Editing must resend the file as-is: its mxc points at the ciphertext, so re-uploading it
@@ -134,11 +134,10 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     public static restoreFromMessage(
         props: MessageComposerUrlPreviewViewModelRestoreProps,
     ): MessageComposerUrlPreviewViewModel {
-        const urlPreviewBundle = SettingsStore.getValue("feature_msc4095_url_preview_bundle");
         const content = props.mxEvent.getContent<RoomMessageEventContent>();
-        const bundleContent = content["com.beeper.linkpreviews"];
+        const bundleContent = getBundledUrlPreviews(content);
         const linksInMessage = linksIn(content.body);
-        const linksInBundle = new Set(bundleContent?.map((entry) => entry.matched_url));
+        const linksInBundle = new Set(bundleContent?.map((entry) => entry["matrix:matched_url"]));
 
         const urlVmProps: MessageComposerUrlPreviewViewModelProps = {
             client: props.client,
@@ -148,18 +147,18 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             content: content.body,
         };
 
-        if (urlPreviewBundle && bundleContent !== undefined) {
+        if (bundleContent !== undefined) {
             urlVmProps.cachedEntries = new Map(
                 bundleContent
                     .map((entry): [string, MessageComposerUrlPreviewSnapshotEntry] => [
-                        entry.matched_url,
+                        entry["matrix:matched_url"],
                         {
                             // previewFromBundle is async (it falls back to a server request when the
-                            // bundle carries only matched_url), so the bundled entries start out
+                            // bundle carries only the matched URL), so the bundled entries start out
                             // loading and are resolved by resolveBundledPreviews below.
                             status: "loading",
                             include: true,
-                            matched_url: entry.matched_url,
+                            matched_url: entry["matrix:matched_url"],
                         },
                     ])
                     .concat(
@@ -174,7 +173,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         }
 
         const urlVm = new MessageComposerUrlPreviewViewModel(urlVmProps);
-        if (urlPreviewBundle && bundleContent !== undefined) {
+        if (bundleContent !== undefined) {
             urlVm.resolveBundledPreviews(bundleContent, props.mxEvent);
         }
         return urlVm;
@@ -264,23 +263,22 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      *
      * The seeded entries are already in {@link previewCache} as `loading`, which stops
      * {@link computeSnapshot} from refetching them, so they have to be resolved here. Entries whose
-     * bundle carries only `matched_url` fall back to a server request inside `previewFromBundle`.
+     * bundle carries only `matrix:matched_url` fall back to a server request inside
+     * `previewFromBundle`.
      *
-     * @param bundle The event's preview bundle.
+     * @param bundle The event's preview bundle, as read by `getBundledUrlPreviews`.
      * @param mxEvent The event the bundle belongs to.
      */
-    public readonly resolveBundledPreviews = (
-        bundle: UnstableBundledUrlPreviewSingle[],
-        mxEvent: MatrixEvent,
-    ): void => {
+    public readonly resolveBundledPreviews = (bundle: BundledUrlPreview[], mxEvent: MatrixEvent): void => {
         for (const single of bundle) {
-            const encryptedImage = single["beeper:image:encryption"];
+            const matchedUrl = single["matrix:matched_url"];
+            const encryptedImage = single["matrix:image:encrypted"];
             if (encryptedImage !== undefined) {
-                this.encryptedImageCache.set(single.matched_url, encryptedImage);
+                this.encryptedImageCache.set(matchedUrl, encryptedImage);
             }
 
             void this.fetcher.previewFromBundle(single, mxEvent, true).then((fetched) => {
-                this.resolvePreview(single.matched_url, fetched);
+                this.resolvePreview(matchedUrl, fetched);
             });
         }
     };
@@ -347,7 +345,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
     /**
      * The {@link EncryptedFile}s of preview images seeded from an event's existing bundle, keyed by
-     * `matched_url`, so that editing can resend them rather than re-uploading the image.
+     * matched URL, so that editing can resend them rather than re-uploading the image.
      */
     public getEncryptedImageCache(): ReadonlyMap<string, EncryptedFile> {
         return this.encryptedImageCache;

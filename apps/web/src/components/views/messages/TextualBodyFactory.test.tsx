@@ -748,33 +748,26 @@ describe("<TextualBody />", () => {
             return urlPreviewGroupProps.at(-1)!.urlPreviewKind;
         };
 
-        // Without the lab flag the bundle is ignored entirely and previews come from the server.
-        it("asks the server when the bundle feature is off", () => {
-            expect(renderAndGetKind()).toBe("fetchonly");
-        });
-
-        it("prefers the bundle when the bundle feature is on in an unencrypted room", () => {
-            enableSettings("feature_msc4095_url_preview_bundle");
+        it("prefers the bundle in an unencrypted room", () => {
             expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
         });
 
         // The user has not asked for the stricter behaviour, so an encrypted message whose bundle
         // is missing a preview may still be filled in by the server.
         it("prefers the bundle in an encrypted room when bundled-only is off", () => {
-            enableSettings("feature_msc4095_url_preview_bundle");
             expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("preferbundled");
         });
 
         // The whole point of the setting: in an encrypted room nothing about the message, not even
         // one of its URLs, may be sent to the homeserver.
         it("uses the bundle only in an encrypted room when bundled-only is on", () => {
-            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            enableSettings("urlPreviewsEnabled_e2ee_bundled_only");
             expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("bundledonly");
         });
 
         // The setting is about encrypted rooms only, so it must not restrict an unencrypted one.
         it("ignores bundled-only in an unencrypted room", () => {
-            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            enableSettings("urlPreviewsEnabled_e2ee_bundled_only");
             expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
         });
     });

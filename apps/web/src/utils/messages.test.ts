@@ -20,7 +20,6 @@ import { attachMentions, attachUrlPreviews } from "./messages";
 import EditorModel from "../editor/model";
 import { createPartCreator } from "../editor/__mocks__";
 import { type RoomMessageEventContent } from "../../@types/url-preview";
-import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 
 vi.mock("../ContentMessages", () => ({ uploadFile: vi.fn() }));
@@ -28,13 +27,6 @@ vi.mock("../ContentMessages", () => ({ uploadFile: vi.fn() }));
 describe("attachUrlPreviews", () => {
     const mxClient = createTestClient();
     const mxRoom = mkRoom(mxClient, "test-room");
-
-    beforeEach(() => {
-        const original = SettingsStore.getValue;
-        vi.spyOn(SettingsStore, "getValue").mockImplementation(
-            (setting) => setting === "feature_msc4095_url_preview_bundle" || original(setting),
-        );
-    });
 
     afterEach(() => {
         vi.restoreAllMocks();
@@ -73,14 +65,18 @@ describe("attachUrlPreviews", () => {
             content,
             false,
         );
-        expect(content["com.beeper.linkpreviews"]).toBeUndefined();
+        expect(content["m.url_previews"]).toBeUndefined();
     });
 
     it("attaches a preview with no image", async () => {
         const content = makeContent();
         await attachUrlPreviews(mxClient, mxRoom, snapshot(), content, true);
-        expect(content["com.beeper.linkpreviews"]).toEqual([expect.objectContaining({ "og:title": "Example" })]);
-        expect(content["com.beeper.linkpreviews"]![0]["og:image"]).toBeUndefined();
+        expect(content["m.url_previews"]).toEqual([
+            expect.objectContaining({ "matrix:matched_url": "https://example.com", "og:title": "Example" }),
+        ]);
+        // The unstable format is read but no longer sent.
+        expect(content["com.beeper.linkpreviews"]).toBeUndefined();
+        expect(content["m.url_previews"]![0]["og:image"]).toBeUndefined();
     });
 
     it("embeds the mxc url from the preview image", async () => {
@@ -102,7 +98,7 @@ describe("attachUrlPreviews", () => {
             true,
         );
 
-        expect(content["com.beeper.linkpreviews"]![0]).toEqual(
+        expect(content["m.url_previews"]![0]).toEqual(
             expect.objectContaining({
                 "og:image": "mxc://server/img",
                 "og:image:width": 100,
@@ -129,7 +125,7 @@ describe("attachUrlPreviews", () => {
             true,
         );
 
-        const bundle = content["com.beeper.linkpreviews"]![0];
+        const bundle = content["m.url_previews"]![0];
         expect(bundle["og:title"]).toEqual("Example");
         expect(bundle["og:image"]).toBeUndefined();
         expect(bundle["og:image:width"]).toBeUndefined();
@@ -165,16 +161,9 @@ describe("attachUrlPreviews", () => {
             new Map([["https://example.com", encryptedFile]]),
         );
 
-        expect(content["com.beeper.linkpreviews"]![0]["beeper:image:encryption"]).toBe(encryptedFile);
-        expect(content["com.beeper.linkpreviews"]![0]["og:image"]).toBeUndefined();
+        expect(content["m.url_previews"]![0]["matrix:image:encrypted"]).toBe(encryptedFile);
+        expect(content["m.url_previews"]![0]["og:image"]).toBeUndefined();
         expect(fetchSpy).not.toHaveBeenCalled();
-    });
-
-    it("does not attach a bundle when the setting is disabled", async () => {
-        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        const content = makeContent();
-        expect(await attachUrlPreviews(mxClient, mxRoom, snapshot(), content, true)).toBe(false);
-        expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 
     // The bundle only describes links that are in the body, so a body with none gets no bundle even
@@ -182,7 +171,7 @@ describe("attachUrlPreviews", () => {
     it("does not attach a bundle when the message has no links", async () => {
         const content = makeContent();
         await attachUrlPreviews(mxClient, mxRoom, snapshot(), content, false);
-        expect(content["com.beeper.linkpreviews"]).toBeUndefined();
+        expect(content["m.url_previews"]).toBeUndefined();
     });
 
     // Removing a preview in the composer clears its `include`, and a preview that never finished
@@ -204,7 +193,7 @@ describe("attachUrlPreviews", () => {
             content,
             true,
         );
-        expect(content["com.beeper.linkpreviews"]).toEqual([]);
+        expect(content["m.url_previews"]).toEqual([]);
     });
 
     it("merges additionalBundleContent into the bundle", async () => {
@@ -215,7 +204,7 @@ describe("attachUrlPreviews", () => {
 
         await attachUrlPreviews(mxClient, mxRoom, snap, content, true);
 
-        expect(content["com.beeper.linkpreviews"]![0]).toEqual(
+        expect(content["m.url_previews"]![0]).toEqual(
             expect.objectContaining({ "og:title": "From the module", "custom:field": 7 }),
         );
     });
@@ -264,11 +253,6 @@ describe("attachUrlPreviews in an encrypted room", () => {
         mxRoom.updatePendingEvent = vi.fn();
         mxRoom.removePendingEvent = vi.fn();
 
-        const original = SettingsStore.getValue;
-        vi.spyOn(SettingsStore, "getValue").mockImplementation(
-            (setting) => setting === "feature_msc4095_url_preview_bundle" || original(setting),
-        );
-
         fetchMock.get(IMAGE_HTTP_URL, { body: "image bytes" });
         vi.mocked(uploadFile).mockResolvedValue({ file: ENCRYPTED_FILE });
     });
@@ -303,7 +287,7 @@ describe("attachUrlPreviews in an encrypted room", () => {
     });
 
     // The homeserver must not be handed the preview image as plaintext, so it is downloaded,
-    // re-uploaded encrypted, and referenced by `beeper:image:encryption` instead of `og:image`.
+    // re-uploaded encrypted, and referenced by `matrix:image:encrypted` instead of `og:image`.
     it("uploads the preview image and references it as an encrypted file", async () => {
         const content = makeContent();
         expect(await attachUrlPreviews(mxClient, mxRoom, snapshot(IMAGE), content, true)).toBe(false);
@@ -317,8 +301,8 @@ describe("attachUrlPreviews in an encrypted room", () => {
             expect.any(AbortController),
         );
 
-        const bundled = content["com.beeper.linkpreviews"]![0];
-        expect(bundled["beeper:image:encryption"]).toEqual(ENCRYPTED_FILE);
+        const bundled = content["m.url_previews"]![0];
+        expect(bundled["matrix:image:encrypted"]).toEqual(ENCRYPTED_FILE);
         // The plaintext mxc:// URL must not leak into the bundle.
         expect(bundled["og:image"]).toBeUndefined();
         // The dimensions are not secret and are still needed to size the tile.
@@ -393,8 +377,8 @@ describe("attachUrlPreviews in an encrypted room", () => {
         const content = makeContent();
         expect(await attachUrlPreviews(mxClient, mxRoom, snapshot(IMAGE), content, true)).toBe(false);
 
-        const bundled = content["com.beeper.linkpreviews"]![0];
-        expect(bundled["beeper:image:encryption"]).toBeUndefined();
+        const bundled = content["m.url_previews"]![0];
+        expect(bundled["matrix:image:encrypted"]).toBeUndefined();
         expect(bundled["og:image"]).toBeUndefined();
         expect(bundled["og:title"]).toBe("Example");
         expect(consoleError).toHaveBeenCalled();
@@ -407,7 +391,7 @@ describe("attachUrlPreviews in an encrypted room", () => {
         const content = makeContent();
         expect(await attachUrlPreviews(mxClient, mxRoom, snapshot(IMAGE), content, true)).toBe(false);
 
-        expect(content["com.beeper.linkpreviews"]![0]["beeper:image:encryption"]).toBeUndefined();
+        expect(content["m.url_previews"]![0]["matrix:image:encrypted"]).toBeUndefined();
         expect(consoleError).toHaveBeenCalledWith(new Error("Forced test failure"));
     });
 
@@ -432,7 +416,7 @@ describe("attachUrlPreviews in an encrypted room", () => {
         const content = makeContent();
         await attachUrlPreviews(mxClient, mxRoom, snapshot(IMAGE), content, true);
 
-        expect(content["com.beeper.linkpreviews"]![0]["beeper:image:encryption"]).toBeUndefined();
+        expect(content["m.url_previews"]![0]["matrix:image:encrypted"]).toBeUndefined();
         expect(uploadFile).not.toHaveBeenCalled();
         expect(consoleError).toHaveBeenCalled();
     });
@@ -444,8 +428,8 @@ describe("attachUrlPreviews in an encrypted room", () => {
         const content = makeContent();
         await attachUrlPreviews(mxClient, mxRoom, snapshot(IMAGE), content, true);
 
-        expect(content["com.beeper.linkpreviews"]![0]["og:image"]).toBe("mxc://server/img");
-        expect(content["com.beeper.linkpreviews"]![0]["beeper:image:encryption"]).toBeUndefined();
+        expect(content["m.url_previews"]![0]["og:image"]).toBe("mxc://server/img");
+        expect(content["m.url_previews"]![0]["matrix:image:encrypted"]).toBeUndefined();
         expect(uploadFile).not.toHaveBeenCalled();
         expect(mxRoom.addPendingEvent).not.toHaveBeenCalled();
     });

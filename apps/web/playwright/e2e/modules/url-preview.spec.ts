@@ -105,12 +105,6 @@ test.describe("URL Preview API", () => {
             await expect(tile.getByRole("link", { name: `Module preview from ${user.userId}` })).toBeVisible();
             await expect(tile.getByText("Later handler should not be used")).not.toBeVisible();
         });
-    });
-
-    test.describe("with bundled previews", () => {
-        test.use({
-            labsFlags: ["feature_msc4095_url_preview_bundle"],
-        });
 
         test("should preview a bundled URL with the module handler", async ({ page, room, app, user }) => {
             const previewRequestCount = await mockHomeserverPreviews(page);
@@ -134,6 +128,8 @@ test.describe("URL Preview API", () => {
             expect(previewRequestCount()).toBe(0);
         });
     });
+
+
 
     test.describe("in the composer", () => {
         test("should preview a URL handled by a module, without an event", async ({ page, room, app, user }) => {

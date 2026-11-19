@@ -25,7 +25,6 @@ export function MessageComposerUrlPreviewWrapper({
     const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
     const { content } = useViewModel(vm);
 
-    const urlPreviewBundlesEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
     const collapsed = useSettingValue("composerUrlPreviewCollapsed");
 
     const toggleCollapsed = useCallback(() => {
@@ -37,7 +36,7 @@ export function MessageComposerUrlPreviewWrapper({
             vm={vm}
             collapsed={collapsed}
             toggleCollapsed={toggleCollapsed}
-            removePreview={urlPreviewBundlesEnabled ? vm.removePreview : undefined}
+            removePreview={vm.removePreview}
         />
     );
 
