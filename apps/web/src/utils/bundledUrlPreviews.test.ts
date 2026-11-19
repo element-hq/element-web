@@ -78,9 +78,8 @@ describe("getBundledUrlPreviews", () => {
     });
 
     it("returns undefined when the bundle is not a list", () => {
-        expect(getBundledUrlPreviews({ "m.url_previews": { "matrix:matched_url": "https://example.org" } })).toBe(
-            undefined,
-        );
+        const content = { "m.url_previews": { "matrix:matched_url": "https://example.org" } };
+        expect(getBundledUrlPreviews(content)).toBeUndefined();
     });
 
     it("leaves out entries that do not name a URL", () => {

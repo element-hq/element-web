@@ -129,8 +129,6 @@ test.describe("URL Preview API", () => {
         });
     });
 
-
-
     test.describe("in the composer", () => {
         test("should preview a URL handled by a module, without an event", async ({ page, room, app, user }) => {
             const previewRequestCount = await mockHomeserverPreviews(page);
