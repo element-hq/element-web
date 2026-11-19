@@ -229,6 +229,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 EventType.CallSDPStreamMetadataChangedPrefix,
                 EventType.CallReplaces,
                 EventType.CallEncryptionKeysPrefix,
+                // TODO: Switch to the JS SDK constant once #5711 has landed there.
                 "m.rtc.encryption_key",
             ];
             for (const eventType of sendRecvToDevice) {
