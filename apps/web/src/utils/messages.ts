@@ -20,7 +20,7 @@ import {
     type MessageComposerUrlPreviewSnapshotEntryLoaded,
     type MessageComposerUrlPreviewSnapshot,
 } from "@element-hq/web-shared-components";
-import { type UrlPreview } from "shared-types";
+import { type UrlPreview, type UrlPreviewImage, type UrlPreviewImageBundled } from "shared-types";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
@@ -29,6 +29,14 @@ import SettingsStore from "../settings/SettingsStore";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
+
+/**
+ * Whether a preview image has an mxc:// URI and so can be bundled into a message.
+ * Images without one are only shown locally and must not be sent.
+ */
+function isBundledImage(image: UrlPreviewImage | undefined): image is UrlPreviewImageBundled {
+    return typeof (image as UrlPreviewImageBundled | undefined)?.mxcImageFull === "string";
+}
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -197,20 +205,21 @@ export async function attachUrlPreviews(
             "og:url": preview.ogUrl,
             "og:title": preview.title,
             "og:description": preview.description,
-            "og:image:width": preview.image?.width,
-            "og:image:height": preview.image?.height,
-            "og:image:type": preview.image?.imageType,
-            "matrix:image:size": preview.image?.fileSize,
             ...preview.additionalBundleContent,
         };
 
-        // no image
-        if (preview.image?.mxcImageFull === undefined) return out;
+        // no image, or an image that must not be bundled
+        const image = preview.image;
+        if (!isBundledImage(image)) return out;
+
+        out["og:image:width"] = image.width;
+        out["og:image:height"] = image.height;
+        out["og:image:type"] = image.imageType;
+        out["matrix:image:size"] = image.fileSize;
 
         // has image, not encrypted chat
         if (!isRoomEncrypted) {
-            out["og:image"] = preview.image?.mxcImageFull;
-            out["matrix:image:size"] = preview.image?.fileSize;
+            out["og:image"] = image.mxcImageFull;
             return out;
         }
 
@@ -226,7 +235,7 @@ export async function attachUrlPreviews(
         // has image, encrypted chat - upload the image to send the EncryptedFile instead
         try {
             // image url from homeserver assumed to not be malformed
-            const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp!;
+            const httpUrl = mediaFromMxc(image.mxcImageFull).srcHttp!;
             const blob = await (await fetch(httpUrl, { signal: abortController.signal })).blob();
             const { file } = await uploadFile(client, room.roomId, blob, undefined, abortController);
 
@@ -245,7 +254,7 @@ export async function attachUrlPreviews(
     }
 
     // if encrypted + has previews
-    if (isRoomEncrypted && previewsToAttach.some((preview) => preview.image !== undefined))
+    if (isRoomEncrypted && previewsToAttach.some((preview) => isBundledImage(preview.image)))
         putSendingMessageInTimeline();
 
     const bundle = await Promise.all(previewsToAttach.map(bundleFromPreview));
