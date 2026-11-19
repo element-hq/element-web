@@ -39,7 +39,7 @@ This can then be enabled with the following in `config.json`:
 
 ```json
 {
-    "modules": [ "/modules/banner/index.js" ]
+    "modules": ["/modules/banner/index.js"]
 }
 ```
 
