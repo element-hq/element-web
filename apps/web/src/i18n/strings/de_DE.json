@@ -2865,7 +2865,7 @@
             "message_search_pending_rooms": "Anzahl Chats, die indexiert werden müssen: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s von %(totalRooms)s",
             "message_search_section": "Nachrichtensuche",
-            "message_search_sleep_time": "Wie schnell Nachrichten heruntergeladen werden sollen.",
+            "message_search_sleep_time": "Wie langsam Nachrichten heruntergeladen werden sollen (Verzögerung in ms, größer ist langsamer).",
             "message_search_space_used": "Speicherplatzbedarf:",
             "message_search_unsupported": "Um verschlüsselte Nachrichten lokal zu durchsuchen, benötigt %(brand)s weitere Komponenten. Wenn du diese Funktion testen möchtest, kannst du dir deine eigene Version von %(brand)s Desktop mit der <nativeLink>integrierten Suchfunktion kompilieren</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s kann verschlüsselte Nachrichten im Browser nicht sicher lokal zwischenspeichern. Nutze <desktopLink>%(brand)s Desktop</desktopLink>, damit verschlüsselte Nachrichten in den Suchergebnissen erscheinen.",
