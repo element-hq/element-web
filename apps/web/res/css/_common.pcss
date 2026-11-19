@@ -119,6 +119,20 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/**
+ * Identifiers have to show exactly as typed, but Inter's contextual alternates draw an "x" between
+ * digits as a multiplication sign, so "@1x2:example.org" would read "@1×2:example.org".
+ */
+.mx_CopyableText,
+.mx_SpotlightDialog_result_publicRoomAlias,
+#mx_LoginForm_username,
+#mx_RegistrationForm_username {
+    font-feature-settings:
+        "kern" 1,
+        "liga" 1,
+        "calt" 0;
+}
+
 pre,
 code {
     font-family: $monospace-font-family;
