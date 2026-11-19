@@ -114,6 +114,11 @@ describe("<VoiceUserSettingsTab />", () => {
         });
     });
 
+    it("describes audio input in the same secondary text as other settings descriptions", () => {
+        render(getComponent());
+        expect(screen.getByText(/The audio input configured here/)).toHaveClass("mx_SettingsSubsection_text");
+    });
+
     it("renders audio processing settings", () => {
         const { getByRole } = render(getComponent());
         expect(getByRole("switch", { name: "Automatically adjust the microphone volume" })).toBeTruthy();
