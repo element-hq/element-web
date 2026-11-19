@@ -332,6 +332,8 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
         await encryptionTab.getByRole("textbox").fill(recoveryKey);
         await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+        // Wait for the confirmation screen, so recovery is set up before the settings are closed
+        await encryptionTab.getByRole("button", { name: "Done" }).click();
         await app.settings.closeDialog();
         return recoveryKey;
     });
