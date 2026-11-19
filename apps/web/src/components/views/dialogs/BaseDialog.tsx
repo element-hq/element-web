@@ -27,13 +27,13 @@ interface IProps {
     /**
      * If set to `true`, the dialog may be cancelled. A "close" button is rendered in
      * the top corner, and pressing "Escape" allows users to dismiss it. If either of
-     * these is actioned, `onFinished` runs.
+     * these is actioned, {@link onFinished} is called.
      *
      * Only set this to `false` if there is nothing the app can sensibly do when the dialog is
      * cancelled, eg. "We can't restore your session and the app cannot work". This removes the
-     * "close" button AND the "Escape" handler. In this case, `onFinished` never runs at all.
+     * "close" button AND the "Escape" handler. In this case, {@link onFinished} is never called at all.
      *
-     * To remove only the "close" button while keeping "Escape", use `hideCloseButton`.
+     * To remove only the "close" button while keeping "Escape", use {@link hideCloseButton}.
      *
      * Default: `true`.
      */
@@ -46,7 +46,7 @@ interface IProps {
      * Use this for dialogs that must be cancelled through their own explicit buttons, since
      * accessibility requires 'Escape' to keep working (per the WAI-ARIA modal dialog pattern).
      *
-     * This has no effect when `hasCancel` is `false`.
+     * This has no effect when {@link hasCancel} is `false`.
      *
      * Default: `false`.
      */
@@ -55,7 +55,7 @@ interface IProps {
     /**
      * Called when the dialog is cancelled, either by the 'close' button or by 'Escape'.
      *
-     * This method is never called if `hasCancel` is `false`.
+     * This method is never called if {@link hasCancel} is `false`.
      */
     "onFinished"?: () => void;
 
