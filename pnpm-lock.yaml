@@ -330,7 +330,7 @@ importers:
         version: 3.39.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/d04bfdc624bafa266f303b5edc1aaff0c8ef9edc#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272#path:/eslint
       eslint-plugin-element-web:
         specifier: workspace:*
         version: link:packages/eslint-plugin-element-web
@@ -348,7 +348,7 @@ importers:
         version: 6.45.1(patch_hash=65f5f004ad90eb9d044dd3af5aa76468c1aec19bf7b245606aa1742cd1e69f7a)
       lint-staged:
         specifier: ^17.6.0
-        version: 17.6.0
+        version: 17.6.1
       lodash:
         specifier: ^4.18.1
         version: 4.18.1
@@ -506,7 +506,7 @@ importers:
         version: 7.29.14
       '@element-hq/element-call-component':
         specifier: 0.28.2
-        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3)(react-dom@19.3.1)(react@19.3.1)
+        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc)(react-dom@19.3.1)(react@19.3.1)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -548,13 +548,13 @@ importers:
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.3.1)
       '@zxcvbn-ts/core':
         specifier: ^4.0.0
-        version: 4.2.0
+        version: 4.3.0
       '@zxcvbn-ts/language-common':
         specifier: ^4.0.0
-        version: 4.1.3
+        version: 4.2.0
       '@zxcvbn-ts/language-en':
         specifier: ^4.0.0
-        version: 4.1.1
+        version: 4.1.2
       await-lock:
         specifier: ^3.0.0
         version: 3.0.0
@@ -635,7 +635,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -658,8 +658,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       posthog-js:
-        specifier: 1.449.2
-        version: 1.449.2(@types/react@19.3.0)(react@19.3.1)
+        specifier: 1.450.0
+        version: 1.450.0(@types/react@19.3.0)(react@19.3.1)
       qrcode:
         specifier: 1.5.4
         version: 1.5.4
@@ -786,7 +786,7 @@ importers:
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@testing-library/user-event':
         specifier: ^14.5.2
-        version: 14.6.10(@testing-library/dom@10.4.2)
+        version: 14.6.12(@testing-library/dom@10.4.2)
       '@types/commonmark':
         specifier: ^0.27.4
         version: 0.27.10
@@ -1069,7 +1069,7 @@ importers:
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@testing-library/user-event':
         specifier: ^14.6.1
-        version: 14.6.10(@testing-library/dom@10.4.2)
+        version: 14.6.12(@testing-library/dom@10.4.2)
       '@types/node':
         specifier: 25.9.3
         version: 25.9.3
@@ -1213,7 +1213,7 @@ importers:
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@testing-library/user-event':
         specifier: ^14.6.1
-        version: 14.6.10(@testing-library/dom@10.4.2)
+        version: 14.6.12(@testing-library/dom@10.4.2)
       '@types/node':
         specifier: 25.9.3
         version: 25.9.3
@@ -1483,7 +1483,7 @@ importers:
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@testing-library/user-event':
         specifier: ^14.6.1
-        version: 14.6.10(@testing-library/dom@10.4.2)
+        version: 14.6.12(@testing-library/dom@10.4.2)
       '@types/counterpart':
         specifier: ^0.18.4
         version: 0.18.4
@@ -4810,8 +4810,8 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
-  '@posthog/browser-common@0.11.0':
-    resolution: {integrity: sha512-aNj0D10kN/Owa39iyfrwHKg3XGIQq2azbTVa34uzQHJvlcnHphqIYB24qD4qFZqYjDvn1fKhWPA06p79WHUDpw==}
+  '@posthog/browser-common@0.12.0':
+    resolution: {integrity: sha512-P1CubrDp1xwYi2DQxjzJITEeMJpZ7qYcbHuhtXLHgkG8bE6gLy0JwkykjRtEFbElvJNbHQO1jQi7Cbb3JyazNw==}
 
   '@posthog/core@1.68.0':
     resolution: {integrity: sha512-5kjPcLquzj47qBGn52+7RRXrJJvrTHaRKgxV9izYPFzoVFEftFqSXYZF/ug+yialxDU73dR9apyi+mSaAeaXPw==}
@@ -6041,8 +6041,8 @@ packages:
       '@types/react-dom':
         optional: true
 
-  '@testing-library/user-event@14.6.10':
-    resolution: {integrity: sha512-tA4stGNp3mLGOGO+lh87UA56Tz4c8NVGBSkyIF58O+W/bs2Re9BCI9xihnL70+DsThncFznE0skS88SM1D2hyg==}
+  '@testing-library/user-event@14.6.12':
+    resolution: {integrity: sha512-8yQV8v+eToBhsUO4oYrZY7fzhpTEMZx4IDx0/iuER/x0Xuy0NdqQOhsaaUNlvXE03N7vQ+4RCXUieKC0NJty9w==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
@@ -6912,17 +6912,17 @@ packages:
     resolution: {integrity: sha512-nrUSn7hzt7J6JWgWGz78ZYI8wj+gdIJdk0Ynjpp8l+trkn58Uqsf6RYrYkEK+3X18EX+TNdtJI0WxAtc+L84SQ==}
     hasBin: true
 
-  '@zxcvbn-ts/core@4.2.0':
-    resolution: {integrity: sha512-tuwzwOcYVca9MufHuUvzKGRyL04iP52OjCNoRDuGXjzzrtPiPcl8r5QtOotbx0AyTR/CMcDTU9qLkN16b9fXiw==}
+  '@zxcvbn-ts/core@4.3.0':
+    resolution: {integrity: sha512-Y5Nes+T9TweCdA/X1zji6KZiepThNP52kNXAo9omdyI5fltlDqIBgFeIwEepehzVUiGdYvL+YsbCYyyS3yn2nw==}
 
   '@zxcvbn-ts/dictionary-compression@3.0.1':
     resolution: {integrity: sha512-p3KyPzxGc3vWSap5hHA6SllbUCmh7s+NtpGyC3qEWrxYJT9t9TUAzjPm48Okipo+UUyPQfDlIvTcs9JRShBFiQ==}
 
-  '@zxcvbn-ts/language-common@4.1.3':
-    resolution: {integrity: sha512-g2bg4skmlJG9aJqC/nWziZzgYpSe/f3rKeGobrkdFiOrfZVFqqzUgC6BUQWuX54Sua9j0Jxxt+1bf4f/Mal1Kg==}
+  '@zxcvbn-ts/language-common@4.2.0':
+    resolution: {integrity: sha512-LPcIu73i+ZV2fYPRDAd/JfaBblFUMVXSjupxkr0NU04wViVkYuzZ6ncw6pDgUdm7MMM5llMMzkbzhKrwXgv1tg==}
 
-  '@zxcvbn-ts/language-en@4.1.1':
-    resolution: {integrity: sha512-6UdzuBd3Uex8TKubohcn+uXRVAH34Zjs2eCfT4hQVo9zeTy7AkQRQfdV4OnHR5hQfW/XBrK/AGTZk7VBWh7wwQ==}
+  '@zxcvbn-ts/language-en@4.1.2':
+    resolution: {integrity: sha512-VICTXVOYrfSCtmrLLv41x4nx34H+BEJO2FPYMUXK3DGYxVtBfqUKx9Xq9WfxBpDAvvlQ4DocUA9bqNN18zKMXA==}
 
   abbrev@4.0.0:
     resolution: {integrity: sha512-a1wflyaL0tHtJSmLSOVybYhy22vRih4eduhhrkcjgrWGnRfrZtovJ2FRjxuTtkkj47O/baf0R86QU5OuYpz8fA==}
@@ -8616,8 +8616,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/d04bfdc624bafa266f303b5edc1aaff0c8ef9edc#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-9+m8lQaHEJajDkvDJqeZ/MBFxHuaqqcnR1TjXaef93fJDajdi5il/l2Mb6uBcwCkS6669xbOG+QbgMsacPovig==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/d04bfdc624bafa266f303b5edc1aaff0c8ef9edc}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-kdBGmXiFMCA3tvDGA4LM1CzbN2RZA/qoivNQkVE0cYTIPD3C8kgWbGl612mnNUJw8vwiaEliFzJ74ehnyZ/n7A==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272}
     version: 0.0.0
 
   eslint-plugin-react-web-api@5.28.8:
@@ -9802,8 +9802,8 @@ packages:
   linkifyjs@4.4.0:
     resolution: {integrity: sha512-InTexvtbai+2c+dEVGcc6O6P2DMVIiwD9a/i4zFroazOIYLOS6FSVmAJ7kFeumnCMx6/gQqNAkbUvgMubV4+MA==}
 
-  lint-staged@17.6.0:
-    resolution: {integrity: sha512-nOhBfYkZEwkFtNzD5pK9s9LkcWoxJ+whLzEnhqi9nl7zTB5n7tg8+9iYgMGx2Wm3VlLu8cbNj0RACzY+nWi5iQ==}
+  lint-staged@17.6.1:
+    resolution: {integrity: sha512-3MXgVN7BERDR/6CXZs2fDHGc+r0+hlvGAa9wqMlVbIS6RVRuaPOnb5SnN6wMXulwfEy9DXVkMVUN/8cUlpPDnw==}
     engines: {node: '>=22.22.1'}
     hasBin: true
 
@@ -9937,8 +9937,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3:
-    resolution: {gitHosted: true, integrity: sha512-qLJi5TDIGrDWsN52LGlG3eDSvFuBvXZ6lRj4s0+M/NUY4Jvk+VNzHSefdR/aRVb6VWt/clgbDyCwGpzYkCOIoQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc:
+    resolution: {gitHosted: true, integrity: sha512-GiikQ2qoLzlPPyhssl5QGOXeDrSI8tj7blLZDwPd7Q2yWB4482pwArb0Maux8JVQkyiJhiHYC6Pae7hHW4JLUw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc}
     version: 45.1.0
     engines: {node: '>=22.0.0'}
 
@@ -11112,8 +11112,8 @@ packages:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.449.2:
-    resolution: {integrity: sha512-vji+h92IHaLlFSEnRH1hwe8uLWGOdDUImmPXexj/+V7Xm7HTxIQisYE/Kom7Aaw4DRpzfdhQxiyAN1YVYR4G8Q==}
+  posthog-js@1.450.0:
+    resolution: {integrity: sha512-KsjBOy0At8HFm8aYIb3zZ+0oYdOeAMCDkGcvM4po/N08K+nyvFNJgqHL2DzyVXkN0FiB6lvdWzjbZk7QQbxJCQ==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: '>=16.8.0'
@@ -11969,6 +11969,10 @@ packages:
   string-argv@0.3.2:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
+
+  string-argv@0.4.0:
+    resolution: {integrity: sha512-UOtaksJ3SK3KLHba2i9I27fvuZNfBlImDP5wKsCOxCDMRDNxlipCe8rmnUAaDpqlQ93upnA0SzF2pjWhttozSA==}
+    engines: {node: '>=16.20.0'}
 
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -15109,11 +15113,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3)(react-dom@19.3.1)(react@19.3.1)':
+  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
@@ -16760,7 +16764,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@posthog/browser-common@0.11.0':
+  '@posthog/browser-common@0.12.0':
     dependencies:
       '@posthog/core': 1.68.0
       '@posthog/types': 1.425.1
@@ -17901,7 +17905,7 @@ snapshots:
       '@types/react': 19.3.0
       '@types/react-dom': 19.3.0(@types/react@19.3.0)
 
-  '@testing-library/user-event@14.6.10(@testing-library/dom@10.4.2)':
+  '@testing-library/user-event@14.6.12(@testing-library/dom@10.4.2)':
     dependencies:
       '@testing-library/dom': 10.4.2
 
@@ -18842,17 +18846,17 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  '@zxcvbn-ts/core@4.2.0':
+  '@zxcvbn-ts/core@4.3.0':
     dependencies:
       fastest-levenshtein: 1.0.16
 
   '@zxcvbn-ts/dictionary-compression@3.0.1': {}
 
-  '@zxcvbn-ts/language-common@4.1.3':
+  '@zxcvbn-ts/language-common@4.2.0':
     dependencies:
       '@zxcvbn-ts/dictionary-compression': 3.0.1
 
-  '@zxcvbn-ts/language-en@4.1.1':
+  '@zxcvbn-ts/language-en@4.1.2':
     dependencies:
       '@zxcvbn-ts/dictionary-compression': 3.0.1
 
@@ -20837,7 +20841,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/d04bfdc624bafa266f303b5edc1aaff0c8ef9edc#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272#path:/eslint: {}
 
   eslint-plugin-react-web-api@5.28.8(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0):
     dependencies:
@@ -22167,10 +22171,10 @@ snapshots:
 
   linkifyjs@4.4.0: {}
 
-  lint-staged@17.6.0:
+  lint-staged@17.6.1:
     dependencies:
       picomatch: 4.0.7
-      string-argv: 0.3.2
+      string-argv: 0.4.0
       tinyexec: 1.3.1
     optionalDependencies:
       yaml: 2.9.1
@@ -22309,7 +22313,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/5fd73874e81231afdf17d38d6ccc27dcf497e9b3:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f6afaad029ebc4f2c15c269d7e2167d67454dbbc:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 19.0.1
@@ -23758,9 +23762,9 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  posthog-js@1.449.2(@types/react@19.3.0)(react@19.3.1):
+  posthog-js@1.450.0(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      '@posthog/browser-common': 0.11.0
+      '@posthog/browser-common': 0.12.0
       '@posthog/core': 1.68.0
       '@posthog/types': 1.425.1
       core-js: 3.50.0
@@ -24762,7 +24766,7 @@ snapshots:
       '@storybook/icons': 2.1.0(react@19.3.1)
       '@testing-library/dom': 10.4.2
       '@testing-library/jest-dom': 6.9.1
-      '@testing-library/user-event': 14.6.10(@testing-library/dom@10.4.2)
+      '@testing-library/user-event': 14.6.12(@testing-library/dom@10.4.2)
       '@vitest/expect': 3.2.4
       '@vitest/spy': 3.2.4
       '@webcontainer/env': 1.1.1
@@ -24805,6 +24809,8 @@ snapshots:
       - react-native-b4a
 
   string-argv@0.3.2: {}
+
+  string-argv@0.4.0: {}
 
   string-width@4.2.3:
     dependencies:
