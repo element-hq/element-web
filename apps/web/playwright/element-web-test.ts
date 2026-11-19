@@ -85,6 +85,16 @@ export const test = base.extend<TestFixtures>({
         await use(axe);
     },
 
+    page: async ({ page }, use, testInfo) => {
+        // Firefox and WebKit block service workers (see playwright.config.ts), so Element shows a
+        // "Failed to load service worker" toast, which can cover whatever the test clicks next.
+        if (testInfo.project.use.serviceWorkers === "block") {
+            const toast = page.locator(".mx_Toast_toast", { hasText: "Failed to load service worker" });
+            await page.addLocatorHandler(toast, () => toast.getByRole("button", { name: "OK" }).click());
+        }
+        await use(page);
+    },
+
     app: async ({ page }, use) => {
         const app = new ElementAppPage(page);
         await use(app);
