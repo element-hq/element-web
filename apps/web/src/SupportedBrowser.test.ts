@@ -75,7 +75,7 @@ describe("SupportedBrowser", () => {
     // Grabbed from https://www.whatismybrowser.com/guides/the-latest-user-agent/
     it.each([
         // Safari 26.0 on macOS
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_8_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Safari/605.1.15",
         // Latest Firefox on macOS Sonoma
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:159.0) Gecko/20100101 Firefox/159.0",
         // Latest Edge on Windows
