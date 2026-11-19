@@ -102,6 +102,7 @@ allowBuilds:
     "@parcel/watcher": false
     # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
     pkcs11js: false
+    "@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/f54284c6d38afff4f4a64d8d8776a06cf1e4e5b1": true
 
 patchedDependencies:
     # Workaround for missing types export
