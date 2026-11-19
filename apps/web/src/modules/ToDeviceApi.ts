@@ -18,14 +18,6 @@ import {
     type ToDeviceApi as IToDeviceApi,
 } from "@element-hq/element-web-module-api";
 
-// Matrix event types are limited to 255 bytes: https://spec.matrix.org/v1.17/client-server-api/#size-limits
-const MAX_EVENT_TYPE_LENGTH = 255;
-const MAX_DEVICE_ID_LENGTH = 255;
-// Example match: @alice:example.org.
-// Matrix user ID format: https://spec.matrix.org/v1.17/appendices/#user-identifiers
-const MATRIX_USER_ID_REGEX = /^@[^\s:]+:[^\s:]+$/u;
-const MATRIX_DEVICE_ID_INVALID_CHARACTERS_REGEX = /[\p{Cc}\p{White_Space}]/u;
-
 type MatrixSessionIdentity = { readonly userId: string; readonly deviceId: string };
 type Subscription = {
     readonly type: string;
@@ -46,7 +38,6 @@ export class ToDeviceApi implements IToDeviceApi {
 
     /** Send one message without waiting for a response. */
     public sendMessage = async (message: OutgoingToDeviceMessage): Promise<void> => {
-        this.validateMessage(message);
         const client = this.client;
         const session = this.getSession();
         if (!client || !session || !this.isCurrentSession(client, session)) {
@@ -65,7 +56,7 @@ export class ToDeviceApi implements IToDeviceApi {
 
     /** Register a listener that follows the active Matrix session until unsubscribed. */
     public onMessage = (type: string, listener: (message: IncomingToDeviceMessage) => void): (() => void) => {
-        if (!this.isValidEventType(type)) {
+        if (typeof type !== "string") {
             throw new Error("Invalid to-device event type");
         }
         if (typeof listener !== "function") {
@@ -132,48 +123,6 @@ export class ToDeviceApi implements IToDeviceApi {
         if (!this.receivedListener || !this.client) return;
         this.client.off(ClientEvent.ReceivedToDeviceMessage, this.receivedListener);
         this.receivedListener = null;
-    }
-
-    private validateMessage(message: OutgoingToDeviceMessage): void {
-        if (!message || typeof message !== "object") {
-            throw new Error("Invalid to-device message");
-        }
-        if (typeof message.recipientUserId !== "string" || !MATRIX_USER_ID_REGEX.test(message.recipientUserId)) {
-            throw new Error("Invalid to-device recipient");
-        }
-        if (
-            typeof message.recipientDeviceId !== "string" ||
-            message.recipientDeviceId.length === 0 ||
-            message.recipientDeviceId.length > MAX_DEVICE_ID_LENGTH ||
-            (message.recipientDeviceId !== "*" &&
-                MATRIX_DEVICE_ID_INVALID_CHARACTERS_REGEX.test(message.recipientDeviceId))
-        ) {
-            throw new Error("Invalid to-device device");
-        }
-        if (!this.isValidEventType(message.type)) {
-            throw new Error("Invalid to-device event type");
-        }
-        if (!this.isPlainRecord(message.content)) {
-            throw new Error("Invalid to-device content");
-        }
-    }
-
-    private isValidEventType(eventType: unknown): eventType is string {
-        if (
-            typeof eventType !== "string" ||
-            eventType.trim() !== eventType ||
-            eventType.length === 0 ||
-            eventType.length > MAX_EVENT_TYPE_LENGTH
-        ) {
-            return false;
-        }
-        return new TextEncoder().encode(eventType).byteLength <= MAX_EVENT_TYPE_LENGTH;
-    }
-
-    private isPlainRecord(value: unknown): value is Record<string, unknown> {
-        if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
-        const prototype = Object.getPrototypeOf(value);
-        return prototype === Object.prototype || prototype === null;
     }
 
     private getSessionIdentity(client: MatrixClient): MatrixSessionIdentity | null {

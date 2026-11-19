@@ -83,25 +83,18 @@ describe("ToDeviceApi", () => {
         await expect(api.sendMessage(outgoing())).rejects.toThrow("Failed to send to-device message");
     });
 
-    it("validates outgoing messages before sending", async () => {
+    it("passes a recipient user ID with a server port to the SDK", async () => {
         const client = stubClient();
         const api = new ToDeviceApi(client);
-        const invalidMessages = [
-            outgoing({ recipientUserId: "not-a-user-id" }),
-            outgoing({ recipientDeviceId: "" }),
-            outgoing({ recipientDeviceId: "BAD DEVICE" }),
-            outgoing({ recipientDeviceId: "x".repeat(256) }),
-            outgoing({ type: " " }),
-            outgoing({ type: "x".repeat(256) }),
-            outgoing({ type: "é".repeat(128) }),
-            outgoing({ content: [] as unknown as Record<string, unknown> }),
-            outgoing({ content: new Date() as unknown as Record<string, unknown> }),
-        ];
+        const recipientUserId = "@bot:example.org:8448";
+        const content = { action: "probe" };
 
-        for (const message of invalidMessages) {
-            await expect(api.sendMessage(message)).rejects.toThrow();
-        }
-        expect(client.sendToDevice).not.toHaveBeenCalled();
+        await api.sendMessage(outgoing({ recipientUserId, content }));
+
+        expect(client.sendToDevice).toHaveBeenCalledWith(
+            MESSAGE_TYPE,
+            new Map([[recipientUserId, new Map([["*", content]])]]),
+        );
     });
 
     it("supports a receive-only subscription and passes only message data", () => {
@@ -340,10 +333,9 @@ describe("ToDeviceApi", () => {
         const client = stubClient();
         const api = new ToDeviceApi(null);
         const on = vi.spyOn(client, "on");
-        expect(() => api.onMessage(" ", vi.fn())).toThrow("Invalid to-device event type");
-        expect(() => api.onMessage("x".repeat(256), vi.fn())).toThrow("Invalid to-device event type");
+        expect(() => api.onMessage(null as unknown as string, vi.fn())).toThrow("Invalid to-device event type");
         expect(() => api.onMessage(MESSAGE_TYPE, null as unknown as () => void)).toThrow(TypeError);
-        expect(() => api.onMessage(MESSAGE_TYPE, vi.fn())).not.toThrow();
+        expect(() => api.onMessage("x".repeat(256), vi.fn())).not.toThrow();
         expect(on).not.toHaveBeenCalledWith(ClientEvent.ReceivedToDeviceMessage, expect.any(Function));
         await expect(api.sendMessage(outgoing())).rejects.toThrow("No active Matrix session");
     });
