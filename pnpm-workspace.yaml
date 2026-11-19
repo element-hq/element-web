@@ -126,6 +126,9 @@ patchedDependencies:
     # Tweaks to record screenshot diffs as vitest artifacts
     vitest-plugin-vis@5: patches/vitest-plugin-vis@5.7.0.patch
     storybook-addon-vis@4: patches/storybook-addon-vis@4.8.0.patch
+    # Bundled types squash `@ts-expect-error` comments onto the line they cover, so they fail type checks
+    # https://github.com/storybookjs/storybook/issues/37336
+    "@storybook/react@10.6.7": patches/@storybook__react@10.6.7.patch
 
 peerDependencyRules:
     allowedVersions:

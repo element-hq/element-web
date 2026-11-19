@@ -286,6 +286,7 @@ packageExtensionsChecksum: sha256-kCJccFy7l6HmjcpzmxV958fHndI9zZq246f1ttgkURI=
 
 patchedDependencies:
   '@arcmantle/vite-plugin-import-css-sheet': 8019aa9feca17db6bab3483612b4150c911d70b58fddc52bf2d7258a1484a747
+  '@storybook/react@10.6.7': 544eb702406c645a0674377a638d35917f3da20947e5f7f1329f00ce85ba255c
   '@tanstack/virtual-core@3': 530725d29f16ff8df1f4e58a292a80396ab587fb78c3c174d2ac1ce1377af46c
   '@types/auto-launch': b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538
   '@vector-im/matrix-wysiwyg': 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
@@ -17738,7 +17739,7 @@ snapshots:
       '@joshwooding/vite-plugin-react-docgen-typescript': 0.7.0(@typescript/typescript6@6.0.2)(vite@8.3.8)
       '@rollup/pluginutils': 5.4.0(rollup@4.64.2)
       '@storybook/builder-vite': 10.6.7(storybook@10.6.7)(vite@8.3.8)
-      '@storybook/react': 10.6.7(@types/react-dom@19.3.0)(@types/react@19.3.0)(@typescript/typescript6@6.0.2)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(supports-color@10.2.2)
+      '@storybook/react': 10.6.7(patch_hash=544eb702406c645a0674377a638d35917f3da20947e5f7f1329f00ce85ba255c)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@typescript/typescript6@6.0.2)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(supports-color@10.2.2)
       empathic: 2.1.0
       magic-string: 1.4.3
       react: 19.3.1
@@ -17756,7 +17757,7 @@ snapshots:
       - rollup
       - supports-color
 
-  '@storybook/react@10.6.7(@types/react-dom@19.3.0)(@types/react@19.3.0)(@typescript/typescript6@6.0.2)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(supports-color@10.2.2)':
+  '@storybook/react@10.6.7(patch_hash=544eb702406c645a0674377a638d35917f3da20947e5f7f1329f00ce85ba255c)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@typescript/typescript6@6.0.2)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(supports-color@10.2.2)':
     dependencies:
       '@storybook/global': 5.0.0
       '@storybook/react-dom-shim': 10.6.7(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)
