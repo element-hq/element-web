@@ -18,6 +18,7 @@ import AccessSecretStorageDialog, {
     type KeyParams,
 } from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
+import { DeviceListener } from "./device-listener";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -167,6 +168,10 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
         secretStorageBeingAccessed = false;
         secretStorageKeys = {};
         secretStorageKeyInfo = {};
+
+        // DeviceListener suppresses toast updates while `secretStorageBeingAccessed`
+        // is set, so we should trigger a recheck now the operation is done.
+        DeviceListener.sharedInstance().recheck();
     }
 }
 
