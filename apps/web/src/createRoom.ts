@@ -27,6 +27,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
+import { type CreatedRoom as CreatedRoomEvent } from "@matrix-org/analytics-events/types/typescript/CreatedRoom";
 
 import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
@@ -49,6 +50,29 @@ import { ElementCallMemberEventType } from "./call-types";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { SDKContextClass } from "./contexts/SDKContextClass.ts";
 import SdkConfig from "./SdkConfig";
+import { PosthogAnalytics } from "./PosthogAnalytics";
+
+// Map from js-sdk join rule to analytics join rule.
+const ANALYTICS_JOIN_RULE: Record<JoinRule, CreatedRoomEvent["joinRule"]> = {
+    [JoinRule.Public]: "Public",
+    [JoinRule.Invite]: "Invite",
+    [JoinRule.Private]: "Invite",
+    [JoinRule.Knock]: "Knock",
+    [JoinRule.Restricted]: "Restricted",
+    [JoinRule.KnockRestricted]: "KnockRestricted",
+};
+
+/**
+ * Work out the join rule the new room actually gets, for analytics.
+ */
+function getEffectiveJoinRuleForAnalytics(opts: IOpts, preset?: Preset): CreatedRoomEvent["joinRule"] {
+    // A restricted join rule is only applied when the room is created in a space.
+    if (opts.joinRule && (opts.joinRule !== JoinRule.Restricted || opts.parentSpace)) {
+        return ANALYTICS_JOIN_RULE[opts.joinRule];
+    }
+    // Otherwise the server applies the join rule of the preset
+    return preset === Preset.PublicChat ? "Public" : "Invite";
+}
 
 // we define a number of interfaces which take their names from the js-sdk
 export interface IOpts {
@@ -401,6 +425,14 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         })
         .then(
             function () {
+                if (opts.roomType !== RoomType.Space) {
+                    PosthogAnalytics.instance.trackEvent<CreatedRoomEvent>({
+                        eventName: "CreatedRoom",
+                        isDM: Boolean(opts.dmUserId),
+                        joinRule: getEffectiveJoinRuleForAnalytics(opts, createOpts.preset),
+                    });
+                }
+
                 // NB we haven't necessarily blocked on the room promise, so we race
                 // here with the client knowing that the room exists, causing things
                 // like https://github.com/vector-im/vector-web/issues/1813
