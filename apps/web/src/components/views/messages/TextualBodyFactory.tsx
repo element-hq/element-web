@@ -169,8 +169,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         } else {
             content = {
                 type: "image",
-                // The thumbnail, not the original: the original may be large and animated.
-                image: preview.image.imageThumb,
+                // Prefer the thumbnail: the original may be large and animated.
+                image: preview.image.imageThumb ?? preview.image.imageFull,
                 imageAlt: preview.title,
                 imageSize: "banner",
                 imageOnClick: () => {

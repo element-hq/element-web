@@ -26,4 +26,14 @@ describe("BaseDialog", () => {
         await userEvent.keyboard("{Escape}");
         expect(onFinished).toHaveBeenCalled();
     });
+
+    it("hides the close button but keeps the Escape handler when hideCloseButton is set", async () => {
+        const onFinished = vi.fn();
+        const { container } = render(<BaseDialog onFinished={onFinished} hideCloseButton={true} />);
+        expect(container.querySelector(".mx_Dialog_cancelButton")).toBeNull();
+        const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
+        dialog?.focus();
+        await userEvent.keyboard("{Escape}");
+        expect(onFinished).toHaveBeenCalled();
+    });
 });

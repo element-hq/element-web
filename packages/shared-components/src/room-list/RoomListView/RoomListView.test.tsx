@@ -151,6 +151,17 @@ describe("<RoomListView />", () => {
         expect(Empty.args.createChatRoom).toHaveBeenCalled();
     });
 
+    it("should hide the Start chat button when canStartChat is false", () => {
+        const { rerender } = renderWithMockContext(<Empty canStartChat={false} />);
+
+        expect(screen.queryByRole("button", { name: "Start chat" })).not.toBeInTheDocument();
+        expect(screen.getByText("Get started by creating a room")).toBeInTheDocument();
+
+        // Without any possible action, there is no description
+        rerender(<Empty canStartChat={false} canCreateRoom={false} />);
+        expect(screen.queryByText(/Get started/)).not.toBeInTheDocument();
+    });
+
     it("should call onToggleFilter when Show all chats is clicked in unread empty state", async () => {
         const user = userEvent.setup();
         renderWithMockContext(<EmptyUnreadFilter />);

@@ -25,7 +25,7 @@ jobs:
               github.event.action == 'synchronize'
               || (github.event.action == 'labeled' && github.event.label.name == 'X-Bypass-CLA')
             )
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         permissions:
             statuses: write
         steps:
@@ -43,7 +43,7 @@ jobs:
     remove_label:
         name: Remove X-Needs-Iteration label after new commits are pushed
         if: github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'X-Needs-Iteration')
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         permissions:
             pull-requests: write
         steps:

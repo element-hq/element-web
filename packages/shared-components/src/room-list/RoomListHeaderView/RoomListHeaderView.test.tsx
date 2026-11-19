@@ -12,7 +12,7 @@ import React from "react";
 
 import * as stories from "./RoomListHeaderView.stories";
 
-const { Default, NoSpaceMenu, CollapseSections, ExpandSections } = composeStories(stories);
+const { Default, NoSpaceMenu, CollapseSections, ExpandSections, NoComposeMenu } = composeStories(stories);
 
 describe("RoomListHeaderView", () => {
     it("renders the default state", () => {
@@ -33,6 +33,16 @@ describe("RoomListHeaderView", () => {
     it("renders expand button", () => {
         const { container } = render(<ExpandSections />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("renders the start chat button only when the user can start a chat", () => {
+        const { getByRole, queryByRole, rerender } = render(<NoComposeMenu />);
+        expect(getByRole("button", { name: "Start chat" })).toBeInTheDocument();
+
+        rerender(<NoComposeMenu canStartChat={false} />);
+        expect(queryByRole("button", { name: "Start chat" })).not.toBeInTheDocument();
+        // Nothing can be created, so the compose menu is not rendered either
+        expect(queryByRole("button", { name: "New" })).not.toBeInTheDocument();
     });
 
     it("should bind the collapse all sections action", () => {

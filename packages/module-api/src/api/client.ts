@@ -9,6 +9,62 @@ import type { Room } from "../models/Room";
 import { type Watchable } from "./watchable";
 
 /**
+ * A to-device message sent through the current Matrix session.
+ * @alpha
+ */
+export interface OutgoingToDeviceMessage {
+    /** Matrix user that should receive the message. */
+    readonly recipientUserId: string;
+    /** A specific recipient device, or "*" to send to all of the user's devices. */
+    readonly recipientDeviceId: string;
+    /** Event type of the message. */
+    readonly type: string;
+    /** Message content. The caller owns any protocol fields, including correlation IDs. */
+    readonly content: Record<string, unknown>;
+}
+
+/**
+ * A to-device message received by the current Matrix session.
+ * @alpha
+ */
+export interface IncomingToDeviceMessage {
+    /** Event type of the message. */
+    readonly type: string;
+    /** Matrix user who sent the message. */
+    readonly sender: string;
+    /** Unvalidated message content; the caller must validate its protocol. */
+    readonly content: unknown;
+}
+
+/**
+ * Send messages through the current Matrix session and subscribe across sessions.
+ * @alpha
+ */
+export interface ToDeviceApi {
+    /**
+     * Sends one message through the current Matrix session.
+     *
+     * Resolves when the send completes; it does not wait for a response.
+     *
+     * @param message - Recipient, event type, and content.
+     */
+    sendMessage(message: OutgoingToDeviceMessage): Promise<void>;
+
+    /**
+     * Listens for messages of one exact event type across Matrix sessions.
+     *
+     * Registration does not require an active session or a preceding send. Delivery pauses on logout and
+     * resumes for the next session until the caller unsubscribes. Callers must clear session-specific state
+     * when the profile changes.
+     *
+     * @param type - Event type to receive.
+     * @param listener - Called with untrusted message data.
+     * @returns An idempotent function that stops this listener.
+     */
+    onMessage(type: string, listener: (message: IncomingToDeviceMessage) => void): () => void;
+}
+
+/**
  * Modify account data stored on the homeserver.
  * @public
  */
@@ -32,6 +88,12 @@ export interface AccountDataApi {
  * @public
  */
 export interface ClientApi {
+    /**
+     * Send to the current session and subscribe to messages across sessions.
+     * @alpha Subject to change.
+     */
+    readonly toDevice: ToDeviceApi;
+
     /**
      * Allows modules to modify aspects of the way the matrix-js-sdk client is created and configured.
      * @alpha Subject to change.

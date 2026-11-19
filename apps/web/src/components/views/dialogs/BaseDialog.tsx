@@ -25,21 +25,37 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IProps {
     /**
-     * Whether the dialog should have a 'close' button and a keyDown handler which
-     * will intercept 'Escape'.
+     * If set to `true`, the dialog may be cancelled. A "close" button is rendered in
+     * the top corner, and pressing "Escape" allows users to dismiss it. If either of
+     * these is actioned, {@link onFinished} is called.
      *
-     * This should only be set to `false` if there is nothing the app can sensibly do if the
-     * dialog is cancelled, eg. "We can't restore your session and
-     * the app cannot work".
+     * Only set this to `false` if there is nothing the app can sensibly do when the dialog is
+     * cancelled, eg. "We can't restore your session and the app cannot work". This removes the
+     * "close" button AND the "Escape" handler. In this case, {@link onFinished} is never called at all.
+     *
+     * To remove only the "close" button while keeping "Escape", use {@link hideCloseButton}.
      *
      * Default: `true`.
      */
     "hasCancel"?: boolean;
 
     /**
-     * Callback that will be called when the 'close' button is clicked or 'Escape' is pressed.
+     * If set to `true`, the 'close' button is hidden, but pressing 'Escape' still cancels
+     * the dialog.
      *
-     * Not used if `hasCancel` is false.
+     * Use this for dialogs that must be cancelled through their own explicit buttons, since
+     * accessibility requires 'Escape' to keep working (per the WAI-ARIA modal dialog pattern).
+     *
+     * This has no effect when {@link hasCancel} is `false`.
+     *
+     * Default: `false`.
+     */
+    "hideCloseButton"?: boolean;
+
+    /**
+     * Called when the dialog is cancelled, either by the 'close' button or by 'Escape'.
+     *
+     * This method is never called if {@link hasCancel} is `false`.
      */
     "onFinished"?: () => void;
 
@@ -130,7 +146,7 @@ export default class BaseDialog extends React.Component<IProps> {
 
     public render(): React.ReactNode {
         let cancelButton;
-        if (this.props.hasCancel) {
+        if (this.props.hasCancel && !this.props.hideCloseButton) {
             cancelButton = (
                 <AccessibleButton
                     onClick={this.onCancelClick}

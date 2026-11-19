@@ -229,6 +229,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 EventType.CallSDPStreamMetadataChangedPrefix,
                 EventType.CallReplaces,
                 EventType.CallEncryptionKeysPrefix,
+                "m.rtc.encryption_key",
             ];
             for (const eventType of sendRecvToDevice) {
                 this.allowedCapabilities.add(
