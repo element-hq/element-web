@@ -804,6 +804,24 @@ describe("RoomHeader", () => {
             expect(elementCallButton).toBeInTheDocument();
             expect(legacyCallButton).toBeInTheDocument();
         });
+
+        it("shows why voice calls are disabled in the voice call button's tooltip", () => {
+            mockRoomMembers(room, 2);
+            SdkConfig.add({
+                element_call: {
+                    use_exclusively: true,
+                },
+            });
+            // disallow element calls
+            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(false);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const reason = "You do not have permission to start voice calls";
+            const button = screen.getByRole("button", { name: reason });
+            expect(button).toHaveAttribute("aria-disabled", "true");
+            const tooltipId = button.querySelector("svg")!.getAttribute("aria-labelledby")!;
+            expect(document.getElementById(tooltipId)).toHaveTextContent(reason);
+        });
     });
 
     describe("public room", () => {
