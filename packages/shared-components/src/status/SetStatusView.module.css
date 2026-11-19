@@ -23,6 +23,34 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+/* Makes a button look like the Link used in the listbox variant */
+.setStatusButton {
+    appearance: none;
+    background: none;
+    border: none;
+    margin: 0;
+    padding-block: 0;
+    padding-inline: 0.25rem;
+    border-radius: var(--cpd-radius-pill-effect);
+    color: var(--cpd-color-text-primary);
+    font: inherit;
+    cursor: pointer;
+
+    &:active {
+        background: var(--cpd-color-bg-subtle-primary);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--cpd-color-border-focused);
+        outline-offset: 2px;
+    }
+
+    &[aria-disabled="true"] {
+        cursor: default;
+        background: none;
+    }
+}
+
 .disabledTrigger {
     color: var(--cpd-color-text-disabled);
 }

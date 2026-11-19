@@ -247,7 +247,7 @@ export const WithStatusDropdownOpen: Story = {
     },
     play: async ({ canvasElement }) => {
         const body = within(canvasElement.ownerDocument.body);
-        await userEvent.click(await body.findByRole("combobox", { name: "What's your status?" }));
-        await expect(body.findByRole("listbox")).resolves.toBeVisible();
+        await userEvent.click(await body.findByRole("button", { name: "What's your status?" }));
+        await expect(body.findByRole("menu", { name: "What's your status?" })).resolves.toBeVisible();
     },
 };

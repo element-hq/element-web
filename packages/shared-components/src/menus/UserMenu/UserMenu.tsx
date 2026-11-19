@@ -181,7 +181,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     >
                         {displayName}
                     </Text>
-                    {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
+                    {showUserStatus && <SetStatusView vm={setStatusViewModel} variant="menu" />}
                 </section>
                 <section className={classNames(styles.profile, styles.profileSecondary)}>
                     <Text

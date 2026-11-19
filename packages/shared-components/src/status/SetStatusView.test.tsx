@@ -8,13 +8,29 @@
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@test-utils";
+import { render, screen, waitFor } from "@test-utils";
 
 import { SetStatusView, type SetStatusViewActions, type SetStatusViewSnapshot } from "./SetStatusView";
 import { MockViewModel } from "../core/viewmodel/MockViewModel";
+import { BaseViewModel } from "../core/viewmodel/BaseViewModel";
+import { type UserStatus } from "../core/userStatus";
 
 class SetStatusViewModel extends MockViewModel<SetStatusViewSnapshot> implements SetStatusViewActions {
     public setStatus = vi.fn();
+    public clearStatus = vi.fn();
+}
+
+/**
+ * A view model whose status changes when it is set, so the view re-renders.
+ */
+class LiveSetStatusViewModel
+    extends BaseViewModel<SetStatusViewSnapshot, Record<string, never>>
+    implements SetStatusViewActions
+{
+    public constructor() {
+        super({}, {});
+    }
+    public setStatus = vi.fn((userStatus: UserStatus) => this.snapshot.merge({ userStatus }));
     public clearStatus = vi.fn();
 }
 
@@ -77,5 +93,59 @@ describe("SetStatusView", () => {
         expect(vm.setStatus).not.toHaveBeenCalled();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    });
+
+    describe("menu variant", () => {
+        const trigger = (): HTMLElement => screen.getByRole("button", { name: "What's your status?" });
+
+        it("shows the statuses as a menu", async () => {
+            const vm = new SetStatusViewModel({});
+            render(<SetStatusView vm={vm} variant="menu" />);
+            expect(trigger()).toHaveAttribute("aria-haspopup", "menu");
+
+            await userEvent.click(trigger());
+
+            expect(screen.getByRole("menu", { name: "What's your status?" })).toBeInTheDocument();
+            expect(screen.getByRole("menuitem", { name: "🌴Away" })).toBeInTheDocument();
+        });
+
+        it("sets a preset status", async () => {
+            const vm = new SetStatusViewModel({});
+            render(<SetStatusView vm={vm} variant="menu" />);
+
+            await userEvent.click(trigger());
+            await userEvent.click(screen.getByRole("menuitem", { name: "🌴Away" }));
+
+            expect(vm.setStatus).toHaveBeenCalledWith({ emoji: "🌴", text: "Away" });
+        });
+
+        it("moves focus to the clear button once a status is picked", async () => {
+            const vm = new LiveSetStatusViewModel();
+            render(<SetStatusView vm={vm} variant="menu" />);
+
+            await userEvent.click(trigger());
+            await userEvent.click(screen.getByRole("menuitem", { name: "🌴Away" }));
+
+            await waitFor(() => expect(screen.getByRole("button", { name: "Clear status" })).toHaveFocus());
+        });
+
+        it("opens the custom editor from the menu", async () => {
+            const vm = new SetStatusViewModel({});
+            render(<SetStatusView vm={vm} variant="menu" />);
+
+            await userEvent.click(trigger());
+            await userEvent.click(screen.getByRole("menuitem", { name: "✍️Custom…" }));
+
+            expect(screen.getByRole("textbox", { name: "What's your status?" })).toBeInTheDocument();
+        });
+
+        it("does not open when disabled", async () => {
+            const vm = new SetStatusViewModel({ disabled: true });
+            render(<SetStatusView vm={vm} variant="menu" />);
+
+            await userEvent.click(trigger());
+
+            expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+        });
     });
 });
