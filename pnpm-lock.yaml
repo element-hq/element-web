@@ -294,8 +294,8 @@ patchedDependencies:
   plist: 7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7
   postcss-mixins: 30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0
   react-blurhash: 58bc7f075478017ce27bcc252e8509876390db106246bd5b0a7446642cc4b505
-  storybook-addon-vis@4: 631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7
-  vitest-plugin-vis@5: fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a
+  storybook-addon-vis@4: b377c3360d3a847bf96a198e9dc80d76e99a6c0e769fa054bdae01ce0de34c4f
+  vitest-plugin-vis@5: 075a91ec47faa63fed9119bf33a1cf5d4d88f96f33306ebd37db7bbc71c6f25a
 
 importers:
 
@@ -1525,7 +1525,7 @@ importers:
         version: 10.6.7(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.1)
       storybook-addon-vis:
         specifier: ^4.0.0
-        version: 4.8.0(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.6.7)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(vitest@5.1.0)
+        version: 4.8.0(patch_hash=b377c3360d3a847bf96a198e9dc80d76e99a6c0e769fa054bdae01ce0de34c4f)(@storybook/addon-vitest@10.6.7)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(vitest@5.1.0)
       typedoc:
         specifier: ^0.28.16
         version: 0.28.20(@typescript/typescript6@6.0.2)
@@ -24780,7 +24780,7 @@ snapshots:
 
   std-env@4.3.0: {}
 
-  storybook-addon-vis@4.8.0(patch_hash=631cea8834458f836a58b5412fb8877ba9d193a0a0f11ce3d4f27bc02ced2be7)(@storybook/addon-vitest@10.6.7)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(vitest@5.1.0):
+  storybook-addon-vis@4.8.0(patch_hash=b377c3360d3a847bf96a198e9dc80d76e99a6c0e769fa054bdae01ce0de34c4f)(@storybook/addon-vitest@10.6.7)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(react-dom@19.3.1)(react@19.3.1)(storybook@10.6.7)(vitest@5.1.0):
     dependencies:
       '@just-web/react-image-compare': 0.1.1(react-dom@19.3.1)(react@19.3.1)
       '@storybook/addon-vitest': 10.6.7(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(react@19.3.1)(storybook@10.6.7)(vitest@5.1.0)
@@ -24793,7 +24793,7 @@ snapshots:
       storybook: 10.6.7(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.1)
       type-plus: 8.0.1(@typescript/typescript6@6.0.2)
       vitest: 5.1.0(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(happy-dom@21.0.4)(jsdom@31.0.1)(vite@8.3.8)
-      vitest-plugin-vis: 5.7.0(patch_hash=fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.1.0)
+      vitest-plugin-vis: 5.7.0(patch_hash=075a91ec47faa63fed9119bf33a1cf5d4d88f96f33306ebd37db7bbc71c6f25a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.1.0)
     transitivePeerDependencies:
       - '@vitest/browser-playwright'
       - '@vitest/browser-webdriverio'
@@ -25733,7 +25733,7 @@ snapshots:
       moo-color: 1.0.3
       vitest: 5.1.0(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(happy-dom@21.0.4)(jsdom@31.0.1)(vite@8.3.8)
 
-  vitest-plugin-vis@5.7.0(patch_hash=fe7169f93f3b5ebfadda7b70d6a9fc4e22dafbf6fed10e8a62f6708f99512f2a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.1.0):
+  vitest-plugin-vis@5.7.0(patch_hash=075a91ec47faa63fed9119bf33a1cf5d4d88f96f33306ebd37db7bbc71c6f25a)(@typescript/typescript6@6.0.2)(@vitest/browser-playwright@5.1.0)(@vitest/browser@4.1.11)(babel-plugin-macros@3.1.0)(vitest@5.1.0):
     dependencies:
       '@vitest/browser': 4.1.11(vite@8.3.8)(vitest@5.1.0)
       dedent: 1.7.2(babel-plugin-macros@3.1.0)

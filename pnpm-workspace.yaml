@@ -124,8 +124,8 @@ patchedDependencies:
     # at the end when the scroller shrinks (#1298) and reading the scroller's size with each scroll event (#1378)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
     # Tweaks to record screenshot diffs as vitest artifacts
-    vitest-plugin-vis@5: patches/vitest-plugin-vis@5.1.5.patch
-    storybook-addon-vis@4: patches/storybook-addon-vis@4.3.1.patch
+    vitest-plugin-vis@5: patches/vitest-plugin-vis@5.7.0.patch
+    storybook-addon-vis@4: patches/storybook-addon-vis@4.8.0.patch
 
 peerDependencyRules:
     allowedVersions:
