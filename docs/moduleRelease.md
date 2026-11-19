@@ -1,6 +1,6 @@
 # Releasing a Module
 
-To make a release of a module:
+To make a release of a module in [element-web/modules](https://github.com/element-hq/element-web/blob/develop/modules):
 
 1. Make a PR to bump the module's version in package.json, taking care to bump the version respecting SemVer.
 1. Get it merged.
