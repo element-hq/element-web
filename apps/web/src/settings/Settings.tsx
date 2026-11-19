@@ -230,7 +230,6 @@ export interface Settings {
     "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
@@ -656,17 +655,6 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
         controller: new ReloadOnChangeController(),
-    },
-    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
-    // that people who already turned the lab on keep it, and only for as long as the lab exists.
-    "feature_pdf_viewer": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|document_previews"),
-        description: _td("labs|document_previews_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
     },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],

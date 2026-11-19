@@ -1777,8 +1777,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s 키를 성공적으로 복원했습니다.",
         "enter_key_description": "복구 키를 입력하여 보안 메시지 기록에 접근하고 보안 메시징을 설정하세요.",
         "enter_key_title": "복구 키를 입력하세요",
-        "enter_phrase_description": "보안 문구를 입력하여 보안 메시지 기록에 접근하고 보안 메시징을 설정하세요.",
-        "enter_phrase_title": "보안 문구를 입력하세요",
         "incorrect_security_phrase_dialog": "이 보안 문구로 백업을 복호화할 수 없습니다: 올바른 보안 문구를 입력했는지 확인하십시오.",
         "incorrect_security_phrase_title": "잘못된 보안 문구",
         "key_backup_warning": "<b>경고</b>: 신뢰할 수 있는 컴퓨터에서만 키 백업을 설정해야 합니다.",
@@ -1790,7 +1788,6 @@
         "load_error_content": "백업 상태 불러올 수 없음",
         "load_keys_progress": "%(total)s개 키 중 %(completed)s개 복원 완료",
         "no_backup_error": "백업을 찾을 수 없습니다!",
-        "phrase_forgotten_text": "보안 문구를 잊으셨다면, <button1>복구 키를 사용</button1>하거나 <button2>새 복구 옵션을 설정</button2>할 수 있습니다",
         "recovery_key_mismatch_description": "이 복구 키로 백업을 해독할 수 없습니다: 올바른 복구 키를 입력했는지 확인하십시오.",
         "recovery_key_mismatch_title": "복구 키 불일치",
         "restore_failed_error": "백업을 복구할 수 없음"

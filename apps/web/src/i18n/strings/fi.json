@@ -1499,7 +1499,6 @@
         "count_of_decryption_failures": "%(failedCount)s istunnon purkaminen epäonnistui!",
         "count_of_successfully_restored_keys": "%(sessionCount)s avaimen palautus onnistui",
         "enter_key_title": "Anna palautusavain",
-        "enter_phrase_title": "Kirjoita turvalause",
         "incorrect_security_phrase_title": "Virheellinen turvalause",
         "key_backup_warning": "<b>Varoitus</b>: sinun pitäisi ottaa avainvarmuuskopio käyttöön vain luotetulla tietokoneella.",
         "key_fetch_in_progress": "Noudetaan avaimia palvelimelta…",

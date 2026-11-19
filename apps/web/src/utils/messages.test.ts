@@ -112,6 +112,32 @@ describe("attachUrlPreviews", () => {
         );
     });
 
+    it("does not bundle an image without an mxc url", async () => {
+        const content = makeContent();
+        await attachUrlPreviews(
+            mxClient,
+            mxRoom,
+            snapshot({
+                imageFull: "https://example.com/full.png",
+                imageType: "image/png",
+                fileSize: 1234,
+                width: 100,
+                height: 50,
+                playable: false,
+            }),
+            content,
+            true,
+        );
+
+        const bundle = content["com.beeper.linkpreviews"]![0];
+        expect(bundle["og:title"]).toEqual("Example");
+        expect(bundle["og:image"]).toBeUndefined();
+        expect(bundle["og:image:width"]).toBeUndefined();
+        expect(bundle["og:image:height"]).toBeUndefined();
+        expect(bundle["og:image:type"]).toBeUndefined();
+        expect(bundle["matrix:image:size"]).toBeUndefined();
+    });
+
     it("reuses the bundled EncryptedFile instead of re-uploading when editing in an encrypted room", async () => {
         vi.spyOn(mxRoom, "hasEncryptionStateEvent").mockReturnValue(true);
         // the encrypted path shows a pending event while it uploads

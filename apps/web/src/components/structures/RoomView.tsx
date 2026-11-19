@@ -2286,7 +2286,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 joining={this.state.joining}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
-                                oobData={this.props.oobData}
+                                oobData={{
+                                    ...this.props.oobData,
+                                    name: this.props.oobData?.name ?? this.state.roomSummary?.name,
+                                }}
                                 signUrl={this.props.threepidInvite?.signUrl}
                                 roomId={this.state.roomId}
                                 promptAskToJoin={this.canAskToJoin || this.state.promptAskToJoin}

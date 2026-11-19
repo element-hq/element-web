@@ -10,7 +10,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "@fetch-mock/vitest";
 import { ThemeProvider } from "styled-components";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
 import Menu from "./Menu";
 import { Theme } from "../theme";
@@ -19,13 +19,11 @@ import { type UniventionConfig } from "../config";
 // The silent login iframe would try to load the ICS, stub it out
 vi.mock("./SilentLogin", () => ({ default: () => null }));
 
-const makeApi = (): Api => {
+const makeI18n = (): I18nApi => {
     return {
-        i18n: {
-            language: "en-GB",
-            translate: vi.fn((key: string) => key),
-        },
-    } as unknown as Api;
+        language: "en-GB",
+        translate: vi.fn((key: string) => key),
+    } as unknown as I18nApi;
 };
 
 const config: UniventionConfig = {
@@ -57,7 +55,11 @@ const navigation = {
 const renderMenu = (props: Partial<UniventionConfig> = {}): void => {
     render(
         <ThemeProvider theme={Theme.parse({})}>
-            <Menu api={makeApi()} config={{ ...config, ...props }} fallbackLogoUrl="https://example.com/fallback.png" />
+            <Menu
+                i18n={makeI18n()}
+                config={{ ...config, ...props }}
+                fallbackLogoUrl="https://example.com/fallback.png"
+            />
         </ThemeProvider>,
     );
 };

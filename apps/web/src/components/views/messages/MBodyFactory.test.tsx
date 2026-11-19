@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React, { type ReactNode } from "react";
-import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from "vitest";
-import { act, render, screen, type RenderResult, waitFor } from "test-utils-rtl";
+import { describe, it, expect, vi, beforeEach, type MockInstance } from "vitest";
+import { render, screen, type RenderResult, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
@@ -24,7 +24,6 @@ import {
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
@@ -177,45 +176,12 @@ describe("MBodyFactory", () => {
         });
     });
 
-    describe("FileBodyFactory and the document previews lab, for a PDF", () => {
-        afterEach(async () => {
-            // Both viewers share the lab, so a value left on the device would leak into the next test.
-            await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, false);
-            SettingsStore.reset();
-        });
-
-        const renderPdfBody = (): RenderResult => {
-            const mediaEvent = mkEvent("m.file", { info: { mimetype: "application/pdf" } });
-
-            return renderInRoomContext(
-                renderMBody(
-                    { ...props, mxEvent: mediaEvent, mediaEventHelper: new MediaEventHelper(mediaEvent) },
-                    FileBodyFactory,
-                ),
-                TimelineRenderingType.Room,
-            );
-        };
-
-        it("offers the viewer only once the lab is turned on, without a remount", async () => {
-            renderPdfBody();
-            expect(screen.queryByRole("button", { name: "Open PDF" })).not.toBeInTheDocument();
-
-            // The view reads the setting, so turning the lab on has to reach an already-rendered tile.
-            await act(() => SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true));
-
-            expect(screen.getByRole("button", { name: "Open PDF" })).toBeInTheDocument();
-        });
-    });
-
-    describe("FileBodyFactory and the document previews lab, for Markdown", () => {
-        afterEach(async () => {
-            // Both viewers share the lab, so a value left on the device would leak into the next test.
-            await SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, false);
-            SettingsStore.reset();
-        });
-
-        it("offers the viewer only once the lab is turned on, without a remount", async () => {
-            const mediaEvent = mkEvent("m.file", { body: "README.md", info: { mimetype: "text/markdown" } });
+    describe("FileBodyFactory and the document viewers", () => {
+        it.each([
+            ["a PDF", "spec.pdf", "application/pdf", "Open PDF"],
+            ["Markdown", "README.md", "text/markdown", "Open Markdown"],
+        ])("offers the viewer for %s", (_label, body, mimetype, openLabel) => {
+            const mediaEvent = mkEvent("m.file", { body, info: { mimetype } });
 
             renderInRoomContext(
                 renderMBody(
@@ -224,11 +190,8 @@ describe("MBodyFactory", () => {
                 ),
                 TimelineRenderingType.Room,
             );
-            expect(screen.queryByRole("button", { name: "Open Markdown" })).not.toBeInTheDocument();
 
-            await act(() => SettingsStore.setValue("feature_pdf_viewer", null, SettingLevel.DEVICE, true));
-
-            expect(screen.getByRole("button", { name: "Open Markdown" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: openLabel })).toBeInTheDocument();
         });
     });
 

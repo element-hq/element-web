@@ -593,7 +593,7 @@ describe("UrlPreviewFetcher", () => {
                 );
 
                 expect(preview!.image!.imageFull).toEqual("blob:decrypted-0");
-                expect(preview!.image!.mxcImageFull).toEqual(ENCRYPTED_FILE.url);
+                expect(preview!.image).toHaveProperty("mxcImageFull", ENCRYPTED_FILE.url);
                 // eslint-disable-next-line no-restricted-properties
                 expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
             });
