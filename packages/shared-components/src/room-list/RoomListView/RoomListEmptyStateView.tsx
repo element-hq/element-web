@@ -36,11 +36,7 @@ export const RoomListEmptyStateView: React.FC<RoomListEmptyStateViewProps> = ({ 
         return (
             <GenericPlaceholder
                 title={_t("room_list|empty|no_chats")}
-                description={
-                    snapshot.canCreateRoom
-                        ? _t("room_list|empty|no_chats_description")
-                        : _t("room_list|empty|no_chats_description_no_room_rights")
-                }
+                description={getNoChatsDescription(snapshot.canStartChat, snapshot.canCreateRoom)}
             >
                 <Flex
                     className={styles.defaultPlaceholder}
@@ -49,9 +45,11 @@ export const RoomListEmptyStateView: React.FC<RoomListEmptyStateViewProps> = ({ 
                     direction="column"
                     gap="var(--cpd-space-4x)"
                 >
-                    <Button size="md" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
-                        {_t("action|start_chat")}
-                    </Button>
+                    {snapshot.canStartChat && (
+                        <Button size="md" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
+                            {_t("action|start_chat")}
+                        </Button>
+                    )}
                     {snapshot.canCreateRoom && (
                         <Button size="md" kind="secondary" Icon={RoomIcon} onClick={vm.createRoom}>
                             {_t("action|new_room")}
@@ -111,6 +109,19 @@ export const RoomListEmptyStateView: React.FC<RoomListEmptyStateViewProps> = ({ 
             );
     }
 };
+
+/**
+ * Get the description of the default empty state, mentioning only the actions the user can do.
+ * @param canStartChat - whether the user can start a chat
+ * @param canCreateRoom - whether the user can create a room
+ * @returns the description, or undefined if the user can do neither
+ */
+function getNoChatsDescription(canStartChat: boolean, canCreateRoom?: boolean): string | undefined {
+    if (canStartChat && canCreateRoom) return _t("room_list|empty|no_chats_description");
+    if (canStartChat) return _t("room_list|empty|no_chats_description_no_room_rights");
+    if (canCreateRoom) return _t("room_list|empty|no_chats_description_no_dm");
+    return undefined;
+}
 
 interface GenericPlaceholderProps {
     /** The title of the placeholder */
