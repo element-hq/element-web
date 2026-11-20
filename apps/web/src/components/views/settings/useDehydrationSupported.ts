@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import { _t } from "../../../../languageHandler";
-import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { _t } from "../../../languageHandler";
+import { SDKContext } from "../../../contexts/SDKContext";
 
 /**
  * Is dehydration supported on our homeserver?
@@ -17,7 +17,8 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
  * dehydration is supported, false otherwise.
  */
 export const useDehydrationSupported = (): boolean | undefined => {
-    const matrixClient = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
+    const matrixClient = sdkContext.client!;
 
     const [isDehydrationSupported, setDehydrationSupported] = useState<boolean | undefined>(undefined);
 
