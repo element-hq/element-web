@@ -18,6 +18,7 @@ import { Disposables } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
 import { MessagePreviewStore } from "../../../../stores/message-preview";
+import { getGalleryCaption, isGalleryContent } from "../../../../utils/gallery";
 
 export interface EventPreviewContent {
     previewContent: ReactNode;
@@ -104,7 +105,7 @@ export function getEventPreviewContent(
         return null;
     }
 
-    const prefix = getEventPreviewPrefix(mxEvent.getType(), mxEvent.getContent().msgtype as MsgType | undefined);
+    const prefix = getEventPreviewPrefix(mxEvent);
 
     return {
         previewContent: cache.get(preview, prefix),
@@ -112,12 +113,20 @@ export function getEventPreviewContent(
     };
 }
 
-function getEventPreviewPrefix(type: string, msgType?: MsgType): string | null {
-    switch (type) {
+function getEventPreviewPrefix(mxEvent: MatrixEvent): string | null {
+    switch (mxEvent.getType()) {
         case M_POLL_START.name:
             return _t("event_preview|prefix|poll");
         default:
     }
+
+    const content = mxEvent.getContent();
+    if (isGalleryContent(content)) {
+        // Without a caption the preview already says that this is a gallery.
+        return getGalleryCaption(content) ? _t("event_preview|prefix|gallery") : null;
+    }
+
+    const msgType = content.msgtype as MsgType | undefined;
 
     switch (msgType) {
         case MsgType.Audio:

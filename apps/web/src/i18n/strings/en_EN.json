@@ -1200,6 +1200,7 @@
         "prefix": {
             "audio": "Audio",
             "file": "File",
+            "gallery": "Gallery",
             "image": "Image",
             "poll": "Poll",
             "video": "Video"

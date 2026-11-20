@@ -14,6 +14,7 @@ import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { sanitizeHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
+import { getGalleryCaption, getGallerySummary, isGalleryContent } from "../../../utils/gallery";
 
 export class MessageEventPreview implements Preview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
@@ -22,6 +23,11 @@ export class MessageEventPreview implements Preview {
         if (event.isRelation(RelationType.Replace)) {
             // It's an edit, generate the preview on the new text
             eventContent = event.getContent()["m.new_content"];
+        }
+
+        if (isGalleryContent(eventContent) && !getGalleryCaption(eventContent)) {
+            // A gallery without a caption has no body to preview, so describe it instead.
+            eventContent = { msgtype: eventContent.msgtype, body: getGallerySummary(eventContent) };
         }
 
         if (!eventContent?.["body"]) return null; // invalid for our purposes
