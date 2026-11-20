@@ -130,12 +130,18 @@ describe("ReactionsRowButtonViewModel", () => {
 
             expect(vm.getSnapshot()).toMatchObject({
                 imageSrc: `https://example.org/_matrix/media/reaction.png?16x16&scale&animated=${autoplayGifs}`,
-                animatedImageSrc: autoplayGifs
-                    ? undefined
-                    : "https://example.org/_matrix/media/reaction.png?16x16&scale&animated=true",
                 imageAlt: "party",
             });
             expect(getAriaLabel(vm)).toContain("reacted with party");
+
+            vm.setHoveredOrFocused(true);
+            expect(vm.getSnapshot().imageSrc).toBe(
+                "https://example.org/_matrix/media/reaction.png?16x16&scale&animated=true",
+            );
+            vm.setHoveredOrFocused(false);
+            expect(vm.getSnapshot().imageSrc).toBe(
+                `https://example.org/_matrix/media/reaction.png?16x16&scale&animated=${autoplayGifs}`,
+            );
         },
     );
 

@@ -8,7 +8,7 @@
 import { composeStories } from "@storybook/react-vite";
 import { fireEvent, render } from "@test-utils";
 import React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import * as stories from "./ReactionsRowButton.stories";
 
@@ -25,22 +25,15 @@ describe("ReactionsRowButton", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("shows the animated reaction image only while hovered or focused", () => {
-        const { container } = render(
-            <Default imageSrc="https://server/static" animatedImageSrc="https://server/animated" imageAlt="party" />,
-        );
-        const button = container.querySelector("button")!;
-        const img = container.querySelector("img")!;
-        expect(img.getAttribute("src")).toBe("https://server/static");
+    it("reports hover and focus changes", () => {
+        const setHoveredOrFocused = vi.fn();
+        const { getByRole } = render(<Default setHoveredOrFocused={setHoveredOrFocused} />);
+        const button = getByRole("button");
 
         fireEvent.mouseEnter(button);
-        expect(img.getAttribute("src")).toBe("https://server/animated");
         fireEvent.mouseLeave(button);
-        expect(img.getAttribute("src")).toBe("https://server/static");
-
         fireEvent.focus(button);
-        expect(img.getAttribute("src")).toBe("https://server/animated");
         fireEvent.blur(button);
-        expect(img.getAttribute("src")).toBe("https://server/static");
+        expect(setHoveredOrFocused.mock.calls).toEqual([[true], [false], [true], [false]]);
     });
 });

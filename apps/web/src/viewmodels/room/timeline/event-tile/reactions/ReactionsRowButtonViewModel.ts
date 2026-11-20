@@ -64,12 +64,27 @@ export class ReactionsRowButtonViewModel
     implements ReactionsRowButtonViewModelInterface
 {
     private readonly tooltipVm: ReactionsRowButtonTooltipViewModel;
+    private hoveredOrFocused = false;
     private static readonly getAriaLabel = (snapshot: ReactionsRowButtonViewSnapshot): string | undefined =>
         (snapshot as ReactionsRowButtonViewSnapshot & { ariaLabel?: string }).ariaLabel;
+
+    /**
+     * A thumbnail keeps the size of the download bounded, unlike the original media.
+     * Without autoplay, the image only animates while hovered or focused.
+     */
+    private static readonly getImageSrc = (
+        props: ReactionsRowButtonViewModelProps,
+        hoveredOrFocused: boolean,
+    ): string | undefined => {
+        if (!props.customReactionImagesEnabled || !props.content.startsWith("mxc://")) return undefined;
+        const animated = hoveredOrFocused || SettingsStore.getValue("autoplayGifs");
+        return mediaFromMxc(props.content).getThumbnailOfSourceHttp(16, 16, "scale", animated) ?? undefined;
+    };
 
     private static readonly computeSnapshot = (
         props: ReactionsRowButtonViewModelProps,
         tooltipVm: ReactionsRowButtonTooltipViewModel,
+        hoveredOrFocused: boolean,
     ): ReactionsRowButtonViewSnapshot => {
         const {
             client,
@@ -108,23 +123,10 @@ export class ReactionsRowButtonViewModel
             }
         }
 
-        let imageSrc: string | undefined;
-        let animatedImageSrc: string | undefined;
-        let imageAlt: string | undefined;
-        if (customReactionImagesEnabled && content.startsWith("mxc://")) {
-            // A thumbnail keeps the size of the download bounded, unlike the original media.
-            const media = mediaFromMxc(content);
-            const autoplay = SettingsStore.getValue("autoplayGifs");
-            const resolved = media.getThumbnailOfSourceHttp(16, 16, "scale", autoplay);
-            if (resolved) {
-                imageSrc = resolved;
-                // Without autoplay, the image only animates while hovered.
-                animatedImageSrc = autoplay
-                    ? undefined
-                    : (media.getThumbnailOfSourceHttp(16, 16, "scale", true) ?? undefined);
-                imageAlt = customReactionName || _t("timeline|reactions|custom_reaction_fallback_label");
-            }
-        }
+        const imageSrc = ReactionsRowButtonViewModel.getImageSrc(props, hoveredOrFocused);
+        const imageAlt = imageSrc
+            ? customReactionName || _t("timeline|reactions|custom_reaction_fallback_label")
+            : undefined;
 
         const snapshot = {
             content,
@@ -134,7 +136,6 @@ export class ReactionsRowButtonViewModel
             isSelected: !!myReactionEvent,
             isDisabled: !!disabled,
             imageSrc,
-            animatedImageSrc,
             imageAlt,
             tooltipVm,
         };
@@ -150,7 +151,7 @@ export class ReactionsRowButtonViewModel
             reactionEvents: props.reactionEvents,
             customReactionImagesEnabled: props.customReactionImagesEnabled,
         });
-        super(props, ReactionsRowButtonViewModel.computeSnapshot(props, tooltipVm));
+        super(props, ReactionsRowButtonViewModel.computeSnapshot(props, tooltipVm, false));
         this.tooltipVm = tooltipVm;
         this.disposables.track(tooltipVm);
     }
@@ -166,7 +167,6 @@ export class ReactionsRowButtonViewModel
             nextSnapshot.isSelected === currentSnapshot.isSelected &&
             nextSnapshot.isDisabled === currentSnapshot.isDisabled &&
             nextSnapshot.imageSrc === currentSnapshot.imageSrc &&
-            nextSnapshot.animatedImageSrc === currentSnapshot.animatedImageSrc &&
             nextSnapshot.imageAlt === currentSnapshot.imageAlt
         ) {
             return;
@@ -183,7 +183,9 @@ export class ReactionsRowButtonViewModel
         this.props = { ...this.props, content, reactionEvents, customReactionImagesEnabled };
 
         this.tooltipVm.setProps({ content, reactionEvents, customReactionImagesEnabled });
-        this.setSnapshot(ReactionsRowButtonViewModel.computeSnapshot(this.props, this.tooltipVm));
+        this.setSnapshot(
+            ReactionsRowButtonViewModel.computeSnapshot(this.props, this.tooltipVm, this.hoveredOrFocused),
+        );
     }
 
     public setCount(count: number): void {
@@ -200,6 +202,11 @@ export class ReactionsRowButtonViewModel
         this.props = { ...this.props, disabled };
         this.snapshot.merge({ isDisabled: !!disabled });
     }
+
+    public setHoveredOrFocused = (hoveredOrFocused: boolean): void => {
+        this.hoveredOrFocused = hoveredOrFocused;
+        this.snapshot.merge({ imageSrc: ReactionsRowButtonViewModel.getImageSrc(this.props, hoveredOrFocused) });
+    };
 
     public onClick = (): void => {
         const { client, mxEvent, myReactionEvent, content, disabled } = this.props;
