@@ -10,7 +10,13 @@ Please see LICENSE in the repository root for full details.
 import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, within } from "test-utils-rtl";
-import { getMockClientWithEventEmitter, mockClientMethodsUser, mockClientMethodsServer } from "test-utils";
+import {
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+    mockClientMethodsServer,
+    mockPlatformPeg,
+    unmockPlatformPeg,
+} from "test-utils";
 
 import HelpUserSettingsTab from "./HelpUserSettingsTab";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
@@ -45,5 +51,22 @@ describe("<HelpUserSettingsTab />", () => {
         expect(items).toHaveLength(5);
         expect(items[3]).toHaveTextContent("First module credit");
         expect(items[4]).toHaveTextContent("Second module credit");
+    });
+
+    it("spaces the update check from the versions, as a separate item of the subsection", async () => {
+        mockPlatformPeg({
+            getAppVersion: vi.fn().mockResolvedValue("1.2.3"),
+            canSelfUpdate: vi.fn().mockResolvedValue(true),
+        });
+        try {
+            getComponent(new ElementWebExtrasApi());
+
+            const button = await screen.findByRole("button", { name: "Check for update" });
+            const itemOf = (element: HTMLElement): Element | null =>
+                element.closest(".mx_SettingsSubsection_content > *");
+            expect(itemOf(button)).not.toBe(itemOf(screen.getByText(/Crypto version/)));
+        } finally {
+            unmockPlatformPeg();
+        }
     });
 });
