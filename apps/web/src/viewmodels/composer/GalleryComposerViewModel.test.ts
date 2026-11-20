@@ -96,6 +96,7 @@ describe("GalleryComposerViewModel", () => {
                 canAddMore: true,
                 countLabel: `2 of ${MAX_GALLERY_ITEMS} items`,
                 notice: undefined,
+                hint: "Sent as a gallery. People using older apps will only see your text.",
             });
             vm.dispose();
         });
@@ -540,6 +541,33 @@ describe("GalleryComposerViewModel", () => {
             await flushPromises();
 
             expect(listener).not.toHaveBeenCalled();
+            vm.dispose();
+        });
+    });
+
+    describe("hint for older apps", () => {
+        const hint = "Sent as a gallery. People using older apps will only see your text.";
+
+        it("is given once there are several attachments, which are sent as a gallery", () => {
+            const vm = new GalleryComposerViewModel({ items: [] });
+            expect(vm.getSnapshot().hint).toBeUndefined();
+
+            // One image or video is sent as an ordinary message, which every app shows.
+            vm.onAddFiles([mkFile("a.png")]);
+            expect(vm.getSnapshot().hint).toBeUndefined();
+
+            vm.onAddFiles([mkFile("b.png")]);
+            expect(vm.getSnapshot().hint).toBe(hint);
+
+            vm.onRemoveItem(vm.getSnapshot().items[0].id);
+            expect(vm.getSnapshot().hint).toBeUndefined();
+            vm.dispose();
+        });
+
+        it("is given for a message being edited which has several items", () => {
+            const vm = new GalleryComposerViewModel({ items: [mkItem("a.png"), mkItem("b.png")] });
+
+            expect(vm.getSnapshot().hint).toBe(hint);
             vm.dispose();
         });
     });

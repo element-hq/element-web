@@ -128,6 +128,19 @@ Please see LICENSE in the repository root for full details.
     display: none;
 }
 
+.hint {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-1x);
+    margin: var(--cpd-space-0x);
+    color: var(--cpd-color-text-secondary);
+}
+
+.hintIcon {
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-secondary);
+}
+
 .notice {
     margin: var(--cpd-space-0x);
     color: var(--cpd-color-text-critical-primary);

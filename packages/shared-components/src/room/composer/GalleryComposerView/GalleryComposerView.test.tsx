@@ -166,6 +166,19 @@ describe("GalleryComposerView", () => {
         expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
+    it("shows a hint, which is not announced like a notice", () => {
+        render(<GalleryComposerView vm={makeViewModel({ hint: "Sent as a gallery." })} />);
+
+        expect(screen.getByText("Sent as a gallery.")).toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    it("has no hint unless given one", () => {
+        render(<Default />);
+
+        expect(screen.queryByText(/Sent as a gallery/)).not.toBeInTheDocument();
+    });
+
     it("only offers to add more while the gallery is not full", () => {
         const { unmount } = render(<Full />);
         expect(screen.queryByRole("button", { name: "Add photos or videos" })).not.toBeInTheDocument();

@@ -132,7 +132,18 @@ export class GalleryComposerViewModel
             canAddMore: this.entries.length < MAX_GALLERY_ITEMS,
             countLabel: _t("gallery|composer|count", { count: this.entries.length, max: MAX_GALLERY_ITEMS }),
             notice: this.notice,
+            hint: GalleryComposerViewModel.computeHint(this.entries.length),
         });
+    }
+
+    /**
+     * Several attachments are sent as one gallery message (MSC4274), which apps that predate it
+     * show as the text alone. A single image or video is an ordinary message every app shows.
+     *
+     * Remove once the apps people use show galleries.
+     */
+    private static computeHint(itemCount: number): string | undefined {
+        return itemCount > 1 ? _t("gallery|composer|hint_old_clients") : undefined;
     }
 
     /**

@@ -7,7 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 import React, { type ChangeEvent, type ClipboardEvent, type DragEvent, type JSX, useRef } from "react";
 import classNames from "classnames";
-import { CloseIcon, PlaySolidIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CloseIcon, InfoIcon, PlaySolidIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { InlineSpinner, Text } from "@vector-im/compound-web";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
@@ -65,6 +65,11 @@ export interface GalleryComposerViewSnapshot {
      */
     notice?: string;
     /**
+     * Optional information about how the attachments will be sent, shown less prominently than
+     * a notice.
+     */
+    hint?: string;
+    /**
      * Whether every control is disabled, e.g. while the gallery is being sent.
      */
     disabled?: boolean;
@@ -119,7 +124,7 @@ interface GalleryComposerViewProps {
  */
 export function GalleryComposerView({ vm, className }: Readonly<GalleryComposerViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { items, canAddMore, countLabel, notice, disabled } = useViewModel(vm);
+    const { items, canAddMore, countLabel, notice, hint, disabled } = useViewModel(vm);
     const fileInput = useRef<HTMLInputElement>(null);
 
     const onInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -227,6 +232,12 @@ export function GalleryComposerView({ vm, className }: Readonly<GalleryComposerV
                 aria-hidden="true"
                 onChange={onInputChange}
             />
+            {hint && (
+                <Text as="p" size="sm" className={styles.hint}>
+                    <InfoIcon className={styles.hintIcon} width="16" height="16" aria-hidden="true" />
+                    {hint}
+                </Text>
+            )}
             {notice && (
                 <Text as="p" size="sm" className={styles.notice} role="status">
                     {notice}
