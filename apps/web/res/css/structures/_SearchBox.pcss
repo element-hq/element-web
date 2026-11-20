@@ -10,9 +10,23 @@ Please see LICENSE files in the repository root for full details.
     flex: 1 1 0;
     min-width: 0;
     min-height: 36px; /* to avoid jumping when the X to clear shows/hides */
+    position: relative;
 
     &.mx_SearchBox_blurred:not(:hover) {
         background-color: transparent;
+    }
+
+    .mx_SearchBox_icon {
+        /* Drawn over the input's 36px start padding (see .mx_textinput_icon), centered vertically */
+        position: absolute;
+        inset-inline-start: 10px;
+        inset-block: 0;
+        margin-block: auto;
+        width: 24px;
+        height: 24px;
+        color: var(--cpd-color-icon-secondary);
+        /* Let clicks through to the input */
+        pointer-events: none;
     }
 
     .mx_SearchBox_closeButton {

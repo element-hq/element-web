@@ -189,14 +189,6 @@ a:where(:not([data-kind]):not(.mx_MessageTimestamp)):visited {
 input[type="text"].mx_textinput_icon,
 input[type="search"].mx_textinput_icon {
     padding-left: 36px;
-    background-repeat: no-repeat;
-    background-position: 10px center;
-}
-
-/* FIXME THEME - Tint by CSS rather than referencing a duplicate asset */
-input[type="text"].mx_textinput_icon.mx_textinput_search,
-input[type="search"].mx_textinput_icon.mx_textinput_search {
-    background-image: url("@vector-im/compound-design-tokens/icons/search.svg");
 }
 
 /* dont search UI as not all browsers support it, */

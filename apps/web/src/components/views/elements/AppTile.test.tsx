@@ -208,6 +208,37 @@ describe("AppTile", () => {
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
     });
 
+    it("shows an icon on the options button of a right panel widget", async () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
+            if (name !== "RightPanel.phases") return realGetValue(name, roomId);
+            if (roomId === "r1") {
+                return {
+                    history: [{ phase: RightPanelPhases.Widget, state: { widgetId: "1" } }],
+                    isOpen: true,
+                };
+            }
+            return null;
+        });
+
+        const { findByRole } = render(
+            <RightPanel
+                room={r1}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
+            />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
+        act(() =>
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: "r1",
+            }),
+        );
+
+        const optionsButton = await findByRole("button", { name: "Options" });
+        expect(optionsButton.querySelector("svg")).toBeInTheDocument();
+    });
+
     it("distinguishes widgets with the same ID in different rooms", async () => {
         // Set up right panel state
         const realGetValue = SettingsStore.getValue;

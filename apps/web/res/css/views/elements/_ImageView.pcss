@@ -44,6 +44,8 @@ $button-gap: var(--cpd-space-3x);
 .mx_ImageView_panel {
     width: 100%;
     height: var(--image-view-panel-height);
+    /* The image wrapper below is 100% tall too, so stop it from squeezing the panel */
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
