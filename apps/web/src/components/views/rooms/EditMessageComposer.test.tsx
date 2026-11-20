@@ -600,8 +600,8 @@ describe("<EditMessageComposer/>", () => {
 
         it("should attach the bundle to the new content before sending", async () => {
             const attachBundles = vi.fn(async (content: RoomMessageEventContent) => {
-                (content as unknown as Record<string, unknown>)["com.beeper.linkpreviews"] = [
-                    { matched_url: "https://example.org" },
+                (content as unknown as Record<string, unknown>)["m.url_previews"] = [
+                    { "matrix:matched_url": "https://example.org" },
                 ];
                 return false;
             });
@@ -617,7 +617,7 @@ describe("<EditMessageComposer/>", () => {
             const messageContent = mockClient.sendMessage.mock.calls[0][2] as RoomMessageEventContent &
                 ReplacementEvent<RoomMessageEventContent>;
             const newContent = messageContent["m.new_content"] as unknown as Record<string, unknown>;
-            expect(newContent["com.beeper.linkpreviews"]).toEqual([{ matched_url: "https://example.org" }]);
+            expect(newContent["m.url_previews"]).toEqual([{ "matrix:matched_url": "https://example.org" }]);
         });
 
         // The user cancelled the pending message while its preview images were uploading.

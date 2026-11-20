@@ -8,18 +8,13 @@
 // @vitest-environment happy-dom
 
 import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, afterEach, type Mock, type MockedObject } from "vitest";
+import { vi, describe, it, expect, type Mock, type MockedObject } from "vitest";
 
-import {
-    BUNDLED_LINK_PREVIEWS,
-    MAX_PREVIEWS_WHEN_LIMITED,
-    UrlPreviewGroupViewModel,
-    type UrlPreviewKind,
-} from "./UrlPreviewGroupViewModel";
+import { MAX_PREVIEWS_WHEN_LIMITED, UrlPreviewGroupViewModel, type UrlPreviewKind } from "./UrlPreviewGroupViewModel";
 import type { UrlPreview } from "shared-types";
 import { getMockClientWithEventEmitter, mkEvent } from "test-utils";
-import SettingsStore from "../../settings/SettingsStore";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import { BUNDLED_URL_PREVIEWS, UNSTABLE_BUNDLED_URL_PREVIEWS } from "../../utils/bundledUrlPreviews";
 import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
 
 const IMAGE_MXC = "mxc://example.org/abc";
@@ -32,25 +27,25 @@ const BASIC_PREVIEW_OGDATA = {
 };
 
 const BUNDLE_PREVIEW_ONE = {
-    "matched_url": "https://example.org/1",
+    "matrix:matched_url": "https://example.org/1",
     "og:title": "Bundled one",
     "og:description": "First bundled preview",
     "og:url": "https://example.org/1",
 };
 const BUNDLE_PREVIEW_TWO = {
-    "matched_url": "https://example.org/2",
+    "matrix:matched_url": "https://example.org/2",
     "og:title": "Bundled two",
     "og:description": "Second bundled preview",
     "og:url": "https://example.org/2",
 };
 const BUNDLE_PREVIEW_THREE = {
-    "matched_url": "https://example.org/3",
+    "matrix:matched_url": "https://example.org/3",
     "og:title": "Bundled three",
     "og:description": "Third bundled preview",
     "og:url": "https://example.org/3",
 };
 const BUNDLE_PREVIEW_WITH_IMAGE = {
-    "matched_url": "https://example.org/image",
+    "matrix:matched_url": "https://example.org/image",
     "og:title": "Bundled with image",
     "og:image": IMAGE_MXC,
     "og:image:type": "image/png",
@@ -91,7 +86,7 @@ function getViewModel({
             user: "@foo:bar",
             type: "m.room.message",
             content: {
-                ...(showPreview ? undefined : { [BUNDLED_LINK_PREVIEWS]: [] }),
+                ...(showPreview ? undefined : { [BUNDLED_URL_PREVIEWS]: [] }),
                 ...content,
             },
             id: "$id",
@@ -275,8 +270,8 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewKind: "preferbundled",
                 content: {
                     msgtype: MsgType.Text,
-                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
-                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
+                    body: `${BUNDLE_PREVIEW_ONE["matrix:matched_url"]} ${BUNDLE_PREVIEW_TWO["matrix:matched_url"]}`,
+                    [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
                 },
             });
             const msg = document.createElement("div");
@@ -308,8 +303,8 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewKind: "preferbundled",
                 content: {
                     msgtype: MsgType.Text,
-                    body: BUNDLE_PREVIEW_WITH_IMAGE.matched_url,
-                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_WITH_IMAGE],
+                    body: BUNDLE_PREVIEW_WITH_IMAGE["matrix:matched_url"],
+                    [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_WITH_IMAGE],
                 },
             });
             // eslint-disable-next-line no-restricted-properties
@@ -333,8 +328,8 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewKind: "preferbundled",
                 content: {
                     msgtype: MsgType.Text,
-                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url} ${BUNDLE_PREVIEW_THREE.matched_url}`,
-                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO, BUNDLE_PREVIEW_THREE],
+                    body: `${BUNDLE_PREVIEW_ONE["matrix:matched_url"]} ${BUNDLE_PREVIEW_TWO["matrix:matched_url"]} ${BUNDLE_PREVIEW_THREE["matrix:matched_url"]}`,
+                    [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO, BUNDLE_PREVIEW_THREE],
                 },
             });
             const msg = document.createElement("div");
@@ -359,7 +354,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewKind: "fetchonly",
                 content: {
                     msgtype: MsgType.Text,
-                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+                    [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
                 },
             });
             client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
@@ -377,7 +372,7 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewKind: "preferbundled",
                 content: {
                     msgtype: MsgType.Notice,
-                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+                    [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
                 },
             });
             client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
@@ -389,13 +384,35 @@ describe("UrlPreviewGroupViewModel", () => {
             expect(previews).toMatchObject([{ title: "This is an example!" }]);
         });
 
-        it("should not ask the server to resolve a bare matched_url when bundled previews only", async () => {
+        // Messages sent before MSC4095 was accepted use different field names.
+        it("should render bundled previews sent in the unstable format", async () => {
             const { vm, client } = getViewModel({
                 urlPreviewKind: "bundledonly",
                 content: {
                     msgtype: MsgType.Text,
-                    body: BUNDLE_PREVIEW_ONE.matched_url,
-                    [BUNDLED_LINK_PREVIEWS]: [{ matched_url: BUNDLE_PREVIEW_ONE.matched_url }],
+                    body: "https://example.org/old",
+                    [UNSTABLE_BUNDLED_URL_PREVIEWS]: [
+                        { "matched_url": "https://example.org/old", "og:title": "Bundled in the unstable format" },
+                    ],
+                },
+            });
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/old">Test1</a>';
+            await vm.updateEventElement(msg);
+
+            expect(vm.getSnapshot().previews).toMatchObject([
+                { link: "https://example.org/old", title: "Bundled in the unstable format" },
+            ]);
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+        });
+
+        it("should not ask the server to resolve a bare matched URL when bundled previews only", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewKind: "bundledonly",
+                content: {
+                    msgtype: MsgType.Text,
+                    body: BUNDLE_PREVIEW_ONE["matrix:matched_url"],
+                    [BUNDLED_URL_PREVIEWS]: [{ "matrix:matched_url": BUNDLE_PREVIEW_ONE["matrix:matched_url"] }],
                 },
             });
             const msg = document.createElement("div");
@@ -424,11 +441,11 @@ describe("UrlPreviewGroupViewModel", () => {
         // An image whose decryption throws must not take the whole preview group down with it.
         it("should drop a bundled preview that throws rather than failing them all", async () => {
             vi.spyOn(UrlPreviewFetcher.prototype, "previewFromBundle").mockImplementation(async (single) => {
-                if (single.matched_url === BUNDLE_PREVIEW_ONE.matched_url) {
+                if (single["matrix:matched_url"] === BUNDLE_PREVIEW_ONE["matrix:matched_url"]) {
                     throw new Error("Forced test failure");
                 }
                 return {
-                    link: single.matched_url,
+                    link: single["matrix:matched_url"],
                     title: "Bundled two",
                     siteName: "example.org",
                     showTooltipOnLink: false,
@@ -439,8 +456,8 @@ describe("UrlPreviewGroupViewModel", () => {
                 urlPreviewKind: "preferbundled",
                 content: {
                     msgtype: MsgType.Text,
-                    body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
-                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
+                    body: `${BUNDLE_PREVIEW_ONE["matrix:matched_url"]} ${BUNDLE_PREVIEW_TWO["matrix:matched_url"]}`,
+                    [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
                 },
             });
             const msg = document.createElement("div");
@@ -448,7 +465,7 @@ describe("UrlPreviewGroupViewModel", () => {
             await vm.updateEventElement(msg);
 
             expect(vm.getSnapshot().previews).toMatchObject([
-                { link: BUNDLE_PREVIEW_TWO.matched_url, title: "Bundled two" },
+                { link: BUNDLE_PREVIEW_TWO["matrix:matched_url"], title: "Bundled two" },
             ]);
             vi.mocked(UrlPreviewFetcher.prototype.previewFromBundle).mockRestore();
         });
@@ -468,30 +485,14 @@ describe("UrlPreviewGroupViewModel", () => {
             vi.mocked(UrlPreviewFetcher.prototype.fetchPreview).mockRestore();
         });
 
-        describe("with the bundle setting enabled in SettingsStore", () => {
-            afterEach(() => {
-                vi.restoreAllMocks();
-            });
-
-            /**
-             * `updateEventElement` reads the bundle feature flag from SettingsStore rather than
-             * from props, so it has to be enabled there to take the bundle-driven link path.
-             */
-            function enableBundleSetting(): void {
-                const original = SettingsStore.getValue;
-                vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (setting) => setting === "feature_msc4095_url_preview_bundle" || original(setting),
-                );
-            }
-
+        describe("with a bundle", () => {
             it("should take its links from the bundle rather than from the rendered message", async () => {
-                enableBundleSetting();
                 const { vm, client } = getViewModel({
                     urlPreviewKind: "preferbundled",
                     content: {
                         msgtype: MsgType.Text,
-                        body: `${BUNDLE_PREVIEW_ONE.matched_url} ${BUNDLE_PREVIEW_TWO.matched_url}`,
-                        [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
+                        body: `${BUNDLE_PREVIEW_ONE["matrix:matched_url"]} ${BUNDLE_PREVIEW_TWO["matrix:matched_url"]}`,
+                        [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
                     },
                 });
                 // The rendered message carries a link that the bundle does not, so if the links came
@@ -503,8 +504,8 @@ describe("UrlPreviewGroupViewModel", () => {
 
                 const snapshot = vm.getSnapshot();
                 expect(snapshot.previews).toMatchObject([
-                    { link: BUNDLE_PREVIEW_ONE.matched_url, title: "Bundled one" },
-                    { link: BUNDLE_PREVIEW_TWO.matched_url, title: "Bundled two" },
+                    { link: BUNDLE_PREVIEW_ONE["matrix:matched_url"], title: "Bundled one" },
+                    { link: BUNDLE_PREVIEW_TWO["matrix:matched_url"], title: "Bundled two" },
                 ]);
                 expect(snapshot.totalPreviewCount).toBe(2);
                 expect(snapshot.overPreviewLimit).toBe(false);
@@ -512,13 +513,12 @@ describe("UrlPreviewGroupViewModel", () => {
             });
 
             it("should recompute even when the rendered links have not changed", async () => {
-                enableBundleSetting();
                 const { vm } = getViewModel({
                     urlPreviewKind: "preferbundled",
                     content: {
                         msgtype: MsgType.Text,
-                        body: BUNDLE_PREVIEW_ONE.matched_url,
-                        [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+                        body: BUNDLE_PREVIEW_ONE["matrix:matched_url"],
+                        [BUNDLED_URL_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
                     },
                 });
                 const msg = document.createElement("div");
@@ -531,12 +531,11 @@ describe("UrlPreviewGroupViewModel", () => {
                 // still produces the same previews rather than leaving a stale snapshot.
                 await vm.updateEventElement(msg);
                 expect(vm.getSnapshot().previews).toMatchObject([
-                    { link: BUNDLE_PREVIEW_ONE.matched_url, title: "Bundled one" },
+                    { link: BUNDLE_PREVIEW_ONE["matrix:matched_url"], title: "Bundled one" },
                 ]);
             });
 
             it("should fall back to the rendered links when the message has no bundle", async () => {
-                enableBundleSetting();
                 const { vm, client } = getViewModel({
                     urlPreviewKind: "preferbundled",
                     content: {

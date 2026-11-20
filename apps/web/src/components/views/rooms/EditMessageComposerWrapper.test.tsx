@@ -40,7 +40,7 @@ const BASIC_PREVIEW_OGDATA = {
 };
 
 const BUNDLE_ENTRY = {
-    "matched_url": "https://example.org/bundled",
+    "matrix:matched_url": "https://example.org/bundled",
     "og:title": "Bundled preview",
     "og:description": "Came from the event",
     "og:url": "https://example.org/bundled",
@@ -184,7 +184,6 @@ describe("<EditMessageComposerWrapper />", () => {
     });
 
     it("should attach the previewed links as a bundle on the edited content", async () => {
-        enabledSettings.push("feature_msc4095_url_preview_bundle");
         renderWrapper();
         act(() => {
             lastProps(plainComposerProps).updateUrlPreviews!({
@@ -198,9 +197,9 @@ describe("<EditMessageComposerWrapper />", () => {
         const newContent = { msgtype: "m.text", body: "https://example.org" } as RoomMessageEventContent;
         await waitFor(() => {
             lastProps(plainComposerProps).attachBundles!(newContent);
-            expect(newContent["com.beeper.linkpreviews"]).toEqual([
+            expect(newContent["m.url_previews"]).toEqual([
                 expect.objectContaining({
-                    "matched_url": "https://example.org",
+                    "matrix:matched_url": "https://example.org",
                     "og:title": "This is an example!",
                     "og:description": "This is a description",
                 }),
@@ -209,28 +208,26 @@ describe("<EditMessageComposerWrapper />", () => {
     });
 
     it("should attach an empty bundle when every preview has been removed", async () => {
-        enabledSettings.push("feature_msc4095_url_preview_bundle");
         // The edited event opted out of previews, so its links are seeded as excluded.
         renderWrapper({
             "msgtype": "m.text",
             "body": "https://example.org",
-            "com.beeper.linkpreviews": [],
+            "m.url_previews": [],
         });
 
         const newContent = { msgtype: "m.text", body: "https://example.org" } as RoomMessageEventContent;
         await waitFor(() => {
             lastProps(plainComposerProps).attachBundles!(newContent);
-            expect(newContent["com.beeper.linkpreviews"]).toEqual([]);
+            expect(newContent["m.url_previews"]).toEqual([]);
         });
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
 
     it("should seed the previews from the edited event's own bundle", async () => {
-        enabledSettings.push("feature_msc4095_url_preview_bundle");
         renderWrapper({
             "msgtype": "m.text",
-            "body": `Look at ${BUNDLE_ENTRY.matched_url}`,
-            "com.beeper.linkpreviews": [BUNDLE_ENTRY],
+            "body": `Look at ${BUNDLE_ENTRY["matrix:matched_url"]}`,
+            "m.url_previews": [BUNDLE_ENTRY],
         });
 
         expect(await screen.findByText("Bundled preview")).toBeInTheDocument();
