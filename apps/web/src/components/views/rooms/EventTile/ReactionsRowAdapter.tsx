@@ -167,7 +167,17 @@ export function ReactionsRowAdapter({
     }, [reactions, userId, vm]);
 
     useEffect(() => {
-        vm.setActionable(isContentActionable(mxEvent));
+        const updateActionable = (): void => {
+            vm.setActionable(isContentActionable(mxEvent));
+        };
+        updateActionable();
+
+        // The content of an edited event comes from its replacement. While that replacement is still encrypted
+        // the content is empty, so the event is not actionable until the decrypted replacement is applied.
+        mxEvent.on(MatrixEventEvent.Replaced, updateActionable);
+        return () => {
+            mxEvent.off(MatrixEventEvent.Replaced, updateActionable);
+        };
     }, [mxEvent, vm]);
 
     useEffect(() => {
@@ -217,19 +227,6 @@ export function ReactionsRowAdapter({
 
         return () => {
             mxEvent.off(MatrixEventEvent.Decrypted, onDecrypted);
-        };
-    }, [mxEvent, vm]);
-
-    useEffect(() => {
-        // The content of an edited event comes from its replacement. While that replacement is still encrypted
-        // the content is empty, so the event is not actionable until the decrypted replacement is applied.
-        const onReplaced = (): void => {
-            vm.setActionable(isContentActionable(mxEvent));
-        };
-
-        mxEvent.on(MatrixEventEvent.Replaced, onReplaced);
-        return () => {
-            mxEvent.off(MatrixEventEvent.Replaced, onReplaced);
         };
     }, [mxEvent, vm]);
 
