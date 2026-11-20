@@ -15,10 +15,17 @@ import {
     MatrixEventEvent,
     M_BEACON_INFO,
     M_LOCATION,
+    M_POLL_END,
     M_POLL_START,
+    M_TEXT,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { MjolnirBodyView, UnknownBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    MjolnirBodyView,
+    PollEndBodyView,
+    UnknownBodyView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
@@ -45,6 +52,10 @@ import {
     renderMBody,
 } from "./MBodyFactory";
 import { TextualBodyFactory } from "./TextualBodyFactory";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { textForEvent } from "../../../TextForEvent";
+import { _t } from "../../../languageHandler";
+import { usePollTopAnswer } from "../../../utils/polls";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -80,6 +91,8 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
     [M_POLL_START.name, MPollBody],
     [M_POLL_START.altName, MPollBody],
+    [M_POLL_END.name, PollEndBody],
+    [M_POLL_END.altName, PollEndBody],
     [M_BEACON_INFO.name, MBeaconBody],
     [M_BEACON_INFO.altName, MBeaconBody],
 ]);
@@ -95,6 +108,22 @@ function MjolnirBodyWrappedView({ mxEvent, onMessageAllowed, ref }: IBodyProps):
     }, [onAllow, vm]);
 
     return <MjolnirBodyView vm={vm} ref={ref} />;
+}
+
+function PollEndBody({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const topAnswer = usePollTopAnswer(mxEvent);
+
+    let text: string;
+    if (topAnswer === undefined) {
+        // Until the votes are counted, show the sender's text fallback, which is in the sender's language
+        text = M_TEXT.findIn<string>(mxEvent.getContent()) || textForEvent(mxEvent, cli);
+    } else if (topAnswer === "") {
+        text = _t("poll|end_message_no_votes");
+    } else {
+        text = _t("poll|end_message", { topAnswer });
+    }
+    return <PollEndBodyView text={text} ref={ref} className="mx_PollEndBody" />;
 }
 
 function UnknownBody({ mxEvent, ref }: IBodyProps): JSX.Element {

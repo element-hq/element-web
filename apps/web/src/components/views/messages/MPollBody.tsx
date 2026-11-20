@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import classNames from "classnames";
-import { logger } from "matrix-js-sdk/src/logger";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -31,7 +30,6 @@ import { useEventPresentation } from "@element-hq/web-shared-components";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import { type IBodyProps } from "./IBodyProps";
-import { formatList } from "../../../utils/FormattingUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
@@ -39,6 +37,7 @@ import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Spinner from "../elements/Spinner";
 import { PollOption } from "../polls/PollOption";
+import { allVotes, collectUserVotes, countVotes, type UserVote } from "../../../utils/polls";
 
 interface IState {
     poll?: Poll;
@@ -62,43 +61,6 @@ export function createVoteRelations(getRelationsForEvent: GetRelationsForEvent, 
     }
 
     return new RelatedRelations(relationsList);
-}
-
-export function findTopAnswer(pollEvent: MatrixEvent, voteRelations: Relations): string {
-    const pollEventId = pollEvent.getId();
-    if (!pollEventId) {
-        logger.warn(
-            "findTopAnswer: Poll event needs an event ID to fetch relations in order to determine " +
-                "the top answer - assuming no best answer",
-        );
-        return "";
-    }
-
-    const poll = pollEvent.unstableExtensibleEvent as PollStartEvent;
-    if (!poll?.isEquivalentTo(M_POLL_START)) {
-        logger.warn("Failed to parse poll to determine top answer - assuming no best answer");
-        return "";
-    }
-
-    const findAnswerText = (answerId: string): string => {
-        return poll.answers.find((a) => a.id === answerId)?.text ?? "";
-    };
-
-    const userVotes: Map<string, UserVote> = collectUserVotes(allVotes(voteRelations));
-
-    const votes: Map<string, number> = countVotes(userVotes, poll);
-    const highestScore: number = Math.max(...votes.values());
-
-    const bestAnswerIds: string[] = [];
-    for (const [answerId, score] of votes) {
-        if (score == highestScore) {
-            bestAnswerIds.push(answerId);
-        }
-    }
-
-    const bestAnswerTexts = bestAnswerIds.map(findAnswerText);
-
-    return formatList(bestAnswerTexts, 3);
 }
 
 export function isPollEnded(pollEvent: MatrixEvent, matrixClient: MatrixClient): boolean {
@@ -400,80 +362,4 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             </PollBodyPresentationAttributes>
         );
     }
-}
-export class UserVote {
-    public constructor(
-        public readonly ts: number,
-        public readonly sender: string,
-        public readonly answers: string[],
-    ) {}
-}
-
-function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
-    const response = event.unstableExtensibleEvent as PollResponseEvent;
-    if (!response?.isEquivalentTo(M_POLL_RESPONSE)) {
-        throw new Error("Failed to parse Poll Response Event to determine user response");
-    }
-
-    return new UserVote(event.getTs(), event.getSender()!, response.answerIds);
-}
-
-export function allVotes(voteRelations: Relations): Array<UserVote> {
-    if (voteRelations) {
-        return voteRelations
-            .getRelations()
-            .filter((e) => !e.isRedacted())
-            .map(userResponseFromPollResponseEvent);
-    } else {
-        return [];
-    }
-}
-
-/**
- * Figure out the correct vote for each user.
- * @param userResponses current vote responses in the poll
- * @param {string?} userId The userId for which the `selected` option will apply to.
- *                  Should be set to the current user ID.
- * @param {string?} selected Local echo selected option for the userId
- * @returns a Map of user ID to their vote info
- */
-export function collectUserVotes(
-    userResponses: Array<UserVote>,
-    userId?: string | null,
-    selected?: string | null,
-): Map<string, UserVote> {
-    const userVotes: Map<string, UserVote> = new Map();
-
-    for (const response of userResponses) {
-        const otherResponse = userVotes.get(response.sender);
-        if (!otherResponse || otherResponse.ts < response.ts) {
-            userVotes.set(response.sender, response);
-        }
-    }
-
-    if (selected && userId) {
-        userVotes.set(userId, new UserVote(0, userId, [selected]));
-    }
-
-    return userVotes;
-}
-
-export function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, number> {
-    const collected = new Map<string, number>();
-
-    for (const response of userVotes.values()) {
-        const tempResponse = PollResponseEvent.from(response.answers, "$irrelevant");
-        tempResponse.validateAgainst(pollStart);
-        if (!tempResponse.spoiled) {
-            for (const answerId of tempResponse.answerIds) {
-                if (collected.has(answerId)) {
-                    collected.set(answerId, collected.get(answerId)! + 1);
-                } else {
-                    collected.set(answerId, 1);
-                }
-            }
-        }
-    }
-
-    return collected;
 }
