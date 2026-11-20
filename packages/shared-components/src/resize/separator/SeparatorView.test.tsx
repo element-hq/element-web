@@ -74,6 +74,20 @@ describe("<SeparatorView />", () => {
         expect(vm.onPointerUp).toHaveBeenCalledOnce();
     });
 
+    it("should keep the resize cursor over the whole window while it is dragged", () => {
+        renderPanel({ isCollapsed: false });
+        const separator = screen.getByRole("separator");
+        const overlay = (): CSSStyleDeclaration => getComputedStyle(separator, "::after");
+
+        expect(overlay().content).toBe("none");
+        // The library sets this attribute while the separator is dragged
+        separator.setAttribute("data-separator", "active");
+        expect(overlay().position).toBe("fixed");
+        expect(overlay().cursor).toBe("ew-resize");
+        expect(document.elementFromPoint(0, 0)).toBe(separator);
+        expect(document.elementFromPoint(window.innerWidth - 1, window.innerHeight - 1)).toBe(separator);
+    });
+
     it("should call onDoubleClick on double click", async () => {
         const vm = renderPanel();
         const separator = screen.getByRole("separator");

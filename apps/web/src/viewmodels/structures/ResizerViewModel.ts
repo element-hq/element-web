@@ -141,7 +141,33 @@ export class ResizerViewModel
 
     public onPointerDown = (event: PointerEvent): void => {
         this.mouseClickHandler.onPointerDown(event.clientX, event.clientY);
+        blockWidgetPointerEventsUntilDragEnds();
     };
+}
+
+/**
+ * Widgets (calls included) are iframes in the persisted element container, which sits above the rest of the app. An
+ * iframe under the pointer would take the pointer events away from the separator while it is dragged, so the container
+ * ignores the pointer until the drag ends. This is set on the container rather than by a style rule on the
+ * separator's state, as that rule needs `:has()` and restyles the whole page each time the separator changes state.
+ *
+ * The pointer can be released away from the separator, so the window is listened to. A context menu or the window
+ * losing focus also ends the drag, as the pointer may then be released without a `pointerup`.
+ */
+function blockWidgetPointerEventsUntilDragEnds(): void {
+    const container = document.getElementById("mx_PersistedElement_container");
+    if (!container) return;
+
+    container.style.pointerEvents = "none";
+    const listeners = new AbortController();
+    const restore = (): void => {
+        container.style.pointerEvents = "";
+        listeners.abort();
+    };
+    for (const type of ["pointerup", "pointercancel", "contextmenu"]) {
+        window.addEventListener(type, restore, { capture: true, signal: listeners.signal });
+    }
+    window.addEventListener("blur", restore, { signal: listeners.signal });
 }
 
 /**

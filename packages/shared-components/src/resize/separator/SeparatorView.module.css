@@ -18,6 +18,18 @@
     cursor: ew-resize;
 }
 
+/*
+ * While the separator is dragged, cover the window so that the resize cursor stays wherever the pointer goes.
+ * GroupView disables the library's cursor, which sets it on every element and so restyles the whole page.
+ */
+.separator[data-separator="active"]::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    cursor: ew-resize;
+}
+
 .content {
     display: flex;
     align-items: center;
