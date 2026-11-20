@@ -9,20 +9,28 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import { SetStatusView, type SetStatusViewActions, type SetStatusViewSnapshot } from "./SetStatusView";
+import { Menu } from "@vector-im/compound-web";
+
+import {
+    SetStatusView,
+    type SetStatusViewActions,
+    type SetStatusViewProps,
+    type SetStatusViewSnapshot,
+} from "./SetStatusView";
 import { useMockedViewModel } from "../core/viewmodel";
 import { withViewDocs } from "../../.storybook/withViewDocs";
 
 const SetStatusViewWrapperImpl = ({
     setStatus,
     clearStatus,
+    variant,
     ...snapshot
-}: SetStatusViewSnapshot & SetStatusViewActions): JSX.Element => {
+}: SetStatusViewSnapshot & SetStatusViewActions & Pick<SetStatusViewProps, "variant">): JSX.Element => {
     const vm = useMockedViewModel<SetStatusViewSnapshot, SetStatusViewActions>(snapshot, {
         setStatus,
         clearStatus,
     });
-    return <SetStatusView vm={vm} />;
+    return <SetStatusView vm={vm} variant={variant} />;
 };
 
 const SetStatusViewWrapper = withViewDocs(SetStatusViewWrapperImpl, SetStatusView);
@@ -67,6 +75,25 @@ const MENU_OPEN_A11Y_RULES = [
         enabled: false,
     },
 ];
+
+/**
+ * The `submenu` variant, as used inside a menu such as the user menu.
+ */
+export const InMenu: Story = {
+    render: (args) => (
+        <Menu open={true} onOpenChange={fn()} title="Menu" showTitle={false} trigger={<button>Menu</button>}>
+            <SetStatusViewWrapperImpl {...args} variant="submenu" />
+        </Menu>
+    ),
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
+            },
+        },
+    },
+    tags: ["!autodocs"],
+};
 
 export const Open: Story = {
     parameters: {

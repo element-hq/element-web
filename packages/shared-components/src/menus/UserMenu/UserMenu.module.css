@@ -26,21 +26,6 @@
         padding-block: 0;
         --cpd-menu-padding-block-end: 0;
     }
-    /*
-     * Make the user status dropdown overflow the menu which is otherwise clipped.
-     */
-    [role="listbox"] {
-        position: fixed;
-        inset-block-start: auto;
-        margin-block-start: var(--cpd-space-2x);
-        inline-size: max-content;
-    }
-    /*
-     * Fix the user menu border bottom being drawn over the user status dropdown when it is open.
-     */
-    section.profile > :has([role="listbox"]) {
-        z-index: 2;
-    }
     section.profile {
         margin-left: var(--cpd-space-6x);
         margin-right: var(--cpd-space-6x);
@@ -50,6 +35,17 @@
 
         > * {
             margin: auto;
+        }
+
+        /*
+         * Span the full width of the menu, so the status submenu opens beside the menu's edge
+         * rather than beside the "Set status" link.
+         */
+        > .setStatusRow {
+            display: flex;
+            justify-content: center;
+            align-self: stretch;
+            margin-inline: calc(-1 * var(--cpd-space-6x));
         }
 
         .constrainedText {

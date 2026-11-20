@@ -230,18 +230,19 @@ describe("UserMenuSetStatusViewModel", () => {
         vi.restoreAllMocks();
     });
 
-    it("dispatches ToggleUserMenu and ViewUserSettings on onSetCustomStatusClick", async () => {
+    it("opens user settings without toggling the user menu on onSetCustomStatusClick", async () => {
         const vm = new UserMenuSetStatusViewModel({ client, ownProfileStore: mockOwnProfileStoreInstance });
         tearDownAfterTest(vm);
         vm.onSetCustomStatusClick();
         await waitFor(() => {
-            expect(dispatchSpy).toHaveBeenCalledWith({ action: Action.ToggleUserMenu });
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Account,
                 props: { startCustomStatus: true },
             });
         });
+        // The submenu selection closes the user menu itself; toggling here would reopen it.
+        expect(dispatchSpy).not.toHaveBeenCalledWith({ action: Action.ToggleUserMenu });
     });
 
     it("inherits setStatus from SetStatusViewModel", async () => {
