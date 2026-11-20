@@ -29,7 +29,7 @@ import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import { useOwnDevices } from "../../devices/useOwnDevices";
-import { SettingsSubsection } from "../../shared/SettingsSubsection";
+import { SettingsHeader } from "../../SettingsHeader";
 
 /**
  * The state in the encryption settings tab.
@@ -316,15 +316,16 @@ const OfflineDevice: React.FC = () => {
     if (!dehydratedDeviceId) return null;
 
     return (
-        <SettingsSubsection heading={_t("settings|encryption|offline_device|offline_device")}>
-            <div className="mx_SettingsSubsection_content">
-                <div className="mx_SettingsFlag_label">
-                    {_t("settings|encryption|offline_device|offline_device_enabled")}
-                </div>
-                <div className="mx_SettingsSubsection_text">
-                    {_t("settings|encryption|offline_device|offline_device_description")}
-                </div>
-            </div>
-        </SettingsSubsection>
+        <SettingsSection
+            legacy={false}
+            heading={
+                <SettingsHeader
+                    hasRecommendedTag={false}
+                    label={_t("settings|encryption|offline_device|offline_device")}
+                />
+            }
+            subHeading={_t("settings|encryption|offline_device|offline_device_description")}
+            data-testid="offlineDevice"
+        />
     );
 };
