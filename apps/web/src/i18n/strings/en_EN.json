@@ -2563,7 +2563,8 @@
             "offline_device": {
                 "offline_device": "Offline device",
                 "offline_device_active": "Active",
-                "offline_device_description": "The offline device feature allows you to receive encrypted messages even when you are not signed in to any devices."
+                "offline_device_description": "The offline device feature allows you to receive encrypted messages even when you are not signed in to any devices.",
+                "offline_device_not_available": "Not available"
             },
             "recovery": {
                 "backup_set_up_hint": "To change your recovery key, go to <b>Settings → Encryption → Backup</b>",

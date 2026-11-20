@@ -30,6 +30,7 @@ import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { SettingsHeader } from "../../SettingsHeader";
+import { useDehydrationSupported } from "../../encryption/useDehydrationSupported";
 
 /**
  * The state in the encryption settings tab.
@@ -312,21 +313,51 @@ export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecover
 }
 
 const OfflineDevice: React.FC = () => {
-    const { dehydratedDeviceId } = useOwnDevices();
-    if (!dehydratedDeviceId) return null;
+    let hasRecommendedTag;
+    let annotation;
 
-    const annotation = (
-        <div className="mx_SettingsHeader_annotation mx_SettingsHeader_annotation_active">
-            {_t("settings|encryption|offline_device|offline_device_active")}
-        </div>
-    );
+    const dehydrationSupported = useDehydrationSupported();
+    const { dehydratedDeviceId } = useOwnDevices();
+
+    if (dehydrationSupported === true) {
+        if (dehydratedDeviceId) {
+            // Dehydration is supported and we are using it
+            hasRecommendedTag = false;
+            annotation = (
+                <div className="mx_SettingsHeader_annotation mx_SettingsHeader_annotation_active">
+                    {_t("settings|encryption|offline_device|offline_device_active")}
+                </div>
+            );
+        } else if (dehydratedDeviceId === undefined) {
+            // Dehydration is supported but we are still checking whether we are
+            // using it
+            hasRecommendedTag = false;
+            annotation = undefined;
+        } else {
+            // Dehydration is supported but we are not using it
+            hasRecommendedTag = true;
+            annotation = undefined;
+        }
+    } else if (dehydrationSupported === undefined) {
+        // We are still checking whether dehydration is supported
+        hasRecommendedTag = false;
+        annotation = undefined;
+    } else {
+        // Dehydration is not supported
+        hasRecommendedTag = false;
+        annotation = (
+            <div className="mx_SettingsHeader_annotation">
+                {_t("settings|encryption|offline_device|offline_device_not_available")}
+            </div>
+        );
+    }
 
     return (
         <SettingsSection
             legacy={false}
             heading={
                 <SettingsHeader
-                    hasRecommendedTag={false}
+                    hasRecommendedTag={hasRecommendedTag}
                     label={_t("settings|encryption|offline_device|offline_device")}
                     annotation={annotation}
                 />

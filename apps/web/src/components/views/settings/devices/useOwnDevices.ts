@@ -65,7 +65,14 @@ export enum OwnDevicesError {
 }
 export type DevicesState = {
     devices: DevicesDictionary;
-    dehydratedDeviceId?: string;
+    /**
+     * The ID of the dehydrated device.
+     *
+     * undefined = still checking for a dehydrated device
+     * null = there is no dehydrated device
+     * string = there is a dehydrated device with this ID
+     */
+    dehydratedDeviceId: string | null | undefined;
     pushers: IPusher[];
     localNotificationSettings: Map<string, LocalNotificationSettings>;
     currentDeviceId: string;
@@ -134,7 +141,7 @@ export const useOwnDevices = (): DevicesState => {
             // indicate that the user is using a dehydrated device).  If the user has
             // more than one, that is anomalous, and we show all the devices so that
             // nothing is hidden.
-            setDehydratedDeviceId(dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : undefined);
+            setDehydratedDeviceId(dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : null);
 
             setIsLoadingDeviceList(false);
         } catch (error) {
