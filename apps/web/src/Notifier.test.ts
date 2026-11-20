@@ -64,6 +64,8 @@ import { type ThreadPayload } from "./dispatcher/payloads/ThreadPayload";
 import { Action } from "./dispatcher/actions";
 import { addReplyToMessageContent } from "./utils/Reply";
 import type * as audioCompat from "./audio/compat";
+import { shouldShowComponent } from "./customisations/helpers/UIComponents";
+import { UIComponent } from "./settings/UIFeature";
 
 vi.mock("./utils/notifications", async () => ({
     ...(await vi.importActual<typeof notificationsUtils>("./utils/notifications")),
@@ -74,6 +76,8 @@ vi.mock("./audio/compat", async () => ({
     ...(await vi.importActual<typeof audioCompat>("./audio/compat")),
     createAudioContext: vi.fn(),
 }));
+
+vi.mock("./customisations/helpers/UIComponents", () => ({ shouldShowComponent: vi.fn() }));
 
 const settingsStoreGetValue = SettingsStore.getValue;
 
@@ -1013,6 +1017,30 @@ describe("Notifier", () => {
         it("should show a pop-up for an audio message", () => {
             notifier.evaluateEvent(mkAudioEvent());
             expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("shouldShowPrompt", () => {
+        beforeEach(() => {
+            localStorage.removeItem("notifications_hidden");
+            vi.spyOn(notifier, "isEnabled").mockReturnValue(false);
+            vi.spyOn(mockClient.pushProcessor, "getPushRuleById").mockReturnValue({
+                rule_id: ".m.rule.master",
+                default: true,
+                enabled: false,
+                actions: [],
+            });
+            vi.mocked(shouldShowComponent).mockReturnValue(true);
+        });
+
+        it("should show the prompt when notifications are disabled", () => {
+            expect(notifier.shouldShowPrompt()).toBe(true);
+        });
+
+        it("should not show the prompt when a module hides the notifications toast", () => {
+            vi.mocked(shouldShowComponent).mockReturnValue(false);
+            expect(notifier.shouldShowPrompt()).toBe(false);
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.OnboardingToasts);
         });
     });
 
