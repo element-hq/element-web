@@ -96,7 +96,7 @@ describe("GalleryComposerViewModel", () => {
                 canAddMore: true,
                 countLabel: `2 of ${MAX_GALLERY_ITEMS} items`,
                 notice: undefined,
-                hint: "Sent as a gallery. People using older apps will only see your text.",
+                hint: "You've added more than one image or video, so this will be sent as a gallery. People using older apps will only see your text, not the images.",
             });
             vm.dispose();
         });
@@ -546,7 +546,8 @@ describe("GalleryComposerViewModel", () => {
     });
 
     describe("hint for older apps", () => {
-        const hint = "Sent as a gallery. People using older apps will only see your text.";
+        const hint =
+            "You've added more than one image or video, so this will be sent as a gallery. People using older apps will only see your text, not the images.";
 
         it("is given once there are several attachments, which are sent as a gallery", () => {
             const vm = new GalleryComposerViewModel({ items: [] });

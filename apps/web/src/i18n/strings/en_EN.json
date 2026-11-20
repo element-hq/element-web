@@ -1302,7 +1302,7 @@
                 "one": "%(count)s of %(max)s item",
                 "other": "%(count)s of %(max)s items"
             },
-            "hint_old_clients": "Sent as a gallery. People using older apps will only see your text.",
+            "hint_old_clients": "You've added more than one image or video, so this will be sent as a gallery. People using older apps will only see your text, not the images.",
             "notice_too_large": "Some files were left out because they are larger than the upload limit of %(limit)s.",
             "notice_too_many": "A gallery can hold up to %(max)s items. The rest were left out.",
             "notice_unsupported": "Only images and videos can be added. Other files were left out."

@@ -118,7 +118,9 @@ export const Disabled: Story = {
 
 /** A warning about how the attachments will be sent. */
 export const WithHint: Story = {
-    args: { hint: "Sent as a gallery. People using older apps will only see your text." },
+    args: {
+        hint: "You've added more than one image or video, so this will be sent as a gallery. People using older apps will only see your text, not the images.",
+    },
 };
 
 /** Each preview opens the item at full size, as it does in the app. */
