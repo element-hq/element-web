@@ -20,8 +20,10 @@ import {
 } from "./index";
 import styles from "./EventTileView.module.css";
 import { MockViewModel } from "../../../../core/viewmodel";
+import { MediaBody } from "../body/MediaBody";
 import { ReactionsRowView, type ReactionsRowViewSnapshot } from "../reactions/ReactionsRow";
 import reactionStyles from "../reactions/ReactionsRow/ReactionsRow.module.css";
+import { MessageTimestampView, type MessageTimestampViewSnapshot } from "../timestamp/MessageTimestampView";
 
 const renderState: EventTileViewProps["root"] = {
     id: "event-line-1",
@@ -778,6 +780,43 @@ describe("EventTileView add-reaction control", () => {
     });
 });
 
+describe("EventTileView bubble layout media corners", () => {
+    const corners = (element: Element): string[] => {
+        const style = getComputedStyle(element);
+        return [
+            style.borderStartStartRadius,
+            style.borderStartEndRadius,
+            style.borderEndEndRadius,
+            style.borderEndStartRadius,
+        ];
+    };
+
+    it.each<[string, Partial<EventTileViewRootState>]>([
+        ["another user's first message", { isOwnEvent: false }],
+        ["another user's follow-up", { isOwnEvent: false, continuation: true }],
+        ["another user's last message", { isOwnEvent: false, lastInSection: true }],
+        ["another user's last follow-up", { isOwnEvent: false, continuation: true, lastInSection: true }],
+        ["an own first message", { isOwnEvent: true }],
+        ["an own follow-up", { isOwnEvent: true, continuation: true }],
+        ["an own last message", { isOwnEvent: true, lastInSection: true }],
+        ["an own last follow-up", { isOwnEvent: true, continuation: true, lastInSection: true }],
+    ])("rounds the media body of %s like a text bubble", (_, state) => {
+        // Media lines have no background of their own, so the media body has to carry the bubble's corners.
+        render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, state: { isOwnEvent: false, hasReply: false, ...state } },
+                    line: { media: true },
+                    slots: { body: <MediaBody data-testid="media-body">Recording.ogg</MediaBody> },
+                })}
+            />,
+            { presentation: { layout: "bubble" } },
+        );
+
+        expect(corners(screen.getByTestId("media-body"))).toEqual(corners(screen.getByTestId("event-tile-line")));
+    });
+});
+
 describe("EventTileView bubble layout reactions", () => {
     const reactionsSnapshot: ReactionsRowViewSnapshot = {
         ariaLabel: "Reactions",
@@ -818,5 +857,42 @@ describe("EventTileView bubble layout reactions", () => {
 
     it("keeps the add-reaction control after the reactions in another user's bubble", () => {
         expect(getComputedStyle(renderAddReactionButton(false)).order).toBe("0");
+    });
+});
+
+describe("EventTileView bubble layout picture time", () => {
+    const renderMediaLine = (line: EventTileViewLine): HTMLElement => {
+        const timestampVm = new MockViewModel<MessageTimestampViewSnapshot>({
+            ts: "12:34",
+            tsSentAt: "Tuesday, 4 August 2026 at 12:34",
+            inhibitTooltip: true,
+        });
+        render(
+            <EventTileView
+                {...createProps({
+                    root: { ...renderState, state: { isOwnEvent: false, hasReply: false } },
+                    line,
+                    slots: {
+                        body: <span data-testid="body">Body</span>,
+                        timestamp: <MessageTimestampView vm={timestampVm} />,
+                    },
+                })}
+            />,
+            { presentation: { layout: "bubble" } },
+        );
+
+        return screen.getByText("12:34");
+    };
+
+    it("draws a dark backdrop behind the time of a picture", () => {
+        // The time sits on top of the picture, so it needs its own backdrop to stay readable.
+        const timestamp = getComputedStyle(renderMediaLine({ media: true, image: true }));
+
+        expect(timestamp.backgroundColor).toBe("rgba(0, 0, 0, 0.6)");
+        expect(timestamp.color).toBe("rgb(255, 255, 255)");
+    });
+
+    it("keeps the plain time on other media", () => {
+        expect(getComputedStyle(renderMediaLine({ media: true })).backgroundColor).toBe("rgba(0, 0, 0, 0)");
     });
 });
