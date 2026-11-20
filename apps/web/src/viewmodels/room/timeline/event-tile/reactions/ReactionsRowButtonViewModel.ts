@@ -14,6 +14,7 @@ import {
 
 import { mediaFromMxc } from "../../../../../customisations/Media";
 import { _t } from "../../../../../languageHandler";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import { formatList } from "../../../../../utils/FormattingUtils";
 import dis from "../../../../../dispatcher/dispatcher";
 import { ReactionsRowButtonTooltipViewModel } from "./ReactionsRowButtonTooltipViewModel";
@@ -108,11 +109,19 @@ export class ReactionsRowButtonViewModel
         }
 
         let imageSrc: string | undefined;
+        let animatedImageSrc: string | undefined;
         let imageAlt: string | undefined;
         if (customReactionImagesEnabled && content.startsWith("mxc://")) {
-            const resolved = mediaFromMxc(content).srcHttp;
+            // A thumbnail keeps the size of the download bounded, unlike the original media.
+            const media = mediaFromMxc(content);
+            const autoplay = SettingsStore.getValue("autoplayGifs");
+            const resolved = media.getThumbnailOfSourceHttp(16, 16, "scale", autoplay);
             if (resolved) {
                 imageSrc = resolved;
+                // Without autoplay, the image only animates while hovered.
+                animatedImageSrc = autoplay
+                    ? undefined
+                    : (media.getThumbnailOfSourceHttp(16, 16, "scale", true) ?? undefined);
                 imageAlt = customReactionName || _t("timeline|reactions|custom_reaction_fallback_label");
             }
         }
@@ -125,6 +134,7 @@ export class ReactionsRowButtonViewModel
             isSelected: !!myReactionEvent,
             isDisabled: !!disabled,
             imageSrc,
+            animatedImageSrc,
             imageAlt,
             tooltipVm,
         };
@@ -156,6 +166,7 @@ export class ReactionsRowButtonViewModel
             nextSnapshot.isSelected === currentSnapshot.isSelected &&
             nextSnapshot.isDisabled === currentSnapshot.isDisabled &&
             nextSnapshot.imageSrc === currentSnapshot.imageSrc &&
+            nextSnapshot.animatedImageSrc === currentSnapshot.animatedImageSrc &&
             nextSnapshot.imageAlt === currentSnapshot.imageAlt
         ) {
             return;

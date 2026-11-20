@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { getHttpUriForMxc, type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -108,14 +108,30 @@ class MediaImplementation {
      * @param {number} width The desired width of the thumbnail.
      * @param {number} height The desired height of the thumbnail.
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
+     * @param {boolean} animated Whether to ask the server to keep the animation of animated media.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null {
+    public getThumbnailOfSourceHttp(
+        width: number,
+        height: number,
+        mode: ResizeMethod = "scale",
+        animated = false,
+    ): string | null {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
-        // eslint-disable-next-line no-restricted-properties
-        return this.client.mxcUrlToHttp(this.srcMxc, width, height, mode, false, true);
+        // `mxcUrlToHttp` can't request animated thumbnails. Static ones leave `animated` out of the URL entirely.
+        return getHttpUriForMxc(
+            this.client.baseUrl,
+            this.srcMxc,
+            width,
+            height,
+            mode,
+            false,
+            true,
+            undefined,
+            animated || undefined,
+        );
     }
 
     /**

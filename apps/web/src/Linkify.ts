@@ -33,6 +33,7 @@ import { Action } from "./dispatcher/actions";
 import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import SettingsStore from "./settings/SettingsStore";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -92,7 +93,10 @@ export const transformTags = {
         if (requestedHeight) {
             attribs.style += "height: 100%;";
         }
-        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
+        // Custom emoticons are often animated, so ask for animated thumbnails for them,
+        // unless the user turned animations off.
+        const animated = "data-mx-emoticon" in attribs && SettingsStore.getValue("autoplayGifs");
+        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height, "scale", animated)!;
         return { tagName, attribs };
     },
     "code": function (tagName: string, attribs: HtmlSanitizeAttributes) {

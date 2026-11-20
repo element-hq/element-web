@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { waitFor } from "test-utils-rtl";
-import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkEvent, tearDownAfterTest } from "test-utils";
 
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
@@ -68,7 +68,6 @@ vi.mock("../../../../RoomNotifs", () => ({
 
 const roomId = "!room:example.org";
 const userId = "@alice:example.org";
-const clientMxcUrlToHttpMocks = new WeakMap<MatrixClient, Mock>();
 
 class TestRoom extends EventEmitter {
     public roomId = roomId;
@@ -87,22 +86,10 @@ class TestThread extends EventEmitter {
 }
 
 function makeClient(decryptEventIfNeeded = vi.fn().mockResolvedValue(undefined)): MatrixClient {
-    const mxcUrlToHttp = vi.fn(
-        (mxc: string, width?: number, height?: number, resizeMethod?: string) =>
-            `https://matrix.example.org/_matrix/media/${mxc}/${width}x${height}/${resizeMethod}`,
-    );
-    const cli = {
+    return {
+        baseUrl: "https://matrix.example.org",
         decryptEventIfNeeded,
-        mxcUrlToHttp,
     } as unknown as MatrixClient;
-    clientMxcUrlToHttpMocks.set(cli, mxcUrlToHttp);
-    return cli;
-}
-
-function getMxcUrlToHttpMock(cli: MatrixClient): Mock {
-    const mock = clientMxcUrlToHttpMocks.get(cli);
-    if (!mock) throw new Error("Missing mxcUrlToHttp mock for test client");
-    return mock;
 }
 
 function makeMember(name: string, senderUserId = userId, mxcAvatarUrl?: string): RoomMember {
@@ -776,7 +763,7 @@ describe("ThreadMessagePreviewViewModel", () => {
         const room = new TestRoom() as TestRoom & Room;
         const currentMember = makeMember("Current Alice", userId, "mxc://example.org/avatar");
         room.getMember.mockReturnValue(currentMember);
-        const { vm, cli } = makePreviewVm({
+        const { vm } = makePreviewVm({
             room,
             useOnlyCurrentProfiles: true,
             thread: Object.assign(new TestThread(room), {
@@ -790,10 +777,9 @@ describe("ThreadMessagePreviewViewModel", () => {
             expect.objectContaining({
                 id: userId,
                 name: "Current Alice",
-                src: "https://matrix.example.org/_matrix/media/mxc://example.org/avatar/24x24/crop",
+                src: "https://matrix.example.org/_matrix/media/v3/thumbnail/example.org/avatar?width=24&height=24&method=crop&allow_redirect=true",
             }),
         );
-        expect(getMxcUrlToHttpMock(cli)).toHaveBeenCalledWith("mxc://example.org/avatar", 24, 24, "crop", false, true);
     });
 
     it("updates the avatar and sender when the current room member profile changes", async () => {
@@ -817,7 +803,7 @@ describe("ThreadMessagePreviewViewModel", () => {
             expect.objectContaining({
                 id: userId,
                 name: "Current Alice",
-                src: "https://matrix.example.org/_matrix/media/mxc://example.org/current-avatar/24x24/crop",
+                src: "https://matrix.example.org/_matrix/media/v3/thumbnail/example.org/current-avatar?width=24&height=24&method=crop&allow_redirect=true",
             }),
         );
     });
@@ -853,7 +839,7 @@ describe("ThreadMessagePreviewViewModel", () => {
     it("uses current room profiles in thread timelines and suppresses avatar URLs in low-bandwidth mode", async () => {
         const room = new TestRoom() as TestRoom & Room;
         room.getMember.mockReturnValue(makeMember("Thread Alice", userId, "mxc://example.org/avatar"));
-        const { vm, cli } = makePreviewVm({
+        const { vm } = makePreviewVm({
             room,
             timelineRenderingType: TimelineRenderingType.Thread,
             lowBandwidth: true,
@@ -871,7 +857,6 @@ describe("ThreadMessagePreviewViewModel", () => {
                 src: undefined,
             }),
         );
-        expect(getMxcUrlToHttpMock(cli)).not.toHaveBeenCalled();
     });
 
     it("falls back to historical sender profiles when no current member exists", async () => {

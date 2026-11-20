@@ -180,6 +180,9 @@ describe("HTMLExport", () => {
     function mockMxc(mxc: string, body: string) {
         const media = mediaFromMxc(mxc, client);
         fetchMock.get(media.srcHttp!, body);
+        // Room and user avatars are fetched as thumbnails.
+        fetchMock.get(media.getThumbnailOfSourceHttp(32, 32, "crop")!, body);
+        fetchMock.get(media.getThumbnailOfSourceHttp(30, 30, "crop")!, body);
     }
 
     async function mockReactionForMessage(message: IRoomEvent): Promise<MatrixEvent> {
@@ -278,7 +281,7 @@ describe("HTMLExport", () => {
     it("should include the room's avatar", async () => {
         mockMessages(EVENT_MESSAGE);
 
-        const mxc = "mxc://www.example.com/avatars/nice-room.jpeg";
+        const mxc = "mxc://www.example.com/nice-room";
         const avatar = "011011000110111101101100";
         vi.spyOn(room, "getMxcAvatarUrl").mockReturnValue(mxc);
         mockMxc(mxc, avatar);
@@ -365,10 +368,10 @@ describe("HTMLExport", () => {
     it("should include avatars", async () => {
         mockMessages(EVENT_MESSAGE);
 
-        vi.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar.bmp");
+        vi.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar");
 
         const avatarContent = "this is a bitmap all the pixels are red :^-)";
-        mockMxc("mxc://example.org/avatar.bmp", avatarContent);
+        mockMxc("mxc://example.org/avatar", avatarContent);
 
         const exporter = new HTMLExporter(
             room,
@@ -396,8 +399,8 @@ describe("HTMLExport", () => {
         const userId = '@alice"><img src=x onerror=alert(1)/>:example.com';
         mockMessages({ ...EVENT_MESSAGE, sender: userId });
 
-        vi.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar.bmp");
-        mockMxc("mxc://example.org/avatar.bmp", "an avatar");
+        vi.spyOn(RoomMember.prototype, "getMxcAvatarUrl").mockReturnValue("mxc://example.org/avatar");
+        mockMxc("mxc://example.org/avatar", "an avatar");
 
         const exporter = new HTMLExporter(
             room,
