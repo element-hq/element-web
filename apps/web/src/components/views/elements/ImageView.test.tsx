@@ -11,6 +11,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import React from "react";
 import { render, fireEvent, waitFor } from "test-utils-rtl";
+import userEvent from "@testing-library/user-event";
 import fetchMock from "@fetch-mock/vitest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
@@ -30,6 +31,20 @@ describe("<ImageView />", () => {
     it("renders correctly", () => {
         const { container } = render(<ImageView src="https://example.com/image.png" onFinished={vi.fn()} />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("should close on Escape when the lightbox itself has focus", async () => {
+        const onFinished = vi.fn();
+        const { getByRole } = render(<ImageView src="https://example.com/image.png" onFinished={onFinished} />);
+        const lightbox = getByRole("dialog");
+        // Clicking non-interactive content, like the image, focuses the nearest focusable ancestor. Unless that
+        // is the lightbox, focus falls back to the body, where the lightbox never sees the Escape key.
+        expect(lightbox).toHaveAttribute("tabindex", "-1");
+        lightbox.focus();
+        expect(lightbox).toHaveFocus();
+
+        await userEvent.keyboard("{Escape}");
+        expect(onFinished).toHaveBeenCalled();
     });
 
     it("should download on click", async () => {

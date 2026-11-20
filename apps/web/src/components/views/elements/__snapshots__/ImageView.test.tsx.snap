@@ -12,6 +12,7 @@ exports[`<ImageView /> > renders correctly 1`] = `
     class="mx_ImageView"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_ImageView_panel"
