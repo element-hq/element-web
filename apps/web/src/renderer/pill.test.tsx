@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import React from "react";
 import { render, type RenderResult } from "test-utils-rtl";
 import {
@@ -27,8 +27,10 @@ import { stubClient, withClientContextRenderOptions } from "test-utils";
 import { keywordPillRenderer, mentionPillRenderer, combineRenderers } from "./index";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import DMRoomMap from "../utils/DMRoomMap";
+import SettingsStore from "../settings/SettingsStore";
 
 describe("mention pills", () => {
+    afterEach(() => vi.mocked(SettingsStore.getValue).mockRestore?.());
     let cli: MatrixClient;
     let room: Room;
     const roomId = "!room:id";
@@ -111,6 +113,58 @@ describe("mention pills", () => {
             withClientContextRenderOptions(cli),
         );
     }
+
+    it.each(["", "ignored"])("renders explicit links as ordinary anchors (value %j)", (value) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
+        for (const href of [
+            "https://matrix.to/#/@alice:example.org",
+            "https://matrix.to/#/#support:example.org",
+            "https://matrix.to/#/!room:example.org/$event",
+            "matrix:u/alice:example.org",
+            "matrix:r/support:example.org",
+        ]) {
+            const { container, unmount } = renderPills(
+                `<a data-org.matrix.msc4550.link="${value}" href="${href}">${href}</a>`,
+            );
+            expect(container.querySelector(".mx_Pill")).toBeNull();
+            expect(container.querySelector("a")?.textContent).toBe(href);
+            unmount();
+        }
+    });
+
+    it.each(["Ask @room for help", "Ask <strong>@room</strong> for help"])(
+        "keeps @room text inside explicit link labels (%s)",
+        (label) => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting) => setting === "feature_msc4550_explicit_links",
+            );
+            const { container } = renderPills(
+                `<a href="https://example.org" data-org.matrix.msc4550.link>${label}</a>`,
+            );
+            expect(container.querySelector(".mx_Pill")).toBeNull();
+            expect(container.querySelector("a")?.textContent).toBe("Ask @room for help");
+        },
+    );
+
+    it("still renders room mentions outside explicit links", () => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4550_explicit_links",
+        );
+        const { container } = renderPills(
+            '<a href="https://example.org" data-org.matrix.msc4550.link>Ask @room for help</a> @room',
+        );
+        expect(container.querySelector("a .mx_Pill")).toBeNull();
+        expect(container.querySelectorAll(".mx_AtRoomPill")).toHaveLength(1);
+    });
+
+    it("recognizes @room inside marked links when the Labs flag is disabled", () => {
+        const { container } = renderPills(
+            '<a href="https://example.org" data-org.matrix.msc4550.link>Ask @room for help</a>',
+        );
+        expect(container.querySelector("a .mx_AtRoomPill")).not.toBeNull();
+    });
 
     it("should do nothing for empty element", () => {
         const input = "<div></div>";
