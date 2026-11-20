@@ -362,7 +362,9 @@ const OfflineDevice: React.FC<OfflineDeviceProps> = ({ dehydrationSupported, deh
             annotation = undefined;
         } else {
             // Dehydration is supported but we are not using it
-            hasRecommendedTag = true;
+            // TODO: for #29080 change this to true:
+            // hasRecommendedTag = true;
+            hasRecommendedTag = false;
             annotation = undefined;
         }
     } else if (dehydrationSupported === undefined) {

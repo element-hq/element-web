@@ -134,7 +134,9 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         false,
     );
 
-    const showEnableDehydrationIndicator = dehydrationSupported && dehydratedDeviceId === null;
+    // TODO: for #29080 use this:
+    // const showEnableDehydrationIndicator = dehydrationSupported && dehydratedDeviceId === null;
+    const showEnableDehydrationIndicator = false;
 
     const showEncryptionIndicator = showSetupRecoveryIndicator || showEnableDehydrationIndicator;
 
