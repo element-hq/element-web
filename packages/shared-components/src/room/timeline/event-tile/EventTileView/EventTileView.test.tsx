@@ -820,3 +820,74 @@ describe("EventTileView bubble layout reactions", () => {
         expect(getComputedStyle(renderAddReactionButton(false)).order).toBe("0");
     });
 });
+
+describe("EventTileView bubble layout decryption failure", () => {
+    const renderDecryptionFailure = (replyChain?: React.ReactNode): void => {
+        render(
+            <EventTileView
+                {...createProps({
+                    root: {
+                        ...renderState,
+                        state: { isOwnEvent: false, encryptionFailure: true, hasReply: replyChain !== undefined },
+                    },
+                    slots: {
+                        padlock: <span data-testid="padlock" style={{ display: "block", width: 14, height: 14 }} />,
+                        replyChain,
+                        body: <div data-testid="body">Unable to decrypt message</div>,
+                    },
+                })}
+            />,
+            { presentation: { layout: "bubble" } },
+        );
+    };
+
+    it("puts the shield beside the message on the bubble's first row", () => {
+        renderDecryptionFailure();
+        const line = screen.getByTestId("event-tile-line");
+        const shield = screen.getByTestId("padlock").getBoundingClientRect();
+        const body = screen.getByTestId("body").getBoundingClientRect();
+
+        expect(body.top).toBe(line.getBoundingClientRect().top + parseFloat(getComputedStyle(line).paddingTop));
+        expect(body.left).toBeGreaterThan(shield.right);
+        expect(shield.top + shield.height / 2).toBeCloseTo(body.top + body.height / 2, 0);
+    });
+
+    it("puts a quoted reply above the shield and the message", () => {
+        renderDecryptionFailure(<div data-testid="reply">Quoted message</div>);
+        const reply = screen.getByTestId("reply").getBoundingClientRect();
+        const shield = screen.getByTestId("padlock").getBoundingClientRect();
+        const body = screen.getByTestId("body").getBoundingClientRect();
+
+        expect(body.top).toBeGreaterThan(reply.bottom);
+        expect(body.left).toBeGreaterThan(shield.right);
+        expect(shield.top + shield.height / 2).toBeCloseTo(body.top + body.height / 2, 0);
+    });
+
+    it("lays out a message without a shield like any other bubble, as in ThreadView", () => {
+        const renderThreadTile = (encryptionFailure: boolean): { line: DOMRect; body: DOMRect } => {
+            const { container } = render(
+                <EventTileView
+                    {...createProps({
+                        root: {
+                            ...renderState,
+                            shape: "Thread",
+                            state: { isOwnEvent: false, encryptionFailure, hasReply: false },
+                        },
+                        slots: { body: <div data-testid="thread-body">Unable to decrypt message</div> },
+                    })}
+                />,
+                { presentation: { layout: "bubble" } },
+            );
+
+            return {
+                line: container.querySelector(`.${styles.line}`)!.getBoundingClientRect(),
+                body: container.querySelector("[data-testid='thread-body']")!.getBoundingClientRect(),
+            };
+        };
+        const message = renderThreadTile(false);
+        const failure = renderThreadTile(true);
+
+        expect(failure.body.left).toBe(message.body.left);
+        expect(failure.line.height).toBe(message.line.height);
+    });
+});
