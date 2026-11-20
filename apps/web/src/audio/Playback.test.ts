@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { createAudioContext, decodeOgg } from "./compat";
 import { Playback, PlaybackState } from "./Playback";
@@ -43,6 +44,7 @@ describe("Playback", () => {
         decodeAudioData: vi.fn(),
         suspend: vi.fn(),
         resume: vi.fn(),
+        close: vi.fn().mockResolvedValue(undefined),
         createBufferSource: vi.fn().mockReturnValue(mockAudioBufferSourceNode),
         createMediaElementSource: vi.fn().mockReturnValue(mockMediaElementSourceNode),
         currentTime: 1337,
@@ -221,7 +223,7 @@ describe("Playback", () => {
         });
     });
 
-    describe("audio larger than 5mb", () => {
+    describe("audio larger than 5mb or longer than 5 minutes", () => {
         // Anything over 5mb is played through an <audio /> element rather than a decoded buffer
         const largeBuffer = (): ArrayBuffer => new ArrayBuffer(5 * 1024 * 1024 + 1);
 
@@ -296,6 +298,18 @@ describe("Playback", () => {
             playback.destroy();
 
             expect(element.listenerCount("ended")).toEqual(0);
+            await vi.waitFor(() => expect(mockAudioContext.close).toHaveBeenCalled());
+        });
+
+        it("uses the media element for a small file with a long duration", async () => {
+            const playback = new Playback(new ArrayBuffer(1024));
+            playback.clockInfo.populatePlaceholdersFrom({
+                getContent: () => ({ info: { duration: 30 * 60 * 1000 } }),
+            } as unknown as MatrixEvent);
+            await playback.prepare();
+
+            expect(document.createElement).toHaveBeenCalledWith("AUDIO");
+            expect(mockAudioContext.decodeAudioData).not.toHaveBeenCalled();
         });
     });
 });
