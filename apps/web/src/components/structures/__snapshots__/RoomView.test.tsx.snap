@@ -1180,6 +1180,7 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Video call"
+            aria-labelledby="react-use-id-1"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -1191,7 +1192,6 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-1"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1207,6 +1207,7 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
+            aria-labelledby="react-use-id-2"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -1218,7 +1219,6 @@ exports[`RoomView > should hide the composer when hideComposer=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-2"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1733,6 +1733,7 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           <button
             aria-disabled="false"
             aria-label="Video call"
+            aria-labelledby="react-use-id-1"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -1744,7 +1745,6 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-1"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1760,6 +1760,7 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
           <button
             aria-disabled="false"
             aria-label="Voice call"
+            aria-labelledby="react-use-id-2"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -1771,7 +1772,6 @@ exports[`RoomView > should hide the pinned message banner when hidePinnedMessage
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-2"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2216,6 +2216,7 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Video call"
+            aria-labelledby="react-use-id-1"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -2227,7 +2228,6 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-1"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2243,6 +2243,7 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
           <button
             aria-disabled="false"
             aria-label="Voice call"
+            aria-labelledby="react-use-id-2"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -2254,7 +2255,6 @@ exports[`RoomView > should hide the right panel when hideRightPanel=true 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-2"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2699,6 +2699,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Video call"
+            aria-labelledby="react-use-id-1"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -2710,7 +2711,6 @@ exports[`RoomView > should not display the timeline when the room encryption is 
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-1"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2726,6 +2726,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Voice call"
+            aria-labelledby="react-use-id-2"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -2737,7 +2738,6 @@ exports[`RoomView > should not display the timeline when the room encryption is 
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-2"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2938,6 +2938,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Video call"
+            aria-labelledby="react-use-id-2"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -2949,7 +2950,6 @@ exports[`RoomView > should not display the timeline when the room encryption is 
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-2"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -2965,6 +2965,7 @@ exports[`RoomView > should not display the timeline when the room encryption is 
           <button
             aria-disabled="false"
             aria-label="Voice call"
+            aria-labelledby="react-use-id-3"
             class="_icon-button"
             data-kind="primary"
             role="button"
@@ -2976,7 +2977,6 @@ exports[`RoomView > should not display the timeline when the room encryption is 
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
-                aria-labelledby="react-use-id-3"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"

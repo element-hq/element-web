@@ -243,6 +243,17 @@ describe("RoomHeader", () => {
         expect(voiceButton).toBeInTheDocument();
     });
 
+    it("anchors each call button's tooltip on the button rather than its icon", () => {
+        mockRoomMembers(room, 2);
+        render(<RoomHeader room={room} />, getWrapper());
+
+        for (const name of ["Video call", "Voice call"]) {
+            const button = screen.getByRole("button", { name });
+            expect(document.getElementById(button.getAttribute("aria-labelledby")!)).toHaveTextContent(name);
+            expect(button.querySelector("[aria-labelledby]")).toBeNull();
+        }
+    });
+
     it("should not show voice call button in managed hybrid environments", async () => {
         mockRoomMembers(room, 2);
         vi.spyOn(SdkConfig, "get").mockReturnValue({ widget_build_url: "https://widget.build.url" });
@@ -803,6 +814,38 @@ describe("RoomHeader", () => {
             const legacyCallButton = screen.getByRole("menuitem", { name: "Legacy Call" });
             expect(elementCallButton).toBeInTheDocument();
             expect(legacyCallButton).toBeInTheDocument();
+        });
+
+        it("anchors the tooltips of the call menus' buttons on the buttons", () => {
+            mockRoomMembers(room, 2);
+            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation(
+                (key) => key === ElementCallMemberEventType.name,
+            );
+            render(<RoomHeader room={room} />, getWrapper());
+
+            for (const name of ["Video call", "Voice call"]) {
+                const button = screen.getByRole("button", { name });
+                expect(button).toHaveAttribute("aria-haspopup", "menu");
+                expect(document.getElementById(button.getAttribute("aria-labelledby")!)).toHaveTextContent(name);
+                expect(button.querySelector("[aria-labelledby]")).toBeNull();
+            }
+        });
+
+        it("shows why voice calls are disabled in the voice call button's tooltip", () => {
+            mockRoomMembers(room, 2);
+            SdkConfig.add({
+                element_call: {
+                    use_exclusively: true,
+                },
+            });
+            // disallow element calls
+            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(false);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const reason = "You do not have permission to start voice calls";
+            const button = screen.getByRole("button", { name: reason });
+            expect(button).toHaveAttribute("aria-disabled", "true");
+            expect(document.getElementById(button.getAttribute("aria-labelledby")!)).toHaveTextContent(reason);
         });
     });
 
