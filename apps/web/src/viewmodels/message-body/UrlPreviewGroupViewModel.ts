@@ -120,9 +120,15 @@ export class UrlPreviewGroupViewModel
     private mediaVisible: boolean;
 
     /**
-     * Has the user opted to render this individual preview, or hide it.
+     * `false` when the older storage format hid every preview of this message at once. Kept so
+     * those stay hidden.
      */
     private urlPreviewEnabledByUser: boolean;
+
+    /**
+     * Links in this message whose previews the user has closed.
+     */
+    private hiddenLinks: Set<string>;
 
     /**
      * Called when the user clicks on the preview thumbnail.
@@ -140,13 +146,32 @@ export class UrlPreviewGroupViewModel
         this.storageKey = `hide_preview_${props.mxEvent.getId()}`;
         this.urlPreviewVisible = props.visible;
         this.mediaVisible = props.mediaVisible;
-        this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(this.storageKey) !== "1";
+        const stored = globalThis.localStorage.getItem(this.storageKey);
+        this.urlPreviewEnabledByUser = stored !== "1";
+        this.hiddenLinks = UrlPreviewGroupViewModel.parseHiddenLinks(stored);
         this.fetcher = new UrlPreviewFetcher(
             props.client,
             props.mxEvent.getTs(),
             props.showTooltips,
             props.moduleUrlPreviewApi,
         );
+    }
+
+    /**
+     * Reads the stored list of closed links. The older all-or-nothing flag and anything malformed
+     * count as nothing closed.
+     */
+    private static parseHiddenLinks(stored: string | null): Set<string> {
+        if (!stored || stored === "1") return new Set();
+        try {
+            const parsed: unknown = JSON.parse(stored);
+            if (Array.isArray(parsed)) {
+                return new Set(parsed.filter((link): link is string => typeof link === "string"));
+            }
+        } catch {
+            // Not JSON: nothing closed.
+        }
+        return new Set();
     }
 
     /**
@@ -181,6 +206,8 @@ export class UrlPreviewGroupViewModel
         }
 
         const loadMedia = this.visibility === PreviewVisibility.Visible;
+        // Closed previews are left out before the limit applies, so they do not use up a slot.
+        const links = this.links.filter((link) => !this.hiddenLinks.has(link));
         let previews: (UrlPreview | null)[] | undefined;
 
         if (this.visibility <= PreviewVisibility.UserHidden) {
@@ -204,6 +231,7 @@ export class UrlPreviewGroupViewModel
                 previews = (
                     await Promise.all(
                         bundledPreviews
+                            .filter((preview) => !this.hiddenLinks.has(preview.matched_url))
                             .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                             .map((preview) =>
                                 this.fetcher
@@ -217,17 +245,17 @@ export class UrlPreviewGroupViewModel
 
         if (urlPreviewKind === "fetchonly" || urlPreviewKind === "preferbundled") {
             previews ??= await Promise.all(
-                this.links
+                links
                     .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
                     .map((link) => this.fetcher.fetchPreview(link, loadMedia, this.props.mxEvent).catch((_) => null)),
             );
         }
 
         this.snapshot.merge({
-            previews: (previews ?? []).filter((p) => !!p),
-            totalPreviewCount: this.links.length,
+            previews: (previews ?? []).filter((p): p is UrlPreview => !!p && !this.hiddenLinks.has(p.link)),
+            totalPreviewCount: links.length,
             previewsLimited: this.limitPreviews,
-            overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
+            overPreviewLimit: links.length > MAX_PREVIEWS_WHEN_LIMITED,
         });
     }
 
@@ -284,26 +312,28 @@ export class UrlPreviewGroupViewModel
     public readonly onShowClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
         this.urlPreviewEnabledByUser = true;
+        this.hiddenLinks.clear();
         globalThis.localStorage?.removeItem(this.storageKey);
         return this.computeSnapshot();
     };
 
     /**
-     * Called when the user has requsted previews be hidden. Will take precedence
-     * over other settings.
+     * Called when the user closes one preview. Only that preview is hidden, and the choice is
+     * remembered for this message.
      *
+     * @param link The previewed link to hide.
      * @returns A promise that completes when the snapshot has been recomputed.
      */
-    public readonly onHideClick = (): Promise<void> => {
+    public readonly onHideClick = (link: string): Promise<void> => {
+        this.hiddenLinks.add(link);
         // FIXME: persist this somewhere smarter than local storage
-        globalThis.localStorage?.setItem(this.storageKey, "1");
-        this.urlPreviewEnabledByUser = false;
+        globalThis.localStorage?.setItem(this.storageKey, JSON.stringify([...this.hiddenLinks]));
         PosthogAnalytics.instance.trackEvent<UrlPreviewVisibilityChanged>({
             eventName: "UrlPreviewVisibilityChanged",
             previewKind: "LegacyCard",
             hasThumbnail: this.snapshot.current.previews.some((p) => !!p.image),
             previewCount: this.snapshot.current.previews.length,
-            visible: this.urlPreviewEnabledByUser,
+            visible: false,
         });
         return this.computeSnapshot();
     };

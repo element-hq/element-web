@@ -59,3 +59,16 @@ export const ClickableIcon: Story = {
         onClick: () => {},
     },
 };
+
+// Timeline link preview without an image.
+export const SideBySide: Story = {
+    args: {
+        layout: "side",
+        header: "The Future of Artificial Intelligence: How AI is Transforming Our Daily Lives",
+        headerUrl: "https://techcrunch.com/ai-future",
+        body: "Explore how artificial intelligence is revolutionizing everything from healthcare to transportation.",
+        footer: "techcrunch.com",
+        icon: undefined,
+        buttons: [],
+    },
+};

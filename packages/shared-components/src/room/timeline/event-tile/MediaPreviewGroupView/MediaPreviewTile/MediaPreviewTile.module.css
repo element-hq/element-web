@@ -5,10 +5,30 @@
     max-width: 100%;
     overflow: clip;
     background: var(--cpd-color-bg-subtle-secondary);
+    /* Anchors the dismiss button in the corner. */
+    position: relative;
 
     .below {
         display: flex;
         margin: var(--cpd-space-3x);
         gap: var(--cpd-space-2x);
+        padding-inline-end: var(--MediaPreview-dismiss-inset, 0px);
+    }
+}
+
+/* Reserve room for the dismiss button. The text content reads this variable, see
+   `MediaPreviewComponents.module.css`. */
+.tileDismissable {
+    --MediaPreview-dismiss-inset: var(--cpd-space-7x);
+}
+
+/* Media left, text right. With the thumbnail and border the tile is 480x144px. */
+.tileSide {
+    display: flex;
+    align-items: stretch;
+
+    .sideButtons {
+        align-self: flex-start;
+        margin: var(--cpd-space-3x);
     }
 }

@@ -26,8 +26,13 @@ import demoImage from "../../../../../../static/wideImage.png";
 import demoVideo from "../../../../../../static/videoPreviewDemo.webm?inline";
 import demoAudio from "../../../../../../static/audioDemo.ogg";
 
-const { Default: DefaultText, WithHeaderUrl, NoButtons } = composeStories(textStories);
-const { Default: DefaultImage } = composeStories(imageStories);
+const { Default: DefaultText, WithHeaderUrl, NoButtons, SideBySide: SideBySideText } = composeStories(textStories);
+const {
+    Default: DefaultImage,
+    SideBySide: SideBySideImage,
+    SideBySideWithButtons,
+    SideBySideLogo,
+} = composeStories(imageStories);
 const { Default: DefaultVideo } = composeStories(videoStories);
 const { Default: DefaultAudio } = composeStories(audioStories);
 
@@ -111,6 +116,83 @@ describe("MediaPreviewTile", () => {
 
         expect(screen.queryByRole("button")).not.toBeInTheDocument();
     });
+
+    it("renders no icon when none is given", () => {
+        const { icon: _icon, color: _color, ...propsWithoutIcon } = baseProps;
+        render(<MediaPreviewTile {...propsWithoutIcon} />);
+
+        expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+        expect(screen.getByText("annual-report.pdf")).toBeInTheDocument();
+    });
+
+    describe("side layout", () => {
+        const sideProps = {
+            ...baseProps,
+            layout: "side",
+            header: "Matrix",
+            headerUrl: "https://matrix.org/",
+            body: "An open network for secure, decentralised communication",
+            footer: "matrix.org",
+        } as const;
+
+        it("renders the text content with its footer and without the icon", () => {
+            const { container } = render(<MediaPreviewTile {...sideProps} />);
+
+            expect(screen.getByRole("link", { name: "Matrix" })).toHaveAttribute("href", "https://matrix.org/");
+            expect(screen.getByText("An open network for secure, decentralised communication")).toBeInTheDocument();
+            expect(screen.getByText("matrix.org")).toBeInTheDocument();
+            expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
+            expect(container).toMatchSnapshot();
+        });
+
+        it("renders the given media before the text content", () => {
+            const { container } = render(
+                <MediaPreviewTile {...sideProps}>
+                    <span data-testid="media">media</span>
+                </MediaPreviewTile>,
+            );
+
+            const tile = container.firstElementChild!;
+            expect(tile.children[0]).toBe(screen.getByTestId("media"));
+            expect(tile.children[1]).toContainElement(screen.getByText("Matrix"));
+        });
+
+        it("renders the buttons when there are any", async () => {
+            const user = userEvent.setup();
+            const onClick = vi.fn();
+
+            render(<MediaPreviewTile {...sideProps} buttons={[{ label: "Expand", icon: <span>e</span>, onClick }]} />);
+
+            await user.click(screen.getByRole("button", { name: "Expand" }));
+
+            expect(onClick).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("dismiss button", () => {
+        it("closes the tile when clicked", async () => {
+            const user = userEvent.setup();
+            const onDismiss = vi.fn();
+
+            render(<MediaPreviewTile {...textProps} layout="side" onDismiss={onDismiss} />);
+
+            await user.click(screen.getByRole("button", { name: "Close preview" }));
+
+            expect(onDismiss).toHaveBeenCalledTimes(1);
+        });
+
+        it("is also offered in the stacked layout", () => {
+            render(<MediaPreviewTile {...textProps} onDismiss={vi.fn()} />);
+
+            expect(screen.getByRole("button", { name: "Close preview" })).toBeInTheDocument();
+        });
+
+        it("is not shown for a tile that cannot be dismissed", () => {
+            render(<MediaPreviewTile {...textProps} layout="side" />);
+
+            expect(screen.queryByRole("button", { name: "Close preview" })).not.toBeInTheDocument();
+        });
+    });
 });
 
 describe("TextPreviewTile", () => {
@@ -138,6 +220,14 @@ describe("TextPreviewTile", () => {
 
         expect(container.querySelector("img, video, audio")).toBeNull();
     });
+
+    it("renders the side-by-side story with its footer", () => {
+        render(<SideBySideText />);
+
+        expect(screen.getByRole("link", { name: /The Future of Artificial Intelligence/ })).toBeInTheDocument();
+        expect(screen.getByText("techcrunch.com")).toBeInTheDocument();
+        expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    });
 });
 
 describe("ImagePreviewTile", () => {
@@ -154,6 +244,32 @@ describe("ImagePreviewTile", () => {
 
         await waitForImage(container);
         expect(container.querySelector("img")).toHaveAttribute("src", demoImage);
+    });
+
+    it("renders the side-by-side story with a clickable thumbnail", async () => {
+        const { container } = render(<SideBySideImage />);
+
+        await waitForImage(container);
+        expect(screen.getByRole("button", { name: "View image" })).toContainElement(container.querySelector("img"));
+        expect(screen.getByText("techcrunch.com")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders the side-by-side logo story with an unclickable logo", async () => {
+        const { container } = render(<SideBySideLogo />);
+
+        await waitForImage(container);
+        expect(screen.queryByRole("button", { name: "View image" })).not.toBeInTheDocument();
+        expect(container.querySelector("img")).toHaveAttribute("alt", "techcrunch.com");
+        expect(screen.getByText("techcrunch.com")).toBeInTheDocument();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders the side-by-side story's buttons after the text", async () => {
+        const { container } = render(<SideBySideWithButtons />);
+
+        await waitForImage(container);
+        expect(screen.getByRole("button", { name: "Expand" })).toBeInTheDocument();
     });
 });
 
