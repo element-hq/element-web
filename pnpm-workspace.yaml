@@ -57,6 +57,13 @@ catalogs:
         "@types/node": ts6.0
 
 packageExtensions:
+    testcontainers:
+        dependencies:
+            # Keep a single testcontainers instance across workspaces. Otherwise debug's optional
+            # supports-color peer can resolve differently per workspace, splitting testcontainers into
+            # several copies, and exposeHostPorts() then registers the port forwarder in a different copy
+            # to the one starting the homeserver, so host.testcontainers.internal doesn't resolve.
+            supports-color: "^10.2.2"
     fdir:
         dependencies:
             # Fix missing type dependency
