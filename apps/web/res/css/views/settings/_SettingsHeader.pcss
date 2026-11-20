@@ -26,4 +26,17 @@
         background-color: var(--cpd-color-icon-critical-primary);
         clip-path: circle(4px);
     }
+
+    .mx_SettingsHeader_annotation {
+        font: var(--cpd-font-body-sm-medium);
+    }
+
+    .mx_SettingsHeader_annotation_active {
+        color: var(--cpd-color-text-action-accent);
+        font-weight: var(--cpd-font-weight-medium);
+    }
+}
+
+.mx_SettingsHeader:has(.mx_SettingsHeader_annotation) {
+    align-items: end;
 }
