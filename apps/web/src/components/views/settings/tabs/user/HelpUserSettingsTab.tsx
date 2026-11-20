@@ -140,47 +140,26 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </li>
                         <li>
                             {_t(
-                                "credits|twemoji_colr",
+                                "credits|noto_color_emoji",
                                 {},
                                 {
-                                    colr: (sub) => (
+                                    font: (sub) => (
                                         <ExternalLink
-                                            href="https://github.com/matrix-org/twemoji-colr"
+                                            href="https://github.com/googlefonts/noto-emoji"
                                             rel="noreferrer noopener"
                                             target="_blank"
                                         >
                                             {sub}
                                         </ExternalLink>
-                                    ),
-                                    author: (sub) => <ExternalLink href="https://mozilla.org">{sub}</ExternalLink>,
-                                    terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://www.apache.org/licenses/LICENSE-2.0"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
-                                            {sub}
-                                        </ExternalLink>
-                                    ),
-                                },
-                            )}
-                        </li>
-                        <li>
-                            {_t(
-                                "credits|twemoji",
-                                {},
-                                {
-                                    twemoji: (sub) => (
-                                        <ExternalLink href="https://github.com/jdecked/twemoji">{sub}</ExternalLink>
                                     ),
                                     author: (sub) => (
-                                        <ExternalLink href="https://github.com/jdecked/twemoji/graphs/contributors">
+                                        <ExternalLink href="https://github.com/googlefonts/noto-emoji/graphs/contributors">
                                             {sub}
                                         </ExternalLink>
                                     ),
                                     terms: (sub) => (
                                         <ExternalLink
-                                            href="https://creativecommons.org/licenses/by/4.0/"
+                                            href="https://openfontlicense.org/"
                                             rel="noreferrer noopener"
                                             target="_blank"
                                         >

@@ -44,6 +44,7 @@
         "@element-hq/web-shared-components": "workspace:*",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "catalog:",
+        "@fontsource/noto-color-emoji": "^5.3.2",
         "@formatjs/intl-segmenter": "^12.0.0",
         "@matrix-org/analytics-events": "^0.38.0",
         "@matrix-org/emojibase-bindings": "catalog:",

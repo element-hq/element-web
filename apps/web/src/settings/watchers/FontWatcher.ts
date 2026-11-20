@@ -95,7 +95,8 @@ export class FontWatcher implements IWatcher {
 
     public static readonly FONT_FAMILY_CUSTOM_PROPERTY = "--cpd-font-family-sans";
     public static readonly EMOJI_FONT_FAMILY_CUSTOM_PROPERTY = "--emoji-font-family";
-    public static readonly BUNDLED_EMOJI_FONT = "Twemoji";
+    // Declared in res/themes/light/css/_fonts.pcss
+    public static readonly BUNDLED_EMOJI_FONT = '"Bundled Noto Color Emoji"';
 
     private setSystemFont = ({
         useBundledEmojiFont,
