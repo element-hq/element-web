@@ -408,6 +408,53 @@ export async function uploadFile(
     }
 }
 
+/**
+ * Work out which kind of media message a file should be sent as, and read the metadata that goes
+ * with it. Uploads a thumbnail for images and videos which need one.
+ *
+ * A file which claims to be media but cannot be read as such is sent as a plain file.
+ *
+ * @param matrixClient - The client to upload the thumbnail with.
+ * @param roomId - The ID of the room the file will be sent to.
+ * @param file - The file to inspect.
+ * @returns The `msgtype` to send the file with, and the `info` to merge into the content.
+ * @throws {UploadFailedError} If the thumbnail of an image could not be uploaded.
+ */
+async function prepareMediaContent(
+    matrixClient: MatrixClient,
+    roomId: string,
+    file: File,
+): Promise<{ msgtype: MediaEventContent["msgtype"]; info: Partial<MediaEventInfo> }> {
+    if (file.type.startsWith("image/")) {
+        try {
+            return { msgtype: MsgType.Image, info: await infoForImageFile(matrixClient, roomId, file) };
+        } catch (e) {
+            if (e instanceof UploadFailedError) {
+                // re-throw to main upload error handler
+                throw e;
+            }
+            // Otherwise we failed to thumbnail, fall back to uploading an m.file
+            logger.error(`Expected file of type "${file.type}" to be an image, but got`, e);
+        }
+    } else if (file.type.startsWith("audio/")) {
+        try {
+            return { msgtype: MsgType.Audio, info: await infoForAudioFile(file) };
+        } catch (e) {
+            // Failed to process audio file, fall back to uploading an m.file
+            logger.error(e);
+        }
+    } else if (file.type.startsWith("video/")) {
+        try {
+            return { msgtype: MsgType.Video, info: await infoForVideoFile(matrixClient, roomId, file) };
+        } catch (e) {
+            // Failed to thumbnail, fall back to uploading an m.file
+            logger.error(e);
+        }
+    }
+
+    return { msgtype: MsgType.File, info: {} };
+}
+
 export default class ContentMessages {
     private inprogress: RoomUpload[] = [];
     private mediaConfig: IMediaConfig | null = null;
@@ -627,43 +674,9 @@ export default class ContentMessages {
         }
 
         try {
-            if (file.type.startsWith("image/")) {
-                content.msgtype = MsgType.Image;
-                try {
-                    const imageInfo = await infoForImageFile(matrixClient, roomId, file);
-                    Object.assign(content.info, imageInfo);
-                } catch (e) {
-                    if (e instanceof UploadFailedError) {
-                        // re-throw to main upload error handler
-                        throw e;
-                    }
-                    // Otherwise we failed to thumbnail, fall back to uploading an m.file
-                    logger.error(`Expected file of type "${file.type}" to be an image, but got`, e);
-                    content.msgtype = MsgType.File;
-                }
-            } else if (file.type.startsWith("audio/")) {
-                content.msgtype = MsgType.Audio;
-                try {
-                    const audioInfo = await infoForAudioFile(file);
-                    Object.assign(content.info, audioInfo);
-                } catch (e) {
-                    // Failed to process audio file, fall back to uploading an m.file
-                    logger.error(e);
-                    content.msgtype = MsgType.File;
-                }
-            } else if (file.type.startsWith("video/")) {
-                content.msgtype = MsgType.Video;
-                try {
-                    const videoInfo = await infoForVideoFile(matrixClient, roomId, file);
-                    Object.assign(content.info, videoInfo);
-                } catch (e) {
-                    // Failed to thumbnail, fall back to uploading an m.file
-                    logger.error(e);
-                    content.msgtype = MsgType.File;
-                }
-            } else {
-                content.msgtype = MsgType.File;
-            }
+            const { msgtype, info } = await prepareMediaContent(matrixClient, roomId, file);
+            content.msgtype = msgtype;
+            Object.assign(content.info, info);
 
             if (upload.cancelled) throw new UploadCanceledError();
             const result = await uploadFile(matrixClient, roomId, file, onProgress, upload.abortController);
