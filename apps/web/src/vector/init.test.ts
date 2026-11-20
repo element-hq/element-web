@@ -8,16 +8,26 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 // @vitest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
 
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach, type Mock, type MockInstance } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import fetchMock from "@fetch-mock/vitest";
 import { waitFor, screen } from "test-utils-rtl";
 import { mockPlatformPeg, unmockPlatformPeg } from "test-utils/platform.ts";
 
-import { loadApp, logAppVersion, showError, showIncompatibleBrowser } from "./init.tsx";
+import {
+    loadApp,
+    loadPlugins,
+    logAppVersion,
+    showError,
+    showIncompatibleBrowser,
+    registerModuleLifecycle,
+} from "./init.tsx";
 import SdkConfig from "../SdkConfig.ts";
+import { ModuleApi } from "../modules/Api.ts";
 import MatrixChat from "../components/structures/MatrixChat.tsx";
 import { parseAppUrl } from "./url_utils.ts";
+import { Action } from "../dispatcher/actions.ts";
+import defaultDispatcher, { MatrixDispatcher } from "../dispatcher/dispatcher.ts";
 
 function setUpMatrixChatDiv() {
     document.getElementById("matrixchat")?.remove();
@@ -91,6 +101,73 @@ describe("loadApp", () => {
         window.matrixChat!.props.onTokenLoginCompleted(parseAppUrl(window.location).params, "/home");
 
         expect(spy).toHaveBeenCalledWith(null, "", "https://app.element.io/?something_else=value#/home");
+    });
+});
+
+describe("loadPlugins", () => {
+    let registerSpy: MockInstance<MatrixDispatcher["register"]>;
+
+    beforeEach(() => {
+        setUpMatrixChatDiv();
+        // Create the ModuleApi first so the spy only sees the listeners loadPlugins registers.
+        void ModuleApi.instance;
+        registerSpy = vi.spyOn(defaultDispatcher, "register");
+    });
+
+    afterEach(() => {
+        // Remove the module lifecycle listener so it can't fire in later tests.
+        for (const result of registerSpy.mock.results) {
+            if (result.type === "return") defaultDispatcher.unregister(result.value);
+        }
+        registerSpy.mockRestore();
+        vi.unstubAllGlobals();
+        SdkConfig.reset();
+    });
+
+    it("should call module lifecycle hooks on login and logout", async () => {
+        const moduleSrc = `
+            export default class TestModule {
+                static moduleApiVersion = "*";
+                async load() {}
+                async onLoggedIn() { window.testModuleEvents.push("in"); }
+                async onLoggedOut() { window.testModuleEvents.push("out"); }
+            }
+        `;
+        const events: string[] = [];
+        vi.stubGlobal("testModuleEvents", events);
+        SdkConfig.put({ modules: [`data:text/javascript,${encodeURIComponent(moduleSrc)}`] });
+
+        await loadPlugins();
+
+        defaultDispatcher.dispatch({ action: Action.OnLoggedIn }, true);
+        defaultDispatcher.fire(Action.OnLoggedOut, true);
+        await waitFor(() => expect(events).toEqual(["in", "out"]));
+    });
+});
+
+describe("registerModuleLifecycle", () => {
+    let dispatcher: MatrixDispatcher;
+    let loader: { onLoggedIn: Mock<() => Promise<void>>; onLoggedOut: Mock<() => Promise<void>> };
+
+    beforeEach(() => {
+        dispatcher = new MatrixDispatcher();
+        loader = {
+            onLoggedIn: vi.fn().mockResolvedValue(undefined),
+            onLoggedOut: vi.fn().mockResolvedValue(undefined),
+        };
+        registerModuleLifecycle(loader, dispatcher);
+    });
+
+    it("should call onLoggedIn when the user logs in", () => {
+        dispatcher.dispatch({ action: Action.OnLoggedIn }, true);
+        expect(loader.onLoggedIn).toHaveBeenCalledTimes(1);
+        expect(loader.onLoggedOut).not.toHaveBeenCalled();
+    });
+
+    it("should call onLoggedOut when the user logs out", () => {
+        dispatcher.fire(Action.OnLoggedOut, true);
+        expect(loader.onLoggedOut).toHaveBeenCalledTimes(1);
+        expect(loader.onLoggedIn).not.toHaveBeenCalled();
     });
 });
 

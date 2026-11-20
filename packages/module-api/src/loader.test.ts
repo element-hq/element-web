@@ -72,4 +72,89 @@ describe("ModuleLoader", () => {
         await loader.start();
         expect(spy).toHaveBeenCalledWith();
     });
+
+    describe("lifecycle hooks", () => {
+        function makeModule(hooks: { onLoggedIn?: () => Promise<void>; onLoggedOut?: () => Promise<void> }) {
+            return {
+                default: class TestModule {
+                    public static moduleApiVersion = "^1.0.0";
+                    public constructor(private readonly api: Api) {}
+                    public async load(): Promise<void> {}
+                    public onLoggedIn = hooks.onLoggedIn;
+                    public onLoggedOut = hooks.onLoggedOut;
+                },
+            };
+        }
+
+        test("should call onLoggedIn and onLoggedOut on modules that implement them", async () => {
+            const onLoggedIn = vi.fn().mockResolvedValue(undefined);
+            const onLoggedOut = vi.fn().mockResolvedValue(undefined);
+
+            const loader = new ModuleLoader(mockApi);
+            await loader.load(makeModule({ onLoggedIn, onLoggedOut }));
+            await loader.start();
+
+            await loader.onLoggedIn();
+            expect(onLoggedIn).toHaveBeenCalledTimes(1);
+            expect(onLoggedOut).not.toHaveBeenCalled();
+
+            await loader.onLoggedOut();
+            expect(onLoggedOut).toHaveBeenCalledTimes(1);
+        });
+
+        test("should not call hooks before the modules are started", async () => {
+            const onLoggedIn = vi.fn().mockResolvedValue(undefined);
+            const onLoggedOut = vi.fn().mockResolvedValue(undefined);
+
+            const loader = new ModuleLoader(mockApi);
+            await loader.load(makeModule({ onLoggedIn, onLoggedOut }));
+
+            await loader.onLoggedIn();
+            await loader.onLoggedOut();
+            expect(onLoggedIn).not.toHaveBeenCalled();
+            expect(onLoggedOut).not.toHaveBeenCalled();
+        });
+
+        test("should not start onLoggedIn until the previous onLoggedOut has finished", async () => {
+            const { promise: logoutDone, resolve: finishLogout } = Promise.withResolvers<void>();
+            const onLoggedOut = vi.fn().mockReturnValue(logoutDone);
+            const onLoggedIn = vi.fn().mockResolvedValue(undefined);
+
+            const loader = new ModuleLoader(mockApi);
+            await loader.load(makeModule({ onLoggedIn, onLoggedOut }));
+            await loader.start();
+
+            const loggedOut = loader.onLoggedOut();
+            const loggedIn = loader.onLoggedIn();
+            await vi.waitFor(() => expect(onLoggedOut).toHaveBeenCalledTimes(1));
+            expect(onLoggedIn).not.toHaveBeenCalled();
+
+            finishLogout();
+            await Promise.all([loggedOut, loggedIn]);
+            expect(onLoggedIn).toHaveBeenCalledTimes(1);
+            expect(onLoggedOut.mock.invocationCallOrder[0]).toBeLessThan(onLoggedIn.mock.invocationCallOrder[0]);
+        });
+
+        test("should call the remaining modules when one fails", async () => {
+            const error = new Error("oh no");
+            const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+            const failing = vi.fn().mockRejectedValue(error);
+            const throwing = vi.fn(() => {
+                throw error;
+            });
+            const working = vi.fn().mockResolvedValue(undefined);
+
+            const loader = new ModuleLoader(mockApi);
+            await loader.load(makeModule({ onLoggedOut: failing }));
+            await loader.load(makeModule({ onLoggedOut: throwing }));
+            await loader.load(makeModule({ onLoggedOut: working }));
+            await loader.start();
+
+            await expect(loader.onLoggedOut()).resolves.toBeUndefined();
+            expect(working).toHaveBeenCalledTimes(1);
+            expect(consoleSpy).toHaveBeenCalledTimes(2);
+            expect(consoleSpy).toHaveBeenCalledWith("Module onLoggedOut hook failed", error);
+            consoleSpy.mockRestore();
+        });
+    });
 });

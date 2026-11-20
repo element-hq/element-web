@@ -28,6 +28,9 @@ import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
 import { type URLParams } from "./url_utils.ts";
+import { Action } from "../dispatcher/actions.ts";
+import defaultDispatcher, { type MatrixDispatcher } from "../dispatcher/dispatcher.ts";
+import { type ActionPayload } from "../dispatcher/payloads.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -176,6 +179,29 @@ export async function loadPlugins(): Promise<void> {
         await moduleLoader.load(module);
     }
     await moduleLoader.start();
+    registerModuleLifecycle(moduleLoader, defaultDispatcher);
+}
+
+/**
+ * Forwards login and logout events from the dispatcher to the optional lifecycle hooks of the module.
+ *
+ * @param loader - the module loader
+ * @param dispatcher - the dispatcher to listen for {@link Action.OnLoggedIn} and {@link Action.OnLoggedOut} on.
+ */
+export function registerModuleLifecycle(
+    loader: Pick<ModuleLoader, "onLoggedIn" | "onLoggedOut">,
+    dispatcher: MatrixDispatcher,
+): void {
+    dispatcher.register((payload: ActionPayload) => {
+        switch (payload.action) {
+            case Action.OnLoggedIn:
+                void loader.onLoggedIn();
+                break;
+            case Action.OnLoggedOut:
+                void loader.onLoggedOut();
+                break;
+        }
+    });
 }
 
 export { _t } from "../languageHandler";

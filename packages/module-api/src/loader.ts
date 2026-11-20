@@ -26,6 +26,7 @@ export class ModuleIncompatibleError extends Error {
 export class ModuleLoader {
     private modules: Module[] = [];
     private started = false;
+    private lifecycleQueue: Promise<void> = Promise.resolve();
 
     public constructor(private api: Api) {}
 
@@ -51,5 +52,41 @@ export class ModuleLoader {
         this.started = true;
 
         await Promise.all(this.modules.map((plugin) => plugin.load()));
+    }
+
+    /**
+     * Calls {@link Module.onLoggedIn} on every started module that implements it.
+     * A failure in one module is logged and does not prevent the others from being called.
+     */
+    public async onLoggedIn(): Promise<void> {
+        await this.callLifecycleHook("onLoggedIn");
+    }
+
+    /**
+     * Calls {@link Module.onLoggedOut} on every started module that implements it.
+     * A failure in one module is logged and does not prevent the others from being called.
+     */
+    public async onLoggedOut(): Promise<void> {
+        await this.callLifecycleHook("onLoggedOut");
+    }
+
+    private callLifecycleHook(hook: "onLoggedIn" | "onLoggedOut"): Promise<void> {
+        // Modules which have not been loaded yet should not receive lifecycle events.
+        if (!this.started) return Promise.resolve();
+
+        // Wait for the previous hook to finish, so that a slow onLoggedOut from the old session
+        // cannot run after (and undo) the onLoggedIn of the new one.
+        this.lifecycleQueue = this.lifecycleQueue.then(() => this.runLifecycleHook(hook));
+        return this.lifecycleQueue;
+    }
+
+    // Never rejects: failures are logged per module, so the lifecycle queue keeps running.
+    private async runLifecycleHook(hook: "onLoggedIn" | "onLoggedOut"): Promise<void> {
+        const results = await Promise.allSettled(this.modules.map(async (module) => module[hook]?.()));
+        for (const result of results) {
+            if (result.status === "rejected") {
+                console.error(`Module ${hook} hook failed`, result.reason);
+            }
+        }
     }
 }

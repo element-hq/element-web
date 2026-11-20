@@ -34,9 +34,28 @@ import { type X509Api } from "./x509.ts";
  */
 export interface Module {
     load(): Promise<void>;
+
+    /**
+     * Called when a session becomes active: after a fresh login, when a stored session is restored on app start,
+     * and when a session is replaced (e.g. logging back in after a soft logout). In the last case it is not
+     * preceded by a call to {@link Module.onLoggedOut}.
+     * The client has not necessarily started yet when this is called.
+     * Optional: implement this only if the module needs to react to logins.
+     * @alpha Subject to change.
+     */
+    onLoggedIn?(): Promise<void>;
+
+    /**
+     * Called when the user has logged out, before the client is stopped and storage is cleared.
+     * Modules holding data relevant to a single session should reset it here.
+     * Optional: implement this only if the module needs to react to logouts.
+     * @alpha Subject to change.
+     */
+    onLoggedOut?(): Promise<void>;
 }
 
-const moduleSignature: Record<keyof Module, Type> = {
+// Only the required members of Module are checked; the optional lifecycle hooks may be absent.
+const moduleSignature: Record<"load", Type> = {
     load: "function",
 };
 

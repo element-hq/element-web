@@ -364,6 +364,10 @@ export type MaybePromise<T> = T | PromiseLike<T>;
 export interface Module {
     // (undocumented)
     load(): Promise<void>;
+    // @alpha
+    onLoggedIn?(): Promise<void>;
+    // @alpha
+    onLoggedOut?(): Promise<void>;
 }
 
 // @public
@@ -388,6 +392,8 @@ export class ModuleLoader {
     //
     // (undocumented)
     load(moduleExport: ModuleExport): Promise<void>;
+    onLoggedIn(): Promise<void>;
+    onLoggedOut(): Promise<void>;
     // (undocumented)
     start(): Promise<void>;
 }
