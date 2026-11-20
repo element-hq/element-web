@@ -30,6 +30,7 @@ import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/enc
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { SettingsHeader } from "../../SettingsHeader";
 import { useDehydrationSupported } from "../../encryption/useDehydrationSupported";
+import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 
 /**
  * The state in the encryption settings tab.
@@ -306,8 +307,9 @@ const OfflineDevice: React.FC = () => {
     let hasRecommendedTag;
     let annotation;
 
-    const dehydrationSupported = useDehydrationSupported();
-    const { dehydratedDeviceId } = useOwnDevices();
+    const matrixClient = useMatrixClientContext();
+    const dehydrationSupported = useDehydrationSupported(matrixClient);
+    const { dehydratedDeviceId } = useOwnDevices(matrixClient);
 
     if (dehydrationSupported === true) {
         if (dehydratedDeviceId) {

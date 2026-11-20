@@ -134,6 +134,8 @@ const useSignOut = (
 const SessionManagerTab: React.FC<{
     showMsc4108QrCode?: boolean;
 }> = ({ showMsc4108QrCode }) => {
+    const sdkContext = useContext(SDKContext);
+    const matrixClient = sdkContext.client!;
     const {
         devices,
         dehydratedDeviceId,
@@ -146,15 +148,12 @@ const SessionManagerTab: React.FC<{
         saveDeviceName,
         setPushNotifications,
         supportsMSC3881,
-    } = useOwnDevices();
+    } = useOwnDevices(matrixClient);
     const [filter, setFilter] = useState<FilterVariation>();
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<ExtendedDevice["device_id"][]>([]);
     const [selectedDeviceIds, setSelectedDeviceIds] = useState<ExtendedDevice["device_id"][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
     const scrollIntoViewTimeoutRef = useRef<number>(undefined);
-
-    const sdkContext = useContext(SDKContext);
-    const matrixClient = sdkContext.client!;
     /**
      * If we have a delegated auth account management URL, all sessions but the current session need to be managed in the
      * delegated auth provider.
