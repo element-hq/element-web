@@ -274,18 +274,47 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-/* The editor of a message being edited, in place of the one for the message being written */
-.mx_MessageComposer_editor {
+/* The editor of a message being edited, in place of the one for the message being written. It fills
+   the row and looks like the editor it replaces, rather than the bordered box used for editing in
+   the timeline. */
+.mx_MessageComposer_row > .mx_EditMessageComposerWrapper {
     flex: 1;
+    /* don't grow wider than available space */
     min-width: 0;
+    margin-right: 6px;
+    /* Keeps the autocomplete and format bar visible above the editor */
+    overflow: visible;
+}
 
-    .mx_EditMessageComposer_inComposer {
-        padding: 0;
+.mx_EditMessageComposer.mx_EditMessageComposer_inComposer {
+    padding: 0;
+    font: var(--cpd-font-body-md-regular);
+    /* fixed line height to prevent emoji from being taller than text */
+    line-height: $font-18px;
 
-        .mx_BasicMessageComposer_input {
-            border: none;
-            background-color: transparent;
-            padding: var(--cpd-space-2-5x) 0;
-        }
+    .mx_BasicMessageComposer {
+        display: flex;
+        flex-direction: column;
+        min-height: 55px;
+    }
+
+    .mx_BasicMessageComposer_input {
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        padding: 3px 0;
+        margin: auto 0;
+        max-height: 140px;
+        overflow-y: auto;
+    }
+}
+
+.mx_EditWysiwygComposer.mx_EditWysiwygComposer_inComposer {
+    padding: 0;
+
+    .mx_WysiwygComposer_Editor_content {
+        border: none;
+        background-color: transparent;
+        padding: 3px 0;
     }
 }
