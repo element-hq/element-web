@@ -17,7 +17,8 @@ interface MessageAttachmentsProps {
     vm: GalleryComposerViewModel;
     /**
      * Whether to show the strip, with its tile to add more, even when there is nothing attached.
-     * By default it only appears once something is.
+     * By default it only appears once something is, or when there is a notice about files which
+     * could not be attached.
      */
     alwaysShow?: boolean;
     className?: string;
@@ -31,7 +32,7 @@ export function MessageAttachments({
     alwaysShow,
     className,
 }: Readonly<MessageAttachmentsProps>): JSX.Element | null {
-    const { items } = useViewModel(vm);
-    if (!alwaysShow && items.length === 0) return null;
+    const { items, notice } = useViewModel(vm);
+    if (!alwaysShow && items.length === 0 && !notice) return null;
     return <GalleryComposerView vm={vm} className={className} />;
 }
