@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import {
     type ComposerApi as ModuleComposerApi,
     type ComposerApiFileUploadOption,
+    type ComposerApiSlashCommand,
     type ComposerApiTarget,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
@@ -17,6 +18,7 @@ import { Action } from "../dispatcher/actions";
 import { ComposerType, type ComposerInsertPayload } from "../dispatcher/payloads/ComposerInsertPayload";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import type { ComposerInsertFilesPayload } from "../dispatcher/payloads/ComposerInsertFilePayload";
+import { registerModuleCommand } from "../slash-commands/registry";
 
 export enum ModuleComposerApiEvents {
     UploaderOptionsChanged = "uploaderOptionsChanged",
@@ -76,5 +78,9 @@ export class ComposerApi
             // We only support send.
             composerType: ComposerType.Send,
         } satisfies ComposerInsertPayload);
+    }
+
+    public registerSlashCommand(command: ComposerApiSlashCommand): void {
+        registerModuleCommand(command);
     }
 }

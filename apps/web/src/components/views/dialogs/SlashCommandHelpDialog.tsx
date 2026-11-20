@@ -51,7 +51,7 @@ const SlashCommandHelpDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
                             <strong>{cmd.getCommand()}</strong>
                         </td>
                         <td>{cmd.args}</td>
-                        <td>{_t(cmd.description)}</td>
+                        <td>{cmd.getDescription()}</td>
                     </tr>,
                 );
             });
