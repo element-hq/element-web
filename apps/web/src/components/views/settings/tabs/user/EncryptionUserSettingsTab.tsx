@@ -315,6 +315,12 @@ const OfflineDevice: React.FC = () => {
     const { dehydratedDeviceId } = useOwnDevices();
     if (!dehydratedDeviceId) return null;
 
+    const annotation = (
+        <div className="mx_SettingsHeader_annotation mx_SettingsHeader_annotation_active">
+            {_t("settings|encryption|offline_device|offline_device_active")}
+        </div>
+    );
+
     return (
         <SettingsSection
             legacy={false}
@@ -322,6 +328,7 @@ const OfflineDevice: React.FC = () => {
                 <SettingsHeader
                     hasRecommendedTag={false}
                     label={_t("settings|encryption|offline_device|offline_device")}
+                    annotation={annotation}
                 />
             }
             subHeading={_t("settings|encryption|offline_device|offline_device_description")}
