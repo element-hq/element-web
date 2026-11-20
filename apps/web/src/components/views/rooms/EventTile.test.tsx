@@ -628,6 +628,41 @@ describe("EventTile", () => {
             expect(reactionButton).toHaveTextContent("👍1");
         });
 
+        it("renders reactions once the decrypted replacement of an edited event is applied", () => {
+            // The event is already decrypted, but its edit is not yet, so the event has no content
+            const pendingEdit = mkEvent({
+                event: true,
+                type: EventType.RoomMessageEncrypted,
+                room: room.roomId,
+                user: mxEvent.getSender()!,
+                content: { algorithm: "m.megolm.v1.aes-sha2", ciphertext: "not yet decrypted" },
+            });
+            mxEvent.makeReplaced(pendingEdit);
+            const bobReaction = makeReactionEvent(room.roomId, mxEvent.getId()!, "@bob:example.org", "👍");
+            const getRelationsForEvent = vi.fn().mockReturnValue(makeRelations(new Map([["👍", [bobReaction]]])));
+
+            getComponent({ showReactions: true, getRelationsForEvent }, TimelineRenderingType.Room, {
+                canReact: true,
+            });
+            expect(screen.queryByRole("button", { name: /reacted with 👍/ })).toBeNull();
+
+            const decryptedEdit = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: room.roomId,
+                user: mxEvent.getSender()!,
+                content: {
+                    "msgtype": "m.text",
+                    "body": "* Edited",
+                    "m.new_content": { msgtype: "m.text", body: "Edited" },
+                    "m.relates_to": { rel_type: RelationType.Replace, event_id: mxEvent.getId()! },
+                },
+            });
+            act(() => mxEvent.makeReplaced(decryptedEdit));
+
+            expect(screen.getByRole("button", { name: /reacted with 👍/ })).toBeInTheDocument();
+        });
+
         it("detects the current user's reaction when rendering relation groups", () => {
             const ownReaction = makeReactionEvent(room.roomId, mxEvent.getId()!, client.getSafeUserId(), "👍");
             const getRelationsForEvent = vi.fn().mockReturnValue(
