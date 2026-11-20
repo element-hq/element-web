@@ -18,7 +18,6 @@ import AccessSecretStorageDialog, {
     type KeyParams,
 } from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
-import { DeviceListener } from "./device-listener";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -171,6 +170,9 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
 
         // DeviceListener suppresses toast updates while `secretStorageBeingAccessed`
         // is set, so we should trigger a recheck now the operation is done.
+        // We import device listener lazily, since its test mocks the `SecurityManager`
+        // module (i.e. this module), and import cycles appear to break said mocking.
+        const { DeviceListener } = await import("./device-listener");
         DeviceListener.sharedInstance().recheck();
     }
 }
