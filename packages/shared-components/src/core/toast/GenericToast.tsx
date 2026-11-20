@@ -32,8 +32,7 @@ interface GenericToastBaseProps {
      */
     onPrimaryClick(this: void): void;
     /**
-     * If set, this will override the minimum width of the description, making the toast wider or narrower than
-     * standard. The description still grows with the toast when the buttons need more room.
+     * If set, this will override the max-width (of the description) making the toast wider or narrower than standard.
      */
     overrideWidth?: string;
 }
@@ -101,7 +100,7 @@ export function GenericToast({
 
     return (
         <div className={styles.toast}>
-            <div className={styles.description} style={{ minWidth: overrideWidth }}>
+            <div className={styles.description} style={{ maxWidth: overrideWidth }}>
                 {description}
                 {detailContent}
             </div>
