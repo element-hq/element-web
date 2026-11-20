@@ -35,7 +35,7 @@
     &:hover,
     &.selected {
         background: var(--cpd-color-bg-subtle-secondary);
-        border-color: var(--cpd-color-border-interactive-hover);
+        border-color: var(--cpd-color-border-interactive-hovered);
     }
 }
 

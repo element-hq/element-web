@@ -129,7 +129,7 @@
     background: none;
     padding: 0;
     display: flex;
-    color: var(--cpd-color-body-primary);
+    color: var(--cpd-color-text-primary);
     cursor: pointer;
     gap: var(--cpd-space-2x);
     > span {
