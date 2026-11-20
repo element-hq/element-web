@@ -39,9 +39,27 @@ import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 import { Action } from "../../../dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 import { TimelineRenderingType, type RoomContextType } from "../../../contexts/RoomContext.ts";
-import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import {
+    RoomUploadContextProvider,
+    type RoomUploadViewModel,
+    useRoomUploadViewModel,
+} from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
+import { sendMessage as sendWysiwygMessage } from "./wysiwyg_composer/utils/message";
+import { createMessageContent as createWysiwygMessageContent } from "./wysiwyg_composer/utils/createMessageContent";
+import { captionFromMessageContent } from "../../../utils/gallery";
+
+// Wrapped rather than replaced, so the composer behaves as it always does in the other tests while
+// the attachment tests can tell which of the two ways of sending was taken.
+vi.mock("./wysiwyg_composer/utils/message", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("./wysiwyg_composer/utils/message")>();
+    return { ...actual, sendMessage: vi.fn(actual.sendMessage) };
+});
+vi.mock("./wysiwyg_composer/utils/createMessageContent", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("./wysiwyg_composer/utils/createMessageContent")>();
+    return { ...actual, createMessageContent: vi.fn(actual.createMessageContent) };
+});
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -424,6 +442,237 @@ describe("MessageComposer", () => {
             it("should try to start a voice message", () => {
                 expectVoiceMessageRecordingTriggered();
             });
+        });
+    });
+
+    describe("with attachments waiting in the composer", () => {
+        const room = mkStubRoom("!attachments:server", "Room with attachments", cli);
+        const image = new File(["image"], "photo.png", { type: "image/png" });
+        const video = new File(["video"], "clip.mp4", { type: "video/mp4" });
+
+        let uploadVm: RoomUploadViewModel;
+        let sendAttachments: ReturnType<typeof vi.spyOn>;
+
+        // Gives the test the view model which the composer gets from the upload context.
+        const CaptureUploadVm = (): null => {
+            uploadVm = useRoomUploadViewModel();
+            return null;
+        };
+
+        const renderComposer = (props: Partial<React.ComponentProps<typeof MessageComposer>> = {}) => {
+            const client = MatrixClientPeg.safeGet();
+            const roomContext = {
+                room,
+                canSendMessages: true,
+                narrow: false,
+                timelineRenderingType: TimelineRenderingType.Room,
+            } satisfies Partial<RoomContextType> as RoomContextType;
+            const result = render(
+                <SDKContext.Provider value={SDKContextClass.instance}>
+                    <MatrixClientContext.Provider value={client}>
+                        <ScopedRoomContextProvider {...roomContext}>
+                            <RoomUploadContextProvider>
+                                <CaptureUploadVm />
+                                <MessageComposer
+                                    room={room}
+                                    resizeNotifier={new ResizeNotifier()}
+                                    permalinkCreator={new RoomPermalinkCreator(room)}
+                                    {...props}
+                                />
+                            </RoomUploadContextProvider>
+                        </ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>
+                </SDKContext.Provider>,
+            );
+            // Sending is the view model's job, which has tests of its own.
+            sendAttachments = vi.spyOn(uploadVm, "sendAttachments").mockReturnValue(true);
+            return { ...result, client };
+        };
+
+        const attach = (...files: File[]): void => act(() => uploadVm.attachments.onAddFiles(files));
+        const tray = (container: HTMLElement): HTMLElement | null =>
+            container.querySelector<HTMLElement>(".mx_MessageComposer_attachments");
+
+        beforeEach(() => {
+            // Each test starts from an empty composer, not from the draft of the one before
+            localStorage.clear();
+            vi.spyOn(URL, "createObjectURL").mockImplementation((file) => `blob:${(file as File).name}`);
+            vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+            vi.mocked(sendWysiwygMessage).mockClear();
+            vi.mocked(createWysiwygMessageContent).mockClear();
+        });
+
+        afterEach(() => {
+            vi.mocked(URL.createObjectURL).mockRestore();
+            vi.mocked(URL.revokeObjectURL).mockRestore();
+        });
+
+        it("shows no attachment tray while nothing is attached", () => {
+            const { container } = renderComposer();
+
+            expect(tray(container)).toBeNull();
+            expect(screen.queryByRole("button", { name: /^Remove / })).not.toBeInTheDocument();
+        });
+
+        it("shows the attachments in the composer, in a tray without a field for text", () => {
+            const { container } = renderComposer();
+
+            attach(image, video);
+
+            const attachments = tray(container)!;
+            expect(attachments).toBeInTheDocument();
+            // Inside the composer, next to the message being written
+            expect(screen.getByRole("region", { name: "Message composer" })).toContainElement(attachments);
+            expect(attachments.querySelector("img")).toHaveAttribute("src", "blob:photo.png");
+            expect(attachments.querySelector("video")).toHaveAttribute("src", "blob:clip.mp4");
+            expect(screen.getByRole("button", { name: "Remove photo.png" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Remove clip.mp4" })).toBeInTheDocument();
+            // The caption is the message itself, and the tray only has an icon to add more
+            expect(attachments.querySelector("textarea")).toBeNull();
+            expect(screen.getByRole("button", { name: "Add photos or videos" })).toHaveTextContent("");
+        });
+
+        it("takes the tray away again when every attachment has been removed", async () => {
+            const { container } = renderComposer();
+            attach(image, video);
+
+            await userEvent.click(screen.getByRole("button", { name: "Remove photo.png" }));
+            expect(tray(container)).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Remove photo.png" })).not.toBeInTheDocument();
+
+            await userEvent.click(screen.getByRole("button", { name: "Remove clip.mp4" }));
+            expect(tray(container)).toBeNull();
+            expect(screen.queryByLabelText("Send message")).not.toBeInTheDocument();
+        });
+
+        it("offers to send as soon as something is attached, without any text", () => {
+            renderComposer();
+            expect(screen.queryByLabelText("Send message")).not.toBeInTheDocument();
+
+            attach(image);
+
+            expect(screen.getByLabelText("Send message")).toBeInTheDocument();
+        });
+
+        it("sends the attachments from the send button when nothing was written", async () => {
+            const { client } = renderComposer();
+            vi.mocked(client.sendMessage).mockClear();
+            attach(image);
+
+            await userEvent.click(screen.getByLabelText("Send message"));
+
+            await waitFor(() => expect(sendAttachments).toHaveBeenCalledTimes(1));
+            expect(sendAttachments).toHaveBeenCalledWith({ "body": "", "m.mentions": {} });
+            expect(client.sendMessage).not.toHaveBeenCalled();
+        });
+
+        it("sends the message being written as the caption of the attachments", async () => {
+            const { client, ...renderResult } = renderComposer();
+            vi.mocked(client.sendMessage).mockClear();
+            await addTextToComposerRTL(renderResult, "Hello");
+            attach(image, video);
+
+            await userEvent.click(screen.getByLabelText("Send message"));
+
+            await waitFor(() => expect(sendAttachments).toHaveBeenCalledWith({ "body": "Hello", "m.mentions": {} }));
+            expect(client.sendMessage).not.toHaveBeenCalled();
+        });
+
+        describe("in the rich text composer", () => {
+            beforeEach(async () => {
+                await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+            });
+
+            const typeInComposer = async (text: string): Promise<void> => {
+                await userEvent.click(await screen.findByRole("textbox"));
+                fireEvent.input(screen.getByRole("textbox"), { data: text, inputType: "insertText" });
+                await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(text));
+                // Wait for the composer to report its new content
+                await flushPromises();
+            };
+
+            it("sends the message being written as the caption of the attachments", async () => {
+                const replyToEvent = mkEvent({
+                    event: true,
+                    type: EventType.RoomMessage,
+                    user: "@bob:test",
+                    room: room.roomId,
+                    content: { msgtype: "m.text", body: "Send me the photos" },
+                });
+                const dispatch = vi.spyOn(dis, "dispatch");
+                renderComposer({ replyToEvent });
+                await flushPromises();
+                await typeInComposer("Here they are");
+                attach(image, video);
+
+                await userEvent.click(screen.getByLabelText("Send message"));
+
+                await waitFor(() => expect(sendAttachments).toHaveBeenCalledTimes(1));
+                // The caption is what the rich text composer would have sent as a message
+                expect(createWysiwygMessageContent).toHaveBeenCalledWith("Here they are", true, {
+                    relation: undefined,
+                    replyToEvent,
+                });
+                const content = await vi.mocked(createWysiwygMessageContent).mock.results[0].value;
+                expect(content.body).toBe("Here they are");
+                expect(sendAttachments).toHaveBeenCalledWith(captionFromMessageContent(content));
+                // It is not also sent as a message of its own
+                expect(sendWysiwygMessage).not.toHaveBeenCalled();
+                // The composer is emptied and the reply ended, as for any message
+                expect(dispatch).toHaveBeenCalledWith({
+                    action: Action.ClearAndFocusSendMessageComposer,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+                expect(dispatch).toHaveBeenCalledWith({
+                    action: "reply_to_event",
+                    event: null,
+                    context: TimelineRenderingType.Room,
+                });
+                dispatch.mockRestore();
+            }, 10000);
+
+            it("sends the attachments on their own when nothing was written", async () => {
+                renderComposer();
+                await flushPromises();
+                await screen.findByRole("textbox");
+                attach(image);
+
+                await userEvent.click(screen.getByLabelText("Send message"));
+
+                await waitFor(() => expect(sendAttachments).toHaveBeenCalledTimes(1));
+                expect(sendAttachments.mock.calls[0][0]).toMatchObject({ body: "" });
+                expect(sendWysiwygMessage).not.toHaveBeenCalled();
+            }, 10000);
+
+            it("runs a command as usual and leaves the attachments waiting", async () => {
+                // The command itself is not what is being tested
+                vi.mocked(sendWysiwygMessage).mockResolvedValueOnce(undefined);
+                const { container } = renderComposer();
+                await flushPromises();
+                await typeInComposer("/shrug");
+                attach(image);
+
+                await userEvent.click(screen.getByLabelText("Send message"));
+
+                await waitFor(() => expect(sendWysiwygMessage).toHaveBeenCalledTimes(1));
+                expect(vi.mocked(sendWysiwygMessage).mock.calls[0][0]).toBe("/shrug");
+                expect(sendAttachments).not.toHaveBeenCalled();
+                expect(uploadVm.hasAttachments).toBe(true);
+                expect(tray(container)).toBeInTheDocument();
+            }, 10000);
+
+            it("sends a message without attachments as usual", async () => {
+                vi.mocked(sendWysiwygMessage).mockResolvedValueOnce(undefined);
+                renderComposer();
+                await flushPromises();
+                await typeInComposer("Just text");
+
+                await userEvent.click(screen.getByLabelText("Send message"));
+
+                await waitFor(() => expect(sendWysiwygMessage).toHaveBeenCalledTimes(1));
+                expect(vi.mocked(sendWysiwygMessage).mock.calls[0][0]).toBe("Just text");
+                expect(sendAttachments).not.toHaveBeenCalled();
+            }, 10000);
         });
     });
 

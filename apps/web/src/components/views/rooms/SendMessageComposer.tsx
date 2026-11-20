@@ -66,6 +66,7 @@ import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { getEmojiRegex } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import { captionFromMessageContent } from "../../../utils/gallery";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { linksIn } from "../../../utils/UrlUtils";
 import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
@@ -351,8 +352,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
      */
     public async sendMessage({ urlPreviewSnapshot }: ISendMessageActionProps): Promise<void> {
         const model = this.model;
+        // Attachments waiting in the composer are sent with the text, or on their own without any.
+        const hasAttachments = this.props.uploadVm.hasAttachments;
 
-        if (model.isEmpty) {
+        if (model.isEmpty && !hasAttachments) {
             return;
         }
 
@@ -370,7 +373,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         PosthogAnalytics.instance.trackEvent<ComposerEvent>(posthogEvent);
 
         // Replace emoticon at the end of the message
-        if (SettingsStore.getValue("MessageComposerInput.autoReplaceEmoji")) {
+        if (SettingsStore.getValue("MessageComposerInput.autoReplaceEmoji") && !model.isEmpty) {
             const indexOfLastPart = model.parts.length - 1;
             const positionInLastPart = model.parts[indexOfLastPart].text.length;
             this.editorRef.current?.replaceEmoticon(
@@ -455,6 +458,21 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     replyToEvent,
                     this.props.relation,
                 );
+            }
+
+            if (hasAttachments) {
+                // The text becomes the caption of the attachments, so that they are one message.
+                clearComposerAndPushHistory();
+                this.props.uploadVm.sendAttachments(captionFromMessageContent(content));
+                if (replyToEvent) {
+                    // Clear reply_to_event as we put the message into the queue
+                    dis.dispatch({
+                        action: "reply_to_event",
+                        event: null,
+                        context: this.context.timelineRenderingType,
+                    });
+                }
+                return;
             }
 
             // don't bother sending an empty message

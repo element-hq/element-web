@@ -19,7 +19,7 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { GalleryComposerView, useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -51,6 +51,9 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
+import { createMessageContent } from "./wysiwyg_composer/utils/createMessageContent";
+import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import { captionFromMessageContent } from "../../../utils/gallery";
 import {
     type MatrixClientProps,
     withMatrixClientHOC,
@@ -97,6 +100,14 @@ interface IProps extends MatrixClientProps {
     e2eStatus?: E2EStatus;
     compact?: boolean;
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
+    /**
+     * Holds the images and videos waiting in the composer to be sent with the next message.
+     */
+    uploadVm: RoomUploadViewModel;
+    /**
+     * How many images and videos are waiting in the composer.
+     */
+    attachmentCount: number;
 }
 
 interface IState {
@@ -423,6 +434,23 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 action: Action.ClearAndFocusSendMessageComposer,
                 timelineRenderingType: this.context.timelineRenderingType,
             });
+            // Attachments waiting in the composer take the text as their caption, so that they
+            // are one message. Commands are still run on their own.
+            if (this.props.uploadVm.hasAttachments && !composerContent.startsWith("/")) {
+                const content = await createMessageContent(composerContent, this.state.isRichTextEnabled, {
+                    relation,
+                    replyToEvent,
+                });
+                this.props.uploadVm.sendAttachments(captionFromMessageContent(content));
+                if (replyToEvent) {
+                    dis.dispatch({
+                        action: "reply_to_event",
+                        event: null,
+                        context: this.context.timelineRenderingType,
+                    });
+                }
+                return;
+            }
             await sendMessage(composerContent, this.state.isRichTextEnabled, {
                 mxClient: this.props.mxClient,
                 roomContext: this.context,
@@ -685,7 +713,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
             />,
         );
 
-        const showSendButton = canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording);
+        const showSendButton =
+            canSendMessages &&
+            (!this.state.isComposerEmpty || this.state.haveRecording || this.props.attachmentCount > 0);
 
         const classes = classNames({
             "mx_MessageComposer": true,
@@ -739,6 +769,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             )}
                         </div>
                     </div>
+                    {/* Below the text rather than above it, where the formatting bar pops up over a selection */}
+                    {this.props.attachmentCount > 0 && (
+                        <GalleryComposerView
+                            vm={this.props.uploadVm.attachments}
+                            className="mx_MessageComposer_attachments"
+                        />
+                    )}
                 </div>
             </div>
         );
@@ -747,9 +784,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 
-export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
+export default function MessageComposerWrapper(
+    props: Omit<IProps, "mxClient" | "urlPreviewVm" | "uploadVm" | "attachmentCount">,
+): JSX.Element {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
     const client = useMatrixClientContext();
+    const uploadVm = useRoomUploadViewModel();
+    const attachmentCount = useViewModel(uploadVm.attachments).items.length;
     const urlPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
@@ -764,5 +805,12 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
         urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
-    return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
+    return (
+        <MessageComposerWithMatrixClient
+            {...props}
+            urlPreviewVm={urlPreviewVm}
+            uploadVm={uploadVm}
+            attachmentCount={attachmentCount}
+        />
+    );
 }

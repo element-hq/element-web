@@ -48,6 +48,11 @@ import type { ActionPayload } from "../../dispatcher/payloads";
 import { type AttachmentOpen } from "@matrix-org/analytics-events/types/typescript/AttachmentOpen";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import type { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
+import type { AttachmentSend } from "@matrix-org/analytics-events/types/typescript/AttachmentSend";
+import SettingsStore from "../../settings/SettingsStore";
+import { isGalleryFile, type MediaCaption } from "../../utils/gallery";
+import { doMaybeLocalRoomAction } from "../../utils/local-room";
+import { GalleryComposerViewModel } from "../composer/GalleryComposerViewModel";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
@@ -60,6 +65,12 @@ export class RoomUploadViewModel
     implements UploadButtonViewActions
 {
     private readonly uploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
+
+    /**
+     * The images and videos waiting in the composer to be sent with the next message.
+     */
+    public readonly attachments = this.disposables.track(new GalleryComposerViewModel({ items: [] }));
+
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -139,8 +150,10 @@ export class RoomUploadViewModel
         logger.info("initiateViaInputFiles for", roomId);
         if (!files?.length) return;
         try {
+            const otherFiles = await this.attachMedia(Array.from(files));
+            if (otherFiles.length === 0) return;
             await ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(files),
+                otherFiles,
                 roomId,
                 this.threadRelation,
                 this.replyToEvent,
@@ -161,8 +174,10 @@ export class RoomUploadViewModel
         if (!dataTransfer.files?.length) return;
 
         try {
+            const otherFiles = await this.attachMedia(Array.from(dataTransfer.files));
+            if (otherFiles.length === 0) return;
             await ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(dataTransfer.files),
+                otherFiles,
                 roomId,
                 this.threadRelation,
                 this.replyToEvent,
@@ -172,6 +187,76 @@ export class RoomUploadViewModel
         } catch (ex) {
             logger.warn("Failed to handle drag and drop data transfer", ex);
         }
+    };
+
+    /**
+     * Keep the images and videos among some files in the composer, to be sent as one message
+     * together with the text the user writes there. Only when gallery messages are enabled.
+     *
+     * @param files - The files the user picked, dropped or pasted.
+     * @returns The files which are not kept, and are to be sent the way they always were.
+     */
+    private async attachMedia(files: File[]): Promise<File[]> {
+        if (!SettingsStore.getValue("feature_gallery_messages")) return files;
+
+        const media = files.filter(isGalleryFile);
+        if (media.length === 0) return files;
+
+        const uploadLimit = await ContentMessages.sharedInstance().fetchUploadLimit(this.client);
+        if (this.isDisposed) return [];
+        this.attachments.setMaxFileSize(uploadLimit ?? undefined);
+        this.attachments.onAddFiles(media);
+        // The user carries on writing the message the attachments go with.
+        this.dispatcher.dispatch({ action: Action.FocusSendMessageComposer, context: this.timelineRenderingType });
+
+        return files.filter((file) => !media.includes(file));
+    }
+
+    /**
+     * Whether there are images or videos waiting in the composer.
+     */
+    public get hasAttachments(): boolean {
+        return this.attachments.getItems().length > 0;
+    }
+
+    /**
+     * Send the images and videos waiting in the composer as one message, with the text of the
+     * composer as their caption.
+     *
+     * @param caption - The text to send with them, taken from the composer. Its body may be empty.
+     * @returns False if nothing was waiting, in which case nothing is sent.
+     */
+    public sendAttachments = (caption: MediaCaption): boolean => {
+        const files = this.attachments.getItems().filter((item): item is File => item instanceof File);
+        if (files.length === 0) return false;
+        this.attachments.clear();
+
+        const { threadRelation: relation, replyToEvent } = this;
+        const types = files.map((file) => file.type.split("/")[0]);
+        PosthogAnalytics.instance.trackEvent<AttachmentSend>({
+            eventName: "AttachmentSend",
+            isReply: !!replyToEvent,
+            inThread: relation?.rel_type === "m.thread",
+            count: files.length,
+            kind: "local",
+            // The most common type
+            type: types.sort((a, b) => types.filter((v) => v === b).length - types.filter((v) => v === a).length)[0],
+        });
+
+        doMaybeLocalRoomAction(
+            this.room.roomId,
+            (actualRoomId) =>
+                ContentMessages.sharedInstance().sendGalleryToRoom(
+                    files,
+                    caption,
+                    actualRoomId,
+                    relation,
+                    this.client,
+                    replyToEvent,
+                ),
+            this.client,
+        ).catch((ex) => logger.warn("Failed to send attachments", ex));
+        return true;
     };
 
     public onUploadOptionSelected = (type: ComposerApiFileUploadOption["type"]): void => {

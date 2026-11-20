@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
-import { fireEvent, render, waitFor } from "test-utils-rtl";
+import { act, fireEvent, render, type RenderResult, waitFor } from "test-utils-rtl";
 import { type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 import { createTestClient, mkEvent, mkStubRoom, stubClient, mockPlatformPeg, tearDownAfterTest } from "test-utils";
@@ -28,7 +28,12 @@ import { Layout } from "../../../settings/enums/Layout";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";
-import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import {
+    RoomUploadContextProvider,
+    type RoomUploadViewModel,
+    useRoomUploadViewModel,
+} from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import SettingsStore from "../../../settings/SettingsStore";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { UrlPreviewApi } from "../../../modules/UrlPreviewApi.ts";
@@ -466,6 +471,191 @@ describe("<SendMessageComposer/>", () => {
             );
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
+        });
+
+        describe("with attachments waiting in the composer", () => {
+            const image = new File(["image"], "photo.png", { type: "image/png" });
+            const video = new File(["video"], "clip.mp4", { type: "video/mp4" });
+
+            let uploadVm: RoomUploadViewModel;
+            let sendAttachments: ReturnType<typeof vi.spyOn>;
+
+            // Gives the test the view model which the composer gets from the upload context.
+            const CaptureUploadVm = (): null => {
+                uploadVm = useRoomUploadViewModel();
+                return null;
+            };
+
+            const getComponentWithUploadVm = (props = {}): RenderResult => {
+                const result = render(
+                    <MatrixClientContext.Provider value={mockClient}>
+                        <ScopedRoomContextProvider room={mockRoom} {...defaultRoomContext}>
+                            <RoomUploadContextProvider>
+                                <CaptureUploadVm />
+                                <SendMessageComposer {...defaultProps} {...props} urlPreviewVm={urlPreviewVm} />
+                            </RoomUploadContextProvider>
+                        </ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>,
+                    {
+                        wrapper: ({ children }) => (
+                            <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                        ),
+                    },
+                );
+                // Sending is the view model's job, which has tests of its own.
+                sendAttachments = vi.spyOn(uploadVm, "sendAttachments").mockReturnValue(true);
+                return result;
+            };
+
+            const attach = (...files: File[]): void => act(() => uploadVm.attachments.onAddFiles(files));
+
+            const pressEnter = (container: HTMLElement): boolean =>
+                fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            beforeEach(() => {
+                vi.mocked(mockClient.sendMessage).mockClear();
+                vi.mocked(doMaybeLocalRoomAction).mockImplementation(
+                    <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                        return fn(roomId);
+                    },
+                );
+                mockPlatformPeg({ overrideBrowserShortcuts: vi.fn().mockReturnValue(false) });
+            });
+
+            it("sends the text as the caption of the attachments instead of as a message", async () => {
+                const { container } = getComponentWithUploadVm();
+                attach(image, video);
+
+                addTextToComposer(container, "test message");
+                pressEnter(container);
+
+                await waitFor(() => expect(sendAttachments).toHaveBeenCalledTimes(1));
+                expect(sendAttachments).toHaveBeenCalledWith({ "body": "test message", "m.mentions": {} });
+                // The text must not also go out as a message of its own
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("sends formatted text as a formatted caption", async () => {
+                const { container } = getComponentWithUploadVm();
+                attach(image);
+
+                addTextToComposer(container, "hello *world*");
+                pressEnter(container);
+
+                await waitFor(() =>
+                    expect(sendAttachments).toHaveBeenCalledWith({
+                        "body": "hello *world*",
+                        "format": "org.matrix.custom.html",
+                        "formatted_body": "hello <em>world</em>",
+                        "m.mentions": {},
+                    }),
+                );
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("clears the composer and remembers the text in the send history", async () => {
+                const { container } = getComponentWithUploadVm();
+                attach(image);
+
+                addTextToComposer(container, "Look at this");
+                expect(container.textContent).toBe("Look at this");
+                pressEnter(container);
+
+                await waitFor(() => expect(sendAttachments).toHaveBeenCalled());
+                expect(container.textContent).toBe("");
+                // Other tests in this file have sent from this room too, so look through its whole history.
+                const history = Object.keys(sessionStorage)
+                    .filter((key) => key.startsWith(`mx_cider_history_${mockRoom.roomId}[`))
+                    .map((key) => JSON.parse(sessionStorage.getItem(key)!).parts);
+                expect(history).toContainEqual([{ type: "plain", text: "Look at this" }]);
+            });
+
+            it("sends the attachments on their own when nothing was written", async () => {
+                // Replacing an emoticon at the end of the message must cope with there being no message
+                const getValue = SettingsStore.getValue.bind(SettingsStore);
+                const settings = vi
+                    .spyOn(SettingsStore, "getValue")
+                    .mockImplementation(((name: string, ...rest: unknown[]) =>
+                        name === "MessageComposerInput.autoReplaceEmoji"
+                            ? true
+                            : (getValue as (...args: unknown[]) => unknown)(
+                                  name,
+                                  ...rest,
+                              )) as typeof SettingsStore.getValue);
+                const { container } = getComponentWithUploadVm();
+                attach(image, video);
+
+                pressEnter(container);
+
+                await waitFor(() => expect(sendAttachments).toHaveBeenCalledTimes(1));
+                expect(sendAttachments).toHaveBeenCalledWith({ "body": "", "m.mentions": {} });
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+                settings.mockRestore();
+            });
+
+            it("mentions the sender of the message being replied to, and ends the reply", async () => {
+                const { container } = getComponentWithUploadVm({ replyToEvent: mockEvent });
+                attach(image);
+
+                addTextToComposer(container, "Here you go");
+                pressEnter(container);
+
+                await waitFor(() =>
+                    expect(sendAttachments).toHaveBeenCalledWith({
+                        "body": "Here you go",
+                        "m.mentions": { user_ids: [mockEvent.getSender()] },
+                    }),
+                );
+                expect(spyDispatcher).toHaveBeenCalledWith({
+                    action: "reply_to_event",
+                    event: null,
+                    context: TimelineRenderingType.Room,
+                });
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("does not end a reply which was not being written", async () => {
+                const { container } = getComponentWithUploadVm();
+                attach(image);
+
+                addTextToComposer(container, "No reply here");
+                pressEnter(container);
+
+                await waitFor(() => expect(sendAttachments).toHaveBeenCalled());
+                expect(spyDispatcher).not.toHaveBeenCalledWith(expect.objectContaining({ action: "reply_to_event" }));
+            });
+
+            it("sends text as an ordinary message once the attachments have been removed", async () => {
+                const { container } = getComponentWithUploadVm();
+                attach(image);
+                act(() => uploadVm.attachments.clear());
+
+                addTextToComposer(container, "just text");
+                pressEnter(container);
+
+                await waitFor(() =>
+                    expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                        "body": "just text",
+                        "msgtype": MsgType.Text,
+                        "m.mentions": {},
+                    }),
+                );
+                expect(sendAttachments).not.toHaveBeenCalled();
+            });
+
+            it("sends nothing from an empty composer without attachments", async () => {
+                const { container } = getComponentWithUploadVm();
+
+                pressEnter(container);
+                // Give a send that should not happen the chance to happen
+                await act(async () => {
+                    await Promise.resolve();
+                });
+
+                expect(sendAttachments).not.toHaveBeenCalled();
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+                expect(spyDispatcher).not.toHaveBeenCalledWith(expect.objectContaining({ action: "message_sent" }));
+            });
         });
     });
 

@@ -12,9 +12,12 @@ import {
     type MatrixClient,
     MsgType,
     HTTPError,
+    type IContent,
     type IEventRelation,
+    type IMentions,
     type ISendEventResponse,
     type MatrixEvent,
+    RelationType,
     type UploadOpts,
     type UploadProgress,
     THREAD_RELATION_TYPE,
@@ -26,6 +29,7 @@ import {
     type EncryptedFile,
     type MediaEventContent,
     type MediaEventInfo,
+    type RoomMessageEventContent,
 } from "matrix-js-sdk/src/types";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
@@ -60,10 +64,25 @@ import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
 import { PosthogAnalytics } from "./PosthogAnalytics.ts";
 import { cacheUploadedMedia } from "./utils/UploadedMediaCache";
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+import {
+    GALLERY_MSGTYPE,
+    type GalleryContent,
+    type GalleryItem,
+    getGallerySummary,
+    getMessageMediaCaption,
+    getMessageMediaItems,
+    isGalleryContent,
+    type MediaCaption,
+    splitGalleryItems,
+} from "./utils/gallery";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
+
+// How many items of a gallery are uploaded at the same time.
+const GALLERY_UPLOAD_CONCURRENCY = 3;
 
 export class UploadCanceledError extends Error {}
 export class UploadFailedError extends Error {
@@ -631,6 +650,17 @@ export default class ContentMessages {
         dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
     }
 
+    /**
+     * Upload a file and send it to a room as a media message.
+     *
+     * @param file - The file to send.
+     * @param roomId - The ID of the room to send the file to.
+     * @param relation - The relation of the message, e.g. to the thread it is sent in.
+     * @param matrixClient - The Matrix client to upload and send with.
+     * @param replyToEvent - The event being replied to, if any.
+     * @param promBefore - A promise to wait for before sending the message, to keep files in order.
+     * @param caption - Text to show with the file, if any.
+     */
     public async sendContentToRoom(
         file: File,
         roomId: string,
@@ -638,6 +668,7 @@ export default class ContentMessages {
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
+        caption?: MediaCaption,
     ): Promise<void> {
         const fileName = file.name || _t("common|attachment");
         const content: Omit<MediaEventContent, "info"> & { info: Partial<MediaEventInfo> } = {
@@ -647,9 +678,20 @@ export default class ContentMessages {
             },
             msgtype: MsgType.File, // set more specifically later
         };
+        const { "m.mentions": mentions, ...captionText } = caption ?? { body: "" };
+        if (captionText.body) {
+            // With a caption, the body holds the caption and the file name moves to `filename`.
+            Object.assign(content, { filename: fileName }, captionText);
+        }
 
-        // Attach mentions, which really only applies if there's a replyToEvent.
-        attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
+        if (mentions) {
+            // Written in the composer, which already accounts for the reply. Kept even when there
+            // is no text to go with the file.
+            Object.assign(content, { "m.mentions": mentions });
+        } else {
+            // Attach mentions, which really only applies if there's a replyToEvent.
+            attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
+        }
         attachRelation(content, relation);
         if (replyToEvent) {
             addReplyToMessageContent(content, replyToEvent);
@@ -724,6 +766,317 @@ export default class ContentMessages {
         } finally {
             removeElement(this.inprogress, (e) => e.promise === upload.promise);
         }
+    }
+
+    /**
+     * Upload several images and videos and send them to a room as one gallery message (MSC4274).
+     *
+     * A single file is sent as an ordinary image or video message, which every client can show.
+     *
+     * @param files - The images and videos to send, in order.
+     * @param caption - Text to show with the gallery. Its body may be empty.
+     * @param roomId - The ID of the room to send the gallery to.
+     * @param relation - The relation of the message, e.g. to the thread it is sent in.
+     * @param matrixClient - The Matrix client to upload and send with.
+     * @param replyToEvent - The event being replied to, if any.
+     */
+    public async sendGalleryToRoom(
+        files: File[],
+        caption: MediaCaption,
+        roomId: string,
+        relation: IEventRelation | undefined,
+        matrixClient: MatrixClient,
+        replyToEvent: MatrixEvent | undefined,
+    ): Promise<void> {
+        if (files.length === 1) {
+            return this.sendContentToRoom(files[0], roomId, relation, matrixClient, replyToEvent, undefined, caption);
+        }
+
+        const uploaded = await this.uploadGalleryFiles(files, roomId, relation, matrixClient);
+        if (!uploaded) return;
+
+        const items = files.map((file) => uploaded.get(file)).filter((item) => !!item);
+        const { "m.mentions": mentions, ...captionContent } = caption;
+        const encrypted = !!(await matrixClient.getCrypto()?.isEncryptionEnabledInRoom(roomId));
+        const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? (relation.event_id ?? null) : null;
+
+        // Normally a single message. The caption goes with the first if the items do not fit in one.
+        for (const [index, itemtypes] of splitGalleryItems(items, captionContent, encrypted).entries()) {
+            if (itemtypes.length === 0) continue;
+            const content: GalleryContent & IContent = {
+                msgtype: GALLERY_MSGTYPE.name,
+                ...(index === 0 ? captionContent : { body: "" }),
+                itemtypes,
+            };
+            if (mentions && index === 0) {
+                // Written in the composer, which already accounts for the reply.
+                content["m.mentions"] = mentions;
+            } else {
+                attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
+            }
+            attachRelation(content, relation);
+            if (replyToEvent) {
+                addReplyToMessageContent(content, replyToEvent);
+            }
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                decorateStartSendingTime(content);
+            }
+
+            try {
+                const response = await matrixClient.sendMessage(
+                    roomId,
+                    threadId,
+                    // The js-sdk has no type for the unstable gallery msgtype.
+                    content as IContent as RoomMessageEventContent,
+                );
+                if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                    sendRoundTripMetric(matrixClient, roomId, response.event_id);
+                }
+                dis.dispatch({ action: "message_sent" });
+            } catch (error) {
+                // The message stays in the timeline as unsent, where it can be retried or deleted.
+                logger.error("Failed to send gallery message", error);
+                return;
+            }
+        }
+
+        // Files which turned out not to be images or videos are sent the way they always were.
+        for (const file of files) {
+            if (uploaded.get(file) === null) {
+                await this.sendContentToRoom(file, roomId, relation, matrixClient, replyToEvent);
+            }
+        }
+    }
+
+    /**
+     * Change the images, videos and caption of a message the user sent: uploads any new files and
+     * sends the result as an edit. Nothing is sent if nothing changed.
+     *
+     * What the message becomes depends on how many items it ends up with, as it does when
+     * sending: a gallery for several, an image or video message for one, and a text message when
+     * every item was removed.
+     *
+     * @param mxEvent - The gallery, image or video message to edit.
+     * @param matrixClient - The Matrix client to upload and send with.
+     * @param items - The items the message should have, in order: those it keeps, and files to add.
+     * @param caption - The text the message should have. Its body may be empty.
+     * @param newMentions - The people to notify about the edit: those the caption newly mentions.
+     */
+    public async editMediaMessage(
+        mxEvent: MatrixEvent,
+        matrixClient: MatrixClient,
+        items: Array<File | GalleryItem>,
+        caption: MediaCaption,
+        newMentions: IMentions = {},
+    ): Promise<void> {
+        const roomId = mxEvent.getRoomId();
+        const eventId = mxEvent.getId();
+        const originalContent = mxEvent.getContent();
+        const originalItems = getMessageMediaItems(originalContent);
+        if (!roomId || !eventId || !originalItems) return;
+
+        const { "m.mentions": mentions = originalContent["m.mentions"] ?? {}, ...captionText } = caption;
+        // Without items or text there would be nothing left of the message.
+        if (items.length === 0 && !captionText.body) return;
+
+        const files = items.filter((item): item is File => item instanceof File);
+        const originalCaption = getMessageMediaCaption(originalContent);
+        // Items can be removed and added but not reordered, so this means nothing changed.
+        if (
+            files.length === 0 &&
+            items.length === originalItems.length &&
+            captionText.body === originalCaption.body &&
+            captionText.formatted_body === originalCaption.formatted_body
+        ) {
+            return;
+        }
+
+        // The thread is found the same way as for the edits made in the message composer.
+        const threadId = mxEvent.threadRootId ?? null;
+        // Shows the progress of the upload in the thread the message is in.
+        const relation = threadId ? { rel_type: THREAD_RELATION_TYPE.name, event_id: threadId } : undefined;
+        const uploaded = await this.uploadGalleryFiles(files, roomId, relation, matrixClient);
+        if (!uploaded) return;
+
+        const itemtypes = items
+            .map((item) => (item instanceof File ? uploaded.get(item) : item))
+            .filter((item) => !!item);
+
+        let newContent: IContent;
+        if (itemtypes.length === 0) {
+            if (!captionText.body) return;
+            newContent = { "msgtype": MsgType.Text, ...captionText, "m.mentions": mentions };
+        } else if (itemtypes.length === 1) {
+            const { itemtype, ...media } = itemtypes[0];
+            newContent = { ...media, "msgtype": itemtype, "m.mentions": mentions };
+            // With a caption, the body holds the caption and the file name moves to `filename`.
+            if (captionText.body) Object.assign(newContent, { filename: media.filename ?? media.body }, captionText);
+        } else {
+            newContent = { "msgtype": GALLERY_MSGTYPE.name, ...captionText, itemtypes, "m.mentions": mentions };
+        }
+
+        const editContent: IContent = {
+            // The media is not repeated in the fallback: together with `m.new_content` the items of
+            // a gallery would halve the number that fit in one event.
+            "msgtype": MsgType.Text,
+            "body": `* ${isGalleryContent(newContent) ? getGallerySummary(newContent) : newContent.body}`,
+            "m.mentions": newMentions,
+            "m.new_content": newContent,
+            "m.relates_to": { rel_type: RelationType.Replace, event_id: eventId },
+        };
+
+        try {
+            await matrixClient.sendMessage(roomId, threadId, editContent as RoomMessageEventContent);
+            dis.dispatch({ action: "message_sent" });
+        } catch (error) {
+            // The edit stays in the timeline as unsent, where it can be retried or deleted.
+            logger.error("Failed to send media edit", error);
+        }
+    }
+
+    /**
+     * Upload the files of a gallery, showing their combined progress as one upload which can be
+     * cancelled. If a file fails the user can retry, which only uploads what is still missing.
+     *
+     * @returns The gallery item of every file, with null for a file which cannot be a gallery
+     *     item. Undefined if the user cancelled, or gave up after a failure.
+     */
+    private async uploadGalleryFiles(
+        files: File[],
+        roomId: string,
+        relation: IEventRelation | undefined,
+        matrixClient: MatrixClient,
+    ): Promise<Map<File, GalleryItem | null> | undefined> {
+        const uploaded = new Map<File, GalleryItem | null>();
+
+        for (;;) {
+            const pending = files.filter((file) => !uploaded.has(file));
+            if (pending.length === 0) return uploaded;
+
+            const upload = new RoomUpload(
+                roomId,
+                _t("gallery|upload_name", { count: files.length }),
+                relation,
+                pending.reduce((total, file) => total + file.size, 0),
+            );
+            this.inprogress.push(upload);
+            dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
+
+            try {
+                await this.uploadGalleryBatch(pending, uploaded, upload, roomId, matrixClient);
+                dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
+                return uploaded;
+            } catch (error) {
+                if (upload.cancelled) return undefined;
+
+                // Unwrap UploadFailedError to get the underlying error
+                const unwrappedError = error instanceof UploadFailedError && error.cause ? error.cause : error;
+                // 413: File was too big or upset the server in some way:
+                // clear the media size limit so we fetch it again next time we try to upload
+                if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
+                    this.mediaConfig = null;
+                }
+                dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });
+            } finally {
+                removeElement(this.inprogress, (e) => e === upload);
+            }
+
+            const { finished } = Modal.createDialog(QuestionDialog, {
+                title: _t("upload_failed_title"),
+                description: _t("gallery|upload_failed", { count: files.length - uploaded.size }),
+                button: _t("action|retry"),
+            });
+            const [retry] = await finished;
+            if (!retry) return undefined;
+        }
+    }
+
+    /**
+     * Upload files a few at a time, recording the gallery item of each one that completes.
+     *
+     * @throws The first error, once every upload that was under way has settled.
+     */
+    private async uploadGalleryBatch(
+        files: File[],
+        uploaded: Map<File, GalleryItem | null>,
+        upload: RoomUpload,
+        roomId: string,
+        matrixClient: MatrixClient,
+    ): Promise<void> {
+        const progress = new Map<File, UploadProgress>();
+        const onProgress = (file: File, fileProgress: UploadProgress): void => {
+            progress.set(file, fileProgress);
+            let loaded = 0;
+            let total = 0;
+            for (const candidate of files) {
+                loaded += progress.get(candidate)?.loaded ?? 0;
+                total += progress.get(candidate)?.total ?? candidate.size;
+            }
+            upload.onProgress({ loaded, total });
+            dis.dispatch<UploadProgressPayload>({ action: Action.UploadProgress, upload });
+        };
+
+        const queue = [...files];
+        let failed = false;
+        const worker = async (): Promise<void> => {
+            for (let file = queue.shift(); file && !failed; file = queue.shift()) {
+                try {
+                    if (upload.cancelled) throw new UploadCanceledError();
+                    const item = await this.uploadGalleryItem(file, roomId, matrixClient, upload, (fileProgress) =>
+                        onProgress(file, fileProgress),
+                    );
+                    uploaded.set(file, item);
+                } catch (error) {
+                    // Stops the other workers from starting on the files that are left.
+                    failed = true;
+                    throw error;
+                }
+            }
+        };
+
+        const results = await Promise.allSettled(Array.from({ length: GALLERY_UPLOAD_CONCURRENCY }, worker));
+        const failure = results.find((result) => result.status === "rejected");
+        if (failure) throw failure.reason;
+    }
+
+    /**
+     * Upload one file of a gallery, together with its thumbnail.
+     *
+     * @returns The gallery item, or null for a file which is not an image or video after all.
+     */
+    private async uploadGalleryItem(
+        file: File,
+        roomId: string,
+        matrixClient: MatrixClient,
+        upload: RoomUpload,
+        onProgress: (progress: UploadProgress) => void,
+    ): Promise<GalleryItem | null> {
+        const { msgtype, info } = await prepareMediaContent(matrixClient, roomId, file);
+        if (msgtype !== MsgType.Image && msgtype !== MsgType.Video) return null;
+
+        if (upload.cancelled) throw new UploadCanceledError();
+        const result = await uploadFile(matrixClient, roomId, file, onProgress, upload.abortController);
+        if (upload.cancelled) throw new UploadCanceledError();
+
+        return {
+            itemtype: msgtype,
+            body: file.name || _t("common|attachment"),
+            info: { size: file.size, mimetype: file.type, ...info },
+            url: result.url,
+            file: result.file,
+        };
+    }
+
+    /**
+     * Find out the largest file the content repository accepts, asking the homeserver if it is
+     * not known yet.
+     *
+     * @param matrixClient - The Matrix client to ask with.
+     * @returns The limit in bytes, or null if there is none.
+     */
+    public async fetchUploadLimit(matrixClient: MatrixClient): Promise<number | null> {
+        await this.ensureMediaConfigFetched(matrixClient);
+        return this.getUploadLimit();
     }
 
     private isFileSizeAcceptable(file: File): boolean {
