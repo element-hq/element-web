@@ -185,8 +185,15 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
     const reportVisibleState = useCallback(
         (v: Virtualizer<HTMLDivElement, Element>): void => {
             if (phaseRef.current !== "live" || snapshotRef.current.pendingAnchor !== null) return;
+            // After a scroll TanStack wrote itself (a jump, placing the first load), its figures
+            // below still describe the old position until the scroll event reports the new one.
+            // An update in between, from a row being measured, would report the rows on screen
+            // as where the jump started. Skip it: the scroll event brings another update.
+            if (v.isScrollPending()) return;
             const itemCount = itemsRef.current.length;
             const visibleRange = v.range;
+            const scrollOffset = v.scrollOffset ?? 0;
+            const viewportHeight = v.scrollRect?.height ?? 0;
 
             // Which rows are on screen, given as positions in the items array.
             if (
@@ -201,8 +208,6 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
             // Are we scrolled to the bottom? Worked out from figures TanStack already holds
             // (how far we have scrolled, the viewport height, the total height) rather than
             // measuring the DOM, which would force the browser to redo layout on every call.
-            const scrollOffset = v.scrollOffset ?? 0;
-            const viewportHeight = v.scrollRect?.height ?? 0;
             const totalSize = v.getTotalSize();
             const atBottom = viewportHeight > 0 && scrollOffset + viewportHeight >= totalSize - AT_BOTTOM_THRESHOLD_PX;
             if (atBottom !== lastAtBottomRef.current) {
@@ -386,6 +391,18 @@ export function TimelineView({ vm, renderItem, ref }: TimelineViewProps): JSX.El
                 vm.onAnchorReached();
             }
         }
+    });
+
+    // reportVisibleState is skipped while the first load or a jump is being placed, and a room
+    // that fits on screen does not scroll afterwards to prompt it, so call it once placing ends.
+    const wasPlacingRef = useRef(true);
+    useLayoutEffect(() => {
+        const placing = phaseRef.current !== "live" || snapshot.pendingAnchor !== null;
+        if (!placing && wasPlacingRef.current) {
+            lastVisibleRangeRef.current = null;
+            reportVisibleState(virtualizer);
+        }
+        wasPlacingRef.current = placing;
     });
 
     // Handed to the overlay buttons, and through them to the view model, so it can scroll
