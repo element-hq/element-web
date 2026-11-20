@@ -151,6 +151,36 @@ describe("<EditMessageComposerWrapper />", () => {
         expect(lastProps(wysiwygComposerProps).isUrlPreviewsModified).toBe(false);
     });
 
+    // Both composers can change the images and videos of a message, so the setting alone decides.
+    describe.each([
+        [
+            "a gallery",
+            {
+                msgtype: "dm.filament.gallery",
+                body: "Our holiday",
+                itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+            },
+        ],
+        ["an image", { msgtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+        ["a video", { msgtype: "m.video", body: "clip.mp4", url: "mxc://server/clip" }],
+    ])("for %s", (_name, content) => {
+        it("should render the wysiwyg composer when that composer is enabled", () => {
+            enabledSettings.push("feature_wysiwyg_composer");
+            renderWrapper(content);
+
+            expect(screen.getByRole("textbox", { name: WYSIWYG_COMPOSER_LABEL })).toBeInTheDocument();
+            expect(screen.queryByRole("textbox", { name: PLAIN_COMPOSER_LABEL })).not.toBeInTheDocument();
+            expect(plainComposerProps).not.toHaveBeenCalled();
+        });
+
+        it("should render the plain composer by default", () => {
+            renderWrapper(content);
+
+            expect(screen.getByRole("textbox", { name: PLAIN_COMPOSER_LABEL })).toBeInTheDocument();
+            expect(wysiwygComposerProps).not.toHaveBeenCalled();
+        });
+    });
+
     it("should preview links the plain composer reports", async () => {
         renderWrapper();
         act(() => {

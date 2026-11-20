@@ -15,6 +15,8 @@ import { CommandPartCreator, type Part } from "../../../../../editor/parts";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { getMessageMediaItems } from "../../../../../utils/gallery";
+import { MediaEventHelper } from "../../../../../utils/MediaEventHelper";
 
 function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {
     return (
@@ -44,6 +46,13 @@ export function parseEditorStateTransfer(
         // otherwise, either restore serialized parts from localStorage or parse the body of the event
         // TODO local storage
         // const restoredParts = this.restoreStoredEditorState(partCreator);
+
+        const event = editorStateTransfer.getEvent();
+        // The body of an image or video without a caption is its file name, which is not text
+        // to edit: the editor starts empty, for a caption to be written.
+        if (getMessageMediaItems(event.getContent()) && !MediaEventHelper.hasCaption(event)) {
+            return "";
+        }
 
         if (editorStateTransfer.getEvent().getContent().format === "org.matrix.custom.html") {
             return getFormattedContent(editorStateTransfer);

@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, type KeyboardEvent } from "react";
+import { GalleryComposerView } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 import { EventStatus, type MatrixEvent, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -46,6 +47,10 @@ import type DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "../../../utils/messages";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import ContentMessages from "../../../ContentMessages";
+import { captionFromMessageContent, getMessageMediaItems } from "../../../utils/gallery";
+import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
 
 // exported for tests
 export function createEditContent(
@@ -104,6 +109,11 @@ interface IEditMessageComposerProps extends MatrixClientProps {
 }
 interface IState {
     saveDisabled: boolean;
+    /**
+     * The images and videos of the message being edited, when it has any, for the user to remove
+     * items and add more.
+     */
+    attachments?: GalleryComposerViewModel;
 }
 
 class EditMessageComposer extends React.Component<IEditMessageComposerProps, IState> {
@@ -114,6 +124,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     private dispatcherRef?: string;
     private readonly replyToEvent?: MatrixEvent;
     private model!: EditorModel;
+    private stopWatchingAttachments?: () => void;
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -132,6 +143,20 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     public componentDidMount(): void {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
+
+        const mediaItems = getMessageMediaItems(this.props.editState.getEvent().getContent());
+        if (mediaItems) {
+            const attachments = new GalleryComposerViewModel({ items: mediaItems });
+            // Changing the attachments is a change worth saving, just as changing the text is.
+            // The view model also reports when a preview has loaded, which is not a change.
+            this.stopWatchingAttachments = attachments.subscribe(() => {
+                if (attachments.isModified) this.setState({ saveDisabled: false });
+            });
+            this.setState({ attachments });
+            void ContentMessages.sharedInstance()
+                .fetchUploadLimit(this.props.mxClient)
+                .then((limit) => attachments.setMaxFileSize(limit ?? undefined));
+        }
     }
 
     private getRoom(): Room {
@@ -285,6 +310,38 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         return true;
     }
 
+    /**
+     * Save the edit of a message with images or videos: the text of the editor becomes its
+     * caption, and the attachments are what is left of them after the user's changes.
+     */
+    private sendMediaEdit(attachments: GalleryComposerViewModel): void {
+        const editedEvent = this.props.editState.getEvent();
+        const editContent = createEditContent(this.model, editedEvent, this.replyToEvent);
+        const items = attachments.getItems();
+
+        if (items.length === 0 && editContent["m.new_content"]!.body === "") {
+            // Nothing is left of the message, so offer to remove it, as for an emptied text message.
+            this.cancelPreviousPendingEdit();
+            createRedactEventDialog({
+                mxEvent: editedEvent,
+                onCloseDialog: () => {
+                    this.cancelEdit();
+                },
+            });
+            return;
+        }
+
+        this.cancelPreviousPendingEdit();
+        this.endEdit();
+        void ContentMessages.sharedInstance().editMediaMessage(
+            editedEvent,
+            this.props.mxClient,
+            items,
+            captionFromMessageContent(editContent["m.new_content"]!),
+            editContent["m.mentions"],
+        );
+    }
+
     private sendEdit = async (): Promise<void> => {
         if (this.state.saveDisabled && !this.props.isUrlPreviewsModified) return;
 
@@ -304,6 +361,12 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
             this.editorRef.current.replaceEmoticon(position, REGEX_EMOTICON);
         }
+
+        if (this.state.attachments) {
+            this.sendMediaEdit(this.state.attachments);
+            return;
+        }
+
         const editContent = createEditContent(this.model, editedEvent, this.replyToEvent);
         const newContent = editContent["m.new_content"]!;
 
@@ -408,6 +471,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             this.saveStoredEditorState();
         }
         dis.unregister(this.dispatcherRef);
+        this.stopWatchingAttachments?.();
+        this.state.attachments?.dispose();
     }
 
     private createEditorModel(): boolean {
@@ -425,11 +490,17 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         } else {
             // otherwise, either restore serialized parts from localStorage or parse the body of the event
             const restoredParts = this.restoreStoredEditorState(partCreator);
+            const event = editState.getEvent();
+            // The body of an image or video without a caption is its file name, which is not
+            // text to edit: the editor starts empty, for a caption to be written.
+            const hasText = !getMessageMediaItems(event.getContent()) || MediaEventHelper.hasCaption(event);
             parts =
                 restoredParts ||
-                parseEvent(editState.getEvent(), partCreator, {
-                    shouldEscape: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
-                });
+                (hasText
+                    ? parseEvent(event, partCreator, {
+                          shouldEscape: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
+                      })
+                    : []);
             isRestored = !!restoredParts;
         }
         this.model = new EditorModel(parts, partCreator);
@@ -484,6 +555,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     label={_t("composer|edit_composer_label")}
                     onChange={this.onChange}
                 />
+                {/* Below the text rather than above it, where the formatting bar pops up over a selection */}
+                {this.state.attachments && (
+                    <GalleryComposerView vm={this.state.attachments} className="mx_EditMessageComposer_attachments" />
+                )}
                 <div className="mx_EditMessageComposer_buttons">
                     <AccessibleButton kind="secondary" onClick={this.cancelEdit}>
                         {_t("action|cancel")}

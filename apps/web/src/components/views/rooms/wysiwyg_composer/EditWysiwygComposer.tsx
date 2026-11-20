@@ -6,7 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type RefObject, useMemo, type ReactNode } from "react";
+import React, { type JSX, type RefObject, useEffect, useMemo, type ReactNode } from "react";
+import { GalleryComposerView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
@@ -18,6 +19,10 @@ import { useEditing } from "./hooks/useEditing";
 import { useInitialContent } from "./hooks/useInitialContent";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
 import { type ComposerFunctions } from "./types";
+import ContentMessages from "../../../../ContentMessages";
+import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { getMessageMediaItems } from "../../../../utils/gallery";
+import { GalleryComposerViewModel } from "../../../../viewmodels/composer/GalleryComposerViewModel";
 
 interface ContentProps {
     disabled?: boolean;
@@ -57,12 +62,31 @@ export default function EditWysiwygComposer({
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
+    // The images and videos of the message being edited, when it has any, for the user to remove
+    // items and add more.
+    const mxClient = useMatrixClientContext();
+    const mediaItems = useMemo(
+        () => getMessageMediaItems(editorStateTransfer.getEvent().getContent()),
+        [editorStateTransfer],
+    );
+    const attachmentsVm = useCreateAutoDisposedViewModel(
+        () => new GalleryComposerViewModel({ items: mediaItems ?? [] }),
+    );
+    const attachments = mediaItems ? attachmentsVm : undefined;
+    useEffect(() => {
+        if (!attachments) return;
+        void ContentMessages.sharedInstance()
+            .fetchUploadLimit(mxClient)
+            .then((limit) => attachments.setMaxFileSize(limit ?? undefined));
+    }, [attachments, mxClient]);
+
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(
         editorStateTransfer,
         initialContent,
         attachBundles,
         updateUrlPreviews,
         isUrlPreviewsModified,
+        attachments,
     );
 
     if (!isReady) {
@@ -81,6 +105,9 @@ export default function EditWysiwygComposer({
                 {(ref, composerFunctions) => (
                     <>
                         <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
+                        {attachments && (
+                            <GalleryComposerView vm={attachments} className="mx_EditWysiwygComposer_attachments" />
+                        )}
                         <EditionButtons
                             onCancelClick={endEditing}
                             onSaveClick={editMessage}

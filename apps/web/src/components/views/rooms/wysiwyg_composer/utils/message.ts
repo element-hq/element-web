@@ -36,6 +36,8 @@ import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
 import { linksIn } from "../../../../../utils/UrlUtils";
+import ContentMessages from "../../../../../ContentMessages";
+import { captionFromMessageContent, type GalleryItem } from "../../../../../utils/gallery";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -193,11 +195,23 @@ interface EditMessageParams {
      * whether the list of previews to attach has changed even if the text body is unchanged
      */
     isUrlPreviewsModified?: boolean;
+    /**
+     * For a message with images or videos: the items it should have after the edit, those it
+     * keeps and files to add. The text of the editor is then its caption.
+     */
+    attachments?: Array<File | GalleryItem>;
 }
 
 export async function editMessage(
     html: string,
-    { roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified }: EditMessageParams,
+    {
+        roomContext,
+        mxClient,
+        editorStateTransfer,
+        attachBundles,
+        isUrlPreviewsModified,
+        attachments,
+    }: EditMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const editedEvent = editorStateTransfer.getEvent();
 
@@ -220,6 +234,21 @@ export async function editMessage(
     const newContent = editContent["m.new_content"]!;
 
     const shouldSend = true;
+
+    // A message with images or videos can be saved without text. With neither left, it is
+    // handled like an emptied text message below.
+    if (attachments && (attachments.length > 0 || newContent.body !== "")) {
+        cancelPreviousPendingEdit(mxClient, editorStateTransfer);
+        endEditing(roomContext);
+        void ContentMessages.sharedInstance().editMediaMessage(
+            editedEvent,
+            mxClient,
+            attachments,
+            captionFromMessageContent(newContent),
+            editContent["m.mentions"],
+        );
+        return;
+    }
 
     if (newContent?.body === "") {
         cancelPreviousPendingEdit(mxClient, editorStateTransfer);

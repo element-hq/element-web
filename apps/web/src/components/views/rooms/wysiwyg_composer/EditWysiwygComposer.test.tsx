@@ -28,6 +28,10 @@ import * as EmojiButton from "../EmojiButton";
 import { createMocks } from "./__mocks__";
 import { ScopedRoomContextProvider } from "../../../../contexts/ScopedRoomContext.tsx";
 import { RoomUploadContextProvider } from "../../../../viewmodels/room/RoomUploadViewModel.tsx";
+import ContentMessages from "../../../../ContentMessages";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { GalleryComposerViewModel } from "../../../../viewmodels/composer/GalleryComposerViewModel";
+import { parseEditorStateTransfer } from "./hooks/useInitialContent";
 
 beforeAll(initOnce, 10000);
 
@@ -309,6 +313,184 @@ describe("EditWysiwygComposer", () => {
             await waitFor(() => expect(attachBundles).toHaveBeenCalledTimes(1));
             await flushPromises();
             expect(mockClient.sendMessage).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("Messages with images or videos", () => {
+        const first = { itemtype: "m.image", body: "one.png", url: "mxc://server/one" };
+        const second = { itemtype: "m.video", body: "two.mp4", url: "mxc://server/two" };
+
+        const mkMediaEvent = (content: Record<string, unknown>) =>
+            mkEvent({ type: "m.room.message", room: "myfakeroom", user: "myfakeuser", content, event: true });
+        const mkGalleryEvent = (content: Record<string, unknown> = {}) =>
+            mkMediaEvent({ msgtype: "dm.filament.gallery", body: "Before", itemtypes: [first, second], ...content });
+        const mkImageEvent = (content: Record<string, unknown> = {}) =>
+            mkMediaEvent({ msgtype: "m.image", body: "one.png", url: "mxc://server/one", ...content });
+
+        const editMediaMessage = vi.fn();
+        const fetchUploadLimit = vi.fn();
+        let spyDispatcher: MockInstance<(payload: ActionPayload, sync?: boolean) => void>;
+
+        /** Render the composer for an event, and wait for the editor and the attachments to be shown. */
+        const editMedia = async (event: ReturnType<typeof mkEvent>, items: number) => {
+            const result = customRender(false, new EditorStateTransfer(event));
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+            await screen.findByRole("list", { name: `${items} of 60 ${items === 1 ? "item" : "items"}` });
+            return result;
+        };
+
+        beforeEach(() => {
+            // The mocks of the client are reset after every test, and the media of the items needs it.
+            vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+            vi.spyOn(mockClient, "mxcUrlToHttp").mockImplementation((mxc: string) =>
+                mxc.replace("mxc://", "http://this.is.a.url/"),
+            );
+            editMediaMessage.mockResolvedValue(undefined);
+            fetchUploadLimit.mockResolvedValue(null);
+            vi.spyOn(ContentMessages, "sharedInstance").mockReturnValue({
+                editMediaMessage,
+                fetchUploadLimit,
+            } as unknown as ContentMessages);
+            spyDispatcher = vi.spyOn(defaultDispatcher, "dispatch");
+        });
+
+        afterEach(() => {
+            spyDispatcher.mockRestore();
+            vi.mocked(ContentMessages.sharedInstance).mockRestore();
+            vi.mocked(MatrixClientPeg.safeGet).mockRestore();
+        });
+
+        it("Should not show attachments for a text message", async () => {
+            customRender(false, editorStateTransfer);
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            expect(screen.queryByRole("list")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("gallery-composer-file-input")).not.toBeInTheDocument();
+            expect(fetchUploadLimit).not.toHaveBeenCalled();
+        });
+
+        it("Should show the items of a gallery beside its caption", async () => {
+            await editMedia(
+                mkGalleryEvent({ format: "org.matrix.custom.html", formatted_body: "<strong>Before</strong>" }),
+                2,
+            );
+
+            await waitFor(() => expect(screen.getByRole("textbox")).toContainHTML("<strong>Before</strong>"));
+            expect(screen.getByRole("button", { name: "Remove one.png" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Remove two.mp4" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Add photos or videos" })).toBeInTheDocument();
+        });
+
+        it("Should start with an empty editor for an image without a caption", async () => {
+            await editMedia(mkImageEvent(), 1);
+
+            // The body of the event is the file name, which is not text to edit.
+            expect(screen.getByRole("textbox")).not.toHaveTextContent("one.png");
+            expect(screen.getByRole("button", { name: "Remove one.png" })).toBeInTheDocument();
+        });
+
+        it("Should start with the caption of an image which has one", async () => {
+            await editMedia(mkImageEvent({ body: "Look at this", filename: "one.png" }), 1);
+
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent("Look at this"));
+        });
+
+        it("Should work out the text to start with from the caption alone", () => {
+            const room = defaultRoomContext.room!;
+            const parse = (event: ReturnType<typeof mkEvent>): string =>
+                parseEditorStateTransfer(new EditorStateTransfer(event), room, mockClient);
+
+            expect(parse(mkImageEvent())).toBe("");
+            expect(parse(mkMediaEvent({ msgtype: "m.video", body: "clip.mp4", url: "mxc://server/clip" }))).toBe("");
+            expect(parse(mkGalleryEvent({ body: "" }))).toBe("");
+            expect(parse(mkImageEvent({ body: "Look at this", filename: "one.png" }))).toBe("Look at this");
+            expect(parse(mkGalleryEvent())).toBe("Before");
+            expect(
+                parse(mkGalleryEvent({ format: "org.matrix.custom.html", formatted_body: "<strong>Before</strong>" })),
+            ).toBe("<strong>Before</strong>");
+            // The body of a file is not left out: it is the text of that message.
+            expect(parse(mkMediaEvent({ msgtype: "m.file", body: "notes.pdf", url: "mxc://server/notes" }))).toBe(
+                "notes.pdf",
+            );
+        });
+
+        it("Should enable Save when an item is removed, and save what is left through the media edit", async () => {
+            const event = mkGalleryEvent();
+            await editMedia(event, 2);
+
+            fireEvent.click(screen.getByRole("button", { name: "Remove one.png" }));
+            await screen.findByRole("list", { name: "1 of 60 item" });
+            await waitFor(() => expect(screen.getByText("Save")).not.toHaveAttribute("disabled"));
+            screen.getByText("Save").click();
+
+            await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+            expect(editMediaMessage).toHaveBeenCalledWith(
+                event,
+                mockClient,
+                [second],
+                expect.objectContaining({ body: "Before" }),
+                undefined,
+            );
+            // The media edit sends the event itself.
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            expect(spyDispatcher).toHaveBeenCalledWith({
+                action: Action.EditEvent,
+                event: null,
+                timelineRenderingType: defaultRoomContext.timelineRenderingType,
+            });
+        });
+
+        it("Should save the text which was typed as the caption", async () => {
+            const event = mkImageEvent();
+            await editMedia(event, 1);
+
+            fireEvent.input(screen.getByRole("textbox"), { data: "A caption", inputType: "insertText" });
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent("A caption"));
+            screen.getByText("Save").click();
+
+            await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+            expect(editMediaMessage).toHaveBeenCalledWith(
+                event,
+                mockClient,
+                [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+                { body: "A caption", format: "org.matrix.custom.html", formatted_body: "A caption" },
+                undefined,
+            );
+        });
+
+        it("Should save the files which were added after the items which are left", async () => {
+            const event = mkGalleryEvent();
+            await editMedia(event, 2);
+            const added = new File(["image"], "three.png", { type: "image/png" });
+
+            fireEvent.change(screen.getByTestId("gallery-composer-file-input"), { target: { files: [added] } });
+            await screen.findByRole("button", { name: "Remove three.png" });
+            screen.getByText("Save").click();
+
+            await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+            expect(editMediaMessage.mock.calls[0][2]).toEqual([first, second, added]);
+        });
+
+        it("Should turn away added files which are larger than the upload limit", async () => {
+            fetchUploadLimit.mockResolvedValue(5);
+            const setMaxFileSize = vi.spyOn(GalleryComposerViewModel.prototype, "setMaxFileSize");
+            await editMedia(mkGalleryEvent(), 2);
+
+            expect(fetchUploadLimit).toHaveBeenCalledWith(mockClient);
+            await waitFor(() => expect(setMaxFileSize).toHaveBeenCalledWith(5));
+
+            const tooLarge = new File(["0123456789"], "large.png", { type: "image/png" });
+            fireEvent.change(screen.getByTestId("gallery-composer-file-input"), { target: { files: [tooLarge] } });
+
+            expect(await screen.findByRole("status")).toHaveTextContent("larger than the upload limit");
+            expect(screen.queryByRole("button", { name: "Remove large.png" })).not.toBeInTheDocument();
+        });
+
+        it("Should not limit the size of added files when the server has no limit", async () => {
+            const setMaxFileSize = vi.spyOn(GalleryComposerViewModel.prototype, "setMaxFileSize");
+            await editMedia(mkGalleryEvent(), 2);
+
+            await waitFor(() => expect(setMaxFileSize).toHaveBeenCalledWith(undefined));
         });
     });
 

@@ -31,6 +31,7 @@ import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { ModuleApi } from "../modules/Api";
+import { getMessageMediaItems } from "./gallery";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -87,7 +88,10 @@ export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent)
     const { msgtype, body } = mxEvent.getOriginalContent();
     return (
         M_POLL_START.matches(mxEvent.getType()) ||
-        ((msgtype === MsgType.Text || msgtype === MsgType.Emote) && !!body && typeof body === "string")
+        ((msgtype === MsgType.Text || msgtype === MsgType.Emote) && !!body && typeof body === "string") ||
+        // Editing images and videos can send gallery content, which is only done when the user opted in.
+        (SettingsStore.getValue("feature_gallery_messages") &&
+            getMessageMediaItems(mxEvent.getOriginalContent()) !== undefined)
     );
 }
 
