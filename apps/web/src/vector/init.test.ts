@@ -143,6 +143,35 @@ describe("loadPlugins", () => {
         defaultDispatcher.fire(Action.OnLoggedOut, true);
         await waitFor(() => expect(events).toEqual(["in", "out"]));
     });
+
+    it("should not duplicate room header buttons a module registers again on each login", async () => {
+        const moduleSrc = `
+            export default class TestModule {
+                static moduleApiVersion = "*";
+                constructor(api) { this.api = api; }
+                async load() {}
+                async onLoggedIn() {
+                    this.unregisterHeaderButton = this.api.extras.addRoomHeaderButtonCallback(() => undefined);
+                }
+                async onLoggedOut() { this.unregisterHeaderButton?.(); }
+            }
+        `;
+        SdkConfig.put({ modules: [`data:text/javascript,${encodeURIComponent(moduleSrc)}`] });
+        expect(ModuleApi.instance.extras.roomHeaderButtonsCallbacks).toHaveLength(0);
+
+        await loadPlugins();
+
+        defaultDispatcher.dispatch({ action: Action.OnLoggedIn }, true);
+        await waitFor(() => expect(ModuleApi.instance.extras.roomHeaderButtonsCallbacks).toHaveLength(1));
+        defaultDispatcher.fire(Action.OnLoggedOut, true);
+        await waitFor(() => expect(ModuleApi.instance.extras.roomHeaderButtonsCallbacks).toHaveLength(0));
+        defaultDispatcher.dispatch({ action: Action.OnLoggedIn }, true);
+        await waitFor(() => expect(ModuleApi.instance.extras.roomHeaderButtonsCallbacks).toHaveLength(1));
+
+        // Leave the shared ModuleApi as we found it.
+        defaultDispatcher.fire(Action.OnLoggedOut, true);
+        await waitFor(() => expect(ModuleApi.instance.extras.roomHeaderButtonsCallbacks).toHaveLength(0));
+    });
 });
 
 describe("registerModuleLifecycle", () => {

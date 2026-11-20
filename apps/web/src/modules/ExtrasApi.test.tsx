@@ -21,6 +21,7 @@ import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
 import MatrixClientContext from "../contexts/MatrixClientContext";
 import { RoomView } from "../components/structures/RoomView";
 import { ModuleApi } from "./Api";
+import { ElementWebExtrasApi } from "./ExtrasApi";
 
 describe("ExtrasApi", () => {
     let client: MatrixClient;
@@ -76,5 +77,29 @@ describe("ExtrasApi", () => {
         });
 
         expect(callback).toHaveBeenCalled();
+    });
+
+    describe("should support unregistering from addRoomHeaderButtonCallback", () => {
+        it("removes the callback", () => {
+            const extras = new ElementWebExtrasApi();
+            const callback = vi.fn();
+            const unregister = extras.addRoomHeaderButtonCallback(callback);
+
+            unregister();
+
+            expect(extras.roomHeaderButtonsCallbacks).toEqual([]);
+        });
+
+        it("leaves other callbacks in place", () => {
+            const extras = new ElementWebExtrasApi();
+            const first = vi.fn();
+            const second = vi.fn();
+            extras.addRoomHeaderButtonCallback(first);
+            const unregisterSecond = extras.addRoomHeaderButtonCallback(second);
+
+            unregisterSecond();
+
+            expect(extras.roomHeaderButtonsCallbacks).toEqual([first]);
+        });
     });
 });

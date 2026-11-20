@@ -9,6 +9,7 @@ import type { JSX, ReactNode } from "react";
 import type { MatrixEvent } from "../models/event";
 import type { AccountAuthInfo } from "./auth.ts";
 import type { ComposerApiTarget } from "./composer.ts";
+import type { Unregister } from "../utils";
 
 /**
  * Properties for all message components.
@@ -238,6 +239,7 @@ export interface CustomComponentsApi {
      * @param eventTypeOrFilter - The event type this renderer is for. Use a function for more complex filtering.
      * @param renderer - The render function.
      * @param hints - Hints that alter the way the tile is handled.
+     * @returns A function that removes this renderer.
      * @example
      * ```
      *  customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
@@ -255,7 +257,7 @@ export interface CustomComponentsApi {
         eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean),
         renderer: CustomMessageRenderFunction,
         hints?: CustomMessageRenderHints,
-    ): void;
+    ): Unregister;
 
     /**
      * Register a renderer for the room preview bar.
@@ -300,6 +302,7 @@ export interface CustomComponentsApi {
      *
      * @param filterFn - A filter function to determine if this renderer should be used.
      * @param renderer - The render function.
+     * @returns A function that removes this renderer.
      * @example
      * ```
      *  customComponents.registerComposerPreview(
@@ -313,5 +316,5 @@ export interface CustomComponentsApi {
     registerComposerPreview(
         filterFn: (composerText: string, roomId: string) => boolean,
         renderer: CustomComposerPreviewRenderFunction,
-    ): void;
+    ): Unregister;
 }

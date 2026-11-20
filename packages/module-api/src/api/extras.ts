@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { type JSX } from "react";
 
+import type { Unregister } from "../utils";
+
 /**
  * Properties of an item added to the Space panel
  * @alpha
@@ -81,8 +83,9 @@ export interface ExtrasApi {
      * Adds a callback to get extra buttons in the room header (which can vary depending on the room being displayed).
      *
      * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
+     * @returns A function that removes this callback.
      */
-    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): Unregister;
 
     /**
      * Adds an entry to the credits list in the Help & About settings tab. Each entry is

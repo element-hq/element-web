@@ -23,4 +23,28 @@ describe("CustomisationsApi", () => {
         expect(api.shouldShowComponent(UIComponent.CreateRooms)).toBe(true);
         expect(shouldShowComponent).toHaveBeenCalledWith("UIComponent.roomCreation");
     });
+
+    describe("should support unregistering from registerShouldShowComponent()", () => {
+        it("removes the callback", () => {
+            const hide = vi.fn().mockReturnValue(false);
+            const unregister = api.registerShouldShowComponent(hide);
+
+            unregister();
+
+            expect(api.shouldShowComponent(UIComponent.CreateRooms)).toBeUndefined();
+            expect(hide).not.toHaveBeenCalled();
+        });
+
+        it("lets a callback registered again take effect instead of the removed one", () => {
+            const oldCallback = vi.fn().mockReturnValue(false);
+            const newCallback = vi.fn().mockReturnValue(true);
+            const unregister = api.registerShouldShowComponent(oldCallback);
+            api.registerShouldShowComponent(newCallback);
+
+            unregister();
+
+            expect(api.shouldShowComponent(UIComponent.CreateRooms)).toBe(true);
+            expect(oldCallback).not.toHaveBeenCalled();
+        });
+    });
 });
