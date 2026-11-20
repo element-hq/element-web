@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     ConnectionError,
     type IProtocol,
@@ -39,6 +39,7 @@ import { MetaSpace } from "../../../../stores/spaces";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
+import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 
 vi.useFakeTimers({ shouldAdvanceTime: true });
 
@@ -710,6 +711,37 @@ describe("Spotlight Dialog", () => {
                 initialText: "search term",
             }),
         );
+    });
+
+    describe("recently viewed rooms", () => {
+        beforeEach(() => {
+            vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it("should leave out the section when the only recently viewed room is the open one", async () => {
+            vi.spyOn(BreadcrumbsStore.instance, "rooms", "get").mockReturnValue([testRoom]);
+            render(<SpotlightDialog onFinished={() => null} />);
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            expect(screen.queryByRole("group", { name: "Recently viewed" })).not.toBeInTheDocument();
+        });
+
+        it("should list the recently viewed rooms other than the open one", async () => {
+            vi.spyOn(BreadcrumbsStore.instance, "rooms", "get").mockReturnValue([testRoom, testDM]);
+            render(<SpotlightDialog onFinished={() => null} />);
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const tile = (room: Room): HTMLElement | null =>
+                document.getElementById(`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`);
+            expect(screen.getByRole("group", { name: "Recently viewed" })).toContainElement(tile(testDM));
+            expect(tile(testRoom)).toBeNull();
+        });
     });
 
     describe("keyboard prompt filter and query checks", () => {

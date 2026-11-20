@@ -1139,20 +1139,23 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
+        const recentlyViewedRooms = BreadcrumbsStore.instance.rooms.filter(
+            (r) => r.roomId !== SDKContextClass.instance.roomViewStore.getRoomId(),
+        );
+
         content = (
             <>
-                <div
-                    className="mx_SpotlightDialog_section mx_SpotlightDialog_recentlyViewed"
-                    role="group"
-                    aria-labelledby="mx_SpotlightDialog_section_recentlyViewed"
-                >
-                    <h4 id="mx_SpotlightDialog_section_recentlyViewed">
-                        {_t("spotlight_dialog|recently_viewed_section_title")}
-                    </h4>
-                    <div>
-                        {BreadcrumbsStore.instance.rooms
-                            .filter((r) => r.roomId !== SDKContextClass.instance.roomViewStore.getRoomId())
-                            .map((room) => (
+                {recentlyViewedRooms.length > 0 && (
+                    <div
+                        className="mx_SpotlightDialog_section mx_SpotlightDialog_recentlyViewed"
+                        role="group"
+                        aria-labelledby="mx_SpotlightDialog_section_recentlyViewed"
+                    >
+                        <h4 id="mx_SpotlightDialog_section_recentlyViewed">
+                            {_t("spotlight_dialog|recently_viewed_section_title")}
+                        </h4>
+                        <div>
+                            {recentlyViewedRooms.map((room) => (
                                 <TooltipOption
                                     id={`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`}
                                     title={room.name}
@@ -1165,8 +1168,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                     {room.name}
                                 </TooltipOption>
                             ))}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {recentSearchesSection}
                 {otherSearchesSection}
