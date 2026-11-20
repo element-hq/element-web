@@ -22,4 +22,18 @@ test.describe("Notifications tab", () => {
         await expect(axe).toHaveNoViolations();
         await expect(settings).toMatchScreenshot("standard-notification-settings.png");
     });
+
+    test("should vertically center the remove button of a keyword", async ({ app, user }) => {
+        const settings = await app.settings.openUserSettings("Notifications");
+        await settings.getByRole("textbox", { name: "Keyword", exact: true }).fill("crocodile");
+        await settings.getByRole("button", { name: "Add", exact: true }).click();
+
+        const keyword = settings.getByRole("listitem").filter({ hasText: "crocodile" });
+        const keywordBox = await keyword.boundingBox();
+        const removeBox = await keyword.getByRole("button", { name: "Remove" }).boundingBox();
+        expect(removeBox!.y - keywordBox!.y).toBeCloseTo(
+            keywordBox!.y + keywordBox!.height - (removeBox!.y + removeBox!.height),
+            0,
+        );
+    });
 });
