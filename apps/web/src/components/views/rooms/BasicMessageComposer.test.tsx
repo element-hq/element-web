@@ -37,6 +37,36 @@ describe("BasicMessageComposer", () => {
     const userId = client.getSafeUserId();
     const room = new Room(roomId, client, userId);
 
+    describe("focus on mount", () => {
+        const renderComposer = (wrapperClassNames: string[]): void => {
+            const model = new EditorModel([], pc, renderer);
+            const composer = wrapperClassNames.reduceRight(
+                (children, className) => <div className={className}>{children}</div>,
+                <BasicMessageComposer model={model} room={room} />,
+            );
+            render(composer, {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            });
+        };
+
+        it("should focus the composer outside the right panel", () => {
+            renderComposer([]);
+            expect(screen.getByRole("textbox")).toHaveFocus();
+        });
+
+        it("should not focus the composer inside the right panel", () => {
+            renderComposer(["mx_RightPanel"]);
+            expect(screen.getByRole("textbox")).not.toHaveFocus();
+        });
+
+        it("should focus an edit composer inside the right panel", () => {
+            renderComposer(["mx_RightPanel", "mx_EditMessageComposer"]);
+            expect(screen.getByRole("textbox")).toHaveFocus();
+        });
+    });
+
     it("should allow a user to paste a URL without it being mangled", async () => {
         const model = new EditorModel([], pc, renderer);
         render(<BasicMessageComposer model={model} room={room} />, {

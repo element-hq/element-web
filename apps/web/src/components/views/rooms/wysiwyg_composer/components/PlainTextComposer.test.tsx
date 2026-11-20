@@ -66,6 +66,18 @@ describe("PlainTextComposer", () => {
         expect(screen.getByRole("textbox")).toHaveFocus();
     });
 
+    it("Should not have focus when rendered in the right panel", () => {
+        // When
+        render(
+            <div className="mx_RightPanel">
+                <PlainTextComposer onChange={vi.fn()} onSend={vi.fn()} />
+            </div>,
+        );
+
+        // Then
+        expect(screen.getByRole("textbox")).not.toHaveFocus();
+    });
+
     it("Should call onChange handler", async () => {
         // When
         const content = "content";

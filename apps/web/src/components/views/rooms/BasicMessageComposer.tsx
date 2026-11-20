@@ -776,7 +776,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current?.addEventListener("input", this.onInput, true);
         this.editorRef.current?.addEventListener("compositionstart", this.onCompositionStart, true);
         this.editorRef.current?.addEventListener("compositionend", this.onCompositionEnd, true);
-        this.editorRef.current?.focus();
+        // When a room opens with the thread panel open, the thread composer mounts after the main composer,
+        // so don't let composers in the right panel steal focus. Edit composers only mount when the user
+        // starts editing, so they still take focus.
+        const editor = this.editorRef.current;
+        if (!editor?.closest(".mx_RightPanel") || editor.closest(".mx_EditMessageComposer")) {
+            editor?.focus();
+        }
     }
 
     private getInitialCaretPosition(): DocumentPosition {
