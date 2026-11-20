@@ -73,6 +73,11 @@ export interface GalleryComposerViewActions {
      * Invoked when the user removes an item.
      */
     onRemoveItem: (id: string) => void;
+    /**
+     * Invoked when the user activates an item, to see it at full size. Items are not interactive
+     * without it.
+     */
+    onOpenItem?: (id: string) => void;
 }
 
 export type GalleryComposerViewModel = ViewModel<GalleryComposerViewSnapshot, GalleryComposerViewActions>;
@@ -131,39 +136,59 @@ export function GalleryComposerView({ vm, className }: Readonly<GalleryComposerV
     return (
         <div className={classNames(className, styles.root)} onDrop={onDrop} onDragOver={onDragOver} onPaste={onPaste}>
             <ul className={styles.grid} aria-label={countLabel}>
-                {items.map((item) => (
-                    <li key={item.id} className={styles.item}>
-                        {item.loading ? (
-                            <InlineSpinner aria-label={_t("common|loading")} role="progressbar" />
-                        ) : item.previewUrl === undefined ? null : item.previewIsVideo ? (
-                            <video
-                                className={styles.preview}
-                                src={item.previewUrl}
-                                aria-label={item.name}
-                                muted
-                                playsInline
-                                preload="metadata"
-                            />
-                        ) : (
-                            <img className={styles.preview} src={item.previewUrl} alt={item.name} />
-                        )}
-                        {item.type === "video" && (
-                            <span className={styles.video}>
-                                <PlaySolidIcon width="16" height="16" />
-                            </span>
-                        )}
-                        <button
-                            type="button"
-                            className={styles.remove}
-                            aria-label={_t("composer|gallery|remove_item", { name: item.name })}
-                            title={_t("action|remove")}
-                            disabled={disabled}
-                            onClick={(): void => vm.onRemoveItem(item.id)}
-                        >
-                            <CloseIcon width="16" height="16" />
-                        </button>
-                    </li>
-                ))}
+                {items.map((item) => {
+                    const preview = (
+                        <>
+                            {item.loading ? (
+                                <InlineSpinner aria-label={_t("common|loading")} role="progressbar" />
+                            ) : item.previewUrl === undefined ? null : item.previewIsVideo ? (
+                                <video
+                                    className={styles.preview}
+                                    src={item.previewUrl}
+                                    aria-label={item.name}
+                                    muted
+                                    playsInline
+                                    preload="metadata"
+                                />
+                            ) : (
+                                <img className={styles.preview} src={item.previewUrl} alt={item.name} />
+                            )}
+                            {item.type === "video" && (
+                                <span className={styles.video}>
+                                    <PlaySolidIcon width="16" height="16" />
+                                </span>
+                            )}
+                        </>
+                    );
+                    return (
+                        <li key={item.id} className={styles.item}>
+                            {/* The preview opens the item at full size, when the host allows it */}
+                            {vm.onOpenItem ? (
+                                <button
+                                    type="button"
+                                    className={styles.open}
+                                    aria-label={_t("composer|gallery|view_item", { name: item.name })}
+                                    title={_t("composer|gallery|view_item", { name: item.name })}
+                                    onClick={(): void => vm.onOpenItem?.(item.id)}
+                                >
+                                    {preview}
+                                </button>
+                            ) : (
+                                preview
+                            )}
+                            <button
+                                type="button"
+                                className={styles.remove}
+                                aria-label={_t("composer|gallery|remove_item", { name: item.name })}
+                                title={_t("action|remove")}
+                                disabled={disabled}
+                                onClick={(): void => vm.onRemoveItem(item.id)}
+                            >
+                                <CloseIcon width="16" height="16" />
+                            </button>
+                        </li>
+                    );
+                })}
                 {canAddMore && (
                     <li className={styles.item}>
                         <button

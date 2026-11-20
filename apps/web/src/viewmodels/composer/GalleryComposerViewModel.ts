@@ -17,6 +17,8 @@ import { _t } from "../../languageHandler";
 import { fileSize } from "../../utils/FileUtils";
 import { type GalleryItem, isGalleryFile, MAX_GALLERY_ITEMS } from "../../utils/gallery";
 import { GalleryMedia } from "../../utils/GalleryMedia";
+import Modal from "../../Modal";
+import { GalleryImageView } from "../../components/views/elements/GalleryImageView";
 
 /**
  * One attachment of a message being written or edited: either a file still to be uploaded, or an
@@ -193,6 +195,19 @@ export class GalleryComposerViewModel
 
     public onAddFiles = (files: File[]): void => {
         this.addFiles(files);
+    };
+
+    public onOpenItem = (id: string): void => {
+        const index = this.entries.findIndex((entry) => entry.id === id);
+        if (index === -1) return;
+
+        Modal.createDialog(
+            GalleryImageView,
+            { items: this.getItems(), initialIndex: index },
+            "mx_Dialog_lightbox",
+            undefined,
+            true,
+        );
     };
 
     public onRemoveItem = (id: string): void => {

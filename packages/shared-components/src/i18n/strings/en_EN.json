@@ -48,7 +48,8 @@
     "composer": {
         "gallery": {
             "add_more": "Add photos or videos",
-            "remove_item": "Remove %(name)s"
+            "remove_item": "Remove %(name)s",
+            "view_item": "View %(name)s"
         },
         "url_preview": {
             "clear_all": "Clear all",

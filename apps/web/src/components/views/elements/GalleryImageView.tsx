@@ -11,6 +11,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import { GalleryMedia } from "../../../utils/GalleryMedia";
+import { LocalMedia } from "../../../utils/LocalMedia";
+import { type GalleryItem } from "../../../utils/gallery";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import ImageView from "./ImageView";
 import Spinner from "./Spinner";
@@ -19,7 +21,13 @@ interface GalleryImageViewProps {
     /**
      * The gallery message whose items are shown.
      */
-    mxEvent: MatrixEvent;
+    mxEvent?: MatrixEvent;
+    /**
+     * The media to show when it is not that of a message: the attachments of a message being
+     * written or edited, both files still to be sent and items the message already has.
+     * Ignored when `mxEvent` is given.
+     */
+    items?: Array<File | GalleryItem>;
     /**
      * Position of the item to show first, among the displayable items of the gallery.
      */
@@ -41,12 +49,22 @@ interface GalleryImageViewProps {
 /** What is known about the source of the item being shown. */
 type Source = { status: "loading" } | { status: "ready"; url: string } | { status: "error" };
 
+/** One piece of media the viewer can show. */
+type ViewerMedia = GalleryMedia | LocalMedia;
+
+function mediaFor(mxEvent?: MatrixEvent, items: Array<File | GalleryItem> = []): ViewerMedia[] {
+    if (mxEvent) return GalleryMedia.forEvent(mxEvent);
+    return items.map((item) => (item instanceof File ? new LocalMedia(item) : new GalleryMedia(item)));
+}
+
 /**
- * The media viewer for a gallery message: shows one item at a time in the image view and steps
- * through the others with the previous and next buttons or the arrow keys.
+ * The media viewer for a gallery message, or for the attachments of a message being written:
+ * shows one item at a time in the image view and steps through the others with the previous and
+ * next buttons or the arrow keys.
  */
 export function GalleryImageView({
     mxEvent,
+    items: attachments,
     initialIndex,
     permalinkCreator,
     thumbnailInfo,
@@ -54,7 +72,7 @@ export function GalleryImageView({
 }: Readonly<GalleryImageViewProps>): JSX.Element | null {
     // The viewer owns its media rather than borrowing the timeline's, which is released when the
     // message scrolls out of view.
-    const items = useMemo(() => GalleryMedia.forEvent(mxEvent), [mxEvent]);
+    const items = useMemo(() => mediaFor(mxEvent, attachments), [mxEvent, attachments]);
     useEffect(() => {
         return () => items.forEach((item) => item.destroy());
     }, [items]);
@@ -62,7 +80,7 @@ export function GalleryImageView({
     const [index, setIndex] = useState(() => Math.max(0, Math.min(initialIndex, items.length - 1)));
     // The viewer only grows out of a tile when it opens, not when coming back to the first item.
     const [hasNavigated, setHasNavigated] = useState(false);
-    const [sources, setSources] = useState<ReadonlyMap<GalleryMedia, Source>>(new Map());
+    const [sources, setSources] = useState<ReadonlyMap<ViewerMedia, Source>>(new Map());
     const current = items.at(index);
 
     useEffect(() => {
@@ -115,9 +133,9 @@ export function GalleryImageView({
                 index: position + 1,
                 count: items.length,
             })}
-            width={current.item.info?.w}
-            height={current.item.info?.h}
-            fileSize={current.item.info?.size}
+            width={current.info?.w}
+            height={current.info?.h}
+            fileSize={current.info?.size}
             mxEvent={mxEvent}
             permalinkCreator={permalinkCreator}
             mediaEventHelper={current.helper}

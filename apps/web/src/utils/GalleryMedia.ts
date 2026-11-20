@@ -57,6 +57,13 @@ export class GalleryMedia implements IDestroyable {
     }
 
     /**
+     * What the message says about the media: its size, dimensions and type.
+     */
+    public get info(): GalleryItem["info"] {
+        return this.item.info;
+    }
+
+    /**
      * The file name of the item.
      */
     public get name(): string {
