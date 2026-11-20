@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useState, useCallback } from "react";
+import React, { type JSX, useState, useCallback, useRef } from "react";
 import { Dropdown, type DropdownTriggerProps, Link, Text } from "@vector-im/compound-web";
 import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -83,6 +83,14 @@ export type SetStatusViewProps = {
      * Ignored if the user already has a status set, as their existing status is shown instead.
      */
     initialCustomMode?: boolean;
+
+    /**
+     * How the status choices are shown.
+     * - `"listbox"`: a list attached below the "set status" prompt, for use in a page.
+     * - `"menu"`: a menu beside the parent menu, for use inside a Menu (such as the user menu).
+     * Default: "listbox"
+     */
+    variant?: "listbox" | "menu";
 };
 
 function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
@@ -94,9 +102,19 @@ function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
     );
 }
 
-export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewProps): JSX.Element {
+export function SetStatusView({ vm, initialCustomMode = false, variant = "listbox" }: SetStatusViewProps): JSX.Element {
     const { userStatus, recentEmojis, disabled } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(initialCustomMode);
+    const clearButtonRef = useRef<HTMLButtonElement>(null);
+
+    // Picking a status replaces the trigger with the status pill, so rather than
+    // let focus fall back to the parent menu, put it on the pill's clear button.
+    const onCloseAutoFocus = useCallback((e: Event): void => {
+        if (clearButtonRef.current) {
+            e.preventDefault();
+            clearButtonRef.current.focus();
+        }
+    }, []);
 
     const renderItem = useCallback((value: StatusValue | null): React.ReactNode => {
         if (value === null) return null;
@@ -105,7 +123,7 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
     }, []);
 
     if (userStatus) {
-        return <StatusPillView status={userStatus} clearStatus={vm.clearStatus} />;
+        return <StatusPillView status={userStatus} clearStatus={vm.clearStatus} clearButtonRef={clearButtonRef} />;
     }
 
     if (customMode) {
@@ -123,23 +141,41 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
     }
 
     const renderTrigger = (props: DropdownTriggerProps): JSX.Element => {
-        const trigger = (
+        const content = (
+            <>
+                <ReactionIcon />
+                <Text as="span" type="body" size="md" weight="medium">
+                    {_t("status|set_status|set_status_prompt")}
+                </Text>
+            </>
+        );
+        const className = classNames(styles.setStatusTrigger, { [styles.disabledTrigger]: disabled });
+
+        return (
             <div className={styles.setStatusContainer}>
-                <Link
-                    className={classNames(styles.setStatusTrigger, { [styles.disabledTrigger]: disabled })}
-                    aria-label={_t("status|set_status|set_status_prompt")}
-                    aria-disabled={disabled}
-                    {...props}
-                >
-                    <ReactionIcon />
-                    <Text as="span" type="body" size="md" weight="medium">
-                        {_t("status|set_status|set_status_prompt")}
-                    </Text>
-                </Link>
+                {variant === "menu" ? (
+                    // A real button, so it can be focused and opened with Enter or Space
+                    <button
+                        type="button"
+                        className={classNames(className, styles.setStatusButton)}
+                        aria-label={_t("status|set_status|set_status_prompt")}
+                        aria-disabled={disabled}
+                        {...props}
+                    >
+                        {content}
+                    </button>
+                ) : (
+                    <Link
+                        className={className}
+                        aria-label={_t("status|set_status|set_status_prompt")}
+                        aria-disabled={disabled}
+                        {...props}
+                    >
+                        {content}
+                    </Link>
+                )}
             </div>
         );
-
-        return trigger;
     };
 
     const onValueChange = (value: StatusValue): void => {
@@ -172,6 +208,9 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
             onValueChange={onValueChange}
             renderItem={renderItem}
             disabled={disabled}
+            variant={variant}
+            menuTitle={_t("status|set_status|set_status_prompt")}
+            onCloseAutoFocus={onCloseAutoFocus}
         />
     );
 }

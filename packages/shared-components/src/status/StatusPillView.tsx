@@ -21,8 +21,12 @@ export const StatusPillView: React.FC<
         status: UserStatus;
         clearStatus: () => void;
         ref?: Ref<HTMLDivElement>;
+        /**
+         * A ref to the button that clears the status.
+         */
+        clearButtonRef?: Ref<HTMLButtonElement>;
     } & HTMLAttributes<HTMLDivElement>
-> = ({ status, clearStatus, ref, ...props }): JSX.Element => {
+> = ({ status, clearStatus, ref, clearButtonRef, ...props }): JSX.Element => {
     return (
         <div ref={ref} {...props} className={styles.statusPill}>
             <Text as="span" className={styles.menuStatusEmoji}>
@@ -32,6 +36,7 @@ export const StatusPillView: React.FC<
                 {status.text}
             </Text>
             <IconButton
+                ref={clearButtonRef}
                 onClick={clearStatus}
                 aria-label={_t("menus|user_menu|clear_status")}
                 tooltip={_t("menus|user_menu|clear_status")}
