@@ -38,8 +38,7 @@
         "encryption_enabled": "암호화 활성화됨",
         "loading": "로딩 중…",
         "options": "옵션",
-        "preferences": "환경설정",
-        "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
+        "preferences": "환경설정"
     },
     "devtools": {
         "toggle_event": "이벤트 토글"
@@ -235,7 +234,6 @@
             "enabled_dm": "이곳의 메시지는 종단간 암호화로 보호됩니다. 프로필 사진을 탭하여 %(displayName)s 님을 인증하세요.",
             "enabled_local": "이 채팅의 메시지는 종단간 암호화됩니다.",
             "parameters_changed": "일부 암호화 설정이 변경되었습니다.",
-            "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
             "unsupported": "이 방에서 사용 중인 암호화 방식은 지원되지 않습니다."
         },
         "mab": {

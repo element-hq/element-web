@@ -43,8 +43,7 @@
         "encryption_enabled": "Verschlüsselung aktiviert",
         "loading": "Wird geladen …",
         "options": "Optionen",
-        "preferences": "Einstellungen",
-        "state_encryption_enabled": "Experimentelle State-Verschlüsselung aktiviert"
+        "preferences": "Einstellungen"
     },
     "composer": {
         "url_preview": {
@@ -371,7 +370,6 @@
             "enabled_dm": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s im Profil – wähle dazu das Profilbild.",
             "enabled_local": "Nachrichten in diesem Chat werden Ende-zu-Ende-verschlüsselt.",
             "parameters_changed": "Einige Verschlüsselungsparameter wurden geändert.",
-            "state_enabled": "Nachrichten und State-Events in diesem Chat sind Ende-zu-Ende-verschlüsselt. Wenn Personen beitreten, kannst du sie in ihrem Profil verifizieren – wähle dazu ihr Profilbild.",
             "unsupported": "Die in diesem Chat verwendete Verschlüsselung wird nicht unterstützt."
         },
         "mab": {

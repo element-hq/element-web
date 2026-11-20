@@ -15,6 +15,14 @@
         "trigger_label": "Show menu",
         "univention_error": "Could not fetch central navigation from the portal"
     },
+    "et": {
+        "close_label": "Sulge menüü",
+        "logo_alt": "Portaali logo",
+        "logo_link_label": "Näita portaali",
+        "menu_label": "Menüü",
+        "trigger_label": "Näita menüüd",
+        "univention_error": "Portaalist keskmenüü laadimine ei õnnestunud"
+    },
     "fr": {
         "close_label": "Fermer le menu",
         "logo_alt": "Logo du portail",
@@ -22,6 +30,22 @@
         "menu_label": "Menu",
         "trigger_label": "Afficher le menu",
         "univention_error": "Impossible de récupérer la navigation centrale du portail"
+    },
+    "hr": {
+        "close_label": "Zatvori izbornik",
+        "logo_alt": "Logotip portala",
+        "logo_link_label": "Prikaži portal",
+        "menu_label": "Izbornik",
+        "trigger_label": "Prikaži izbornik",
+        "univention_error": "Nije moguće dohvatiti središnju navigaciju s portala"
+    },
+    "pl": {
+        "close_label": "Zamknij menu",
+        "logo_alt": "Logo portalu",
+        "logo_link_label": "Pokaż portal",
+        "menu_label": "Menu",
+        "trigger_label": "Pokaż menu",
+        "univention_error": "Nie udało się pobrać nawigacji centralnej z portalu"
     },
     "sv": {
         "close_label": "Stäng menyn",

@@ -43,8 +43,7 @@
         "encryption_enabled": "Šifriranje je omogućeno",
         "loading": "Učitavanje…",
         "options": "Mogućnosti",
-        "preferences": "Osobne postavke",
-        "state_encryption_enabled": "Omogućeno je eksperimentalno šifriranje stanja"
+        "preferences": "Osobne postavke"
     },
     "composer": {
         "url_preview": {
@@ -95,6 +94,12 @@
     "emoji_picker": {
         "cancel_search_label": "Otkaži pretraživanje",
         "emoji_picker": "Birač emotikona"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Izgubit ćete povijest šifriranih razgovora i morat ćete resetirati svoj digitalni identitet ako uklonite sve svoje uređaje.",
+            "error": "Brisanje pohrane ključeva nije uspjelo. Pokušajte ponovno."
+        }
     },
     "error": {
         "legacy_crypto_unsupported": {
@@ -369,7 +374,6 @@
             "enabled_dm": "Poruke su ovdje sveobuhvatno šifrirane. Potvrdite %(displayName)s u njihovu profilu – odaberite njihovu profilnu sliku.",
             "enabled_local": "Poruke u ovom razgovoru bit će sveobuhvatno šifrirane.",
             "parameters_changed": "Neki parametri šifriranja su promijenjeni.",
-            "state_enabled": "Poruke i događaji u ovoj sobi sveobuhvatno su šifrirani. Kada se osobe pridruže, možete ih potvrditi u njihovu profilu, tako da samo odaberete njihovu profilnu sliku.",
             "unsupported": "Šifriranje kojim se koristi ova soba nije podržano."
         },
         "mab": {

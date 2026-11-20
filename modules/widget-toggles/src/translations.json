@@ -3,9 +3,21 @@
         "hide_widget": "Hide %(name)s",
         "show_widget": "Show %(name)s"
     },
+    "et": {
+        "hide_widget": "Peida %(name)s",
+        "show_widget": "Näita „%(name)s“ vidinat"
+    },
     "fr": {
         "hide_widget": "Cacher %(name)s",
         "show_widget": "Afficher %(name)s"
+    },
+    "hr": {
+        "hide_widget": "Sakrij %(name)s",
+        "show_widget": "Prikaži %(name)s"
+    },
+    "pl": {
+        "hide_widget": "Ukryj %(name)s",
+        "show_widget": "Pokaż %(name)s"
     },
     "sv": {
         "hide_widget": "Dölj %(name)s",
