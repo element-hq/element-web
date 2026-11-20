@@ -120,6 +120,13 @@ function handleKeyboardEvent(
         case KeyBindingAction.SendMessage:
             send();
             return null;
+        case KeyBindingAction.CancelReplyOrEdit:
+            // As in the classic editor, Escape abandons an edit.
+            if (!isEditing) break;
+            endEditing(roomContext);
+            event.preventDefault();
+            event.stopPropagation();
+            return null;
         case KeyBindingAction.EditPrevMessage: {
             // Or if the caret is not at the beginning of the editor
             // Or the editor is modified

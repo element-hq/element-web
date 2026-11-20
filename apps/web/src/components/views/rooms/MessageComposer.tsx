@@ -58,6 +58,8 @@ import { captionFromMessageContent, getMessageMediaItems } from "../../../utils/
 import { type GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
 import { MessageAttachments } from "./MessageAttachments";
 import { type EditorActions } from "./EditorActions";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { EditMessageComposerWrapper } from "./EditMessageComposerWrapper";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import {
@@ -96,7 +98,10 @@ function EditingBar({ onCancel }: EditingBarProps): JSX.Element {
         <div className="mx_ReplyPreview mx_MessageComposer_editingBar">
             <div className="mx_ReplyPreview_section">
                 <div className="mx_ReplyPreview_header">
-                    <span>{_t("composer|editing_title")}</span>
+                    <span>
+                        {_t("composer|editing_title")}
+                        <span className="mx_MessageComposer_editingBar_hint">{_t("composer|editing_cancel_hint")}</span>
+                    </span>
                     <AccessibleButton
                         className="mx_ReplyPreview_header_cancel"
                         title={_t("composer|cancel_editing")}
@@ -316,6 +321,25 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     private cancelEdit = (): void => {
         this.editorActions.current?.cancel();
+    };
+
+    /**
+     * Escape abandons an edit wherever the focus is in the composer: on the attachments and the
+     * buttons as well as in the editor, which handles it itself. Taken on the way down, before the
+     * tooltip of a focused button, which would otherwise only close itself.
+     */
+    private onKeyDown = (event: React.KeyboardEvent): void => {
+        if (!this.props.editState) return;
+        const target = event.target as Element;
+        // Menus opened from the composer are rendered elsewhere in the page and close themselves.
+        if (!this.ref.current?.contains(target)) return;
+        // The editor handles it, after giving its suggestions the chance to close first.
+        if (target.closest?.(".mx_EditMessageComposerWrapper")) return;
+        if (getKeyBindingsManager().getMessageComposerAction(event) !== KeyBindingAction.CancelReplyOrEdit) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        this.cancelEdit();
     };
 
     public componentDidMount(): void {
@@ -817,7 +841,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
+            <div
+                className={classes}
+                ref={this.ref}
+                role="region"
+                aria-label={_t("a11y|message_composer")}
+                onKeyDownCapture={this.onKeyDown}
+            >
                 <div className="mx_MessageComposer_wrapper">
                     {/* The previews of the message being written, which is put aside while editing */}
                     {!isEditing && <MessageComposerUrlPreviewWrapper urlPreviewVm={this.props.urlPreviewVm} />}

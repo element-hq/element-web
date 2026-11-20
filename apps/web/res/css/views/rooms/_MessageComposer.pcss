@@ -318,3 +318,21 @@ Please see LICENSE files in the repository root for full details.
         padding: 3px 0;
     }
 }
+
+/* Unlike the bar shown when replying, the bar shown when editing is not faded: its button is how
+   the edit is abandoned with a pointer. */
+.mx_MessageComposer_editingBar .mx_ReplyPreview_section .mx_ReplyPreview_header {
+    opacity: 1;
+    align-items: center;
+    color: var(--cpd-color-text-secondary);
+
+    .mx_ReplyPreview_header_cancel svg {
+        color: var(--cpd-color-icon-primary);
+    }
+}
+
+.mx_MessageComposer_editingBar_hint {
+    margin-inline-start: var(--cpd-space-2x);
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-regular);
+}

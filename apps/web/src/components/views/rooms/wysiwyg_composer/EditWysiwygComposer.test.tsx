@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type MockInstance } from "vitest";
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
@@ -200,6 +201,19 @@ describe("EditWysiwygComposer", () => {
             expect(spyDispatcher).toHaveBeenCalledWith({
                 action: Action.FocusSendMessageComposer,
                 context: defaultRoomContext.timelineRenderingType,
+            });
+        });
+
+        it("Should cancel edit on Escape, as the classic editor does", async () => {
+            // When
+            screen.getByRole("textbox").focus();
+            await userEvent.keyboard("{Escape}");
+
+            // Then
+            expect(spyDispatcher).toHaveBeenCalledWith({
+                action: Action.EditEvent,
+                event: null,
+                timelineRenderingType: defaultRoomContext.timelineRenderingType,
             });
         });
 

@@ -611,6 +611,7 @@
         "cancel_editing": "Cancel editing",
         "close_sticker_picker": "Hide stickers",
         "edit_composer_label": "Edit message",
+        "editing_cancel_hint": "Esc to cancel",
         "editing_title": "Editing message",
         "format_bold": "Bold",
         "format_code_block": "Code block",

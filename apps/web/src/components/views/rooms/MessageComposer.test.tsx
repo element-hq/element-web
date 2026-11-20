@@ -844,6 +844,31 @@ describe("MessageComposer", () => {
             expect(actions.save).not.toHaveBeenCalled();
         });
 
+        it("cancels the edit with Escape wherever the focus is in the composer", async () => {
+            renderComposer({ editState: new EditorStateTransfer(textMessage) });
+            const actions = { save: vi.fn(), cancel: vi.fn() };
+            lastEditorProps().actionsRef.current = actions;
+            expect(screen.getByText("Esc to cancel")).toBeInTheDocument();
+
+            screen.getByRole("button", { name: "Save" }).focus();
+            await userEvent.keyboard("{Escape}");
+
+            expect(actions.cancel).toHaveBeenCalledTimes(1);
+            expect(actions.save).not.toHaveBeenCalled();
+        });
+
+        it("leaves Escape alone while nothing is being edited", async () => {
+            const { container } = renderComposer();
+            const onKeyDown = vi.fn();
+            container.parentElement!.addEventListener("keydown", onKeyDown);
+
+            screen.getByRole("textbox").focus();
+            await userEvent.keyboard("{Escape}");
+
+            // Not swallowed: the room view below uses it, e.g. to jump to the latest messages.
+            expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: "Escape", defaultPrevented: false }));
+        });
+
         it("does nothing from its buttons once the editor has gone", async () => {
             renderComposer({ editState: new EditorStateTransfer(textMessage) });
 
