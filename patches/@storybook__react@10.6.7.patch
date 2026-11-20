@@ -1,0 +1,24 @@
+diff --git a/dist/chunk-ojHmM-yX.d.ts b/dist/chunk-ojHmM-yX.d.ts
+index 49560531974950c2bb1ee6cca2cbe3fa6d08ab1d..cdf867fd2c26f65a47e7a971fff280c1de4bd83e 100644
+--- a/dist/chunk-ojHmM-yX.d.ts
++++ b/dist/chunk-ojHmM-yX.d.ts
+@@ -1023,7 +1023,8 @@ interface ReactPreview<T extends AddonTypes> extends Preview<ReactTypes & T> {
+  * provided in meta become optional in stories, while missing required args must be provided at the
+  * story level.
+  */
+-interface ReactMeta<T extends ReactTypes, MetaInput extends ComponentAnnotations<T>> /** @ts-expect-error ReactMeta requires two type parameters, but Meta's constraints differ */ extends Meta<T, MetaInput> {
++// @ts-expect-error ReactMeta requires two type parameters, but Meta's constraints differ
++interface ReactMeta<T extends ReactTypes, MetaInput extends ComponentAnnotations<T>> extends Meta<T, MetaInput> {
+   /**
+    * Creates a story with a custom render function that takes no args.
+    *
+@@ -1069,7 +1070,8 @@ interface ReactMeta<T extends ReactTypes, MetaInput extends ComponentAnnotations
+    * });
+    * ```
+    */
+-  story<TInput extends Simplify<StoryAnnotations<T, AddMocks<T['args'], MetaInput['args']>, SetOptional<T['args'], keyof T['args'] & keyof MetaInput['args']>>>>(story: TInput /** @ts-expect-error hard */): ReactStory<T, TInput>;
++  // @ts-expect-error hard
++  story<TInput extends Simplify<StoryAnnotations<T, AddMocks<T['args'], MetaInput['args']>, SetOptional<T['args'], keyof T['args'] & keyof MetaInput['args']>>>>(story: TInput): ReactStory<T, TInput>;
+   /**
+    * Creates a story with no additional configuration.
+    *

@@ -29,7 +29,6 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
-import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
 import { type IEventTileType, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -321,8 +320,7 @@ export function pickFactory(
     }
 
     if (evType === EventType.RoomCreate) {
-        const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor();
         if (!predecessor) {
             return noEventFactoryFactory();
         }
@@ -565,8 +563,7 @@ export function haveRendererForEvent(
     if (handler === TextualEventFactory) {
         return hasText(mxEvent, matrixClient, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
-        const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor();
         return Boolean(predecessor);
     } else if (ElementCallEventType.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
         const intent = mxEvent.getContent()["m.intent"];

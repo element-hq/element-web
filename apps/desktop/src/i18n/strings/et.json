@@ -73,7 +73,8 @@
         "save_image_as_error_title": "Pildi salvestamine ei õnnestunud"
     },
     "save_dialog": {
-        "all_files": "Kõik failid"
+        "all_files": "Kõik failid",
+        "named_file_type": "%(extension)s-fail"
     },
     "store": {
         "error": {

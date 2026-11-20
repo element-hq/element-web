@@ -43,6 +43,7 @@ import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
 import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
+import { ModuleApi } from "../../../modules/Api";
 import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext } from "../../../contexts/SDKContext";
 import { type SDKContextClass } from "../../../contexts/SDKContextClass";
@@ -250,7 +251,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Help,
                 _td("setting|help_about|title"),
                 <HelpIcon />,
-                <HelpUserSettingsTab />,
+                <HelpUserSettingsTab moduleApi={ModuleApi.instance} />,
                 "UserSettingsHelpAbout",
             ),
         );

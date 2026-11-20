@@ -18,6 +18,8 @@ import { Action } from "../../dispatcher/actions";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
 import MatrixClientContext, { useMatrixClientContext } from "../../contexts/MatrixClientContext";
@@ -116,10 +118,12 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
             <div className="mx_HomePage_default_wrapper">
                 {introSection}
                 <div className="mx_HomePage_default_buttons">
-                    <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
-                        <ChatSolidIcon />
-                        {_tDom("onboarding|send_dm")}
-                    </AccessibleButton>
+                    {shouldShowComponent(UIComponent.CreateDM) && (
+                        <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
+                            <ChatSolidIcon />
+                            {_tDom("onboarding|send_dm")}
+                        </AccessibleButton>
+                    )}
                     <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
                         <ExploreIcon />
                         {_tDom("onboarding|explore_rooms")}

@@ -98,6 +98,7 @@ exports[`<ChangeRecoveryKeyBody /> > flow to change the recovery key > should as
           data-size="lg"
           role="button"
           tabindex="0"
+          type="button"
         >
           Cancel
         </button>
@@ -227,6 +228,7 @@ exports[`<ChangeRecoveryKeyBody /> > flow to change the recovery key > should as
           data-size="lg"
           role="button"
           tabindex="0"
+          type="button"
         >
           Cancel
         </button>
@@ -444,6 +446,7 @@ exports[`<ChangeRecoveryKeyBody /> > flow to set up a recovery key > should ask 
           data-size="lg"
           role="button"
           tabindex="0"
+          type="button"
         >
           Cancel
         </button>
@@ -573,6 +576,7 @@ exports[`<ChangeRecoveryKeyBody /> > flow to set up a recovery key > should ask 
           data-size="lg"
           role="button"
           tabindex="0"
+          type="button"
         >
           Cancel
         </button>

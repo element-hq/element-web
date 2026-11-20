@@ -51,7 +51,6 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     private byRoom: MapWithDefault<string, Map<Container, ContainerValue>> = new MapWithDefault(() => new Map());
     private pinnedRef: string | undefined;
     private layoutRef: string | undefined;
-    private dynamicRef: string | undefined;
 
     private constructor() {
         super(defaultDispatcher);
@@ -79,11 +78,6 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.matrixClient?.on(RoomStateEvent.Events, this.updateRoomFromState);
         this.pinnedRef = SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
         this.layoutRef = SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
-        this.dynamicRef = SettingsStore.watchSetting(
-            "feature_dynamic_room_predecessors",
-            null,
-            this.updateFromSettings,
-        );
         WidgetStore.instance.on(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
@@ -93,15 +87,13 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.matrixClient?.off(RoomStateEvent.Events, this.updateRoomFromState);
         SettingsStore.unwatchSetting(this.pinnedRef);
         SettingsStore.unwatchSetting(this.layoutRef);
-        SettingsStore.unwatchSetting(this.dynamicRef);
         WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
     private updateAllRooms = (): void => {
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         if (!this.matrixClient) return;
         this.byRoom = new MapWithDefault(() => new Map());
-        for (const room of this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor)) {
+        for (const room of this.matrixClient.getVisibleRooms()) {
             this.recalculateRoom(room);
         }
     };

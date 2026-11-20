@@ -5,6 +5,55 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+/**
+ * Minimal image for a URL Preview. Since it lacks MXC URIs, it will not
+ * be bundled inside a message.
+ */
+export interface UrlPreviewImage {
+    /**
+     * The HTTP URI of the full image.
+     */
+    imageFull: string;
+    /**
+     * The HTTP URI of the the thumbnail.
+     */
+    imageThumb?: string;
+    /**
+     * Alt text for the image
+     */
+    alt?: string;
+    /**
+     * Is the media playable. E.g. a video.
+     */
+    playable: boolean;
+    /**
+     * The width of the thumbnail.
+     */
+    width?: number;
+    /**
+     * The height of the thumbnail.
+     */
+    height?: number;
+    /**
+     * The type/subtype of the image format
+     */
+    imageType?: string;
+    /**
+     * File size in bytes.
+     */
+    fileSize?: number;
+}
+
+/**
+ * Preview will be bundled since it contains the image.
+ */
+export interface UrlPreviewImageBundled extends UrlPreviewImage {
+    /**
+     * The mxc:// URI of the full image.
+     */
+    mxcImageFull: string;
+}
+
 export interface UrlPreview {
     /**
      * The URL for the preview.
@@ -35,47 +84,10 @@ export interface UrlPreview {
      */
     description?: string;
     /**
-     * Preview image to display.
+     * Preview image to display. Only bundled when
+     * this satisfies `UrlPreviewImageBundled`.
      */
-    image?: {
-        /**
-         * The HTTP URI of the the thumbnail.
-         */
-        imageThumb: string;
-        /**
-         * The HTTP URI of the full image.
-         */
-        imageFull: string;
-        /**
-         * The mxc:// URI of the full image.
-         */
-        mxcImageFull: string;
-        /**
-         * The type/subtype of the image format
-         */
-        imageType?: string;
-        /**
-         * File size in bytes.
-         */
-        fileSize?: number;
-        /**
-         * The width of the thumbnail.
-         */
-        width?: number;
-        /**
-         * The height of the thumbnail.
-         */
-        height?: number;
-        /**
-         * Alt text for the image
-         */
-        alt?: string;
-
-        /**
-         * Is the media playable.
-         */
-        playable: boolean;
-    };
+    image?: UrlPreviewImage | UrlPreviewImageBundled;
 
     /**
      * Author of the content, if specified.

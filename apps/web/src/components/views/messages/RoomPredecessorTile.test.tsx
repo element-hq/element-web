@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
 import { act, render, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
@@ -30,12 +30,7 @@ describe("<RoomPredecessorTile />", () => {
     stubClient();
     const client = vi.mocked(MatrixClientPeg.safeGet());
 
-    function makeRoom({
-        createEventHasPredecessor = false,
-        predecessorEventExists = false,
-        predecessorEventHasEventId = false,
-        predecessorEventHasViaServers = false,
-    }): Room {
+    function makeRoom({ createEventHasPredecessor = false }): Room {
         const room = new Room(roomId, client, userId);
 
         const createInfo = {
@@ -55,26 +50,6 @@ describe("<RoomPredecessorTile />", () => {
 
         const createEvent = new MatrixEvent(createInfo);
         upsertRoomStateEvents(room, [createEvent]);
-
-        if (predecessorEventExists) {
-            const predecessorInfo = {
-                type: EventType.RoomPredecessor,
-                state_key: "",
-                sender: userId,
-                room_id: roomId,
-                content: {
-                    predecessor_room_id: "old_room_id_from_predecessor",
-                    last_known_event_id: predecessorEventHasEventId
-                        ? "$tombstone_event_id_from_predecessor"
-                        : undefined,
-                    via_servers: predecessorEventHasViaServers ? ["a.example.com", "b.example.com"] : undefined,
-                },
-                event_id: "$predecessor",
-            };
-
-            const predecessorEvent = new MatrixEvent(predecessorInfo);
-            upsertRoomStateEvents(room, [predecessorEvent]);
-        }
         return room;
     }
 
@@ -143,14 +118,6 @@ describe("<RoomPredecessorTile />", () => {
         );
     });
 
-    it("Ignores m.predecessor if labs flag is off", () => {
-        renderTile(makeRoom({ createEventHasPredecessor: true, predecessorEventExists: true }));
-        expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
-            "href",
-            "https://matrix.to/#/old_room_id/$tombstone_event_id",
-        );
-    });
-
     describe("If the predecessor room is not found", () => {
         filterConsole("Failed to find predecessor room with id old_room_id");
 
@@ -159,94 +126,8 @@ describe("<RoomPredecessorTile />", () => {
         });
 
         it("Shows an error if there are no via servers", () => {
-            renderTile(makeRoom({ createEventHasPredecessor: true, predecessorEventExists: true }));
-            expect(screen.getByText("Can't find the old version of this room", { exact: false })).toBeInTheDocument();
-        });
-    });
-
-    describe("When feature_dynamic_room_predecessors = true", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        afterEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReset();
-        });
-
-        it("Uses the create event if there is no m.predecessor", () => {
             renderTile(makeRoom({ createEventHasPredecessor: true }));
-            expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
-                "href",
-                "https://matrix.to/#/old_room_id/$tombstone_event_id",
-            );
-        });
-
-        it("Uses m.predecessor when it's there", () => {
-            renderTile(makeRoom({ createEventHasPredecessor: true, predecessorEventExists: true }));
-            expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
-                "href",
-                "https://matrix.to/#/old_room_id_from_predecessor",
-            );
-        });
-
-        it("Links to the event in the room if event ID is provided", () => {
-            renderTile(
-                makeRoom({
-                    createEventHasPredecessor: true,
-                    predecessorEventExists: true,
-                    predecessorEventHasEventId: true,
-                }),
-            );
-            expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
-                "href",
-                "https://matrix.to/#/old_room_id_from_predecessor/$tombstone_event_id_from_predecessor",
-            );
-        });
-
-        describe("If the predecessor room is not found", () => {
-            filterConsole("Failed to find predecessor room with id old_room_id");
-
-            beforeEach(() => {
-                vi.mocked(MatrixClientPeg.safeGet().getRoom).mockReturnValue(null);
-            });
-
-            it("Shows an error if there are no via servers", () => {
-                renderTile(makeRoom({ createEventHasPredecessor: true, predecessorEventExists: true }));
-                expect(
-                    screen.getByText("Can't find the old version of this room", { exact: false }),
-                ).toBeInTheDocument();
-            });
-
-            it("Shows a tile if there are via servers", () => {
-                renderTile(
-                    makeRoom({
-                        createEventHasPredecessor: true,
-                        predecessorEventExists: true,
-                        predecessorEventHasViaServers: true,
-                    }),
-                );
-                expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
-                    "href",
-                    "https://matrix.to/#/old_room_id_from_predecessor?via=a.example.com&via=b.example.com",
-                );
-            });
-
-            it("Shows a tile linking to an event if there are via servers", () => {
-                renderTile(
-                    makeRoom({
-                        createEventHasPredecessor: true,
-                        predecessorEventExists: true,
-                        predecessorEventHasEventId: true,
-                        predecessorEventHasViaServers: true,
-                    }),
-                );
-                expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
-                    "href",
-                    "https://matrix.to/#/old_room_id_from_predecessor/$tombstone_event_id_from_predecessor?via=a.example.com&via=b.example.com",
-                );
-            });
+            expect(screen.getByText("Can't find the old version of this room", { exact: false })).toBeInTheDocument();
         });
     });
 });

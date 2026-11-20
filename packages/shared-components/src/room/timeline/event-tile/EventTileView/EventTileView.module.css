@@ -343,6 +343,10 @@
 
         padding-top: 0;
 
+        .slotFooter {
+            margin-inline-start: var(--event-tile-group-line-padding-inline-start);
+        }
+
         .slotAvatar,
         .slotPadlock {
             line-height: 1;
@@ -357,6 +361,7 @@
 
         .line {
             padding-block: 3px 2px;
+            line-height: normal;
         }
 
         .slotTimestamp,
@@ -833,14 +838,17 @@
         z-index: 9;
         inset-block-start: 6px;
         inset-inline-start: -36px;
-        line-height: 0;
         border: 4px solid var(--cpd-color-bg-canvas-default);
         border-radius: 50%;
     }
 
     .slotAvatar > * {
+        display: block;
         border-radius: 50%;
         box-shadow: 0 0 0 3px var(--cpd-color-bg-canvas-default);
+        /* Keep fallback initials centered when host styles (button.mx_BaseAvatar)
+           override the avatar's size-based line-height. */
+        line-height: calc(var(--cpd-avatar-size) - 2px) !important;
     }
 
     > .slotReceipt {
@@ -1111,11 +1119,16 @@
         --event-tile-body-padding: 0;
 
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: flex-start;
         margin-block: 0;
         margin-inline-end: 0;
         padding-block: 0;
+
+        &.hasReceiptSlot {
+            margin-inline-end: var(--event-tile-bubble-margin-inline-end);
+        }
 
         &.stateContinuation {
             margin-block-start: 2px;
@@ -1123,6 +1136,7 @@
 
         .slotAvatar {
             position: static;
+            align-self: flex-start;
             order: -1;
             display: inline-flex;
             align-items: center;
@@ -1131,25 +1145,35 @@
             margin-inline-end: var(--event-tile-bubble-gap);
             border: 0;
             flex-shrink: 0;
-            line-height: 1;
         }
 
         .slotAvatar > *,
         .slotAvatar > * > * {
-            /* Compound Avatar sets its own fallback line-height; override it
-               so initials remain vertically centred in the 14px avatar. */
-            line-height: 1 !important;
             box-shadow: none;
         }
 
         .line {
-            width: 100%;
-            min-width: 100%;
+            flex: 1 1 0;
+            width: auto;
+            min-width: 0;
             max-width: 100%;
             margin: 0;
             padding-block: 0;
             padding-inline: 0 60px;
             background: transparent;
+        }
+
+        /* Keep reactions below the info row instead of beside the message. */
+        .slotFooter {
+            flex: 0 0 calc(100% - 14px - var(--event-tile-bubble-gap));
+            margin-inline: calc(14px + var(--event-tile-bubble-gap)) 0;
+        }
+
+        /* Informational rows stay left-aligned even for own events. Keep the
+           reaction controls in their natural order, with add-reaction last. */
+        &.stateOwnEvent .slotFooter {
+            justify-content: flex-start;
+            --event-tile-reactions-add-button-order: 0;
         }
 
         .slotTimestamp {
@@ -1169,7 +1193,7 @@
             align-self: center;
         }
 
-        /* ThreadView's hidden-event rows retain the legacy bubble body inset. */
+        /* ThreadView's hidden-event rows retain the legacy bubble body padding. */
         &.shapeThread {
             --event-tile-body-padding: 1px;
         }
@@ -1421,21 +1445,24 @@
             }
         }
 
+        &.layoutGroup .slotFooter {
+            margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+        }
+
         &.layoutBubble {
             .senderDetails .slotAvatar {
                 inset-inline-start: 0;
             }
 
             .line .slotBody {
-                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+                margin-inline-start: calc(14px + 6px);
             }
 
-            /* Bubble body slots are display: contents, so their margin is not
-               rendered. Apply the state-info slot offset to each rendered
-               body, while preserving the slot wrapper's styling contract. */
+            /* Bubble body slots are display: contents, so also offset the
+               rendered body by the avatar width and gap. */
             .line .slotBody > * {
                 width: auto;
-                margin-inline-start: calc(var(--event-tile-thread-spacing-inline-start) + 14px + 6px);
+                margin-inline-start: calc(14px + 6px);
             }
         }
     }
@@ -1726,6 +1753,10 @@
            the body must not reserve the external timestamp gutter. */
         .slotBody {
             --event-tile-bubble-max-width: min(100%, 600px);
+        }
+
+        &.stateInfo.hasReceiptSlot {
+            margin-inline-end: 0;
         }
     }
 

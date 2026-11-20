@@ -1,0 +1,73 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { DocumentPreviewApi } from "./DocumentPreviewApi";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
+import { SDKContextClass } from "../contexts/SDKContextClass";
+
+describe("DocumentPreviewApi", () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it.each(["application/pdf", "text/markdown"])("offers an opener for %s", (mimetype) => {
+        expect(new DocumentPreviewApi().getPreviewOpener({ mimetype })).toBeInstanceOf(Function);
+    });
+
+    it("offers an opener for a Markdown file with a generic mimetype, going by its name", () => {
+        const openPreview = new DocumentPreviewApi().getPreviewOpener({ mimetype: "text/plain", name: "README.md" });
+
+        expect(openPreview).toBeInstanceOf(Function);
+    });
+
+    it("returns null for a mimetype no viewer can open", () => {
+        expect(new DocumentPreviewApi().getPreviewOpener({ mimetype: "image/png" })).toBeNull();
+    });
+
+    it("opens the file in the document viewer with the mimetype and name it was got for", async () => {
+        vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room:example.org");
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const blob = vi.fn(() => Promise.resolve(new Blob()));
+
+        const api = new DocumentPreviewApi();
+        await api.moduleLoadPromise;
+
+        api.getPreviewOpener({ mimetype: "application/pdf", name: "spec.pdf" })!({ blob });
+
+        expect(dispatch).toHaveBeenCalledWith({
+            action: Action.OpenDocumentViewer,
+            file: { mimetype: "application/pdf", name: "spec.pdf", blob },
+        });
+        // Not fetched until the viewer asks for it.
+        expect(blob).not.toHaveBeenCalled();
+    });
+
+    it("throws if no room is being viewed", async () => {
+        vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const api = new DocumentPreviewApi();
+        await api.moduleLoadPromise;
+        const openPreview = api.getPreviewOpener({ mimetype: "application/pdf" })!;
+
+        expect(() => openPreview({ blob: vi.fn() })).toThrow("No room is being viewed");
+        expect(dispatch).not.toHaveBeenCalled();
+    });
+
+    it("throws as if no room is being viewed when the SDK context has not loaded yet", () => {
+        vi.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room:example.org");
+        const dispatch = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const openPreview = new DocumentPreviewApi().getPreviewOpener({ mimetype: "application/pdf" })!;
+
+        expect(() => openPreview({ blob: vi.fn() })).toThrow("No room is being viewed");
+        expect(dispatch).not.toHaveBeenCalled();
+    });
+});

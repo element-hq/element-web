@@ -292,7 +292,7 @@ describe("UrlPreviewFetcher", () => {
         client.mxcUrlToHttp.mockImplementation((url) => `https://example.org/${url.split("/").pop()}`);
         const preview = await fetcher.fetchPreview("https://example.org", true);
         expect(preview?.siteIcon).toBe("https://example.org/logo");
-        expect(preview?.image?.mxcImageFull).toBe(IMAGE_MXC);
+        expect(preview?.image).toHaveProperty("mxcImageFull", IMAGE_MXC);
     });
 
     it("should not load the MSC4448 site logo when media is hidden", async () => {
@@ -733,7 +733,7 @@ describe("UrlPreviewFetcher", () => {
                 );
 
                 expect(preview!.image!.imageFull).toEqual("blob:decrypted-0");
-                expect(preview!.image!.mxcImageFull).toEqual(ENCRYPTED_FILE.url);
+                expect(preview!.image).toHaveProperty("mxcImageFull", ENCRYPTED_FILE.url);
                 // eslint-disable-next-line no-restricted-properties
                 expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
             });

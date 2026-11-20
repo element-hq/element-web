@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     ConnectionError,
     type IProtocol,
@@ -37,10 +37,17 @@ import SdkConfig from "../../../../SdkConfig";
 import { Action } from "../../../../dispatcher/actions";
 import { MetaSpace } from "../../../../stores/spaces";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
 
 vi.useFakeTimers({ shouldAdvanceTime: true });
 
 vi.mock("../../../../utils/Feedback");
+
+vi.mock("../../../../customisations/helpers/UIComponents", async (importOriginal) => {
+    const original = await importOriginal<typeof import("../../../../customisations/helpers/UIComponents")>();
+    return { shouldShowComponent: vi.fn(original.shouldShowComponent) };
+});
 
 vi.mock("../../../../utils/direct-messages", async () => ({
     // @ts-ignore
@@ -252,7 +259,7 @@ describe("Spotlight Dialog", () => {
         });
 
         it("with people filter", async () => {
-            render(
+            const { unmount } = render(
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
@@ -273,23 +280,14 @@ describe("Spotlight Dialog", () => {
                 expect(options.length).toBeGreaterThanOrEqual(1);
                 expect(options[0]!.innerHTML).toContain(testPerson.display_name);
             });
-        });
-    });
+            expect(screen.getByText("Start a group chat")).toBeInTheDocument();
 
-    describe("when MSC3946 dynamic room predecessors is enabled", () => {
-        beforeEach(async () => {
-            await SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
-        });
-
-        afterEach(() => {
-            vi.restoreAllMocks();
-        });
-
-        it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
-            render(<SpotlightDialog onFinished={() => null} />);
-            vi.advanceTimersByTime(200);
-            await flushPromisesWithFakeTimers();
-            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);
+            // The group chat option is not offered when DM creation is hidden
+            unmount();
+            vi.mocked(shouldShowComponent).mockImplementation((component) => component !== UIComponent.CreateDM);
+            render(<SpotlightDialog initialFilter={Filter.People} onFinished={() => null} />);
+            expect(screen.queryByText("Start a group chat")).not.toBeInTheDocument();
+            vi.mocked(shouldShowComponent).mockReset();
         });
     });
 
@@ -314,9 +312,6 @@ describe("Spotlight Dialog", () => {
                 expect(options.length).toBe(1);
                 expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
             });
-
-            // assert that getVisibleRooms is called without MSC3946 dynamic room predecessors
-            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(false);
         });
         it("with people", async () => {
             render(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);

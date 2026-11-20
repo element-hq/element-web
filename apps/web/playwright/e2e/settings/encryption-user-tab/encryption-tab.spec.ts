@@ -43,7 +43,9 @@ test.describe("Encryption tab", () => {
                 // The user's device is in an unverified state, therefore the only option available to them here is to verify it
                 const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
                 await expect(verifyButton).toBeVisible();
-                await expect(content).toMatchScreenshot("verify-device-encryption-tab.png");
+                await expect(content).toMatchScreenshot("verify-device-encryption-tab.png", {
+                    mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+                });
                 await verifyButton.click();
 
                 await util.verifyDevice(recoveryKey);
@@ -81,7 +83,9 @@ test.describe("Encryption tab", () => {
                 const dialog = util.getEncryptionTabContent();
                 const enterKeyButton = dialog.getByRole("button", { name: "Enter recovery key" });
                 await expect(enterKeyButton).toBeVisible();
-                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png");
+                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png", {
+                    mask: [dialog.getByTestId("deviceId"), dialog.getByTestId("sessionKey")],
+                });
                 await enterKeyButton.click();
 
                 // Fill the recovery key

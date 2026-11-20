@@ -1,8 +1,8 @@
-# syntax=docker.io/docker/dockerfile:1.28-labs@sha256:ad43eec41369d9ef94412c0d1eb3203d12218d01da225afc92a3aeba3a0e7796
+# syntax=docker.io/docker/dockerfile:1.29-labs@sha256:36366b12c1dffb228bb25e9feffb73707b93388f084f4927d2b7686dba29e76a
 # Context must be the root of the monorepo
 
 # PNPM source
-FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.17.0@sha256:172468925f0ca368313c09867081a43e298eaeb13dee8f7e4356bfad45dd8b15 AS pnpm
+FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:12.22.0@sha256:81346f048d668195928d441b80efc0df300474ed8bf81789e4554ec0079079d0 AS pnpm
 
 # Builder
 FROM --platform=$BUILDPLATFORM node:26-bullseye@sha256:784b1bb050f6bf8ccfdc28d9d07ad07d15ab9d72eee5867f875ba219abec2611 AS builder
@@ -23,7 +23,9 @@ RUN pnpm install --frozen-lockfile
 RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 
 # Build
-COPY --link --exclude=.git --exclude=apps/web/docker . /src
+# Don't re-copy package.json and pnpm-lock.yaml here. The link step above may have changed these
+# and resetting them would cause the build step below to reinstall the non-linked versions.
+COPY --link --exclude=.git --exclude=apps/web/docker --exclude=pnpm-lock.yaml --exclude=apps/web/package.json . /src
 RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
@@ -58,10 +60,10 @@ HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB
 
 # Modules are consumed as prebuilt release artifacts rather than built from source.
 # Each module is pinned to a version and the sha256 of its release archive.
-FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS modules
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf AS modules
 
-ARG MODULE_BANNER_VERSION=v2.1.1
-ADD --checksum=sha256:bd894fa30df4faa4fd7aab450f8d15c2f1b8246b3073b51932e5fa35821973da \
+ARG MODULE_BANNER_VERSION=v2.2.0
+ADD --checksum=sha256:f46c5ac232385a13a99bd8d016e9f9b65544692294ec4e7b6e135b34e200426e \
     https://github.com/element-hq/element-web/releases/download/module%2Fbanner%2F${MODULE_BANNER_VERSION}/banner-${MODULE_BANNER_VERSION}.zip \
     /tmp/modules/banner-${MODULE_BANNER_VERSION}.zip
 

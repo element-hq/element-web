@@ -46,6 +46,8 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
     // @alpha
     readonly customisations: CustomisationsApi;
     // @alpha
+    readonly documentPreviews: DocumentPreviewApi;
+    // @alpha
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
@@ -97,6 +99,9 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    // @alpha
+    readonly toDevice: ToDeviceApi;
+    waitForClientStarted(): Promise<void>;
 }
 
 // @public
@@ -260,6 +265,25 @@ export type DialogProps<M> = {
 };
 
 // @alpha
+export interface DocumentPreviewApi {
+    getPreviewOpener(file: DocumentPreviewFileInfo): DocumentPreviewOpener | null;
+}
+
+// @alpha
+export interface DocumentPreviewFile {
+    blob: () => Promise<Blob>;
+}
+
+// @alpha
+export interface DocumentPreviewFileInfo {
+    mimetype: string;
+    name?: string;
+}
+
+// @alpha
+export type DocumentPreviewOpener = (file: DocumentPreviewFile) => void;
+
+// @alpha
 export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
 props: P,
 originalComponent: (props: P) => JSX.Element) => JSX.Element;
@@ -268,6 +292,7 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 export interface ExtrasApi {
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+    setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
 
@@ -294,13 +319,28 @@ export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticat
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
+    namespaced(this: void, namespace: string): I18nApi;
     register(this: void, translations: Partial<Translations>): void;
+    registerLanguage(this: void, language: string, translations: LanguageTranslations): void;
     translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;
 }
 
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
+
+// @alpha
+export interface IncomingToDeviceMessage {
+    readonly content: unknown;
+    readonly sender: string;
+    readonly type: string;
+}
+
+// @public
+export interface LanguageTranslations {
+    // (undocumented)
+    [key: string]: string | LanguageTranslations;
+}
 
 // @alpha
 export type LocationRenderFunction = () => JSX.Element;
@@ -372,11 +412,21 @@ export type OriginalMessageComponentProps = {
 };
 
 // @alpha
+export interface OutgoingToDeviceMessage {
+    readonly content: Record<string, unknown>;
+    readonly recipientDeviceId: string;
+    readonly recipientUserId: string;
+    readonly type: string;
+}
+
+// @alpha
 export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
 
 // @public
 export interface Profile {
+    deviceId?: string;
     displayName?: string;
+    homeserverUrl?: string;
     isGuest?: boolean;
     userId?: string;
 }
@@ -397,7 +447,10 @@ export interface RichVariables {
 // @public
 export interface Room {
     getLastActiveTimestamp: () => number;
+    // @alpha
+    getStateEvents(eventType: string): Watchable<RoomStateEvent[]>;
     id: string;
+    isEncrypted: Watchable<boolean | undefined>;
     name: Watchable<string>;
 }
 
@@ -408,6 +461,12 @@ export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefi
 export interface RoomListStoreApi {
     getRooms(): Watchable<Room[]>;
     waitForReady(): Promise<void>;
+}
+
+// @alpha
+export interface RoomStateEvent {
+    content: Record<string, unknown>;
+    stateKey: string;
 }
 
 // @alpha
@@ -459,6 +518,12 @@ export type SubstitutionValue = number | string | ReactNode | ((sub: string) => 
 // @public
 export type Tags = Record<string, SubstitutionValue>;
 
+// @alpha
+export interface ToDeviceApi {
+    onMessage(type: string, listener: (message: IncomingToDeviceMessage) => void): () => void;
+    sendMessage(message: OutgoingToDeviceMessage): Promise<void>;
+}
+
 // @public
 export type Translations = Record<string, {
     [ietfLanguageTag: string]: string;
@@ -467,12 +532,14 @@ export type Translations = Record<string, {
 // @alpha
 export const enum UIComponent {
     AddIntegrations = "UIComponent.addIntegrations",
+    CreateDM = "UIComponent.dmCreation",
     CreateRooms = "UIComponent.roomCreation",
     CreateSpaces = "UIComponent.spaceCreation",
     ExploreRooms = "UIComponent.exploreRooms",
     FilterContainer = "UIComponent.filterContainer",
     InviteUsers = "UIComponent.sendInvites",
     PublicRooms = "UIComponent.publicRooms",
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
     RoomOptionsMenu = "UIComponent.roomOptionsMenu"
 }
 
