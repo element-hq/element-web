@@ -131,14 +131,21 @@ Please see LICENSE in the repository root for full details.
 .hint {
     display: flex;
     align-items: center;
-    gap: var(--cpd-space-1x);
+    gap: var(--cpd-space-1-5x);
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
     margin: var(--cpd-space-0x);
-    color: var(--cpd-color-text-secondary);
+    padding: var(--cpd-space-1x) var(--cpd-space-2x);
+    border-radius: 8px;
+    background-color: var(--cpd-color-bg-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
+    font: var(--cpd-font-body-sm-semibold);
 }
 
 .hintIcon {
     flex-shrink: 0;
-    color: var(--cpd-color-icon-secondary);
+    color: var(--cpd-color-icon-critical-primary);
 }
 
 .notice {

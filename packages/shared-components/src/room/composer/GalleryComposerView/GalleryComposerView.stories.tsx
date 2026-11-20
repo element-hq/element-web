@@ -116,7 +116,7 @@ export const Disabled: Story = {
     args: { disabled: true },
 };
 
-/** Information on how the attachments will be sent, shown less prominently than a notice. */
+/** A warning about how the attachments will be sent. */
 export const WithHint: Story = {
     args: { hint: "Sent as a gallery. People using older apps will only see your text." },
 };

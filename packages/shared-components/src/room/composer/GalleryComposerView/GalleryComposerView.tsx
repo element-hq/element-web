@@ -7,7 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 import React, { type ChangeEvent, type ClipboardEvent, type DragEvent, type JSX, useRef } from "react";
 import classNames from "classnames";
-import { CloseIcon, InfoIcon, PlaySolidIcon, PlusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CloseIcon, PlaySolidIcon, PlusIcon, WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { InlineSpinner, Text } from "@vector-im/compound-web";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
@@ -65,8 +65,8 @@ export interface GalleryComposerViewSnapshot {
      */
     notice?: string;
     /**
-     * Optional information about how the attachments will be sent, shown less prominently than
-     * a notice.
+     * Optional warning about how the attachments will be sent. Unlike a notice, which reports a
+     * problem with files the user just added, it is not announced to assistive technology.
      */
     hint?: string;
     /**
@@ -234,7 +234,7 @@ export function GalleryComposerView({ vm, className }: Readonly<GalleryComposerV
             />
             {hint && (
                 <Text as="p" size="sm" className={styles.hint}>
-                    <InfoIcon className={styles.hintIcon} width="16" height="16" aria-hidden="true" />
+                    <WarningIcon className={styles.hintIcon} width="16" height="16" aria-hidden="true" />
                     {hint}
                 </Text>
             )}
