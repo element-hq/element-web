@@ -167,6 +167,13 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
         secretStorageBeingAccessed = false;
         secretStorageKeys = {};
         secretStorageKeyInfo = {};
+
+        // DeviceListener suppresses toast updates while `secretStorageBeingAccessed`
+        // is set, so we should trigger a recheck now the operation is done.
+        // We import device listener lazily, since its test mocks the `SecurityManager`
+        // module (i.e. this module), and import cycles appear to break said mocking.
+        const { DeviceListener } = await import("./device-listener");
+        DeviceListener.sharedInstance().recheck();
     }
 }
 
