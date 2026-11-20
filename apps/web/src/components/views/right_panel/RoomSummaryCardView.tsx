@@ -249,6 +249,15 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                     disabled={!vm.canInviteToState}
                     onSelect={vm.onInviteToRoomClick}
                 />
+                {vm.moduleActions.map((action) => (
+                    <MenuItem
+                        key={action.key}
+                        Icon={action.icon}
+                        label={action.label}
+                        disabled={action.disabled}
+                        onSelect={action.onClick}
+                    />
+                ))}
 
                 <Separator />
 

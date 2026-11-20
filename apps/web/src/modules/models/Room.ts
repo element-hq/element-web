@@ -6,21 +6,57 @@
  */
 
 import {
+    type HistoryVisibility,
+    type JoinRule,
     type Room as IRoom,
     type RoomStateEvent as ModuleRoomStateEvent,
     Watchable,
 } from "@element-hq/element-web-module-api";
-import { EventType, type MatrixEvent, RoomEvent, RoomStateEvent, type Room as SdkRoom } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    JoinRule as SdkJoinRule,
+    type MatrixEvent,
+    RoomEvent,
+    RoomStateEvent,
+    type Room as SdkRoom,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+
 import { RoomStateEventWatchable } from "./RoomStateEventWatchable";
+import { canInviteTo } from "../../utils/room/canInviteTo";
+import { doesRoomVersionSupport, PreferredRoomVersions } from "../../utils/PreferredRoomVersions";
+
+/**
+ * Convert a module API join rule to the matrix-js-sdk join rule.
+ */
+function toSdkJoinRule(joinRule: JoinRule): SdkJoinRule {
+    switch (joinRule) {
+        case "public":
+            return SdkJoinRule.Public;
+        case "invite":
+            return SdkJoinRule.Invite;
+        case "knock":
+            return SdkJoinRule.Knock;
+        case "restricted":
+            return SdkJoinRule.Restricted;
+        case "knock_restricted":
+            return SdkJoinRule.KnockRestricted;
+        case "private":
+            return SdkJoinRule.Private;
+    }
+}
 
 export class Room implements IRoom {
     public name: Watchable<string>;
+    public joinRule: Watchable<JoinRule>;
+    public historyVisibility: Watchable<HistoryVisibility>;
     public isEncrypted: Watchable<boolean | undefined>;
     private readonly stateWatchables = new Map<string, RoomStateEventWatchable>();
 
     public constructor(private sdkRoom: SdkRoom) {
         this.name = new WatchableName(sdkRoom);
+        this.joinRule = new WatchableJoinRule(sdkRoom);
+        this.historyVisibility = new WatchableHistoryVisibility(sdkRoom);
         this.isEncrypted = new WatchableIsEncrypted(sdkRoom);
     }
 
@@ -36,6 +72,27 @@ export class Room implements IRoom {
             this.stateWatchables.set(eventType, watchable);
         }
         return watchable;
+    }
+
+    public async setJoinRule(joinRule: JoinRule): Promise<void> {
+        await this.sdkRoom.client.sendStateEvent(this.sdkRoom.roomId, EventType.RoomJoinRules, {
+            join_rule: toSdkJoinRule(joinRule),
+        });
+    }
+
+    public canInvite(): boolean {
+        return canInviteTo(this.sdkRoom);
+    }
+
+    public canChangeJoinRule(): boolean {
+        return this.sdkRoom.currentState.maySendStateEvent(
+            EventType.RoomJoinRules,
+            this.sdkRoom.client.getSafeUserId(),
+        );
+    }
+
+    public supportsKnock(): boolean {
+        return doesRoomVersionSupport(this.sdkRoom.getVersion(), PreferredRoomVersions.KnockRooms);
     }
 
     public get id(): string {
@@ -105,5 +162,53 @@ class WatchableIsEncrypted extends Watchable<boolean | undefined> {
         this.sdkRoom.off(RoomStateEvent.Events, this.onStateEvent);
         // Discard any check still in flight.
         this.checkId++;
+    }
+}
+
+/**
+ * A custom watchable for the room join rule.
+ */
+class WatchableJoinRule extends Watchable<JoinRule> {
+    public constructor(private sdkRoom: SdkRoom) {
+        super(sdkRoom.getJoinRule());
+    }
+
+    private onStateEvent = (event: MatrixEvent): void => {
+        if (event.getType() !== EventType.RoomJoinRules) return;
+        super.value = this.sdkRoom.getJoinRule();
+    };
+
+    protected onFirstWatch(): void {
+        // The join rule may have changed while nobody was watching
+        super.value = this.sdkRoom.getJoinRule();
+        this.sdkRoom.on(RoomStateEvent.Events, this.onStateEvent);
+    }
+
+    protected onLastWatch(): void {
+        this.sdkRoom.off(RoomStateEvent.Events, this.onStateEvent);
+    }
+}
+
+/**
+ * A custom watchable for the room history visibility.
+ */
+class WatchableHistoryVisibility extends Watchable<HistoryVisibility> {
+    public constructor(private sdkRoom: SdkRoom) {
+        super(sdkRoom.currentState.getHistoryVisibility());
+    }
+
+    private onStateEvent = (event: MatrixEvent): void => {
+        if (event.getType() !== EventType.RoomHistoryVisibility) return;
+        super.value = this.sdkRoom.currentState.getHistoryVisibility();
+    };
+
+    protected onFirstWatch(): void {
+        // The history visibility may have changed while nobody was watching
+        super.value = this.sdkRoom.currentState.getHistoryVisibility();
+        this.sdkRoom.on(RoomStateEvent.Events, this.onStateEvent);
+    }
+
+    protected onLastWatch(): void {
+        this.sdkRoom.off(RoomStateEvent.Events, this.onStateEvent);
     }
 }

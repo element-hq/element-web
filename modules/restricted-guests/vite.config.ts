@@ -21,6 +21,16 @@ export default mergeConfig(baseConfig, {
             formats: ["es"],
         },
     },
+    resolve: {
+        // The node polyfills plugin adds imports of its shims to bundled workspace packages such as shared-utils.
+        // Those packages don't depend on the plugin, so resolve the shims from this module instead.
+        alias: Object.fromEntries(
+            ["buffer", "global", "process"].map((shim) => [
+                `vite-plugin-node-polyfills/shims/${shim}`,
+                fileURLToPath(import.meta.resolve(`vite-plugin-node-polyfills/shims/${shim}`)),
+            ]),
+        ),
+    },
     plugins: [
         importCSSSheet(),
         react(),

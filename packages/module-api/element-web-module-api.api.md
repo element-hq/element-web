@@ -68,6 +68,13 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
 }
 
 // @alpha
+export interface AuthedRequestOpts {
+    body?: unknown;
+    prefix?: string;
+    queryParams?: Record<string, string>;
+}
+
+// @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
@@ -99,6 +106,8 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    // @alpha
+    readonly http: HttpApi;
     // @alpha
     readonly toDevice: ToDeviceApi;
     waitForClientStarted(): Promise<void>;
@@ -290,7 +299,9 @@ originalComponent: (props: P) => JSX.Element) => JSX.Element;
 
 // @alpha
 export interface ExtrasApi {
+    addMemberListHeaderActionCallback(cb: RoomActionCallback): void;
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+    addRoomSummaryCardActionCallback(cb: RoomActionCallback): void;
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setCreditsAttribution(attributionId: string, render: () => JSX.Element): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
@@ -316,6 +327,17 @@ export interface HardwareKey {
 export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticated";
 
 // @public
+export type HistoryVisibility = "invited" | "joined" | "shared" | "world_readable";
+
+// @alpha
+export interface HttpApi {
+    authedRequest<T>(method: HttpMethod, path: string, opts?: AuthedRequestOpts): Promise<T>;
+}
+
+// @alpha
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+// @public
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
@@ -335,6 +357,9 @@ export interface IncomingToDeviceMessage {
     readonly sender: string;
     readonly type: string;
 }
+
+// @public
+export type JoinRule = "public" | "invite" | "knock" | "restricted" | "knock_restricted" | "private";
 
 // @public
 export interface LanguageTranslations {
@@ -446,13 +471,32 @@ export interface RichVariables {
 
 // @public
 export interface Room {
+    canChangeJoinRule: () => boolean;
+    canInvite: () => boolean;
     getLastActiveTimestamp: () => number;
     // @alpha
     getStateEvents(eventType: string): Watchable<RoomStateEvent[]>;
+    historyVisibility: Watchable<HistoryVisibility>;
     id: string;
     isEncrypted: Watchable<boolean | undefined>;
+    joinRule: Watchable<JoinRule>;
     name: Watchable<string>;
+    setJoinRule: (joinRule: JoinRule) => Promise<void>;
+    supportsKnock: () => boolean;
 }
+
+// @alpha
+export interface RoomAction {
+    disabled?: boolean;
+    disabledTooltip?: string;
+    icon: ComponentType<SVGAttributes<SVGElement>>;
+    key: string;
+    label: string;
+    onClick: () => void;
+}
+
+// @alpha
+export type RoomActionCallback = (roomId: string) => RoomAction | undefined;
 
 // @alpha
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;

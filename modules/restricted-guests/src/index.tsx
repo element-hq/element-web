@@ -12,6 +12,7 @@ import { name as ModuleName } from "../package.json";
 import RoomPreviewBar from "./RoomPreviewBar.tsx";
 import AuthFooter from "./AuthFooter.tsx";
 import style from "./style.css" with { type: "css" };
+import { initEmailInvitation } from "./email-invitation/index.ts";
 
 const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
     UIComponent.InviteUsers,
@@ -54,11 +55,11 @@ class RestrictedGuestsModule implements Module {
             throw new Error(`Errors in module configuration for "${ModuleName}"`);
         }
 
-        const appConfig = this.api.config.get();
-        if (appConfig.sso_redirect_options?.immediate) {
-            console.warn(`${ModuleName} found incompatible option 'sso_redirect_options.immediate', turning it off.`);
-            appConfig.sso_redirect_options.immediate = false;
-        }
+        // const appConfig = this.api.config.get();
+        //  if (appConfig.sso_redirect_options?.immediate) {
+        //      console.warn(`${ModuleName} found incompatible option 'sso_redirect_options.immediate', turning it off.`);
+        //      appConfig.sso_redirect_options.immediate = false;
+        //  }
 
         // Room preview bar customisations (for Matrix guest support)
         this.api.customComponents.registerRoomPreviewBar((props, OriginalComponent) => (
@@ -74,6 +75,9 @@ class RestrictedGuestsModule implements Module {
                 <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} i18n={i18n} config={this.config!} />
             </OriginalComponent>
         ));
+
+        // Register the email invitation feature (for inviting guests to rooms via email)
+        initEmailInvitation(this.api, this.config, i18n);
     }
 
     /**

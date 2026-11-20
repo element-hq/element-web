@@ -8,10 +8,13 @@
 // @vitest-environment happy-dom
 
 import { describe, it, expect, vi } from "vitest";
-import { EventType, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
+import { EventType, HistoryVisibility, JoinRule, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkRoom, stubClient } from "test-utils";
 
 import { Room } from "./Room";
+import { canInviteTo } from "../../utils/room/canInviteTo";
+
+vi.mock("../../utils/room/canInviteTo", () => ({ canInviteTo: vi.fn() }));
 
 describe("Room", () => {
     describe("getStateEvents", () => {
@@ -214,6 +217,52 @@ describe("Room", () => {
         expect(room.getLastActiveTimestamp()).toStrictEqual(sdkRoom.getLastActiveTimestamp());
     });
 
+    it.each(["knock", "knock_restricted"] as const)(
+        "should send a join rules state event when setting the join rule to %s",
+        async (joinRule) => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            const room = new Room(sdkRoom);
+            await room.setJoinRule(joinRule);
+            expect(cli.sendStateEvent).toHaveBeenCalledWith("!foo:m.org", EventType.RoomJoinRules, {
+                join_rule: joinRule,
+            });
+        },
+    );
+
+    it("should use the host invite check to tell whether the user can invite", () => {
+        const cli = stubClient();
+        const sdkRoom = mkRoom(cli, "!foo:m.org");
+        vi.mocked(canInviteTo).mockReturnValue(false);
+        const room = new Room(sdkRoom);
+        expect(room.canInvite()).toStrictEqual(false);
+        expect(canInviteTo).toHaveBeenCalledWith(sdkRoom);
+    });
+
+    it("should return whether the user can send a join rules event", () => {
+        const cli = stubClient();
+        const sdkRoom = mkRoom(cli, "!foo:m.org");
+        vi.mocked(sdkRoom.currentState.maySendStateEvent).mockReturnValue(false);
+        const room = new Room(sdkRoom);
+        expect(room.canChangeJoinRule()).toStrictEqual(false);
+        expect(sdkRoom.currentState.maySendStateEvent).toHaveBeenCalledWith(
+            EventType.RoomJoinRules,
+            cli.getSafeUserId(),
+        );
+    });
+
+    it.each([
+        ["6", false],
+        ["7", true],
+        ["10", true],
+    ])("should return whether room version %s supports knocking", (version, expected) => {
+        const cli = stubClient();
+        const sdkRoom = mkRoom(cli, "!foo:m.org");
+        vi.mocked(sdkRoom.getVersion).mockReturnValue(version);
+        const room = new Room(sdkRoom);
+        expect(room.supportsKnock()).toStrictEqual(expected);
+    });
+
     describe("watchableName", () => {
         it("should return name from sdkRoom", () => {
             const cli = stubClient();
@@ -332,6 +381,106 @@ describe("Room", () => {
             );
             await vi.waitFor(() => expect(fn).toHaveBeenCalledWith(true));
             expect(isEncryptionEnabledInRoom).toHaveBeenCalledTimes(3);
+        });
+    });
+
+    describe("watchableJoinRule", () => {
+        it("should return join rule from sdkRoom", () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            sdkRoom.getJoinRule.mockReturnValue(JoinRule.Public);
+            const room = new Room(sdkRoom);
+            expect(room.joinRule.value).toStrictEqual("public");
+        });
+
+        it("should update when the join rule changes", () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            sdkRoom.getJoinRule.mockReturnValue(JoinRule.Public);
+
+            const room = new Room(sdkRoom);
+            const fn = vi.fn();
+
+            // Changed while nobody was watching
+            sdkRoom.getJoinRule.mockReturnValue(JoinRule.Knock);
+            room.joinRule.watch(fn);
+            expect(room.joinRule.value).toStrictEqual("knock");
+            // The new watcher gets the up to date value
+            expect(fn).toHaveBeenCalledWith("knock");
+            fn.mockClear();
+
+            sdkRoom.getJoinRule.mockReturnValue(JoinRule.Invite);
+            const mkStateEvent = (type: string): ReturnType<typeof mkEvent> =>
+                mkEvent({ event: true, type, room: sdkRoom.roomId, user: "@alice:m.org", skey: "", content: {} });
+
+            // Other state events are ignored
+            sdkRoom.emit(RoomStateEvent.Events, mkStateEvent(EventType.RoomTopic), sdkRoom.currentState, null);
+            expect(fn).not.toHaveBeenCalled();
+
+            sdkRoom.emit(RoomStateEvent.Events, mkStateEvent(EventType.RoomJoinRules), sdkRoom.currentState, null);
+            expect(room.joinRule.value).toStrictEqual("invite");
+            expect(fn).toHaveBeenCalledTimes(1);
+        });
+
+        it("should add/remove event listener on sdk room", () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+
+            const room = new Room(sdkRoom);
+            const fn = vi.fn();
+            const onSpy = vi.spyOn(sdkRoom, "on");
+            const offSpy = vi.spyOn(sdkRoom, "off");
+
+            room.joinRule.watch(fn);
+            expect(onSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+            room.joinRule.unwatch(fn);
+            expect(offSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+        });
+    });
+
+    describe("watchableHistoryVisibility", () => {
+        it("should follow the history visibility of the sdk room", () => {
+            const cli = stubClient();
+            const sdkRoom = mkRoom(cli, "!foo:m.org");
+            const getHistoryVisibility = vi.mocked(sdkRoom.currentState.getHistoryVisibility);
+            getHistoryVisibility.mockReturnValue(HistoryVisibility.Joined);
+
+            const room = new Room(sdkRoom);
+            expect(room.historyVisibility.value).toStrictEqual("joined");
+
+            const fn = vi.fn();
+            const onSpy = vi.spyOn(sdkRoom, "on");
+            const offSpy = vi.spyOn(sdkRoom, "off");
+
+            // Changed while nobody was watching
+            getHistoryVisibility.mockReturnValue(HistoryVisibility.Shared);
+            room.historyVisibility.watch(fn);
+            expect(room.historyVisibility.value).toStrictEqual("shared");
+            // The new watcher gets the up to date value
+            expect(fn).toHaveBeenCalledWith("shared");
+            fn.mockClear();
+            expect(onSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+            getHistoryVisibility.mockReturnValue(HistoryVisibility.Invited);
+            const mkStateEvent = (type: string): ReturnType<typeof mkEvent> =>
+                mkEvent({ event: true, type, room: sdkRoom.roomId, user: "@alice:m.org", skey: "", content: {} });
+
+            // Other state events are ignored
+            sdkRoom.emit(RoomStateEvent.Events, mkStateEvent(EventType.RoomTopic), sdkRoom.currentState, null);
+            expect(fn).not.toHaveBeenCalled();
+
+            sdkRoom.emit(
+                RoomStateEvent.Events,
+                mkStateEvent(EventType.RoomHistoryVisibility),
+                sdkRoom.currentState,
+                null,
+            );
+            expect(room.historyVisibility.value).toStrictEqual("invited");
+            expect(fn).toHaveBeenCalledTimes(1);
+
+            room.historyVisibility.unwatch(fn);
+            expect(offSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
         });
     });
 });
