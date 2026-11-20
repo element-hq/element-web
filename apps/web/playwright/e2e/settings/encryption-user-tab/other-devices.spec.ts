@@ -10,6 +10,7 @@ import { type StartedHomeserverContainer } from "@element-hq/element-web-playwri
 import { type Page, type Browser, type TestInfo } from "@playwright/test";
 
 import { test, expect } from "./index";
+import { hideReleaseAnnouncements } from "../../../element-web-test";
 import { ElementAppPage } from "../../../pages/ElementAppPage";
 import { createRoom, sendMessageInCurrentRoom, verifyApp } from "../../crypto/utils";
 import { type CredentialsOptionalAccessToken } from "../../../pages/bot";
@@ -220,7 +221,7 @@ async function newBrowser(
     browser: Browser,
 ): Promise<{ bobCredentials: CredentialsOptionalAccessToken; bobPage: Page; bobElementApp: ElementAppPage }> {
     const bobCredentials = await homeserver.registerUser(`user_${testInfo.testId}_bob`, "password", "bob");
-    const bobPage = await createNewInstance(browser, bobCredentials, {});
+    const bobPage = await createNewInstance(browser, bobCredentials, hideReleaseAnnouncements({}));
     const bobElementApp = new ElementAppPage(bobPage);
     await prepForEncryption(bobElementApp, bobCredentials);
     return { bobCredentials, bobPage, bobElementApp };

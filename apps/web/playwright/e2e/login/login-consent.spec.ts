@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Page } from "@playwright/test";
 import { buildConfigJson } from "@element-hq/element-web-playwright-common";
 
-import { expect, test } from "../../element-web-test";
+import { expect, hideReleaseAnnouncements, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
@@ -258,7 +258,12 @@ test.describe("Login", () => {
                     // The deployment now turns force_verification on. A page-level route takes
                     // precedence over the context-level one registered by the `config` fixture.
                     await page.route("/config.json*", (route) =>
-                        route.fulfill({ json: buildConfigJson(homeserver.baseUrl, { force_verification: true }) }),
+                        route.fulfill({
+                            json: buildConfigJson(
+                                homeserver.baseUrl,
+                                hideReleaseAnnouncements({ force_verification: true }),
+                            ),
+                        }),
                     );
 
                     await page.reload();

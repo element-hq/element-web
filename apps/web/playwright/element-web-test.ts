@@ -18,9 +18,12 @@ import {
     type TestFixtures as BaseTestFixtures,
     expect as baseExpect,
     type ToMatchScreenshotOptions,
+    type Config,
+    routeConfigJson,
 } from "@element-hq/element-web-playwright-common";
 
 import { type Credentials } from "./plugins/homeserver";
+import { FEATURES } from "../src/stores/ReleaseAnnouncementFeatures";
 import { ElementAppPage } from "./pages/ElementAppPage";
 import { Crypto } from "./pages/crypto";
 import { Bot, type CreateBotOpts } from "./pages/bot";
@@ -49,6 +52,24 @@ export interface TestFixtures extends BaseTestFixtures {
     botCreateOpts: CreateBotOpts;
     bot: Bot;
     webserver: Webserver;
+}
+
+/**
+ * Mark every release announcement as seen in the given config.json contents, unless it sets
+ * `releaseAnnouncementData` itself. Release announcements pop up over the UI whenever no toast is showing,
+ * which makes tests flaky, so they are hidden by default; a test opts in with `releaseAnnouncementData: {}`
+ * in `config.setting_defaults`.
+ *
+ * Applied to the `config` fixture automatically. Use it when serving config.json to another context yourself.
+ */
+export function hideReleaseAnnouncements(config: Partial<Config>): Partial<Config> {
+    return {
+        ...config,
+        setting_defaults: {
+            releaseAnnouncementData: Object.fromEntries(FEATURES.map((feature) => [feature, true])),
+            ...config.setting_defaults,
+        },
+    };
 }
 
 type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
@@ -85,7 +106,16 @@ export const test = base.extend<TestFixtures>({
         await use(axe);
     },
 
-    page: async ({ page }, use, testInfo) => {
+    page: async ({ page, context, homeserver, config, labsFlags, disablePresence }, use, testInfo) => {
+        // Replace the base fixture's config.json; this route is registered later, so it takes precedence
+        await routeConfigJson(
+            context,
+            homeserver.baseUrl,
+            hideReleaseAnnouncements(config),
+            labsFlags,
+            disablePresence,
+        );
+
         // Firefox and WebKit block service workers (see playwright.config.ts), so Element shows a
         // "Failed to load service worker" toast, which can cover whatever the test clicks next.
         if (testInfo.project.use.serviceWorkers === "block") {

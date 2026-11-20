@@ -31,6 +31,11 @@ export function buildConfigJson(
             },
             ...additionalConfig.default_server_config,
         },
+        // Merge rather than replace, so that a test setting one default keeps the others from CONFIG_JSON
+        setting_defaults: {
+            ...CONFIG_JSON.setting_defaults,
+            ...additionalConfig.setting_defaults,
+        },
     };
     json["features"] = {
         ...json["features"],
