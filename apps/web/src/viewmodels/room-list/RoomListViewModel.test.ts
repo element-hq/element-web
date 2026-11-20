@@ -21,6 +21,7 @@ import {
 
 import RoomListStoreV3, { RoomListStoreV3Event } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
+import { type FilterId } from "@element-hq/web-shared-components";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
@@ -30,8 +31,11 @@ import { PreviewRoomListItemViewModel } from "./PreviewRoomListItemViewModel";
 import { type RoomViewStore } from "../../stores/RoomViewStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { hasCreateRoomRights } from "./utils";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX, type SectionExpansionState } from "../../stores/room-list-v3/section";
@@ -45,6 +49,10 @@ vi.mock("../../utils/room/tagRoom", () => ({
 
 vi.mock("../../utils/room/getSectionTagForRoom", () => ({
     getSectionTagForRoom: vi.fn().mockReturnValue(null),
+}));
+
+vi.mock("../../customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: vi.fn().mockReturnValue(true),
 }));
 
 vi.mock("./utils", () => ({
@@ -63,20 +71,28 @@ describe("RoomListViewModel", () => {
     // In-memory backing store for the persisted section expansion setting, reset each test so
     // collapse state does not leak between tests and writes round-trip synchronously.
     let sectionExpansionState: SectionExpansionState;
+    // In-memory backing store for the persisted primary filter.
+    let activeFilterSetting: FilterId | null;
 
     beforeEach(() => {
         matrixClient = createTestClient();
 
         sectionExpansionState = {};
+        activeFilterSetting = null;
         const realGetValue = SettingsStore.getValue.bind(SettingsStore);
         vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, roomId, excludeDefault) => {
             if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+            if (setting === "RoomList.activeFilter") return activeFilterSetting;
             return realGetValue(setting, roomId, excludeDefault);
         });
         const realSetValue = SettingsStore.setValue.bind(SettingsStore);
         vi.spyOn(SettingsStore, "setValue").mockImplementation(async (setting, roomId, level, value) => {
             if (setting === "RoomList.SectionExpansionState") {
                 sectionExpansionState = value as SectionExpansionState;
+                return;
+            }
+            if (setting === "RoomList.activeFilter") {
+                activeFilterSetting = value as FilterId | null;
                 return;
             }
             return realSetValue(setting, roomId, level, value);
@@ -144,15 +160,18 @@ describe("RoomListViewModel", () => {
             expect(viewModel.getSnapshot().isFlatList).toBe(true);
         });
 
-        it("should set canCreateRoom based on user rights", () => {
-            vi.mocked(hasCreateRoomRights).mockReturnValue(true);
+        it.each([true, false])("should set canCreateRoom and canStartChat based on user rights (%s)", (rights) => {
+            vi.mocked(hasCreateRoomRights).mockReturnValue(rights);
+            vi.mocked(shouldShowComponent).mockReturnValue(rights);
             viewModel = new RoomListViewModel({
                 client: matrixClient,
                 spaceStore: SDKContextClass.instance.spaceStore,
                 roomViewStore: SDKContextClass.instance.roomViewStore,
             });
 
-            expect(viewModel.getSnapshot().canCreateRoom).toBe(true);
+            expect(viewModel.getSnapshot().canCreateRoom).toBe(rights);
+            expect(viewModel.getSnapshot().canStartChat).toBe(rights);
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateDM);
         });
     });
 
@@ -439,6 +458,7 @@ describe("RoomListViewModel", () => {
                 expect(() => (viewModel as any).previewRoom.getPendingEvents()).not.toThrow();
 
                 // The user has knocked, so the room is now in the room list
+                const sectionsBeforeKnock = viewModel.getSnapshot().sections;
                 const knockRoom = mkStubRoom(previewRoomId, "Knock room", matrixClient);
                 vi.mocked(knockRoom.getMyMembership).mockReturnValue(KnownMembership.Knock);
                 vi.mocked(matrixClient.getRoom).mockReturnValue(knockRoom);
@@ -454,6 +474,8 @@ describe("RoomListViewModel", () => {
                     "!room3:server",
                 ]);
                 expect(viewModel.getRoomItemViewModel(previewRoomId)).not.toBeInstanceOf(PreviewRoomListItemViewModel);
+                // The room ids are the same, but the sections must change so the view fetches the new item
+                expect(viewModel.getSnapshot().sections).not.toBe(sectionsBeforeKnock);
             });
 
             it("doesn't show a joined room", async () => {
@@ -589,6 +611,65 @@ describe("RoomListViewModel", () => {
             ]);
         });
 
+        it("should persist the active filter at the device level", () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            viewModel.onToggleFilter("unread");
+            expect(SettingsStore.setValue).toHaveBeenCalledWith(
+                "RoomList.activeFilter",
+                null,
+                SettingLevel.DEVICE,
+                "unread",
+            );
+            expect(activeFilterSetting).toBe("unread");
+
+            // Toggling the filter off forgets it
+            viewModel.onToggleFilter("unread");
+            expect(SettingsStore.setValue).toHaveBeenLastCalledWith(
+                "RoomList.activeFilter",
+                null,
+                SettingLevel.DEVICE,
+                null,
+            );
+            expect(activeFilterSetting).toBeNull();
+        });
+
+        it("should restore the persisted filter on creation", () => {
+            activeFilterSetting = "unread";
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                filterKeys: [FilterEnum.UnreadFilter],
+            });
+
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+
+            expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith([
+                FilterEnum.UnreadFilter,
+            ]);
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.activeFilterId).toBe("unread");
+            expect(snapshot.roomListState.filterKeys).toEqual([String(FilterEnum.UnreadFilter)]);
+            expect(snapshot.sections[0].roomIds).toEqual(["!room1:server"]);
+
+            // Toggling the restored filter turns it off rather than on again
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
+            });
+            viewModel.onToggleFilter("unread");
+            expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
+            expect(activeFilterSetting).toBeNull();
+        });
+
         describe("Section-only filters (RoomList.showSections)", () => {
             function mockShowSections(showSections: boolean): void {
                 vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
@@ -596,9 +677,38 @@ describe("RoomListViewModel", () => {
                     if (setting === "RoomList.CustomSectionData") return {};
                     if (setting === "RoomList.OrderedCustomSections") return [];
                     if (setting === "RoomList.SectionExpansionState") return {};
+                    if (setting === "RoomList.activeFilter") return activeFilterSetting;
                     return undefined as any;
                 });
             }
+
+            it("ignores a persisted filter that is hidden while sections are enabled", () => {
+                activeFilterSetting = "favourite";
+                mockShowSections(true);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
+
+                expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith(undefined);
+                expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
+            });
+
+            it("restores a persisted section-only filter while sections are disabled", () => {
+                activeFilterSetting = "favourite";
+                mockShowSections(false);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
+
+                expect(RoomListStoreV3.instance.getSortedRoomsInActiveSpace).toHaveBeenCalledWith([
+                    FilterEnum.FavouriteFilter,
+                ]);
+                expect(viewModel.getSnapshot().activeFilterId).toBe("favourite");
+            });
 
             it("hides the Favourites, Low Priority and Invites filters when sections are enabled", () => {
                 mockShowSections(true);
@@ -671,6 +781,12 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.filterIds).not.toContain("favourite");
                 expect(snapshot.filterIds).not.toContain("low_priority");
                 expect(snapshot.activeFilterId).toBeUndefined();
+                expect(SettingsStore.setValue).toHaveBeenLastCalledWith(
+                    "RoomList.activeFilter",
+                    null,
+                    SettingLevel.DEVICE,
+                    null,
+                );
             });
         });
     });

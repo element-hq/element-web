@@ -36,6 +36,8 @@ import {
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import { PreviewRoomListItemViewModel, type PreviewRoomListItemProps } from "./PreviewRoomListItemViewModel";
 import { hasCreateRoomRights } from "./utils";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
@@ -48,6 +50,7 @@ import {
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
@@ -96,6 +99,30 @@ function getVisibleFilterIds(): FilterId[] {
     const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
     const filterIds = [...filterKeyToIdMap.values()];
     return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
+}
+
+/**
+ * Read the primary filter persisted at the device level, if it is still one of the visible chips.
+ */
+function getPersistedFilter(): FilterEnum | undefined {
+    const filterId = SettingsStore.getValue("RoomList.activeFilter");
+    // Ignore a filter that is invisble.
+    if (!filterId || !getVisibleFilterIds().includes(filterId)) return undefined;
+    // Find the filter key.
+    for (const [key, id] of filterKeyToIdMap.entries()) {
+        if (id === filterId) return key;
+    }
+    // We don't know this filter ID.
+    return undefined;
+}
+
+/**
+ * Persist the active primary filter at the device level so it survives a reload or relaunch.
+ * @param filterKey - The active filter, or undefined when no filter is selected.
+ */
+function persistFilter(filterKey: FilterEnum | undefined): void {
+    const filterId = filterKey !== undefined ? (filterKeyToIdMap.get(filterKey) ?? null) : null;
+    void SettingsStore.setValue("RoomList.activeFilter", null, SettingLevel.DEVICE, filterId);
 }
 
 /**
@@ -211,8 +238,12 @@ export class RoomListViewModel
     public constructor(props: RoomListViewModelProps) {
         const activeSpace = props.spaceStore.activeSpaceRoom;
 
+        // Restore the filter selection.
+        const activeFilter = getPersistedFilter();
+
         // Get initial rooms
-        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
+        const filterKeys = activeFilter !== undefined ? [activeFilter] : undefined;
+        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
         const filterIds = getVisibleFilterIds();
@@ -228,17 +259,19 @@ export class RoomListViewModel
             isLoadingRooms: RoomListStoreV3.instance.isLoadingRooms,
             isRoomListEmpty,
             filterIds,
-            activeFilterId: undefined,
+            activeFilterId: activeFilter !== undefined ? filterKeyToIdMap.get(activeFilter) : undefined,
             roomListState: {
                 activeRoomIndex: undefined,
                 spaceId: roomsResult.spaceId,
-                filterKeys: undefined,
+                filterKeys: roomsResult.filterKeys?.map((k) => String(k)),
             },
             isFlatList,
             sections: toRoomListSection(sections),
             canCreateRoom,
+            canStartChat: shouldShowComponent(UIComponent.CreateDM),
         });
 
+        this.activeFilter = activeFilter;
         this.roomsResult = roomsResult;
         this.sections = sections;
 
@@ -402,6 +435,7 @@ export class RoomListViewModel
         // Toggle the filter - if it's already active, deactivate it
         const newFilter = this.activeFilter === filterKey ? undefined : filterKey;
         this.activeFilter = newFilter;
+        persistFilter(newFilter);
 
         // Update rooms result with new filter
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
@@ -420,6 +454,7 @@ export class RoomListViewModel
      */
     private readonly onShowSectionsChange = (): void => {
         this.activeFilter = undefined;
+        persistFilter(undefined);
         this.clearViewModels();
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace();
         this.updateRoomsMap(this.roomsResult);
@@ -979,7 +1014,7 @@ export class RoomListViewModel
         // Rebuild roomsMap with the reordered rooms
         this.updateRoomsMap(this.roomsResult);
 
-        this.updatePreviewItem();
+        const isPreviewItemChanged = this.updatePreviewItem();
 
         // Track the current active room position for future sticky calculations
         this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
@@ -1028,7 +1063,9 @@ export class RoomListViewModel
             isRoomListEmpty,
             activeFilterId,
             roomListState: keepIfSame(this.snapshot.current.roomListState, roomListState),
-            sections: keepIfSame(previousSections, viewSections),
+            // When the preview item is replaced by the room's own item, the room ids stay the same.
+            // Send new sections anyway so the view fetches the new item.
+            sections: isPreviewItemChanged ? viewSections : keepIfSame(previousSections, viewSections),
             isFlatList,
         });
 

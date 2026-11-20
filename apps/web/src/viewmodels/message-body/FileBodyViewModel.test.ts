@@ -88,7 +88,6 @@ describe("FileBodyViewModel", () => {
             timelineRenderingType: TimelineRenderingType.File,
             refIFrame: createRef<HTMLIFrameElement>() as RefObject<HTMLIFrameElement>,
             refLink: createRef<HTMLAnchorElement>() as RefObject<HTMLAnchorElement>,
-            documentPreviewsEnabled: false,
             ...overrides,
         });
 
@@ -326,25 +325,8 @@ describe("FileBodyViewModel", () => {
     describe("open in viewer", () => {
         const pdf = { info: { mimetype: "application/pdf" } };
 
-        /** The lab flag is read by the view and handed in, so a test just sets it directly. */
-        const createPdfVm = (
-            overrides: Partial<ConstructorParameters<typeof FileBodyViewModel>[0]> = {},
-        ): FileBodyViewModel => createVm({ documentPreviewsEnabled: true, ...overrides });
-
-        it("does not offer the viewer while the lab is off", () => {
-            const vm = createPdfVm({
-                documentPreviewsEnabled: false,
-                mxEvent: mkMediaEvent(pdf),
-                showFileInfo: true,
-                timelineRenderingType: TimelineRenderingType.Room,
-            });
-
-            expect(vm.getSnapshot().showOpen).toBe(false);
-            expect(vm.getSnapshot().showInlineDownload).toBe(false);
-        });
-
         it("offers the viewer for a PDF shown as a file in the timeline", () => {
-            const vm = createPdfVm({
+            const vm = createVm({
                 mxEvent: mkMediaEvent(pdf),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -354,7 +336,7 @@ describe("FileBodyViewModel", () => {
         });
 
         it("offers the viewer for an encrypted PDF, which decrypts on open", () => {
-            const vm = createPdfVm({
+            const vm = createVm({
                 mxEvent: mkMediaEvent({ ...pdf, file: { url: "mxc://server/file" } }),
                 mediaEventHelper: mkMediaEventHelper({ encrypted: true }),
                 showFileInfo: true,
@@ -371,7 +353,7 @@ describe("FileBodyViewModel", () => {
             ["a non-PDF mimetype", { info: { mimetype: "text/plain" } }],
             ["no mimetype at all", {}],
         ])("does not offer the viewer for %s", (_label, content) => {
-            const vm = createPdfVm({
+            const vm = createVm({
                 mxEvent: mkMediaEvent(content),
                 showFileInfo: true,
                 timelineRenderingType: TimelineRenderingType.Room,
@@ -381,26 +363,26 @@ describe("FileBodyViewModel", () => {
         });
 
         it("does not offer the viewer in the download-only panels", () => {
-            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: false });
+            const vm = createVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: false });
 
             expect(vm.getSnapshot().showOpen).toBe(false);
         });
 
         it("does not offer the viewer in an export", () => {
-            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: true, forExport: true });
+            const vm = createVm({ mxEvent: mkMediaEvent(pdf), showFileInfo: true, forExport: true });
 
             expect(vm.getSnapshot().showOpen).toBeUndefined();
         });
 
         it("does not offer the viewer without a media helper to fetch the bytes", () => {
-            const vm = createPdfVm({ mxEvent: mkMediaEvent(pdf), mediaEventHelper: undefined, showFileInfo: true });
+            const vm = createVm({ mxEvent: mkMediaEvent(pdf), mediaEventHelper: undefined, showFileInfo: true });
 
             expect(vm.getSnapshot().showOpen).toBe(false);
         });
 
         it("opens the viewer for its own event on click", () => {
             const mxEvent = mkMediaEvent(pdf);
-            const vm = createPdfVm({ mxEvent, showFileInfo: true, timelineRenderingType: TimelineRenderingType.Room });
+            const vm = createVm({ mxEvent, showFileInfo: true, timelineRenderingType: TimelineRenderingType.Room });
 
             vm.onOpenClick();
 
@@ -410,9 +392,8 @@ describe("FileBodyViewModel", () => {
         describe("for Markdown", () => {
             const markdown = { body: "README.md", info: { mimetype: "text/markdown" } };
 
-            it("offers the Markdown viewer while the lab is on", () => {
+            it("offers the Markdown viewer", () => {
                 const vm = createVm({
-                    documentPreviewsEnabled: true,
                     mxEvent: mkMediaEvent(markdown),
                     showFileInfo: true,
                     timelineRenderingType: TimelineRenderingType.Room,
@@ -421,21 +402,9 @@ describe("FileBodyViewModel", () => {
                 expect(vm.getSnapshot()).toMatchObject({ showOpen: true, openLabel: "Open Markdown" });
             });
 
-            it("does not offer the Markdown viewer while the lab is off", () => {
-                const vm = createVm({
-                    documentPreviewsEnabled: false,
-                    mxEvent: mkMediaEvent(markdown),
-                    showFileInfo: true,
-                    timelineRenderingType: TimelineRenderingType.Room,
-                });
-
-                expect(vm.getSnapshot().showOpen).toBe(false);
-            });
-
             it("opens the Markdown viewer for its own event on click", () => {
                 const mxEvent = mkMediaEvent(markdown);
                 const vm = createVm({
-                    documentPreviewsEnabled: true,
                     mxEvent,
                     showFileInfo: true,
                     timelineRenderingType: TimelineRenderingType.Room,

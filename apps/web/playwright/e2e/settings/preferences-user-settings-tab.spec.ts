@@ -75,4 +75,24 @@ test.describe("Preferences user settings tab", () => {
         // Check the new value
         await expect(timezoneValue.getByText("Africa/Abidjan")).toBeVisible();
     });
+
+    test.describe("with a timezone set in config.json", () => {
+        test.use({
+            config: {
+                setting_defaults: {
+                    userTimezone: "UTC",
+                },
+            },
+        });
+
+        test("should show the configured timezone in the dropdown", async ({ uut, user }) => {
+            const timezoneInput = uut.locator(".mx_dropdownUserTimezone");
+            const timezoneValue = uut.locator("#mx_dropdownUserTimezone_value");
+            await timezoneInput.scrollIntoViewIfNeeded();
+            // The configured timezone is selected, even though some browsers leave it out of their timezone list
+            await expect(timezoneValue.getByText("UTC")).toBeVisible();
+            await timezoneInput.getByRole("button", { name: "Set timezone" }).click();
+            await expect(timezoneInput.getByRole("option", { name: "UTC", exact: true })).toBeVisible();
+        });
+    });
 });

@@ -15,9 +15,14 @@ Please see LICENSE files in the repository root for full details.
     height: 100%;
 
     /* Kept mounted but invisible, e.g. while search results are shown, so the
-       timeline keeps its scroll position and loaded window. */
+       timeline keeps its scroll position and loaded window. It stays laid out
+       underneath rather than display: none, which would measure every row as 0px
+       tall and lose the place, and centre a jump made while hidden (clicking a
+       search result) against a 0px viewport. */
     &.mx_NewTimelinePanel_hidden {
-        display: none;
+        position: absolute;
+        inset: 0;
+        visibility: hidden;
     }
 
     /* The virtualized timeline renders its rows as an <ol role="list"> of <li>

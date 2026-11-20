@@ -43,8 +43,7 @@
         "encryption_enabled": "Chiffrement activé",
         "loading": "Chargement…",
         "options": "Options",
-        "preferences": "Préférences",
-        "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
+        "preferences": "Préférences"
     },
     "composer": {
         "url_preview": {
@@ -94,6 +93,12 @@
     "emoji_picker": {
         "cancel_search_label": "Annuler la recherche",
         "emoji_picker": "Sélecteur d'emoji"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Vous perdrez vos discussions chiffrées et devrez reconfigurer votre identité numérique si vous supprimer tous vos appareils.",
+            "error": "Impossible de supprimer le stockage de clés. Veuillez réessayer."
+        }
     },
     "error": {
         "legacy_crypto_unsupported": {
@@ -365,7 +370,6 @@
             "enabled_dm": "Les messages sont chiffrés de bout en bout. Vérifiez %(displayName)s dans leur profil — cliquer sur leur photo de profil.",
             "enabled_local": "Les messages de cette discussion seront chiffrés de bout en bout.",
             "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
-            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier en cliquant sur leur photo de profil.",
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
         },
         "mab": {

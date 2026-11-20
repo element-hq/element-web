@@ -18,7 +18,6 @@ import {
     RoomMember,
     getBeaconInfoIdentifier,
 } from "matrix-js-sdk/src/matrix";
-import * as maplibregl from "maplibre-gl";
 import {
     getMockClientWithEventEmitter,
     makeBeaconEvent,
@@ -30,6 +29,7 @@ import {
 import BeaconViewDialog from "./BeaconViewDialog";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
 import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

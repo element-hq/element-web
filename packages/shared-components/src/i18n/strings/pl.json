@@ -43,8 +43,7 @@
         "encryption_enabled": "Szyfrowanie włączone",
         "loading": "Wczytywanie…",
         "options": "Opcje",
-        "preferences": "Preferencje",
-        "state_encryption_enabled": "Eksperymentalne szyfrowanie włączone"
+        "preferences": "Preferencje"
     },
     "composer": {
         "url_preview": {
@@ -95,6 +94,12 @@
     "emoji_picker": {
         "cancel_search_label": "Anuluj wyszukiwanie",
         "emoji_picker": "Selektor emoji"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Jeśli usuniesz wszystkie swoje urządzenia, stracisz zaszyfrowaną historię wiadomości i będziesz musiał zresetować swoją tożsamość cyfrową.",
+            "error": "Nie udało się usunąć magazynu kluczy. Spróbuj ponownie."
+        }
     },
     "error": {
         "legacy_crypto_unsupported": {
@@ -369,7 +374,6 @@
             "enabled_dm": "Wiadomości tutaj są szyfrowane end-to-end. Sprawdź %(displayName)s na ich profilu — klikając na zdjęcie profilowe.",
             "enabled_local": "Wiadomości na tym czacie będą szyfrowane end-to-end.",
             "parameters_changed": "Niektóre parametry szyfrowania zostały zmienione.",
-            "state_enabled": "Wiadomości i zdarzenia stanowe w tym pokoju są szyfrowane end-to-end. Gdy ktoś dołączy, możesz go zweryfikować klikając na jego zdjęcie profilowe.",
             "unsupported": "Szyfrowanie wykorzystywane przez ten pokój nie jest obsługiwane."
         },
         "mab": {

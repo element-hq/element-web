@@ -13,7 +13,6 @@ import {
     RenderingCancelledException,
     VerbosityLevel,
     type PDFDocumentLoadingTask,
-    type PDFDocumentProxy,
 } from "pdfjs-dist";
 import { EventBus, PDFViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
 
@@ -341,7 +340,7 @@ function openDocument({ container, viewer, workerSource, post, data, position }:
             listeners.abort();
             resizeObserver?.disconnect();
             pdfViewer.cleanup();
-            pdfViewer.setDocument(null as unknown as PDFDocumentProxy);
+            pdfViewer.setDocument(null);
             linkService.setDocument(null);
             loadingTask?.destroy().catch(() => {});
             pdfWorker?.destroy();

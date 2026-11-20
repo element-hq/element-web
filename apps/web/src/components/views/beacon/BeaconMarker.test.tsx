@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { act, render, screen, waitFor } from "test-utils-rtl";
-import * as maplibregl from "maplibre-gl";
 import { Beacon, type Room, RoomMember, type MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 import {
     getMockClientWithEventEmitter,
@@ -23,6 +22,7 @@ import {
 import BeaconMarker from "./BeaconMarker";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
+import * as maplibregl from "../../../utils/location/maplibre";
 
 vi.mock("maplibre-gl");
 

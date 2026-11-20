@@ -131,7 +131,6 @@ export function createTestClient(): MatrixClient {
             getDeviceVerificationStatus: vi.fn(),
             resetKeyBackup: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
-            isStateEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
             getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
             setDeviceIsolationMode: vi.fn(),
             prepareToEncrypt: vi.fn(),
@@ -320,8 +319,8 @@ export function createTestClient(): MatrixClient {
         _unstable_sendScheduledDelayedEvent: vi.fn(),
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
-        _unstable_getRTCTransports: vi.fn(),
-        _unstable_getLivekitToken: vi.fn(),
+        getRTCTransports: vi.fn(),
+        getLivekitToken: vi.fn(),
         _unstable_delegateDelayedLeave: vi.fn(),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
@@ -396,7 +395,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
     mockGetRoomSession.mockImplementation((roomId) => {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
-        session.getConsensusCallIntent = () => "video";
+        session.getConsensusIntent = () => "m.video";
         return session;
     });
     return {

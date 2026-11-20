@@ -18,9 +18,17 @@ export const enum UIComponent {
     /**
      * Components that lead to a room being created that aren't already
      * guarded by some other condition (ie: "only if you can edit this
-     * space" is *not* guarded by this component, but "start DM" is).
+     * space" is *not* guarded by this component, but "new room" is).
+     * DM creation is guarded separately by {@link UIComponent.CreateDM}.
      */
     CreateRooms = "UIComponent.roomCreation",
+
+    /**
+     * Components that lead to a direct message being created, such as "Start chat".
+     * Before this existed, these were guarded by {@link UIComponent.CreateRooms}: modules
+     * hiding room creation that also want to hide DM creation must now hide this as well.
+     */
+    CreateDM = "UIComponent.dmCreation",
 
     /**
      * Components that lead to a Space being created that aren't already
@@ -49,6 +57,18 @@ export const enum UIComponent {
      * Components that lead the user to room options menu.
      */
     RoomOptionsMenu = "UIComponent.roomOptionsMenu",
+
+    /**
+     * Components that let the user make a room or space public, either when creating it or
+     * by changing an existing one. Hiding this is equivalent to setting both
+     * `UIFeature.allowCreatingPublicRooms` and `UIFeature.allowCreatingPublicSpaces` to false.
+     */
+    PublicRooms = "UIComponent.publicRooms",
+
+    /**
+     * Release announcements highlighting new features.
+     */
+    ReleaseAnnouncements = "UIComponent.releaseAnnouncements",
 }
 
 /**

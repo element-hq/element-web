@@ -5,6 +5,7 @@ on:
         branches: [develop]
         paths:
             - "*/*/src/i18n/strings/en_EN.json"
+            - "modules/*/src/translations.json"
 permissions: {} # No permissions needed
 jobs:
     upload:
@@ -14,6 +15,15 @@ jobs:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
+
+            # Modules keep every language in one multilingual file, so strip it down to the source language,
+            # otherwise each upload would resend translations which may be older than those in Localazy.
+            - name: Strip non-source languages from modules
+              run: |
+                  for f in modules/*/src/translations.json; do
+                      jq '{en: .en}' "$f" > "$f.tmp"
+                      mv "$f.tmp" "$f"
+                  done
 
             - uses: localazy/upload@27e6b5c0fddf4551596b42226b1c24124335d24a # v1
               with:

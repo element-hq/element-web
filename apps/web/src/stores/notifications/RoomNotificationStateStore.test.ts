@@ -17,7 +17,6 @@ import { RoomNotificationStateStore, UPDATE_STATUS_INDICATOR } from "./RoomNotif
 import { NotificationLevel } from "./NotificationLevel";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
 import * as RoomNotifs from "../../RoomNotifs";
-import SettingsStore from "../../settings/SettingsStore";
 import { MatrixDispatcher } from "../../dispatcher/dispatcher";
 
 describe("RoomNotificationStateStore", function () {
@@ -162,60 +161,6 @@ describe("RoomNotificationStateStore", function () {
 
             // Then the summary reports the activity as before
             expect(store.emit).toHaveBeenCalledWith(UPDATE_STATUS_INDICATOR, expect.anything(), "SYNCING");
-        });
-    });
-
-    it("Emits an event when a feature flag changes notification state", async () => {
-        // Given we have synced already
-        let room = fakeRoom(0);
-        vi.mocked(store.emit).mockReset();
-        vi.mocked(client.getVisibleRooms).mockReturnValue([room]);
-        client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
-        expect(store.emit).not.toHaveBeenCalled();
-
-        // When we update the feature flag and it makes us have a notification
-        room = fakeRoom(2);
-        vi.mocked(client.getVisibleRooms).mockReturnValue([room]);
-        vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
-        store.emitUpdateIfStateChanged(SyncState.Syncing, false);
-
-        // Then we get notified
-        expect(store.emit).toHaveBeenCalledWith(UPDATE_STATUS_INDICATOR, expect.anything(), "SYNCING");
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            // Turn off feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes the dynamic predecessor flag to getVisibleRooms", async () => {
-            // When we sync
-            vi.mocked(client.getVisibleRooms).mockReturnValue([]);
-            client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
-
-            // Then we check visible rooms, using the dynamic predecessor flag
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith(true);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes the dynamic predecessor flag to getVisibleRooms", async () => {
-            // When we sync
-            vi.mocked(client.getVisibleRooms).mockReturnValue([]);
-            client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
-
-            // Then we check visible rooms, using the dynamic predecessor flag
-            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-            expect(client.getVisibleRooms).not.toHaveBeenCalledWith(false);
         });
     });
 

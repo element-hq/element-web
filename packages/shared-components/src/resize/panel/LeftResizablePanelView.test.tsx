@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@test-utils";
+import { render, screen, waitFor } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
@@ -63,13 +63,19 @@ describe("<LeftResizablePanelView />", () => {
     it("should call onLeftPanelResize", async () => {
         const vm = renderPanel();
         const separator = screen.getByRole("separator");
+        // The library finds the separator from the pointer coordinates, so press on its actual position
+        const { left, top, height } = separator.getBoundingClientRect();
+        const y = top + height / 2;
         const user = userEvent.setup();
         await user.pointer([
-            { target: separator, keys: "[MouseLeft>]" },
-            { coords: { x: 400, y: 200 } },
+            { target: separator, coords: { x: left, y }, keys: "[MouseLeft>]" },
+            { coords: { x: 200, y } },
             { keys: "[/MouseLeft]" },
         ]);
-        expect(vm.onLeftPanelResize).toHaveBeenCalled();
+        // onResize is driven by a ResizeObserver so fires asynchronously, and also fires once on mount
+        await waitFor(() =>
+            expect(vi.mocked(vm.onLeftPanelResize).mock.lastCall?.[0]).toMatchObject({ inPixels: 200 }),
+        );
     });
 
     it("should be inert when collapsed", () => {

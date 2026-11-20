@@ -12,7 +12,8 @@ import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/com
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
-import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
+import { ChangeRecoveryKey, ChangeRecoveryKeyBreadcrumb } from "../../encryption/ChangeRecoveryKey";
+import { RecoveryKeyConfirmationCard } from "../../encryption/RecoveryKeyConfirmationCard";
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
@@ -34,6 +35,8 @@ import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/enc
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
+ *  - "recovery_key_changed": The confirmation shown once the user has changed their recovery key.
+ *  - "recovery_key_set_up": The confirmation shown once the user has set up their recovery key.
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in the case where their key is compromised.
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "reset_identity_sync_failed": The panel to show when the user us resetting their identity, in the case where recovery failed.
@@ -43,6 +46,8 @@ export type State =
     | "main"
     | "change_recovery_key"
     | "set_recovery_key"
+    | "recovery_key_changed"
+    | "recovery_key_set_up"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "reset_identity_sync_failed"
@@ -78,21 +83,35 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
             switch (deviceState) {
                 // some device states require action from the user rather than showing the main settings screen
                 case "verify_this_session":
-                    content = <SetUpEncryptionPanel onFinish={() => setState("main")} />;
+                    content = (
+                        <>
+                            <SetUpEncryptionPanel onFinish={() => setState("main")} />
+                            <Separator kind="section" />
+                            {/* Keep "Export keys" reachable so users can save their keys before resetting their identity. */}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        </>
+                    );
                     break;
                 case "key_storage_out_of_sync":
                     content = (
-                        <RecoveryPanelOutOfSync
-                            onFinish={() => setState("main")}
-                            onForgotRecoveryKey={async () => {
-                                setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
-                            }}
-                            onAccessSecretStorageFailed={async () => {
-                                const needsCrossSigningReset =
-                                    await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
-                                setState(needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key");
-                            }}
-                        />
+                        <>
+                            <RecoveryPanelOutOfSync
+                                onFinish={() => setState("main")}
+                                onForgotRecoveryKey={async () => {
+                                    setState(await encryptionSettingsStateForKeyStorageOutOfSyncForgotRecovery());
+                                }}
+                                onAccessSecretStorageFailed={async () => {
+                                    const needsCrossSigningReset =
+                                        await DeviceListener.sharedInstance().keyStorageOutOfSyncNeedsCrossSigningReset();
+                                    setState(
+                                        needsCrossSigningReset ? "reset_identity_sync_failed" : "change_recovery_key",
+                                    );
+                                }}
+                            />
+                            <Separator kind="section" />
+                            {/* Keep "Export keys" reachable so users can save their keys before resetting recovery. */}
+                            <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        </>
                     );
                     break;
                 case "identity_needs_reset":
@@ -128,8 +147,26 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                 <ChangeRecoveryKey
                     userHasRecoveryKey={state === "change_recovery_key"}
                     onCancelClick={() => setState("main")}
-                    onFinish={() => setState("main")}
+                    onFinish={() =>
+                        setState(state === "change_recovery_key" ? "recovery_key_changed" : "recovery_key_set_up")
+                    }
                 />
+            );
+            break;
+        case "recovery_key_changed":
+        case "recovery_key_set_up":
+            // The breadcrumbs stay, so the confirmation reads as the last step of the flow
+            content = (
+                <>
+                    <ChangeRecoveryKeyBreadcrumb
+                        userHasRecoveryKey={state === "recovery_key_changed"}
+                        onClick={() => setState("main")}
+                    />
+                    <RecoveryKeyConfirmationCard
+                        userHasRecoveryKey={state === "recovery_key_changed"}
+                        onFinish={() => setState("main")}
+                    />
+                </>
             );
             break;
         case "reset_identity_compromised":

@@ -70,7 +70,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
 import { DRAFT_LAST_CLEANUP_KEY } from "../../DraftCleaner";
-import { UIFeature } from "../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../settings/UIFeature";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import Modal from "../../Modal.tsx";
@@ -81,6 +81,12 @@ import UserSettingsDialog from "../../components/views/dialogs/UserSettingsDialo
 import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { type QrLoginCredentials } from "../../components/views/auth/LoginWithQR.tsx";
 import { storeAuthContext } from "../../utils/oauth/persistOAuthSettings.ts";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+
+vi.mock("../../customisations/helpers/UIComponents", async (importOriginal) => {
+    const original = await importOriginal<typeof import("../../customisations/helpers/UIComponents")>();
+    return { shouldShowComponent: vi.fn(original.shouldShowComponent) };
+});
 
 // Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
 // plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
@@ -163,7 +169,7 @@ describe("<MatrixChat />", () => {
         getSyncStateData: vi.fn().mockReturnValue(null),
         getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
         getClientWellKnown: vi.fn().mockReturnValue({}),
-        _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
+        getRTCTransports: vi.fn().mockResolvedValue([]),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
             get: vi.fn().mockReturnValue([]),
@@ -823,6 +829,22 @@ describe("<MatrixChat />", () => {
             await expect(screen.findByLabelText("User menu")).resolves.toBeVisible();
 
             await expect(screen.findByRole("heading", { level: 1, name: "Welcome Ernie" })).resolves.toBeVisible();
+            expect(screen.getByText("Send a Direct Message")).toBeVisible();
+        });
+
+        it("should not allow starting a chat when DM creation is hidden", async () => {
+            vi.mocked(shouldShowComponent).mockImplementation((component) => component !== UIComponent.CreateDM);
+            getComponent();
+
+            await expect(screen.findByRole("heading", { level: 1, name: "Welcome Ernie" })).resolves.toBeVisible();
+            expect(screen.queryByText("Send a Direct Message")).not.toBeInTheDocument();
+
+            // The action is ignored too, it can be fired from the #/dm URL
+            const createDialogSpy = vi.spyOn(Modal, "createDialog");
+            defaultDispatcher.dispatch({ action: Action.CreateChat }, true);
+            expect(createDialogSpy).not.toHaveBeenCalled();
+
+            vi.mocked(shouldShowComponent).mockReset();
         });
 
         describe("clean up drafts", () => {

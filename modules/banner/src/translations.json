@@ -1,26 +1,65 @@
 {
-    "logo_alt": {
-        "en": "Portal logo",
-        "de": "Portal Logo"
+    "de_DE": {
+        "close_label": "Menü schließen",
+        "logo_alt": "Portal Logo",
+        "logo_link_label": "Portal anzeigen",
+        "menu_label": "Menü",
+        "trigger_label": "Menü anzeigen",
+        "univention_error": "Konnte die zentrale Navigation nicht aus dem Portal abrufen"
     },
-    "menu_label": {
-        "en": "Menu",
-        "de": "Menü"
+    "en": {
+        "close_label": "Close menu",
+        "logo_alt": "Portal logo",
+        "logo_link_label": "Show portal",
+        "menu_label": "Menu",
+        "trigger_label": "Show menu",
+        "univention_error": "Could not fetch central navigation from the portal"
     },
-    "trigger_label": {
-        "en": "Show menu",
-        "de": "Menü anzeigen"
+    "et": {
+        "close_label": "Sulge menüü",
+        "logo_alt": "Portaali logo",
+        "logo_link_label": "Näita portaali",
+        "menu_label": "Menüü",
+        "trigger_label": "Näita menüüd",
+        "univention_error": "Portaalist keskmenüü laadimine ei õnnestunud"
     },
-    "close_label": {
-        "en": "Close menu",
-        "de": "Menü schließen"
+    "fr": {
+        "close_label": "Fermer le menu",
+        "logo_alt": "Logo du portail",
+        "logo_link_label": "Afficher le portail",
+        "menu_label": "Menu",
+        "trigger_label": "Afficher le menu",
+        "univention_error": "Impossible de récupérer la navigation centrale du portail"
     },
-    "logo_link_label": {
-        "en": "Show portal",
-        "de": "Portal anzeigen"
+    "hr": {
+        "close_label": "Zatvori izbornik",
+        "logo_alt": "Logotip portala",
+        "logo_link_label": "Prikaži portal",
+        "menu_label": "Izbornik",
+        "trigger_label": "Prikaži izbornik",
+        "univention_error": "Nije moguće dohvatiti središnju navigaciju s portala"
     },
-    "univention_error": {
-        "en": "Could not fetch central navigation from the portal",
-        "de": "Konnte die zentrale Navigation nicht aus dem Portal abrufen"
+    "pl": {
+        "close_label": "Zamknij menu",
+        "logo_alt": "Logo portalu",
+        "logo_link_label": "Pokaż portal",
+        "menu_label": "Menu",
+        "trigger_label": "Pokaż menu",
+        "univention_error": "Nie udało się pobrać nawigacji centralnej z portalu"
+    },
+    "sv": {
+        "close_label": "Stäng menyn",
+        "logo_alt": "Portalens logotyp",
+        "logo_link_label": "Visa portal",
+        "menu_label": "Meny",
+        "trigger_label": "Visa meny"
+    },
+    "zh_Hans": {
+        "close_label": "关闭菜单",
+        "logo_alt": "门户标识",
+        "logo_link_label": "显示门户",
+        "menu_label": "菜单",
+        "trigger_label": "显示菜单",
+        "univention_error": "无法从门户获取中央导航"
     }
 }

@@ -3,11 +3,36 @@
 Banner module for Element Web.
 Allows rendering a top bar with slide out left panel menu.
 
-Supports the following configuration options:
+# Configuration
+
+Configuration for the module should be provided via a
+[Configuration](https://web-docs.element.dev/config.html) setting of
+`io.element.element-web-modules.banner`.
+
+## Example
+
+```json
+{
+    "io.element.element-web-modules.banner": {
+        "logo_url": "https://raw.githubusercontent.com/element-hq/logos/refs/heads/master/element/Element%20Logomark%20%20-%20Transparent%20-%2064px.png",
+        "logo_link_url": "https://element.io",
+        "menu": {
+            "type": "static",
+            "categories": []
+        }
+    }
+}
+```
+
+## Reference
+
+The following configuration options are supported within the
+`io.element.element-web-modules.banner` object:
 
 | Key          | Type   | Description                                                                                    |
 | ------------ | ------ | ---------------------------------------------------------------------------------------------- |
 | logo_url     | string | URL to the logo to render in the banner                                                        |
+| logo_height  | number | Height of the banner logo in pixels, defaults to 35 if omitted                                 |
 | heading_href | string | URL to send the user to when clicking the logo or title in the banner                          |
 | title        | string | The title to render next to the logo, falls back to top level `brand` variable if unspecified. |
 | menu         | `Menu` | Data to render in the banner menu                                                              |

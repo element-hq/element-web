@@ -39,7 +39,6 @@
         "create_account": "Registreren",
         "decline": "Weigeren",
         "delete": "Verwijderen",
-        "deny": "Weigeren",
         "disable": "Uitschakelen",
         "disconnect": "Verbinding verbreken",
         "dismiss": "Sluiten",
@@ -1300,8 +1299,6 @@
         "count_of_successfully_restored_keys": "Succesvol %(sessionCount)s sleutels hersteld",
         "enter_key_description": "Ga naar uw veilige berichtengeschiedenis en stel veilige berichten in door uw veiligheidssleutel in te voeren.",
         "enter_key_title": "Veiligheidssleutel invoeren",
-        "enter_phrase_description": "Ga naar uw versleutelde berichtengeschiedenis en stel versleutelde berichten in door uw veiligheidswachtwoord in te voeren.",
-        "enter_phrase_title": "Veiligheidswachtwoord invoeren",
         "incorrect_security_phrase_dialog": "Back-up kon niet worden ontsleuteld met dit veiligheidswachtwoord: controleer of u het juiste veiligheidswachtwoord hebt ingevoerd.",
         "incorrect_security_phrase_title": "Onjuist veiligheidswachtwoord",
         "key_backup_warning": "<b>Let op</b>: stel sleutelback-up enkel in op een vertrouwde computer.",
@@ -1312,7 +1309,6 @@
         "load_error_content": "Kan back-upstatus niet laden",
         "load_keys_progress": "%(completed)s van %(total)s sleutels hersteld",
         "no_backup_error": "Geen back-up gevonden!",
-        "phrase_forgotten_text": "Als u uw veiligheidswachtwoord bent vergeten, kunt u <button1>uw veiligheidssleutel gebruiken</button1> of <button2>nieuwe herstelopties instellen</button2>",
         "recovery_key_mismatch_description": "Back-up kon niet worden ontcijferd met deze veiligheidssleutel: controleer of u de juiste veiligheidssleutel hebt ingevoerd.",
         "recovery_key_mismatch_title": "Verkeerde veiligheidssleutel",
         "restore_failed_error": "Kan back-up niet terugzetten"
@@ -2016,7 +2012,6 @@
             "verify_session": "Sessie verifiëren",
             "web_session": "Web sessie"
         },
-        "show_breadcrumbs": "Snelkoppelingen naar de kamers die je recent hebt bekeken bovenaan de kamerlijst weergeven",
         "show_chat_effects": "Effecten tonen (animaties bij ontvangst bijv. confetti)",
         "show_displayname_changes": "Veranderingen van weergavenamen tonen",
         "show_join_leave": "Toon deelname/laat berichten (uitnodigingen/verwijderingen/bans onaangetast)",

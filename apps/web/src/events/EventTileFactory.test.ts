@@ -20,7 +20,6 @@ import {
     renderTile,
     RoomCreateEventFactory,
 } from "./EventTileFactory";
-import SettingsStore from "../settings/SettingsStore";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { ModuleApi } from "../modules/Api";
 import DMRoomMap from "../utils/DMRoomMap";
@@ -61,7 +60,6 @@ describe("pickFactory", () => {
 
     let createEventWithPredecessor: MatrixEvent;
     let createEventWithoutPredecessor: MatrixEvent;
-    let dynamicPredecessorEvent: MatrixEvent;
 
     let utdEvent: MatrixEvent;
     let audioMessageEvent: MatrixEvent;
@@ -97,17 +95,6 @@ describe("pickFactory", () => {
                     room_id: "roomid1",
                     event_id: null,
                 },
-            },
-        });
-        dynamicPredecessorEvent = mkEvent({
-            event: true,
-            type: EventType.RoomPredecessor,
-            user: client.getUserId()!,
-            room: roomId,
-            skey: "",
-            content: {
-                predecessor_room_id: "roomid2",
-                last_known_event_id: null,
             },
         });
         audioMessageEvent = mkEvent({
@@ -147,7 +134,6 @@ describe("pickFactory", () => {
                 EventType.RoomCreate,
                 new Map([[createEventWithoutPredecessor.getStateKey()!, createEventWithoutPredecessor]]),
             );
-            room.currentState.events.set(EventType.RoomPredecessor, new Map());
             expect(pickFactory(createEventWithoutPredecessor, client, true)).toBe(JSONEventFactory);
         });
 
@@ -157,78 +143,20 @@ describe("pickFactory", () => {
     });
 
     describe("when not showing hidden events", () => {
-        describe("without dynamic predecessor support", () => {
-            beforeEach(() => {
-                vi.spyOn(SettingsStore, "getValue").mockReset();
-            });
-
-            it("should return undefined for a room without predecessor", () => {
-                room.currentState.events.set(
-                    EventType.RoomCreate,
-                    new Map([[createEventWithoutPredecessor.getStateKey()!, createEventWithoutPredecessor]]),
-                );
-                room.currentState.events.set(EventType.RoomPredecessor, new Map());
-                expect(pickFactory(createEventWithoutPredecessor, client, false)).toBeUndefined();
-            });
-
-            it("should return a RoomCreateFactory for a room with fixed predecessor", () => {
-                room.currentState.events.set(
-                    EventType.RoomCreate,
-                    new Map([[createEventWithPredecessor.getStateKey()!, createEventWithPredecessor]]),
-                );
-                room.currentState.events.set(EventType.RoomPredecessor, new Map());
-                expect(pickFactory(createEventWithPredecessor, client, false)).toBe(RoomCreateEventFactory);
-            });
-
-            it("should return undefined for a room with dynamic predecessor", () => {
-                room.currentState.events.set(
-                    EventType.RoomCreate,
-                    new Map([[createEventWithoutPredecessor.getStateKey()!, createEventWithoutPredecessor]]),
-                );
-                room.currentState.events.set(
-                    EventType.RoomPredecessor,
-                    new Map([[dynamicPredecessorEvent.getStateKey()!, dynamicPredecessorEvent]]),
-                );
-                expect(pickFactory(createEventWithoutPredecessor, client, false)).toBeUndefined();
-            });
+        it("should return undefined for a room without predecessor", () => {
+            room.currentState.events.set(
+                EventType.RoomCreate,
+                new Map([[createEventWithoutPredecessor.getStateKey()!, createEventWithoutPredecessor]]),
+            );
+            expect(pickFactory(createEventWithoutPredecessor, client, false)).toBeUndefined();
         });
 
-        describe("with dynamic predecessor support", () => {
-            beforeEach(() => {
-                vi.spyOn(SettingsStore, "getValue")
-                    .mockReset()
-                    .mockImplementation((settingName) => settingName === "feature_dynamic_room_predecessors");
-            });
-
-            it("should return undefined for a room without predecessor", () => {
-                room.currentState.events.set(
-                    EventType.RoomCreate,
-                    new Map([[createEventWithoutPredecessor.getStateKey()!, createEventWithoutPredecessor]]),
-                );
-                room.currentState.events.set(EventType.RoomPredecessor, new Map());
-                expect(pickFactory(createEventWithoutPredecessor, client, false)).toBeUndefined();
-            });
-
-            it("should return a RoomCreateFactory for a room with fixed predecessor", () => {
-                room.currentState.events.set(
-                    EventType.RoomCreate,
-                    new Map([[createEventWithPredecessor.getStateKey()!, createEventWithPredecessor]]),
-                );
-                room.currentState.events.set(EventType.RoomPredecessor, new Map());
-                expect(pickFactory(createEventWithPredecessor, client, false)).toBe(RoomCreateEventFactory);
-            });
-
-            it("should return a RoomCreateFactory for a room with dynamic predecessor", () => {
-                room.currentState.events.set(
-                    EventType.RoomCreate,
-                    new Map([[createEventWithoutPredecessor.getStateKey()!, createEventWithoutPredecessor]]),
-                );
-                room.currentState.events.set(
-                    EventType.RoomPredecessor,
-                    new Map([[dynamicPredecessorEvent.getStateKey()!, dynamicPredecessorEvent]]),
-                );
-                expect(pickFactory(createEventWithoutPredecessor, client, false)).toBe(RoomCreateEventFactory);
-            });
+        it("should return a RoomCreateFactory for a room with predecessor", () => {
+            room.currentState.events.set(
+                EventType.RoomCreate,
+                new Map([[createEventWithPredecessor.getStateKey()!, createEventWithPredecessor]]),
+            );
+            expect(pickFactory(createEventWithPredecessor, client, false)).toBe(RoomCreateEventFactory);
         });
 
         it("should return a MessageEventFactory for an audio message event", () => {

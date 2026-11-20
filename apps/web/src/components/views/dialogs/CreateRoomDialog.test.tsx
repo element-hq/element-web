@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { act, fireEvent, render, screen, within } from "test-utils-rtl";
+import { fireEvent, render, screen, within } from "test-utils-rtl";
 import { type Room, JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk/src/matrix";
 import { flushPromises, getMockClientWithEventEmitter, mkSpace, mockClientMethodsUser } from "test-utils";
 
@@ -250,7 +250,6 @@ describe("<CreateRoomDialog />", () => {
                 createOpts: {},
                 name: roomName,
                 encryption: true,
-                stateEncryption: false,
                 parentSpace: undefined,
                 roomType: undefined,
             });
@@ -261,29 +260,6 @@ describe("<CreateRoomDialog />", () => {
             const { asFragment } = getComponent();
             await flushPromises();
             expect(asFragment()).toMatchSnapshot();
-        });
-
-        describe("when the state encryption labs flag is on", () => {
-            beforeEach(() => {
-                vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === "feature_msc4362_encrypted_state_events",
-                );
-            });
-
-            it("should turn on state encryption when toggled", async () => {
-                // Given we have the create room dialog open
-                const { asFragment } = getComponent();
-                await flushPromises();
-                expect(asFragment()).toMatchSnapshot();
-
-                // When I click the Encrypt state events toggle
-                const toggle = screen.getByRole("switch", { name: "Encrypt state events" });
-                expect(toggle).not.toBeChecked();
-                act(() => toggle.click());
-
-                // Then it changes state
-                expect(toggle).toBeChecked();
-            });
         });
     });
 
@@ -331,7 +307,6 @@ describe("<CreateRoomDialog />", () => {
                     },
                     name: roomName,
                     encryption: true,
-                    stateEncryption: false,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
                     roomType: undefined,
@@ -350,7 +325,6 @@ describe("<CreateRoomDialog />", () => {
                     },
                     name: roomName,
                     encryption: true,
-                    stateEncryption: false,
                     joinRule: JoinRule.Knock,
                     parentSpace: undefined,
                     roomType: undefined,
@@ -524,6 +498,55 @@ describe("<CreateRoomDialog />", () => {
             expect(onFinished).toHaveBeenCalled();
             const callArgs = onFinished.mock.calls[0];
             expect(callArgs.length === 0 || callArgs[0] === false).toBe(true);
+        });
+    });
+
+    describe("room name validation", () => {
+        it.each([
+            ["a single space", " "],
+            ["several spaces", "   "],
+            ["a tab", "\t"],
+            ["a non-breaking space", "\u00a0"],
+            ["a zero-width space", "\u200b"],
+            ["spaces mixed with zero-width characters", " \u200b\u200d "],
+        ])("should not create a room when the name is only %s", async (_description, roomName) => {
+            const onFinished = vi.fn();
+            getComponent({ onFinished });
+            await flushPromises();
+
+            fireEvent.change(screen.getByLabelText("Name"), { target: { value: roomName } });
+            fireEvent.click(screen.getByText("Create room"));
+            await flushPromises();
+
+            // didn't submit room
+            expect(onFinished).not.toHaveBeenCalled();
+            expect(screen.getByText("Please enter a name for the room")).toBeInTheDocument();
+        });
+
+        it("should trim whitespace around the room name", async () => {
+            const onFinished = vi.fn();
+            getComponent({ onFinished });
+            await flushPromises();
+
+            fireEvent.change(screen.getByLabelText("Name"), { target: { value: "  Test Room Name  " } });
+            fireEvent.click(screen.getByText("Create room"));
+            await flushPromises();
+
+            expect(onFinished).toHaveBeenCalledWith(true, expect.objectContaining({ name: "Test Room Name" }));
+        });
+
+        it("should keep zero-width characters and combining marks inside a visible room name", async () => {
+            const onFinished = vi.fn();
+            getComponent({ onFinished });
+            await flushPromises();
+
+            // An accent written as a combining mark, and an emoji made of parts joined by zero-width joiners
+            const roomName = "Cafe\u0301 \u{1F468}\u200d\u{1F469}\u200d\u{1F467}";
+            fireEvent.change(screen.getByLabelText("Name"), { target: { value: roomName } });
+            fireEvent.click(screen.getByText("Create room"));
+            await flushPromises();
+
+            expect(onFinished).toHaveBeenCalledWith(true, expect.objectContaining({ name: roomName }));
         });
     });
 });
