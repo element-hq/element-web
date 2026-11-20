@@ -527,8 +527,8 @@ importers:
         specifier: ^12.0.0
         version: 12.3.2
       '@matrix-org/analytics-events':
-        specifier: ^0.38.0
-        version: 0.38.0
+        specifier: ^0.39.0
+        version: 0.39.0
       '@matrix-org/emojibase-bindings':
         specifier: 'catalog:'
         version: 1.5.0
@@ -3508,8 +3508,8 @@ packages:
   '@maplibre/vt-pbf@4.3.3':
     resolution: {integrity: sha512-dEe5XUd64RQbxNxy2OzIkJnwNDWjVmSXjCd0A7zLirm7QJ/WWbmtDFIkfsiM4yt1cplqzG6oSivRYeWx1SM1yg==}
 
-  '@matrix-org/analytics-events@0.38.0':
-    resolution: {integrity: sha512-D5sTxEBkUeU2NSX4f8DrWO2YmotZtsiEWZnHiHn0/MxZyBrAiKUK7T4ofGaDI5E21sEyOXaPLmoNP/w2zT1QfQ==}
+  '@matrix-org/analytics-events@0.39.0':
+    resolution: {integrity: sha512-LuEmmkgJrZxpxdi6C1ajgCzrZyTx42w2OnOs6sW3GWYiXYPUHMs7bF8eAjrADKpGCaMFTtyjRlaQQXhgYyIicQ==}
 
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
@@ -15817,7 +15817,7 @@ snapshots:
       '@types/geojson': 7946.0.16
       pbf: 5.1.2
 
-  '@matrix-org/analytics-events@0.38.0': {}
+  '@matrix-org/analytics-events@0.39.0': {}
 
   '@matrix-org/emojibase-bindings@1.5.0':
     dependencies:

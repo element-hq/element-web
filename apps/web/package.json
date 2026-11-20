@@ -45,7 +45,7 @@
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "catalog:",
         "@formatjs/intl-segmenter": "^12.0.0",
-        "@matrix-org/analytics-events": "^0.38.0",
+        "@matrix-org/analytics-events": "^0.39.0",
         "@matrix-org/emojibase-bindings": "catalog:",
         "@sentry/browser": "^11.0.0",
         "@types/png-chunks-extract": "^1.0.2",

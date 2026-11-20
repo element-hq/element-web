@@ -37,6 +37,7 @@ import { ElementCallMemberEventType } from "./call-types";
 import DMRoomMap from "./utils/DMRoomMap";
 import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SdkConfig from "./SdkConfig";
+import { PosthogAnalytics } from "./PosthogAnalytics";
 
 /**
  * This should be the same as
@@ -280,6 +281,53 @@ describe("createRoom", () => {
                 ]),
             }),
         );
+    });
+
+    describe("analytics", () => {
+        beforeEach(() => {
+            vi.spyOn(PosthogAnalytics.instance, "trackEvent").mockImplementation(() => {});
+        });
+
+        it.each([
+            {
+                name: "public room",
+                getOpts: () => ({ createOpts: { preset: Preset.PublicChat } }),
+                isDM: false,
+                joinRule: "Public",
+            },
+            {
+                name: "private room",
+                getOpts: () => ({ createOpts: { preset: Preset.PrivateChat } }),
+                isDM: false,
+                joinRule: "Invite",
+            },
+            { name: "DM", getOpts: () => ({ dmUserId: "@bob:example.org" }), isDM: true, joinRule: "Invite" },
+            { name: "knock room", getOpts: () => ({ joinRule: JoinRule.Knock }), isDM: false, joinRule: "Knock" },
+            {
+                name: "restricted room outside a space",
+                getOpts: () => ({ joinRule: JoinRule.Restricted }),
+                isDM: false,
+                joinRule: "Invite",
+            },
+            {
+                name: "restricted room in a space",
+                getOpts: () => ({ joinRule: JoinRule.Restricted, parentSpace: mkRoom(client, "!parent") }),
+                isDM: false,
+                joinRule: "Restricted",
+            },
+        ])("tracks a created $name", async ({ getOpts, isDM, joinRule }) => {
+            await createRoom(client, getOpts());
+            expect(PosthogAnalytics.instance.trackEvent).toHaveBeenCalledWith({
+                eventName: "CreatedRoom",
+                isDM,
+                joinRule,
+            });
+        });
+
+        it("does not track spaces", async () => {
+            await createRoom(client, { roomType: RoomType.Space });
+            expect(PosthogAnalytics.instance.trackEvent).not.toHaveBeenCalled();
+        });
     });
 
     describe("room versions", () => {
