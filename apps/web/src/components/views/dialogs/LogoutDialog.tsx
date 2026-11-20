@@ -155,7 +155,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                         {_t("auth|logout_dialog|check_recovery_key")}
                     </Button>
                     <Button kind="tertiary" onClick={() => setStep(Step.GenerateKey)}>
-                        {_t("auth|logout_dialog|generate_recovery_key")}
+                        {_t("auth|logout_dialog|create_new_recovery_key")}
                     </Button>
                 </EncryptionCardButtons>
             </EncryptionCard>
@@ -177,7 +177,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                 </EncryptionCardEmphasisedContent>
                 <EncryptionCardButtons>
                     <Button onClick={() => setStep(Step.GenerateKey)} Icon={KeyIcon}>
-                        {_t("settings|encryption|recovery|set_up_recovery")}
+                        {_t("encryption|create_recovery_key")}
                     </Button>
                     <Button kind="tertiary" destructive={true} onClick={onLogoutConfirm} Icon={SignOutIcon}>
                         {_t("auth|logout_dialog|skip_key_backup")}

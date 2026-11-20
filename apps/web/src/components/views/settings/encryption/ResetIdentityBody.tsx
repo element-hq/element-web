@@ -86,7 +86,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                 {variant === "no_encrypted_rooms" ? (
                     <VisualList>
                         <VisualListItem Icon={CheckCircle} success={true}>
-                            {_t("settings|encryption|advanced|breadcrumb_first_description_no_encrypted_devices")}
+                            {_t("settings|encryption|advanced|breadcrumb_first_description_no_encrypted_chats")}
                         </VisualListItem>
                     </VisualList>
                 ) : (
