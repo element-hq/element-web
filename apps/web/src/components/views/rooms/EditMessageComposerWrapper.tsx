@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE in the repository root for full details.
 */
 
-import React, { useCallback, type JSX } from "react";
+import React, { useCallback, type JSX, type MutableRefObject } from "react";
 
 import { type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
@@ -20,11 +20,26 @@ import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import { attachUrlPreviews } from "../../../utils/messages";
 import { linksIn } from "../../../utils/UrlUtils";
 import { ModuleApi } from "../../../modules/Api";
+import { type GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
+import { type EditorActions } from "./EditorActions";
 
 interface IEditMessageComposerProps extends MatrixClientProps {
     showUrlPreview: boolean;
     editState: EditorStateTransfer;
     className?: string;
+    /**
+     * Renders the editor inside the message composer at the bottom of the room, which shows the
+     * attachments and the buttons to save and cancel in place of the editor's own.
+     */
+    inComposer?: boolean;
+    /**
+     * Reports the attachments of the message being edited, for the message composer to show them.
+     */
+    onAttachmentsChange?: (attachments?: GalleryComposerViewModel) => void;
+    /**
+     * Filled with the actions of the editor, for the message composer's buttons to call.
+     */
+    actionsRef?: MutableRefObject<EditorActions | null>;
 }
 
 export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JSX.Element {
@@ -78,6 +93,9 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
             isUrlPreviewsModified={isUrlPreviewsModified}
             editorStateTransfer={props.editState}
             className={props.className}
+            inComposer={props.inComposer}
+            onAttachmentsChange={props.onAttachmentsChange}
+            actionsRef={props.actionsRef}
         />
     ) : (
         <EditMessageComposer
@@ -86,6 +104,9 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
             isUrlPreviewsModified={isUrlPreviewsModified}
             editState={props.editState}
             className={props.className}
+            inComposer={props.inComposer}
+            onAttachmentsChange={props.onAttachmentsChange}
+            actionsRef={props.actionsRef}
         />
     );
 

@@ -273,3 +273,19 @@ Please see LICENSE files in the repository root for full details.
         left: 0;
     }
 }
+
+/* The editor of a message being edited, in place of the one for the message being written */
+.mx_MessageComposer_editor {
+    flex: 1;
+    min-width: 0;
+
+    .mx_EditMessageComposer_inComposer {
+        padding: 0;
+
+        .mx_BasicMessageComposer_input {
+            border: none;
+            background-color: transparent;
+            padding: var(--cpd-space-2-5x) 0;
+        }
+    }
+}

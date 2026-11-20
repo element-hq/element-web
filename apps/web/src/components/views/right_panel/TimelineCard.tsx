@@ -258,6 +258,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                                 permalinkCreator={this.props.permalinkCreator}
                                 e2eStatus={this.props.e2eStatus}
                                 compact={true}
+                                editState={this.state.editState}
                             />
                         )}
                     </RoomUploadContextProvider>

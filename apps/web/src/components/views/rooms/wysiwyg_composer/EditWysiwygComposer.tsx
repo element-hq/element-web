@@ -6,8 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type RefObject, useEffect, useMemo, type ReactNode } from "react";
-import { GalleryComposerView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import React, {
+    type JSX,
+    type MutableRefObject,
+    type RefObject,
+    useEffect,
+    useMemo,
+    useRef,
+    type ReactNode,
+} from "react";
+import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
@@ -21,7 +29,10 @@ import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
 import { type ComposerFunctions } from "./types";
 import ContentMessages from "../../../../ContentMessages";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { getMessageMediaItems } from "../../../../utils/gallery";
+import { getEditableMediaItems, getMessageMediaItems } from "../../../../utils/gallery";
+import { useSettingValue } from "../../../../hooks/useSettings";
+import { MessageAttachments } from "../MessageAttachments";
+import { type EditorActions } from "../EditorActions";
 import { GalleryComposerViewModel } from "../../../../viewmodels/composer/GalleryComposerViewModel";
 
 interface ContentProps {
@@ -47,6 +58,20 @@ interface EditWysiwygComposerProps {
     isUrlPreviewsModified?: boolean;
     editorStateTransfer: EditorStateTransfer;
     className?: string;
+    /**
+     * Renders the editor inside the message composer at the bottom of the room, which shows the
+     * attachments and the buttons to save and cancel in place of the editor's own.
+     */
+    inComposer?: boolean;
+    /**
+     * Reports the attachments of the message being edited, or undefined once the editor is gone,
+     * for the message composer to show them.
+     */
+    onAttachmentsChange?: (attachments?: GalleryComposerViewModel) => void;
+    /**
+     * Filled with the actions of the editor, for the message composer's buttons to call.
+     */
+    actionsRef?: MutableRefObject<EditorActions | null>;
 }
 
 // Default needed for React.lazy
@@ -56,17 +81,26 @@ export default function EditWysiwygComposer({
     attachBundles,
     updateUrlPreviews,
     isUrlPreviewsModified,
+    inComposer,
+    onAttachmentsChange,
+    actionsRef,
     ...props
 }: EditWysiwygComposerProps): JSX.Element {
     const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), [editorStateTransfer]);
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
-    // The images and videos of the message being edited, when it has any, for the user to remove
-    // items and add more.
+    // The images and videos of the message being edited, for the user to remove items and add
+    // more. Also present for a text message, which images and videos can be added to, when sending
+    // them is enabled.
     const mxClient = useMatrixClientContext();
+    const isGalleryEnabled = useSettingValue("feature_gallery_messages");
+    const content = editorStateTransfer.getEvent().getContent();
+    const hasMedia = getMessageMediaItems(content) !== undefined;
     const mediaItems = useMemo(
-        () => getMessageMediaItems(editorStateTransfer.getEvent().getContent()),
+        () => (isGalleryEnabled ? getEditableMediaItems(content) : getMessageMediaItems(content)),
+        // The editor is remounted for each message, and keeps the attachments it started with.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [editorStateTransfer],
     );
     const attachmentsVm = useCreateAutoDisposedViewModel(
@@ -75,10 +109,12 @@ export default function EditWysiwygComposer({
     const attachments = mediaItems ? attachmentsVm : undefined;
     useEffect(() => {
         if (!attachments) return;
+        onAttachmentsChange?.(attachments);
         void ContentMessages.sharedInstance()
             .fetchUploadLimit(mxClient)
             .then((limit) => attachments.setMaxFileSize(limit ?? undefined));
-    }, [attachments, mxClient]);
+        return () => onAttachmentsChange?.(undefined);
+    }, [attachments, mxClient, onAttachmentsChange]);
 
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(
         editorStateTransfer,
@@ -87,7 +123,21 @@ export default function EditWysiwygComposer({
         updateUrlPreviews,
         isUrlPreviewsModified,
         attachments,
+        hasMedia,
     );
+
+    // The message composer's buttons call whichever save and cancel are current.
+    const actions = useRef<EditorActions>({ save: () => {}, cancel: () => {} });
+    actions.current.save = (): void => void editMessage();
+    actions.current.cancel = endEditing;
+    useEffect(() => {
+        if (!actionsRef) return;
+        const current = actions.current;
+        actionsRef.current = current;
+        return () => {
+            if (actionsRef.current === current) actionsRef.current = null;
+        };
+    }, [actionsRef]);
 
     if (!isReady) {
         return <></>;
@@ -96,7 +146,11 @@ export default function EditWysiwygComposer({
     return (
         <ComposerContext.Provider value={defaultContextValue}>
             <WysiwygComposer
-                className={classNames("mx_EditWysiwygComposer", className)}
+                className={classNames(
+                    "mx_EditWysiwygComposer",
+                    { mx_EditWysiwygComposer_inComposer: inComposer },
+                    className,
+                )}
                 initialContent={initialContent}
                 onChange={onChange}
                 onSend={editMessage}
@@ -105,14 +159,21 @@ export default function EditWysiwygComposer({
                 {(ref, composerFunctions) => (
                     <>
                         <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
-                        {attachments && (
-                            <GalleryComposerView vm={attachments} className="mx_EditWysiwygComposer_attachments" />
+                        {/* In the message composer, the composer shows the attachments and the buttons instead. */}
+                        {attachments && !inComposer && (
+                            <MessageAttachments
+                                vm={attachments}
+                                alwaysShow={hasMedia}
+                                className="mx_EditWysiwygComposer_attachments"
+                            />
                         )}
-                        <EditionButtons
-                            onCancelClick={endEditing}
-                            onSaveClick={editMessage}
-                            isSaveDisabled={isSaveDisabled}
-                        />
+                        {!inComposer && (
+                            <EditionButtons
+                                onCancelClick={endEditing}
+                                onSaveClick={editMessage}
+                                isSaveDisabled={isSaveDisabled}
+                            />
+                        )}
                     </>
                 )}
             </WysiwygComposer>

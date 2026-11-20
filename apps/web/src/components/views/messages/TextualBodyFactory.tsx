@@ -77,6 +77,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
 
+    // The message is edited in the composer at the bottom rather than in place.
+    const editInComposer = useSettingValue("feature_edit_in_composer");
     const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
     const e2eeBundledUrlPreviewsOnly = useSettingValue("urlPreviewsEnabled_e2ee_bundled_only");
 
@@ -312,7 +314,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         PosthogTrackers.instance.trackUrlPreview(props.mxEvent.getId()!, props.mxEvent.isEncrypted(), previews);
     }, [props.mxEvent, previews]);
 
-    if (props.editState) {
+    if (props.editState && !editInComposer) {
         return (
             <EditMessageComposerWrapper
                 editState={props.editState}

@@ -60,6 +60,11 @@ interface IProps {
     toggleButtonMenu: () => void;
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
+    /**
+     * Whether the composer holds a message being edited: buttons which make a new message of
+     * their own, such as polls and voice messages, are left out.
+     */
+    isEditing?: boolean;
 }
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
@@ -98,10 +103,14 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     key={type}
                 />
             )),
-            showStickersButton(props),
-            voiceRecordingButton(props, narrow),
-            props.showPollsButton ? pollButton(room, props.relation) : null,
-            showLocationButton(props, room, matrixClient),
+            ...(props.isEditing
+                ? []
+                : [
+                      showStickersButton(props),
+                      voiceRecordingButton(props, narrow),
+                      props.showPollsButton ? pollButton(room, props.relation) : null,
+                      showLocationButton(props, room, matrixClient),
+                  ]),
         ];
     } else {
         mainButtons = [
@@ -116,12 +125,14 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
             <UploadButton key="upload" vm={roomUploadVM} />,
         ];
-        moreButtons = [
-            showStickersButton(props),
-            voiceRecordingButton(props, narrow),
-            props.showPollsButton ? pollButton(room, props.relation) : null,
-            showLocationButton(props, room, matrixClient),
-        ];
+        moreButtons = props.isEditing
+            ? []
+            : [
+                  showStickersButton(props),
+                  voiceRecordingButton(props, narrow),
+                  props.showPollsButton ? pollButton(room, props.relation) : null,
+                  showLocationButton(props, room, matrixClient),
+              ];
     }
 
     mainButtons = filterBoolean(mainButtons);

@@ -334,7 +334,12 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             inhibitInteraction: this.props.inhibitInteraction,
             id: this.props.id,
         };
-        if (this.props.editState && getMessageMediaItems(content) && !this.props.mxEvent.isRedacted()) {
+        if (
+            this.props.editState &&
+            !SettingsStore.getValue("feature_edit_in_composer") &&
+            getMessageMediaItems(content) &&
+            !this.props.mxEvent.isRedacted()
+        ) {
             // The message is being edited: the editor takes its place, and shows the images and
             // videos itself so that they can be changed.
             return <TextualBodyFactory {...bodyProps} />;

@@ -24,6 +24,7 @@ export function useEditing(
     updateUrlPreviews?: (content: string) => void,
     isUrlPreviewsModified?: boolean,
     attachments?: GalleryComposerViewModel,
+    hasMedia = false,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;
@@ -64,9 +65,19 @@ export function useEditing(
             editorStateTransfer,
             attachBundles,
             isUrlPreviewsModified,
-            attachments: attachments?.getItems(),
+            // A text message stays one, with all that goes with it, unless images or videos were added.
+            attachments: attachments && (hasMedia || attachments.isModified) ? attachments.getItems() : undefined,
         });
-    }, [content, roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified, attachments]);
+    }, [
+        content,
+        roomContext,
+        mxClient,
+        editorStateTransfer,
+        attachBundles,
+        isUrlPreviewsModified,
+        attachments,
+        hasMedia,
+    ]);
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);
     return {

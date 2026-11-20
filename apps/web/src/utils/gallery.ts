@@ -178,14 +178,29 @@ export function getMessageMediaItems(content: IContent | undefined): GalleryItem
 }
 
 /**
- * Get the caption of a message with images or videos: the text fields of its content, or an
- * empty body if it has none.
+ * Get the images and videos of a message which can be changed while editing it.
  *
- * @param content - The content of a gallery, image or video message.
+ * @param content - The content of an `m.room.message` event.
+ * @returns The items of a gallery or image or video message, none for a text message which images
+ *     and videos can be added to, or undefined for any other message.
+ */
+export function getEditableMediaItems(content: IContent | undefined): GalleryItem[] | undefined {
+    if (content?.msgtype === MsgType.Text) return [];
+    return getMessageMediaItems(content);
+}
+
+/**
+ * Get the caption of a message with images or videos: the text fields of its content, or an
+ * empty body if it has none. The caption of a text message is its text.
+ *
+ * @param content - The content of a gallery, image, video or text message.
  */
 export function getMessageMediaCaption(content: IContent | undefined): MediaCaption {
     // The body of an image or video is its file name unless `filename` says otherwise.
-    const hasCaption = isGalleryContent(content) || (!!content?.filename && content.filename !== content.body);
+    const hasCaption =
+        content?.msgtype === MsgType.Text ||
+        isGalleryContent(content) ||
+        (!!content?.filename && content.filename !== content.body);
     if (!hasCaption || !getGalleryCaption(content)) return { body: "" };
     const { "m.mentions": _mentions, ...caption } = captionFromMessageContent(content!);
     return caption;

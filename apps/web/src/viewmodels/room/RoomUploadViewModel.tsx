@@ -71,6 +71,12 @@ export class RoomUploadViewModel
      */
     public readonly attachments = this.disposables.track(new GalleryComposerViewModel({ items: [] }));
 
+    /**
+     * The images and videos of a message being edited in the composer, which take the files the
+     * user picks, drops or pastes while it is being edited.
+     */
+    private editAttachments?: GalleryComposerViewModel;
+
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -202,15 +208,27 @@ export class RoomUploadViewModel
         const media = files.filter(isGalleryFile);
         if (media.length === 0) return files;
 
+        // Files picked while a message is being edited go to that message, not the draft.
+        const target = this.editAttachments ?? this.attachments;
         const uploadLimit = await ContentMessages.sharedInstance().fetchUploadLimit(this.client);
         if (this.isDisposed) return [];
-        this.attachments.setMaxFileSize(uploadLimit ?? undefined);
-        this.attachments.onAddFiles(media);
+        target.setMaxFileSize(uploadLimit ?? undefined);
+        target.onAddFiles(media);
         // The user carries on writing the message the attachments go with.
         this.dispatcher.dispatch({ action: Action.FocusSendMessageComposer, context: this.timelineRenderingType });
 
         return files.filter((file) => !media.includes(file));
     }
+
+    /**
+     * Send the images and videos the user picks, drops or pastes to a message being edited in the
+     * composer, rather than to the draft, until called again without one.
+     *
+     * @param attachments - The attachments of the message being edited, or undefined once the edit is over.
+     */
+    public setEditAttachments = (attachments?: GalleryComposerViewModel): void => {
+        this.editAttachments = attachments;
+    };
 
     /**
      * Whether there are images or videos waiting in the composer.

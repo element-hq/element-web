@@ -123,6 +123,12 @@ can see them. A single image or video is sent as an ordinary message with the te
 
 Gallery messages sent by others are always displayed, whether or not this is enabled.
 
+## Edit messages in the message composer (`feature_edit_in_composer`)
+
+Edits messages in the composer at the bottom of the room or thread, with all of its buttons, instead of in place in the
+timeline. Whatever was being written is put aside until the edit is saved or cancelled. With
+`feature_gallery_messages` also enabled, images and videos can be added to the message being edited and removed from it.
+
 ## Element Call React Component (`feature_element_call_react`)
 
 Renders Element Call as a React component instead of a widget.

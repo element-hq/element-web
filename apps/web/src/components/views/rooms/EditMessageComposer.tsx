@@ -6,8 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type KeyboardEvent } from "react";
-import { GalleryComposerView } from "@element-hq/web-shared-components";
+import React, { createRef, type KeyboardEvent, type JSX, type MutableRefObject, type SyntheticEvent } from "react";
 import classNames from "classnames";
 import { EventStatus, type MatrixEvent, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -48,9 +47,11 @@ import { attachMentions, attachRelation } from "../../../utils/messages";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import ContentMessages from "../../../ContentMessages";
-import { captionFromMessageContent, getMessageMediaItems } from "../../../utils/gallery";
+import { captionFromMessageContent, getEditableMediaItems, getMessageMediaItems } from "../../../utils/gallery";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
+import { MessageAttachments } from "./MessageAttachments";
+import { type EditorActions } from "./EditorActions";
 
 // exported for tests
 export function createEditContent(
@@ -106,12 +107,27 @@ interface IEditMessageComposerProps extends MatrixClientProps {
      */
     isUrlPreviewsModified?: boolean;
     className?: string;
+    /**
+     * Renders the editor inside the message composer at the bottom of the room, which shows the
+     * attachments and the buttons to save and cancel in place of the editor's own.
+     */
+    inComposer?: boolean;
+    /**
+     * Reports the attachments of the message being edited, or undefined once the editor is gone,
+     * for the message composer to show them.
+     */
+    onAttachmentsChange?: (attachments?: GalleryComposerViewModel) => void;
+    /**
+     * Filled with the actions of the editor, for the message composer's buttons to call.
+     */
+    actionsRef?: MutableRefObject<EditorActions | null>;
 }
 interface IState {
     saveDisabled: boolean;
     /**
-     * The images and videos of the message being edited, when it has any, for the user to remove
-     * items and add more.
+     * The images and videos of the message being edited, for the user to remove items and add
+     * more. Also present for a text message, which images and videos can be added to, when
+     * sending them is enabled.
      */
     attachments?: GalleryComposerViewModel;
 }
@@ -125,6 +141,12 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     private readonly replyToEvent?: MatrixEvent;
     private model!: EditorModel;
     private stopWatchingAttachments?: () => void;
+    /** Whether the message being edited has images or videos, rather than being a text message. */
+    private readonly hasMedia: boolean;
+    private readonly actions: EditorActions = {
+        save: () => void this.sendEdit(),
+        cancel: () => this.cancelEdit(),
+    };
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -133,6 +155,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         const ev = this.props.editState.getEvent();
 
         this.replyToEvent = ev.replyEventId ? this.context.room?.findEventById(ev.replyEventId) : undefined;
+        this.hasMedia = getMessageMediaItems(ev.getContent()) !== undefined;
 
         const editContent = createEditContent(this.model, ev, this.replyToEvent);
         this.state = {
@@ -144,7 +167,13 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
 
-        const mediaItems = getMessageMediaItems(this.props.editState.getEvent().getContent());
+        if (this.props.actionsRef) this.props.actionsRef.current = this.actions;
+        if (this.props.inComposer) this.editorRef.current?.focus();
+
+        const content = this.props.editState.getEvent().getContent();
+        const mediaItems = SettingsStore.getValue("feature_gallery_messages")
+            ? getEditableMediaItems(content)
+            : getMessageMediaItems(content);
         if (mediaItems) {
             const attachments = new GalleryComposerViewModel({ items: mediaItems });
             // Changing the attachments is a change worth saving, just as changing the text is.
@@ -153,6 +182,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 if (attachments.isModified) this.setState({ saveDisabled: false });
             });
             this.setState({ attachments });
+            this.props.onAttachmentsChange?.(attachments);
             void ContentMessages.sharedInstance()
                 .fetchUploadLimit(this.props.mxClient)
                 .then((limit) => attachments.setMaxFileSize(limit ?? undefined));
@@ -362,7 +392,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             this.editorRef.current.replaceEmoticon(position, REGEX_EMOTICON);
         }
 
-        if (this.state.attachments) {
+        // A text message stays one, with all that goes with it, unless images or videos were added.
+        if (this.state.attachments && (this.hasMedia || this.state.attachments.isModified)) {
             this.sendMediaEdit(this.state.attachments);
             return;
         }
@@ -472,8 +503,21 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         }
         dis.unregister(this.dispatcherRef);
         this.stopWatchingAttachments?.();
+        if (this.state.attachments) this.props.onAttachmentsChange?.(undefined);
         this.state.attachments?.dispose();
+        if (this.props.actionsRef?.current === this.actions) this.props.actionsRef.current = null;
     }
+
+    /**
+     * Files pasted or dropped into the editor are attached to the message, when it can have any.
+     */
+    private onPaste = (_event: Event | SyntheticEvent, data: DataTransfer): boolean => {
+        const { attachments } = this.state;
+        if (!attachments || data.files.length === 0) return false;
+        // Files which cannot be attached are left out with a notice, by the attachments themselves.
+        attachments.onAddFiles(Array.from(data.files));
+        return true;
+    };
 
     private createEditorModel(): boolean {
         const { editState } = this.props;
@@ -545,7 +589,14 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         if (!room) return null;
 
         return (
-            <div className={classNames("mx_EditMessageComposer", this.props.className)} onKeyDown={this.onKeyDown}>
+            <div
+                className={classNames(
+                    "mx_EditMessageComposer",
+                    { mx_EditMessageComposer_inComposer: this.props.inComposer },
+                    this.props.className,
+                )}
+                onKeyDown={this.onKeyDown}
+            >
                 <BasicMessageComposer
                     ref={this.editorRef}
                     model={this.model}
@@ -554,23 +605,35 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     initialCaret={this.props.editState.getCaret() ?? undefined}
                     label={_t("composer|edit_composer_label")}
                     onChange={this.onChange}
+                    onPaste={this.onPaste}
                 />
-                {/* Below the text rather than above it, where the formatting bar pops up over a selection */}
-                {this.state.attachments && (
-                    <GalleryComposerView vm={this.state.attachments} className="mx_EditMessageComposer_attachments" />
+                {/* Below the text rather than above it, where the formatting bar pops up over a selection.
+                    In the message composer, the composer shows them instead. */}
+                {this.state.attachments && !this.props.inComposer && (
+                    <MessageAttachments
+                        vm={this.state.attachments}
+                        alwaysShow={this.hasMedia}
+                        className="mx_EditMessageComposer_attachments"
+                    />
                 )}
-                <div className="mx_EditMessageComposer_buttons">
-                    <AccessibleButton kind="secondary" onClick={this.cancelEdit}>
-                        {_t("action|cancel")}
-                    </AccessibleButton>
-                    <AccessibleButton
-                        kind="primary"
-                        onClick={this.sendEdit}
-                        disabled={this.state.saveDisabled && !this.props.isUrlPreviewsModified}
-                    >
-                        {_t("action|save")}
-                    </AccessibleButton>
-                </div>
+                {!this.props.inComposer && this.renderButtons()}
+            </div>
+        );
+    }
+
+    private renderButtons(): JSX.Element {
+        return (
+            <div className="mx_EditMessageComposer_buttons">
+                <AccessibleButton kind="secondary" onClick={this.cancelEdit}>
+                    {_t("action|cancel")}
+                </AccessibleButton>
+                <AccessibleButton
+                    kind="primary"
+                    onClick={this.sendEdit}
+                    disabled={this.state.saveDisabled && !this.props.isUrlPreviewsModified}
+                >
+                    {_t("action|save")}
+                </AccessibleButton>
             </div>
         );
     }

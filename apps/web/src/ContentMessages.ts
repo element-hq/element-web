@@ -70,8 +70,8 @@ import {
     type GalleryContent,
     type GalleryItem,
     getGallerySummary,
+    getEditableMediaItems,
     getMessageMediaCaption,
-    getMessageMediaItems,
     isGalleryContent,
     type MediaCaption,
     splitGalleryItems,
@@ -856,7 +856,7 @@ export default class ContentMessages {
      * sending: a gallery for several, an image or video message for one, and a text message when
      * every item was removed.
      *
-     * @param mxEvent - The gallery, image or video message to edit.
+     * @param mxEvent - The gallery, image, video or text message to edit.
      * @param matrixClient - The Matrix client to upload and send with.
      * @param items - The items the message should have, in order: those it keeps, and files to add.
      * @param caption - The text the message should have. Its body may be empty.
@@ -872,7 +872,7 @@ export default class ContentMessages {
         const roomId = mxEvent.getRoomId();
         const eventId = mxEvent.getId();
         const originalContent = mxEvent.getContent();
-        const originalItems = getMessageMediaItems(originalContent);
+        const originalItems = getEditableMediaItems(originalContent);
         if (!roomId || !eventId || !originalItems) return;
 
         const { "m.mentions": mentions = originalContent["m.mentions"] ?? {}, ...captionText } = caption;
