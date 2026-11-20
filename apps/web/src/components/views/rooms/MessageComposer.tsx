@@ -896,6 +896,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 
+/**
+ * The message composer, with the attachments waiting in it and, when edits are made in the composer,
+ * the message being edited.
+ */
 export default function MessageComposerWrapper(
     props: Omit<IProps, "mxClient" | "urlPreviewVm" | "uploadVm" | "attachmentCount">,
 ): JSX.Element {

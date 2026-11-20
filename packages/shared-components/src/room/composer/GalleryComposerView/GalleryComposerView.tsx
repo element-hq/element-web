@@ -14,6 +14,9 @@ import { useI18n } from "../../../core/i18n/i18nContext";
 import { type ViewModel, useViewModel } from "../../../core/viewmodel";
 import styles from "./GalleryComposerView.module.css";
 
+/**
+ * One image or video attached to the message, as shown in the strip.
+ */
 export interface GalleryComposerViewItem {
     /**
      * Identifies the item within the gallery. Must be stable across renders.
@@ -41,6 +44,9 @@ export interface GalleryComposerViewItem {
     loading?: boolean;
 }
 
+/**
+ * The state of the attachments the view renders.
+ */
 export interface GalleryComposerViewSnapshot {
     /**
      * The items of the gallery, in the order they will be sent.
@@ -64,6 +70,9 @@ export interface GalleryComposerViewSnapshot {
     disabled?: boolean;
 }
 
+/**
+ * What the user can do with the attachments.
+ */
 export interface GalleryComposerViewActions {
     /**
      * Invoked with the files the user picked, dropped or pasted.
@@ -80,6 +89,9 @@ export interface GalleryComposerViewActions {
     onOpenItem?: (id: string) => void;
 }
 
+/**
+ * The view model of {@link GalleryComposerView}.
+ */
 export type GalleryComposerViewModel = ViewModel<GalleryComposerViewSnapshot, GalleryComposerViewActions>;
 
 interface GalleryComposerViewProps {

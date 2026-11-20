@@ -720,6 +720,9 @@ interface DownloadButtonProps {
     onDownloadReady?: (download: () => Promise<void>) => void;
 }
 
+/**
+ * Downloads the media shown in the image view, when the message allows it.
+ */
 export const DownloadButton: React.FC<DownloadButtonProps> = ({
     url,
     fileName,

@@ -26,6 +26,9 @@ import { BLURHASH_FIELD } from "../../utils/image-media";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { GalleryImageView } from "../../components/views/elements/GalleryImageView";
 
+/**
+ * Props for {@link GalleryBodyViewModel}.
+ */
 export interface GalleryBodyViewModelProps {
     /**
      * Gallery event being rendered.

@@ -42,6 +42,9 @@ export const enum GalleryBodyViewItemState {
     ERROR = "ERROR",
 }
 
+/**
+ * One image or video of the gallery, as shown in its tile.
+ */
 export interface GalleryBodyViewItem {
     /**
      * Identifies the item within its gallery. Must be stable across renders.
@@ -73,6 +76,9 @@ export interface GalleryBodyViewItem {
     durationLabel?: string;
 }
 
+/**
+ * The state of the gallery the view renders.
+ */
 export interface GalleryBodyViewSnapshot {
     /**
      * Controls whether the grid or the hidden-media placeholder is rendered.
@@ -101,6 +107,9 @@ export interface GalleryBodyViewSnapshot {
     maxWidth?: number;
 }
 
+/**
+ * What the user can do with the gallery.
+ */
 export interface GalleryBodyViewActions {
     /**
      * Invoked when a tile is activated.
@@ -116,6 +125,9 @@ export interface GalleryBodyViewActions {
     onHiddenButtonClick: () => void;
 }
 
+/**
+ * The view model of {@link GalleryBodyView}.
+ */
 export type GalleryBodyViewModel = ViewModel<GalleryBodyViewSnapshot, GalleryBodyViewActions>;
 
 interface GalleryBodyViewProps {

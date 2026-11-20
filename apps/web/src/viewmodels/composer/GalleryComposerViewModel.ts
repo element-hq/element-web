@@ -26,6 +26,9 @@ import { GalleryImageView } from "../../components/views/elements/GalleryImageVi
  */
 export type GalleryComposerEntry = File | GalleryItem;
 
+/**
+ * Props for {@link GalleryComposerViewModel}.
+ */
 export interface GalleryComposerViewModelProps {
     /**
      * The attachments to start with: none for a new message, or the images and videos of the
