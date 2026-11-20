@@ -425,6 +425,19 @@ describe("RoomHeader", () => {
             await setupAsyncStoreWithClient(CallStore.instance, client);
         });
 
+        it("shows the voice call reason in the voice call button's tooltip", async () => {
+            SdkConfig.put({ element_call: { use_exclusively: true } });
+            mockRoomMembers(room, 2);
+            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(false);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const voiceCallButton = getByLabelText(document.body, "You do not have permission to start voice calls", {
+                selector: "button",
+            });
+            const voiceCallIcon = voiceCallButton.querySelector("svg")!;
+            expect(voiceCallIcon).toHaveAccessibleName("You do not have permission to start voice calls");
+        });
+
         afterEach(() => {
             SdkConfig.reset();
             vi.restoreAllMocks();

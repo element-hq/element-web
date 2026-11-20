@@ -150,7 +150,7 @@ function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: 
     );
 
     const voiceCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|voice_call")}>
+        <Tooltip label={voiceCallDisabledReason ?? _t("voip|voice_call")}>
             <VoiceCallIcon />
         </Tooltip>
     );
