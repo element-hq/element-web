@@ -35,6 +35,12 @@ import { type UrlPreviewGroupViewModelProps } from "../../../viewmodels/message-
 import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
+
+// The editor which takes the place of the body while the message is edited in place.
+vi.mock("../rooms/EditMessageComposerWrapper", () => ({
+    EditMessageComposerWrapper: () => <div data-testid="edit-composer" />,
+}));
 
 vi.mock("../../../hooks/useMediaVisible", () => ({
     __esModule: true,
@@ -263,6 +269,43 @@ describe("<TextualBody />", () => {
         expect(container).toHaveTextContent(ev.getContent().body);
         const content = container.querySelector(".mx_EventTile_body");
         expect(content).toMatchSnapshot();
+    });
+
+    describe("while the message is being edited", () => {
+        const mkTextEvent = (): MatrixEvent =>
+            mkEvent({
+                type: "m.room.message",
+                room: room1Id,
+                user: "sender",
+                content: { msgtype: "m.text", body: "Hello there" },
+                event: true,
+            });
+
+        beforeEach(() => {
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        it("renders the editor in place of the message by default", () => {
+            const mxEvent = mkTextEvent();
+
+            getComponent({ mxEvent, editState: new EditorStateTransfer(mxEvent) });
+
+            expect(screen.getByTestId("edit-composer")).toBeInTheDocument();
+            expect(screen.queryByText("Hello there")).not.toBeInTheDocument();
+        });
+
+        it("keeps showing the message when it is edited in the composer at the bottom", () => {
+            const original = SettingsStore.getValue;
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                setting === "feature_edit_in_composer" ? true : original(setting, ...rest),
+            );
+            const mxEvent = mkTextEvent();
+
+            getComponent({ mxEvent, editState: new EditorStateTransfer(mxEvent) });
+
+            expect(screen.queryByTestId("edit-composer")).not.toBeInTheDocument();
+            expect(screen.getByText("Hello there")).toBeInTheDocument();
+        });
     });
 
     describe("renders the caption of a gallery", () => {

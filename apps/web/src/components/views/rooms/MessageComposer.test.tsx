@@ -48,7 +48,10 @@ import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 import { sendMessage as sendWysiwygMessage } from "./wysiwyg_composer/utils/message";
 import { createMessageContent as createWysiwygMessageContent } from "./wysiwyg_composer/utils/createMessageContent";
-import { captionFromMessageContent } from "../../../utils/gallery";
+import { captionFromMessageContent, type GalleryItem } from "../../../utils/gallery";
+import { type EditorActions } from "./EditorActions";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import { GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
 
 // Wrapped rather than replaced, so the composer behaves as it always does in the other tests while
 // the attachment tests can tell which of the two ways of sending was taken.
@@ -56,6 +59,24 @@ vi.mock("./wysiwyg_composer/utils/message", async (importOriginal) => {
     const actual = await importOriginal<typeof import("./wysiwyg_composer/utils/message")>();
     return { ...actual, sendMessage: vi.fn(actual.sendMessage) };
 });
+/** What the composer gives the editor of a message being edited. */
+interface EditorProps {
+    editState: EditorStateTransfer;
+    inComposer?: boolean;
+    className?: string;
+    showUrlPreview?: boolean;
+    onAttachmentsChange: (attachments?: GalleryComposerViewModel) => void;
+    actionsRef: { current: EditorActions | null };
+}
+
+// The editor of a message being edited, which has tests of its own. Records what the composer gives it.
+const { editorProps } = vi.hoisted(() => ({ editorProps: [] as EditorProps[] }));
+vi.mock("./EditMessageComposerWrapper", () => ({
+    EditMessageComposerWrapper: (props: EditorProps) => {
+        editorProps.push(props);
+        return <div role="textbox" aria-label="Edit message" />;
+    },
+}));
 vi.mock("./wysiwyg_composer/utils/createMessageContent", async (importOriginal) => {
     const actual = await importOriginal<typeof import("./wysiwyg_composer/utils/createMessageContent")>();
     return { ...actual, createMessageContent: vi.fn(actual.createMessageContent) };
@@ -673,6 +694,266 @@ describe("MessageComposer", () => {
                 expect(vi.mocked(sendWysiwygMessage).mock.calls[0][0]).toBe("Just text");
                 expect(sendAttachments).not.toHaveBeenCalled();
             }, 10000);
+        });
+    });
+
+    describe("while a message is being edited in the composer", () => {
+        const room = mkStubRoom("!editing:server", "Room with an edit", cli);
+        const mkMessage = (id: string, content: Record<string, unknown>): MatrixEvent =>
+            mkEvent({ event: true, type: EventType.RoomMessage, room: room.roomId, user: "@me:server", id, content });
+        const textMessage = mkMessage("$text", { msgtype: "m.text", body: "Hello" });
+        const otherMessage = mkMessage("$other", { msgtype: "m.text", body: "Another" });
+        const galleryMessage = mkMessage("$gallery", {
+            msgtype: "dm.filament.gallery",
+            body: "",
+            itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+        });
+        const draftImage = new File(["image"], "draft.png", { type: "image/png" });
+        const keptItem = { itemtype: "m.image", body: "one.png", url: "mxc://server/one" } as GalleryItem;
+
+        let uploadVm: RoomUploadViewModel;
+        const CaptureUploadVm = (): null => {
+            uploadVm = useRoomUploadViewModel();
+            return null;
+        };
+
+        const tree = (props: Partial<React.ComponentProps<typeof MessageComposer>>): React.ReactElement => {
+            const roomContext = {
+                room,
+                canSendMessages: true,
+                narrow: false,
+                timelineRenderingType: TimelineRenderingType.Room,
+            } satisfies Partial<RoomContextType> as RoomContextType;
+            return (
+                <SDKContext.Provider value={SDKContextClass.instance}>
+                    <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
+                        <ScopedRoomContextProvider {...roomContext}>
+                            <RoomUploadContextProvider>
+                                <CaptureUploadVm />
+                                <MessageComposer
+                                    room={room}
+                                    resizeNotifier={new ResizeNotifier()}
+                                    permalinkCreator={new RoomPermalinkCreator(room)}
+                                    {...props}
+                                />
+                            </RoomUploadContextProvider>
+                        </ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>
+                </SDKContext.Provider>
+            );
+        };
+
+        const renderComposer = (props: Partial<React.ComponentProps<typeof MessageComposer>> = {}) => {
+            const result = render(tree(props));
+            return {
+                ...result,
+                setProps: (newProps: Partial<React.ComponentProps<typeof MessageComposer>>) =>
+                    result.rerender(tree(newProps)),
+            };
+        };
+
+        const lastEditorProps = (): EditorProps => editorProps.at(-1)!;
+        const tray = (container: HTMLElement): HTMLElement | null =>
+            container.querySelector<HTMLElement>(".mx_MessageComposer_attachments");
+        /** Hand the composer the attachments of the message being edited, as the editor does. */
+        const reportAttachments = (attachments?: GalleryComposerViewModel): void => {
+            act(() => {
+                lastEditorProps().onAttachmentsChange(attachments);
+            });
+        };
+
+        const createdVms: GalleryComposerViewModel[] = [];
+        const createAttachments = (items: Array<File | GalleryItem>): GalleryComposerViewModel => {
+            const vm = new GalleryComposerViewModel({ items });
+            createdVms.push(vm);
+            return vm;
+        };
+
+        beforeEach(async () => {
+            localStorage.clear();
+            editorProps.length = 0;
+            vi.spyOn(URL, "createObjectURL").mockImplementation((file) => `blob:${(file as File).name}`);
+            vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+            await SettingsStore.setValue("feature_edit_in_composer", null, SettingLevel.DEVICE, true);
+        });
+
+        afterEach(async () => {
+            while (createdVms.length) createdVms.pop()!.dispose();
+            vi.mocked(URL.createObjectURL).mockRestore();
+            vi.mocked(URL.revokeObjectURL).mockRestore();
+            await SettingsStore.setValue("feature_edit_in_composer", null, SettingLevel.DEVICE, null);
+        });
+
+        it("edits in place in the timeline, not in the composer, while the lab is off", async () => {
+            await SettingsStore.setValue("feature_edit_in_composer", null, SettingLevel.DEVICE, false);
+            const { container } = renderComposer({ editState: new EditorStateTransfer(textMessage) });
+
+            expect(editorProps).toHaveLength(0);
+            expect(screen.queryByText("Editing message")).not.toBeInTheDocument();
+            expect(container.querySelector(".mx_SendMessageComposer")).not.toBeNull();
+        });
+
+        it("holds the editor of the message in place of the message being written", () => {
+            const editState = new EditorStateTransfer(textMessage);
+            const { container } = renderComposer({ editState });
+
+            expect(screen.getByRole("textbox", { name: "Edit message" })).toBeInTheDocument();
+            expect(container.querySelector(".mx_SendMessageComposer")).toBeNull();
+            expect(lastEditorProps()).toEqual(
+                expect.objectContaining({
+                    editState,
+                    inComposer: true,
+                    showUrlPreview: undefined,
+                    className: "mx_MessageComposer_editor",
+                    actionsRef: expect.objectContaining({ current: null }),
+                }),
+            );
+        });
+
+        it("shows that a message is being edited instead of the message being replied to", () => {
+            const replyToEvent = mkMessage("$reply", { msgtype: "m.text", body: "Earlier" });
+            const { setProps } = renderComposer({ replyToEvent });
+            expect(screen.getByText("Replying")).toBeInTheDocument();
+
+            setProps({ replyToEvent, editState: new EditorStateTransfer(textMessage) });
+
+            expect(screen.getByText("Editing message")).toBeInTheDocument();
+            expect(screen.queryByText("Replying")).not.toBeInTheDocument();
+        });
+
+        it("saves the edit from the send button, which shows even without any text", async () => {
+            renderComposer({ editState: new EditorStateTransfer(textMessage) });
+            const actions = { save: vi.fn(), cancel: vi.fn() };
+            lastEditorProps().actionsRef.current = actions;
+
+            await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+            expect(actions.save).toHaveBeenCalledTimes(1);
+            expect(actions.cancel).not.toHaveBeenCalled();
+            expect(screen.queryByRole("button", { name: "Send message" })).not.toBeInTheDocument();
+        });
+
+        it("cancels the edit from the editing bar", async () => {
+            renderComposer({ editState: new EditorStateTransfer(textMessage) });
+            const actions = { save: vi.fn(), cancel: vi.fn() };
+            lastEditorProps().actionsRef.current = actions;
+
+            await userEvent.click(screen.getByRole("button", { name: "Cancel editing" }));
+
+            expect(actions.cancel).toHaveBeenCalledTimes(1);
+            expect(actions.save).not.toHaveBeenCalled();
+        });
+
+        it("does nothing from its buttons once the editor has gone", async () => {
+            renderComposer({ editState: new EditorStateTransfer(textMessage) });
+
+            // The editor clears its actions when it goes away
+            await userEvent.click(screen.getByRole("button", { name: "Save" }));
+            await userEvent.click(screen.getByRole("button", { name: "Cancel editing" }));
+
+            expect(screen.getByText("Editing message")).toBeInTheDocument();
+        });
+
+        it("leaves out the buttons which would make a new message of their own", async () => {
+            await SettingsStore.setValue("MessageComposerInput.showStickersButton", null, SettingLevel.DEVICE, true);
+            const { setProps } = renderComposer();
+            expect(screen.getByLabelText("More options")).toBeInTheDocument();
+
+            setProps({ editState: new EditorStateTransfer(textMessage) });
+
+            // Stickers, voice messages, polls and locations are all in that menu.
+            expect(screen.queryByLabelText("More options")).not.toBeInTheDocument();
+            expect(screen.getByLabelText("Emoji")).toBeInTheDocument();
+            expect(screen.getByLabelText("Attachment")).toBeInTheDocument();
+        });
+
+        it("shows the attachments of the message being edited instead of those of the draft", () => {
+            const { container } = renderComposer({ editState: new EditorStateTransfer(galleryMessage) });
+            act(() => uploadVm.attachments.onAddFiles([draftImage]));
+            const setEditAttachments = vi.spyOn(uploadVm, "setEditAttachments");
+            const attachments = createAttachments([keptItem]);
+
+            reportAttachments(attachments);
+
+            expect(tray(container)).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Remove one.png" })).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Remove draft.png" })).not.toBeInTheDocument();
+            // Files picked while editing go to the message being edited.
+            expect(setEditAttachments).toHaveBeenCalledWith(attachments);
+
+            reportAttachments(undefined);
+            expect(setEditAttachments).toHaveBeenLastCalledWith(undefined);
+            expect(tray(container)).toBeNull();
+        });
+
+        it("keeps the strip of a message with media when every item is removed, so more can be added", () => {
+            const { container } = renderComposer({ editState: new EditorStateTransfer(galleryMessage) });
+
+            reportAttachments(createAttachments([]));
+
+            expect(tray(container)).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Add photos or videos" })).toBeInTheDocument();
+        });
+
+        it("shows no strip for a text message until images or videos are added", () => {
+            const { container } = renderComposer({ editState: new EditorStateTransfer(textMessage) });
+            const attachments = createAttachments([]);
+
+            reportAttachments(attachments);
+            expect(tray(container)).toBeNull();
+
+            act(() => attachments.onAddFiles([draftImage]));
+            expect(screen.getByRole("button", { name: "Remove draft.png" })).toBeInTheDocument();
+        });
+
+        it("brings the draft's attachments back once the edit is over", () => {
+            const { container, setProps } = renderComposer();
+            act(() => uploadVm.attachments.onAddFiles([draftImage]));
+
+            setProps({ editState: new EditorStateTransfer(textMessage) });
+            expect(tray(container)).toBeNull();
+
+            setProps({});
+            expect(screen.getByRole("button", { name: "Remove draft.png" })).toBeInTheDocument();
+            expect(screen.queryByText("Editing message")).not.toBeInTheDocument();
+        });
+
+        it("moves the focus to the editor when an edit starts and when it moves to another message", () => {
+            const dispatch = vi.spyOn(dis, "dispatch");
+            const { setProps } = renderComposer();
+            const focusEdits = () =>
+                dispatch.mock.calls.filter(([payload]) => payload.action === Action.FocusEditMessageComposer);
+
+            setProps({ editState: new EditorStateTransfer(textMessage) });
+            expect(focusEdits()).toEqual([
+                [{ action: Action.FocusEditMessageComposer, context: TimelineRenderingType.Room }],
+            ]);
+
+            // The same message, as when the composer is drawn again
+            setProps({ editState: new EditorStateTransfer(textMessage) });
+            expect(focusEdits()).toHaveLength(1);
+
+            setProps({ editState: new EditorStateTransfer(otherMessage) });
+            expect(focusEdits()).toHaveLength(2);
+            // A fresh editor for the other message
+            expect(lastEditorProps().editState.getEvent()).toBe(otherMessage);
+            dispatch.mockRestore();
+        });
+
+        it("keeps what was being written with the rich text editor for after the edit", async () => {
+            await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+            const { setProps } = renderComposer();
+            await userEvent.click(await screen.findByRole("textbox"));
+            fireEvent.input(screen.getByRole("textbox"), { data: "Half a thought", inputType: "insertText" });
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent("Half a thought"));
+
+            setProps({ editState: new EditorStateTransfer(textMessage) });
+            expect(screen.getByRole("textbox", { name: "Edit message" })).toBeInTheDocument();
+
+            setProps({});
+            await waitFor(() =>
+                expect(screen.getByRole("textbox", { name: /^(?!Edit message)/ })).toHaveTextContent("Half a thought"),
+            );
         });
     });
 

@@ -13,6 +13,8 @@ import { flushPromises } from "test-utils";
 
 import { type GalleryItem, MAX_GALLERY_ITEMS } from "../../utils/gallery";
 import { GalleryComposerViewModel } from "./GalleryComposerViewModel";
+import Modal from "../../Modal";
+import { GalleryImageView } from "../../components/views/elements/GalleryImageView";
 
 /** What the mocked `GalleryMedia` resolves the thumbnail of each item to, by the mxc URI of the item. */
 const thumbnails = vi.hoisted(() => new Map<string, Promise<string | null>>());
@@ -421,6 +423,54 @@ describe("GalleryComposerViewModel", () => {
 
             expect(listener).not.toHaveBeenCalled();
             expect(vm.getSnapshot().items).toEqual([]);
+            vm.dispose();
+        });
+    });
+
+    describe("onOpenItem", () => {
+        it("opens the attachments in the media viewer, at the one which was activated", () => {
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue(undefined as never);
+            const kept = mkItem("kept.png");
+            const added = mkFile("added.png");
+            const vm = new GalleryComposerViewModel({ items: [kept, added] });
+            const [, second] = vm.getSnapshot().items;
+
+            vm.onOpenItem(second.id);
+
+            expect(createDialog).toHaveBeenCalledWith(
+                GalleryImageView,
+                { items: [kept, added], initialIndex: 1 },
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+            // The viewer gets the very items, so it can show the files which have not been sent yet.
+            expect(createDialog.mock.calls[0][1]!.items![1]).toBe(added);
+            vm.dispose();
+        });
+
+        it("opens the attachments as they stand after some were removed", () => {
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue(undefined as never);
+            const first = mkFile("first.png");
+            const second = mkFile("second.png");
+            const third = mkFile("third.png");
+            const vm = new GalleryComposerViewModel({ items: [first, second, third] });
+            const ids = vm.getSnapshot().items.map((item) => item.id);
+
+            vm.onRemoveItem(ids[0]);
+            vm.onOpenItem(ids[2]);
+
+            expect(createDialog.mock.calls[0][1]).toEqual({ items: [second, third], initialIndex: 1 });
+            vm.dispose();
+        });
+
+        it("does nothing for an attachment it does not have", () => {
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue(undefined as never);
+            const vm = new GalleryComposerViewModel({ items: [mkFile("photo.png")] });
+
+            vm.onOpenItem("not-an-item");
+
+            expect(createDialog).not.toHaveBeenCalled();
             vm.dispose();
         });
     });

@@ -32,6 +32,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
 import { type MediaCaption } from "../../utils/gallery";
+import { type GalleryComposerEntry, GalleryComposerViewModel } from "../composer/GalleryComposerViewModel";
 
 const sendContentListToRoomSpy = vi.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
 
@@ -469,6 +470,108 @@ describe("RoomUploadViewModel", () => {
             expect(onAddFiles).not.toHaveBeenCalled();
             expect(dis.dispatch).not.toHaveBeenCalled();
             expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        describe("while a message is being edited in the composer", () => {
+            const keptItem = {
+                itemtype: "m.image",
+                body: "kept.png",
+                url: "mxc://server/kept",
+            } as GalleryComposerEntry;
+
+            function createEditAttachments(): GalleryComposerViewModel {
+                return tearDownAfterTest(new GalleryComposerViewModel({ items: [keptItem] }));
+            }
+
+            it("attaches picked images and videos to the message being edited, not the draft", async () => {
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaInputFiles([image, video]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image, video]);
+                expect(vm.attachments.getItems()).toEqual([]);
+                expect(vm.hasAttachments).toBe(false);
+                expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            });
+
+            it("attaches dropped images and videos to the message being edited and sends the other files", async () => {
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaDataTransfer({ files: [pdf, image] as unknown as FileList } as DataTransfer);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image]);
+                expect(vm.attachments.getItems()).toEqual([]);
+                expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                    [pdf],
+                    room.roomId,
+                    undefined,
+                    undefined,
+                    client,
+                    TimelineRenderingType.Room,
+                );
+            });
+
+            it("applies the upload limit to the message being edited", async () => {
+                fetchUploadLimit.mockResolvedValue(6);
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                // "image" is 5 bytes, "second image" is 12
+                await vm.initiateViaInputFiles([image, secondImage]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image]);
+                expect(editAttachments.getSnapshot().notice).toBeTruthy();
+                expect(vm.attachments.getSnapshot().notice).toBeUndefined();
+            });
+
+            it("attaches to the draft again once the edit is over", async () => {
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+                await vm.initiateViaInputFiles([image]);
+
+                vm.setEditAttachments(undefined);
+                await vm.initiateViaInputFiles([video]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image]);
+                expect(vm.attachments.getItems()).toEqual([video]);
+            });
+
+            it("leaves the draft's attachments alone while the edit is in progress", async () => {
+                const vm = createVm();
+                await vm.initiateViaInputFiles([image]);
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaInputFiles([video]);
+
+                expect(vm.attachments.getItems()).toEqual([image]);
+                expect(vm.hasAttachments).toBe(true);
+            });
+
+            it("sends the files straight away while gallery messages are disabled", async () => {
+                galleryEnabled = false;
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaInputFiles([image]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem]);
+                expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                    [image],
+                    room.roomId,
+                    undefined,
+                    undefined,
+                    client,
+                    TimelineRenderingType.Room,
+                );
+            });
         });
 
         it("keeps files inserted by a module in the composer", async () => {

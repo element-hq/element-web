@@ -134,6 +134,44 @@ describe("MessageComposerButtons", () => {
         expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
     });
 
+    describe("while a message is being edited", () => {
+        it("keeps only the emoji and upload buttons in wide mode", async () => {
+            wrapAndRender(
+                <MessageComposerButtons
+                    {...mockProps}
+                    isMenuOpen={true}
+                    showLocationButton={true}
+                    showPollsButton={true}
+                    showStickersButton={true}
+                    isEditing={true}
+                />,
+                false,
+            );
+
+            // Stickers, voice messages, polls and locations are new messages of their own, so there is
+            // nothing left for a menu of more options.
+            await waitFor(() => {
+                expect(getButtonLabels()).toEqual(["Emoji", "Attachment"]);
+            });
+        });
+
+        it("keeps only the upload option in the menu in narrow mode", () => {
+            wrapAndRender(
+                <MessageComposerButtons
+                    {...mockProps}
+                    isMenuOpen={true}
+                    showLocationButton={true}
+                    showPollsButton={true}
+                    showStickersButton={true}
+                    isEditing={true}
+                />,
+                true,
+            );
+
+            expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment"]]);
+        });
+    });
+
     describe("polls button", () => {
         it("should render when asked to", () => {
             wrapAndRender(

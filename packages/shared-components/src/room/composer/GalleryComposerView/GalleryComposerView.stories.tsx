@@ -26,10 +26,11 @@ type GalleryComposerViewProps = GalleryComposerViewSnapshot & GalleryComposerVie
 const GalleryComposerViewWrapperImpl = ({
     onAddFiles,
     onRemoveItem,
+    onOpenItem,
     className,
     ...snapshotProps
 }: GalleryComposerViewProps): ReactNode => {
-    const vm = useMockedViewModel(snapshotProps, { onAddFiles, onRemoveItem });
+    const vm = useMockedViewModel(snapshotProps, { onAddFiles, onRemoveItem, onOpenItem });
 
     return <GalleryComposerView vm={vm} className={className} />;
 };
@@ -113,4 +114,9 @@ export const Empty: Story = {
 
 export const Disabled: Story = {
     args: { disabled: true },
+};
+
+/** Each preview opens the item at full size, as it does in the app. */
+export const Openable: Story = {
+    args: { onOpenItem: fn() },
 };

@@ -1622,7 +1622,7 @@ describe("gallery messages", () => {
             });
 
             it.each([
-                ["a text message", { msgtype: "m.text", body: "Hello", url: undefined }],
+                ["an emote", { msgtype: "m.emote", body: "waves", url: undefined }],
                 ["a file", { msgtype: "m.file", body: "a.pdf" }],
                 ["an image without media", { url: undefined }],
             ])("does nothing for %s", async (_name, content) => {
@@ -1632,6 +1632,100 @@ describe("gallery messages", () => {
 
                 expect(client.uploadContent).not.toHaveBeenCalled();
                 expect(client.sendMessage).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("for a text message", () => {
+            function mkTextEvent(content: IContent = {}): MatrixEvent {
+                return mkEvent({
+                    type: "m.room.message",
+                    user: "@userId:matrix.org",
+                    room: roomId,
+                    id: "$text",
+                    content: {
+                        "msgtype": "m.text",
+                        "body": "Hello",
+                        "m.mentions": { user_ids: ["@bob:test"] },
+                        ...content,
+                    },
+                    event: true,
+                });
+            }
+
+            it("becomes an image message with its text as the caption when one file is added", async () => {
+                await contentMessages.editMediaMessage(mkTextEvent(), client, [mkFile("added.jpg")], {
+                    body: "Hello",
+                });
+
+                expect(uploadedNames()).toEqual(["added.jpg"]);
+                expect(sentContents()[0].body).toBe("* Hello");
+                expect(sentContents()[0]["m.relates_to"]).toEqual({ rel_type: "m.replace", event_id: "$text" });
+                expect(sentNewContent()).toEqual(
+                    expect.objectContaining({
+                        "msgtype": "m.image",
+                        // The text takes the body, and the file name moves to `filename`.
+                        "body": "Hello",
+                        "filename": "added.jpg",
+                        "url": "mxc://server/added.jpg",
+                        // Whoever the message mentioned is still mentioned.
+                        "m.mentions": { user_ids: ["@bob:test"] },
+                    }),
+                );
+            });
+
+            it("becomes a gallery when two files are added", async () => {
+                await contentMessages.editMediaMessage(mkTextEvent(), client, [mkFile("one.jpg"), mkFile("two.jpg")], {
+                    body: "Hello",
+                });
+
+                expect(uploadedNames()).toEqual(["one.jpg", "two.jpg"]);
+                const newContent = sentNewContent();
+                expect(newContent.msgtype).toBe(GALLERY_MSGTYPE);
+                expect(newContent.body).toBe("Hello");
+                expect(newContent.itemtypes).toEqual([
+                    expect.objectContaining({ itemtype: "m.image", body: "one.jpg", url: "mxc://server/one.jpg" }),
+                    expect.objectContaining({ itemtype: "m.image", body: "two.jpg", url: "mxc://server/two.jpg" }),
+                ]);
+            });
+
+            it("keeps the formatting of the text it is given", async () => {
+                await contentMessages.editMediaMessage(mkTextEvent(), client, [mkFile("added.jpg")], {
+                    body: "Hello **you**",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "Hello <strong>you</strong>",
+                });
+
+                expect(sentNewContent()).toEqual(
+                    expect.objectContaining({
+                        body: "Hello **you**",
+                        format: "org.matrix.custom.html",
+                        formatted_body: "Hello <strong>you</strong>",
+                    }),
+                );
+            });
+
+            it("sends nothing when nothing was added and the text is unchanged", async () => {
+                await contentMessages.editMediaMessage(mkTextEvent(), client, [], { body: "Hello" });
+
+                expect(client.uploadContent).not.toHaveBeenCalled();
+                expect(client.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("sends nothing when the text was emptied and nothing was added", async () => {
+                await contentMessages.editMediaMessage(mkTextEvent(), client, [], noCaption);
+
+                expect(client.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("stays a text message when only its text is changed", async () => {
+                await contentMessages.editMediaMessage(mkTextEvent(), client, [], { body: "Hello again" });
+
+                expect(client.uploadContent).not.toHaveBeenCalled();
+                expect(sentNewContent()).toEqual({
+                    "msgtype": "m.text",
+                    "body": "Hello again",
+                    "m.mentions": { user_ids: ["@bob:test"] },
+                });
             });
         });
 

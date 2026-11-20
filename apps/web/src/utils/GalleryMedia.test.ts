@@ -124,6 +124,13 @@ describe("GalleryMedia", () => {
         expect(new GalleryMedia(image({ filename: "real-name.png", body: "A caption" })).name).toBe("real-name.png");
     });
 
+    it("describes the media as the message does", () => {
+        const info = { size: 1234, mimetype: "image/png", w: 640, h: 480 };
+
+        expect(new GalleryMedia(image({ info })).info).toEqual(info);
+        expect(new GalleryMedia(image({ info: undefined })).info).toBeUndefined();
+    });
+
     describe("getThumbnailUrl", () => {
         it("asks the content repository to scale an unencrypted image", async () => {
             await expect(new GalleryMedia(image()).getThumbnailUrl()).resolves.toBe(

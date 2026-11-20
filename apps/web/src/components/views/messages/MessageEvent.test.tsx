@@ -317,6 +317,38 @@ describe("MessageEvent", () => {
             expect(result.getByTestId("textual-body")).toHaveAttribute("data-editing", "false");
         });
 
+        describe("in the composer at the bottom", () => {
+            beforeEach(() => {
+                // Replace the spy of the outer suite, which calls through, with one that turns the lab on.
+                vi.mocked(SettingsStore.getValue).mockRestore();
+                const original = SettingsStore.getValue;
+                vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...rest) =>
+                    setting === "feature_edit_in_composer" ? true : original(setting, ...rest),
+                );
+            });
+
+            it.each([
+                ["a gallery", { ...gallery, body: "Our holiday" }, "gallery-body"],
+                ["an image", { ...image, body: "Look", filename: "image.png" }, "image-body"],
+                ["an image without a caption", image, "image-body"],
+            ])("keeps showing %s, as the composer holds the editor", (_name, content, bodyTestId) => {
+                event = mkMessage(content);
+
+                const result = renderEditing();
+
+                expect(result.getByTestId(bodyTestId)).toBeVisible();
+            });
+
+            it("still gives the editing state to the body of a text message, which shows the message", () => {
+                event = mkMessage({ msgtype: MsgType.Text, body: "Hello" });
+
+                const result = renderEditing();
+
+                // The textual body itself decides not to show the editor; see its own tests.
+                expect(result.getAllByTestId("textual-body")).toHaveLength(1);
+            });
+        });
+
         it("renders a text message as before, in the body which hosts the editor", () => {
             event = mkMessage({ msgtype: MsgType.Text, body: "Hello" });
 

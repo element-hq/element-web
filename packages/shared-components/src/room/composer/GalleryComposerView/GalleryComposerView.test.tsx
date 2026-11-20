@@ -21,7 +21,7 @@ import {
 } from "./GalleryComposerView";
 import * as stories from "./GalleryComposerView.stories";
 
-const { Default, WithVideo, Loading, Full, Empty, Disabled } = composeStories(stories);
+const { Default, WithVideo, Loading, Full, Empty, Disabled, Openable } = composeStories(stories);
 
 function makeItems(count: number): GalleryComposerViewItem[] {
     return Array.from({ length: count }, (_, index) => ({
@@ -306,5 +306,52 @@ describe("GalleryComposerView", () => {
         expect(drop.defaultPrevented).toBe(true);
         expect(paste.defaultPrevented).toBe(true);
         expect(onAddFiles).not.toHaveBeenCalled();
+    });
+
+    describe("opening an item", () => {
+        it("lets each preview be opened when the host allows it", async () => {
+            const user = userEvent.setup();
+            const onOpenItem = vi.fn();
+            render(<GalleryComposerView vm={makeViewModel({}, { onOpenItem })} />);
+
+            const open = screen.getByRole("button", { name: "View image-1.png" });
+            expect(open).toHaveAttribute("title", "View image-1.png");
+            expect(open.querySelector("img")).toHaveAttribute("src", "https://example.org/1.png");
+
+            await user.click(open);
+
+            expect(onOpenItem).toHaveBeenCalledTimes(1);
+            expect(onOpenItem).toHaveBeenCalledWith("item-1");
+        });
+
+        it("keeps the remove button apart from the preview", async () => {
+            const user = userEvent.setup();
+            const onOpenItem = vi.fn();
+            const onRemoveItem = vi.fn();
+            render(<GalleryComposerView vm={makeViewModel({}, { onOpenItem, onRemoveItem })} />);
+
+            await user.click(screen.getByRole("button", { name: "Remove image-0.png" }));
+
+            expect(onRemoveItem).toHaveBeenCalledWith("item-0");
+            expect(onOpenItem).not.toHaveBeenCalled();
+            expect(screen.getByRole("button", { name: "View image-0.png" })).not.toContainElement(
+                screen.getByRole("button", { name: "Remove image-0.png" }),
+            );
+        });
+
+        it("does not make the previews interactive without a way to open them", () => {
+            render(<GalleryComposerView vm={makeViewModel()} />);
+
+            expect(screen.queryByRole("button", { name: /^View / })).not.toBeInTheDocument();
+            expect(screen.getByRole("img", { name: "image-0.png" })).toBeInTheDocument();
+        });
+
+        it("renders the Openable story with a button per item", () => {
+            render(<Openable />);
+
+            expect(screen.getAllByRole("button", { name: /^View / })).toHaveLength(
+                screen.getAllByRole("button", { name: /^Remove / }).length,
+            );
+        });
     });
 });

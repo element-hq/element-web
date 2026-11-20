@@ -283,6 +283,105 @@ describe("<GalleryImageView />", () => {
         expect(onFinished).toHaveBeenCalledTimes(1);
     });
 
+    describe("for the attachments of a message being written", () => {
+        const photo = new File(["photo"], "photo.png", { type: "image/png" });
+        const clip = new File(["a video"], "clip.mp4", { type: "video/mp4" });
+
+        beforeEach(() => {
+            vi.spyOn(URL, "createObjectURL").mockImplementation((file) => `blob:${(file as File).name}`);
+            vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+        });
+
+        const renderAttachments = (
+            items: Array<File | Item>,
+            initialIndex = 0,
+        ): ReturnType<typeof render> & { onFinished: ReturnType<typeof vi.fn> } => {
+            const onFinished = vi.fn();
+            const result = render(
+                <GalleryImageView
+                    items={items as React.ComponentProps<typeof GalleryImageView>["items"]}
+                    initialIndex={initialIndex}
+                    onFinished={onFinished}
+                />,
+            );
+            return { ...result, onFinished };
+        };
+
+        it("shows a file which has not been sent yet from the device", async () => {
+            renderAttachments([photo]);
+
+            expect(screen.getByText("photo.png (1 of 1)")).toBeInTheDocument();
+            expect(await screen.findByRole("img", { name: "photo.png" })).toHaveAttribute("src", "blob:photo.png");
+        });
+
+        it("steps through files and items the message already has, in order", async () => {
+            const { container } = renderAttachments([image("kept.png"), photo, clip]);
+
+            expect(await screen.findByRole("img", { name: "kept.png" })).toHaveAttribute(
+                "src",
+                "http://this.is.a.url/server/kept.png",
+            );
+            expect(screen.queryByRole("button", { name: "Previous" })).not.toBeInTheDocument();
+
+            fireEvent.click(screen.getByRole("button", { name: "Next" }));
+            expect(screen.getByText("photo.png (2 of 3)")).toBeInTheDocument();
+            expect(await screen.findByRole("img", { name: "photo.png" })).toHaveAttribute("src", "blob:photo.png");
+
+            fireEvent.click(screen.getByRole("button", { name: "Next" }));
+            expect(screen.getByText("clip.mp4 (3 of 3)")).toBeInTheDocument();
+            await waitFor(() => expect(container.querySelector("video")).toHaveAttribute("src", "blob:clip.mp4"));
+            expect(screen.queryByRole("button", { name: "Next" })).not.toBeInTheDocument();
+        });
+
+        it("opens on the attachment which was activated", async () => {
+            renderAttachments([photo, clip], 1);
+
+            expect(screen.getByText("clip.mp4 (2 of 2)")).toBeInTheDocument();
+        });
+
+        it("offers no options for a message, as there is none yet", async () => {
+            renderAttachments([photo]);
+            await screen.findByRole("img", { name: "photo.png" });
+
+            // There is no message to show the sender or time of.
+            expect(screen.queryByRole("button", { name: "Options" })).not.toBeInTheDocument();
+        });
+
+        it("releases the URLs of the files when it closes", async () => {
+            const { unmount } = renderAttachments([photo, clip]);
+            await screen.findByRole("img", { name: "photo.png" });
+            fireEvent.click(screen.getByRole("button", { name: "Next" }));
+            await waitFor(() => expect(URL.createObjectURL).toHaveBeenCalledTimes(2));
+            expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+
+            unmount();
+
+            expect(vi.mocked(URL.revokeObjectURL).mock.calls.map(([url]) => url)).toEqual(
+                expect.arrayContaining(["blob:photo.png", "blob:clip.mp4"]),
+            );
+        });
+
+        it("shows the message's items rather than the attachments when given both", async () => {
+            render(
+                <GalleryImageView
+                    mxEvent={makeEvent([image("from-event.png")])}
+                    items={[photo]}
+                    initialIndex={0}
+                    onFinished={vi.fn()}
+                />,
+            );
+
+            expect(screen.getByText("from-event.png (1 of 1)")).toBeInTheDocument();
+            expect(URL.createObjectURL).not.toHaveBeenCalled();
+        });
+
+        it("renders nothing without attachments", () => {
+            const { container } = renderAttachments([]);
+
+            expect(container).toBeEmptyDOMElement();
+        });
+    });
+
     it("releases the media of every item when it closes", async () => {
         const destroy = vi.spyOn(GalleryMedia.prototype, "destroy");
         const { unmount } = renderViewer([image("one.png"), image("two.png"), video("clip.mp4")]);

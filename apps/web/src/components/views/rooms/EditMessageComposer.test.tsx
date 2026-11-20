@@ -40,6 +40,7 @@ import ContentMessages from "../../../ContentMessages";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
+import { type EditorActions } from "./EditorActions";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
 
 vi.mock("../dialogs/ConfirmRedactDialog", async () => ({
@@ -942,6 +943,234 @@ describe("<EditMessageComposer/>", () => {
 
             await waitFor(() => expect(setMaxFileSize).toHaveBeenCalledWith(undefined));
             setMaxFileSize.mockRestore();
+        });
+
+        describe("in the message composer", () => {
+            const renderInComposer = (
+                event: MatrixEvent,
+                props: Partial<React.ComponentProps<typeof EditMessageComposerWithMatrixClient>> = {},
+            ): ReturnType<typeof render> =>
+                render(
+                    <EditMessageComposerWithMatrixClient
+                        editState={new EditorStateTransfer(event)}
+                        inComposer
+                        {...props}
+                    />,
+                    {
+                        wrapper: ({ children }) => (
+                            <SDKContext.Provider value={SDKContextClass.instance}>
+                                <MatrixClientContext.Provider value={mockClient}>
+                                    <ScopedRoomContextProvider {...defaultRoomContext}>
+                                        {children}
+                                    </ScopedRoomContextProvider>
+                                </MatrixClientContext.Provider>
+                            </SDKContext.Provider>
+                        ),
+                    },
+                );
+
+            it("should leave the buttons and the attachments to the message composer", async () => {
+                const onAttachmentsChange = vi.fn();
+                renderInComposer(mkGalleryEvent(), { onAttachmentsChange });
+
+                await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalledTimes(1));
+                expect(screen.queryByText("Save")).not.toBeInTheDocument();
+                expect(screen.queryByText("Cancel")).not.toBeInTheDocument();
+                expect(screen.queryByRole("list")).not.toBeInTheDocument();
+                expect(screen.getByRole("textbox")).toHaveTextContent("Before");
+                expect(screen.getByRole("textbox").closest(".mx_EditMessageComposer")).toHaveClass(
+                    "mx_EditMessageComposer_inComposer",
+                );
+            });
+
+            it("should hand the attachments of the message to the message composer, and take them back", async () => {
+                const onAttachmentsChange = vi.fn();
+                const { unmount } = renderInComposer(mkGalleryEvent(), { onAttachmentsChange });
+
+                await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalledTimes(1));
+                const [attachments] = onAttachmentsChange.mock.calls[0];
+                expect(attachments).toBeInstanceOf(GalleryComposerViewModel);
+                expect(attachments.getItems()).toEqual([first, second]);
+
+                unmount();
+
+                expect(onAttachmentsChange).toHaveBeenLastCalledWith(undefined);
+            });
+
+            it("should not report attachments for a text message while gallery messages are disabled", async () => {
+                const onAttachmentsChange = vi.fn();
+                const { unmount } = renderInComposer(editedEvent, { onAttachmentsChange });
+                unmount();
+
+                expect(onAttachmentsChange).not.toHaveBeenCalled();
+            });
+
+            it("should take the focus, as the message composer's own editor would", () => {
+                renderInComposer(editedEvent);
+
+                expect(screen.getByRole("textbox")).toHaveFocus();
+            });
+
+            it("should let the message composer save and cancel the edit", async () => {
+                const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                const event = mkGalleryEvent();
+                const { unmount } = renderInComposer(event, { actionsRef });
+                expect(actionsRef.current).not.toBeNull();
+
+                await editText(" and after");
+                actionsRef.current!.save();
+
+                await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+                expect(editMediaMessage.mock.calls[0][0]).toBe(event);
+                expect(editMediaMessage.mock.calls[0][3]).toEqual({ "body": "Before and after", "m.mentions": {} });
+
+                unmount();
+                expect(actionsRef.current).toBeNull();
+            });
+
+            it("should end the edit when the message composer cancels it", () => {
+                const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                renderInComposer(editedEvent, { actionsRef });
+
+                actionsRef.current!.cancel();
+
+                expect(endedEdits()).toHaveLength(1);
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("should save a text message as a text edit when the message composer asks", async () => {
+                const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                renderInComposer(editedEvent, { actionsRef });
+
+                await editText(" + edit");
+                actionsRef.current!.save();
+
+                await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalledTimes(1));
+                expect(mockClient.sendMessage.mock.calls[0][2]).toEqual(
+                    expect.objectContaining({
+                        "m.new_content": expect.objectContaining({ body: "original message + edit" }),
+                        "m.relates_to": { event_id: editedEvent.getId(), rel_type: "m.replace" },
+                    }),
+                );
+                expect(editMediaMessage).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("for a text message, with gallery messages enabled", () => {
+            const textEvent = (): MatrixEvent =>
+                mkMediaEvent("$text", { "msgtype": "m.text", "body": "Hello", "m.mentions": {} });
+
+            /** Paste files into the editor, as the browser would. */
+            const pasteFiles = (files: File[], text = ""): void => {
+                const paste = new Event("paste", { bubbles: true, cancelable: true });
+                Object.defineProperty(paste, "clipboardData", {
+                    value: {
+                        files,
+                        types: files.length ? ["Files"] : ["text/plain"],
+                        getData: (type: string) => (type === "text/plain" ? text : ""),
+                    },
+                });
+                fireEvent(screen.getByRole("textbox"), paste);
+            };
+
+            let galleryEnabled: boolean;
+
+            beforeEach(() => {
+                galleryEnabled = true;
+                const getValue = SettingsStore.getValue.bind(SettingsStore);
+                vi.spyOn(SettingsStore, "getValue").mockImplementation(((name: string, ...rest: unknown[]) =>
+                    name === "feature_gallery_messages"
+                        ? galleryEnabled
+                        : (getValue as (...args: unknown[]) => unknown)(
+                              name,
+                              ...rest,
+                          )) as typeof SettingsStore.getValue);
+            });
+
+            afterEach(() => {
+                vi.mocked(SettingsStore.getValue).mockRestore();
+            });
+
+            it("should not show attachments until some are added", async () => {
+                getComponent(new EditorStateTransfer(textEvent()));
+                await waitFor(() => expect(fetchUploadLimit).toHaveBeenCalledWith(mockClient));
+
+                expect(screen.queryByRole("list")).not.toBeInTheDocument();
+            });
+
+            it("should still save a change of text as a text edit", async () => {
+                const event = textEvent();
+                getComponent(new EditorStateTransfer(event));
+                await editText(" there");
+
+                fireEvent.click(screen.getByText("Save"));
+
+                await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalledTimes(1));
+                expect(mockClient.sendMessage.mock.calls[0][2]).toEqual(
+                    expect.objectContaining({
+                        "m.new_content": expect.objectContaining({ msgtype: "m.text", body: "Hello there" }),
+                    }),
+                );
+                expect(editMediaMessage).not.toHaveBeenCalled();
+            });
+
+            it("should attach images pasted into the editor, and save the message with them", async () => {
+                const event = textEvent();
+                getComponent(new EditorStateTransfer(event));
+                const photo = new File(["image"], "photo.png", { type: "image/png" });
+
+                pasteFiles([photo]);
+
+                expect(await screen.findByRole("button", { name: "Remove photo.png" })).toBeInTheDocument();
+                // The file is attached, not pasted into the text.
+                expect(screen.getByRole("textbox")).toHaveTextContent("Hello");
+                await waitFor(() => expect(screen.getByText("Save")).not.toHaveAttribute("disabled"));
+
+                fireEvent.click(screen.getByText("Save"));
+
+                await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+                expect(editMediaMessage).toHaveBeenCalledWith(
+                    event,
+                    mockClient,
+                    [photo],
+                    { "body": "Hello", "m.mentions": {} },
+                    {},
+                );
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("should not attach pasted files which are not images or videos", async () => {
+                getComponent(new EditorStateTransfer(textEvent()));
+                await waitFor(() => expect(fetchUploadLimit).toHaveBeenCalled());
+                const pdf = new File(["pdf"], "notes.pdf", { type: "application/pdf" });
+
+                pasteFiles([pdf]);
+
+                expect(screen.queryByRole("button", { name: "Remove notes.pdf" })).not.toBeInTheDocument();
+                // Nor is the file pasted into the text.
+                expect(screen.getByRole("textbox")).toHaveTextContent("Hello");
+                expect(screen.getByText("Save")).toHaveAttribute("disabled");
+            });
+
+            it("should paste text into the editor as before", async () => {
+                getComponent(new EditorStateTransfer(textEvent()));
+                await waitFor(() => expect(fetchUploadLimit).toHaveBeenCalled());
+
+                pasteFiles([], " world");
+
+                await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent("Hello world"));
+                expect(screen.queryByRole("list")).not.toBeInTheDocument();
+            });
+
+            it("should not attach pasted files while gallery messages are disabled", () => {
+                galleryEnabled = false;
+                getComponent(new EditorStateTransfer(textEvent()));
+
+                pasteFiles([new File(["image"], "photo.png", { type: "image/png" })]);
+
+                expect(screen.queryByRole("list")).not.toBeInTheDocument();
+                expect(fetchUploadLimit).not.toHaveBeenCalled();
+            });
         });
 
         it("should release the attachments when the edit ends", async () => {

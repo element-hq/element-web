@@ -17,6 +17,7 @@ import {
     getGalleryCaption,
     getGalleryItems,
     getGallerySummary,
+    getEditableMediaItems,
     getMessageMediaCaption,
     getMessageMediaItems,
     isGalleryContent,
@@ -356,6 +357,72 @@ describe("gallery", () => {
 
         it("returns an empty caption for nothing", () => {
             expect(getMessageMediaCaption(undefined)).toEqual({ body: "" });
+        });
+
+        it("returns the text of a text message, with its formatting", () => {
+            expect(
+                getMessageMediaCaption({
+                    "msgtype": "m.text",
+                    "body": "Hello **there**",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": "Hello <strong>there</strong>",
+                    "m.mentions": { user_ids: ["@bob:server"] },
+                }),
+            ).toEqual({
+                body: "Hello **there**",
+                format: "org.matrix.custom.html",
+                formatted_body: "Hello <strong>there</strong>",
+            });
+        });
+
+        it("returns the plain text of a text message", () => {
+            expect(getMessageMediaCaption({ msgtype: "m.text", body: "Hello" })).toEqual({ body: "Hello" });
+        });
+
+        it("returns an empty caption for a text message of white space", () => {
+            expect(getMessageMediaCaption({ msgtype: "m.text", body: "  " })).toEqual({ body: "" });
+        });
+
+        it("does not take the body of an emote or notice as a caption", () => {
+            expect(getMessageMediaCaption({ msgtype: "m.emote", body: "waves" })).toEqual({ body: "" });
+            expect(getMessageMediaCaption({ msgtype: "m.notice", body: "Beep" })).toEqual({ body: "" });
+        });
+    });
+
+    describe("getEditableMediaItems", () => {
+        it("returns no items for a text message, which images and videos can be added to", () => {
+            expect(getEditableMediaItems({ msgtype: "m.text", body: "Hello" })).toEqual([]);
+        });
+
+        it("returns the items of a gallery", () => {
+            const first = image("a.png");
+            const second = image("b.png");
+
+            const items = getEditableMediaItems({
+                msgtype: "dm.filament.gallery",
+                body: "",
+                itemtypes: [first, second],
+            });
+
+            expect(items).toEqual([first, second]);
+            expect(items![0]).toBe(first);
+        });
+
+        it("returns the one item of an image message", () => {
+            expect(getEditableMediaItems({ msgtype: "m.image", body: "a.png", url: "mxc://server/a.png" })).toEqual([
+                { itemtype: "m.image", body: "a.png", url: "mxc://server/a.png" },
+            ]);
+        });
+
+        it.each([
+            ["an emote", { msgtype: "m.emote", body: "waves" }],
+            ["a notice", { msgtype: "m.notice", body: "Beep" }],
+            ["a file", { msgtype: "m.file", body: "a.pdf", url: "mxc://server/a.pdf" }],
+            ["audio", { msgtype: "m.audio", body: "a.ogg", url: "mxc://server/a.ogg" }],
+            ["a message without a msgtype", { body: "Hello" }],
+            ["nothing", undefined],
+        ])("returns undefined for %s", (_name, content) => {
+            expect(getEditableMediaItems(content)).toBeUndefined();
         });
     });
 

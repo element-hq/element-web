@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type MockInstance } from "vitest";
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
@@ -32,6 +32,8 @@ import ContentMessages from "../../../../ContentMessages";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { GalleryComposerViewModel } from "../../../../viewmodels/composer/GalleryComposerViewModel";
 import { parseEditorStateTransfer } from "./hooks/useInitialContent";
+import SettingsStore from "../../../../settings/SettingsStore";
+import { type EditorActions } from "../EditorActions";
 
 beforeAll(initOnce, 10000);
 
@@ -484,6 +486,186 @@ describe("EditWysiwygComposer", () => {
 
             expect(await screen.findByRole("status")).toHaveTextContent("larger than the upload limit");
             expect(screen.queryByRole("button", { name: "Remove large.png" })).not.toBeInTheDocument();
+        });
+
+        describe("In the message composer", () => {
+            const renderInComposer = (
+                event: ReturnType<typeof mkEvent>,
+                props: Partial<React.ComponentProps<typeof EditWysiwygComposer>> = {},
+            ) =>
+                render(
+                    <MatrixClientContext.Provider value={mockClient}>
+                        <ScopedRoomContextProvider {...defaultRoomContext}>
+                            <RoomUploadContextProvider>
+                                <EditWysiwygComposer
+                                    editorStateTransfer={new EditorStateTransfer(event)}
+                                    inComposer
+                                    {...props}
+                                />
+                            </RoomUploadContextProvider>
+                        </ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>,
+                );
+
+            const waitForEditor = () =>
+                waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+
+            it("Should keep the formatting buttons but leave Save, Cancel and the attachments to the composer", async () => {
+                const onAttachmentsChange = vi.fn();
+                renderInComposer(mkGalleryEvent(), { onAttachmentsChange });
+                await waitForEditor();
+                await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalled());
+
+                expect(screen.getByLabelText("Bold")).toBeInTheDocument();
+                expect(screen.queryByText("Save")).not.toBeInTheDocument();
+                expect(screen.queryByText("Cancel")).not.toBeInTheDocument();
+                expect(screen.queryByRole("list")).not.toBeInTheDocument();
+                expect(document.querySelector(".mx_EditWysiwygComposer_inComposer")).not.toBeNull();
+            });
+
+            it("Should hand the attachments of the message to the composer, and take them back", async () => {
+                const onAttachmentsChange = vi.fn();
+                const { unmount } = renderInComposer(mkGalleryEvent(), { onAttachmentsChange });
+                await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalled());
+
+                const attachments = onAttachmentsChange.mock.calls[0][0] as GalleryComposerViewModel;
+                expect(attachments).toBeInstanceOf(GalleryComposerViewModel);
+                expect(attachments.getItems()).toEqual([first, second]);
+
+                unmount();
+                expect(onAttachmentsChange).toHaveBeenLastCalledWith(undefined);
+            });
+
+            it("Should let the composer save the items which are left through the media edit", async () => {
+                const onAttachmentsChange = vi.fn();
+                const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                const event = mkGalleryEvent();
+                const { unmount } = renderInComposer(event, { onAttachmentsChange, actionsRef });
+                await waitForEditor();
+                await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalled());
+                const attachments = onAttachmentsChange.mock.calls[0][0] as GalleryComposerViewModel;
+
+                act(() => attachments.onRemoveItem(attachments.getSnapshot().items[0].id));
+                act(() => actionsRef.current!.save());
+
+                await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+                expect(editMediaMessage).toHaveBeenCalledWith(
+                    event,
+                    mockClient,
+                    [second],
+                    expect.objectContaining({ body: "Before" }),
+                    undefined,
+                );
+
+                unmount();
+                expect(actionsRef.current).toBeNull();
+            });
+
+            it("Should let the composer cancel the edit", async () => {
+                const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                renderInComposer(mkGalleryEvent(), { actionsRef });
+                await waitForEditor();
+
+                act(() => actionsRef.current!.cancel());
+
+                expect(spyDispatcher).toHaveBeenCalledWith({
+                    action: Action.EditEvent,
+                    event: null,
+                    timelineRenderingType: defaultRoomContext.timelineRenderingType,
+                });
+                expect(editMediaMessage).not.toHaveBeenCalled();
+            });
+
+            describe("for a text message, with gallery messages enabled", () => {
+                const textEvent = () => mkMediaEvent({ msgtype: "m.text", body: "Hello" });
+                let galleryEnabled: boolean;
+
+                beforeEach(() => {
+                    galleryEnabled = true;
+                    const getValue = SettingsStore.getValue.bind(SettingsStore);
+                    vi.spyOn(SettingsStore, "getValue").mockImplementation(((name: string, ...rest: unknown[]) =>
+                        name === "feature_gallery_messages"
+                            ? galleryEnabled
+                            : (getValue as (...args: unknown[]) => unknown)(
+                                  name,
+                                  ...rest,
+                              )) as typeof SettingsStore.getValue);
+                });
+
+                afterEach(() => {
+                    vi.mocked(SettingsStore.getValue).mockRestore();
+                });
+
+                it("Should hand the composer empty attachments, to which images and videos can be added", async () => {
+                    const onAttachmentsChange = vi.fn();
+                    renderInComposer(textEvent(), { onAttachmentsChange });
+                    await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalled());
+
+                    expect((onAttachmentsChange.mock.calls[0][0] as GalleryComposerViewModel).getItems()).toEqual([]);
+                });
+
+                it("Should hand the composer no attachments while gallery messages are disabled", async () => {
+                    galleryEnabled = false;
+                    const onAttachmentsChange = vi.fn();
+                    renderInComposer(textEvent(), { onAttachmentsChange });
+                    await waitForEditor();
+
+                    expect(onAttachmentsChange).not.toHaveBeenCalled();
+                });
+
+                it("Should save the text message with the files which were added through the media edit", async () => {
+                    const onAttachmentsChange = vi.fn();
+                    const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                    const event = textEvent();
+                    renderInComposer(event, { onAttachmentsChange, actionsRef });
+                    await waitForEditor();
+                    await waitFor(() => expect(onAttachmentsChange).toHaveBeenCalled());
+                    const attachments = onAttachmentsChange.mock.calls[0][0] as GalleryComposerViewModel;
+                    const photo = new File(["image"], "photo.png", { type: "image/png" });
+
+                    act(() => attachments.onAddFiles([photo]));
+                    act(() => actionsRef.current!.save());
+
+                    await waitFor(() => expect(editMediaMessage).toHaveBeenCalledTimes(1));
+                    expect(editMediaMessage).toHaveBeenCalledWith(
+                        event,
+                        mockClient,
+                        [photo],
+                        expect.objectContaining({ body: "Hello" }),
+                        undefined,
+                    );
+                    expect(mockClient.sendMessage).not.toHaveBeenCalled();
+                });
+
+                it("Should save a change of text alone as a text edit", async () => {
+                    const actionsRef: React.MutableRefObject<EditorActions | null> = { current: null };
+                    const event = textEvent();
+                    renderInComposer(event, { actionsRef });
+                    await waitForEditor();
+
+                    fireEvent.input(screen.getByRole("textbox"), { data: " there", inputType: "insertText" });
+                    await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent("there"));
+                    act(() => actionsRef.current!.save());
+
+                    await waitFor(() => expect(mockClient.sendMessage).toHaveBeenCalledTimes(1));
+                    expect(vi.mocked(mockClient.sendMessage).mock.calls[0][2]).toEqual(
+                        expect.objectContaining({
+                            "m.new_content": expect.objectContaining({ msgtype: "m.text" }),
+                            "m.relates_to": { event_id: event.getId(), rel_type: "m.replace" },
+                        }),
+                    );
+                    expect(editMediaMessage).not.toHaveBeenCalled();
+                });
+
+                it("Should not show the empty attachments of a text message when edited in place", async () => {
+                    customRender(false, new EditorStateTransfer(textEvent()));
+                    await waitForEditor();
+                    await waitFor(() => expect(fetchUploadLimit).toHaveBeenCalled());
+
+                    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+                    expect(screen.getByText("Save")).toBeInTheDocument();
+                });
+            });
         });
 
         it("Should not limit the size of added files when the server has no limit", async () => {
