@@ -71,8 +71,6 @@ const BACKUP_SET_UP_TOAST_TIMEOUT_MS = 5000;
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
-    const offlineDevice = <OfflineDevice />;
-
     const toastRack = useToastContext();
     // Briefly confirm success after the user finishes the recovery key flow. The rack outlives this tab
     // and the remover is a no-op once another toast replaces it, so the timer is left to fire on its own.
@@ -153,12 +151,8 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         }
                                     />
                                     <Separator kind="section" />
-                                    {offlineDevice && (
-                                        <>
-                                            {offlineDevice}
-                                            <Separator kind="section" />
-                                        </>
-                                    )}
+                                    <OfflineDevice />
+                                    <Separator kind="section" />
                                 </>
                             )}
                             <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
