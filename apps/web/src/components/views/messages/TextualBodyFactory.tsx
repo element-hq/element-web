@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useContext, useEffect, useMemo, useRef } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { type IContent, MsgType } from "matrix-js-sdk/src/matrix";
 import {
     _t,
     EventContentBodyView,
@@ -42,10 +42,13 @@ import { MediaPreviewGroupViewModel } from "../../../viewmodels/message-body/Med
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import { EditMessageComposerWrapper } from "../rooms/EditMessageComposerWrapper";
 import { ModuleApi } from "../../../modules/Api";
+import { isGalleryContent } from "../../../utils/gallery";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
-function getTextualBodyClassName(msgtype: MsgType | undefined): string {
+function getTextualBodyClassName(content: IContent): string {
+    const msgtype = content.msgtype as MsgType | undefined;
+
     if (msgtype === MsgType.Notice) {
         return "mx_MNoticeBody mx_EventTile_content";
     }
@@ -54,7 +57,10 @@ function getTextualBodyClassName(msgtype: MsgType | undefined): string {
         return "mx_MEmoteBody mx_EventTile_content";
     }
 
-    if ([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType)) {
+    if (
+        [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) ||
+        isGalleryContent(content)
+    ) {
         return "mx_MTextBody mx_EventTile_caption";
     }
 
@@ -323,7 +329,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
             body={<EventContentBodyView vm={eventContentBodyVm} as={willHaveWrapper ? "span" : "div"} />}
             bodyRef={contentRef}
             urlPreviews={<MediaPreviewGroupPreview vm={mediaPreviewVm} className="mx_TextualBody_urlPreviews" />}
-            className={getTextualBodyClassName(content.msgtype as MsgType | undefined)}
+            className={getTextualBodyClassName(content)}
         />
     );
 }

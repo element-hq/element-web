@@ -22,11 +22,13 @@ import MessageEvent from "./MessageEvent";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 
 vi.mock("./MBodyFactory", () => ({
     __esModule: true,
     DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
     FileBodyFactory: () => <div data-testid="file-body" />,
+    GalleryBodyFactory: () => <div data-testid="gallery-body" />,
     ImageBodyFactory: () => <div data-testid="image-body" />,
     RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
     VideoBodyFactory: () => <video data-testid="video-body" />,
@@ -35,7 +37,10 @@ vi.mock("./MBodyFactory", () => ({
 
 vi.mock("./TextualBodyFactory", () => ({
     __esModule: true,
-    TextualBodyFactory: () => <div data-testid="textual-body" />,
+    // Hosts the editor while the message is being edited
+    TextualBodyFactory: ({ editState }: { editState?: unknown }) => (
+        <div data-testid="textual-body" data-editing={editState ? "true" : "false"} />
+    ),
 }));
 
 vi.mock("./MImageReplyBody", () => ({
@@ -164,6 +169,182 @@ describe("MessageEvent", () => {
         expect(result.getByText("Unsupported message body")).toBeInTheDocument();
         expect(result.container.querySelector(".mx_UnknownBody")).not.toBeNull();
         expect(result.queryByTestId("textual-body")).toBeNull();
+    });
+
+    describe("when a gallery is sent", () => {
+        function createGalleryEvent(msgtype: string, content: Record<string, unknown> = {}): MatrixEvent {
+            return mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: "@alice:example.com",
+                room: room.roomId,
+                content: {
+                    msgtype,
+                    body: "",
+                    itemtypes: [
+                        { itemtype: "m.image", body: "one.png", url: "mxc://server/one" },
+                        { itemtype: "m.video", body: "two.mp4", url: "mxc://server/two" },
+                    ],
+                    ...content,
+                },
+            });
+        }
+
+        it.each(["dm.filament.gallery", "m.gallery"])("renders the gallery body for msgtype %s", (msgtype) => {
+            event = createGalleryEvent(msgtype);
+
+            const result = renderMessageEvent();
+
+            expect(result.getByTestId("gallery-body")).toBeVisible();
+            // Neither treated as an unknown message nor as a file, and without a caption there is no text.
+            expect(result.container.querySelector(".mx_UnknownBody")).toBeNull();
+            expect(result.queryByTestId("file-body")).toBeNull();
+            expect(result.queryByTestId("textual-body")).toBeNull();
+        });
+
+        it("renders the caption under the gallery", () => {
+            event = createGalleryEvent("dm.filament.gallery", {
+                body: "Our holiday",
+                format: "org.matrix.custom.html",
+                formatted_body: "Our <strong>holiday</strong>",
+            });
+
+            const result = renderMessageEvent();
+
+            const gallery = result.getByTestId("gallery-body");
+            const caption = result.getByTestId("textual-body");
+            expect(gallery).toBeVisible();
+            expect(caption).toBeVisible();
+            // Both belong to the content of the one message, the items first.
+            expect(gallery.parentElement).toHaveClass("mx_EventTile_content");
+            expect(caption.parentElement).toBe(gallery.parentElement);
+            expect(gallery.compareDocumentPosition(caption) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        });
+
+        it("does not render a caption for a body of only whitespace", () => {
+            event = createGalleryEvent("dm.filament.gallery", { body: "  \n " });
+
+            const result = renderMessageEvent();
+
+            expect(result.getByTestId("gallery-body")).toBeVisible();
+            expect(result.queryByTestId("textual-body")).toBeNull();
+        });
+
+        it("renders the redacted body for a gallery which was removed", () => {
+            vi.spyOn(room, "getMember").mockReturnValue({ name: "Moderator" } as any);
+            event = createGalleryEvent("dm.filament.gallery", { body: "Our holiday" });
+            vi.spyOn(event, "isRedacted").mockReturnValue(true);
+
+            const result = renderMessageEvent();
+
+            expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+            expect(result.queryByTestId("gallery-body")).toBeNull();
+        });
+
+        it("does not offer a media helper, as the gallery itself is not one file", () => {
+            event = createGalleryEvent("dm.filament.gallery");
+            const ref = React.createRef<MessageEvent>();
+
+            render(
+                <MatrixClientContext.Provider value={client}>
+                    <MessageEvent ref={ref} mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
+                </MatrixClientContext.Provider>,
+            );
+
+            expect(ref.current!.getMediaHelper()).toBeUndefined();
+        });
+    });
+
+    describe("when a message is being edited", () => {
+        const mkMessage = (content: Record<string, unknown>): MatrixEvent =>
+            mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                user: "@alice:example.com",
+                room: room.roomId,
+                content,
+            });
+
+        const gallery = {
+            msgtype: "dm.filament.gallery",
+            body: "",
+            itemtypes: [
+                { itemtype: "m.image", body: "one.png", url: "mxc://server/one" },
+                { itemtype: "m.video", body: "two.mp4", url: "mxc://server/two" },
+            ],
+        };
+        const image = { msgtype: MsgType.Image, body: "image.png", url: "mxc://server/image" };
+
+        const renderEditing = (): RenderResult =>
+            render(
+                <MatrixClientContext.Provider value={client}>
+                    <MessageEvent
+                        mxEvent={event}
+                        permalinkCreator={new RoomPermalinkCreator(room)}
+                        editState={new EditorStateTransfer(event)}
+                    />
+                </MatrixClientContext.Provider>,
+            );
+
+        it.each([
+            ["a gallery without a caption", gallery, "gallery-body"],
+            ["a gallery with a caption", { ...gallery, body: "Our holiday" }, "gallery-body"],
+            ["an image without a caption", image, "image-body"],
+            ["an image with a caption", { ...image, body: "Look", filename: "image.png" }, "image-body"],
+            ["a video", { msgtype: MsgType.Video, body: "clip.mp4", url: "mxc://server/clip" }, "video-body"],
+        ])("renders only the editor in place of %s", (_name, content, bodyTestId) => {
+            event = mkMessage(content);
+
+            const result = renderEditing();
+
+            // The editor shows the images and videos itself, so that they can be changed.
+            const editor = result.getByTestId("textual-body");
+            expect(editor).toHaveAttribute("data-editing", "true");
+            expect(result.queryByTestId(bodyTestId)).toBeNull();
+            // It is not wrapped as the caption of a body
+            expect(result.container.querySelector(".mx_EventTile_content")).toBeNull();
+        });
+
+        it.each([
+            ["a gallery", { ...gallery, body: "Our holiday" }, "gallery-body"],
+            ["an image", { ...image, body: "Look", filename: "image.png" }, "image-body"],
+        ])("still renders %s with its caption when it is not being edited", (_name, content, bodyTestId) => {
+            event = mkMessage(content);
+
+            const result = renderMessageEvent();
+
+            expect(result.getByTestId(bodyTestId)).toBeVisible();
+            expect(result.getByTestId("textual-body")).toHaveAttribute("data-editing", "false");
+        });
+
+        it("renders a text message as before, in the body which hosts the editor", () => {
+            event = mkMessage({ msgtype: MsgType.Text, body: "Hello" });
+
+            const result = renderEditing();
+
+            expect(result.getAllByTestId("textual-body")).toHaveLength(1);
+            expect(result.getByTestId("textual-body")).toHaveAttribute("data-editing", "true");
+        });
+
+        it("leaves a file to its own body, which has no images or videos to change", () => {
+            event = mkMessage({ msgtype: MsgType.File, body: "notes.pdf", url: "mxc://server/notes" });
+
+            const result = renderEditing();
+
+            expect(result.getByTestId("file-body")).toBeVisible();
+            expect(result.queryByTestId("textual-body")).toBeNull();
+        });
+
+        it("renders the redacted body for a gallery which was removed while being edited", () => {
+            vi.spyOn(room, "getMember").mockReturnValue({ name: "Moderator" } as any);
+            event = mkMessage(gallery);
+            vi.spyOn(event, "isRedacted").mockReturnValue(true);
+
+            const result = renderEditing();
+
+            expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+            expect(result.queryByTestId("textual-body")).toBeNull();
+        });
     });
 
     describe("when an image with a caption is sent", () => {

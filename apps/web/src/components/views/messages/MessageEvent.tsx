@@ -39,12 +39,14 @@ import {
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
+    GalleryBodyFactory,
     ImageBodyFactory,
     RedactedBodyFactory,
     VideoBodyFactory,
     renderMBody,
 } from "./MBodyFactory";
 import { TextualBodyFactory } from "./TextualBodyFactory";
+import { GALLERY_MSGTYPE, getMessageMediaItems } from "../../../utils/gallery";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -75,6 +77,8 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
+    [GALLERY_MSGTYPE.name, GalleryBodyFactory],
+    [GALLERY_MSGTYPE.altName, GalleryBodyFactory],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
@@ -330,6 +334,11 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             inhibitInteraction: this.props.inhibitInteraction,
             id: this.props.id,
         };
+        if (this.props.editState && getMessageMediaItems(content) && !this.props.mxEvent.isRedacted()) {
+            // The message is being edited: the editor takes its place, and shows the images and
+            // videos itself so that they can be changed.
+            return <TextualBodyFactory {...bodyProps} />;
+        }
         if (hasCaption) {
             return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;
         }

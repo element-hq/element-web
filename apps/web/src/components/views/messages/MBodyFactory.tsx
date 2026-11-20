@@ -11,9 +11,11 @@ import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
+    GalleryBodyView,
     ImageBodyView,
     MediaPreviewGroupPreview,
     RedactedBodyView,
+    UnknownBodyView,
     VideoBodyView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -25,6 +27,7 @@ import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
+import { GalleryBodyViewModel } from "../../../viewmodels/message-body/GalleryBodyViewModel";
 import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
@@ -32,6 +35,8 @@ import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyVi
 import { isMimeTypeAllowed } from "../../../utils/blobs";
 import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
+import { getGalleryItems } from "../../../utils/gallery";
+import { _t } from "../../../languageHandler";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -288,6 +293,63 @@ export function ImageBodyFactory({
             ) : null}
         </ImageBodyView>
     );
+}
+
+/**
+ * Renders the body of a gallery message (MSC4274): a grid of its images and videos. The caption,
+ * if there is one, is rendered beneath it by `MessageEvent`.
+ *
+ * Exports do not include the media of a gallery yet, so there the items are only counted.
+ */
+export function GalleryBodyFactory({
+    mxEvent,
+    forExport,
+    maxImageHeight,
+    permalinkCreator,
+}: Readonly<Pick<IBodyProps, "mxEvent" | "forExport" | "maxImageHeight" | "permalinkCreator">>): JSX.Element {
+    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new GalleryBodyViewModel({
+                mxEvent,
+                mediaVisible: mediaVisible && !forExport,
+                maxImageHeight,
+                permalinkCreator,
+                setMediaVisible,
+            }),
+    );
+
+    useEffect(() => {
+        vm.loadThumbnailsIfVisible();
+    }, [vm]);
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    useEffect(() => {
+        vm.setMaxImageHeight(maxImageHeight);
+    }, [maxImageHeight, vm]);
+
+    useEffect(() => {
+        vm.setMediaVisible(mediaVisible && !forExport);
+    }, [forExport, mediaVisible, vm]);
+
+    useEffect(() => {
+        vm.setPermalinkCreator(permalinkCreator);
+    }, [permalinkCreator, vm]);
+
+    useEffect(() => {
+        vm.setSetMediaVisible(setMediaVisible);
+    }, [setMediaVisible, vm]);
+
+    if (forExport) {
+        const count = getGalleryItems(mxEvent.getContent()).length;
+        return <UnknownBodyView text={_t("timeline|m.gallery|summary", { count })} className="mx_UnknownBody" />;
+    }
+
+    return <GalleryBodyView vm={vm} className="mx_GalleryBody" />;
 }
 
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {

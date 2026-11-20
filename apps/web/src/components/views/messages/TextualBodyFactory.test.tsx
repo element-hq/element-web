@@ -265,6 +265,64 @@ describe("<TextualBody />", () => {
         expect(content).toMatchSnapshot();
     });
 
+    describe("renders the caption of a gallery", () => {
+        beforeEach(() => {
+            DMRoomMap.makeShared(defaultMatrixClient);
+        });
+
+        const mkGalleryEvent = (content: Record<string, unknown>): MatrixEvent =>
+            mkEvent({
+                type: "m.room.message",
+                room: room1Id,
+                user: "sender",
+                content: {
+                    msgtype: "dm.filament.gallery",
+                    itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+                    ...content,
+                },
+                event: true,
+            });
+
+        it.each(["dm.filament.gallery", "m.gallery"])("styles the body of a %s as a caption", (msgtype) => {
+            const { container } = getComponent({ mxEvent: mkGalleryEvent({ msgtype, body: "Our holiday" }) });
+
+            const caption = container.querySelector(".mx_EventTile_caption");
+            expect(caption).toHaveTextContent("Our holiday");
+            expect(caption).toHaveClass("mx_MTextBody");
+            // A caption sits under the media of its message, so it is not laid out as the message content.
+            expect(container.querySelector(".mx_EventTile_content")).toBeNull();
+        });
+
+        it("keeps styling the body of a text message as the content", () => {
+            const ev = mkEvent({
+                type: "m.room.message",
+                room: room1Id,
+                user: "sender",
+                content: { body: "Our holiday", msgtype: "m.text" },
+                event: true,
+            });
+
+            const { container } = getComponent({ mxEvent: ev });
+
+            expect(container.querySelector(".mx_EventTile_content")).toHaveTextContent("Our holiday");
+            expect(container.querySelector(".mx_EventTile_caption")).toBeNull();
+        });
+
+        it("renders the formatting of the caption", () => {
+            const { container } = getComponent({
+                mxEvent: mkGalleryEvent({
+                    body: "Our **holiday**",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "Our <strong>holiday</strong>",
+                }),
+            });
+
+            const caption = container.querySelector(".mx_EventTile_caption")!;
+            expect(caption).toHaveTextContent("Our holiday");
+            expect(caption.querySelector("strong")).toHaveTextContent("holiday");
+        });
+    });
+
     describe("renders plain-text m.text correctly", () => {
         beforeEach(() => {
             DMRoomMap.makeShared(defaultMatrixClient);

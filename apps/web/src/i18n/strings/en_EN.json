@@ -3427,10 +3427,16 @@
             "size_unknown": "Size unknown"
         },
         "m.gallery": {
+            "error_video": "Unable to show video due to error",
+            "item_error": "%(label)s (failed to load)",
+            "item_image": "Image %(index)s of %(count)s",
+            "item_video": "Video %(index)s of %(count)s",
+            "show_gallery": "Show gallery",
             "summary": {
                 "one": "Gallery with %(count)s item",
                 "other": "Gallery with %(count)s items"
-            }
+            },
+            "viewer_title": "%(name)s (%(index)s of %(count)s)"
         },
         "m.image": {
             "error": "Unable to show image due to error",
