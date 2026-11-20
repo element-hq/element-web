@@ -13,6 +13,7 @@ import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { normalize } from "matrix-js-sdk/src/utils";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { SearchQuery, SearchQueryMatch } from "../utils/SearchQuery";
 
 export const useSpaceResults = (space: Room | undefined, query: string): [HierarchyRoom[], boolean] => {
     const [rooms, setRooms] = useState<HierarchyRoom[]>([]);
@@ -43,18 +44,23 @@ export const useSpaceResults = (space: Room | undefined, query: string): [Hierar
     }, [space, hierarchy]);
 
     const results = useMemo(() => {
-        const trimmedQuery = query.trim();
-        const lcQuery = trimmedQuery.toLowerCase();
-        const normalizedQuery = normalize(trimmedQuery);
-
+        const searchQuery = new SearchQuery(query);
         const cli = MatrixClientPeg.safeGet();
-        return rooms?.filter((r) => {
-            return (
-                r.room_type !== RoomType.Space &&
-                cli.getRoom(r.room_id)?.getMyMembership() !== KnownMembership.Join &&
-                (normalize(r.name || "").includes(normalizedQuery) || (r.canonical_alias || "").includes(lcQuery))
+
+        const matches: { room: HierarchyRoom; match: SearchQueryMatch }[] = [];
+        for (const room of rooms) {
+            if (room.room_type === RoomType.Space) continue;
+            if (cli.getRoom(room.room_id)?.getMyMembership() === KnownMembership.Join) continue;
+
+            const match = Math.max(
+                searchQuery.matchNormalized(normalize(room.name || "")),
+                searchQuery.matchIgnoringCase(room.canonical_alias),
             );
-        });
+            if (match !== SearchQueryMatch.None) matches.push({ room, match });
+        }
+
+        // Rooms containing the whole query come first, otherwise keep the hierarchy order
+        return matches.sort((a, b) => b.match - a.match).map(({ room }) => room);
     }, [rooms, query]);
 
     return [results, hierarchy?.loading ?? false];
