@@ -43,8 +43,7 @@
         "encryption_enabled": "Chiffrement activé",
         "loading": "Chargement…",
         "options": "Options",
-        "preferences": "Préférences",
-        "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
+        "preferences": "Préférences"
     },
     "composer": {
         "url_preview": {
@@ -371,7 +370,6 @@
             "enabled_dm": "Les messages sont chiffrés de bout en bout. Vérifiez %(displayName)s dans leur profil — cliquer sur leur photo de profil.",
             "enabled_local": "Les messages de cette discussion seront chiffrés de bout en bout.",
             "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
-            "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier en cliquant sur leur photo de profil.",
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
         },
         "mab": {
