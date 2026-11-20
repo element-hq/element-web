@@ -10,10 +10,10 @@ import classNames from "classnames";
 import { type DOMNode, type Element as ParserElement, domToReact } from "html-react-parser";
 import { textContent, getInnerHTML } from "domutils";
 import { CollapseIcon, CopyIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { IconButton } from "@vector-im/compound-web";
 
 import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { CopyTextButton } from "../elements/CopyableText.tsx";
-import AccessibleButton from "../elements/AccessibleButton.tsx";
 import { _t } from "../../../i18n";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
@@ -28,14 +28,16 @@ const ExpandCollapseButton: React.FC<{
     onClick(this: void): void;
 }> = ({ expanded, onClick }) => {
     return (
-        <AccessibleButton
-            element="button"
-            title={expanded ? _t("action|collapse") : _t("action|expand")}
+        // The same size as the copy button under it (CopyTextButton), so that their icons line up
+        <IconButton
+            tooltip={expanded ? _t("action|collapse") : _t("action|expand")}
             onClick={onClick}
             className="mx_EventTile_button"
+            size="28px"
+            style={{ padding: "4px" }} // Work around miscalculated padding on 28px button: https://github.com/element-hq/compound/issues/409
         >
             {expanded ? <CollapseIcon /> : <ExpandIcon />}
-        </AccessibleButton>
+        </IconButton>
     );
 };
 
@@ -128,7 +130,8 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
         <div className="mx_EventTile_pre_container">
             <pre
                 className={classNames({
-                    mx_EventTile_collapsedCodeBlock: !expanded,
+                    "mx_EventTile_collapsedCodeBlock": !expanded,
+                    "mx_EventTile_pre--lineNumbers": !!lineNumbers,
                 })}
             >
                 {lineNumbers}

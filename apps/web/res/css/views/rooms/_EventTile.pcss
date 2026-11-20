@@ -167,7 +167,7 @@ $left-gutter: 64px;
             border: 1px solid $inlinecode-border-color;
             border-radius: 4px;
             /* The horizontal padding is added by github-markdown-css .markdown-body */
-            padding: var(--cpd-space-0-5x) 0;
+            padding-block: var(--cpd-space-0-5x);
             /* Avoid inline code blocks to be sticked when on multiple lines */
             line-height: $font-22px;
             /* Avoid the border to be glued to the other words */
@@ -222,7 +222,9 @@ $left-gutter: 64px;
         }
 
         blockquote {
-            border-left: 2px solid $blockquote-bar-color;
+            border-inline-start: 2px solid $blockquote-bar-color;
+            /* github-markdown-css draws its bar on the left, which is the end side in right-to-left text */
+            border-inline-end: none;
             color: $secondary-content;
             border-radius: 2px;
             padding: 0 10px;
@@ -349,10 +351,37 @@ $left-gutter: 64px;
             }
         }
 
-        .mx_EventTile_collapsedCodeBlock {
-            max-height: 30vh;
+        /* The same padding whether the block is collapsed or not, so that expanding it doesn't move the code */
+        > pre {
             padding-top: var(--cpd-space-3x);
             padding-bottom: var(--cpd-space-3x);
+        }
+
+        .mx_EventTile_collapsedCodeBlock {
+            max-height: 30vh;
+        }
+
+        /* Put the line numbers beside the code, so that a block as wide as its content (as in the bubble layout)
+           makes room for them on every line, not just the first */
+        > .mx_EventTile_pre--lineNumbers {
+            display: flex;
+            /* Keep the numbers and the code as tall as their lines rather than the collapsed block's max-height, so
+               that a block that scrolls still ends with its bottom padding */
+            align-items: flex-start;
+        }
+
+        .mx_ReplyQuote & > pre {
+            /* ReplyTileView clamps a quoted code block to two lines and hides its line numbers */
+            display: -webkit-box;
+            /* ReplyTileView puts 4px under it, but github-markdown-css's 16px wins from this later cascade layer */
+            margin-block-end: var(--cpd-space-1x);
+        }
+
+        /* A collapsed quote clamps a code block to two lines, but the line after them is still laid out in the
+           block's bottom padding, so clip at the content box rather than the padding box */
+        .mx_ReplyQuote:not(.mx_ReplyChain--expanded) & > pre {
+            overflow: clip;
+            overflow-clip-margin: content-box;
         }
 
         /* Inserted adjacent to <pre> blocks, (See TextualBody) */
@@ -363,7 +392,8 @@ $left-gutter: 64px;
             visibility: hidden;
 
             &.mx_EventTile_buttonBottom {
-                top: 33px;
+                /* Under the 28px expand button */
+                top: calc(var(--cpd-space-2x) + 28px);
             }
 
             svg {
@@ -377,14 +407,13 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_lineNumbers {
-    float: left;
-    margin: 0 0.5em 0 -1.5em;
+    margin-inline: -1.5em 0.5em;
     color: gray;
 
     & span {
-        text-align: right;
+        text-align: end;
         display: block;
-        padding-left: 1em;
+        padding-inline-start: 1em;
     }
 }
 

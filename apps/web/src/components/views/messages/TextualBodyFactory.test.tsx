@@ -429,6 +429,15 @@ describe("<TextualBody />", () => {
             expect(content).toMatchSnapshot();
         });
 
+        it("renders a long code block's expand button at the size of its copy button", () => {
+            const ev = mkFormattedMessage("```\n1\n2\n3\n4\n5\n```", "<pre><code>1\n2\n3\n4\n5\n</code></pre>\n");
+            getComponent({ mxEvent: ev }, matrixClient);
+
+            const expand = screen.getByRole("button", { name: "Expand" });
+            const copy = screen.getByRole("button", { name: "Copy" });
+            expect(expand).toHaveAttribute("style", copy.getAttribute("style"));
+        });
+
         // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
         it("pills get injected correctly into the DOM", () => {
             const ev = mkFormattedMessage("Hey User", 'Hey <a href="https://matrix.to/#/@user:server">Member</a>');
