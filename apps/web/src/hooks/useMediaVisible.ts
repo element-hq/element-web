@@ -49,7 +49,9 @@ export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: bool
             client.getUserId() ?? undefined,
             mxEvent?.getId(),
             mxEvent?.getSender(),
-            joinRule ? [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted].includes(joinRule) : false,
+            joinRule
+                ? [JoinRule.Invite, JoinRule.Knock, JoinRule.KnockRestricted, JoinRule.Restricted].includes(joinRule)
+                : false,
         ),
         setMediaVisible,
     ];
