@@ -233,7 +233,7 @@ export const WithStatusOpen: Story = {
     },
 };
 
-export const WithStatusDropdownOpen: Story = {
+export const WithStatusSubMenuOpen: Story = {
     args: {
         open: true,
         setStatusViewModel: new MockSetStatusViewModel({}),
@@ -247,7 +247,7 @@ export const WithStatusDropdownOpen: Story = {
     },
     play: async ({ canvasElement }) => {
         const body = within(canvasElement.ownerDocument.body);
-        await userEvent.click(await body.findByRole("combobox", { name: "What's your status?" }));
-        await expect(body.findByRole("listbox")).resolves.toBeVisible();
+        await userEvent.click(await body.findByRole("menuitem", { name: "What's your status?" }));
+        await expect(body.findByRole("menuitem", { name: "Away" })).resolves.toBeVisible();
     },
 };

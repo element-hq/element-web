@@ -35,6 +35,33 @@ Please see LICENSE files in the repository root for full details.
     font-size: var(--cpd-font-size-body-md);
 }
 
+.subMenuTrigger {
+    display: flex;
+    justify-content: center;
+    /* Top-aligned within the 28px box, matching the dropdown variant */
+    align-items: flex-start;
+    inline-size: 100%;
+    /* Same height as setStatusContainer so it doesn't shift when it changes to the pill */
+    min-height: 28px;
+    cursor: pointer;
+    outline: none;
+
+    /* Radix moves focus between menu items, so show a ring for keyboard focus only */
+    &:focus-visible .setStatusTrigger {
+        outline: 2px solid var(--cpd-color-border-focused);
+        outline-offset: 2px;
+        border-radius: var(--cpd-space-1x);
+    }
+}
+
+.menuItemEmoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--cpd-font-size-heading-sm);
+    line-height: 1;
+}
+
 .dropdownEmoji {
     margin-right: var(--cpd-space-1-5x);
 }

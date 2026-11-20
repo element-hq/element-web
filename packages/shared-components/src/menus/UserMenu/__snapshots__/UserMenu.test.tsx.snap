@@ -288,7 +288,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       tabindex="-1"
     >
       <div
-        class="_area_hlput_8 _content_3dqwm_39"
+        class="_area_1vt8x_8 _content_3dqwm_39"
         role="none"
       >
         <section
@@ -300,22 +300,25 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
             Sally Sanderson
           </span>
           <div
-            aria-invalid="false"
-            class="_container_1dsjc_8"
+            class="UserMenu-module_setStatusRow"
           >
             <div
-              class="SetStatusView-module_setStatusContainer"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              class="SetStatusView-module_subMenuTrigger"
+              data-orientation="vertical"
+              data-radix-collection-item=""
+              data-state="closed"
+              id="radix-react-use-id-3"
+              role="menuitem"
+              tabindex="-1"
             >
               <a
-                aria-controls="react-use-id-3"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-label="What's your status?"
                 class="_link_13esb_8 SetStatusView-module_setStatusTrigger"
                 data-kind="primary"
                 data-size="md"
                 rel="noreferrer noopener"
-                role="combobox"
+                tabindex="-1"
               >
                 <svg
                   fill="currentColor"
@@ -337,118 +340,6 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
                   What's your status?
                 </span>
               </a>
-            </div>
-            <div
-              class="_content_1dsjc_73"
-            >
-              <ul
-                class="_content_1dsjc_73"
-                id="react-use-id-3"
-                role="listbox"
-              >
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      💬
-                    </span>
-                    <span>
-                      In a meeting
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      💡
-                    </span>
-                    <span>
-                      Focus Time
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      🚙
-                    </span>
-                    <span>
-                      On the road
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      ☕️
-                    </span>
-                    <span>
-                      Be right back
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      🌴
-                    </span>
-                    <span>
-                      Away
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      ✍️
-                    </span>
-                    <span>
-                      Custom…
-                    </span>
-                  </span>
-                   
-                </li>
-              </ul>
             </div>
           </div>
         </section>
@@ -752,7 +643,7 @@ exports[`UserMenu > renders an open menu 1`] = `
       tabindex="-1"
     >
       <div
-        class="_area_hlput_8 _content_3dqwm_39"
+        class="_area_1vt8x_8 _content_3dqwm_39"
         role="none"
       >
         <section
@@ -783,22 +674,25 @@ exports[`UserMenu > renders an open menu 1`] = `
             Sally Sanderson with a longer name
           </span>
           <div
-            aria-invalid="false"
-            class="_container_1dsjc_8"
+            class="UserMenu-module_setStatusRow"
           >
             <div
-              class="SetStatusView-module_setStatusContainer"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              class="SetStatusView-module_subMenuTrigger"
+              data-orientation="vertical"
+              data-radix-collection-item=""
+              data-state="closed"
+              id="radix-react-use-id-3"
+              role="menuitem"
+              tabindex="-1"
             >
               <a
-                aria-controls="react-use-id-3"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-label="What's your status?"
                 class="_link_13esb_8 SetStatusView-module_setStatusTrigger"
                 data-kind="primary"
                 data-size="md"
                 rel="noreferrer noopener"
-                role="combobox"
+                tabindex="-1"
               >
                 <svg
                   fill="currentColor"
@@ -820,118 +714,6 @@ exports[`UserMenu > renders an open menu 1`] = `
                   What's your status?
                 </span>
               </a>
-            </div>
-            <div
-              class="_content_1dsjc_73"
-            >
-              <ul
-                class="_content_1dsjc_73"
-                id="react-use-id-3"
-                role="listbox"
-              >
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      💬
-                    </span>
-                    <span>
-                      In a meeting
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      💡
-                    </span>
-                    <span>
-                      Focus Time
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      🚙
-                    </span>
-                    <span>
-                      On the road
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      ☕️
-                    </span>
-                    <span>
-                      Be right back
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      🌴
-                    </span>
-                    <span>
-                      Away
-                    </span>
-                  </span>
-                   
-                </li>
-                <li
-                  aria-selected="false"
-                  role="option"
-                  tabindex="0"
-                >
-                  <span>
-                    <span
-                      class="SetStatusView-module_dropdownEmoji"
-                    >
-                      ✍️
-                    </span>
-                    <span>
-                      Custom…
-                    </span>
-                  </span>
-                   
-                </li>
-              </ul>
             </div>
           </div>
         </section>

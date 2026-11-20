@@ -54,4 +54,14 @@ describe("UserMenu", () => {
         const { container } = render(<WithStatusOpen />);
         expect(container).toMatchSnapshot();
     });
+    it("opens the status choices as a submenu", async () => {
+        const { findByRole, getByRole } = render(<Open />);
+        const trigger = getByRole("menuitem", { name: "What's your status?" });
+        expect(trigger).toHaveAttribute("aria-haspopup", "menu");
+
+        await userEvent.click(trigger);
+
+        expect(await findByRole("menuitem", { name: "Away" })).toBeVisible();
+        expect(trigger).toHaveAttribute("aria-expanded", "true");
+    });
 });

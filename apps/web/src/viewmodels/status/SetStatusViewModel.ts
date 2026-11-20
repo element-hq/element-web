@@ -92,9 +92,7 @@ export class UserMenuSetStatusViewModel extends SetStatusViewModel {
     }
 
     public onSetCustomStatusClick = (): void => {
-        dis.dispatch({
-            action: Action.ToggleUserMenu,
-        });
+        // No need to close the user menu: selecting a submenu item already closes it.
         dis.dispatch({
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Account,

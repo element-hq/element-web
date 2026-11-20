@@ -190,8 +190,8 @@ catalogs:
       specifier: 11.3.0
       version: 11.3.0
     '@vector-im/compound-web':
-      specifier: 10.4.0
-      version: 10.4.0
+      specifier: github:element-hq/compound-web#dbkr/submenu
+      version: https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2
     '@vitejs/plugin-react':
       specifier: 6.3.0
       version: 6.3.0
@@ -331,7 +331,7 @@ importers:
         version: 3.39.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/ef1f69e085bd2ab84da48badfaa0482727ea5ad1#path:/eslint
       eslint-plugin-element-web:
         specifier: workspace:*
         version: link:packages/eslint-plugin-element-web
@@ -507,7 +507,7 @@ importers:
         version: 7.29.14
       '@element-hq/element-call-component':
         specifier: 0.28.2
-        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d)(react-dom@19.3.1)(react@19.3.1)
+        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea)(react-dom@19.3.1)(react@19.3.1)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -543,7 +543,7 @@ importers:
         version: 11.3.0(@types/react@19.3.0)(react@19.3.1)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
+        version: https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.3.1)
@@ -636,7 +636,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -1505,7 +1505,7 @@ importers:
         version: typescript@7.0.2
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
+        version: https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@vitejs/plugin-react':
         specifier: 'catalog:'
         version: 6.3.0(vite@8.3.8)
@@ -5072,6 +5072,19 @@ packages:
       '@types/react-dom':
         optional: true
 
+  '@radix-ui/react-form@0.3.0':
+    resolution: {integrity: sha512-KnmrCM27m7Jo1R8S6cFDPrEeq20Jfn5dqde0SZrJr2lVXlj6/QZSUCyFoYh1d8ti0uUrMNK5Lx6dUDuINT+f4Q==}
+    peerDependencies:
+      '@types/react': ^19.2.10
+      '@types/react-dom': ^19.2.3
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
   '@radix-ui/react-id@1.1.4':
     resolution: {integrity: sha512-TMQp2llA+RYn7JcjnrMnz7wN4pcVttPZnRZo52PLQsoLVKzNlVwUeHmfePgTgRluXFvlD3GD5g5MOVVTJCO0qA==}
     peerDependencies:
@@ -5083,6 +5096,19 @@ packages:
 
   '@radix-ui/react-label@2.1.15':
     resolution: {integrity: sha512-o/rdYEwZTTo5tjknnPeyQFU45kUC4i/XyeDPP+HGyi6XqpOP6Zf5Ya5vh/Yfe9Id5JiuWnnAx2XqIeD3UYZt0g==}
+    peerDependencies:
+      '@types/react': ^19.2.10
+      '@types/react-dom': ^19.2.3
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-label@2.1.17':
+    resolution: {integrity: sha512-xmj7MN/drx1oUAXkfiFIvyDmGNUIN/omGobvA5oAoNqu9zO2MkISYGZOkBcqSzs/UZXXwV+/3ACRE7q7mGcmkA==}
     peerDependencies:
       '@types/react': ^19.2.10
       '@types/react-dom': ^19.2.3
@@ -6620,6 +6646,19 @@ packages:
 
   '@vector-im/compound-web@10.4.0':
     resolution: {integrity: sha512-Tt5hsNK7ulhGdRuy9lzSm5C+T8M/4O4kLDFLkaU+Hi1kVWj6tj/5awW+U+GvtpWRh5llbHN2HRCh79+gQhek+A==}
+    peerDependencies:
+      '@fontsource/inconsolata': ^5
+      '@fontsource/inter': ^5
+      '@types/react': ^19.2.10
+      '@vector-im/compound-design-tokens': '>=1.6.1 <12.0.0'
+      react: ^18 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2':
+    resolution: {gitHosted: true, integrity: sha512-UeyxZzAQTkVGZlfQAZO7k6929Gx+YbmHfbDg6dqSEx9b6JtOrApere3aMWZdqj1zvYaRq/eTypPZkmzBjihXSw==, tarball: https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2}
+    version: 10.6.0
     peerDependencies:
       '@fontsource/inconsolata': ^5
       '@fontsource/inter': ^5
@@ -8622,8 +8661,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-kdBGmXiFMCA3tvDGA4LM1CzbN2RZA/qoivNQkVE0cYTIPD3C8kgWbGl612mnNUJw8vwiaEliFzJ74ehnyZ/n7A==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ef1f69e085bd2ab84da48badfaa0482727ea5ad1#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-FmE38t8OW42Df5kBOdPpG7EEEST/G4CO3CHmt1YfKMLI64Q35cFXuCAlviQq6vbDb2mjWXuhazkBZBX3JyBCMA==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ef1f69e085bd2ab84da48badfaa0482727ea5ad1}
     version: 0.0.0
 
   eslint-plugin-react-web-api@5.30.3:
@@ -9943,8 +9982,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d:
-    resolution: {gitHosted: true, integrity: sha512-m5w0dANZxNAFjJ9I9zyN9p1EJa3ksHRTVVEChTbCAzWGXzj6RI+hFuFE+wdToNpqZEPofGnHQE/1jcRSJQo0wg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea:
+    resolution: {gitHosted: true, integrity: sha512-SgrHqKNwDaf2HSd9YLjVuJCeNCuATv/pt11gdBdyXYjkvJtdfaJtlkBJLHVktBxdIo7z4mB4PWlyoE31MHKDgg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea}
     version: 45.1.0
     engines: {node: '>=22.0.0'}
 
@@ -15122,11 +15161,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d)(react-dom@19.3.1)(react@19.3.1)':
+  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
-      '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d
+      '@vector-im/compound-web': https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
@@ -17036,6 +17075,20 @@ snapshots:
       '@types/react': 19.3.0
       '@types/react-dom': 19.3.0(@types/react@19.3.0)
 
+  '@radix-ui/react-form@0.3.0(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)':
+    dependencies:
+      '@radix-ui/primitive': 1.2.0
+      '@radix-ui/react-compose-refs': 1.1.5(@types/react@19.3.0)(react@19.3.1)
+      '@radix-ui/react-context': 1.3.0(@types/react@19.3.0)(react@19.3.1)
+      '@radix-ui/react-id': 1.1.4(@types/react@19.3.0)(react@19.3.1)
+      '@radix-ui/react-label': 2.1.17(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      '@radix-ui/react-primitive': 2.2.0(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+    optionalDependencies:
+      '@types/react': 19.3.0
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
+
   '@radix-ui/react-id@1.1.4(@types/react@19.3.0)(react@19.3.1)':
     dependencies:
       '@radix-ui/react-use-layout-effect': 1.1.4(@types/react@19.3.0)(react@19.3.1)
@@ -17046,6 +17099,15 @@ snapshots:
   '@radix-ui/react-label@2.1.15(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@radix-ui/react-primitive': 2.1.10(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+    optionalDependencies:
+      '@types/react': 19.3.0
+      '@types/react-dom': 19.3.0(@types/react@19.3.0)
+
+  '@radix-ui/react-label@2.1.17(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)':
+    dependencies:
+      '@radix-ui/react-primitive': 2.2.0(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
     optionalDependencies:
@@ -18509,6 +18571,28 @@ snapshots:
       '@radix-ui/react-context-menu': 2.3.8(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@radix-ui/react-dropdown-menu': 2.1.25(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@radix-ui/react-form': 0.1.16(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      '@radix-ui/react-progress': 1.1.17(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      '@radix-ui/react-separator': 1.1.16(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      '@radix-ui/react-slot': 1.5.0(@types/react@19.3.0)(react@19.3.1)
+      '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
+      classnames: 2.5.1
+      react: 19.3.1
+      vaul: 1.1.2(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+    optionalDependencies:
+      '@types/react': 19.3.0
+    transitivePeerDependencies:
+      - '@types/react-dom'
+      - react-dom
+
+  '@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/562e61dfaafe9b7ba7956cd6c69b81dfc95411c2(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)':
+    dependencies:
+      '@floating-ui/react': 0.27.20(react-dom@19.3.1)(react@19.3.1)
+      '@floating-ui/react-dom': 2.1.9(react-dom@19.3.1)(react@19.3.1)
+      '@fontsource/inconsolata': 5.3.0
+      '@fontsource/inter': 5.3.0
+      '@radix-ui/react-context-menu': 2.3.8(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      '@radix-ui/react-dropdown-menu': 2.1.25(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
+      '@radix-ui/react-form': 0.3.0(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@radix-ui/react-progress': 1.1.17(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@radix-ui/react-separator': 1.1.16(@types/react-dom@19.3.0)(@types/react@19.3.0)(react-dom@19.3.1)(react@19.3.1)
       '@radix-ui/react-slot': 1.5.0(@types/react@19.3.0)(react@19.3.1)
@@ -20879,7 +20963,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/7cf6cb4feee3ed02adf86f547c254eab4a384272#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ef1f69e085bd2ab84da48badfaa0482727ea5ad1#path:/eslint: {}
 
   eslint-plugin-react-web-api@5.30.3(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)(typescript@7.0.2):
     dependencies:
@@ -22353,7 +22437,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/484d22d92269693332fa4413df3ad43ba83097ea:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 19.0.1

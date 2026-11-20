@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useState, useCallback } from "react";
-import { Dropdown, type DropdownTriggerProps, Link, Text } from "@vector-im/compound-web";
+import { Dropdown, type DropdownTriggerProps, Link, MenuItem, SubMenu, Text } from "@vector-im/compound-web";
 import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td, type UserStatus } from "..";
@@ -83,6 +83,15 @@ export type SetStatusViewProps = {
      * Ignored if the user already has a status set, as their existing status is shown instead.
      */
     initialCustomMode?: boolean;
+
+    /**
+     * How the list of statuses is shown:
+     * - `"dropdown"`: a dropdown opened from the "Set status" link.
+     * - `"submenu"`: a cascading submenu. Only use this when the view is inside a compound `Menu`.
+     *
+     * Default: `"dropdown"`
+     */
+    variant?: "dropdown" | "submenu";
 };
 
 function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
@@ -94,7 +103,25 @@ function StatusOption({ value }: { value: StatusValue }): React.ReactNode {
     );
 }
 
-export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewProps): JSX.Element {
+/**
+ * The icon and label shown in the "Set status" trigger.
+ */
+function SetStatusPrompt(): JSX.Element {
+    return (
+        <>
+            <ReactionIcon />
+            <Text as="span" type="body" size="md" weight="medium">
+                {_t("status|set_status|set_status_prompt")}
+            </Text>
+        </>
+    );
+}
+
+export function SetStatusView({
+    vm,
+    initialCustomMode = false,
+    variant = "dropdown",
+}: SetStatusViewProps): JSX.Element {
     const { userStatus, recentEmojis, disabled } = useViewModel(vm);
     const [customMode, setCustomMode] = useState(initialCustomMode);
 
@@ -131,10 +158,7 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
                     aria-disabled={disabled}
                     {...props}
                 >
-                    <ReactionIcon />
-                    <Text as="span" type="body" size="md" weight="medium">
-                        {_t("status|set_status|set_status_prompt")}
-                    </Text>
+                    <SetStatusPrompt />
                 </Link>
             </div>
         );
@@ -163,6 +187,53 @@ export function SetStatusView({ vm, initialCustomMode = false }: SetStatusViewPr
             text: _t(status.textKey),
         });
     };
+
+    if (variant === "submenu") {
+        if (disabled) {
+            // compound's SubMenu can't be disabled, so show the trigger without a submenu.
+            return (
+                <div className={styles.subMenuTrigger}>
+                    <Link
+                        className={classNames(styles.setStatusTrigger, styles.disabledTrigger)}
+                        aria-label={_t("status|set_status|set_status_prompt")}
+                        aria-disabled={true}
+                    >
+                        <SetStatusPrompt />
+                    </Link>
+                </div>
+            );
+        }
+
+        return (
+            <SubMenu
+                // The trigger looks like a link, so it opens on click rather than hover.
+                openOn="click"
+                trigger={
+                    // A full-width row, so the submenu opens beside the edge of the enclosing menu
+                    // rather than beside the link text. Radix makes this row the menu item.
+                    <div className={styles.subMenuTrigger}>
+                        <Link className={styles.setStatusTrigger} tabIndex={-1}>
+                            <SetStatusPrompt />
+                        </Link>
+                    </div>
+                }
+            >
+                {STATUS_KEYS.map((key) => (
+                    <MenuItem
+                        key={key}
+                        Icon={
+                            <span className={styles.menuItemEmoji} aria-hidden={true}>
+                                {STATUSES[key].emoji}
+                            </span>
+                        }
+                        label={_t(STATUSES[key].textKey)}
+                        onSelect={() => onValueChange(key)}
+                        hideChevron={true}
+                    />
+                ))}
+            </SubMenu>
+        );
+    }
 
     return (
         <Dropdown<StatusValue>
