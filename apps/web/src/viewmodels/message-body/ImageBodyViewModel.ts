@@ -32,7 +32,7 @@ import { createReconnectedListener } from "../../utils/connection";
 import { DecryptError, DownloadError } from "../../utils/DecryptFile";
 import { BLURHASH_FIELD, createThumbnail } from "../../utils/image-media";
 import { isMimeTypeAllowed } from "../../utils/blobs";
-import ImageView from "../../components/views/elements/ImageView";
+import NavigableImageViewDialog from "../../components/views/messages/NavigableImageViewDialog";
 
 export interface ImageBodyViewModelProps {
     /**
@@ -476,22 +476,10 @@ export class ImageBodyViewModel
             return;
         }
 
-        const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
-            src: httpUrl,
-            name: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
-            mxEvent: this.props.mxEvent,
-            permalinkCreator: this.props.permalinkCreator,
-        };
-
-        if (content.info) {
-            params.width = content.info.w;
-            params.height = content.info.h;
-            params.fileSize = content.info.size;
-        }
-
+        let thumbnailInfo: ComponentProps<typeof NavigableImageViewDialog>["thumbnailInfo"];
         if (this.props.imageRef.current) {
             const clientRect = this.props.imageRef.current.getBoundingClientRect();
-            params.thumbnailInfo = {
+            thumbnailInfo = {
                 width: clientRect.width,
                 height: clientRect.height,
                 positionX: clientRect.x,
@@ -499,7 +487,15 @@ export class ImageBodyViewModel
             };
         }
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+        const params: Omit<ComponentProps<typeof NavigableImageViewDialog>, "onFinished"> = {
+            initialEvent: this.props.mxEvent,
+            permalinkCreator: this.props.permalinkCreator,
+            thumbnailInfo,
+            initialSrc: httpUrl,
+            initialName: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
+        };
+
+        Modal.createDialog(NavigableImageViewDialog, params, "mx_Dialog_lightbox", undefined, true);
     }
 
     public onLinkClick = (event: MouseEvent<HTMLAnchorElement>): void => {

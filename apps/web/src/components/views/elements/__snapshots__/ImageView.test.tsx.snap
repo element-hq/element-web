@@ -12,6 +12,7 @@ exports[`<ImageView /> > renders correctly 1`] = `
     class="mx_ImageView"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_ImageView_panel"
@@ -153,17 +154,21 @@ exports[`<ImageView /> > renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="mx_ImageView_image_wrapper"
+      class="mx_ImageView_content"
     >
-      <img
-        class="mx_ImageView_image "
-        draggable="true"
-        src="https://example.com/image.png"
-        style="transform: translateX(0px)
+      <div
+        class="mx_ImageView_image_wrapper"
+      >
+        <img
+          class="mx_ImageView_image "
+          draggable="true"
+          src="https://example.com/image.png"
+          style="transform: translateX(0px)
                         translateY(0px)
                         scale(0)
                         rotate(0deg); cursor: zoom-out;"
-      />
+        />
+      </div>
     </div>
   </div>
   <div
