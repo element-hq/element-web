@@ -12,6 +12,8 @@ import React, { type JSX, createRef, type CSSProperties, useEffect } from "react
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
+    ChevronLeftIcon,
+    ChevronRightIcon,
     CloseIcon,
     DownloadIcon,
     OverflowHorizontalIcon,
@@ -39,6 +41,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import AccessibleButton from "./AccessibleButton";
 import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper.ts";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
@@ -81,6 +84,35 @@ interface IProps {
         width: number;
         height: number;
     };
+
+    /**
+     * Title shown in the panel, in place of the file name taken from `mxEvent`. For media which is
+     * only part of the event, such as one item of a gallery.
+     */
+    title?: string;
+    /**
+     * Downloads the media, in place of a helper for `mxEvent` as a whole. For media which is only
+     * part of the event, such as one item of a gallery.
+     */
+    mediaEventHelper?: MediaEventHelper;
+    /**
+     * Whether `src` is a video, which is played with the browser's controls rather than shown as
+     * a zoomable image.
+     */
+    isVideo?: boolean;
+    /**
+     * Shown in place of the media while there is no `src` to display, e.g. a spinner or an error.
+     */
+    placeholder?: React.ReactNode;
+    /**
+     * Shows the previous media of a set, such as a gallery. The button is hidden when omitted.
+     */
+    onPrevious?(): void;
+    /**
+     * Shows the next media of a set, such as a gallery. The button is hidden when omitted.
+     */
+    onNext?(): void;
+
     onFinished(): void;
 }
 
@@ -146,16 +178,14 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.focusLock.current.addEventListener("wheel", this.onWheel, { passive: false });
         // We want to recalculate zoom whenever the window's size changes
         window.addEventListener("resize", this.recalculateZoom);
-        // After the image loads for the first time we want to calculate the zoom
-        this.image.current?.addEventListener("load", this.imageLoaded);
     }
 
     public componentWillUnmount(): void {
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
-        this.image.current?.removeEventListener("load", this.imageLoaded);
     }
 
+    // After the image loads we want to calculate the zoom
     private imageLoaded = (): void => {
         if (!this.image.current) return;
         // First, we calculate the zoom, so that the image has the same size as
@@ -318,7 +348,25 @@ export default class ImageView extends React.Component<IProps, IState> {
                     void this.downloadFunction();
                 }
                 break;
+            case KeyBindingAction.ArrowLeft:
+                // Leave the arrow keys to the controls of a video, which seek with them.
+                if (!this.props.onPrevious || ev.target instanceof HTMLVideoElement) break;
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.props.onPrevious();
+                break;
+            case KeyBindingAction.ArrowRight:
+                if (!this.props.onNext || ev.target instanceof HTMLVideoElement) break;
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.props.onNext();
+                break;
         }
+    };
+
+    // Stops a press on a control inside the image wrapper from reaching it, where it would close the view.
+    private onControlMouseDown = (ev: React.MouseEvent): void => {
+        ev.stopPropagation();
     };
 
     private onRotateCounterClockwiseClick = (): void => {
@@ -521,11 +569,76 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
 
         let title: JSX.Element | undefined;
-        if (this.props.mxEvent?.getContent()) {
+        if (this.props.title !== undefined) {
+            title = <div className="mx_ImageView_title">{this.props.title}</div>;
+        } else if (this.props.mxEvent?.getContent()) {
             title = (
                 <div className="mx_ImageView_title">
                     {presentableTextForFile(this.props.mxEvent?.getContent(), _t("common|image"), true)}
                 </div>
+            );
+        }
+
+        // A video is not zoomed, panned or rotated: it keeps the browser's own controls.
+        const imageControls = this.props.isVideo ? null : (
+            <>
+                <AccessibleButton
+                    className="mx_ImageView_button"
+                    title={_t("action|zoom_out")}
+                    onClick={this.onZoomOutClick}
+                >
+                    <ZoomOutIcon />
+                </AccessibleButton>
+                <AccessibleButton
+                    className="mx_ImageView_button"
+                    title={_t("action|zoom_in")}
+                    onClick={this.onZoomInClick}
+                >
+                    <ZoomInIcon />
+                </AccessibleButton>
+                <AccessibleButton
+                    className="mx_ImageView_button"
+                    title={_t("lightbox|rotate_left")}
+                    onClick={this.onRotateCounterClockwiseClick}
+                >
+                    <RotateLeftIcon />
+                </AccessibleButton>
+                <AccessibleButton
+                    className="mx_ImageView_button"
+                    title={_t("lightbox|rotate_right")}
+                    onClick={this.onRotateClockwiseClick}
+                >
+                    <RotateRightIcon />
+                </AccessibleButton>
+            </>
+        );
+
+        let media: JSX.Element | undefined;
+        if (!this.props.src) {
+            media = undefined;
+        } else if (this.props.isVideo) {
+            media = (
+                <video
+                    src={this.props.src}
+                    className="mx_ImageView_video"
+                    title={this.props.name}
+                    controls
+                    autoPlay
+                    onMouseDown={this.onControlMouseDown}
+                />
+            );
+        } else {
+            media = (
+                <img
+                    src={this.props.src}
+                    style={style}
+                    alt={this.props.name}
+                    ref={this.image}
+                    className={`mx_ImageView_image ${transitionClassName}`}
+                    draggable={true}
+                    onMouseDown={this.onStartMoving}
+                    onLoad={this.imageLoaded}
+                />
             );
         }
 
@@ -544,38 +657,12 @@ export default class ImageView extends React.Component<IProps, IState> {
                     {info}
                     {title}
                     <div className="mx_ImageView_toolbar">
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("action|zoom_out")}
-                            onClick={this.onZoomOutClick}
-                        >
-                            <ZoomOutIcon />
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("action|zoom_in")}
-                            onClick={this.onZoomInClick}
-                        >
-                            <ZoomInIcon />
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("lightbox|rotate_left")}
-                            onClick={this.onRotateCounterClockwiseClick}
-                        >
-                            <RotateLeftIcon />
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_ImageView_button"
-                            title={_t("lightbox|rotate_right")}
-                            onClick={this.onRotateClockwiseClick}
-                        >
-                            <RotateRightIcon />
-                        </AccessibleButton>
+                        {imageControls}
                         <DownloadButton
                             url={this.props.src}
                             fileName={this.props.name}
                             mxEvent={this.props.mxEvent}
+                            mediaEventHelper={this.props.mediaEventHelper}
                             onDownloadReady={this.onDownloadFunctionReady}
                         />
                         {contextMenuButton}
@@ -597,15 +684,27 @@ export default class ImageView extends React.Component<IProps, IState> {
                     onMouseUp={this.onEndMoving}
                     onMouseLeave={this.onEndMoving}
                 >
-                    <img
-                        src={this.props.src}
-                        style={style}
-                        alt={this.props.name}
-                        ref={this.image}
-                        className={`mx_ImageView_image ${transitionClassName}`}
-                        draggable={true}
-                        onMouseDown={this.onStartMoving}
-                    />
+                    {this.props.onPrevious && (
+                        <AccessibleButton
+                            className="mx_ImageView_nav mx_ImageView_nav_previous"
+                            title={_t("lightbox|previous")}
+                            onClick={this.props.onPrevious}
+                            onMouseDown={this.onControlMouseDown}
+                        >
+                            <ChevronLeftIcon />
+                        </AccessibleButton>
+                    )}
+                    {media ?? this.props.placeholder}
+                    {this.props.onNext && (
+                        <AccessibleButton
+                            className="mx_ImageView_nav mx_ImageView_nav_next"
+                            title={_t("action|next")}
+                            onClick={this.props.onNext}
+                            onMouseDown={this.onControlMouseDown}
+                        >
+                            <ChevronRightIcon />
+                        </AccessibleButton>
+                    )}
                 </div>
             </FocusLock>
         );
@@ -616,11 +715,19 @@ interface DownloadButtonProps {
     url: string;
     fileName?: string;
     mxEvent?: MatrixEvent;
+    /** Downloads the media, in place of a helper for `mxEvent` as a whole. */
+    mediaEventHelper?: MediaEventHelper;
     onDownloadReady?: (download: () => Promise<void>) => void;
 }
 
-export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, mxEvent, onDownloadReady }) => {
-    const { download, loading, canDownload } = useDownloadMedia(url, fileName, mxEvent);
+export const DownloadButton: React.FC<DownloadButtonProps> = ({
+    url,
+    fileName,
+    mxEvent,
+    mediaEventHelper,
+    onDownloadReady,
+}) => {
+    const { download, loading, canDownload } = useDownloadMedia(url, fileName, mxEvent, mediaEventHelper);
 
     useEffect(() => {
         if (onDownloadReady) onDownloadReady(download);

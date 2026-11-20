@@ -8,6 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 $button-size: 32px;
 $button-gap: var(--cpd-space-3x);
+$nav-button-size: 48px;
+$nav-button-inset: var(--cpd-space-4x);
 
 :root {
     --image-view-panel-height: 68px;
@@ -27,6 +29,51 @@ $button-gap: var(--cpd-space-3x);
     align-items: center;
     height: 100%;
     overflow: hidden;
+    /* Anchors the previous and next buttons */
+    position: relative;
+}
+
+.mx_ImageView_video {
+    max-width: calc(100% - 2 * ($nav-button-inset + $nav-button-size + $button-gap));
+    max-height: 95%;
+}
+
+.mx_ImageView_placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    color: $lightbox-fg-color;
+    font: var(--cpd-font-body-md-regular);
+}
+
+/* Sits beside the media rather than over it: the wrapper is as wide as the window. */
+.mx_ImageView_nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    box-sizing: border-box;
+    width: $nav-button-size;
+    height: $nav-button-size;
+    padding: calc(($nav-button-size - 24px) / 2);
+    border-radius: 100%;
+    background: #21262c; /* same on all themes */
+
+    svg {
+        width: 24px;
+        height: 24px;
+        display: block;
+        color: $icon-button-color;
+    }
+}
+
+.mx_ImageView_nav_previous {
+    left: $nav-button-inset;
+}
+
+.mx_ImageView_nav_next {
+    right: $nav-button-inset;
 }
 
 .mx_ImageView_image {

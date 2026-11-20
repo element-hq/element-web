@@ -1647,6 +1647,7 @@
         "space_rejoin_warning_restricted": "This space is restricted and cannot be rejoined unless you are in one of its authorised spaces or invited."
     },
     "lightbox": {
+        "previous": "Previous",
         "rotate_left": "Rotate Left",
         "rotate_right": "Rotate Right",
         "title": "Image view"
