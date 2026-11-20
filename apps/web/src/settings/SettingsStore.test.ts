@@ -293,4 +293,34 @@ describe("SettingsStore", () => {
             });
         });
     });
+
+    describe("registerModuleSettings", () => {
+        it("should return the default value of a registered setting", () => {
+            SettingsStore.registerModuleSettings({
+                "module.test.withDefault": { default: true, supportedLevels: [SettingLevel.DEVICE] },
+            });
+            expect(SettingsStore.getValue("module.test.withDefault" as SettingKey)).toBe(true);
+            expect(SettingsStore.getValue("module.test.withDefault" as SettingKey, null, true)).toBeNull();
+        });
+
+        it("should reject settings without the module. prefix", () => {
+            expect(() =>
+                SettingsStore.registerModuleSettings({
+                    language: { default: "xx", supportedLevels: [SettingLevel.DEVICE] },
+                }),
+            ).toThrow('Module setting "language" must start with "module."');
+            expect(SettingsStore.getValue("language")).not.toBe("xx");
+        });
+
+        it("should reject settings that are already registered", () => {
+            SettingsStore.registerModuleSettings({
+                "module.test.duplicate": { default: 1, supportedLevels: [SettingLevel.DEVICE] },
+            });
+            expect(() =>
+                SettingsStore.registerModuleSettings({
+                    "module.test.duplicate": { default: 2, supportedLevels: [SettingLevel.DEVICE] },
+                }),
+            ).toThrow('Setting "module.test.duplicate" is already registered');
+        });
+    });
 });
