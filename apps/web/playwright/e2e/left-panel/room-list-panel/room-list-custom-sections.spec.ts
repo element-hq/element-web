@@ -387,7 +387,7 @@ test.describe("Room list custom sections", () => {
             await roomItem.hover();
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Move to" }).hover();
-            await page.getByRole("menuitem", { name: "Work" }).click();
+            await page.getByRole("menuitemradio", { name: "Work" }).click();
             await assertRoomInSection(page, "Work", "my room");
 
             // Remove the Work section
@@ -488,7 +488,7 @@ test.describe("Room list custom sections", () => {
             await roomItem.hover();
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Move to" }).hover();
-            await page.getByRole("menuitem", { name: "Work" }).click();
+            await page.getByRole("menuitemradio", { name: "Work" }).click();
 
             // Room should now be nested under the Work section header (aria-level=1 → aria-level=2)
             await assertRoomInSection(page, "Work", "my room");
@@ -507,7 +507,7 @@ test.describe("Room list custom sections", () => {
                 await roomItem.hover();
                 await roomItem.getByRole("button", { name: "More Options" }).click();
                 await page.getByRole("menuitem", { name: "Move to" }).hover();
-                await page.getByRole("menuitem", { name: "Work" }).click();
+                await page.getByRole("menuitemradio", { name: "Work" }).click();
 
                 // The "Chat moved" toast should appear
                 await expect(page.getByText("Chat moved")).toBeVisible();
@@ -546,7 +546,7 @@ test.describe("Room list custom sections", () => {
             await roomItem.hover();
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Move to" }).hover();
-            await page.getByRole("menuitem", { name: "Work" }).click();
+            await page.getByRole("menuitemradio", { name: "Work" }).click();
 
             await assertRoomInSection(page, "Work", "my room");
 
@@ -555,7 +555,7 @@ test.describe("Room list custom sections", () => {
             await roomItem.hover();
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Move to" }).hover();
-            await page.getByRole("menuitem", { name: "Work" }).click();
+            await page.getByRole("menuitemradio", { name: "Work" }).click();
 
             // Room is back in the Rooms section
             await assertRoomInSection(page, "Rooms", "my room");
@@ -575,7 +575,7 @@ test.describe("Room list custom sections", () => {
             await roomItem.hover();
             await roomItem.getByRole("button", { name: "More Options" }).click();
             await page.getByRole("menuitem", { name: "Move to" }).hover();
-            await page.getByRole("menuitem", { name: "Work" }).click();
+            await page.getByRole("menuitemradio", { name: "Work" }).click();
 
             await assertRoomInSection(page, "Work", "my room");
 
