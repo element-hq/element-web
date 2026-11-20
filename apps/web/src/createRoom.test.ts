@@ -367,6 +367,23 @@ describe("createRoom", () => {
             const { initial_state: initialState } = client.createRoom.mock.calls[0][0];
             expect(initialState!.filter((e) => e.type === EventType.RoomJoinRules)).toHaveLength(1);
         });
+        it("should use the default room version for knock_restricted join rules when default supports it", async () => {
+            client.getCapabilities.mockResolvedValue({
+                "m.room_versions": {
+                    default: "12",
+                    available: {
+                        [PreferredRoomVersions.KnockRestrictedRooms]: RoomVersionStability.Stable,
+                        "12": RoomVersionStability.Stable,
+                    },
+                },
+            });
+            await createRoom(client, { parentSpace: mkRoom(client, "!parent"), joinRule: JoinRule.KnockRestricted });
+            expect(client.createRoom).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    room_version: expect.anything(),
+                }),
+            );
+        });
         it("should use the default room version for restricted join rules when default supports it", async () => {
             client.getCapabilities.mockResolvedValue({
                 "m.room_versions": {
