@@ -99,7 +99,7 @@ export function GenericToast({
     const detailContent = detail ? <div>{detail}</div> : null;
 
     return (
-        <div>
+        <div className={styles.toast}>
             <div className={styles.description} style={{ maxWidth: overrideWidth }}>
                 {description}
                 {detailContent}
