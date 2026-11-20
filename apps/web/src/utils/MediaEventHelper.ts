@@ -16,6 +16,7 @@ import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
 import { getBlobSafeMimeType } from "./blobs.ts";
 import { queryUploadedMediaCache } from "./UploadedMediaCache";
+import { getGalleryCaption, isGalleryEvent } from "./gallery";
 
 // Consider this list of message types as "media".
 const MEDIA_MSG_TYPES: string[] = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video];
@@ -33,7 +34,11 @@ export class MediaEventHelper implements IDestroyable {
 
     public readonly media: Media;
 
-    public constructor(private event: MatrixEvent) {
+    /**
+     * @param event - The media event, or anything else that can supply the content of one: see
+     *     {@link MediaEventHelper.fromContent}.
+     */
+    public constructor(private event: Pick<MatrixEvent, "getContent">) {
         this.sourceUrl = new LazyValue(this.prepareSourceUrl);
         this.thumbnailUrl = new LazyValue(this.prepareThumbnailUrl);
         this.sourceBlob = new LazyValue(this.fetchSource);
@@ -140,6 +145,16 @@ export class MediaEventHelper implements IDestroyable {
         );
     };
 
+    /**
+     * Create a helper for media which is described by a content object rather than by an event of
+     * its own, such as one item of a gallery.
+     *
+     * @param content - Content in the shape of a media message.
+     */
+    public static fromContent(content: MediaEventContent): MediaEventHelper {
+        return new MediaEventHelper({ getContent: <T>() => content as T });
+    }
+
     public static isEligible(event: MatrixEvent): boolean {
         if (!event) return false;
         if (event.isRedacted()) return false;
@@ -156,10 +171,13 @@ export class MediaEventHelper implements IDestroyable {
 
     /**
      * Determine if the media event in question has a caption
-     * @returns `true` if the event is an image, file, audio or video message with a caption, otherwise `false`.
+     * @returns `true` if the event is an image, file, audio or video message with a caption, or a gallery
+     *     with one, otherwise `false`.
      */
     public static hasCaption(event: MatrixEvent): boolean {
         const content = event.getContent();
+        // The body of a gallery is its caption: there is no file name for it to be instead.
+        if (isGalleryEvent(event)) return getGalleryCaption(content) !== undefined;
         return MEDIA_MSG_TYPES.includes(content.msgtype!) && !!content.filename && content.filename !== content.body;
     }
 
@@ -174,6 +192,6 @@ export class MediaEventHelper implements IDestroyable {
         const content = event.getContent();
         const hideTypes: string[] = [MsgType.Video, MsgType.Image];
         if (hideTypes.includes(content.msgtype!)) return true;
-        return false;
+        return isGalleryEvent(event);
     }
 }

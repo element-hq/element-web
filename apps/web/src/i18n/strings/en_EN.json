@@ -3425,6 +3425,12 @@
             "error_decrypting": "Error decrypting attachment",
             "size_unknown": "Size unknown"
         },
+        "m.gallery": {
+            "summary": {
+                "one": "Gallery with %(count)s item",
+                "other": "Gallery with %(count)s items"
+            }
+        },
         "m.image": {
             "error": "Unable to show image due to error",
             "error_decrypting": "Error decrypting image",
