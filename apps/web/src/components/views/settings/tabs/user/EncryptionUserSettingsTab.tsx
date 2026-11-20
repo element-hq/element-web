@@ -69,8 +69,6 @@ interface Props {
 export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
-    const offlineDevice = <OfflineDevice />;
-
     const deviceState = useTypedEventEmitterState(
         DeviceListener.sharedInstance().currentDeviceChangedEmitter,
         CurrentDeviceEvents.DeviceStateChanged,
@@ -138,12 +136,8 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         }
                                     />
                                     <Separator kind="section" />
-                                    {offlineDevice && (
-                                        <>
-                                            {offlineDevice}
-                                            <Separator kind="section" />
-                                        </>
-                                    )}
+                                    <OfflineDevice />
+                                    <Separator kind="section" />
                                 </>
                             )}
                             <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
