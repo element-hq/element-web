@@ -20,6 +20,8 @@ import {
 } from "../components/views/dialogs/AnalyticsLearnMoreDialog";
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { UIComponent } from "../settings/UIFeature";
 
 const onAccept = (): void => {
     dis.dispatch({
@@ -69,6 +71,8 @@ const onLearnMorePreviouslyOptedIn = (): void => {
 const TOAST_KEY = "analytics";
 
 export const showToast = (): void => {
+    if (!shouldShowComponent(UIComponent.OnboardingToasts)) return;
+
     const legacyAnalyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);
 
     let props: Omit<React.ComponentProps<typeof GenericToast>, "toastKey">;

@@ -6,10 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Search, Text, Button, Tooltip, InlineSpinner } from "@vector-im/compound-web";
-import React from "react";
+import React, { type ComponentProps, type JSX } from "react";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Flex } from "@element-hq/web-shared-components";
+import { type RoomAction } from "@element-hq/element-web-module-api";
 
 import { type MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
 import { _t } from "../../../../languageHandler";
@@ -75,6 +76,37 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
     );
 };
 
+interface ModuleActionButtonProps extends Partial<ComponentProps<typeof Button>> {
+    action: RoomAction;
+    className?: string;
+}
+
+function ModuleActionButton(props: ModuleActionButtonProps): JSX.Element {
+    const { action, ...buttonProps } = props;
+    const content = props.iconOnly ? undefined : action.label;
+    const button = (
+        <Button
+            kind="secondary"
+            size="md"
+            className="mx_MemberListHeaderView_inviteButton"
+            Icon={action.icon}
+            disabled={action.disabled}
+            onClick={action.onClick}
+            type="button"
+            aria-label={action.label}
+            {...buttonProps}
+        >
+            {content}
+        </Button>
+    );
+
+    // A disabled action only gets a tooltip when the module explains why it is disabled
+    const enabledTooltip = props.iconOnly ? action.label : undefined;
+    const tooltip = action.disabled ? action.disabledTooltip : enabledTooltip;
+    if (tooltip) return <Tooltip description={tooltip}>{button}</Tooltip>;
+    return button;
+}
+
 /**
  * This should be:
  * A loading text with spinner while the memberlist loads.
@@ -111,17 +143,28 @@ export const MemberListHeaderView: React.FC<Props> = (props: Props) => {
                     onChange={(e) => vm.search((e as React.ChangeEvent<HTMLInputElement>).target.value)}
                 />
                 <InviteButton vm={vm} />
+                {vm.moduleActions.map((action) => (
+                    <ModuleActionButton key={action.key} action={action} iconOnly={true} />
+                ))}
             </Flex>
         );
-    } else if (!vm.shouldShowSearch && vm.shouldShowInvite) {
-        // When we don't need to show the search box but still need an invite button
+    } else if (vm.shouldShowInvite || vm.moduleActions.length > 0) {
+        // When we don't need to show the search box but still need an invite or module button
         contentJSX = (
-            <Flex direction="column" align="center" className="mx_MemberListHeaderView_container">
+            <Flex
+                direction="column"
+                align="center"
+                gap="var(--cpd-space-4x)"
+                className="mx_MemberListHeaderView_container"
+            >
                 <InviteButton vm={vm} />
+                {vm.moduleActions.map((action) => (
+                    <ModuleActionButton key={action.key} action={action} iconOnly={false} />
+                ))}
             </Flex>
         );
     } else {
-        // No search box and no invite icon, so nothing to render!
+        // No search box and no invite or module button, so nothing to render!
         contentJSX = null;
     }
 

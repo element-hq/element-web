@@ -13,9 +13,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { act, fireEvent, screen, waitFor } from "test-utils-rtl";
 import { RoomMember, User, RoomEvent, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import userEvent from "@testing-library/user-event";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
+import { ModuleApi } from "../../../../modules/Api";
 import { type Rendered, renderMemberList } from "./__mocks__";
 
 vi.mock("../../../../customisations/helpers/UIComponents", () => ({
@@ -134,5 +136,84 @@ describe("MemberListHeaderView", () => {
                 roomId: memberListRoom.roomId,
             });
         });
+    });
+});
+
+describe("Module actions in memberlist header", () => {
+    const onClick = vi.fn();
+    const action = { key: "action", label: "Module action", icon: () => null, onClick };
+    const disabledAction = { ...action, disabled: true, disabledTooltip: "You can't invite guests" };
+    const callback = vi.fn();
+
+    beforeEach(() => {
+        vi.mocked(shouldShowComponent).mockReturnValue(true);
+        callback.mockReturnValue(action);
+        ModuleApi.instance.extras.addMemberListHeaderActionCallback(callback);
+    });
+
+    afterEach(() => {
+        ModuleApi.instance.extras.memberListHeaderActionCallbacks = [];
+    });
+
+    it("renders the module action next to the invite button", async () => {
+        // The module action stays enabled even when the user can't invite: only the module disables it
+        const { memberListRoom } = await renderMemberList(true, (room) => {
+            vi.spyOn(room, "canInvite").mockReturnValue(false);
+        });
+
+        const button = await screen.findByRole("button", { name: "Module action" });
+        expect(button).not.toHaveAttribute("aria-disabled", "true");
+        expect(screen.getByRole("button", { name: "Invite" })).toBeVisible();
+        expect(callback).toHaveBeenCalledWith(memberListRoom.roomId);
+
+        fireEvent.click(button);
+        expect(onClick).toHaveBeenCalled();
+    });
+
+    it("shows the module tooltip when the module disables the action", async () => {
+        callback.mockReturnValue(disabledAction);
+        await renderMemberList(true);
+
+        const button = await screen.findByRole("button", { name: "Module action" });
+        expect(button).toHaveAttribute("aria-disabled", "true");
+        await userEvent.hover(button);
+        expect(await screen.findByRole("tooltip")).toHaveTextContent("You can't invite guests");
+    });
+
+    it("renders the module action when the invite button is hidden", async () => {
+        await renderMemberList(true, (room) => room.updateMyMembership(KnownMembership.Leave));
+
+        expect(await screen.findByRole("button", { name: "Module action" })).toBeVisible();
+        expect(screen.queryByRole("button", { name: "Invite" })).toBeNull();
+    });
+
+    it("renders the module action as an icon next to the search box", async () => {
+        callback.mockReturnValue(disabledAction);
+        const { memberListRoom, client, reRender } = await renderMemberList(true);
+        // Memberlist already has 6 members, add 14 more to make the total 20
+        for (let i = 0; i < 14; ++i) {
+            const newMember = new RoomMember(memberListRoom.roomId, `@new${i}:localhost`);
+            newMember.membership = KnownMembership.Join;
+            newMember.user = User.createUser(newMember.userId, client);
+            memberListRoom.currentState.members[newMember.userId] = newMember;
+        }
+        await reRender();
+
+        await waitFor(() => expect(screen.getByPlaceholderText("Search room members")).toBeVisible());
+        const button = screen.getByRole("button", { name: "Module action" });
+        expect(button).not.toHaveTextContent("Module action");
+        expect(button).toHaveAttribute("aria-disabled", "true");
+        await userEvent.hover(button);
+        expect(await screen.findByRole("tooltip")).toHaveTextContent("You can't invite guests");
+    });
+
+    it("does not show a tooltip when the module disables the action without a reason", async () => {
+        callback.mockReturnValue({ ...action, disabled: true });
+        await renderMemberList(true);
+
+        const button = await screen.findByRole("button", { name: "Module action" });
+        expect(button).toHaveAttribute("aria-disabled", "true");
+        await userEvent.hover(button);
+        await expect(screen.findByRole("tooltip", {}, { timeout: 500 })).rejects.toThrow();
     });
 });
