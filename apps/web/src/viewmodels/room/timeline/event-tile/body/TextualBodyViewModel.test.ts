@@ -124,6 +124,32 @@ describe("TextualBodyViewModel", () => {
         expect(vm.getSnapshot().kind).toBe(TextualBodyViewKind.NOTICE);
     });
 
+    it.each(["dm.filament.gallery", "m.gallery"])("uses the caption kind for the caption of a %s", (msgtype) => {
+        const galleryEvent = createEvent({
+            body: "Our holiday",
+            msgtype,
+            itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+        });
+        const vm = createVm({ mxEvent: galleryEvent });
+
+        expect(vm.getSnapshot().kind).toBe(TextualBodyViewKind.CAPTION);
+    });
+
+    it("switches to the caption kind when the event becomes a gallery", () => {
+        const vm = createVm();
+        expect(vm.getSnapshot().kind).toBe(TextualBodyViewKind.TEXT);
+
+        vm.setEvent(
+            createEvent({
+                body: "Our holiday",
+                msgtype: "dm.filament.gallery",
+                itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+            }),
+        );
+
+        expect(vm.getSnapshot().kind).toBe(TextualBodyViewKind.CAPTION);
+    });
+
     it("updates the moderation marker from the dedicated setter", () => {
         const hiddenEvent = createEvent({
             body: "hidden",

@@ -8,13 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { endEditing } from "../utils/editing";
 import { editMessage } from "../utils/message";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { type GalleryComposerViewModel } from "../../../../../viewmodels/composer/GalleryComposerViewModel";
 
 export function useEditing(
     editorStateTransfer: EditorStateTransfer,
@@ -22,6 +23,8 @@ export function useEditing(
     attachBundles?: (content: RoomMessageEventContent) => Promise<boolean>,
     updateUrlPreviews?: (content: string) => void,
     isUrlPreviewsModified?: boolean,
+    attachments?: GalleryComposerViewModel,
+    hasMedia = false,
 ): {
     isSaveDisabled: boolean;
     onChange(this: void, content: string): void;
@@ -42,6 +45,16 @@ export function useEditing(
         [initialContent, updateUrlPreviews],
     );
 
+    // Changing the attachments is a change worth saving, just as changing the text is.
+    // The view model also reports when a preview has loaded, which is not a change.
+    useEffect(
+        () =>
+            attachments?.subscribe(() => {
+                if (attachments.isModified) setIsSaveDisabled(false);
+            }),
+        [attachments],
+    );
+
     const editMessageMemoized = useCallback(async () => {
         if (mxClient === undefined || content === undefined) {
             return;
@@ -52,8 +65,19 @@ export function useEditing(
             editorStateTransfer,
             attachBundles,
             isUrlPreviewsModified,
+            // A text message stays one, with all that goes with it, unless images or videos were added.
+            attachments: attachments && (hasMedia || attachments.isModified) ? attachments.getItems() : undefined,
         });
-    }, [content, roomContext, mxClient, editorStateTransfer, attachBundles, isUrlPreviewsModified]);
+    }, [
+        content,
+        roomContext,
+        mxClient,
+        editorStateTransfer,
+        attachBundles,
+        isUrlPreviewsModified,
+        attachments,
+        hasMedia,
+    ]);
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);
     return {

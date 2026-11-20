@@ -45,6 +45,11 @@ Please see LICENSE files in the repository root for full details.
     width: 100%;
 }
 
+/* The images and videos waiting to be sent with the message being written */
+.mx_MessageComposer_attachments {
+    padding: var(--cpd-space-0x) var(--cpd-space-3x) var(--cpd-space-2x) var(--cpd-space-0x);
+}
+
 .mx_MessageComposer_actions {
     display: flex;
     align-items: center;
@@ -267,4 +272,67 @@ Please see LICENSE files in the repository root for full details.
     .mx_MessageComposer_e2eIcon {
         left: 0;
     }
+}
+
+/* The editor of a message being edited, in place of the one for the message being written. It fills
+   the row and looks like the editor it replaces, rather than the bordered box used for editing in
+   the timeline. */
+.mx_MessageComposer_row > .mx_EditMessageComposerWrapper {
+    flex: 1;
+    /* don't grow wider than available space */
+    min-width: 0;
+    margin-right: 6px;
+    /* Keeps the autocomplete and format bar visible above the editor */
+    overflow: visible;
+}
+
+.mx_EditMessageComposer.mx_EditMessageComposer_inComposer {
+    padding: 0;
+    font: var(--cpd-font-body-md-regular);
+    /* fixed line height to prevent emoji from being taller than text */
+    line-height: $font-18px;
+
+    .mx_BasicMessageComposer {
+        display: flex;
+        flex-direction: column;
+        min-height: 55px;
+    }
+
+    .mx_BasicMessageComposer_input {
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        padding: 3px 0;
+        margin: auto 0;
+        max-height: 140px;
+        overflow-y: auto;
+    }
+}
+
+.mx_EditWysiwygComposer.mx_EditWysiwygComposer_inComposer {
+    padding: 0;
+
+    .mx_WysiwygComposer_Editor_content {
+        border: none;
+        background-color: transparent;
+        padding: 3px 0;
+    }
+}
+
+/* Unlike the bar shown when replying, the bar shown when editing is not faded: its button is how
+   the edit is abandoned with a pointer. */
+.mx_MessageComposer_editingBar .mx_ReplyPreview_section .mx_ReplyPreview_header {
+    opacity: 1;
+    align-items: center;
+    color: var(--cpd-color-text-secondary);
+
+    .mx_ReplyPreview_header_cancel svg {
+        color: var(--cpd-color-icon-primary);
+    }
+}
+
+.mx_MessageComposer_editingBar_hint {
+    margin-inline-start: var(--cpd-space-2x);
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-regular);
 }

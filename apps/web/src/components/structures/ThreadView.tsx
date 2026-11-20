@@ -451,6 +451,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                                 permalinkCreator={this.props.permalinkCreator}
                                 e2eStatus={this.props.e2eStatus}
                                 compact={true}
+                                editState={this.state.editState}
                             />
                         )}
                     </BaseCard>

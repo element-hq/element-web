@@ -1,0 +1,154 @@
+/*
+Copyright 2026 Alar Mäerand
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-1x);
+    min-width: var(--cpd-space-0x);
+}
+
+/* A strip of small tiles which wraps, and scrolls after two rows. */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 64px);
+    gap: var(--cpd-space-2x);
+    max-height: 140px;
+    overflow-y: auto;
+    margin: var(--cpd-space-0x);
+    /* Room for the focus rings of the tiles, which the scroll container would clip. */
+    padding: var(--cpd-space-0-5x);
+    list-style: none;
+}
+
+.item {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+}
+
+.preview {
+    position: absolute;
+    inset: var(--cpd-space-0x);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video {
+    position: absolute;
+    bottom: var(--cpd-space-1x);
+    left: var(--cpd-space-1x);
+    display: inline-flex;
+    padding: var(--cpd-space-0-5x);
+    border-radius: 8px;
+    background-color: rgb(0 0 0 / 0.6);
+    color: #fff;
+    pointer-events: none;
+}
+
+/* Covers the whole tile, under the button to remove the item */
+.open {
+    position: absolute;
+    inset: var(--cpd-space-0x);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--cpd-space-0x);
+    border: none;
+    border-radius: 8px;
+    cursor: zoom-in;
+    background-color: transparent;
+}
+
+.open:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.remove {
+    z-index: 1;
+    position: absolute;
+    top: var(--cpd-space-1x);
+    right: var(--cpd-space-1x);
+    display: inline-flex;
+    padding: var(--cpd-space-0-5x);
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: rgb(0 0 0 / 0.6);
+    color: #fff;
+}
+
+.remove:hover:not(:disabled) {
+    background-color: rgb(0 0 0 / 0.8);
+}
+
+.add {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--cpd-space-0x);
+    border: 1px dashed var(--cpd-color-border-interactive-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--cpd-color-text-secondary);
+}
+
+.add:hover:not(:disabled) {
+    border-color: var(--cpd-color-border-interactive-hovered);
+    color: var(--cpd-color-text-primary);
+}
+
+.remove:focus-visible,
+.add:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.remove:disabled,
+.add:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.fileInput {
+    display: none;
+}
+
+.hint {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-1-5x);
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: var(--cpd-space-0x);
+    padding: var(--cpd-space-1x) var(--cpd-space-2x);
+    border-radius: 8px;
+    background-color: var(--cpd-color-bg-critical-subtle);
+    color: var(--cpd-color-text-critical-primary);
+    font: var(--cpd-font-body-sm-semibold);
+}
+
+.hintIcon {
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-critical-primary);
+}
+
+.notice {
+    margin: var(--cpd-space-0x);
+    color: var(--cpd-color-text-critical-primary);
+}

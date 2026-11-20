@@ -26,6 +26,7 @@ import * as Reply from "../../../../../utils/Reply";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import { Action } from "../../../../../dispatcher/actions";
 import { attachUrlPreviews } from "../../../../../utils/messages";
+import ContentMessages from "../../../../../ContentMessages";
 
 // Wrapped rather than replaced: only the cancellation test below overrides it.
 vi.mock("../../../../../utils/messages", async (importOriginal) => {
@@ -503,6 +504,166 @@ describe("message", () => {
             expect(mockClient.cancelPendingEvent).toHaveBeenCalledTimes(1);
             expect(mockCreateRedactEventDialog).toHaveBeenCalledTimes(1);
             expect(spyDispatcher).toHaveBeenCalledTimes(1);
+        });
+
+        describe("for a message with images or videos", () => {
+            const first = { itemtype: MsgType.Image as const, body: "one.png", url: "mxc://server/one" };
+            const second = { itemtype: MsgType.Video as const, body: "two.mp4", url: "mxc://server/two" };
+            const galleryEvent = mkEvent({
+                type: "m.room.message",
+                room: "myfakeroom",
+                user: "myfakeuser",
+                content: { msgtype: "dm.filament.gallery", body: "Before", itemtypes: [first, second] },
+                event: true,
+            });
+            const editMediaMessage = vi.fn();
+
+            /** The events for which editing was ended. */
+            const endedEdits = (): unknown[] =>
+                spyDispatcher.mock.calls
+                    .map(([payload]) => payload)
+                    .filter((payload) => payload.action === Action.EditEvent && payload.event === null);
+
+            beforeEach(() => {
+                editMediaMessage.mockReset().mockResolvedValue(undefined);
+                vi.spyOn(ContentMessages, "sharedInstance").mockReturnValue({
+                    editMediaMessage,
+                } as unknown as ContentMessages);
+            });
+
+            it("Should save the text as the caption of the items, through the media edit", async () => {
+                const editorStateTransfer = new EditorStateTransfer(galleryEvent);
+                const added = new File(["image"], "three.png", { type: "image/png" });
+
+                const response = await editMessage("<b>After</b> all", {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer,
+                    attachments: [second, added],
+                });
+
+                expect(editMediaMessage).toHaveBeenCalledTimes(1);
+                expect(editMediaMessage).toHaveBeenCalledWith(
+                    galleryEvent,
+                    mockClient,
+                    [second, added],
+                    { body: "__After__ all", format: "org.matrix.custom.html", formatted_body: "<b>After</b> all" },
+                    // The rich text composer does not work out mentions, so there are none to pass on.
+                    undefined,
+                );
+                // The media edit sends the event itself.
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+                expect(response).toBeUndefined();
+                expect(endedEdits()).toHaveLength(1);
+            });
+
+            it("Should save the items without a caption when the text is emptied", async () => {
+                const mockCreateRedactEventDialog = vi.spyOn(ConfirmRedactDialog, "createRedactEventDialog");
+
+                await editMessage("", {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer: new EditorStateTransfer(galleryEvent),
+                    attachments: [first, second],
+                });
+
+                expect(editMediaMessage).toHaveBeenCalledWith(
+                    galleryEvent,
+                    mockClient,
+                    [first, second],
+                    expect.objectContaining({ body: "" }),
+                    undefined,
+                );
+                expect(mockCreateRedactEventDialog).not.toHaveBeenCalled();
+            });
+
+            it("Should save the text alone when every item was removed", async () => {
+                await editMessage("Only words", {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer: new EditorStateTransfer(galleryEvent),
+                    attachments: [],
+                });
+
+                expect(editMediaMessage).toHaveBeenCalledWith(
+                    galleryEvent,
+                    mockClient,
+                    [],
+                    expect.objectContaining({ body: "Only words" }),
+                    undefined,
+                );
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("Should ask for event removal when neither items nor text are left", async () => {
+                const mockCreateRedactEventDialog = vi.spyOn(ConfirmRedactDialog, "createRedactEventDialog");
+
+                await editMessage("", {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer: new EditorStateTransfer(galleryEvent),
+                    attachments: [],
+                });
+
+                expect(mockCreateRedactEventDialog).toHaveBeenCalledTimes(1);
+                expect(mockCreateRedactEventDialog.mock.calls[0][0].mxEvent).toBe(galleryEvent);
+                expect(editMediaMessage).not.toHaveBeenCalled();
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+                // The edit goes on until the user has decided
+                expect(endedEdits()).toHaveLength(0);
+            });
+
+            it("Should cancel an earlier edit which has not been sent yet", async () => {
+                const event = mkEvent({
+                    type: "m.room.message",
+                    room: "myfakeroom",
+                    user: "myfakeuser",
+                    content: { msgtype: "m.image", body: "one.png", url: "mxc://server/one" },
+                    event: true,
+                });
+                const replacingEvent = mkEvent({
+                    type: "m.room.message",
+                    room: "myfakeroom",
+                    user: "myfakeuser",
+                    content: { msgtype: "m.text", body: "ReplacingEvent" },
+                    event: true,
+                });
+                replacingEvent.setStatus(EventStatus.QUEUED);
+                event.makeReplaced(replacingEvent);
+
+                await editMessage("A caption", {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer: new EditorStateTransfer(event),
+                    attachments: [first],
+                });
+
+                expect(mockClient.cancelPendingEvent).toHaveBeenCalledWith(replacingEvent);
+                expect(editMediaMessage).toHaveBeenCalledTimes(1);
+            });
+
+            it("Should leave it to the media edit to tell whether anything changed", async () => {
+                await editMessage("Before", {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer: new EditorStateTransfer(galleryEvent),
+                    attachments: [first, second],
+                });
+
+                expect(editMediaMessage).toHaveBeenCalledTimes(1);
+                expect(mockClient.sendMessage).not.toHaveBeenCalled();
+            });
+
+            it("Should not go through the media edit for a text message", async () => {
+                await editMessage(`${mockEvent.getContent().body} new content`, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    editorStateTransfer,
+                });
+
+                expect(editMediaMessage).not.toHaveBeenCalled();
+                expect(mockClient.sendMessage).toHaveBeenCalledTimes(1);
+            });
         });
 
         it("Should do nothing if the content is unmodified", async () => {

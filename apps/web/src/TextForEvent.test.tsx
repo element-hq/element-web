@@ -444,6 +444,57 @@ describe("TextForEvent", () => {
         it("returns correct message for normal message", () => {
             expect(textForEvent(messageEvent, mockClient)).toEqual("@a: test message");
         });
+
+        describe("for a gallery", () => {
+            const mkGalleryEvent = (body: string, msgtype = "dm.filament.gallery"): MatrixEvent =>
+                new MatrixEvent({
+                    type: "m.room.message",
+                    sender: "@a",
+                    content: {
+                        msgtype,
+                        body,
+                        itemtypes: [
+                            { itemtype: "m.image", body: "one.png", url: "mxc://server/one" },
+                            { itemtype: "m.video", body: "two.mp4", url: "mxc://server/two" },
+                            { itemtype: "m.image", body: "three.png", file: { url: "mxc://server/three" } },
+                        ],
+                    },
+                });
+
+            it("returns the caption", () => {
+                expect(textForEvent(mkGalleryEvent("Our holiday"), mockClient)).toEqual("@a: Our holiday");
+            });
+
+            it("counts the items when there is no caption", () => {
+                expect(textForEvent(mkGalleryEvent(""), mockClient)).toEqual("@a: Gallery with 3 items");
+                expect(textForEvent(mkGalleryEvent("  "), mockClient)).toEqual("@a: Gallery with 3 items");
+            });
+
+            it("recognises the stable msgtype", () => {
+                expect(textForEvent(mkGalleryEvent("", "m.gallery"), mockClient)).toEqual("@a: Gallery with 3 items");
+            });
+
+            it("uses the singular for a single item", () => {
+                const event = new MatrixEvent({
+                    type: "m.room.message",
+                    sender: "@a",
+                    content: {
+                        msgtype: "dm.filament.gallery",
+                        body: "",
+                        itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+                    },
+                });
+
+                expect(textForEvent(event, mockClient)).toEqual("@a: Gallery with 1 item");
+            });
+
+            it("does not describe a redacted gallery as a gallery", () => {
+                const event = mkGalleryEvent("");
+                event.makeRedacted(event, new Room(event.getRoomId()!, mockClient, mockClient.getSafeUserId()));
+
+                expect(textForEvent(event, mockClient)).toEqual("@a: Message deleted");
+            });
+        });
     });
 
     describe("textForCallEvent()", () => {

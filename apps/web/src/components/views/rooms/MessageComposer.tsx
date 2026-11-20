@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, useEffect } from "react";
+import React, { type JSX, createRef, type ReactNode, useEffect, type MutableRefObject } from "react";
 import classNames from "classnames";
 import {
     type IEventRelation,
@@ -18,8 +18,8 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { CloseIcon, LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -51,6 +51,17 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
+import { createMessageContent } from "./wysiwyg_composer/utils/createMessageContent";
+import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { captionFromMessageContent, getMessageMediaItems } from "../../../utils/gallery";
+import { type GalleryComposerViewModel } from "../../../viewmodels/composer/GalleryComposerViewModel";
+import { MessageAttachments } from "./MessageAttachments";
+import { type EditorActions } from "./EditorActions";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { EditMessageComposerWrapper } from "./EditMessageComposerWrapper";
+import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import {
     type MatrixClientProps,
     withMatrixClientHOC,
@@ -75,6 +86,35 @@ interface ISendButtonProps {
     title?: string; // defaults to something generic
 }
 
+interface EditingBarProps {
+    onCancel: () => void;
+}
+
+/**
+ * Shown above the composer while it holds a message being edited, with a button to stop editing.
+ */
+function EditingBar({ onCancel }: EditingBarProps): JSX.Element {
+    return (
+        <div className="mx_ReplyPreview mx_MessageComposer_editingBar">
+            <div className="mx_ReplyPreview_section">
+                <div className="mx_ReplyPreview_header">
+                    <span>
+                        {_t("composer|editing_title")}
+                        <span className="mx_MessageComposer_editingBar_hint">{_t("composer|editing_cancel_hint")}</span>
+                    </span>
+                    <AccessibleButton
+                        className="mx_ReplyPreview_header_cancel"
+                        title={_t("composer|cancel_editing")}
+                        onClick={onCancel}
+                    >
+                        <CloseIcon />
+                    </AccessibleButton>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function SendButton(props: ISendButtonProps): JSX.Element {
     return (
         <AccessibleButton
@@ -97,9 +137,26 @@ interface IProps extends MatrixClientProps {
     e2eStatus?: E2EStatus;
     compact?: boolean;
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
+    /**
+     * Holds the images and videos waiting in the composer to be sent with the next message.
+     */
+    uploadVm: RoomUploadViewModel;
+    /**
+     * How many images and videos are waiting in the composer.
+     */
+    attachmentCount: number;
+    /**
+     * The message being edited in the composer, which then takes the place of the message being
+     * written until the edit is saved or cancelled. Only given when edits are made in the composer.
+     */
+    editState?: EditorStateTransfer;
 }
 
 interface IState {
+    /**
+     * The images and videos of the message being edited, while one is.
+     */
+    editAttachments?: GalleryComposerViewModel;
     composerContent: string;
     isComposerEmpty: boolean;
     haveRecording: boolean;
@@ -123,6 +180,8 @@ type WysiwygComposerState = {
 export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
+    /** The save and cancel actions of the editor of the message being edited, if there is one. */
+    private readonly editorActions: MutableRefObject<EditorActions | null> = { current: null };
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
     private ref = createRef<HTMLDivElement>();
     private instanceId: number;
@@ -235,6 +294,53 @@ export class MessageComposer extends React.Component<IProps, IState> {
             rec.on(RecordingState.EndingSoon, this.onRecordingEndingSoon);
         }
     }
+
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+        const editedEvent = this.props.editState?.getEvent();
+        if (editedEvent && editedEvent !== prevProps.editState?.getEvent()) {
+            if (!prevProps.editState) {
+                // The editor of the message being written goes away while the edit is in progress:
+                // keep what was written so far for when it comes back.
+                this.setState({ initialComposerContent: this.state.composerContent });
+            }
+            dis.dispatch({
+                action: Action.FocusEditMessageComposer,
+                context: this.context.timelineRenderingType,
+            });
+        }
+    }
+
+    private onEditAttachmentsChange = (editAttachments?: GalleryComposerViewModel): void => {
+        this.setState({ editAttachments });
+        this.props.uploadVm.setEditAttachments(editAttachments);
+    };
+
+    private saveEdit = (): void => {
+        this.editorActions.current?.save();
+    };
+
+    private cancelEdit = (): void => {
+        this.editorActions.current?.cancel();
+    };
+
+    /**
+     * Escape abandons an edit wherever the focus is in the composer: on the attachments and the
+     * buttons as well as in the editor, which handles it itself. Taken on the way down, before the
+     * tooltip of a focused button, which would otherwise only close itself.
+     */
+    private onKeyDown = (event: React.KeyboardEvent): void => {
+        if (!this.props.editState) return;
+        const target = event.target as Element;
+        // Menus opened from the composer are rendered elsewhere in the page and close themselves.
+        if (!this.ref.current?.contains(target)) return;
+        // The editor handles it, after giving its suggestions the chance to close first.
+        if (target.closest?.(".mx_EditMessageComposerWrapper")) return;
+        if (getKeyBindingsManager().getMessageComposerAction(event) !== KeyBindingAction.CancelReplyOrEdit) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        this.cancelEdit();
+    };
 
     public componentDidMount(): void {
         VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
@@ -423,6 +529,23 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 action: Action.ClearAndFocusSendMessageComposer,
                 timelineRenderingType: this.context.timelineRenderingType,
             });
+            // Attachments waiting in the composer take the text as their caption, so that they
+            // are one message. Commands are still run on their own.
+            if (this.props.uploadVm.hasAttachments && !composerContent.startsWith("/")) {
+                const content = await createMessageContent(composerContent, this.state.isRichTextEnabled, {
+                    relation,
+                    replyToEvent,
+                });
+                this.props.uploadVm.sendAttachments(captionFromMessageContent(content));
+                if (replyToEvent) {
+                    dis.dispatch({
+                        action: "reply_to_event",
+                        event: null,
+                        context: this.context.timelineRenderingType,
+                    });
+                }
+                return;
+            }
             await sendMessage(composerContent, this.state.isRichTextEnabled, {
                 mxClient: this.props.mxClient,
                 roomContext: this.context,
@@ -582,9 +705,25 @@ export class MessageComposer extends React.Component<IProps, IState> {
         const menuPosition = this.getMenuPosition();
 
         const canSendMessages = this.context.canSendMessages && !this.context.tombstone;
+        const { editState } = this.props;
+        const isEditing = canSendMessages && !!editState;
         let composer: ReactNode;
         if (canSendMessages) {
-            if (this.state.isWysiwygLabEnabled && menuPosition) {
+            if (editState) {
+                composer = (
+                    <EditMessageComposerWrapper
+                        // A fresh editor for each message, so it starts from that message's content.
+                        key={editState.getEvent().getId()}
+                        editState={editState}
+                        mxClient={this.props.mxClient}
+                        showUrlPreview={this.context.showUrlPreview}
+                        className="mx_MessageComposer_editor"
+                        inComposer
+                        onAttachmentsChange={this.onEditAttachmentsChange}
+                        actionsRef={this.editorActions}
+                    />
+                );
+            } else if (this.state.isWysiwygLabEnabled && menuPosition) {
                 composer = (
                     <SendWysiwygComposer
                         key="controls_input"
@@ -620,17 +759,19 @@ export class MessageComposer extends React.Component<IProps, IState> {
             const secondsLeft = this.state.recordingTimeLeftSeconds
                 ? Math.round(this.state.recordingTimeLeftSeconds)
                 : 0;
-            controls.push(
-                <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
-                    <VoiceRecordComposerTile
-                        key="controls_voice_record"
-                        ref={this.voiceRecordingButton}
-                        room={this.props.room}
-                        relation={this.props.relation}
-                        replyToEvent={this.props.replyToEvent}
-                    />
-                </Tooltip>,
-            );
+            // A voice message is a new message, which has no place in an edit.
+            if (!isEditing)
+                controls.push(
+                    <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
+                        <VoiceRecordComposerTile
+                            key="controls_voice_record"
+                            ref={this.voiceRecordingButton}
+                            room={this.props.room}
+                            relation={this.props.relation}
+                            replyToEvent={this.props.replyToEvent}
+                        />
+                    </Tooltip>,
+                );
         } else if (this.context.tombstone) {
             const replacementRoomId = this.context.tombstone.getContent()["replacement_room"];
 
@@ -674,18 +815,23 @@ export class MessageComposer extends React.Component<IProps, IState> {
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
 
-        controls.push(
-            <Stickerpicker
-                room={this.props.room}
-                threadId={threadId}
-                isStickerPickerOpen={this.state.isStickerPickerOpen}
-                setStickerPickerOpen={this.setStickerPickerOpen}
-                menuPosition={menuPosition}
-                key="stickers"
-            />,
-        );
+        // A sticker is a new message, which has no place in an edit.
+        if (!isEditing)
+            controls.push(
+                <Stickerpicker
+                    room={this.props.room}
+                    threadId={threadId}
+                    isStickerPickerOpen={this.state.isStickerPickerOpen}
+                    setStickerPickerOpen={this.setStickerPickerOpen}
+                    menuPosition={menuPosition}
+                    key="stickers"
+                />,
+            );
 
-        const showSendButton = canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording);
+        const showSendButton =
+            isEditing ||
+            (canSendMessages &&
+                (!this.state.isComposerEmpty || this.state.haveRecording || this.props.attachmentCount > 0));
 
         const classes = classNames({
             "mx_MessageComposer": true,
@@ -695,14 +841,25 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
+            <div
+                className={classes}
+                ref={this.ref}
+                role="region"
+                aria-label={_t("a11y|message_composer")}
+                onKeyDownCapture={this.onKeyDown}
+            >
                 <div className="mx_MessageComposer_wrapper">
-                    <MessageComposerUrlPreviewWrapper urlPreviewVm={this.props.urlPreviewVm} />
+                    {/* The previews of the message being written, which is put aside while editing */}
+                    {!isEditing && <MessageComposerUrlPreviewWrapper urlPreviewVm={this.props.urlPreviewVm} />}
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
-                    <ReplyPreview
-                        replyToEvent={this.props.replyToEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                    />
+                    {isEditing ? (
+                        <EditingBar onCancel={this.cancelEdit} />
+                    ) : (
+                        <ReplyPreview
+                            replyToEvent={this.props.replyToEvent}
+                            permalinkCreator={this.props.permalinkCreator}
+                        />
+                    )}
                     <div className="mx_MessageComposer_row">
                         {leftIcon}
                         {composer}
@@ -726,19 +883,41 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     isRichTextEnabled={this.state.isRichTextEnabled}
                                     onComposerModeClick={this.onRichTextToggle}
                                     toggleButtonMenu={this.toggleButtonMenu}
+                                    isEditing={isEditing}
                                 />
                             )}
                             {showSendButton && (
                                 <SendButton
                                     key="controls_send"
-                                    onClick={this.sendMessage}
+                                    onClick={isEditing ? this.saveEdit : this.sendMessage}
                                     title={
-                                        this.state.haveRecording ? _t("composer|send_button_voice_message") : undefined
+                                        isEditing
+                                            ? _t("action|save")
+                                            : this.state.haveRecording
+                                              ? _t("composer|send_button_voice_message")
+                                              : undefined
                                     }
                                 />
                             )}
                         </div>
                     </div>
+                    {/* Below the text rather than above it, where the formatting bar pops up over a selection.
+                        While editing, those of the message being edited; those of the message being
+                        written wait until the edit is over. */}
+                    {isEditing ? (
+                        this.state.editAttachments && (
+                            <MessageAttachments
+                                vm={this.state.editAttachments}
+                                alwaysShow={getMessageMediaItems(editState.getEvent().getContent()) !== undefined}
+                                className="mx_MessageComposer_attachments"
+                            />
+                        )
+                    ) : (
+                        <MessageAttachments
+                            vm={this.props.uploadVm.attachments}
+                            className="mx_MessageComposer_attachments"
+                        />
+                    )}
                 </div>
             </div>
         );
@@ -747,9 +926,19 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 
-export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
+/**
+ * The message composer, with the attachments waiting in it and, when edits are made in the composer,
+ * the message being edited.
+ */
+export default function MessageComposerWrapper(
+    props: Omit<IProps, "mxClient" | "urlPreviewVm" | "uploadVm" | "attachmentCount">,
+): JSX.Element {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
     const client = useMatrixClientContext();
+    const uploadVm = useRoomUploadViewModel();
+    const attachmentCount = useViewModel(uploadVm.attachments).items.length;
+    // Without this, messages are edited in place in the timeline rather than in the composer.
+    const editInComposer = useSettingValue("feature_edit_in_composer");
     const urlPreviewVm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
@@ -764,5 +953,13 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
         urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
-    return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
+    return (
+        <MessageComposerWithMatrixClient
+            {...props}
+            urlPreviewVm={urlPreviewVm}
+            uploadVm={uploadVm}
+            attachmentCount={attachmentCount}
+            editState={editInComposer ? props.editState : undefined}
+        />
+    );
 }

@@ -21,7 +21,7 @@ import {
     Room,
     Thread,
 } from "matrix-js-sdk/src/matrix";
-import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterAll, afterEach, type MockInstance } from "vitest";
 import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "test-utils";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -29,6 +29,7 @@ import {
     canCancel,
     canEditContent,
     canEditOwnEvent,
+    editEvent,
     fetchInitialEvent,
     findEditableEvent,
     highlightEvent,
@@ -38,6 +39,8 @@ import {
 } from "./EventUtils";
 import dis from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
+import SettingsStore from "../settings/SettingsStore";
+import { TimelineRenderingType } from "../contexts/RoomContext";
 
 vi.mock("../dispatcher/dispatcher");
 
@@ -247,6 +250,271 @@ describe("EventUtils", () => {
 
             it.each<TestCase>(editableCases)("returns true for %s", (_description, event) => {
                 expect(canEditOwnEvent(mockClient, event)).toBe(true);
+            });
+        });
+    });
+
+    describe("galleries", () => {
+        const mkGalleryEvent = (sender = userId, msgtype = "dm.filament.gallery", body = "Our holiday"): MatrixEvent =>
+            new MatrixEvent({
+                type: EventType.RoomMessage,
+                event_id: `$gallery-${sender}-${msgtype}`,
+                room_id: roomId,
+                sender,
+                content: {
+                    msgtype,
+                    body,
+                    itemtypes: [
+                        { itemtype: "m.image", body: "one.png", url: "mxc://server/one" },
+                        { itemtype: "m.image", body: "two.png", url: "mxc://server/two" },
+                    ],
+                },
+            });
+
+        const mkMediaEvent = (msgtype: string): MatrixEvent =>
+            new MatrixEvent({
+                type: EventType.RoomMessage,
+                event_id: `$media-${msgtype}`,
+                room_id: roomId,
+                sender: userId,
+                content: { msgtype, body: "one.png", url: "mxc://server/one" },
+            });
+
+        /** Turn the labs flag for sending galleries on or off, leaving every other setting alone. */
+        const setGalleryMessagesEnabled = (enabled: boolean): void => {
+            const getValue = SettingsStore.getValue;
+            settingsSpy = vi
+                .spyOn(SettingsStore, "getValue")
+                .mockImplementation(((name: string, ...args: unknown[]) =>
+                    name === "feature_gallery_messages"
+                        ? enabled
+                        : (getValue as (...args: unknown[]) => unknown).call(
+                              SettingsStore,
+                              name,
+                              ...args,
+                          )) as typeof SettingsStore.getValue);
+        };
+
+        let settingsSpy: MockInstance | undefined;
+
+        beforeEach(() => {
+            vi.mocked(dis.dispatch).mockClear();
+        });
+
+        afterEach(() => {
+            settingsSpy?.mockRestore();
+            settingsSpy = undefined;
+        });
+
+        describe("canEditContent()", () => {
+            it.each(["dm.filament.gallery", "m.gallery"])(
+                "returns true for the user's own %s when sending galleries is enabled",
+                (msgtype) => {
+                    setGalleryMessagesEnabled(true);
+
+                    expect(canEditContent(mockClient, mkGalleryEvent(userId, msgtype))).toBe(true);
+                },
+            );
+
+            it("returns true for a gallery without a caption when sending galleries is enabled", () => {
+                setGalleryMessagesEnabled(true);
+
+                expect(canEditContent(mockClient, mkGalleryEvent(userId, "dm.filament.gallery", ""))).toBe(true);
+            });
+
+            it("returns false for the user's own gallery when sending galleries is disabled", () => {
+                setGalleryMessagesEnabled(false);
+
+                expect(canEditContent(mockClient, mkGalleryEvent())).toBe(false);
+            });
+
+            it("returns false for somebody else's gallery", () => {
+                setGalleryMessagesEnabled(true);
+
+                expect(canEditContent(mockClient, mkGalleryEvent("@bob:server"))).toBe(false);
+            });
+
+            it("returns false for a gallery which has not been sent yet", () => {
+                setGalleryMessagesEnabled(true);
+                const event = mkGalleryEvent();
+                event.status = EventStatus.SENDING;
+
+                expect(canEditContent(mockClient, event)).toBe(false);
+            });
+
+            it("still returns true for a text message when sending galleries is disabled", () => {
+                setGalleryMessagesEnabled(false);
+
+                expect(canEditContent(mockClient, niceTextMessage)).toBe(true);
+            });
+
+            it.each(["m.image", "m.video"])(
+                "returns true for the user's own %s message only when sending galleries is enabled",
+                (msgtype) => {
+                    const event = mkMediaEvent(msgtype);
+
+                    setGalleryMessagesEnabled(true);
+                    expect(canEditContent(mockClient, event)).toBe(true);
+
+                    settingsSpy?.mockRestore();
+                    setGalleryMessagesEnabled(false);
+                    expect(canEditContent(mockClient, event)).toBe(false);
+                },
+            );
+
+            it.each(["m.file", "m.audio"])("returns false for the user's own %s message", (msgtype) => {
+                setGalleryMessagesEnabled(true);
+
+                expect(canEditContent(mockClient, mkMediaEvent(msgtype))).toBe(false);
+            });
+        });
+
+        describe("canEditOwnEvent()", () => {
+            it.each([
+                ["a gallery", (): MatrixEvent => mkGalleryEvent()],
+                ["an image", (): MatrixEvent => mkMediaEvent("m.image")],
+                ["a video", (): MatrixEvent => mkMediaEvent("m.video")],
+            ])("returns true for %s of the user's own when sending galleries is enabled", (_name, mkOwnEvent) => {
+                setGalleryMessagesEnabled(true);
+
+                expect(canEditOwnEvent(mockClient, mkOwnEvent())).toBe(true);
+            });
+
+            it.each([
+                ["a gallery", (): MatrixEvent => mkGalleryEvent()],
+                ["an image", (): MatrixEvent => mkMediaEvent("m.image")],
+            ])("returns false for %s when sending galleries is disabled", (_name, mkOwnEvent) => {
+                setGalleryMessagesEnabled(false);
+
+                expect(canEditOwnEvent(mockClient, mkOwnEvent())).toBe(false);
+            });
+
+            it("returns false for somebody else's gallery", () => {
+                setGalleryMessagesEnabled(true);
+
+                expect(canEditOwnEvent(mockClient, mkGalleryEvent("@bob:server"))).toBe(false);
+            });
+        });
+
+        describe("findEditableEvent()", () => {
+            const olderText = new MatrixEvent({
+                type: EventType.RoomMessage,
+                event_id: "$older",
+                sender: userId,
+                content: { msgtype: MsgType.Text, body: "Older" },
+            });
+            const newerText = new MatrixEvent({
+                type: EventType.RoomMessage,
+                event_id: "$newer",
+                sender: userId,
+                content: { msgtype: MsgType.Text, body: "Newer" },
+            });
+
+            it.each([
+                ["a gallery", (): MatrixEvent => mkGalleryEvent()],
+                ["an image", (): MatrixEvent => mkMediaEvent("m.image")],
+            ])("finds %s when looking for the message to edit", (_name, mkOwnEvent) => {
+                setGalleryMessagesEnabled(true);
+                const media = mkOwnEvent();
+
+                // Looking backwards from the end of the timeline, as the up arrow does
+                expect(
+                    findEditableEvent({ events: [olderText, media], isForward: false, matrixClient: mockClient }),
+                ).toBe(media);
+                // Stepping from one message being edited to the next one
+                expect(
+                    findEditableEvent({
+                        events: [olderText, media, newerText],
+                        isForward: true,
+                        fromEventId: "$older",
+                        matrixClient: mockClient,
+                    }),
+                ).toBe(media);
+            });
+
+            it("skips galleries and images when sending galleries is disabled", () => {
+                setGalleryMessagesEnabled(false);
+                const gallery = mkGalleryEvent();
+                const image = mkMediaEvent("m.image");
+
+                expect(
+                    findEditableEvent({
+                        events: [olderText, gallery, image],
+                        isForward: false,
+                        matrixClient: mockClient,
+                    }),
+                ).toBe(olderText);
+                expect(
+                    findEditableEvent({
+                        events: [olderText, gallery, image, newerText],
+                        isForward: true,
+                        fromEventId: "$older",
+                        matrixClient: mockClient,
+                    }),
+                ).toBe(newerText);
+            });
+
+            it("skips somebody else's gallery", () => {
+                setGalleryMessagesEnabled(true);
+
+                expect(
+                    findEditableEvent({
+                        events: [olderText, mkGalleryEvent("@bob:server")],
+                        isForward: false,
+                        matrixClient: mockClient,
+                    }),
+                ).toBe(olderText);
+            });
+        });
+
+        describe("editEvent()", () => {
+            it.each([
+                ["a gallery", (): MatrixEvent => mkGalleryEvent()],
+                ["an image", (): MatrixEvent => mkMediaEvent("m.image")],
+                ["a video", (): MatrixEvent => mkMediaEvent("m.video")],
+            ])("edits %s in the message editor, like a text message", (_name, mkOwnEvent) => {
+                setGalleryMessagesEnabled(true);
+                const event = mkOwnEvent();
+
+                editEvent(mockClient, event, TimelineRenderingType.Room);
+
+                expect(dis.dispatch).toHaveBeenCalledTimes(1);
+                expect(dis.dispatch).toHaveBeenCalledWith({
+                    action: Action.EditEvent,
+                    event,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                });
+            });
+
+            it.each([
+                ["a gallery", (): MatrixEvent => mkGalleryEvent()],
+                ["an image", (): MatrixEvent => mkMediaEvent("m.image")],
+            ])("does nothing for %s when sending galleries is disabled", (_name, mkOwnEvent) => {
+                setGalleryMessagesEnabled(false);
+
+                editEvent(mockClient, mkOwnEvent(), TimelineRenderingType.Room);
+
+                expect(dis.dispatch).not.toHaveBeenCalled();
+            });
+
+            it("does nothing for somebody else's gallery", () => {
+                setGalleryMessagesEnabled(true);
+
+                editEvent(mockClient, mkGalleryEvent("@bob:server"), TimelineRenderingType.Room);
+
+                expect(dis.dispatch).not.toHaveBeenCalled();
+            });
+
+            it("still edits a text message in the message editor", () => {
+                setGalleryMessagesEnabled(true);
+
+                editEvent(mockClient, niceTextMessage, TimelineRenderingType.Thread);
+
+                expect(dis.dispatch).toHaveBeenCalledWith({
+                    action: Action.EditEvent,
+                    event: niceTextMessage,
+                    timelineRenderingType: TimelineRenderingType.Thread,
+                });
             });
         });
     });

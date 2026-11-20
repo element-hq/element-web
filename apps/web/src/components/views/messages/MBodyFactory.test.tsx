@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, type MockInstance } from "vitest";
-import { render, screen, type RenderResult, waitFor } from "test-utils-rtl";
+import { render, screen, type RenderResult, waitFor, within } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
@@ -27,6 +27,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
+    GalleryBodyFactory,
     ImageBodyFactory,
     RedactedBodyFactory,
     VideoBodyFactory,
@@ -36,6 +37,8 @@ import { TimelineRenderingType } from "../../../contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { FileDownloader } from "../../../utils/FileDownloader";
+import Modal from "../../../Modal";
+import { GalleryImageView } from "../elements/GalleryImageView";
 
 vi.mock("matrix-encrypt-attachment", () => ({
     default: {
@@ -443,6 +446,120 @@ describe("MBodyFactory", () => {
             expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
             expect(screen.getByRole("link", { name: /Download/ })).toBeInTheDocument();
+        });
+    });
+
+    describe("GalleryBodyFactory", () => {
+        const mkGalleryEvent = (count = 2): MatrixEvent =>
+            mkEvent("dm.filament.gallery", {
+                body: "",
+                url: undefined,
+                itemtypes: Array.from({ length: count }, (_, index) => ({
+                    itemtype: "m.image",
+                    body: `image-${index}.png`,
+                    url: `mxc://server/image-${index}`,
+                    info: { mimetype: "image/png" },
+                })),
+            });
+
+        it("renders a tile for each item of the gallery and loads their thumbnails", async () => {
+            const { container } = render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent()} />);
+
+            const gallery = screen.getByRole("group", { name: "Gallery with 2 items" });
+            expect(gallery).toHaveClass("mx_GalleryBody");
+            expect(within(gallery).getByRole("button", { name: "Image 1 of 2" })).toBeInTheDocument();
+            expect(within(gallery).getByRole("button", { name: "Image 2 of 2" })).toBeInTheDocument();
+
+            await waitFor(() => expect(container.querySelectorAll("img")).toHaveLength(2));
+            const sources = [...container.querySelectorAll("img")].map((img) => img.getAttribute("src"));
+            expect(sources[0]).toContain("image-0");
+            expect(sources[1]).toContain("image-1");
+            // The thumbnails are scaled by the content repository rather than downloaded in full.
+            expect(sources[0]).toContain("width=800");
+        });
+
+        it("shows how many items have no tile", () => {
+            render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent(8)} />);
+
+            const gallery = screen.getByRole("group", { name: "Gallery with 8 items" });
+            expect(within(gallery).getAllByRole("button")).toHaveLength(5);
+            expect(within(gallery).getByText("+3")).toBeInTheDocument();
+        });
+
+        it("opens the gallery viewer on the item which was clicked", async () => {
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+            const mediaEvent = mkGalleryEvent();
+            render(<GalleryBodyFactory {...props} mxEvent={mediaEvent} />);
+
+            await userEvent.click(screen.getByRole("button", { name: "Image 2 of 2" }));
+
+            expect(createDialog).toHaveBeenCalledWith(
+                GalleryImageView,
+                expect.objectContaining({
+                    mxEvent: mediaEvent,
+                    initialIndex: 1,
+                    permalinkCreator: props.permalinkCreator,
+                }),
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
+            createDialog.mockRestore();
+        });
+
+        it("hides the media until the user chooses to show it", async () => {
+            const setMediaVisible = vi.fn();
+            vi.mocked(useMediaVisible).mockReturnValue([false, setMediaVisible]);
+            const { container } = render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent()} />);
+
+            expect(screen.queryByRole("group")).toBeNull();
+            expect(container.querySelector("img")).toBeNull();
+
+            await userEvent.click(screen.getByRole("button", { name: "Show gallery" }));
+
+            expect(setMediaVisible).toHaveBeenCalledWith(true);
+        });
+
+        it("shows the tiles once the media becomes visible", async () => {
+            vi.mocked(useMediaVisible).mockReturnValue([false, vi.fn()]);
+            const mediaEvent = mkGalleryEvent();
+            const { container, rerender } = render(<GalleryBodyFactory {...props} mxEvent={mediaEvent} />);
+            expect(screen.queryByRole("group")).toBeNull();
+
+            vi.mocked(useMediaVisible).mockReturnValue([true, vi.fn()]);
+            rerender(<GalleryBodyFactory {...props} mxEvent={mediaEvent} />);
+
+            expect(screen.getByRole("group", { name: "Gallery with 2 items" })).toBeInTheDocument();
+            await waitFor(() => expect(container.querySelectorAll("img")).toHaveLength(2));
+        });
+
+        it("limits the size of the grid to the maximum image height", () => {
+            render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent()} maxImageHeight={96} />);
+
+            expect(screen.getByRole("group").style.getPropertyValue("--GalleryBody-width")).toBe("144px");
+        });
+
+        it("leaves the size of the grid to the stylesheet when there is no maximum image height", () => {
+            render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent()} />);
+
+            expect(screen.getByRole("group").style.getPropertyValue("--GalleryBody-width")).toBe("");
+        });
+
+        it("shows the items of another event when the event changes", () => {
+            const { rerender } = render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent(2)} />);
+
+            rerender(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent(3)} />);
+
+            expect(screen.getByRole("group", { name: "Gallery with 3 items" })).toBeInTheDocument();
+        });
+
+        it("only counts the items in an export, which does not include their media", () => {
+            const { container } = render(<GalleryBodyFactory {...props} mxEvent={mkGalleryEvent(3)} forExport />);
+
+            expect(screen.getByText("Gallery with 3 items")).toHaveClass("mx_UnknownBody");
+            expect(screen.queryByRole("group")).toBeNull();
+            expect(screen.queryByRole("button")).toBeNull();
+            expect(container.querySelector("img")).toBeNull();
         });
     });
 

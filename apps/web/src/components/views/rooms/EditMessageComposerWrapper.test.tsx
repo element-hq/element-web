@@ -56,6 +56,9 @@ interface ComposerProps {
     updateUrlPreviews?: (arg: never) => void;
     attachBundles?: (content: RoomMessageEventContent) => void;
     isUrlPreviewsModified?: boolean;
+    inComposer?: boolean;
+    onAttachmentsChange?: unknown;
+    actionsRef?: unknown;
 }
 const plainComposerProps = vi.fn<(props: ComposerProps) => void>();
 const wysiwygComposerProps = vi.fn<(props: ComposerProps) => void>();
@@ -119,22 +122,64 @@ describe("<EditMessageComposerWrapper />", () => {
         vi.restoreAllMocks();
     });
 
-    function renderWrapper(content: object = { msgtype: "m.text", body: "original message" }): void {
+    function renderWrapper(
+        content: object = { msgtype: "m.text", body: "original message" },
+        props: Partial<React.ComponentProps<typeof EditMessageComposerWrapper>> = {},
+    ): void {
         const editState = new EditorStateTransfer(
             mkEvent({ event: true, type: "m.room.message", user: "@alice:server.org", content }),
         );
         const room = mkRoom(client, "!foo:bar");
         vi.mocked(client.getRoom).mockReturnValue(room);
-        render(<EditMessageComposerWrapper mxClient={client} editState={editState} showUrlPreview={true} />, {
-            wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={client}>
-                    <ScopedRoomContextProvider roomId="!foo:bar" {...getRoomContext(room, { showUrlPreview: true })}>
-                        {children}
-                    </ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>
-            ),
-        });
+        render(
+            <EditMessageComposerWrapper mxClient={client} editState={editState} showUrlPreview={true} {...props} />,
+            {
+                wrapper: ({ children }) => (
+                    <MatrixClientContext.Provider value={client}>
+                        <ScopedRoomContextProvider
+                            roomId="!foo:bar"
+                            {...getRoomContext(room, { showUrlPreview: true })}
+                        >
+                            {children}
+                        </ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>
+                ),
+            },
+        );
     }
+
+    describe("in the message composer", () => {
+        const onAttachmentsChange = vi.fn();
+        const actionsRef = { current: null };
+
+        it("should pass the composer's options on to the plain editor", () => {
+            renderWrapper(undefined, { inComposer: true, onAttachmentsChange, actionsRef });
+
+            const props = lastProps(plainComposerProps);
+            expect(props.inComposer).toBe(true);
+            expect(props.onAttachmentsChange).toBe(onAttachmentsChange);
+            expect(props.actionsRef).toBe(actionsRef);
+        });
+
+        it("should pass the composer's options on to the rich text editor", () => {
+            enabledSettings.push("feature_wysiwyg_composer");
+            renderWrapper(undefined, { inComposer: true, onAttachmentsChange, actionsRef });
+
+            const props = lastProps(wysiwygComposerProps);
+            expect(props.inComposer).toBe(true);
+            expect(props.onAttachmentsChange).toBe(onAttachmentsChange);
+            expect(props.actionsRef).toBe(actionsRef);
+        });
+
+        it("should leave the editor in place in the timeline by default", () => {
+            renderWrapper();
+
+            const props = lastProps(plainComposerProps);
+            expect(props.inComposer).toBeUndefined();
+            expect(props.onAttachmentsChange).toBeUndefined();
+            expect(props.actionsRef).toBeUndefined();
+        });
+    });
 
     it("should render the plain composer by default", () => {
         renderWrapper();
@@ -149,6 +194,36 @@ describe("<EditMessageComposerWrapper />", () => {
         expect(screen.getByRole("textbox", { name: WYSIWYG_COMPOSER_LABEL })).toBeInTheDocument();
         expect(screen.queryByRole("textbox", { name: PLAIN_COMPOSER_LABEL })).not.toBeInTheDocument();
         expect(lastProps(wysiwygComposerProps).isUrlPreviewsModified).toBe(false);
+    });
+
+    // Both composers can change the images and videos of a message, so the setting alone decides.
+    describe.each([
+        [
+            "a gallery",
+            {
+                msgtype: "dm.filament.gallery",
+                body: "Our holiday",
+                itemtypes: [{ itemtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+            },
+        ],
+        ["an image", { msgtype: "m.image", body: "one.png", url: "mxc://server/one" }],
+        ["a video", { msgtype: "m.video", body: "clip.mp4", url: "mxc://server/clip" }],
+    ])("for %s", (_name, content) => {
+        it("should render the wysiwyg composer when that composer is enabled", () => {
+            enabledSettings.push("feature_wysiwyg_composer");
+            renderWrapper(content);
+
+            expect(screen.getByRole("textbox", { name: WYSIWYG_COMPOSER_LABEL })).toBeInTheDocument();
+            expect(screen.queryByRole("textbox", { name: PLAIN_COMPOSER_LABEL })).not.toBeInTheDocument();
+            expect(plainComposerProps).not.toHaveBeenCalled();
+        });
+
+        it("should render the plain composer by default", () => {
+            renderWrapper(content);
+
+            expect(screen.getByRole("textbox", { name: PLAIN_COMPOSER_LABEL })).toBeInTheDocument();
+            expect(wysiwygComposerProps).not.toHaveBeenCalled();
+        });
     });
 
     it("should preview links the plain composer reports", async () => {

@@ -12,7 +12,11 @@ import { EventType, type MatrixClient, MatrixEvent, MsgType } from "matrix-js-sd
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { stubClient, tearDownAfterTest } from "test-utils";
 
-import { FileBodyFactory, VideoBodyFactory } from "../../../../components/views/messages/MBodyFactory";
+import {
+    FileBodyFactory,
+    GalleryBodyFactory,
+    VideoBodyFactory,
+} from "../../../../components/views/messages/MBodyFactory";
 import { type IBodyProps } from "../../../../components/views/messages/IBodyProps";
 import MImageReplyBody from "../../../../components/views/messages/MImageReplyBody";
 import MVoiceMessageBody from "../../../../components/views/messages/MVoiceMessageBody";
@@ -168,6 +172,27 @@ describe("ReplyTileViewModel", () => {
             throw new Error("Expected audio override to render a file body element");
         }
         expect(audioBody.type).toBe(FileBodyFactory);
+    });
+
+    it.each(["dm.filament.gallery", "m.gallery"])("renders %s replies as a small gallery", (msgtype) => {
+        const galleryEvent = createEvent({
+            msgtype: msgtype as MsgType,
+            body: "Our holiday",
+            content: {
+                itemtypes: [
+                    { itemtype: "m.image", body: "one.png", url: "mxc://server/one" },
+                    { itemtype: "m.image", body: "two.png", url: "mxc://server/two" },
+                ],
+            },
+        });
+
+        tearDownAfterTest(new ReplyTileViewModel({ mxEvent: galleryEvent, cli }));
+
+        const replyTileProps = getReplyTileProps();
+        expect(replyTileProps.mxEvent).toBe(galleryEvent);
+        expect(getReplyTileOverrides().overrideBodyTypes[msgtype]).toBe(GalleryBodyFactory);
+        // The gallery body sizes its grid from this, as the image and video bodies do.
+        expect(replyTileProps.maxImageHeight).toBe(96);
     });
 
     it("renders voice replies with the voice body override", () => {

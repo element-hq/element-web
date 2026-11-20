@@ -17,6 +17,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { render } from "test-utils-rtl";
 import { vi, describe, it, expect, beforeEach, afterEach, afterAll, type MockedObject } from "vitest";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { getRoomContext, mkEvent, mkStubRoom, stubClient, tearDownAfterTest } from "test-utils";
 
 import { RoomUploadContextProvider, RoomUploadViewModel } from "./RoomUploadViewModel";
@@ -29,6 +30,9 @@ import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext";
 import { Action } from "../../dispatcher/actions";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
+import SettingsStore from "../../settings/SettingsStore";
+import { type MediaCaption } from "../../utils/gallery";
+import { type GalleryComposerEntry, GalleryComposerViewModel } from "../composer/GalleryComposerViewModel";
 
 const sendContentListToRoomSpy = vi.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
 
@@ -236,6 +240,497 @@ describe("RoomUploadViewModel", () => {
         });
     });
 
+    describe("attachments", () => {
+        const image = new File(["image"], "photo.png", { type: "image/png" });
+        const secondImage = new File(["second image"], "other.jpg", { type: "image/jpeg" });
+        const video = new File(["video"], "clip.mp4", { type: "video/mp4" });
+        const pdf = new File(["pdf"], "doc.pdf", { type: "application/pdf" });
+        const audio = new File(["audio"], "song.ogg", { type: "audio/ogg" });
+        const caption: MediaCaption = { body: "Look at these" };
+
+        let galleryEnabled: boolean;
+        let fetchUploadLimit: ReturnType<typeof vi.spyOn>;
+        let sendGalleryToRoom: ReturnType<typeof vi.spyOn>;
+        let trackEvent: ReturnType<typeof vi.spyOn>;
+        const spies: Array<{ mockRestore(): void }> = [];
+
+        beforeEach(() => {
+            galleryEnabled = true;
+            sendContentListToRoomSpy.mockResolvedValue(undefined);
+
+            const getValue = SettingsStore.getValue.bind(SettingsStore);
+            fetchUploadLimit = vi.spyOn(ContentMessages.sharedInstance(), "fetchUploadLimit").mockResolvedValue(null);
+            sendGalleryToRoom = vi.spyOn(ContentMessages.sharedInstance(), "sendGalleryToRoom").mockResolvedValue();
+            trackEvent = vi.spyOn(PosthogAnalytics.instance, "trackEvent").mockImplementation(() => {});
+            spies.push(
+                fetchUploadLimit,
+                sendGalleryToRoom,
+                trackEvent,
+                vi
+                    .spyOn(SettingsStore, "getValue")
+                    .mockImplementation(((name: string, ...rest: unknown[]) =>
+                        name === "feature_gallery_messages"
+                            ? galleryEnabled
+                            : (getValue as (...args: unknown[]) => unknown)(
+                                  name,
+                                  ...rest,
+                              )) as typeof SettingsStore.getValue),
+                vi.spyOn(URL, "createObjectURL").mockImplementation((file) => `blob:${(file as File).name}`),
+                vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {}),
+            );
+        });
+
+        afterEach(() => {
+            while (spies.length) spies.pop()!.mockRestore();
+        });
+
+        function createVm(timelineRenderingType = TimelineRenderingType.Room): RoomUploadViewModel {
+            return tearDownAfterTest(
+                new RoomUploadViewModel(room, client, timelineRenderingType, dis, undefined, undefined, () => {}),
+            );
+        }
+
+        const attachedNames = (vm: RoomUploadViewModel): string[] =>
+            vm.attachments.getSnapshot().items.map((item) => item.name);
+
+        it("starts without attachments", () => {
+            const vm = createVm();
+
+            expect(vm.hasAttachments).toBe(false);
+            expect(vm.attachments.getSnapshot().items).toEqual([]);
+            expect(vm.attachments.getItems()).toEqual([]);
+        });
+
+        it("sends files straight away and attaches nothing while gallery messages are disabled", async () => {
+            galleryEnabled = false;
+            const vm = createVm();
+
+            await vm.initiateViaInputFiles([image, video]);
+
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [image, video],
+                room.roomId,
+                undefined,
+                undefined,
+                client,
+                TimelineRenderingType.Room,
+            );
+            expect(vm.hasAttachments).toBe(false);
+            expect(fetchUploadLimit).not.toHaveBeenCalled();
+            expect(dis.dispatch).not.toHaveBeenCalled();
+        });
+
+        it("keeps picked images and videos in the composer instead of sending them", async () => {
+            const vm = createVm(TimelineRenderingType.Thread);
+
+            await vm.initiateViaInputFiles([image, video]);
+
+            expect(vm.hasAttachments).toBe(true);
+            expect(vm.attachments.getSnapshot().items).toEqual([
+                expect.objectContaining({ name: "photo.png", type: "image", previewUrl: "blob:photo.png" }),
+                expect.objectContaining({ name: "clip.mp4", type: "video", previewUrl: "blob:clip.mp4" }),
+            ]);
+            // Nothing is sent until the user sends the message
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(sendGalleryToRoom).not.toHaveBeenCalled();
+            // The user carries on writing in the composer the files were attached to
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: Action.FocusSendMessageComposer,
+                context: TimelineRenderingType.Thread,
+            });
+        });
+
+        it("adds to the attachments already waiting", async () => {
+            const vm = createVm();
+
+            await vm.initiateViaInputFiles([image]);
+            await vm.initiateViaInputFiles([video, secondImage]);
+
+            expect(attachedNames(vm)).toEqual(["photo.png", "clip.mp4", "other.jpg"]);
+        });
+
+        it("attaches the media of a mixed selection and sends only the other files", async () => {
+            const vm = createVm();
+            const replyEvent = mkEvent({ event: true, type: "anything", user: "anyone", content: {} });
+            vm.setReplyToEvent(replyEvent);
+            const threadRelation: IEventRelation = { rel_type: "m.thread", event_id: "$root" };
+            vm.setThreadRelation(threadRelation);
+
+            await vm.initiateViaInputFiles([pdf, image, audio, video]);
+
+            expect(attachedNames(vm)).toEqual(["photo.png", "clip.mp4"]);
+            expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1);
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [pdf, audio],
+                room.roomId,
+                threadRelation,
+                replyEvent,
+                client,
+                TimelineRenderingType.Room,
+            );
+        });
+
+        it("sends a selection without images or videos the way it always was", async () => {
+            const vm = createVm();
+
+            await vm.initiateViaInputFiles([pdf, audio]);
+
+            expect(vm.hasAttachments).toBe(false);
+            expect(fetchUploadLimit).not.toHaveBeenCalled();
+            expect(dis.dispatch).not.toHaveBeenCalled();
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [pdf, audio],
+                room.roomId,
+                undefined,
+                undefined,
+                client,
+                TimelineRenderingType.Room,
+            );
+        });
+
+        it("turns away files which are larger than the homeserver accepts", async () => {
+            fetchUploadLimit.mockResolvedValue(6);
+            const vm = createVm();
+
+            // "image" is 5 bytes, "second image" is 12
+            await vm.initiateViaInputFiles([image, secondImage]);
+
+            expect(fetchUploadLimit).toHaveBeenCalledWith(client);
+            expect(attachedNames(vm)).toEqual(["photo.png"]);
+            expect(vm.attachments.getSnapshot().notice).toBeTruthy();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("accepts files of any size when the homeserver has no limit", async () => {
+            // A limit learned for an earlier selection no longer applies
+            fetchUploadLimit.mockResolvedValueOnce(6).mockResolvedValueOnce(null);
+            const vm = createVm();
+
+            await vm.initiateViaInputFiles([secondImage]);
+            expect(vm.hasAttachments).toBe(false);
+
+            await vm.initiateViaInputFiles([secondImage]);
+            expect(attachedNames(vm)).toEqual(["other.jpg"]);
+            expect(vm.attachments.getSnapshot().notice).toBeUndefined();
+        });
+
+        it("keeps dropped and pasted images and videos in the composer too", async () => {
+            const vm = createVm();
+
+            await vm.initiateViaDataTransfer({ files: [image, pdf, video] as unknown as FileList } as DataTransfer);
+
+            expect(attachedNames(vm)).toEqual(["photo.png", "clip.mp4"]);
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [pdf],
+                room.roomId,
+                undefined,
+                undefined,
+                client,
+                TimelineRenderingType.Room,
+            );
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: Action.FocusSendMessageComposer,
+                context: TimelineRenderingType.Room,
+            });
+        });
+
+        it("does not send anything for a drop of only images and videos", async () => {
+            const vm = createVm();
+
+            await vm.initiateViaDataTransfer({ files: [image] as unknown as FileList } as DataTransfer);
+
+            expect(attachedNames(vm)).toEqual(["photo.png"]);
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("still turns guests away", async () => {
+            client.isGuest.mockReturnValue(true);
+            const vm = createVm();
+
+            await vm.initiateViaInputFiles([image]);
+            await vm.initiateViaDataTransfer({ files: [image] as unknown as FileList } as DataTransfer);
+
+            expect(dis.dispatch).toHaveBeenCalledWith({ action: "require_registration" });
+            expect(vm.hasAttachments).toBe(false);
+            expect(fetchUploadLimit).not.toHaveBeenCalled();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("attaches nothing once the composer has gone away", async () => {
+            const { promise, resolve } = Promise.withResolvers<number | null>();
+            fetchUploadLimit.mockReturnValue(promise);
+            const vm = createVm();
+            const onAddFiles = vi.spyOn(vm.attachments, "onAddFiles");
+
+            const pending = vm.initiateViaInputFiles([image, pdf]);
+            vm.dispose();
+            resolve(null);
+            await pending;
+
+            expect(onAddFiles).not.toHaveBeenCalled();
+            expect(dis.dispatch).not.toHaveBeenCalled();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        describe("while a message is being edited in the composer", () => {
+            const keptItem = {
+                itemtype: "m.image",
+                body: "kept.png",
+                url: "mxc://server/kept",
+            } as GalleryComposerEntry;
+
+            function createEditAttachments(): GalleryComposerViewModel {
+                return tearDownAfterTest(new GalleryComposerViewModel({ items: [keptItem] }));
+            }
+
+            it("attaches picked images and videos to the message being edited, not the draft", async () => {
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaInputFiles([image, video]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image, video]);
+                expect(vm.attachments.getItems()).toEqual([]);
+                expect(vm.hasAttachments).toBe(false);
+                expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            });
+
+            it("attaches dropped images and videos to the message being edited and sends the other files", async () => {
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaDataTransfer({ files: [pdf, image] as unknown as FileList } as DataTransfer);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image]);
+                expect(vm.attachments.getItems()).toEqual([]);
+                expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                    [pdf],
+                    room.roomId,
+                    undefined,
+                    undefined,
+                    client,
+                    TimelineRenderingType.Room,
+                );
+            });
+
+            it("applies the upload limit to the message being edited", async () => {
+                fetchUploadLimit.mockResolvedValue(6);
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                // "image" is 5 bytes, "second image" is 12
+                await vm.initiateViaInputFiles([image, secondImage]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image]);
+                expect(editAttachments.getSnapshot().notice).toBeTruthy();
+                expect(vm.attachments.getSnapshot().notice).toBeUndefined();
+            });
+
+            it("attaches to the draft again once the edit is over", async () => {
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+                await vm.initiateViaInputFiles([image]);
+
+                vm.setEditAttachments(undefined);
+                await vm.initiateViaInputFiles([video]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem, image]);
+                expect(vm.attachments.getItems()).toEqual([video]);
+            });
+
+            it("leaves the draft's attachments alone while the edit is in progress", async () => {
+                const vm = createVm();
+                await vm.initiateViaInputFiles([image]);
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaInputFiles([video]);
+
+                expect(vm.attachments.getItems()).toEqual([image]);
+                expect(vm.hasAttachments).toBe(true);
+            });
+
+            it("sends the files straight away while gallery messages are disabled", async () => {
+                galleryEnabled = false;
+                const vm = createVm();
+                const editAttachments = createEditAttachments();
+                vm.setEditAttachments(editAttachments);
+
+                await vm.initiateViaInputFiles([image]);
+
+                expect(editAttachments.getItems()).toEqual([keptItem]);
+                expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                    [image],
+                    room.roomId,
+                    undefined,
+                    undefined,
+                    client,
+                    TimelineRenderingType.Room,
+                );
+            });
+        });
+
+        it("keeps files inserted by a module in the composer", async () => {
+            const { getByTestId } = render(
+                <MatrixClientContext.Provider value={client}>
+                    <ScopedRoomContextProvider {...getRoomContext(room, {})}>
+                        <RoomUploadContextProvider>
+                            <p>Any child</p>
+                        </RoomUploadContextProvider>
+                    </ScopedRoomContextProvider>
+                </MatrixClientContext.Provider>,
+            );
+
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.ComposerFileInsert,
+                    files: [image],
+                    timelineRenderingType: TimelineRenderingType.Room,
+                } satisfies ComposerInsertFilesPayload,
+                true,
+            );
+
+            await vi.waitFor(() => expect(fetchUploadLimit).toHaveBeenCalledWith(client));
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(getByTestId("room-upload-context-input")).toBeInTheDocument();
+        });
+
+        describe("sendAttachments", () => {
+            it("sends nothing when no attachments are waiting", () => {
+                const vm = createVm();
+
+                expect(vm.sendAttachments(caption)).toBe(false);
+
+                expect(sendGalleryToRoom).not.toHaveBeenCalled();
+                expect(trackEvent).not.toHaveBeenCalled();
+            });
+
+            it("sends the waiting attachments as one message with the caption", async () => {
+                const vm = createVm();
+                await vm.initiateViaInputFiles([video, image, secondImage]);
+
+                expect(vm.sendAttachments(caption)).toBe(true);
+
+                await vi.waitFor(() => expect(sendGalleryToRoom).toHaveBeenCalledTimes(1));
+                // In the order they were attached
+                expect(sendGalleryToRoom).toHaveBeenCalledWith(
+                    [video, image, secondImage],
+                    caption,
+                    room.roomId,
+                    undefined,
+                    client,
+                    undefined,
+                );
+            });
+
+            it("sends them in the thread and as the reply the composer is in", async () => {
+                const vm = createVm(TimelineRenderingType.Thread);
+                await vm.initiateViaInputFiles([image, video]);
+                // The user starts a reply after attaching the files
+                const replyEvent = mkEvent({ event: true, type: "anything", user: "anyone", content: {} });
+                vm.setReplyToEvent(replyEvent);
+                const threadRelation: IEventRelation = { rel_type: "m.thread", event_id: "$root" };
+                vm.setThreadRelation(threadRelation);
+                const formatted: MediaCaption = {
+                    "body": "**hi** @bob",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": "<strong>hi</strong> @bob",
+                    "m.mentions": { user_ids: ["@bob:server"] },
+                };
+
+                vm.sendAttachments(formatted);
+
+                await vi.waitFor(() =>
+                    expect(sendGalleryToRoom).toHaveBeenCalledWith(
+                        [image, video],
+                        formatted,
+                        room.roomId,
+                        threadRelation,
+                        client,
+                        replyEvent,
+                    ),
+                );
+            });
+
+            it("leaves the composer without attachments", async () => {
+                const vm = createVm();
+                await vm.initiateViaInputFiles([image, video]);
+
+                vm.sendAttachments(caption);
+
+                expect(vm.hasAttachments).toBe(false);
+                expect(vm.attachments.getSnapshot().items).toEqual([]);
+                // The previews are released
+                expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:photo.png");
+                expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:clip.mp4");
+                // So sending again has nothing to send
+                expect(vm.sendAttachments(caption)).toBe(false);
+                await vi.waitFor(() => expect(sendGalleryToRoom).toHaveBeenCalledTimes(1));
+            });
+
+            it("tracks how many attachments of which kind were sent", async () => {
+                const vm = createVm();
+                await vm.initiateViaInputFiles([image, video, video]);
+
+                vm.sendAttachments(caption);
+
+                expect(trackEvent).toHaveBeenCalledWith({
+                    eventName: "AttachmentSend",
+                    isReply: false,
+                    inThread: false,
+                    count: 3,
+                    kind: "local",
+                    type: "video",
+                });
+            });
+
+            it("tracks whether they were sent as a reply and in a thread", async () => {
+                const vm = createVm(TimelineRenderingType.Thread);
+                vm.setReplyToEvent(mkEvent({ event: true, type: "anything", user: "anyone", content: {} }));
+                vm.setThreadRelation({ rel_type: "m.thread", event_id: "$root" });
+                await vm.initiateViaInputFiles([image]);
+
+                vm.sendAttachments(caption);
+
+                expect(trackEvent).toHaveBeenCalledWith({
+                    eventName: "AttachmentSend",
+                    isReply: true,
+                    inThread: true,
+                    count: 1,
+                    kind: "local",
+                    type: "image",
+                });
+            });
+
+            it("logs a failure to send rather than throwing", async () => {
+                const warn = vi.spyOn(rootLogger.getChild("RoomUploadViewModel"), "warn").mockImplementation(() => {});
+                spies.push(warn);
+                const error = new Error("homeserver is down");
+                sendGalleryToRoom.mockRejectedValue(error);
+                const vm = createVm();
+                await vm.initiateViaInputFiles([image]);
+
+                expect(vm.sendAttachments(caption)).toBe(true);
+
+                await vi.waitFor(() => expect(warn).toHaveBeenCalledWith("Failed to send attachments", error));
+            });
+        });
+
+        it("releases the attachments when the composer goes away", async () => {
+            const vm = createVm();
+            await vm.initiateViaInputFiles([image]);
+
+            vm.dispose();
+
+            expect(vm.attachments.isDisposed).toBe(true);
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:photo.png");
+        });
+    });
+
     describe("RoomUploadContextProvider", () => {
         it("uploads when called via module API", async () => {
             sendContentListToRoomSpy.mockResolvedValue(undefined);
@@ -263,13 +758,16 @@ describe("RoomUploadViewModel", () => {
                 } satisfies ComposerInsertFilesPayload,
                 true,
             );
-            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
-                files,
-                room.roomId,
-                undefined,
-                undefined,
-                client,
-                TimelineRenderingType.Room,
+            // The files are first checked for media to keep in the composer, which takes a tick.
+            await vi.waitFor(() =>
+                expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                    files,
+                    room.roomId,
+                    undefined,
+                    undefined,
+                    client,
+                    TimelineRenderingType.Room,
+                ),
             );
         });
     });

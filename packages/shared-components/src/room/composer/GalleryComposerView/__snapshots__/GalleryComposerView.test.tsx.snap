@@ -1,0 +1,131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GalleryComposerView > renders the default story 1`] = `
+<div>
+  <div
+    style="width: 520px;"
+  >
+    <div
+      class="GalleryComposerView-module_root"
+    >
+      <ul
+        aria-label="3 of 60 items"
+        class="GalleryComposerView-module_grid"
+      >
+        <li
+          class="GalleryComposerView-module_item"
+        >
+          <img
+            alt="wide.png"
+            class="GalleryComposerView-module_preview"
+            src="/static/wideImage.png"
+          />
+          <button
+            aria-label="Remove wide.png"
+            class="GalleryComposerView-module_remove"
+            title="Remove"
+            type="button"
+          >
+            <svg
+              fill="currentColor"
+              height="16"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          class="GalleryComposerView-module_item"
+        >
+          <img
+            alt="tall.png"
+            class="GalleryComposerView-module_preview"
+            src="/static/tallImage.png"
+          />
+          <button
+            aria-label="Remove tall.png"
+            class="GalleryComposerView-module_remove"
+            title="Remove"
+            type="button"
+          >
+            <svg
+              fill="currentColor"
+              height="16"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          class="GalleryComposerView-module_item"
+        >
+          <img
+            alt="square.png"
+            class="GalleryComposerView-module_preview"
+            src="/static/element.png"
+          />
+          <button
+            aria-label="Remove square.png"
+            class="GalleryComposerView-module_remove"
+            title="Remove"
+            type="button"
+          >
+            <svg
+              fill="currentColor"
+              height="16"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+              />
+            </svg>
+          </button>
+        </li>
+        <li
+          class="GalleryComposerView-module_item"
+        >
+          <button
+            aria-label="Add photos or videos"
+            class="GalleryComposerView-module_add"
+            title="Add photos or videos"
+            type="button"
+          >
+            <svg
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 13H6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 5 12q0-.424.287-.713A.97.97 0 0 1 6 11h5V6q0-.424.287-.713A.97.97 0 0 1 12 5q.424 0 .713.287Q13 5.576 13 6v5h5q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 18 13h-5v5q0 .424-.287.712A.97.97 0 0 1 12 19a.97.97 0 0 1-.713-.288A.97.97 0 0 1 11 18z"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+      <input
+        accept="image/*,video/*"
+        aria-hidden="true"
+        class="GalleryComposerView-module_fileInput"
+        data-testid="gallery-composer-file-input"
+        multiple=""
+        tabindex="-1"
+        type="file"
+      />
+    </div>
+  </div>
+</div>
+`;

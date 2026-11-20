@@ -608,8 +608,11 @@
             "user_a11y": "User Autocomplete",
             "user_description": "Users"
         },
+        "cancel_editing": "Cancel editing",
         "close_sticker_picker": "Hide stickers",
         "edit_composer_label": "Edit message",
+        "editing_cancel_hint": "Esc to cancel",
+        "editing_title": "Editing message",
         "format_bold": "Bold",
         "format_code_block": "Code block",
         "format_decrease_indent": "Indent decrease",
@@ -1200,6 +1203,7 @@
         "prefix": {
             "audio": "Audio",
             "file": "File",
+            "gallery": "Gallery",
             "image": "Image",
             "poll": "Poll",
             "video": "Video"
@@ -1291,6 +1295,26 @@
         "send_label": "Send",
         "sending": "Sending",
         "sent": "Sent"
+    },
+    "gallery": {
+        "composer": {
+            "count": {
+                "one": "%(count)s of %(max)s item",
+                "other": "%(count)s of %(max)s items"
+            },
+            "hint_old_clients": "You've added more than one image or video, so this will be sent as a gallery. People using older apps will only see your text, not the images.",
+            "notice_too_large": "Some files were left out because they are larger than the upload limit of %(limit)s.",
+            "notice_too_many": "A gallery can hold up to %(max)s items. The rest were left out.",
+            "notice_unsupported": "Only images and videos can be added. Other files were left out."
+        },
+        "upload_failed": {
+            "one": "%(count)s item could not be uploaded. Retry to continue where the upload stopped.",
+            "other": "%(count)s items could not be uploaded. Retry to continue where the upload stopped."
+        },
+        "upload_name": {
+            "one": "%(count)s item",
+            "other": "%(count)s items"
+        }
     },
     "identity_server": {
         "change": "Change identity server",
@@ -1531,6 +1555,8 @@
         "click_for_info": "More info",
         "config_only": "Your account provider must enable this in config.json.",
         "currently_experimental": "Currently experimental.",
+        "edit_in_composer": "Edit messages in the message composer",
+        "edit_in_composer_description": "Edit your messages in the composer at the bottom, with all its buttons, instead of in place in the timeline.",
         "element_call_video_rooms": "Element Call video rooms",
         "exclude_insecure_devices": "Exclude insecure devices when sending/receiving messages",
         "exclude_insecure_devices_description": "When this mode is enabled, encrypted messages will not be shared with unverified devices, and messages from unverified devices will be shown as an error. Note that if you enable this mode, you may be unable to communicate with users who have not verified their devices.",
@@ -1551,6 +1577,8 @@
             "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
+        "gallery_messages": "Send gallery messages (MSC4274)",
+        "gallery_messages_description": "Send several images or videos as one message with a caption. People using apps without support for galleries won't see them.",
         "group_developer": "Developer",
         "group_encryption": "Encryption",
         "group_experimental": "Experimental",
@@ -1647,6 +1675,7 @@
         "space_rejoin_warning_restricted": "This space is restricted and cannot be rejoined unless you are in one of its authorised spaces or invited."
     },
     "lightbox": {
+        "previous": "Previous",
         "rotate_left": "Rotate Left",
         "rotate_right": "Rotate Right",
         "title": "Image view"
@@ -3424,6 +3453,18 @@
         "m.file": {
             "error_decrypting": "Error decrypting attachment",
             "size_unknown": "Size unknown"
+        },
+        "m.gallery": {
+            "error_video": "Unable to show video due to error",
+            "item_error": "%(label)s (failed to load)",
+            "item_image": "Image %(index)s of %(count)s",
+            "item_video": "Video %(index)s of %(count)s",
+            "show_gallery": "Show gallery",
+            "summary": {
+                "one": "Gallery with %(count)s item",
+                "other": "Gallery with %(count)s items"
+            },
+            "viewer_title": "%(name)s (%(index)s of %(count)s)"
         },
         "m.image": {
             "error": "Unable to show image due to error",

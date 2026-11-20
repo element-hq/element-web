@@ -41,6 +41,7 @@ import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
 import { ElementCallEventType } from "./call-types.ts";
 import Spoiler from "./components/views/elements/Spoiler.tsx";
+import { getGallerySummary, isGalleryEvent } from "./utils/gallery.ts";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -422,6 +423,9 @@ function textForMessageEvent(ev: MatrixEvent, client: MatrixClient): (() => stri
             message = _t("timeline|m.image|sent", { senderDisplayName });
         } else if (ev.getType() == EventType.Sticker) {
             message = _t("timeline|m.sticker", { senderDisplayName });
+        } else if (isGalleryEvent(ev) && !ev.isRedacted()) {
+            // The body is the caption, which a gallery need not have.
+            message = senderDisplayName + ": " + getGallerySummary(ev.getContent());
         } else {
             // in this case, parse it as a plain text message
             message = senderDisplayName + ": " + message;

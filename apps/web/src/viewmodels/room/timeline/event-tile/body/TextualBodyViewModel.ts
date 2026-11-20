@@ -25,6 +25,7 @@ import { Action } from "../../../../../dispatcher/actions";
 import { type ViewUserPayload } from "../../../../../dispatcher/payloads/ViewUserPayload";
 import MessageEditHistoryDialog from "../../../../../components/views/dialogs/MessageEditHistoryDialog";
 import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import { isGalleryEvent } from "../../../../../utils/gallery";
 
 const CAPTION_MESSAGE_TYPES = new Set<MsgType>([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video]);
 
@@ -72,7 +73,7 @@ export class TextualBodyViewModel
             return TextualBodyViewKind.EMOTE;
         }
 
-        if (msgtype && CAPTION_MESSAGE_TYPES.has(msgtype)) {
+        if ((msgtype && CAPTION_MESSAGE_TYPES.has(msgtype)) || isGalleryEvent(mxEvent)) {
             return TextualBodyViewKind.CAPTION;
         }
 

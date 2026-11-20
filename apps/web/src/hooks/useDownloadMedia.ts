@@ -23,13 +23,30 @@ export interface UseDownloadMediaReturn {
     canDownload: boolean;
 }
 
-export function useDownloadMedia(url: string, fileName?: string, mxEvent?: MatrixEvent): UseDownloadMediaReturn {
+/**
+ * Download a piece of media to the user's device.
+ *
+ * @param url - Where to fetch the media from, when it is not attached to an event.
+ * @param fileName - The name to save the media as, when it is not attached to an event.
+ * @param mxEvent - The event the media belongs to. Decides whether downloading is allowed.
+ * @param eventMediaHelper - Fetches the media, in place of a helper for `mxEvent` as a whole. For
+ *     media which is only part of the event, such as one item of a gallery.
+ */
+export function useDownloadMedia(
+    url: string,
+    fileName?: string,
+    mxEvent?: MatrixEvent,
+    eventMediaHelper?: MediaEventHelper,
+): UseDownloadMediaReturn {
     const downloader = useRef(new FileDownloader()).current;
     const blobRef = useRef<Blob>(null);
     const [loading, setLoading] = useState(false);
     const [canDownload, setCanDownload] = useState<boolean>(true);
 
-    const mediaEventHelper = useMemo(() => (mxEvent ? new MediaEventHelper(mxEvent) : undefined), [mxEvent]);
+    const mediaEventHelper = useMemo(
+        () => eventMediaHelper ?? (mxEvent ? new MediaEventHelper(mxEvent) : undefined),
+        [eventMediaHelper, mxEvent],
+    );
 
     useEffect(() => {
         if (!mxEvent) return;

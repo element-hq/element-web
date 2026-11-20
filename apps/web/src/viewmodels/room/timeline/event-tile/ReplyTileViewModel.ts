@@ -32,10 +32,16 @@ import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import { renderReplyTile } from "../../../../events/EventTileFactory";
 import { type GetRelationsForEvent } from "../../../../components/views/rooms/EventTile";
 import { type IBodyProps } from "../../../../components/views/messages/IBodyProps";
-import { FileBodyFactory, VideoBodyFactory, renderMBody } from "../../../../components/views/messages/MBodyFactory";
+import {
+    FileBodyFactory,
+    GalleryBodyFactory,
+    VideoBodyFactory,
+    renderMBody,
+} from "../../../../components/views/messages/MBodyFactory";
 import MImageReplyBody from "../../../../components/views/messages/MImageReplyBody";
 import MVoiceMessageBody from "../../../../components/views/messages/MVoiceMessageBody";
 import { isVoiceMessage } from "../../../../utils/EventUtils";
+import { GALLERY_MSGTYPE } from "../../../../utils/gallery";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import { MemberAvatarViewModel as AppMemberAvatarViewModel } from "../../../../components/viewmodels/avatars/MemberAvatarViewModel";
 import {
@@ -166,6 +172,9 @@ export class ReplyTileViewModel
             // Audio attachments render as a file body, voice messages keep their player.
             [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : ReplyTileFileBody,
             [MsgType.Video]: VideoBodyFactory,
+            // Rendered as a small grid: `maxImageHeight` below also limits the size of a gallery.
+            [GALLERY_MSGTYPE.name]: GalleryBodyFactory,
+            [GALLERY_MSGTYPE.altName]: GalleryBodyFactory,
         };
         const evOverrides: Record<string, ComponentType<IBodyProps>> = {
             // Use the image reply body so the sticker does not take up a lot of space.
