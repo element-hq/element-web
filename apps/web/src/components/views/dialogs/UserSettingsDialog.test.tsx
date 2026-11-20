@@ -11,7 +11,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactElement } from "react";
 import { vi, describe, it, expect, beforeEach, type MockedObject } from "vitest";
 import { render, screen, waitFor } from "test-utils-rtl";
-import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent, type MatrixClient, type Device } from "matrix-js-sdk/src/matrix";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
@@ -80,6 +81,8 @@ describe("<UserSettingsDialog />", () => {
             getMediaConfig: vi.fn(),
             getAuthMetadata: vi.fn().mockResolvedValue(makeDelegatedAuthMetadata()),
             getSyncState: vi.fn().mockReturnValue("SYNCING"),
+            getDevices: vi.fn(),
+            store: { accountData: [] } as unknown,
         });
         sdkContext = new TestSDKContext();
         sdkContext._client = mockClient;
@@ -268,8 +271,10 @@ describe("<UserSettingsDialog />", () => {
         const { container } = render(getComponent());
 
         await waitFor(() => {
-            expect(container.querySelector(
-                "li[data-testid=settings-tab-USER_ENCRYPTION_TAB].mx_SettingsDialog_tabLabelsAlert")
+            expect(
+                container.querySelector(
+                    "li[data-testid=settings-tab-USER_ENCRYPTION_TAB].mx_SettingsDialog_tabLabelsAlert",
+                ),
             ).toBeInTheDocument();
         });
 
@@ -281,6 +286,50 @@ describe("<UserSettingsDialog />", () => {
         vi.mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue("foo");
         mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "m.secret_storage.default_key" }));
 
+        await waitFor(() => {
+            expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).not.toBeInTheDocument();
+        });
+    });
+
+    it("displays an indicator when user can enable dehydrated device", async () => {
+        // Given the user does have secret storage (so that won't cause an indicator)
+        vi.mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue("foo");
+
+        // And the server does support dehydrated devices
+        vi.mocked(mockClient.getCrypto()!.isDehydrationSupported).mockResolvedValue(true);
+
+        // But we don't have a dehydrated device
+        vi.mocked(mockClient.getDevices).mockResolvedValue({
+            devices: [{ device_id: "mydevice" }],
+        });
+
+        // When we render the user settings dialog
+        const { container } = render(getComponent());
+
+        // Then the Encryption tab has a dot on it
+        await waitFor(() => {
+            expect(
+                container.querySelector(
+                    "li[data-testid=settings-tab-USER_ENCRYPTION_TAB].mx_SettingsDialog_tabLabelsAlert",
+                ),
+            ).toBeInTheDocument();
+        });
+
+        // (This test is combined with the above because testing for the lack of
+        // an alert is tricky in isolation)
+
+        // But when we adjust to have a dehydrated device
+        vi.mocked(mockClient.getDevices).mockResolvedValue({
+            devices: [{ device_id: "mydevice" }, { device_id: "mydd" }],
+        });
+        vi.mocked(mockClient.getCrypto()!.getUserDeviceInfo).mockResolvedValue(
+            new Map([[userId, new Map([["mydd", { dehydrated: true } as unknown as Device]])]]),
+        );
+
+        // And trigger an update
+        mockClient.emit(CryptoEvent.DevicesUpdated, [userId]);
+
+        // Then the Encryption tab does not have a dot
         await waitFor(() => {
             expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).not.toBeInTheDocument();
         });

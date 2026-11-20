@@ -27,10 +27,7 @@ import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter"
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
-import { useOwnDevices } from "../../devices/useOwnDevices";
 import { SettingsHeader } from "../../SettingsHeader";
-import { useDehydrationSupported } from "../../encryption/useDehydrationSupported";
-import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 
 /**
  * The state in the encryption settings tab.
@@ -62,12 +59,32 @@ interface Props {
      * If the tab should start in a state other than the default
      */
     initialState?: State;
+    /**
+     * Is dehydration supported on our homeserver?
+     *
+     * undefined = still checking
+     * true = yes, it is supported
+     * false = no, it is not supported
+     */
+    dehydrationSupported?: boolean;
+    /**
+     * The ID of the dehydrated device.
+     *
+     * undefined = still checking for a dehydrated device
+     * null = there is no dehydrated device
+     * string = there is a dehydrated device with this ID
+     */
+    dehydratedDeviceId?: string | null;
 }
 
 /**
  * The encryption settings tab.
  */
-export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
+export function EncryptionUserSettingsTab({
+    initialState = "main",
+    dehydrationSupported,
+    dehydratedDeviceId,
+}: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
     const deviceState = useTypedEventEmitterState(
@@ -137,7 +154,10 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         }
                                     />
                                     <Separator kind="section" />
-                                    <OfflineDevice />
+                                    <OfflineDevice
+                                        dehydrationSupported={dehydrationSupported}
+                                        dehydratedDeviceId={dehydratedDeviceId}
+                                    />
                                     <Separator kind="section" />
                                 </>
                             )}
@@ -303,13 +323,28 @@ export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecover
     }
 }
 
-const OfflineDevice: React.FC = () => {
+interface OfflineDeviceProps {
+    /**
+     * Is dehydration supported on our homeserver?
+     *
+     * undefined = still checking
+     * true = yes, it is supported
+     * false = no, it is not supported
+     */
+    dehydrationSupported?: boolean;
+    /**
+     * The ID of the dehydrated device.
+     *
+     * undefined = still checking for a dehydrated device
+     * null = there is no dehydrated device
+     * string = there is a dehydrated device with this ID
+     */
+    dehydratedDeviceId: string | null | undefined;
+}
+
+const OfflineDevice: React.FC<OfflineDeviceProps> = ({ dehydrationSupported, dehydratedDeviceId }) => {
     let hasRecommendedTag;
     let annotation;
-
-    const matrixClient = useMatrixClientContext();
-    const dehydrationSupported = useDehydrationSupported(matrixClient);
-    const { dehydratedDeviceId } = useOwnDevices(matrixClient);
 
     if (dehydrationSupported === true) {
         if (dehydratedDeviceId) {

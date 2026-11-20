@@ -158,14 +158,8 @@ export const mockClientMethodsDevice = (
 
 export const mockClientMethodsCrypto = (): Partial<
     Record<MethodLikeKeys<MatrixClient> | PropertyLikeKeys<MatrixClient>, unknown>
-> => ({
-    isKeyBackupKeyStored: vi.fn(),
-    secretStorage: {
-        hasKey: vi.fn(),
-        isStored: vi.fn().mockResolvedValue(null),
-        getDefaultKeyId: vi.fn().mockResolvedValue(null),
-    },
-    getCrypto: vi.fn().mockReturnValue({
+> => {
+    const crypto = {
         getUserDeviceInfo: vi.fn(),
         getDeviceVerificationStatus: vi.fn().mockResolvedValue(null),
         getCrossSigningStatus: vi.fn().mockResolvedValue({
@@ -179,14 +173,25 @@ export const mockClientMethodsCrypto = (): Partial<
         }),
         isCrossSigningReady: vi.fn().mockResolvedValue(true),
         isSecretStorageReady: vi.fn(),
+        isDehydrationSupported: vi.fn().mockResolvedValue(undefined),
         getSessionBackupPrivateKey: vi.fn(),
         getVersion: vi.fn().mockReturnValue("Version 0"),
         getOwnDeviceKeys: vi.fn().mockReturnValue(new Promise(() => {})),
         getCrossSigningKeyId: vi.fn(),
         isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
         getKeyBackupInfo: vi.fn().mockResolvedValue(null),
-    }),
-});
+    };
+
+    return {
+        isKeyBackupKeyStored: vi.fn(),
+        secretStorage: {
+            hasKey: vi.fn(),
+            isStored: vi.fn().mockResolvedValue(null),
+            getDefaultKeyId: vi.fn().mockResolvedValue(null),
+        },
+        getCrypto: vi.fn().mockReturnValue(crypto),
+    };
+};
 
 export const mockClientMethodsRooms = (rooms: Room[] = []): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
     getVisibleRooms: vi.fn().mockReturnValue(rooms),

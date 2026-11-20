@@ -60,7 +60,9 @@ describe("<EncryptionUserSettingsTab />", () => {
         vi.resetAllMocks();
     });
 
-    function renderComponent(props: { initialState?: State } = {}) {
+    function renderComponent(
+        props: { initialState?: State; dehydrationSupported?: boolean; dehydratedDeviceId?: string | null } = {},
+    ) {
         return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
     }
 
@@ -103,22 +105,16 @@ describe("<EncryptionUserSettingsTab />", () => {
         // Given key storage is enabled
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
 
-        // And the user has a dehydrated device
-        const userDevices = new Map();
-        userDevices.set("DEHYDRDEV", { dehydrated: true, deviceId: "DEHYDRDEV" });
-        const deviceMap = new Map();
-        deviceMap.set(matrixClient.getUserId(), userDevices);
-        vi.spyOn(matrixClient.getCrypto()!, "getUserDeviceInfo").mockResolvedValue(deviceMap);
+        // And we have a dehydrated device
+        const props = { dehydrationSupported: true, dehydratedDeviceId: "DEHYDDEV" };
 
         // When we render the tab
-        const encryptionTab = renderComponent();
+        const encryptionTab = renderComponent(props);
 
         // Then we can see the dehydrated devices section
         await waitFor(() =>
-            expect(encryptionTab.getByRole("heading", { name: "Secure Backup", level: 2 })).toBeInTheDocument(),
+            expect(encryptionTab.getByRole("heading", { name: "Offline device Active", level: 2 })).toBeInTheDocument(),
         );
-
-        await waitFor(() => expect(encryptionTab.getByText("Offline device enabled")).toBeInTheDocument());
     });
 
     it("should not display the recovery panel when key storage is not enabled", async () => {
