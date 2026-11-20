@@ -155,7 +155,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                         {_t("auth|logout_dialog|check_recovery_key")}
                     </Button>
                     <Button kind="tertiary" onClick={() => setStep(Step.GenerateKey)}>
-                        {_t("auth|logout_dialog|create_new_recovery_key")}
+                        {_t("auth|logout_dialog|generate_recovery_key")}
                     </Button>
                 </EncryptionCardButtons>
             </EncryptionCard>
