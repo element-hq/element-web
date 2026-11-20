@@ -162,7 +162,7 @@ class FilePanel extends React.Component<IProps, IState> {
         });
 
         filter.filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
-        return room.getOrCreateFilteredTimelineSet(filter);
+        return room.getOrCreateFilteredTimelineSet(filter, { includeThreadedEvents: true });
     }
 
     private onPaginationRequest = (
@@ -295,6 +295,7 @@ class FilePanel extends React.Component<IProps, IState> {
                                 manageReadReceipts={false}
                                 manageReadMarkers={false}
                                 timelineSet={this.state.timelineSet}
+                                hideThreadedMessages={false}
                                 showUrlPreview={false}
                                 onPaginationRequest={this.onPaginationRequest}
                                 empty={emptyState}
