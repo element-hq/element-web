@@ -74,6 +74,9 @@ describe("EmailInvitationFormViewModel", () => {
         expect(vm.getSnapshot().isJoinRuleChangeRequired).toBe(true);
         onJoinRuleChange("knock");
         expect(vm.getSnapshot().isJoinRuleChangeRequired).toBe(false);
+        onJoinRuleChange("invite");
+        onJoinRuleChange("knock_restricted");
+        expect(vm.getSnapshot().isJoinRuleChangeRequired).toBe(false);
 
         vm.dispose();
         expect(room.joinRule.unwatch).toHaveBeenCalledWith(onJoinRuleChange);

@@ -12,11 +12,12 @@ import { EmailInvitationSuccessDialog } from "./EmailInvitationSuccessDialog";
 import type { ModuleConfig } from "../config";
 import { ErrorDialog } from "./ErrorDialog";
 import type { EmailInvitationFormResult } from "./EmailInvitationFormDialog";
+import { isKnockJoinRule } from "./isKnockJoinRule";
 
 /**
  * Adds an "Invite guests" action to the room summary card and the member list header.
  * The action opens a form to invite guests by email, sends the invitations and shows the invited emails.
- * The action is disabled when the user can't invite, or when the room must switch to "knock" and the user
+ * The action is disabled when the user can't invite, or when the room doesn't allow knocking and the user
  * can't change the join rule.
  *
  * @param api - Module API
@@ -28,8 +29,8 @@ export function initEmailInvitation(api: Api, config: ModuleConfig, i18n: I18nAp
         const room = api.client.getRoom(roomId);
         if (!room) return undefined;
 
-        // Inviting a guest switches the room to knock, so the user may also need to change the join rule
-        const disabled = !room.canInvite() || (room.joinRule.value !== "knock" && !room.canChangeJoinRule());
+        // Guests join by knocking, so the user may also need to change the join rule to allow it
+        const disabled = !room.canInvite() || (!isKnockJoinRule(room.joinRule.value) && !room.canChangeJoinRule());
 
         return {
             key: "restricted-guests",

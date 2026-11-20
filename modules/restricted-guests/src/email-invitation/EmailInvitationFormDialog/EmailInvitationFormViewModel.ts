@@ -14,6 +14,7 @@ import type {
 } from "./types";
 import type { Api, HistoryVisibility, JoinRule, Room } from "@element-hq/element-web-module-api";
 import type { ModuleConfig } from "../../config";
+import { isKnockJoinRule } from "../isKnockJoinRule";
 
 /**
  * Whether new members can read the messages sent before they joined.
@@ -56,12 +57,12 @@ export class EmailInvitationFormViewModel
             canCopyLinkToClipboard: Boolean(props.inviteLink),
             displayCopyTooltip: false,
             isJoinRuleChangeConfirmed: false,
-            isJoinRuleChangeRequired: props.room.joinRule.value !== "knock",
+            isJoinRuleChangeRequired: !isKnockJoinRule(props.room.joinRule.value),
         });
 
         // Listen to join rule change
         const onJoinRuleChange = (joinRule: JoinRule): void => {
-            this.snapshot.merge({ isJoinRuleChangeRequired: joinRule !== "knock" });
+            this.snapshot.merge({ isJoinRuleChangeRequired: !isKnockJoinRule(joinRule) });
         };
         props.room.joinRule.watch(onJoinRuleChange);
         // Watching refreshes the join rule, which may have changed while nobody was watching

@@ -66,6 +66,7 @@ describe("initEmailInvitation", () => {
 
     it.each([
         { canInvite: true, canChangeJoinRule: false, joinRule: "knock", disabled: false },
+        { canInvite: true, canChangeJoinRule: false, joinRule: "knock_restricted", disabled: false },
         { canInvite: true, canChangeJoinRule: true, joinRule: "invite", disabled: false },
         { canInvite: false, canChangeJoinRule: true, joinRule: "knock", disabled: true },
         { canInvite: true, canChangeJoinRule: false, joinRule: "invite", disabled: true },
