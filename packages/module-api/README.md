@@ -89,7 +89,6 @@ class ExampleModule implements Module {
 - Each setting can only be registered once. Registering a name that is already registered throws an error.
 - Settings must be registered before they are read or written.
 
-
 ```typescript
 // Watchable<boolean>
 const enabled = this.api.settings.getValueWatchable("module.exampleModule.enabled");
