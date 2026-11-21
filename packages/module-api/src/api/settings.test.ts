@@ -21,7 +21,9 @@ describe("SettingsApi types", () => {
     it("types the values of settings declared in ModuleSettingValues", () => {
         expectTypeOf<SettingValue<"module.test.enabled">>().toEqualTypeOf<boolean>();
         const api = {} as SettingsApi;
-        expectTypeOf<ReturnType<typeof api.getValue<"module.test.enabled">>>().toEqualTypeOf<Watchable<boolean>>();
+        expectTypeOf<ReturnType<typeof api.getValueWatchable<"module.test.enabled">>>().toEqualTypeOf<
+            Watchable<boolean>
+        >();
     });
 
     it("uses any for app settings", () => {
@@ -38,11 +40,11 @@ describe("SettingsApi types", () => {
         // Never called: only checks which calls compile.
         const calls = (api: SettingsApi): void => {
             // @ts-expect-error - "module.test.typo" is not declared
-            api.getValue("module.test.typo");
+            api.getValueWatchable("module.test.typo");
             // @ts-expect-error - "module.test.typo" is not declared
             void api.setValue("module.test.typo", null, Level.DEVICE, true);
-            api.getValue("module.test.enabled");
-            api.getValue("language");
+            api.getValueWatchable("module.test.enabled");
+            api.getValueWatchable("language");
         };
         expectTypeOf(calls).toBeFunction();
     });

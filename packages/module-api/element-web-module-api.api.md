@@ -483,7 +483,9 @@ export type SettingName<K extends string> = K extends `module.${string}` ? K ext
 
 // @alpha
 export interface SettingsApi {
-    getValue<K extends string>(settingName: SettingName<K>, roomId?: string | null, excludeDefault?: boolean): Watchable<SettingValue<K>>;
+    // @deprecated
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+    getValueWatchable<K extends string>(settingName: SettingName<K>, roomId?: string | null, excludeDefault?: boolean): Watchable<SettingValue<K>>;
     registerSettings(settings: {
         [K in keyof ModuleSettingValues]: BaseSettings<ModuleSettingValues[K]>;
     }): void;

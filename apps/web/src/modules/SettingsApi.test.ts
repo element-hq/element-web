@@ -25,7 +25,14 @@ describe("SettingsApi", () => {
     it("should return the value from SettingsStore.getValue", () => {
         const spy = vi.spyOn(SettingsStore, "getValue").mockReturnValue("en" as any);
         const api = new SettingsApi();
-        expect(api.getValue("language").value).toBe("en");
+        expect(api.getValue("language")).toBe("en");
+        expect(spy).toHaveBeenCalledWith("language", undefined, undefined);
+    });
+
+    it("should return a watchable from getValueWatchable", () => {
+        const spy = vi.spyOn(SettingsStore, "getValue").mockReturnValue("en" as any);
+        const api = new SettingsApi();
+        expect(api.getValueWatchable("language").value).toBe("en");
         expect(spy).toHaveBeenCalledWith("language", null, false);
     });
 
@@ -38,7 +45,7 @@ describe("SettingsApi", () => {
 
     it("should update watchable when setting value changes", async () => {
         const api = new SettingsApi();
-        const watchable = api.getValue("language");
+        const watchable = api.getValueWatchable("language");
         const fn = vi.fn();
         watchable.watch(fn);
 
@@ -53,7 +60,7 @@ describe("SettingsApi", () => {
         await SettingsStore.setValue("ircDisplayNameWidth", "!roomA", SettingLevel.ROOM_DEVICE, 100);
 
         const api = new SettingsApi();
-        const watchable = api.getValue("ircDisplayNameWidth", "!roomA");
+        const watchable = api.getValueWatchable("ircDisplayNameWidth", "!roomA");
         const fn = vi.fn();
         watchable.watch(fn);
         expect(watchable.value).toBe(100);
@@ -70,7 +77,7 @@ describe("SettingsApi", () => {
     it("should keep excluding the default when the setting changes", async () => {
         const api = new SettingsApi();
         api.registerSettings({ "module.test.excludeDefault": { default: true, supportedLevels: [Level.DEVICE] } });
-        const watchable = api.getValue("module.test.excludeDefault", null, true);
+        const watchable = api.getValueWatchable("module.test.excludeDefault", null, true);
         watchable.watch(vi.fn());
         expect(watchable.value).toBeNull();
 
@@ -84,7 +91,7 @@ describe("SettingsApi", () => {
     it("should pick up changes made before the watchable is watched", async () => {
         const api = new SettingsApi();
         api.registerSettings({ "module.test.stale": { default: false, supportedLevels: [Level.DEVICE] } });
-        const watchable = api.getValue("module.test.stale");
+        const watchable = api.getValueWatchable("module.test.stale");
         expect(watchable.value).toBe(false);
 
         await api.setValue("module.test.stale", null, Level.DEVICE, true);
@@ -103,9 +110,9 @@ describe("SettingsApi", () => {
     it("should register module settings so they can be read and written", async () => {
         const api = new SettingsApi();
         api.registerSettings({ "module.test.enabled": { default: false, supportedLevels: [Level.DEVICE] } });
-        expect(api.getValue("module.test.enabled").value).toBe(false);
+        expect(api.getValueWatchable("module.test.enabled").value).toBe(false);
 
         await api.setValue("module.test.enabled", null, Level.DEVICE, true);
-        expect(api.getValue("module.test.enabled").value).toBe(true);
+        expect(api.getValueWatchable("module.test.enabled").value).toBe(true);
     });
 });

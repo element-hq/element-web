@@ -88,11 +88,11 @@ class ExampleModule implements Module {
 - Each setting can only be registered once. Registering a name that is already registered throws an error.
 - Settings must be registered before they are read or written.
 
-Once declared, settings are typed wherever you use `api.settings`:
+Once declared, settings are typed in `getValueWatchable` and `setValue`:
 
 ```typescript
 // Watchable<boolean>
-const enabled = this.api.settings.getValue("module.exampleModule.enabled");
+const enabled = this.api.settings.getValueWatchable("module.exampleModule.enabled");
 console.log(enabled.value);
 enabled.watch((value) => console.log("Setting changed to", value));
 
@@ -100,16 +100,16 @@ await this.api.settings.setValue("module.exampleModule.enabled", null, Level.DEV
 
 // Type errors: the value must be a boolean, and undeclared module settings are rejected
 await this.api.settings.setValue("module.exampleModule.enabled", null, Level.DEVICE, "yes");
-this.api.settings.getValue("module.exampleModule.typo");
+this.api.settings.getValueWatchable("module.exampleModule.typo");
 ```
 
-`getValue` returns a `Watchable` that updates when the setting changes.
+`getValueWatchable` returns a `Watchable` that updates when the setting changes.
 
 Element Web's own settings can be read and written too, by name. They are not typed by this package, so their values
 are `any`:
 
 ```typescript
-const language: Watchable<string> = this.api.settings.getValue("language");
+const language: Watchable<string> = this.api.settings.getValueWatchable("language");
 ```
 
 ## Releases

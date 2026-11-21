@@ -24,7 +24,12 @@ export class SettingsApi implements ISettingsApi {
         SettingsStore.registerModuleSettings(settings);
     }
 
-    public getValue<K extends string>(
+    public getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined {
+        //@ts-expect-error: SettingsStore.getValue will throw on an invalid setting name anyway.
+        return SettingsStore.getValue(settingName, roomId, excludeDefault);
+    }
+
+    public getValueWatchable<K extends string>(
         settingName: K,
         roomId?: string | null,
         excludeDefault?: boolean,

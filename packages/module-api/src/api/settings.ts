@@ -92,9 +92,22 @@ export interface SettingsApi {
      * @param roomId - Room ID to read a room-scoped value for, or null/undefined for a
      * non-room-scoped value.
      * @param excludeDefault - If true, do not fall back to the setting's default value.
+     *
+     * @deprecated Use {@link SettingsApi.getValueWatchable} instead.
+     */
+    getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+
+    /**
+     * Gets the value of a setting as a watchable, computed across all applicable levels
+     * (device, room, account, config, default, etc.).
+     * Settings declared in {@link ModuleSettingValues} are typed; other settings are `any`.
+     * @param settingName - The name of the setting to read.
+     * @param roomId - Room ID to read a room-scoped value for, or null/undefined for a
+     * non-room-scoped value.
+     * @param excludeDefault - If true, do not fall back to the setting's default value.
      * @returns A watchable holding the setting value, which updates when the setting changes.
      */
-    getValue<K extends string>(
+    getValueWatchable<K extends string>(
         settingName: SettingName<K>,
         roomId?: string | null,
         excludeDefault?: boolean,
