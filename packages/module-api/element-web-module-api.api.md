@@ -342,7 +342,21 @@ export interface LanguageTranslations {
 // @alpha
 export enum Level {
     // (undocumented)
-    DEVICE = "device"
+    ACCOUNT = "account",
+    // (undocumented)
+    CONFIG = "config",
+    // (undocumented)
+    DEFAULT = "default",
+    // (undocumented)
+    DEVICE = "device",
+    // (undocumented)
+    PLATFORM = "platform",
+    // (undocumented)
+    ROOM = "room",
+    // (undocumented)
+    ROOM_ACCOUNT = "room-account",
+    // (undocumented)
+    ROOM_DEVICE = "room-device"
 }
 
 // @alpha

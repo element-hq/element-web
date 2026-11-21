@@ -13,6 +13,13 @@ import type { Watchable } from "./watchable";
  */
 export enum Level {
     DEVICE = "device",
+    ROOM_DEVICE = "room-device",
+    ROOM_ACCOUNT = "room-account",
+    ACCOUNT = "account",
+    ROOM = "room",
+    PLATFORM = "platform",
+    CONFIG = "config",
+    DEFAULT = "default",
 }
 
 /**
