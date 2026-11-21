@@ -146,13 +146,16 @@ export default class SettingsStore {
     /**
      * Allows modules to register their own settings.
      * @param settings - The settings to register, keyed by setting name.
-     * @throws If a name doesn't start with `module.` or is already registered.
+     * @throws If a name isn't of the form `module.<module name>.<setting name>` or is already registered.
      */
     public static registerModuleSettings(settings: Record<string, IBaseSetting>): void {
         for (const settingName of Object.keys(settings)) {
-            if (!settingName.startsWith("module.")) {
-                throw new Error(`Module setting "${settingName}" must start with "module."`);
+            // Check that the setting name has the right structure.
+            // We do this to prevent conflicts between settings used by different modules.
+            if (!/^module\.[^.]+\.[^.]+/.test(settingName)) {
+                throw new Error(`Module setting "${settingName}" must be named "module.<module name>.<setting name>"`);
             }
+            // Don't allow existing settings to be overridden.
             if (settingName in SETTINGS) {
                 throw new Error(`Setting "${settingName}" is already registered`);
             }

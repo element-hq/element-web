@@ -84,11 +84,11 @@ class ExampleModule implements Module {
 // ...
 ```
 
-- Setting names must start with `module.`. Include your module's name to avoid clashing with other modules.
+- Setting names must be of the form `module.<your module name>.<setting name>`, for example
+  `module.exampleModule.enabled`. Including your module's name avoids clashing with other modules.
 - Each setting can only be registered once. Registering a name that is already registered throws an error.
 - Settings must be registered before they are read or written.
 
-Once declared, settings are typed in `getValueWatchable` and `setValue`:
 
 ```typescript
 // Watchable<boolean>

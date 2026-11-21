@@ -303,13 +303,31 @@ describe("SettingsStore", () => {
             expect(SettingsStore.getValue("module.test.withDefault" as SettingKey, null, true)).toBeNull();
         });
 
-        it("should reject settings without the module. prefix", () => {
+        it.each(["language", "module.noSettingName", "module..emptyModuleName", "module.emptySettingName."])(
+            "should reject the badly formed name %s",
+            (settingName) => {
+                expect(() =>
+                    SettingsStore.registerModuleSettings({
+                        [settingName]: { default: "xx", supportedLevels: [SettingLevel.DEVICE] },
+                    }),
+                ).toThrow(`Module setting "${settingName}" must be named "module.<module name>.<setting name>"`);
+            },
+        );
+
+        it("should not register anything when a name is badly formed", () => {
             expect(() =>
                 SettingsStore.registerModuleSettings({
-                    language: { default: "xx", supportedLevels: [SettingLevel.DEVICE] },
+                    "module.test.valid": { default: "valid", supportedLevels: [SettingLevel.DEVICE] },
+                    "language": { default: "xx", supportedLevels: [SettingLevel.DEVICE] },
                 }),
-            ).toThrow('Module setting "language" must start with "module."');
+            ).toThrow();
             expect(SettingsStore.getValue("language")).not.toBe("xx");
+            // The valid name wasn't registered either, so it can still be registered.
+            expect(() =>
+                SettingsStore.registerModuleSettings({
+                    "module.test.valid": { default: "valid", supportedLevels: [SettingLevel.DEVICE] },
+                }),
+            ).not.toThrow();
         });
 
         it("should reject settings that are already registered", () => {

@@ -80,7 +80,10 @@ export type SettingName<K extends string> = K extends `module.${string}`
 export interface SettingsApi {
     /**
      * Register the settings used by your module.
-     * Each setting name must start with `module.` and must not already be registered.
+     * You must extend {@link ModuleSettingValues} through declaration merging to get
+     * strong typing.
+     * Each setting name must be of the form `module.<your module name>.<setting name>`, for example
+     * `module.myModule.enabled`, and must not already be registered.
      * @param settings - The settings to register, keyed by setting name.
      */
     registerSettings(settings: { [K in keyof ModuleSettingValues]: BaseSettings<ModuleSettingValues[K]> }): void;
