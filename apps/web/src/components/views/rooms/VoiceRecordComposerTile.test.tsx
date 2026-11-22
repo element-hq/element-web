@@ -100,7 +100,7 @@ describe("<VoiceRecordComposerTile/>", () => {
         it("should send the voice recording", async () => {
             await voiceRecordComposerTile.current!.send();
             expect(mockClient.sendMessage).toHaveBeenCalledWith(roomId, {
-                "body": "Voice message",
+                "body": "Voice message.ogg",
                 "file": undefined,
                 "info": {
                     duration: 1337000,
@@ -148,7 +148,7 @@ describe("<VoiceRecordComposerTile/>", () => {
 
             await voiceRecordComposerTile.current!.send();
             expect(mockClient.sendMessage).toHaveBeenCalledWith(roomId, {
-                "body": "Voice message",
+                "body": "Voice message.ogg",
                 "file": undefined,
                 "info": {
                     duration: 1337000,

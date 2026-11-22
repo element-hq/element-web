@@ -2,7 +2,7 @@
 
 exports[`createVoiceMessageContent > should create a voice message content 1`] = `
 {
-  "body": "Voice message",
+  "body": "Voice message.ogg",
   "file": {},
   "info": {
     "duration": 23000,

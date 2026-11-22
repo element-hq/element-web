@@ -26,7 +26,7 @@ export const createVoiceMessageContent = (
     waveform?: number[],
 ): RoomMessageEventContent => {
     return {
-        "body": "Voice message",
+        "body": "Voice message.ogg",
         //"msgtype": "org.matrix.msc2516.voice",
         "msgtype": MsgType.Audio,
         "url": mxc,
