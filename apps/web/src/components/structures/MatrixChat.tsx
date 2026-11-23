@@ -1396,8 +1396,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (client.isGuest()) return false;
 
         const crypto = client.getCrypto();
-        const crossSigningReady = await crypto?.isCrossSigningReady();
-
+        let crossSigningReady: boolean | undefined;
+        try {
+                crossSigningReady = await crypto?.isCrossSigningReady();
+    } catch (e) {
+                // If the readiness check fails (for example, because it hit the network),
+            // don't let that abort startup: fall back to not forcing verification.
+            logger.warn("Failed to check if cross-signing is ready, not forcing verification", e);
+            return false;
+    }
         return !crossSigningReady;
     }
 
