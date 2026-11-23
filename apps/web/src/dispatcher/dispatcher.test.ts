@@ -15,16 +15,19 @@ import { Action } from "./actions";
 import { AsyncActionPayload } from "./payloads";
 
 describe("MatrixDispatcher", () => {
-    // Callbacks registered on the shared dispatcher by each test, unregistered afterwards
-    const tokens: string[] = [];
+    // Registration tokens for callbacks registered on the shared dispatcher by the current test.
+    // The callbacks will be automatically unregistered in `afterEach`.
+    const dispatcherRegistrationTokens: string[] = [];
+
+    // Utility to register a dispatcher callback - handles cleanup in `afterEach`.
     const register = (callback: Parameters<typeof defaultDispatcher.register>[0]): string => {
         const token = defaultDispatcher.register(callback);
-        tokens.push(token);
+        dispatcherRegistrationTokens.push(token);
         return token;
     };
 
     afterEach(() => {
-        for (const token of tokens.splice(0)) {
+        for (const token of dispatcherRegistrationTokens.splice(0)) {
             defaultDispatcher.unregister(token);
         }
     });

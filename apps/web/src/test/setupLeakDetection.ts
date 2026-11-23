@@ -25,8 +25,10 @@ import type { MatrixDispatcher } from "../dispatcher/dispatcher";
 import type SettingsStore from "../settings/SettingsStore";
 
 interface Registration {
-    /** Whether it is still registered. */
-    isAlive: () => boolean;
+    /** The id or reference the registration call returned. */
+    handle: string;
+    /** The map which holds the registration, keyed by its handle, for as long as it is registered. */
+    registry: ReadonlyMap<string, unknown>;
     /** Where it was made from, as the chain of source locations which led to it. */
     origin: string;
     /** The name of the test which made it. */
@@ -58,17 +60,18 @@ type SettingsStoreInternals = { watchers: Map<string, unknown> };
 let registrations: Registration[] = [];
 let uninstall: (() => void)[] = [];
 
-/** Wraps `object[method]` to record each registration it makes, until {@link uninstall} runs. */
+/** Wraps `object[method]` to record each registration it makes in `registry`, until {@link uninstall} runs. */
 function track<T extends object, K extends keyof T & string>(
     object: T,
     method: K,
-    isRegistered: (handle: string) => boolean,
+    registry: ReadonlyMap<string, unknown>,
 ): void {
     const original = object[method] as (...args: unknown[]) => string;
     object[method] = function (this: unknown, ...args: unknown[]): string {
         const handle = original.apply(this, args);
         registrations.push({
-            isAlive: () => isRegistered(handle),
+            handle,
+            registry,
             origin: getOrigin(),
             test: expect.getState().currentTestName ?? "",
         });
@@ -84,22 +87,22 @@ beforeEach(() => {
     const dispatcher: MatrixDispatcher | undefined = window.mxDispatcher;
     const callbacks = (dispatcher as unknown as DispatcherInternals | undefined)?.callbacks;
     if (dispatcher && callbacks instanceof Map) {
-        track(dispatcher, "register", (id) => callbacks.has(id));
+        track(dispatcher, "register", callbacks);
     }
 
     // The global is declared with the instance type, but holds the class with its static methods
     const settingsStore = window.mxSettingsStore as unknown as typeof SettingsStore | undefined;
     const watchers = (settingsStore as unknown as SettingsStoreInternals | undefined)?.watchers;
     if (settingsStore && watchers instanceof Map) {
-        track(settingsStore, "watchSetting", (ref) => watchers.has(ref));
+        track(settingsStore, "watchSetting", watchers);
     }
 });
 
 afterEach(() => {
-    for (const fn of uninstall.reverse()) fn();
+    for (const fn of uninstall) fn();
     uninstall = [];
 
-    registrations = registrations.filter((r) => r.isAlive());
+    registrations = registrations.filter((r) => r.registry.has(r.handle));
     const byOrigin = new Map<string, Registration[]>();
     for (const r of registrations) byOrigin.set(r.origin, [...(byOrigin.get(r.origin) ?? []), r]);
     const test = expect.getState().currentTestName ?? "";
