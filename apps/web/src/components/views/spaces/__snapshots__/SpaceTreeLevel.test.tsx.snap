@@ -106,7 +106,7 @@ exports[`SpaceItem > should render a space with subspaces 1`] = `
               height="32px"
               loading="lazy"
               referrerpolicy="no-referrer"
-              src="http://this.is.a.url/avatar.url/room.png"
+              src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
               width="32px"
             />
           </span>
@@ -196,7 +196,7 @@ exports[`SpaceItem > should render a space with subspaces 2`] = `
               height="32px"
               loading="lazy"
               referrerpolicy="no-referrer"
-              src="http://this.is.a.url/avatar.url/room.png"
+              src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
               width="32px"
             />
           </span>
@@ -265,7 +265,7 @@ exports[`SpaceItem > should render a space with subspaces 2`] = `
                   height="24px"
                   loading="lazy"
                   referrerpolicy="no-referrer"
-                  src="http://this.is.a.url/avatar.url/room.png"
+                  src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=24&height=24&method=crop&allow_redirect=true"
                   width="24px"
                 />
               </span>

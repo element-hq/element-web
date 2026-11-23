@@ -561,7 +561,7 @@ const StoryFooter = (): React.ReactElement => {
             "aria-label": "Thumbs up, 2 reactions",
             "tooltipVm": useStoryReactionTooltipVm("Thumbs up"),
         },
-        { onClick: fn() },
+        { onClick: fn(), setHoveredOrFocused: fn() },
     );
     const heartVm = useMockedViewModel(
         {
@@ -571,7 +571,7 @@ const StoryFooter = (): React.ReactElement => {
             "aria-label": "Red heart, 1 reaction",
             "tooltipVm": useStoryReactionTooltipVm("Red heart"),
         },
-        { onClick: fn() },
+        { onClick: fn(), setHoveredOrFocused: fn() },
     );
     return (
         <ReactionsRowView vm={vm} className={styles.storyReactions}>
