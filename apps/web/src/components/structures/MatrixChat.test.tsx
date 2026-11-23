@@ -1395,6 +1395,14 @@ describe("<MatrixChat />", () => {
                 ).resolves.toBeVisible();
             });
 
+                it("should not force verification if the cross-signing readiness check fails", async () => {
+                        vi.spyOn(mockClient.getCrypto()!, "isCrossSigningReady").mockRejectedValue(new Error("network error"));
+                    getComponent();
+                    // The app should still start up instead of getting stuck on the loading screen.
+                    await screen.findByLabelText("User menu");
+                    expect(screen.getByRole("heading", { name: "Welcome Ernie" })).toBeVisible();
+                });
+
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
                 // We used to allow bypassing force verification by choosing "Verify with
