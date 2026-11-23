@@ -94,8 +94,8 @@ export const transformTags = {
             attribs.style += "height: 100%;";
         }
         // Custom emoticons are often animated, so ask for animated thumbnails for them,
-        // unless the user turned animations off.
-        const animated = "data-mx-emoticon" in attribs && SettingsStore.getValue("autoplayGifs");
+        // unless the user turned animations off. Other images leave it to the server.
+        const animated = "data-mx-emoticon" in attribs ? SettingsStore.getValue("autoplayGifs") : undefined;
         attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height, "scale", animated)!;
         return { tagName, attribs };
     },

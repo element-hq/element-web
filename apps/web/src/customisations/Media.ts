@@ -108,19 +108,20 @@ class MediaImplementation {
      * @param {number} width The desired width of the thumbnail.
      * @param {number} height The desired height of the thumbnail.
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
-     * @param {boolean} animated Whether to ask the server to keep the animation of animated media.
+     * @param {boolean} animated Whether the server should keep the animation of animated media. Left out of the URL
+     * when undefined, which lets the server pick (normally static).
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
     public getThumbnailOfSourceHttp(
         width: number,
         height: number,
         mode: ResizeMethod = "scale",
-        animated = false,
+        animated?: boolean,
     ): string | null {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
-        // `mxcUrlToHttp` can't request animated thumbnails. Static ones leave `animated` out of the URL entirely.
+        // `mxcUrlToHttp` can't set `animated`.
         return getHttpUriForMxc(
             this.client.baseUrl,
             this.srcMxc,
@@ -130,7 +131,7 @@ class MediaImplementation {
             false,
             true,
             undefined,
-            animated || undefined,
+            animated,
         );
     }
 

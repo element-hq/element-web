@@ -89,7 +89,7 @@ describe("linkify-matrix", () => {
 
             const emoticonUrl = new URL(emoticon.attribs.src!);
             expect(emoticonUrl.pathname).toBe("/_matrix/media/v3/thumbnail/server/emoticon");
-            expect(emoticonUrl.searchParams.get("animated")).toBe(autoplayGifs ? "true" : null);
+            expect(emoticonUrl.searchParams.get("animated")).toBe(String(autoplayGifs));
             const imageUrl = new URL(image.attribs.src!);
             expect(imageUrl.pathname).toBe("/_matrix/media/v3/thumbnail/server/image");
             expect(imageUrl.searchParams.has("animated")).toBe(false);
