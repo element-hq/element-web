@@ -66,6 +66,28 @@ test.describe("Encryption tab", () => {
             },
         );
 
+        test(
+            "should show 'Offline device' section, and 'Not available' when dehydration is disabled",
+            { tag: "@screenshot" },
+            async ({ util }) => {
+                const dialog = await util.openEncryptionTab();
+                const content = util.getEncryptionTabContent();
+
+                // Given our device is verified
+                await dialog.getByRole("button", { name: "Verify this device" }).click();
+                await util.verifyDevice(recoveryKey);
+
+                // Then we can see the Offline device section but it's not available
+                await content
+                    .getByRole("heading", { name: "Offline device\nNot available", exact: true })
+                    .scrollIntoViewIfNeeded();
+
+                await expect(content).toMatchScreenshot("offline-device-not-available.png", {
+                    mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+                });
+            },
+        );
+
         // Test what happens if the cross-signing secrets are in secret storage but are not cached in the local DB.
         //
         // This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
