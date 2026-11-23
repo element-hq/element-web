@@ -268,7 +268,9 @@ describe("<UserSettingsDialog />", () => {
         const { container } = render(getComponent());
 
         await waitFor(() => {
-            expect(container.querySelector(".mx_SettingsDialog_tabLabelsAlert")).toBeInTheDocument();
+            expect(container.querySelector(
+                "li[data-testid=settings-tab-USER_ENCRYPTION_TAB].mx_SettingsDialog_tabLabelsAlert")
+            ).toBeInTheDocument();
         });
 
         // Test that the handler ignores unknown account data
