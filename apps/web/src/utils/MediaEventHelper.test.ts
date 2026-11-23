@@ -60,6 +60,16 @@ describe("MediaEventHelper", () => {
             },
             false,
         ],
+        [
+            "voice message with a caption",
+            {
+                "msgtype": "m.audio",
+                "filename": "recording.ogg",
+                "body": "Listen to this",
+                "org.matrix.msc3245.voice": {},
+            },
+            true,
+        ],
     ])("hasCaption returns the expected value for a %s", (_, content, expected) => {
         const event = new MatrixEvent({ type: "m.room.message", content });
         expect(MediaEventHelper.hasCaption(event)).toBe(expected);

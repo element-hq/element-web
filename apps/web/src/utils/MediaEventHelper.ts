@@ -157,13 +157,16 @@ export class MediaEventHelper implements IDestroyable {
 
     /**
      * Determine if the media event in question has a caption
-     * Voice messages never have a caption, their body is only a fallback text.
+     * A voice message whose body is its filename without the extension is not a caption.
      * @returns `true` if the event is an image, file, audio or video message with a caption, otherwise `false`.
      */
     public static hasCaption(event: MatrixEvent): boolean {
-        if (isVoiceMessage(event)) return false;
         const content = event.getContent();
-        return MEDIA_MSG_TYPES.includes(content.msgtype!) && !!content.filename && content.filename !== content.body;
+        if (!MEDIA_MSG_TYPES.includes(content.msgtype!) || !content.filename || content.filename === content.body) {
+            return false;
+        }
+        if (isVoiceMessage(event) && content.filename.replace(/\.[^.]+$/, "") === content.body) return false;
+        return true;
     }
 
     /**
