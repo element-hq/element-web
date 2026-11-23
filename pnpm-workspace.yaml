@@ -27,7 +27,7 @@ catalog:
     serve: 14.2.8
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
-    "@vector-im/compound-web": "10.4.0"
+    "@vector-im/compound-web": "github:element-hq/compound-web#dbkr/anchoredmenu"
     # i18n
     matrix-web-i18n: 3.6.0
     # emojibase
@@ -109,6 +109,7 @@ allowBuilds:
     "@parcel/watcher": false
     # Builds native bindings, which we do not need as they are handled by `electron-builder install-app-deps`
     pkcs11js: false
+    "@vector-im/compound-web@https://codeload.github.com/element-hq/compound-web/tar.gz/f54284c6d38afff4f4a64d8d8776a06cf1e4e5b1": true
 
 patchedDependencies:
     # Workaround for missing types export
