@@ -26,6 +26,16 @@ export default class DefaultSettingsHandler extends SettingsHandler {
         super();
     }
 
+    /**
+     * Adds the default value of a setting registered after this handler was created.
+     * Useful for runtime settings which may be added at any point during the app lifetime.
+     * @param settingName - The name of the setting.
+     * @param value - The default value of the setting.
+     */
+    public addDefault(settingName: string, value: any): void {
+        this.defaults[settingName] = value;
+    }
+
     public getValue(settingName: string, roomId: string): any {
         let value = this.defaults[settingName];
         if (value === undefined) {
