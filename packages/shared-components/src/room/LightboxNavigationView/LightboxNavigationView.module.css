@@ -1,0 +1,27 @@
+/*
+ * Copyright 2026
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.navigation {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+/* The root only takes focus as a fallback when a focused button disappears */
+.navigation:focus {
+    outline: none;
+}
+
+/* Gutter on either side of the content holding the previous/next button */
+.gutter {
+    pointer-events: initial;
+    flex: 0 0 auto;
+    width: var(--cpd-space-20x);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
