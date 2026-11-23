@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { WatchableProfile } from "./Profile";
@@ -17,8 +17,18 @@ import { OwnProfileStore } from "../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 
 describe("WatchableProfile", () => {
+    let profile: WatchableProfile;
+
+    beforeEach(() => {
+        profile = new WatchableProfile();
+    });
+
+    afterEach(() => {
+        profile.destroy();
+        vi.restoreAllMocks();
+    });
+
     it("should update the profile with the new client on login, before the profile is fetched", () => {
-        const profile = new WatchableProfile();
         const listener = vi.fn();
         profile.watch(listener);
 
@@ -40,7 +50,6 @@ describe("WatchableProfile", () => {
     });
 
     it("clears the session on logout even when the profile store still has the old client", () => {
-        const profile = new WatchableProfile();
         const listener = vi.fn();
         profile.watch(listener);
         const client = {
@@ -49,7 +58,7 @@ describe("WatchableProfile", () => {
             getDeviceId: () => "OLD_DEVICE",
             getHomeserverUrl: () => "https://matrix.server",
         } as unknown as MatrixClient;
-        const storeClient = vi.spyOn(OwnProfileStore.instance, "matrixClient", "get").mockReturnValue(client);
+        vi.spyOn(OwnProfileStore.instance, "matrixClient", "get").mockReturnValue(client);
 
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn, client }, true);
         expect(profile.value.userId).toBe("@user:server");
@@ -63,6 +72,22 @@ describe("WatchableProfile", () => {
 
         defaultDispatcher.dispatch({ action: Action.OnLoggedIn, client }, true);
         expect(profile.value).toMatchObject({ userId: "@user:server", deviceId: "OLD_DEVICE" });
-        storeClient.mockRestore();
+    });
+
+    it("stops following logins and profile changes once destroyed", () => {
+        const listener = vi.fn();
+        profile.watch(listener);
+        profile.destroy();
+
+        const client = {
+            isGuest: () => false,
+            getUserId: () => "@user:server",
+            getDeviceId: () => "DEVICE",
+            getHomeserverUrl: () => "https://matrix.server",
+        } as unknown as MatrixClient;
+        defaultDispatcher.dispatch({ action: Action.OnLoggedIn, client }, true);
+        OwnProfileStore.instance.emit(UPDATE_EVENT);
+
+        expect(listener).not.toHaveBeenCalled();
     });
 });
