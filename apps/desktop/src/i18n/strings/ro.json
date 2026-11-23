@@ -1,0 +1,106 @@
+{
+    "action": {
+        "cancel": "Anulați",
+        "close": "Închideți",
+        "close_brand": "Închideți %(brand)s",
+        "copy": "Copiați",
+        "cut": "Tăiați",
+        "delete": "Ștergeți",
+        "edit": "Editați",
+        "minimise": "Minimizați",
+        "paste": "Lipiți",
+        "paste_match_style": "Lipiți și potriviți stilul",
+        "quit": "Ieșiți",
+        "redo": "Refaceți",
+        "select_all": "Selectați tot",
+        "show_hide": "Afișați/Ascundeți",
+        "undo": "Anulați",
+        "zoom_in": "Măriți",
+        "zoom_out": "Micșorați"
+    },
+    "common": {
+        "about": "Despre",
+        "brand_help": "Ajutor pentru %(brand)s",
+        "help": "Ajutor",
+        "no": "Nu",
+        "preferences": "Preferințe",
+        "yes": "Da"
+    },
+    "confirm_quit": "Sigur doriți să ieșiți din aplicație?",
+    "download": {
+        "unable_to_open_description": "Fișierul nu a putut fi deschis. Este posibil să fi fost mutat sau șters.",
+        "unable_to_open_title": "Nu se poate deschide fișierul"
+    },
+    "edit_menu": {
+        "speech": "Voce",
+        "speech_start_speaking": "Pornire voce",
+        "speech_stop_speaking": "Oprire voce"
+    },
+    "eol": {
+        "no_more_updates": "Utilizați o versiune de macOS care nu este acceptată. Faceți upgrade pentru a primi actualizări %(brand)s.",
+        "title": "Sistem neacceptat",
+        "warning": "Utilizați o versiune de macOS care nu mai este acceptată. Faceți upgrade pentru a vă asigura că %(brand)s continuă să funcționeze."
+    },
+    "file_menu": {
+        "label": "Fișier"
+    },
+    "icon_overlay": {
+        "description_error": "Eroare",
+        "description_notifications": {
+            "one": "Aveți %(count)s notificare necitită.",
+            "few": "Aveți %(count)s notificări necitite.",
+            "other": "Aveți %(count)s de notificări necitite."
+        }
+    },
+    "menu": {
+        "hide": "Ascundeți",
+        "hide_others": "Ascundeți celelalte",
+        "services": "Servicii",
+        "unhide": "Afișați"
+    },
+    "renderer_crash": {
+        "detail": "Închideți și redeschideți aplicația pentru a continua. Dacă problema persistă, poate fi util să reporniți computerul sau să goliți memoria cache a aplicației.",
+        "message": "%(brand)s a remediat problema de mai multe ori, dar aceasta continuă să apară, așa că a renunțat.",
+        "title": "%(brand)s se blochează în mod repetat"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Adăugați la dicționar",
+        "copy_email": "Copiați adresa de e-mail",
+        "copy_image": "Copiați imaginea",
+        "copy_image_url": "Copiați adresa imaginii",
+        "copy_link_url": "Copiați adresa linkului",
+        "save_image_as": "Salvați imaginea ca…",
+        "save_image_as_error_description": "Imaginea nu s-a salvat",
+        "save_image_as_error_title": "Nu s-a putut salva imaginea"
+    },
+    "save_dialog": {
+        "all_files": "Toate fișierele",
+        "named_file_type": "Fișier %(extension)s"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Ștergeți datele și reîncărcați?",
+            "backend_changed_detail": "Nu se poate accesa secretul din setul de chei; se pare că s-a modificat.",
+            "backend_changed_title": "Nu s-a putut încărca baza de date",
+            "backend_no_encryption": "Sistemul dvs. are un set de chei acceptat, dar criptarea nu este disponibilă.",
+            "backend_no_encryption_detail": "Electron a detectat că criptarea nu este disponibilă pe setul dvs. de chei %(backend)s. Asigurați-vă că aveți setul de chei instalat. Dacă aveți setul de chei instalat, reporniți sistemul și încercați din nou. Opțional, puteți permite %(brand)s să utilizeze o formă mai slabă de criptare.",
+            "backend_no_encryption_title": "Nu este acceptată criptarea",
+            "unsupported_keyring": "Sistemul dvs. are un set de chei neacceptat, ceea ce înseamnă că baza de date nu poate fi deschisă.",
+            "unsupported_keyring_detail": "Funcția de detectare a setului de chei din Electron nu a găsit un backend compatibil. Puteți încerca să configurați manual backendul pornind %(brand)s cu un argument de linie de comandă, o operațiune care se efectuează o singură dată. Consultați %(link)s.",
+            "unsupported_keyring_title": "Sistem neacceptat",
+            "unsupported_keyring_use_basic_text": "Utilizați o criptare mai slabă",
+            "unsupported_keyring_use_plaintext": "Nu utilizați criptare"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Mărime reală",
+        "toggle_developer_tools": "Comutați unelte dezvoltator",
+        "toggle_full_screen": "Comutați ecranul complet",
+        "view": "Vizualizare"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Aduceți totul în față",
+        "label": "Fereastră",
+        "zoom": "Zoom"
+    }
+}

@@ -64,6 +64,11 @@ export default defineConfig({
             fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "umd.cjs"}`,
         },
         outDir: "dist",
+        // In watch mode (`nx start`) consumers such as the element-web webpack dev server compile against
+        // `dist/` concurrently. Emptying it on every rebuild makes the CSS/JS briefly disappear and the
+        // consumer build fails with "Failed to find '@element-hq/web-shared-components/dist/...'".
+        // Overwriting in place keeps the files present at all times; a plain `vite build` still starts clean.
+        emptyOutDir: !process.argv.includes("--watch"),
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
@@ -100,6 +105,9 @@ export default defineConfig({
         layerCssAssets(),
         dts({
             bundleTypes: {
+                // shared-types is a private workspace package, so inline its types rather than
+                // leaving an import that consumers cannot resolve.
+                bundledPackages: ["shared-types"],
                 invokeOptions: {
                     localBuild: !!process.env.CI,
                     // oxlint-disable-next-line unicorn/prefer-module
@@ -107,7 +115,17 @@ export default defineConfig({
                 },
             },
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
+            exclude: [
+                "src/**/*.test.{ts,tsx}",
+                "src/**/*.stories.{ts,tsx}",
+                // Test helpers, including their vitest module augmentations, are not part of the package.
+                "src/test/**",
+                // Our global TranslationKey is internal: the published typings reference TranslationKey as a free
+                // global that each consumer declares. Since unplugin-dts 1.1, hand-written .d.ts files are processed
+                // when bundleTypes is set, and their `declare global` blocks get appended to the bundle without
+                // their imports, which breaks consumers' type checks.
+                "src/@types/i18n.d.ts",
+            ],
             copyDtsFiles: false,
         }),
     ],

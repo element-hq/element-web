@@ -212,9 +212,34 @@ test.describe("'Set up recovery' toast", () => {
         await dialog.getByRole("textbox").fill(recoveryKey);
         await dialog.getByRole("button", { name: "Finish set up" }).click();
 
-        // Then the toast is gone and the device is connected to key backup
+        // Then the confirmation screen is shown, and dismissing it closes the dialog
+        await expect(dialog.getByText("Your backup is now fully set up")).toBeVisible();
+        await dialog.getByRole("button", { name: "Done" }).click();
+        await expect(dialog).not.toBeVisible();
+
+        // And the toast is gone and the device is connected to key backup
         await expect(page.locator(".mx_Toast_toast", { hasText: "Back up your chats" })).not.toBeVisible();
         await checkDeviceIsConnectedKeyBackup(app, "1", true);
+    });
+
+    test("should not close the recovery setup dialog when clicking the background", async ({ page }) => {
+        // Given the recovery setup dialog is shown
+        const toast = await getToast(page, "Back up your chats");
+        await toast.getByRole("button", { name: "Create recovery key" }).click();
+
+        const dialog = page.getByRole("dialog", { name: "Get recovery key" });
+        await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
+
+        // When we click the dialog background
+        await page.getByTestId("dialog-background").click({ position: { x: 10, y: 10 } });
+        await page.waitForTimeout(500);
+
+        // Then the dialog is still shown
+        await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
+
+        // And the Cancel button still closes it
+        await dialog.getByRole("button", { name: "Cancel" }).click();
+        await expect(dialog).not.toBeVisible();
     });
 });
 

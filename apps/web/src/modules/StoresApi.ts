@@ -82,11 +82,20 @@ class RoomsWatchable extends Watchable<Room[]> {
     }
 
     private onRlsUpdate = (): void => {
-        this.value = this.rls.getSortedRooms().map((sdkRoom) => new ModuleRoom(sdkRoom));
+        const sdkRooms = this.rls.getSortedRooms();
+        if (
+            sdkRooms.length === this.value.length &&
+            sdkRooms.every((room, index) => room.roomId === this.value[index].id)
+        ) {
+            return;
+        }
+
+        this.value = sdkRooms.map((sdkRoom) => new ModuleRoom(sdkRoom));
     };
 
     protected onFirstWatch(): void {
         this.rls.on(this.events.LISTS_UPDATE_EVENT, this.onRlsUpdate);
+        this.onRlsUpdate();
     }
 
     protected onLastWatch(): void {

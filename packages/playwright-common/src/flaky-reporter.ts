@@ -12,10 +12,52 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import type { Reporter, TestCase } from "@playwright/test/reporter";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+import { type FlakyAssignee, FlakyAssigneeFinder, parseIgnoreRevs } from "./flaky-assignee-finder.js";
 
 const REPO = "element-hq/element-web";
 const LABEL = "Z-Flaky-Test";
 const ISSUE_TITLE_PREFIX = "Flaky playwright test: ";
+
+// New flake issues are assigned to the last member of this team to change the test file
+const ASSIGNEE_ORG = "element-hq";
+const ASSIGNEE_TEAM = "element-web-contributors";
+
+// Mechanical commits (mass reformatting and the like) whose author shouldn't become a test's owner.
+// Read from the repository root, where the merge job runs.
+const IGNORE_REVS_FILE = ".git-blame-ignore-revs";
+
+function readIgnoredCommits(): Set<string> {
+    try {
+        return parseIgnoreRevs(readFileSync(path.resolve(process.cwd(), IGNORE_REVS_FILE), "utf8"));
+    } catch (e) {
+        // No file just means nothing to ignore
+        if ((e as NodeJS.ErrnoException).code !== "ENOENT") {
+            console.error(`Could not read ${IGNORE_REVS_FILE}, not skipping any commits:`, e);
+        }
+        return new Set();
+    }
+}
+
+// The merged report resolves every test path against apps/web's testDir (see playwright-merge.config.ts),
+// even for Desktop and module tests, but the part after "playwright/e2e/" is still relative to the test's
+// own project. This maps each project back to where its tests actually live, for the commit history lookup.
+// Module projects are named after their packages, which don't reliably match their directories
+// (widget-toggles is "widget-toggle"), so module flakes are filed unassigned.
+const PROJECT_TEST_DIRS = new Map([
+    ["Chrome", "apps/web/playwright/e2e/"],
+    ["Firefox", "apps/web/playwright/e2e/"],
+    ["WebKit", "apps/web/playwright/e2e/"],
+    ["Desktop", "apps/desktop/playwright/e2e/"],
+]);
+
+interface Flake {
+    tests: TestCase[];
+    /** Repository-relative path of the test file, when the flake is attributable to a single web or Desktop test. */
+    path?: string;
+}
 
 type PaginationLinks = {
     prev?: string;
@@ -36,7 +78,7 @@ const SPECIAL_CASES: Record<string, string> = {
 };
 
 class FlakyReporter implements Reporter {
-    private flakes = new Map<string, TestCase[]>();
+    private flakes = new Map<string, Flake>();
 
     public onTestEnd(test: TestCase): void {
         // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
@@ -68,15 +110,22 @@ class FlakyReporter implements Reporter {
                 }
             }
 
+            // Only a flake that is attributable to the test itself has an owner worth assigning
+            let path: string | undefined;
             if (failures.length < 1) {
-                failures.push(`${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`);
+                const relativePath = test.location.file.split("playwright/e2e/")[1];
+                failures.push(`${relativePath}: ${test.title}`);
+                const testDir = PROJECT_TEST_DIRS.get(test.parent.project()!.name);
+                if (testDir) path = testDir + relativePath;
             }
 
             for (const title of failures) {
                 if (!this.flakes.has(title)) {
-                    this.flakes.set(title, []);
+                    this.flakes.set(title, { tests: [] });
                 }
-                this.flakes.get(title)!.push(test);
+                const flake = this.flakes.get(title)!;
+                flake.tests.push(test);
+                flake.path ??= path;
             }
         }
     }
@@ -129,6 +178,49 @@ class FlakyReporter implements Reporter {
         return issues;
     }
 
+    /**
+     * Find who to assign a new flake issue to. Never throws: a failure here must not stop the issue being filed.
+     */
+    private async findAssignee(finder: FlakyAssigneeFinder, path: string): Promise<FlakyAssignee | undefined> {
+        try {
+            const assignee = await finder.find(path, process.env.GITHUB_SHA);
+            if (!assignee) console.log(`No ${ASSIGNEE_TEAM} member found in recent history of ${path}`);
+            return assignee;
+        } catch (e) {
+            console.error(`Could not pick an assignee for ${path}:`, e);
+            return undefined;
+        }
+    }
+
+    /**
+     * Assign a newly created issue. Never throws: a failure here must not stop later flakes being reported.
+     * Logs leave out the login, as the run's logs are public and would imply who is in the team.
+     * @param created - the response to the issue creation request
+     */
+    private async assign(created: Response, login: string, headers: Record<string, string>): Promise<void> {
+        try {
+            const issue = await created.json();
+            const response = await fetch(`${issue.url}/assignees`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify({ assignees: [login] }),
+            });
+            if (!response.ok) {
+                console.error(`Assigning ${issue.html_url} failed: HTTP ${response.status}`);
+                return;
+            }
+            // GitHub drops an assignee it can't assign, such as someone without access, rather than failing
+            const { assignees } = (await response.json()) as { assignees: { login: string }[] };
+            if (!assignees.some((assignee) => assignee.login === login)) {
+                console.error(
+                    `GitHub dropped the assignee of ${issue.html_url}; they may lack access to the repository`,
+                );
+            }
+        } catch (e) {
+            console.error("Could not assign the new issue:", e);
+        }
+    }
+
     public async onExit(): Promise<void> {
         if (this.flakes.size === 0) {
             console.log("No flakes found");
@@ -144,8 +236,17 @@ class FlakyReporter implements Reporter {
             process.env;
         if (!GITHUB_TOKEN) return;
 
+        const finder = new FlakyAssigneeFinder({
+            apiUrl: GITHUB_API_URL!,
+            token: GITHUB_TOKEN,
+            repo: REPO,
+            org: ASSIGNEE_ORG,
+            team: ASSIGNEE_TEAM,
+            ignoredCommits: readIgnoredCommits(),
+        });
+
         const issues = await this.getAllIssues();
-        for (const [flake, results] of this.flakes) {
+        for (const [flake, { tests, path }] of this.flakes) {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
             const existingIssue = issues.find((issue) => issue.title === title);
             const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
@@ -155,7 +256,7 @@ class FlakyReporter implements Reporter {
                 body += " (merge queue run, may be a false positive)";
             }
 
-            const labels = [LABEL, ...results.map((test) => `${LABEL}-${test.parent.project()?.name}`)];
+            const labels = [LABEL, ...tests.map((test) => `${LABEL}-${test.parent.project()?.name}`)];
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);
@@ -177,7 +278,14 @@ class FlakyReporter implements Reporter {
                 });
             } else {
                 console.log(`Creating new issue for ${flake}...`);
-                await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
+                const assignee = path ? await this.findAssignee(finder, path) : undefined;
+                if (assignee) {
+                    // No @-mention: being assigned already notifies them. The team isn't named, as the issue is
+                    // public and team membership is not.
+                    body += `\n\nAssigned to ${assignee.login}, who last changed \`${path}\` (${assignee.commitUrl}).`;
+                }
+
+                const response = await fetch(`${GITHUB_API_URL}/repos/${REPO}/issues`, {
                     method: "POST",
                     headers,
                     body: JSON.stringify({
@@ -186,6 +294,12 @@ class FlakyReporter implements Reporter {
                         labels: [...labels],
                     }),
                 });
+
+                // Assigned separately, rather than in the create call, so that an unassignable user is
+                // silently dropped by GitHub instead of failing the issue creation
+                if (assignee && response.ok) {
+                    await this.assign(response, assignee.login, headers);
+                }
             }
         }
     }

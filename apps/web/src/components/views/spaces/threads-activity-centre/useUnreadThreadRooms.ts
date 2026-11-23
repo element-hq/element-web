@@ -68,7 +68,6 @@ export type UnreadThreadRooms = {
  * @returns {UnreadThreadRooms}
  */
 export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRooms {
-    const msc3946ProcessDynamicPredecessor = useSettingValue("feature_dynamic_room_predecessors");
     const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
     const mxClient = useMatrixClientContext();
 
@@ -80,8 +79,8 @@ export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRoo
     });
 
     const doUpdate = useCallback(() => {
-        setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs));
-    }, [mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs]);
+        setResult(computeUnreadThreadRooms(mxClient, settingTACOnlyNotifs));
+    }, [mxClient, settingTACOnlyNotifs]);
 
     const scheduleUpdate = useMemo(
         () =>
@@ -126,17 +125,12 @@ export function useUnreadThreadRooms(forceComputation: boolean): UnreadThreadRoo
  * so the indicator badge matches the popup content.
  *
  * @param mxClient - MatrixClient
- * @param msc3946ProcessDynamicPredecessor
  * @param settingTACOnlyNotifs
  */
-function computeUnreadThreadRooms(
-    mxClient: MatrixClient,
-    msc3946ProcessDynamicPredecessor: boolean,
-    settingTACOnlyNotifs: boolean,
-): UnreadThreadRooms {
+function computeUnreadThreadRooms(mxClient: MatrixClient, settingTACOnlyNotifs: boolean): UnreadThreadRooms {
     // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
     // This will include highlights from the previous version of the room internally
-    const visibleRooms = mxClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
+    const visibleRooms = mxClient.getVisibleRooms();
 
     let greatestNotificationLevel = NotificationLevel.None;
     const rooms: UnreadThreadRooms["rooms"] = [];

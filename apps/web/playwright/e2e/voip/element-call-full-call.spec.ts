@@ -7,13 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { type FrameLocator, type Page } from "@playwright/test";
 import {
-    closeReleaseAnnouncementIfExists,
     populateLocalStorageWithCredentials,
     rejectToast,
     routeConfigJson,
 } from "@element-hq/element-web-playwright-common";
 
-import { test, expect } from "../../element-web-test";
+import { test, expect, hideReleaseAnnouncements } from "../../element-web-test";
 
 /**
  * A real call between two users through the real Element Call, against a real MatrixRTC backend (Synapse +
@@ -41,7 +40,48 @@ test.skip(({ homeserverType }) => homeserverType !== "synapse", "Needs Synapse's
 async function settleNewSession(page: Page): Promise<void> {
     await rejectToast(page, "Verify this device");
     await rejectToast(page, "Notifications");
-    await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
+}
+
+/**
+ * This is an additional step to test CSS layering for element call.
+ * In "react" mode we opt to not load the compound-web styles twice but only have one copy.
+ * This is saving significant bandwidth but adds complexity.
+ *
+ * This test makes sure we dont mess up our css layering for EC.
+ *
+ * We run it as a side procedure of this playwright test:
+ *  - its best to test this in a full browser env.
+ *  - its unnecassary to restart a new playwright session just for this test.
+ */
+async function testCSSLayering(page: Page) {
+    // Checks that Element Web layers the stylesheets correctly when Element Call is embedded as
+    // a React component.
+    //  - Element Call ships a CSS reset (its `normalize` layer) that zeroes btn margins.
+    //  - we want the `compound-web` layer to take precedence over the normalize layer.
+    //
+    // For this test, we add a rule to the `compound-web` layer that gives a probe
+    // button a 3px margin (which is also effected by the reset/normalise) and place
+    // it inside Element Call's root.
+    // (normalise.css only targets: [data-element-call-root] + children).
+    //
+    // The test: does `compound-web` beat the reset = the margin survives
+    //
+    // This is a better test than inspecting a real Compound button, which would break whenever Compound
+    // changes its own margins.
+    //
+    const probeMargin = await page.evaluate(() => {
+        const style = document.createElement("style");
+        style.textContent = "@layer compound-web { [data-cascade-probe] { margin: 3px; } }";
+        document.head.appendChild(style);
+        const probe = document.createElement("button");
+        probe.setAttribute("data-cascade-probe", "");
+        document.querySelector("[data-element-call-root]")!.appendChild(probe);
+        const margin = getComputedStyle(probe).margin;
+        probe.remove();
+        style.remove();
+        return margin;
+    });
+    expect(probeMargin).toBe("3px");
 }
 
 for (const embedding of ["widget", "react"] as const) {
@@ -80,7 +120,7 @@ for (const embedding of ["widget", "react"] as const) {
                     permissions: ["microphone", "camera"],
                 });
                 const bobPage = await bobContext.newPage();
-                await routeConfigJson(bobContext, homeserver.baseUrl, config);
+                await routeConfigJson(bobContext, homeserver.baseUrl, hideReleaseAnnouncements(config));
                 await populateLocalStorageWithCredentials(bobPage, bob);
 
                 // A plain, unencrypted room with both in it. Element Web's own room creation lets everyone
@@ -121,6 +161,10 @@ for (const embedding of ["widget", "react"] as const) {
                     await expect(callScope(p).locator("video").filter({ visible: true })).toHaveCount(2, {
                         timeout: 15_000,
                     });
+                }
+
+                if (embedding === "react") {
+                    await testCSSLayering(page);
                 }
 
                 // Bob leaves; Alice sees him go

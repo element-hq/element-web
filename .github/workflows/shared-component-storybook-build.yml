@@ -18,9 +18,11 @@ jobs:
                   persist-credentials: false
 
             - name: 🔧 Set up pnpm & node environment
-              uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+              uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: true
                   require-lockfile: true
 
@@ -28,7 +30,7 @@ jobs:
               working-directory: packages/shared-components
               run: pnpm build:storybook
 
-            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: shared-components-storybook
                   path: packages/shared-components/storybook-static

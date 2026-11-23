@@ -36,8 +36,9 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    &[data-layout="group"] {
-        margin-top: var(--cpd-space-2x);
+    &[data-layout="group"][data-expanded="false"] .mx_GenericEventListSummary_summary {
+        /* Match the expanded group row after the collapsed avatar overlap. */
+        margin-inline-start: var(--cpd-space-0-5x);
     }
 
     &[data-layout="bubble"] {
@@ -63,7 +64,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &[data-expanded="false"] {
-            align-items: center;
+            /* Keep the toggle on the first line of a wrapped summary, as in the other layouts */
+            align-items: flex-start;
             justify-content: space-between;
             column-gap: 5px;
         }
@@ -123,8 +125,10 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_GenericEventListSummary_avatars {
-    display: inline-block;
-    line-height: $font-12px;
+    /* An inline flex box is exactly as tall as its 14px avatars at any font size, */
+    /* so that `middle` centers the avatars themselves on the summary text */
+    display: inline-flex;
+    vertical-align: middle;
 
     .mx_BaseAvatar {
         margin-right: -4px;

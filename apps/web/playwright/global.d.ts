@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type * as Matrix from "matrix-js-sdk/src/matrix";
+import type { Api } from "@element-hq/element-web-module-api";
 import { type SettingLevel } from "../src/settings/SettingLevel";
 
 declare global {
@@ -14,6 +15,7 @@ declare global {
         mxMatrixClientPeg: {
             get(): Matrix.MatrixClient;
         };
+        mxModuleApi: Api;
         mxSettingsStore: {
             setValue(settingName: string, roomId: string | null, level: SettingLevel, value: any): Promise<void>;
         };

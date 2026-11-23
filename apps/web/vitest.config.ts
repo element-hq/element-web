@@ -12,6 +12,7 @@ import { playwright } from "@vitest/browser-playwright";
 import { env, platform } from "node:process";
 
 import rootConfig from "../../vitest.config.ts";
+import { getMinimumBrowserVersions } from "./supportedBrowsers.ts";
 
 function resolve(specifier: string): string {
     return fileURLToPath(import.meta.resolve(specifier));
@@ -33,6 +34,10 @@ const canCompareScreenshots = Boolean(wsEndpoint || env["CI"]);
 const browserPlatform = canCompareScreenshots ? "linux" : platform;
 
 export default defineProject({
+    // Matches the DefinePlugin values in webpack.config.ts
+    define: {
+        __MINIMUM_BROWSER_VERSIONS__: JSON.stringify(getMinimumBrowserVersions()),
+    },
     resolve: {
         alias: [
             { find: "test-utils-rtl", replacement: resolve("./src/test/test-utils/vitest-matrix-react") },

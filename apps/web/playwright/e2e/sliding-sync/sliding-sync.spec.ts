@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Locator, type Page, type Request } from "@playwright/test";
-import { closeReleaseAnnouncementIfExists, rejectToast } from "@element-hq/element-web-playwright-common";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
@@ -71,7 +71,6 @@ test.describe("Sliding Sync", () => {
     test.beforeEach(async ({ app, page, user }) => {
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
-        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({

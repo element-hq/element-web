@@ -62,10 +62,12 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
                   # Nothing to cache for the jobs that do not install
                   cache: ${{ matrix.install != '' }}
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             - name: Install Dependencies (layered)
@@ -99,13 +101,14 @@ jobs:
         permissions:
             security-events: write
             contents: read
+            actions: read
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
+              uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
 
     i18n:
         strategy:
@@ -151,7 +154,7 @@ jobs:
         name: Static Analysis
         needs: [lint, i18n, zizmor]
         if: always()
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         steps:
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1

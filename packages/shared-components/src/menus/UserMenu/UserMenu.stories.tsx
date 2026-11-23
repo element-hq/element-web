@@ -7,7 +7,7 @@
 
 import { type Meta, type StoryObj } from "@storybook/react-vite";
 import React, { type JSX } from "react";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
@@ -230,5 +230,24 @@ export const WithStatusOpen: Story = {
                 rules: MENU_OPEN_A11Y_RULES,
             },
         },
+    },
+};
+
+export const WithStatusDropdownOpen: Story = {
+    args: {
+        open: true,
+        setStatusViewModel: new MockSetStatusViewModel({}),
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
+            },
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const body = within(canvasElement.ownerDocument.body);
+        await userEvent.click(await body.findByRole("combobox", { name: "What's your status?" }));
+        await expect(body.findByRole("listbox")).resolves.toBeVisible();
     },
 };

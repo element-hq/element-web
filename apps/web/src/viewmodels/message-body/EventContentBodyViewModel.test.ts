@@ -9,7 +9,7 @@
 
 import { MatrixEventEvent, MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { type JSX } from "react";
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { stubClient, mkStubRoom, mkEvent, tearDownAfterTest } from "test-utils";
 
 import { EventContentBodyViewModel, type EventContentBodyViewModelProps } from "./EventContentBodyViewModel";
@@ -21,10 +21,12 @@ import {
     ambiguousLinkTooltipRenderer,
     spoilerRenderer,
     codeBlockRenderer,
+    emoticonRenderer,
 } from "../../renderer";
 import PlatformPeg from "../../PlatformPeg";
 import type BasePlatform from "../../BasePlatform";
 import SettingsStore from "../../settings/SettingsStore";
+import { getKatex, loadKatex } from "../../utils/katex";
 
 vi.mock("../../HtmlUtils", async () => ({
     ...(await vi.importActual("../../HtmlUtils")),
@@ -37,6 +39,7 @@ vi.mock("../../renderer", () => ({
     keywordPillRenderer: vi.fn(),
     ambiguousLinkTooltipRenderer: vi.fn(),
     codeBlockRenderer: vi.fn(),
+    emoticonRenderer: vi.fn(),
     spoilerRenderer: vi.fn(),
 }));
 
@@ -49,9 +52,16 @@ vi.mock("../../PlatformPeg", () => ({
     },
 }));
 
+vi.mock("../../utils/katex", () => ({
+    getKatex: vi.fn(),
+    loadKatex: vi.fn(),
+}));
+
 const mockedBodyToNode = vi.mocked(bodyToNode);
 const mockedCombineRenderers = vi.mocked(combineRenderers);
 const mockedPlatformPeg = vi.mocked(PlatformPeg);
+const mockedGetKatex = vi.mocked(getKatex);
+const mockedLoadKatex = vi.mocked(loadKatex);
 
 describe("EventContentBodyViewModel", () => {
     const defaultContent = {
@@ -284,6 +294,68 @@ describe("EventContentBodyViewModel", () => {
         expect(vm.getSnapshot().body).toBe("Updated");
     });
 
+    describe("when the body contains maths", () => {
+        const mathsContent = {
+            body: "\\xi",
+            msgtype: MsgType.Text,
+            format: "org.matrix.custom.html",
+            formatted_body: '<span data-mx-maths="\\xi"><code>\\xi</code></span>',
+        };
+        const bodyWith = (strippedBody: string): ReturnType<typeof bodyToNode> => ({
+            strippedBody,
+            formattedBody: undefined,
+            emojiBodyElements: undefined,
+            className: "mx_EventTile_body",
+        });
+
+        beforeEach(() => {
+            mockedCombineRenderers.mockReturnValue(() => vi.fn());
+            mockedGetKatex.mockReset();
+            mockedLoadKatex.mockReset();
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_latex_maths",
+            );
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it("renders it again once KaTeX has loaded", async () => {
+            const { promise: katexLoaded, resolve: finishLoadingKatex } =
+                Promise.withResolvers<Awaited<ReturnType<typeof loadKatex>>>();
+            mockedLoadKatex.mockReturnValue(katexLoaded);
+            mockedBodyToNode.mockReturnValue(bodyWith("fallback"));
+
+            const vm = tearDownAfterTest(new EventContentBodyViewModel(defaultProps({ content: mathsContent })));
+            expect(mockedLoadKatex).toHaveBeenCalled();
+            expect(vm.getSnapshot().body).toBe("fallback");
+
+            mockedBodyToNode.mockReturnValue(bodyWith("rendered"));
+            finishLoadingKatex({} as Awaited<ReturnType<typeof loadKatex>>);
+            await katexLoaded;
+
+            expect(vm.getSnapshot().body).toBe("rendered");
+        });
+
+        it("does not load KaTeX when it is already loaded", () => {
+            mockedGetKatex.mockReturnValue({} as ReturnType<typeof getKatex>);
+            mockedBodyToNode.mockReturnValue(bodyWith("rendered"));
+
+            tearDownAfterTest(new EventContentBodyViewModel(defaultProps({ content: mathsContent })));
+
+            expect(mockedLoadKatex).not.toHaveBeenCalled();
+        });
+
+        it("does not load KaTeX for a body without maths", () => {
+            mockedBodyToNode.mockReturnValue(bodyWith("Hello world"));
+
+            tearDownAfterTest(new EventContentBodyViewModel(defaultProps()));
+
+            expect(mockedLoadKatex).not.toHaveBeenCalled();
+        });
+    });
+
     describe("when the event is replaced", () => {
         const mkReplacedEvent = (): MatrixEvent => {
             const event = mkEvent({
@@ -396,6 +468,7 @@ describe("EventContentBodyViewModel", () => {
             ambiguousLinkTooltipRenderer,
             spoilerRenderer,
             codeBlockRenderer,
+            emoticonRenderer,
         );
     });
 
@@ -418,6 +491,6 @@ describe("EventContentBodyViewModel", () => {
         );
         tearDownAfterTest(vm);
 
-        expect(mockedCombineRenderers).toHaveBeenCalledWith(mentionPillRenderer);
+        expect(mockedCombineRenderers).toHaveBeenCalledWith(mentionPillRenderer, emoticonRenderer);
     });
 });

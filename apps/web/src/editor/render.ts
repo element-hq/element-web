@@ -122,7 +122,13 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
     removeNextSiblings(currentNode);
 }
 
-function reconcileEmptyLine(lineContainer: HTMLElement): void {
+function reconcileEmptyLine(lineContainer: HTMLElement, needsBR: boolean): void {
+    // the only line of an empty composer gets its height from the composer itself,
+    // and a BR there would show up as a selection highlight on select-all
+    if (!needsBR) {
+        removeChildren(lineContainer);
+        return;
+    }
     // empty div needs to have a BR in it to give it height
     let foundBR = false;
     let partNode = lineContainer.firstChild;
@@ -169,7 +175,7 @@ export function renderModel(editor: HTMLDivElement, model: EditorModel): void {
         if (parts.length) {
             reconcileLine(lineContainer, parts);
         } else {
-            reconcileEmptyLine(lineContainer as HTMLElement);
+            reconcileEmptyLine(lineContainer as HTMLElement, lines.length > 1);
         }
     });
     if (lines.length) {

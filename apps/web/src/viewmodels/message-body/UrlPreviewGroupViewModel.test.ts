@@ -76,6 +76,7 @@ function getViewModel({
     onImageClicked: Mock<(preview: UrlPreview) => void>;
 } {
     const client = getMockClientWithEventEmitter({
+        baseUrl: "https://server",
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     });
@@ -207,11 +208,8 @@ describe("UrlPreviewGroupViewModel", () => {
             "matrix:image:size": 10000,
         });
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
+        client.mxcUrlToHttp.mockImplementation((url) => {
             expect(url).toEqual(IMAGE_MXC);
-            if (width) {
-                return "https://example.org/image/thumb";
-            }
             return "https://example.org/image/src";
         });
         const msg = document.createElement("div");

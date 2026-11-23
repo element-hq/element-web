@@ -105,8 +105,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /** The room that was open the last time the filters were applied to every room. */
     private lastFilteredRoomId?: string | null;
 
-    private readonly msc3946ProcessDynamicPredecessor: boolean;
-
     /**
      * Whether a batched LISTS_UPDATE_EVENT emission is pending.
      * Used by {@link scheduleEmit} to coalesce rapid-fire updates into a single emit per frame.
@@ -120,7 +118,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         super(dispatcher);
         this.buildFilters();
 
-        this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         SDKContextClass.instance.spaceStore.on(UPDATE_SELECTED_SPACE, this.onSpaceStoreUpdate);
         SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, this.onSpaceStoreUpdate);
 
@@ -173,7 +170,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Get a list of unsorted, unfiltered rooms.
      */
     public getRooms(): Room[] {
-        let rooms = this.matrixClient?.getVisibleRooms(this.msc3946ProcessDynamicPredecessor) ?? [];
+        let rooms = this.matrixClient?.getVisibleRooms() ?? [];
         rooms = rooms.filter((r) => isRoomVisible(r));
         return rooms;
     }
@@ -373,11 +370,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 // the dead room in the list.
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
                     const room: Room = payload.room;
-                    const roomUpgradeHistory = room.client.getRoomUpgradeHistory(
-                        room.roomId,
-                        true,
-                        this.msc3946ProcessDynamicPredecessor,
-                    );
+                    const roomUpgradeHistory = room.client.getRoomUpgradeHistory(room.roomId, true);
                     const predecessors = roomUpgradeHistory.slice(0, roomUpgradeHistory.indexOf(room));
                     for (const predecessor of predecessors) {
                         this.roomSkipList.removeRoom(predecessor);

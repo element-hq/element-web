@@ -35,6 +35,9 @@
     "file_menu": {
         "label": "Tiedosto"
     },
+    "icon_overlay": {
+        "description_error": "Virhe"
+    },
     "menu": {
         "hide": "Piilota",
         "hide_others": "Piilota muut",
