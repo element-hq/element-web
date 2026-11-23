@@ -1627,17 +1627,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
                         return false;
                     }
 
-                    const { shouldLiveInRoom, threadId } = this.props.timelineSet.room!.eventShouldLiveIn(
-                        event,
-                        pendingEvents,
-                    );
+                    const { shouldLiveInRoom, shouldLiveInThread, threadId } =
+                        this.props.timelineSet.room!.eventShouldLiveIn(event, pendingEvents);
 
                     if (this.context.timelineRenderingType === TimelineRenderingType.Thread) {
                         return threadId === this.context.threadId;
                     }
-                    {
-                        return shouldLiveInRoom;
-                    }
+
+                    // Some timeline sets, such as the file panel's, also show the events sent in threads
+                    return shouldLiveInRoom || (this.props.timelineSet.includeThreadedEvents && shouldLiveInThread);
                 }),
             );
         }

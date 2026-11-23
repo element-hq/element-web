@@ -20,6 +20,8 @@ test.describe("Release announcement", () => {
             await use({ roomId });
         },
         labsFlags: ["feature_room_list_sections"],
+        // element-web-test marks release announcements as seen by default; clear that to see them
+        config: { setting_defaults: { releaseAnnouncementData: {} } },
     });
 
     test.beforeEach(async ({ page, app, user }) => {

@@ -73,7 +73,7 @@ export const getIncomingCallToastKey = (callId: string, roomId: string): string 
  * @returns The timestamp to use as the expect start time to apply the `lifetime` to.
  */
 export const getNotificationEventSendTs = (event: MatrixEvent): number => {
-    const content = event.getContent() as Partial<IRTCNotificationContent>;
+    const content = event.getContent<Partial<IRTCNotificationContent>>();
     const sendTs = content.sender_ts;
     if (sendTs && Math.abs(sendTs - event.getTs()) >= 15000) {
         logger.warn(
@@ -162,7 +162,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     const sdkContext = useContext(SDKContext);
     const roomId = notificationEvent.getRoomId()!;
     // Use a partial type so ts still helps us to not miss any type checks.
-    const notificationContent = notificationEvent.getContent() as Partial<IRTCNotificationContent>;
+    const notificationContent = notificationEvent.getContent<Partial<IRTCNotificationContent>>();
     const room = sdkContext.client?.getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
     const [connectedCalls, setConnectedCalls] = useState<Call[]>(Array.from(CallStore.instance.connectedCalls));

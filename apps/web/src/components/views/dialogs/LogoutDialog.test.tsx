@@ -275,6 +275,16 @@ describe("LogoutDialog", () => {
             expect(document.body.querySelector(".mx_LogoutDialog")).toMatchSnapshot();
         });
 
+        it("confirms the backup is set up once finished when recovery was not set up", async () => {
+            mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
+            renderComponent();
+            fireEvent.click(await screen.findByRole("button", { name: "Get recovery key" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Stub finish" }));
+            await expect(screen.findByText("Your backup is now fully set up")).resolves.toBeVisible();
+            expect(screen.queryByText("Your new recovery key is now active")).not.toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Continue to remove this device" })).toBeVisible();
+        });
+
         it("logs out after the new key is active", async () => {
             const onFinished = vi.fn();
             await startFromRecoverySetUp(onFinished);

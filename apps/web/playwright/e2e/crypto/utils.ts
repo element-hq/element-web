@@ -332,6 +332,8 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
         await encryptionTab.getByRole("textbox").fill(recoveryKey);
         await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+        // Wait for the confirmation screen, so recovery is set up before the settings are closed
+        await encryptionTab.getByRole("button", { name: "Done" }).click();
         await app.settings.closeDialog();
         return recoveryKey;
     });
@@ -360,58 +362,6 @@ export async function disableKeyBackup(app: ElementAppPage): Promise<void> {
         await new Promise((resolve) => setTimeout(resolve, 2000));
     }
     await app.settings.closeDialog();
-}
-
-/**
- * Go through the "Set up Secure Backup" dialog (aka the `CreateSecretStorageDialog`).
- *
- * Assumes the dialog is already open for some reason (see also {@link enableKeyBackup}).
- *
- * @param page - The playwright `Page` fixture.
- * @param opts - Options object
- * @param opts.accountPassword - The user's account password. If we are also resetting cross-signing, then we will need
- *   to upload the public cross-signing keys, which will cause the app to prompt for the password.
- *
- * @returns the new recovery key.
- */
-export async function completeCreateSecretStorageDialog(
-    page: Page,
-    opts?: { accountPassword?: string },
-): Promise<string> {
-    const currentDialogLocator = page.locator(".mx_Dialog");
-
-    await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
-    // "Generate a Recovery Key" is selected by default
-    await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-    await expect(currentDialogLocator.getByRole("heading", { name: "Save your Recovery Key" })).toBeVisible();
-    await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
-    // copy the recovery key to use it later
-    const recoveryKey = await page.evaluate(() => navigator.clipboard.readText());
-    await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-
-    // If the device is unverified, there should be a "Setting up keys" step.
-    // If this is not the first time we are setting up cross-signing, the app will prompt for our password; otherwise
-    // the step is quite quick, and playwright can miss it, so we can't test for it.
-    if (opts && Object.hasOwn(opts, "accountPassword")) {
-        await expect(currentDialogLocator.getByRole("heading", { name: "Setting up keys" })).toBeVisible();
-        await page.getByPlaceholder("Password").fill(opts!.accountPassword!);
-        await currentDialogLocator.getByRole("button", { name: "Continue" }).click();
-    }
-
-    // Either way, we end up at a success dialog:
-    await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();
-    await currentDialogLocator.getByRole("button", { name: "Done", exact: true }).click();
-    await expect(currentDialogLocator.getByText("Secure Backup successful")).not.toBeVisible();
-
-    return recoveryKey;
-}
-
-/**
- * Click on copy and continue buttons to dismiss the recovery key dialog
- */
-export async function copyAndContinue(page: Page) {
-    await page.getByRole("button", { name: "Copy" }).click();
-    await page.getByRole("button", { name: "Continue" }).click();
 }
 
 /**
@@ -578,8 +528,9 @@ export const verifyApp = async (
     await bobElementApp.page.getByRole("button", { name: "Verify" }).click({ timeout: 5000 });
 
     // This requires creating a DM, so can take a while. Give it a longer timeout.
+    // Only Alice starts emoji verification: Bob's app then goes straight to the emoji. If Bob also clicked
+    // "Verify by emoji", the two starts would race, and the button is often gone before he can click it.
     await aliceRoomInfo.getByRole("button", { name: "Verify by emoji" }).click({ timeout: 30000 });
-    await bobElementApp.page.getByRole("button", { name: "Verify by emoji" }).click();
 
     await aliceRoomInfo.getByRole("button", { name: "They match" }).click();
     await bobElementApp.page.getByRole("button", { name: "They match" }).click();

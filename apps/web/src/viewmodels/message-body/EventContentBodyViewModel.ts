@@ -32,6 +32,7 @@ import {
     mentionPillRenderer,
     ambiguousLinkTooltipRenderer,
     codeBlockRenderer,
+    emoticonRenderer,
     spoilerRenderer,
 } from "../../renderer";
 import { filterBoolean } from "../../utils/arrays";
@@ -165,6 +166,8 @@ const createReplacer = (props: EventContentBodyViewModelProps): Replacer => {
             : undefined,
         options.renderSpoilers ? spoilerRenderer : undefined,
         options.renderCodeBlocks ? codeBlockRenderer : undefined,
+        // Emoticons are only animated on hover when GIFs don't autoplay.
+        SettingsStore.getValue("autoplayGifs") ? undefined : emoticonRenderer,
     ]);
 
     return combineRenderers(...replacers)({

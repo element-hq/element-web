@@ -66,6 +66,7 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     const backupStatus = useKeyBackupStatus(client);
     const hasOtherVerifiedDevices = useHasOtherVerifiedDevices(client);
     const [step, setStep] = useState<Step>(Step.Start);
+    const userHasRecoveryKey = backupStatus === BackupStatus.BACKUP_ACTIVE;
 
     const onFinished = (confirmed?: boolean): void => {
         if (confirmed) {
@@ -94,34 +95,42 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     } else if (step === Step.GenerateKey) {
         card = (
             <ChangeRecoveryKeyBody
-                userHasRecoveryKey={backupStatus === BackupStatus.BACKUP_ACTIVE}
+                userHasRecoveryKey={userHasRecoveryKey}
                 dialog={true}
                 onCancelClick={() => setStep(Step.Start)}
                 onFinish={() => setStep(Step.KeyActive)}
             />
         );
-    } else if (step === Step.KeyActive || step === Step.KeyChecked) {
+    } else if (step === Step.KeyActive && !userHasRecoveryKey) {
+        // First recovery key: the backup is now fully set up
         card = (
-            <EncryptionCard
-                Icon={CheckCircleIcon}
-                success={true}
-                title={
-                    step === Step.KeyActive
-                        ? _t("settings|encryption|recovery|key_active_title")
-                        : _t("auth|logout_dialog|key_checked_title")
-                }
-                dialog={true}
+            <SuccessCard
+                title={_t("settings|encryption|recovery|backup_set_up_title")}
+                onContinue={onLogoutConfirm}
+                onBack={() => props.onFinished(false)}
             >
-                <EncryptionCardEmphasisedContent>
-                    <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
-                </EncryptionCardEmphasisedContent>
-                <EncryptionCardButtons>
-                    <Button onClick={onLogoutConfirm}>{_t("auth|logout_dialog|continue")}</Button>
-                    <Button kind="tertiary" onClick={() => props.onFinished(false)}>
-                        {_t("auth|logout_dialog|back_to_app")}
-                    </Button>
-                </EncryptionCardButtons>
-            </EncryptionCard>
+                <Text>
+                    {_t("settings|encryption|recovery|backup_set_up_hint", undefined, {
+                        b: (sub) => <strong>{sub}</strong>,
+                    })}
+                </Text>
+            </SuccessCard>
+        );
+    } else if (step === Step.KeyActive) {
+        card = (
+            <SuccessCard
+                title={_t("settings|encryption|recovery|key_active_title")}
+                onContinue={onLogoutConfirm}
+                onBack={() => props.onFinished(false)}
+            />
+        );
+    } else if (step === Step.KeyChecked) {
+        card = (
+            <SuccessCard
+                title={_t("auth|logout_dialog|key_checked_title")}
+                onContinue={onLogoutConfirm}
+                onBack={() => props.onFinished(false)}
+            />
         );
     } else if (hasOtherVerifiedDevices === undefined) {
         return <Loading onFinished={onFinished} />;
@@ -181,7 +190,9 @@ export default function LogoutDialog(props: IProps): JSX.Element {
     return (
         <BaseDialog
             contentId="mx_Dialog_content"
-            hasCancel={true}
+            // Recovery key steps must be cancelled via their own buttons, but Escape must still
+            // work for accessibility, so only the "X" button is hidden.
+            hideCloseButton={step !== Step.Start}
             onFinished={onFinished}
             className="mx_LogoutDialog"
             aria-label={_t("action|sign_out")}
@@ -189,6 +200,37 @@ export default function LogoutDialog(props: IProps): JSX.Element {
             {/* Dialogs render outside `LoggedInView`, so the key flows need the client provided here */}
             <MatrixClientContext.Provider value={client}>{card}</MatrixClientContext.Provider>
         </BaseDialog>
+    );
+}
+
+interface SuccessCardProps {
+    /** The title of the card. */
+    title: string;
+    /** Called when the user continues to remove the device. */
+    onContinue: () => void;
+    /** Called when the user goes back to the app. */
+    onBack: () => void;
+    /** Extra content shown below the description. */
+    children?: React.ReactNode;
+}
+
+/**
+ * The card shown once the recovery key is set up or checked, before the device is removed.
+ */
+function SuccessCard({ title, onContinue, onBack, children }: Readonly<SuccessCardProps>): JSX.Element {
+    return (
+        <EncryptionCard Icon={CheckCircleIcon} success={true} title={title} dialog={true}>
+            <EncryptionCardEmphasisedContent>
+                <Text>{_t("settings|encryption|recovery|key_active_description")}</Text>
+                {children}
+            </EncryptionCardEmphasisedContent>
+            <EncryptionCardButtons>
+                <Button onClick={onContinue}>{_t("auth|logout_dialog|continue")}</Button>
+                <Button kind="tertiary" onClick={onBack}>
+                    {_t("auth|logout_dialog|back_to_app")}
+                </Button>
+            </EncryptionCardButtons>
+        </EncryptionCard>
     );
 }
 

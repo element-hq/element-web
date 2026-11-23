@@ -8,14 +8,14 @@ permissions: {} # We use ELEMENT_BOT_TOKEN instead
 
 jobs:
     web-app-team:
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
             contains(github.event.issue.assignees.*.login, 'florianduros') ||
             contains(github.event.issue.assignees.*.login, 'dbkr') ||
             contains(github.event.issue.assignees.*.login, 'MidhunSureshR')
         steps:
-            - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2.0.0
+            - uses: actions/add-to-project@f2c1f1fa649a891be84948ea89b5dfba1526ef05 # v2.0.1
               with:
                   project-url: https://github.com/orgs/element-hq/projects/67
                   github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

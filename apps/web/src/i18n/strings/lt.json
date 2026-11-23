@@ -998,8 +998,6 @@
         "count_of_successfully_restored_keys": "Sėkmingai atkurti %(sessionCount)s raktai",
         "enter_key_description": "Prieikite prie savo saugių žinučių istorijos ir nustatykite saugių žinučių siuntimą įvesdami Saugumo Raktą.",
         "enter_key_title": "Įveskite Saugumo Raktą",
-        "enter_phrase_description": "Pasiekite savo saugių žinučių istoriją ir nustatykite saugių žinučių siuntimą įvesdami Saugumo Frazę.",
-        "enter_phrase_title": "Įveskite Saugumo Frazę",
         "incorrect_security_phrase_dialog": "Atsarginės kopijos nepavyko iššifruoti naudojant šią Saugumo Frazę: prašome patikrinti, ar įvedėte teisingą Saugumo Frazę.",
         "incorrect_security_phrase_title": "Neteisinga Saugumo Frazė",
         "key_backup_warning": "<b>Įspėjimas</b>: atsarginę raktų kopiją sukurkite tik iš patikimo kompiuterio.",
@@ -1010,7 +1008,6 @@
         "load_error_content": "Nepavyksta įkelti atsarginės kopijos būsenos",
         "load_keys_progress": "%(completed)s iš %(total)s raktų atkurta",
         "no_backup_error": "Nerasta jokios atsarginės kopijos!",
-        "phrase_forgotten_text": "Jei pamiršote savo Saugumo Frazę, galite <button1>panaudoti savo Saugumo Raktą</button1> arba <button2>nustatyti naujas atkūrimo parinktis</button2>",
         "recovery_key_mismatch_description": "Atsarginės kopijos nepavyko iššifruoti naudojant šį Saugumo Raktą: prašome patikrinti, ar įvedėte teisingą Saugumo Raktą.",
         "recovery_key_mismatch_title": "Saugumo Rakto nesutapimas",
         "restore_failed_error": "Nepavyko atkurti atsarginės kopijos"

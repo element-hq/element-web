@@ -17,7 +17,13 @@ import { filterConsole, stubClient } from "test-utils";
 // oxlint-disable-next-line no-restricted-imports
 import type * as ReactImport from "react";
 
-import { accessSecretStorage, crossSigningCallbacks } from "./SecurityManager";
+import {
+    accessSecretStorage,
+    crossSigningCallbacks,
+    isSecretStorageBeingAccessed,
+    withSecretStorageKeyCache,
+} from "./SecurityManager";
+import { DeviceListener } from "./device-listener";
 import Modal from "./Modal.tsx";
 import {
     default as AccessSecretStorageDialog,
@@ -106,6 +112,23 @@ describe("SecurityManager", () => {
             await expect((spy.mock.lastCall![0] as () => Promise<unknown>)()).resolves.toEqual(
                 expect.objectContaining({ __test: true }),
             );
+        });
+    });
+
+    describe("withSecretStorageKeyCache", () => {
+        it("rechecks the DeviceListener once secret storage access ends", async () => {
+            // DeviceListener suppresses toast updates while secret storage is
+            // being accessed, so a recheck must run after the cache bracket
+            // closes to let the final state reach the toast.
+            const recheck = vi.spyOn(DeviceListener.sharedInstance(), "recheck").mockImplementation(() => {
+                expect(isSecretStorageBeingAccessed()).toBe(false);
+            });
+
+            await withSecretStorageKeyCache(async () => {
+                expect(recheck).not.toHaveBeenCalled();
+            });
+
+            expect(recheck).toHaveBeenCalled();
         });
     });
 

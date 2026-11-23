@@ -83,6 +83,7 @@ describe("ForwardDialog", () => {
         getRoom: vi.fn(),
         getAccountData: vi.fn().mockReturnValue(accountDataEvent),
         getPushActionsForEvent: vi.fn(),
+        baseUrl: "https://server",
         mxcUrlToHttp: vi.fn().mockReturnValue(""),
         getProfileInfo: vi.fn().mockResolvedValue({
             displayname: "Alice",

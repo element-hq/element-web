@@ -80,7 +80,7 @@ describe("<CheckRecoveryKey />", () => {
     });
 
     it("should accept the passphrase if the key was set up with one", async () => {
-        // A non-default key length, to check that `bits` is honoured in the derivation
+        // Note: even though we provide `bits` here, the implementation ignores it.
         const passphrase = { algorithm: "m.pbkdf2", salt: "salt", iterations: 1, bits: 128 };
         vi.mocked(matrixClient.secretStorage.getKey).mockResolvedValue(["keyId", { ...keyCheck, passphrase }] as any);
         const onFinish = vi.fn();
@@ -91,7 +91,7 @@ describe("<CheckRecoveryKey />", () => {
 
         await waitFor(() => expect(onFinish).toHaveBeenCalled());
         expect(matrixClient.secretStorage.checkKey).toHaveBeenCalledWith(
-            await deriveRecoveryKeyFromPassphrase("my passphrase", "salt", 1, 128),
+            await deriveRecoveryKeyFromPassphrase("my passphrase", "salt", 1),
             { ...keyCheck, passphrase },
         );
     });

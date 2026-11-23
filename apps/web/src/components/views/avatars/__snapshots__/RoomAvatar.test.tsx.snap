@@ -33,7 +33,7 @@ exports[`RoomAvatar > should render an avatar for a room the user is invited to 
       height="36px"
       loading="lazy"
       referrerpolicy="no-referrer"
-      src="http://this.is.a.url/example.com/foobar"
+      src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/example.com/foobar?width=36&height=36&method=crop&allow_redirect=true"
       width="36px"
     />
   </span>

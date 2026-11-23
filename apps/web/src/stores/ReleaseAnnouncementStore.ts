@@ -13,17 +13,12 @@ import { cloneDeep } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import ToastStore from "./ToastStore";
+import { shouldShowComponent } from "../customisations/helpers/UIComponents";
+import { UIComponent } from "../settings/UIFeature";
+import { FEATURES, type Feature } from "./ReleaseAnnouncementFeatures";
 
-/**
- * The features are shown in the array order.
- * We include a `_test_dummy` value to enable tests to function even where there are no running release announcements.
- * This value must be at the end of the list.
- */
-const FEATURES = ["room_list_section", "_test_dummy1", "_test_dummy2"] as const;
-/**
- * All the features that can be shown in the release announcements.
- */
-export type Feature = (typeof FEATURES)[number];
+export type { Feature };
+
 /**
  * The stored settings for the release announcements.
  * The boolean is at true when the user has viewed the feature
@@ -128,8 +123,8 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      * @returns The feature to announce or null if there is no feature to announce
      */
     public getReleaseAnnouncement(): Feature | null {
-        // Do nothing if the release announcement is disabled
-        if (!this.enabled) return null;
+        // Do nothing if the release announcement is disabled or hidden by a module
+        if (!this.enabled || !shouldShowComponent(UIComponent.ReleaseAnnouncements)) return null;
 
         // also don't show release announcements if any toasts are on screen
         if (ToastStore.sharedInstance().getToasts().length > 0) return null;

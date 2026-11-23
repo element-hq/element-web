@@ -36,6 +36,8 @@ import {
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import { PreviewRoomListItemViewModel, type PreviewRoomListItemProps } from "./PreviewRoomListItemViewModel";
 import { hasCreateRoomRights } from "./utils";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../settings/UIFeature";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
@@ -266,6 +268,7 @@ export class RoomListViewModel
             isFlatList,
             sections: toRoomListSection(sections),
             canCreateRoom,
+            canStartChat: shouldShowComponent(UIComponent.CreateDM),
         });
 
         this.activeFilter = activeFilter;
@@ -1011,7 +1014,7 @@ export class RoomListViewModel
         // Rebuild roomsMap with the reordered rooms
         this.updateRoomsMap(this.roomsResult);
 
-        this.updatePreviewItem();
+        const isPreviewItemChanged = this.updatePreviewItem();
 
         // Track the current active room position for future sticky calculations
         this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
@@ -1060,7 +1063,9 @@ export class RoomListViewModel
             isRoomListEmpty,
             activeFilterId,
             roomListState: keepIfSame(this.snapshot.current.roomListState, roomListState),
-            sections: keepIfSame(previousSections, viewSections),
+            // When the preview item is replaced by the room's own item, the room ids stay the same.
+            // Send new sections anyway so the view fetches the new item.
+            sections: isPreviewItemChanged ? viewSections : keepIfSame(previousSections, viewSections),
             isFlatList,
         });
 

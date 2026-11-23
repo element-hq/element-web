@@ -1,0 +1,58 @@
+name: Pull Request (privileged)
+on:
+    # Privilege escalation necessary to label, close and set statuses on pull requests from forks.
+    # Unprivileged checks belong in pull_request.yaml instead.
+    # 🚨 We must not execute any checked out code here, and be careful around use of user-controlled inputs.
+    pull_request_target: # zizmor: ignore[dangerous-triggers]
+        types: [opened, labeled, synchronize]
+permissions: {}
+jobs:
+    opened:
+        if: github.event.action == 'opened'
+        uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request_privileged.yaml@develop # zizmor: ignore[unpinned-uses]
+        permissions:
+            pull-requests: write
+        secrets:
+            # Used to check the author's team membership, which GITHUB_TOKEN cannot read
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    # Marks license/cla as passing on PRs labelled X-Bypass-CLA, for when the CLA assistant is being unreliable.
+    bypass-cla:
+        name: Bypass license/cla
+        if: >
+            contains(github.event.pull_request.labels.*.name, 'X-Bypass-CLA')
+            && (
+              github.event.action == 'synchronize'
+              || (github.event.action == 'labeled' && github.event.label.name == 'X-Bypass-CLA')
+            )
+        runs-on: ubuntu-slim
+        permissions:
+            statuses: write
+        steps:
+            - name: Mark license/cla as passing
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  context: license/cla
+                  description: Bypassed using the X-Bypass-CLA label
+                  sha: ${{ github.event.pull_request.head.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    # Remove X-Needs-Iteration label after new commits are pushed
+    remove_label:
+        name: Remove X-Needs-Iteration label after new commits are pushed
+        if: github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'X-Needs-Iteration')
+        runs-on: ubuntu-slim
+        permissions:
+            pull-requests: write
+        steps:
+            - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+              with:
+                  script: |
+                      await github.rest.issues.removeLabel({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: context.payload.pull_request.number,
+                        name: "X-Needs-Iteration",
+                      });

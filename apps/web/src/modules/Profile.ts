@@ -15,6 +15,8 @@ import { type ActionPayload } from "../dispatcher/payloads.ts";
 import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
 
 export class WatchableProfile extends Watchable<Profile> {
+    private loggedOut = false;
+
     public constructor() {
         super({});
         this.value = this.getProfile();
@@ -29,17 +31,22 @@ export class WatchableProfile extends Watchable<Profile> {
             userId: client?.getUserId() ?? undefined,
             deviceId: client?.getDeviceId() ?? undefined,
             displayName: OwnProfileStore.instance.displayName ?? undefined,
+            homeserverUrl: client?.getHomeserverUrl() ?? undefined,
         };
     }
 
     private readonly onProfileChange = (): void => {
-        this.value = this.getProfile();
+        if (!this.loggedOut) this.value = this.getProfile();
     };
 
     private readonly onAction = (payload: ActionPayload): void => {
-        // OwnProfileStore only updates once the profile is fetched, too late for view models built on the first sync
         if (payload.action === Action.OnLoggedIn) {
+            // OwnProfileStore updates after the first sync, too late for view models built at login.
+            this.loggedOut = false;
             this.value = this.getProfile((payload as OnLoggedInPayload).client);
+        } else if (payload.action === Action.OnLoggedOut) {
+            this.loggedOut = true;
+            this.value = {};
         }
     };
 }

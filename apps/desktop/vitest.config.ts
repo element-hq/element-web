@@ -12,7 +12,7 @@ export default defineProject({
         include: /\.[cm]?tsx?$/,
     },
     test: {
-        include: ["src/**/*.test.ts"],
+        include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
         environment: "node",
         pool: "threads",
         globals: false,

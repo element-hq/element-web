@@ -22,7 +22,7 @@
         "lint:knip": "knip --no-tag-hints && knip --strict --exclude unlisted,dependencies,binaries",
         "lint:unused-settings": "node scripts/find-unused-settings.ts",
         "install:git-hooks": "husky",
-        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
+        "postinstall": "node scripts/pnpm-link.ts",
         "docs:dev": "vitepress dev docs",
         "docs:build": "vitepress build docs",
         "docs:preview": "vitepress preview docs",
@@ -44,13 +44,13 @@
         "eslint-plugin-react-web-api": "^5.28.8",
         "eslint-plugin-storybook": "^10.6.5",
         "husky": "^9.1.7",
-        "knip": "6.43.0",
+        "knip": "6.45.1",
         "lint-staged": "^17.6.0",
         "lodash": "^4.18.1",
         "mermaid": "^12.2.0",
         "minimist": "^1.2.8",
         "nx": "catalog:",
-        "oxfmt": "0.75.0",
+        "oxfmt": "0.78.0",
         "oxlint": "catalog:",
         "oxlint-tsgolint": "^7.0.2005",
         "typescript": "catalog:ts6",
@@ -65,7 +65,7 @@
     "devEngines": {
         "packageManager": {
             "name": "pnpm",
-            "version": "12.18.0",
+            "version": "12.21.0",
             "onFail": "download"
         }
     },

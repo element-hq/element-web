@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import React from "react";
+import React, { useImperativeHandle } from "react";
 import { render, screen } from "test-utils-rtl";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { type MatrixClient, type MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import type { TimelineItem } from "@element-hq/web-shared-components";
+import type { TimelineItem, TimelineViewHandle } from "@element-hq/web-shared-components";
 import { createTestClient, mkMessage, TestSDKContext } from "test-utils";
 
-import { NewTimelinePanel } from "./NewTimelinePanel";
+import { NewTimelinePanel, type NewTimelinePanelHandle } from "./NewTimelinePanel";
 import { Layout } from "../../settings/enums/Layout";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -25,8 +25,15 @@ const USER_ID = "@alice:example.org";
 
 // The virtualised TimelineView needs real layout, which this environment has none
 // of, and it has its own tests in shared-components. Stand in a stub that simply
-// draws every row, so these tests cover how this panel renders each kind of row.
-const { rowsRendered } = vi.hoisted(() => ({ rowsRendered: { current: [] as unknown[] } }));
+// draws every row, so these tests cover how this panel renders each kind of row,
+// and that hands out a fake scroll handle so the panel's own handle can be checked.
+const { rowsRendered, viewHandle } = vi.hoisted(() => ({
+    rowsRendered: { current: [] as unknown[] },
+    viewHandle: {
+        scrollByPage: vi.fn(),
+        scrollNow: vi.fn(),
+    },
+}));
 
 vi.mock("@element-hq/web-shared-components", async () => {
     const actual = await vi.importActual<typeof import("@element-hq/web-shared-components")>(
@@ -37,10 +44,13 @@ vi.mock("@element-hq/web-shared-components", async () => {
         TimelineView: ({
             vm,
             renderItem,
+            ref,
         }: {
             vm: { getSnapshot: () => { items: TimelineItem[] } };
             renderItem: (item: TimelineItem) => React.ReactNode;
+            ref?: React.Ref<TimelineViewHandle>;
         }) => {
+            useImperativeHandle(ref, () => viewHandle, []);
             const items = vm.getSnapshot().items;
             rowsRendered.current = items;
             return <div data-testid="timeline-stub">{items.map((item) => renderItem(item))}</div>;
@@ -73,8 +83,18 @@ const { vmState } = vi.hoisted(() => ({
     },
 }));
 
+// Records what the panel asks of the view model.
 const { vmSpies } = vi.hoisted(() => ({
-    vmSpies: { setShowReadReceipts: vi.fn(), constructorOpts: [] as Record<string, unknown>[] },
+    vmSpies: {
+        setShowReadReceipts: vi.fn(),
+        constructorOpts: [] as Record<string, unknown>[],
+        onJumpToLive: vi.fn(),
+        onJumpToStart: vi.fn(),
+        onJumpToReadMarker: vi.fn(),
+        onMarkAllAsRead: vi.fn(),
+        jumpToEvent: vi.fn(),
+        clearHighlight: vi.fn(),
+    },
 }));
 
 vi.mock("../../viewmodels/room/timeline/RoomTimelineViewModel", () => ({
@@ -87,6 +107,12 @@ vi.mock("../../viewmodels/room/timeline/RoomTimelineViewModel", () => ({
         public dispose = (): void => {};
         public subscribe = (): (() => void) => (): void => {};
         public getSnapshot = (): Record<string, unknown> => vmState.snapshot;
+        public onJumpToLive = vmSpies.onJumpToLive;
+        public onJumpToStart = vmSpies.onJumpToStart;
+        public onJumpToReadMarker = vmSpies.onJumpToReadMarker;
+        public onMarkAllAsRead = vmSpies.onMarkAllAsRead;
+        public jumpToEvent = vmSpies.jumpToEvent;
+        public clearHighlight = vmSpies.clearHighlight;
     },
 }));
 
@@ -133,6 +159,9 @@ describe("<NewTimelinePanel />", () => {
 
     beforeEach(() => {
         vi.restoreAllMocks();
+        // restoreAllMocks only touches spies; the hoisted vi.fn() fakes keep their
+        // call history unless cleared.
+        vi.clearAllMocks();
         tileProps.current = [];
         rowsRendered.current = [];
         vmState.setRows([]);
@@ -317,6 +346,128 @@ describe("<NewTimelinePanel />", () => {
             );
 
             expect(vmSpies.setShowReadReceipts).toHaveBeenLastCalledWith(true);
+        });
+    });
+
+    describe("keyboard shortcuts from RoomView", () => {
+        const renderWithHandle = (): NewTimelinePanelHandle => {
+            const ref = React.createRef<NewTimelinePanelHandle>();
+            withItems([]);
+            renderPanel({ ref });
+            return ref.current!;
+        };
+
+        // KeyBindingsManager reads `key` and the modifier flags off the event.
+        const keyDown = (init: KeyboardEventInit): KeyboardEvent => new KeyboardEvent("keydown", init);
+
+        it("pages the view up and down", () => {
+            const handle = renderWithHandle();
+
+            handle.handleScrollKey(keyDown({ key: "PageUp" }));
+            expect(viewHandle.scrollByPage).toHaveBeenLastCalledWith(-1);
+
+            handle.handleScrollKey(keyDown({ key: "PageDown" }));
+            expect(viewHandle.scrollByPage).toHaveBeenLastCalledWith(1);
+        });
+
+        it("jumps to the live end, to the read marker, and forgets the read marker on request", () => {
+            const handle = renderWithHandle();
+
+            handle.jumpToLiveTimeline();
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+
+            handle.jumpToReadMarker();
+            expect(vmSpies.onJumpToReadMarker).toHaveBeenCalledWith(viewHandle.scrollNow);
+
+            handle.forgetReadMarker();
+            expect(vmSpies.onMarkAllAsRead).toHaveBeenCalled();
+        });
+
+        it("goes to the start of the room for ctrl+home, and to the live end for ctrl+end", () => {
+            const handle = renderWithHandle();
+
+            // Either end may need loading first, so both go through the view model, handed
+            // the view's own scroll for when they do not.
+            handle.handleScrollKey(keyDown({ key: "Home", ctrlKey: true }));
+            expect(vmSpies.onJumpToStart).toHaveBeenCalledWith(viewHandle.scrollNow);
+            expect(vmSpies.onJumpToLive).not.toHaveBeenCalled();
+
+            handle.handleScrollKey(keyDown({ key: "End", ctrlKey: true }));
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
+        });
+
+        it("leaves keys that are not timeline shortcuts alone", () => {
+            const handle = renderWithHandle();
+
+            handle.handleScrollKey(keyDown({ key: "Home" }));
+            handle.handleScrollKey(keyDown({ key: "a" }));
+
+            expect(viewHandle.scrollByPage).not.toHaveBeenCalled();
+            expect(vmSpies.onJumpToStart).not.toHaveBeenCalled();
+            expect(vmSpies.onJumpToLive).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("when RoomView asks for a message after the timeline is open", () => {
+        // As RoomView passes them: the message to highlight, whether it still has to be scrolled
+        // into view, and the callback that clears that flag once we report the jump.
+        const renderAsked = (eventId: string | undefined, scrollIntoView?: boolean) => {
+            const onEventScrolledIntoView = vi.fn();
+            const panel = (id: string | undefined, scroll?: boolean): React.ReactElement => (
+                <MatrixClientContext.Provider value={client}>
+                    <SDKContext.Provider value={new TestSDKContext()}>
+                        <NewTimelinePanel
+                            room={room}
+                            highlightedEventId={id}
+                            eventScrollIntoView={scroll}
+                            onEventScrolledIntoView={onEventScrolledIntoView}
+                        />
+                    </SDKContext.Provider>
+                </MatrixClientContext.Provider>
+            );
+            const { rerender } = render(panel(eventId, scrollIntoView));
+            return {
+                onEventScrolledIntoView,
+                ask: (id: string | undefined, scroll?: boolean) => rerender(panel(id, scroll)),
+            };
+        };
+
+        it("does not jump to the message it opened on, which is already loaded there, but reports it", () => {
+            const { onEventScrolledIntoView } = renderAsked("$pinned");
+
+            expect(vmSpies.jumpToEvent).not.toHaveBeenCalled();
+            expect(onEventScrolledIntoView).toHaveBeenCalledWith("$pinned");
+        });
+
+        it("jumps to a newly asked-for message, such as a clicked pinned message", () => {
+            const { ask, onEventScrolledIntoView } = renderAsked(undefined);
+
+            ask("$pinned");
+
+            expect(vmSpies.jumpToEvent).toHaveBeenCalledWith("$pinned", viewHandle.scrollNow);
+            expect(onEventScrolledIntoView).toHaveBeenCalledWith("$pinned");
+        });
+
+        it("jumps again when the same message is asked for again", () => {
+            const { ask } = renderAsked("$pinned");
+            // RoomView clears the flag once told the jump happened...
+            ask("$pinned", false);
+            expect(vmSpies.jumpToEvent).not.toHaveBeenCalled();
+
+            // ...and sets it again on the next click of the same message.
+            ask("$pinned", true);
+
+            expect(vmSpies.jumpToEvent).toHaveBeenCalledTimes(1);
+            expect(vmSpies.jumpToEvent).toHaveBeenCalledWith("$pinned", viewHandle.scrollNow);
+        });
+
+        it("drops the highlight and goes to the live end when no message is asked for any more", () => {
+            const { ask } = renderAsked("$pinned");
+
+            ask(undefined);
+
+            expect(vmSpies.clearHighlight).toHaveBeenCalled();
+            expect(vmSpies.onJumpToLive).toHaveBeenCalledWith(viewHandle.scrollNow);
         });
     });
 });

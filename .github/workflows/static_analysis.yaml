@@ -62,10 +62,12 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
                   # Nothing to cache for the jobs that do not install
                   cache: ${{ matrix.install != '' }}
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             - name: Install Dependencies (layered)
@@ -152,7 +154,7 @@ jobs:
         name: Static Analysis
         needs: [lint, i18n, zizmor]
         if: always()
-        runs-on: ubuntu-26.04
+        runs-on: ubuntu-slim
         steps:
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1
