@@ -15,6 +15,10 @@
         "hide_widget": "Sakrij %(name)s",
         "show_widget": "Prikaži %(name)s"
     },
+    "hu": {
+        "hide_widget": "%(name)s elrejtése",
+        "show_widget": "%(name)s megjelenítése"
+    },
     "pl": {
         "hide_widget": "Ukryj %(name)s",
         "show_widget": "Pokaż %(name)s"
@@ -22,6 +26,10 @@
     "sv": {
         "hide_widget": "Dölj %(name)s",
         "show_widget": "Visa %(name)s"
+    },
+    "uk": {
+        "hide_widget": "Сховати %(name)s",
+        "show_widget": "Показати %(name)s"
     },
     "zh_Hans": {
         "hide_widget": "隐藏 %(name)s",

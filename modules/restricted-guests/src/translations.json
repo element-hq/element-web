@@ -54,6 +54,17 @@
         "register_dialog_register_username_label": "Korisničko ime",
         "register_dialog_title": "Zatraži pristup"
     },
+    "hu": {
+        "join_cta": "Csatlakozás vendégként",
+        "join_message": "Csatlakozás a szobához a részvételhez",
+        "register_dialog_busy": "Fiók létrehozása…",
+        "register_dialog_continue_label": "Folytatás vendégként",
+        "register_dialog_error": "Nem sikerült a fiók létrehozása",
+        "register_dialog_existing_account": "Már van fiókom.",
+        "register_dialog_field_label": "Név",
+        "register_dialog_register_username_label": "Felhasználónév",
+        "register_dialog_title": "Hozzáférés kérése"
+    },
     "pl": {
         "join_cta": "Dołącz jako gość",
         "join_message": "Dołącz do pokoju, aby uczestniczyć",
@@ -75,6 +86,17 @@
         "register_dialog_field_label": "Namn",
         "register_dialog_register_username_label": "Användarnamn",
         "register_dialog_title": "Begär åtkomst"
+    },
+    "uk": {
+        "join_cta": "Приєднатись як гість",
+        "join_message": "Приєднайтеся до кімнати, щоб взяти участь",
+        "register_dialog_busy": "Створення вашого облікового запису...",
+        "register_dialog_continue_label": "Продовжити як гість",
+        "register_dialog_error": "Не вдалося створити обліковий запис.",
+        "register_dialog_existing_account": "У мене вже є обліковий запис",
+        "register_dialog_field_label": "Ім'я",
+        "register_dialog_register_username_label": "Ім'я користувача",
+        "register_dialog_title": "Запитати доступ"
     },
     "zh_Hans": {
         "join_cta": "以访客身份加入",

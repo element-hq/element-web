@@ -39,6 +39,14 @@
         "trigger_label": "Prikaži izbornik",
         "univention_error": "Nije moguće dohvatiti središnju navigaciju s portala"
     },
+    "hu": {
+        "close_label": "Menü bezárása",
+        "logo_alt": "Portál logó",
+        "logo_link_label": "Portál megjelenítése",
+        "menu_label": "Menü",
+        "trigger_label": "Menü megjelenítése",
+        "univention_error": "Nem sikerült lekérni a portál központi navigációs elemeit"
+    },
     "pl": {
         "close_label": "Zamknij menu",
         "logo_alt": "Logo portalu",
@@ -53,6 +61,14 @@
         "logo_link_label": "Visa portal",
         "menu_label": "Meny",
         "trigger_label": "Visa meny"
+    },
+    "uk": {
+        "close_label": "Закрити меню",
+        "logo_alt": "Логотип порталу",
+        "logo_link_label": "Показати портал",
+        "menu_label": "Меню",
+        "trigger_label": "Показати меню",
+        "univention_error": "Не вдалося отримати центральну навігацію з порталу"
     },
     "zh_Hans": {
         "close_label": "关闭菜单",

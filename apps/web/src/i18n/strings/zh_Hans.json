@@ -1580,6 +1580,8 @@
         "sliding_sync_description": "正在处于开发中，并且一旦启用就无法禁用。当前与 Element Call 不兼容。",
         "sliding_sync_disabled_notice": "重新登录以禁用",
         "sliding_sync_server_no_support": "服务器缺少支持",
+        "strip_upload_metadata": "为上传的文件移除位置与其他元数据",
+        "strip_upload_metadata_description": "你可以每次上传时选择保留。",
         "unrealiable_e2e": "在加密房间中不可靠",
         "url_preview_bundle": "绑定式 URL 预览（MSC4095）",
         "url_preview_bundle_description": "发送与消息内容绑定的 URL 预览",
@@ -2850,7 +2852,7 @@
             "message_search_indexing_idle": "尚未为任何房间索引消息。",
             "message_search_intro": "%(brand)s 正在安全地在本地缓存加密消息以使其出现在搜索结果中：",
             "message_search_pending_rooms": "等待索引的房间：%(pendingRooms)s 个",
-            "message_search_room_progress": "%(totalRooms)s 个房间中的 %(doneRooms)s 个",
+            "message_search_room_progress": "%(doneRooms)s 个房间中的 %(totalRooms)s 个",
             "message_search_section": "消息搜索",
             "message_search_sleep_time": "消息下载速度",
             "message_search_space_used": "已使用空间：",
@@ -3787,6 +3789,7 @@
         "title": "允许访客加入此房间"
     },
     "upload_failed_generic": "文件“%(fileName)s”上传失败。",
+    "upload_failed_metadata": "无法从“%(fileName)s”中移除元数据，因此未能上传。要仍然发送，请取消选择“%(option)s”后再次上传。",
     "upload_failed_size": "文件“%(fileName)s”超出上传大小限制",
     "upload_failed_title": "上传失败",
     "upload_file": {
@@ -3796,6 +3799,7 @@
         "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
         "not_image": "你选择的文件不是有效的图像文件。",
+        "strip_metadata": "移除位置与其他元数据",
         "title": "上传文件",
         "title_progress": "上传文件（%(total)s 个中的第 %(current)s 个）",
         "upload_all_button": "全部上传",

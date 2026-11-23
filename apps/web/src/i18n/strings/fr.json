@@ -38,6 +38,7 @@
         "create_a_room": "Créer un salon",
         "create_account": "Créer un compte",
         "decline": "Refuser",
+        "decline_and_ban": "Refuser et bannir",
         "decline_and_block": "Refuser et bloquer",
         "decline_invite": "Refuser l’invitation",
         "delete": "Supprimer",
@@ -1586,6 +1587,8 @@
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Connectez-vous à nouveau pour désactiver",
         "sliding_sync_server_no_support": "Votre serveur n'est pas pris en charge",
+        "strip_upload_metadata": "Supprimer la localisation et les autres méta-données des téléversements",
+        "strip_upload_metadata_description": "Vous pouvez choisir de les garder à chaque téléversement",
         "unrealiable_e2e": "Non fiable dans les salons chiffrés",
         "url_preview_bundle": "Ensemble d'aperçus d'URL (MSC4095)",
         "url_preview_bundle_description": "Envoyer des aperçus d'URL dans le message, en parallèle du contenu du message",
@@ -3829,6 +3832,7 @@
         "title": "Autoriser les utilisateurs invités à rejoindre ce salon"
     },
     "upload_failed_generic": "Le fichier « %(fileName)s » n’a pas pu être envoyé.",
+    "upload_failed_metadata": "Les méta-données n'ont pas pu être retirées de '%(fileName)s' donc il n'a pas été téléversé. Pour l'envoyer tout de mème, téléversez le avec \"%(option)s\" décoché.",
     "upload_failed_size": "Le fichier « %(fileName)s » dépasse la taille limite autorisée pour le téléversement.",
     "upload_failed_title": "Échec de l’envoi",
     "upload_file": {
@@ -3838,6 +3842,7 @@
         "error_some_files_too_large": "Certains fichiers sont <b>trop lourds</b> pour être envoyés. La taille limite des fichiers est de %(limit)s.",
         "error_title": "Erreur d’envoi",
         "not_image": "Le fichier que vous avez choisi n'est pas un fichier image valide.",
+        "strip_metadata": "Supprimer la position and les autres méta-données.",
         "title": "Envoyer les fichiers",
         "title_progress": "Envoi des fichiers (%(current)s sur %(total)s)",
         "upload_all_button": "Tout envoyer",
