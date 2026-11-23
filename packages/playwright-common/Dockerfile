@@ -1,6 +1,9 @@
-# Expose the argument for use in FROM
+# Expose the arguments for use in FROM
 ARG PLAYWRIGHT_VERSION
-FROM mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble
+# The Playwright release whose browsers to use. For a fork such as flashwright (e.g. 1.64.1-flashwright.12),
+# that is the release it is based on (1.64.1), as there is no Playwright image for the fork's own version.
+ARG PLAYWRIGHT_BASE_VERSION=${PLAYWRIGHT_VERSION}
+FROM mcr.microsoft.com/playwright:v${PLAYWRIGHT_BASE_VERSION}-noble
 # Expose the argument to this build stage
 ARG PLAYWRIGHT_VERSION
 
@@ -12,8 +15,12 @@ RUN apt-get update && \
     apt-get purge -y --auto-remove && \
     rm -rf /var/lib/apt/lists/*
 
-# Install the matching playwright runtime, the docker image only includes browsers
-RUN npm i -g playwright@${PLAYWRIGHT_VERSION}
+# Install the matching playwright runtime, the docker image only includes browsers.
+# flashwright publishes it as `flashwright`, which still provides the `playwright` command.
+RUN case "$PLAYWRIGHT_VERSION" in \
+        *-flashwright.*) npm i -g "flashwright@${PLAYWRIGHT_VERSION}" ;; \
+        *) npm i -g "playwright@${PLAYWRIGHT_VERSION}" ;; \
+    esac
 
 # switch to pwuser
 USER 1001:1001

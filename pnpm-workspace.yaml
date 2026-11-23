@@ -21,9 +21,9 @@ catalog:
     react-dom: ^19.0.0
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
-    # playwright
-    "@playwright/test": 1.65.1
-    "playwright-core": 1.65.1
+    # playwright: experimenting with flashwright, a faster fork of Playwright 1.64.1 published under its own package names
+    "@playwright/test": npm:flashwright-test@1.64.1-flashwright.12
+    "playwright-core": npm:flashwright-core@1.64.1-flashwright.12
     serve: 14.2.8
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
@@ -143,6 +143,8 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
+    # Use flashwright wherever `playwright` is pulled in (e.g. by @vitest/browser-playwright), to match the catalog
+    playwright: npm:flashwright@1.64.1-flashwright.12
     pretty-format@30>react-is: 19.3.1
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"

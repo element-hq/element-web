@@ -181,8 +181,8 @@ catalogs:
       specifier: 1.5.0
       version: 1.5.0
     '@playwright/test':
-      specifier: 1.65.1
-      version: 1.65.1
+      specifier: npm:flashwright-test@1.64.1-flashwright.12
+      version: 1.64.1-flashwright.12
     '@typescript/native':
       specifier: npm:typescript@7.0.2
       version: 7.0.2
@@ -217,8 +217,8 @@ catalogs:
       specifier: 1.93.0
       version: 1.93.0
     playwright-core:
-      specifier: 1.65.1
-      version: 1.65.1
+      specifier: npm:flashwright-core@1.64.1-flashwright.12
+      version: 1.64.1-flashwright.12
     react:
       specifier: ^19.0.0
       version: 19.3.1
@@ -252,6 +252,7 @@ catalogs:
       version: 6.0.2
 
 overrides:
+  playwright: npm:flashwright@1.64.1-flashwright.12
   pretty-format@30>react-is: 19.3.1
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
@@ -313,7 +314,7 @@ importers:
         version: 7.3.0(@nx/devkit@23.3.0)(@nx/js@23.3.0)(dotenv@18.0.10)(nx@24.0.6)(tslib@2.8.1)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-test@1.64.1-flashwright.12
       '@types/node':
         specifier: 25.9.3
         version: 25.9.3
@@ -434,7 +435,7 @@ importers:
         version: 2.1.3
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-test@1.64.1-flashwright.12
       '@types/auto-launch':
         specifier: ^5.0.1
         version: 5.0.5(patch_hash=b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538)
@@ -766,7 +767,7 @@ importers:
         version: 2.0.0(@peculiar/asn1-schema@3.0.0)(@peculiar/json-schema@3.0.0)(webcrypto-core@2.0.0)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-test@1.64.1-flashwright.12
       '@principalstudio/html-webpack-inject-preload':
         specifier: ^1.2.7
         version: 1.2.7(html-webpack-plugin@5.6.8)(webpack@5.112.2)
@@ -865,7 +866,7 @@ importers:
         version: 5.1.0(vite@8.3.8)(vitest@5.1.0)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)
+        version: 5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)
       '@vitest/spy':
         specifier: 'catalog:'
         version: 5.1.0
@@ -925,7 +926,7 @@ importers:
         version: 0.78.0
       playwright-core:
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-core@1.64.1-flashwright.12
       postcss:
         specifier: 8.5.33
         version: 8.5.33
@@ -1226,7 +1227,7 @@ importers:
         version: 6.3.0(vite@8.3.8)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)
+        version: 5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)
       matrix-web-i18n:
         specifier: 'catalog:'
         version: 3.6.0(supports-color@10.2.2)
@@ -1320,10 +1321,10 @@ importers:
     dependencies:
       '@axe-core/playwright':
         specifier: ^4.10.1
-        version: 4.14.0(playwright-core@1.65.1)
+        version: 4.14.0(flashwright-core@1.64.1-flashwright.12)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-test@1.64.1-flashwright.12
       '@testcontainers/postgresql':
         specifier: ^12.0.0
         version: 12.2.1(supports-color@10.2.2)
@@ -1338,7 +1339,7 @@ importers:
         version: 2.2.0
       playwright-core:
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-core@1.64.1-flashwright.12
       strip-ansi:
         specifier: ^7.1.0
         version: 7.2.0
@@ -1457,7 +1458,7 @@ importers:
         version: 7.60.1(@types/node@25.9.3)
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.65.1
+        version: flashwright-test@1.64.1-flashwright.12
       '@storybook/addon-a11y':
         specifier: 10.6.7
         version: 10.6.7(storybook@10.6.7)
@@ -1511,7 +1512,7 @@ importers:
         version: 6.3.0(vite@8.3.8)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)
+        version: 5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)
       expect:
         specifier: ^30.5.1
         version: 30.5.2
@@ -4827,11 +4828,6 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
-
-  '@playwright/test@1.65.1':
-    resolution: {integrity: sha512-y+NCIRm2LvY4slUVWvGh1nujJ8RF/hEisIsq2mtUPgdQC4L701bq5hZGMhrpeXjACvwvO9tj5dJqhvM6TP9lbw==}
-    engines: {node: '>=20'}
-    hasBin: true
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -8839,6 +8835,21 @@ packages:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
 
+  flashwright-core@1.64.1-flashwright.12:
+    resolution: {integrity: sha512-iuK+eMGQufE4BjzsPQeLMrE35pgrJt1th63zzDHfogw0mVtwAzIXHazeBQv2RetMIiUUFtrPQTYuvJ19bDr85A==}
+    engines: {node: '>=22.18.0'}
+    hasBin: true
+
+  flashwright-test@1.64.1-flashwright.12:
+    resolution: {integrity: sha512-s++qu9esGJKFscRU2BuEX7QJdYtaLDpibUfEnjPLosKxjhGqECLQ11B/g/LMRpJtbxnFehnr+2o0eUvF4LJAHg==}
+    engines: {node: '>=22.18.0'}
+    hasBin: true
+
+  flashwright@1.64.1-flashwright.12:
+    resolution: {integrity: sha512-uHVbEdcIcMz+/4kvfqYXE5oOMo9EObjQ/AN8yJystNDN6oY5eKa9aRkfwHWaPdlND5V+J/W5qoVQYzxNy3Q8xg==}
+    engines: {node: '>=22.18.0'}
+    hasBin: true
+
   flat-cache@6.1.23:
     resolution: {integrity: sha512-f++BY9pTk+983xK1FLzlLpmM0i0z+jHmx3QESGkURMXujQZz1k5wzwX6hjnQ8goaD0B+sYnDK1yZ6MTyZfUaqA==}
 
@@ -10658,16 +10669,6 @@ packages:
   pkijs@3.4.1:
     resolution: {integrity: sha512-Oo/NZcSWccq8KyoG7gLE9fnltgHns+pNCjCAp/WmjsUySi+sX7y4z4Xqu4fVb42CDHzRPl33fjzT15V1wvcyhA==}
     engines: {node: '>=16.0.0'}
-
-  playwright-core@1.65.1:
-    resolution: {integrity: sha512-hqPpz7blSMPxWVdoeE1yiBSzXsKiVOd2k+kjCvmUywD2GPO2Dd9HfcWnq9NN0GHbNZDFgZ9JfBFr+X5/BLo0qw==}
-    engines: {node: '>=20'}
-    hasBin: true
-
-  playwright@1.65.1:
-    resolution: {integrity: sha512-vJ1FuoOrNwOKHUIVEvSt3jT1L+wjjDpwhwIstKtfvTh8XIG4FG4bIFuvNdMxi81LGfAhUgUZleVFaOLY4RIUUw==}
-    engines: {node: '>=20'}
-    hasBin: true
 
   plist@3.1.0:
     resolution: {integrity: sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==}
@@ -13317,10 +13318,10 @@ snapshots:
       lightningcss: 1.33.0
       typescript: '@typescript/typescript6@6.0.2'
 
-  '@axe-core/playwright@4.14.0(playwright-core@1.65.1)':
+  '@axe-core/playwright@4.14.0(flashwright-core@1.64.1-flashwright.12)':
     dependencies:
       axe-core: 4.14.0
-      playwright-core: 1.65.1
+      playwright-core: flashwright-core@1.64.1-flashwright.12
 
   '@babel/code-frame@7.29.7':
     dependencies:
@@ -16814,10 +16815,6 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@playwright/test@1.65.1':
-    dependencies:
-      playwright: 1.65.1
-
   '@polka/url@1.0.0-next.29': {}
 
   '@posthog/browser-common@0.12.0':
@@ -17708,7 +17705,7 @@ snapshots:
       storybook: 10.6.7(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.1)
     optionalDependencies:
       '@vitest/browser': 4.1.11(vite@8.3.8)(vitest@5.1.0)
-      '@vitest/browser-playwright': 5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)
+      '@vitest/browser-playwright': 5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)
       vitest: 5.1.0(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(happy-dom@21.0.4)(jsdom@31.0.1)(vite@8.3.8)
     transitivePeerDependencies:
       - react
@@ -18536,11 +18533,11 @@ snapshots:
       vite: 8.3.8(@types/node@25.9.3)(esbuild@0.28.1)(jiti@2.7.0)(sugarss@5.0.2)(terser@5.51.2)(yaml@2.9.1)
       vue: 3.5.43(@typescript/typescript6@6.0.2)
 
-  '@vitest/browser-playwright@5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)':
+  '@vitest/browser-playwright@5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)':
     dependencies:
       '@vitest/browser': 5.1.0(vite@8.3.8)(vitest@5.1.0)
       '@vitest/mocker': 5.1.0(vite@8.3.8)
-      playwright: 1.65.1
+      playwright: flashwright@1.64.1-flashwright.12
       tinyrainbow: 3.2.0
       vitest: 5.1.0(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(happy-dom@21.0.4)(jsdom@31.0.1)(vite@8.3.8)
     transitivePeerDependencies:
@@ -21203,6 +21200,16 @@ snapshots:
       locate-path: 6.0.0
       path-exists: 4.0.0
 
+  flashwright-core@1.64.1-flashwright.12: {}
+
+  flashwright-test@1.64.1-flashwright.12:
+    dependencies:
+      playwright: flashwright@1.64.1-flashwright.12
+
+  flashwright@1.64.1-flashwright.12:
+    dependencies:
+      playwright-core: flashwright-core@1.64.1-flashwright.12
+
   flat-cache@6.1.23:
     dependencies:
       cacheable: 2.5.0
@@ -23295,12 +23302,6 @@ snapshots:
       pvtsutils: 1.3.6
       pvutils: 1.2.0
       tslib: 2.8.1
-
-  playwright-core@1.65.1: {}
-
-  playwright@1.65.1:
-    dependencies:
-      playwright-core: 1.65.1
 
   plist@3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7):
     dependencies:
@@ -25749,7 +25750,7 @@ snapshots:
       type-plus: 8.0.1(@typescript/typescript6@6.0.2)
       vitest: 5.1.0(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@5.1.0)(@vitest/coverage-v8@5.1.0)(@vitest/ui@5.1.0)(happy-dom@21.0.4)(jsdom@31.0.1)(vite@8.3.8)
     optionalDependencies:
-      '@vitest/browser-playwright': 5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)
+      '@vitest/browser-playwright': 5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)
     transitivePeerDependencies:
       - babel-plugin-macros
       - typescript
@@ -25773,7 +25774,7 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
       '@types/node': 25.9.3
-      '@vitest/browser-playwright': 5.1.0(playwright@1.65.1)(vite@8.3.8)(vitest@5.1.0)
+      '@vitest/browser-playwright': 5.1.0(flashwright@1.64.1-flashwright.12)(vite@8.3.8)(vitest@5.1.0)
       '@vitest/coverage-v8': 5.1.0(@vitest/browser@5.1.0)(vitest@5.1.0)
       '@vitest/ui': 5.1.0(vitest@5.1.0)
       happy-dom: 21.0.4

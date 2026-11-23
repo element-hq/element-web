@@ -36,8 +36,14 @@ SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
 function build_image() {
     local IMAGE_NAME="$1"
 
+    local VERSION="${IMAGE_NAME#*:}"
+
     echo "playwright-screenshots: Building $IMAGE_NAME image in $SCRIPT_DIR"
-    docker build -t "$IMAGE_NAME" --build-arg "PLAYWRIGHT_VERSION=${IMAGE_NAME#*:}" "$SCRIPT_DIR"
+    # A flashwright version (e.g. 1.64.1-flashwright.12) takes its browsers from the Playwright release it is based on
+    docker build -t "$IMAGE_NAME" \
+        --build-arg "PLAYWRIGHT_VERSION=$VERSION" \
+        --build-arg "PLAYWRIGHT_BASE_VERSION=${VERSION%%-flashwright.*}" \
+        "$SCRIPT_DIR"
 }
 
 WS_PORT=3000
