@@ -209,6 +209,7 @@
         "empty": {
             "no_chats": "Pas encore de discussions",
             "no_chats_description": "Commencez par envoyer un message à quelqu'un ou en créant un salon",
+            "no_chats_description_no_dm": "Commencer par créer un salon",
             "no_chats_description_no_room_rights": "Commencez par envoyer un message à quelqu'un",
             "no_invites": "Vous n'avez aucune invitation non lue",
             "no_mentions": "Vous n'avez aucune mention non lue",

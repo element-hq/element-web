@@ -1587,6 +1587,8 @@
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
+        "strip_upload_metadata": "Eemalda üleslaaditavatest meediumifailidest asukoht ja muu metateave",
+        "strip_upload_metadata_description": "Saate selle teabe iga üleslaadimise puhul alles jätta.",
         "unrealiable_e2e": "Krüptitud jututubades pole see töökindel",
         "url_preview_bundle": "Võrguaadresside lõimitud eelvaated (MSC4095)",
         "url_preview_bundle_description": "Edastab võrguaadresside eelvaated osana sõnumist",
@@ -3830,6 +3832,7 @@
         "title": "Luba külalistel selle jututoaga liituda"
     },
     "upload_failed_generic": "Faili '%(fileName)s' üleslaadimine ei õnnestunud.",
+    "upload_failed_metadata": "Metateabe eemaldamine „%(fileName)s“ failist ei õnnestunud. Kui tahad seda ikkagi üles laadida, siis eemalda enne üleslaadimist „%(option)s“ märge.",
     "upload_failed_size": "„%(fileName)s“ faili suurus ületab seadistatud üleslaadimise piiri",
     "upload_failed_title": "Üleslaadimine ei õnnestunud",
     "upload_file": {
@@ -3839,6 +3842,7 @@
         "error_some_files_too_large": "Mõned failid on üleslaadimiseks <b>liiga suured</b>. Failisuuruse piir on %(limit)s.",
         "error_title": "Üleslaadimise viga",
         "not_image": "Sinu valitud fail pole korrektne pildifail.",
+        "strip_metadata": "Eemalda asukoht ja muu metateave",
         "title": "Laadi failid üles",
         "title_progress": "Laadin faile üles (%(current)s / %(total)s)",
         "upload_all_button": "Laadi kõik üles",
