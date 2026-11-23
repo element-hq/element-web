@@ -50,6 +50,16 @@ describe("MediaEventHelper", () => {
         ["image without filename", { msgtype: "m.image", body: "image.png" }, false],
         ["image whose body is its filename", { msgtype: "m.image", filename: "image.png", body: "image.png" }, false],
         ["text message", { msgtype: "m.text", filename: "image.png", body: "Hello" }, false],
+        [
+            "voice message",
+            {
+                "msgtype": "m.audio",
+                "filename": "Voice message.ogg",
+                "body": "Voice message",
+                "org.matrix.msc3245.voice": {},
+            },
+            false,
+        ],
     ])("hasCaption returns the expected value for a %s", (_, content, expected) => {
         const event = new MatrixEvent({ type: "m.room.message", content });
         expect(MediaEventHelper.hasCaption(event)).toBe(expected);
