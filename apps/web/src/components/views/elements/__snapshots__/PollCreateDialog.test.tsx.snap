@@ -13,6 +13,7 @@ exports[`PollCreateDialog > renders a blank poll 1`] = `
     class="mx_CompoundDialog mx_ScrollableBaseDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_CompoundDialog_header"
@@ -240,6 +241,7 @@ exports[`PollCreateDialog > renders a question and some options 1`] = `
     class="mx_CompoundDialog mx_ScrollableBaseDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_CompoundDialog_header"
@@ -503,6 +505,7 @@ exports[`PollCreateDialog > renders info from a previous event 1`] = `
     class="mx_CompoundDialog mx_ScrollableBaseDialog"
     data-focus-lock-disabled="false"
     role="dialog"
+    tabindex="-1"
   >
     <div
       class="mx_CompoundDialog_header"

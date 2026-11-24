@@ -49,7 +49,7 @@ catalog:
     # nx
     nx: 24.0.6
     # oxc
-    oxlint: 1.93.0
+    oxlint: 1.94.0
 
 catalogs:
     ts6:
@@ -57,6 +57,13 @@ catalogs:
         "@types/node": ts6.0
 
 packageExtensions:
+    testcontainers:
+        dependencies:
+            # Keep a single testcontainers instance across workspaces. Otherwise debug's optional
+            # supports-color peer can resolve differently per workspace, splitting testcontainers into
+            # several copies, and exposeHostPorts() then registers the port forwarder in a different copy
+            # to the one starting the homeserver, so host.testcontainers.internal doesn't resolve.
+            supports-color: "^10.2.2"
     fdir:
         dependencies:
             # Fix missing type dependency
@@ -155,7 +162,7 @@ overrides:
 
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.40.0
+    node-abi: 4.43.0
 
     # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
     markdown-it: ^14.3.0

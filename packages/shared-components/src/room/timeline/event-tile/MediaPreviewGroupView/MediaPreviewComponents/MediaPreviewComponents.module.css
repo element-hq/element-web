@@ -34,7 +34,7 @@
         border: none;
         background: none;
         height: 100%;
-        aspect-ratio: 100%;
+        aspect-ratio: 1;
         align-items: center;
         justify-content: center;
         display: flex;

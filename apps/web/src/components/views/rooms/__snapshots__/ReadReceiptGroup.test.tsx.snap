@@ -114,7 +114,7 @@ exports[`ReadReceiptGroup > <ReadReceiptPerson /> > should render 1`] = `
           height="24px"
           loading="lazy"
           referrerpolicy="no-referrer"
-          src="http://this.is.a.url//placekitten.com/400/400"
+          src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/placekitten.com/kitten?width=24&height=24&method=crop&allow_redirect=true"
           width="24px"
         />
       </span>

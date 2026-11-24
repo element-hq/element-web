@@ -29,6 +29,7 @@ import {
     defaultWatchManager,
     type SettingKey,
     type Settings,
+    type IBaseSetting,
 } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import { type CallbackFn as WatchCallbackFn } from "./WatchManager";
@@ -56,6 +57,8 @@ for (const key in SETTINGS) {
     }
 }
 
+const defaultSettingsHandler = new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings);
+
 // Only wrap the handlers with async setters in a local echo wrapper
 const LEVEL_HANDLERS: Record<SettingLevel, SettingsHandler> = {
     [SettingLevel.DEVICE]: new DeviceSettingsHandler(featureNames, defaultWatchManager),
@@ -68,7 +71,7 @@ const LEVEL_HANDLERS: Record<SettingLevel, SettingsHandler> = {
     [SettingLevel.ROOM]: new LocalEchoWrapper(new RoomSettingsHandler(defaultWatchManager), SettingLevel.ROOM),
     [SettingLevel.PLATFORM]: new LocalEchoWrapper(new PlatformSettingsHandler(), SettingLevel.PLATFORM),
     [SettingLevel.CONFIG]: new ConfigSettingsHandler(featureNames),
-    [SettingLevel.DEFAULT]: new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
+    [SettingLevel.DEFAULT]: defaultSettingsHandler,
 };
 
 export const LEVEL_ORDER = [
@@ -139,6 +142,29 @@ export default class SettingsStore {
 
     // Counter used for generation of watcher IDs
     private static watcherCount = 1;
+
+    /**
+     * Allows modules to register their own settings.
+     * @param settings - The settings to register, keyed by setting name.
+     * @throws If a name isn't of the form `module.<module name>.<setting name>` or is already registered.
+     */
+    public static registerModuleSettings(settings: Record<string, IBaseSetting>): void {
+        for (const settingName of Object.keys(settings)) {
+            // Check that the setting name has the right structure.
+            // We do this to prevent conflicts between settings used by different modules.
+            if (!/^module\.[^.]+\.[^.]+/.test(settingName)) {
+                throw new Error(`Module setting "${settingName}" must be named "module.<module name>.<setting name>"`);
+            }
+            // Don't allow existing settings to be overridden.
+            if (settingName in SETTINGS) {
+                throw new Error(`Setting "${settingName}" is already registered`);
+            }
+        }
+        Object.assign(SETTINGS, settings);
+        for (const [settingName, setting] of Object.entries(settings)) {
+            defaultSettingsHandler.addDefault(settingName, setting.default);
+        }
+    }
 
     public static reset(): void {
         for (const handler of Object.values(LEVEL_HANDLERS)) {

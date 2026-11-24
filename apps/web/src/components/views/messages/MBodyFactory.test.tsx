@@ -56,6 +56,7 @@ describe("MBodyFactory", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
+        baseUrl: "https://server",
         getRooms: vi.fn().mockReturnValue([]),
         getRoom: vi.fn(),
         getIgnoredUsers: vi.fn(),

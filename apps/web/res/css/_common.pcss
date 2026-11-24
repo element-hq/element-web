@@ -112,6 +112,15 @@ body {
     color: $primary-content;
     border: 0px;
     margin: 0px;
+    /*
+     * Content portalled into the body, such as closed tooltips anchored to timeline events out of view,
+     * can extend past the viewport. Clip it so that the page never becomes scrollable, otherwise code such
+     * as drag-and-drop auto-scrolling scrolls the whole app out of view. Unlike `hidden`, `clip` does not
+     * make the body scrollable. The body must be positioned for its clipping to apply to absolutely
+     * positioned content such as tooltips.
+    */
+    position: relative;
+    overflow: clip;
 
     /* needed to match the designs correctly on macOS */
     /* see https://github.com/vector-im/element-web/issues/11425 */
