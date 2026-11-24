@@ -31,7 +31,9 @@ import {
     MatrixEvent,
     SyncState,
     type AccountDataEvents,
+    EventTimelineSet,
 } from "matrix-js-sdk/src/matrix";
+import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { randomUUID } from "node:crypto";
@@ -151,6 +153,7 @@ describe("Notifier", () => {
             decryptEventIfNeeded: vi.fn(),
             getRoom: vi.fn(),
             getPushActionsForEvent: vi.fn(),
+            getNotifTimelineSet: vi.fn().mockReturnValue(null),
             // Mock required because TextForEvent now evaluates supportsVoip for RTCNotification to trigger OS popups.
             // The true/false value is arbitrary here, as this test only verifies the in-app toast creation, not the OS text output.
             supportsVoip: vi.fn().mockReturnValue(true),
@@ -297,6 +300,24 @@ describe("Notifier", () => {
             emitLiveEvent(event);
 
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(testRoom.name, "hey", null, testRoom, event);
+        });
+
+        it("creates a single notification for a highlight also added to the notification timeline set", () => {
+            // Set up the notification timeline set as the client and sync loop do
+            const notifTimelineSet = new EventTimelineSet(undefined, { timelineSupport: true, pendingEvents: false });
+            mockClient.getNotifTimelineSet.mockReturnValue(notifTimelineSet);
+            new ReEmitter(mockClient).reEmit(notifTimelineSet, [RoomEvent.Timeline]);
+            mockClient.getPushActionsForEvent.mockReturnValue({
+                notify: true,
+                tweaks: { highlight: true, sound: true },
+            });
+
+            mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            emitLiveEvent(event);
+            notifTimelineSet.addLiveEvent(event, { addToState: true });
+
+            expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(1);
+            expect(MockPlatform.loudNotification).toHaveBeenCalledTimes(1);
         });
 
         it("closes a desktop notification when room is marked read", () => {
