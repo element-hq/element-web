@@ -111,43 +111,76 @@ jobs:
               uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
 
     i18n:
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - name: Element Web
-                      path: "apps/web"
-                      allowed-hardcoded-keys: |
-                          console_dev_note
-                          labs|element_call_video_rooms
-                          labs|feature_matrixrtc_slots
-                          labs|feature_matrixrtc_slots_description
-                          voip|element_call
-                          error|invalid_json
-                          error|misconfigured
-                          welcome|title_element
-                          devtools|settings|elementCallUrl
-                          labs|sliding_sync_description
-                          settings|voip|noise_suppression_description
-                          settings|voip|echo_cancellation_description
-                          labs|feature_element_call_react
-                          devtools|settings|elementCallMockComponent
-                    - name: Element Desktop
-                      path: "apps/desktop"
-                    - name: Shared Components
-                      path: "packages/shared-components"
-                      allowed-hardcoded-keys: |
-                          voip|element_call_mock|title
-        name: "i18n Check (${{ matrix.name }})"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
-        permissions:
-            pull-requests: read
-            contents: read
-        with:
-            hardcoded-words: "Element"
-            packageManager: pnpm
-            path: ${{ matrix.path }}
-            allowed-hardcoded-keys: ${{ matrix.allowed-hardcoded-keys }}
+        name: i18n Check
+        runs-on: ubuntu-26.04
+        env:
+            HARDCODED_WORDS: Element
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+                  # Brings in the merge commit's parents, so the PR's changes are its diff from the first
+                  fetch-depth: 2
+
+            # Other translation files are only changed by Localazy, as other changes confuse it in lossy ways
+            - name: Assert only en_EN was modified
+              if: |
+                  github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotRobot' && github.event.pull_request.user.login != 't3chguy'
+              run: |
+                  if git diff --name-only HEAD^1 HEAD -- \
+                      ':(glob)apps/web/src/i18n/strings/*' \
+                      ':(glob)apps/desktop/src/i18n/strings/*' \
+                      ':(glob)packages/shared-components/src/i18n/strings/*' \
+                      ':(exclude,glob)**/en_EN.json' | grep .; then
+                      echo "::error::Only translation files modified by 'pnpm i18n' can be committed - other translation files will confuse Localazy in lossy ways."
+                      exit 1
+                  fi
+
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
+              with:
+                  cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: true
+                  require-lockfile: true
+
+            # Each project is checked on its own as they allow different hardcoded keys
+            - name: Run i18n (Element Web)
+              working-directory: apps/web
+              run: pnpm run i18n
+              env:
+                  ALLOWED_HARDCODED_KEYS: |
+                      console_dev_note
+                      labs|element_call_video_rooms
+                      labs|feature_matrixrtc_slots
+                      labs|feature_matrixrtc_slots_description
+                      voip|element_call
+                      error|invalid_json
+                      error|misconfigured
+                      welcome|title_element
+                      devtools|settings|elementCallUrl
+                      labs|sliding_sync_description
+                      settings|voip|noise_suppression_description
+                      settings|voip|echo_cancellation_description
+                      labs|feature_element_call_react
+                      devtools|settings|elementCallMockComponent
+
+            - name: Run i18n (Element Desktop)
+              if: ${{ !cancelled() }}
+              working-directory: apps/desktop
+              run: pnpm run i18n
+
+            - name: Run i18n (Shared Components)
+              if: ${{ !cancelled() }}
+              working-directory: packages/shared-components
+              run: pnpm run i18n
+              env:
+                  ALLOWED_HARDCODED_KEYS: |
+                      voip|element_call_mock|title
+
+            - name: Assert no changes
+              if: ${{ !cancelled() }}
+              run: git diff --exit-code
 
     # Dummy job to simplify branch protections
     ci:
