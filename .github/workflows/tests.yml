@@ -132,7 +132,8 @@ jobs:
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
-                  fetch-depth: 0 # Full history, fastest for diff-cover
+                  # Full history, fastest for diff-cover, which only runs with coverage
+                  fetch-depth: ${{ env.ENABLE_COVERAGE != 'true' && 1 || 0 }}
 
             - name: Download coverage artifacts
               uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
