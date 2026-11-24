@@ -214,6 +214,25 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         });
     });
 
+    // Typing is debounced, so a message sent straight after typing a link would otherwise be sent
+    // with a snapshot that does not know about the link yet.
+    it("should include a link typed just before sending in the snapshot for sending", () => {
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+        vm.updateWithText({ content: "https://example.org", debounced: true });
+        expect(vm.getSnapshot().entries).toEqual([]);
+
+        expect(vm.getSnapshotForSending()?.entries.map(getEntrySummary)).toEqual([
+            { matched_url: "https://example.org", include: true, status: "loading" },
+        ]);
+    });
+
+    it("should have no snapshot for sending when previews are not visible", () => {
+        const { vm } = getViewModel({ visible: false });
+        vm.updateWithText({ content: "https://example.org", debounced: false });
+        expect(vm.getSnapshotForSending()).toBeUndefined();
+    });
+
     it("should hide preview when made invisible", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);

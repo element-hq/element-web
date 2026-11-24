@@ -344,6 +344,23 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     };
 
     /**
+     * The snapshot to attach to a message that is about to be sent.
+     *
+     * Updates from typing are debounced, so text typed just before sending may not have been
+     * looked at yet. This looks at it first, so that every link in the message has an entry.
+     *
+     * @returns The snapshot, or undefined if URL previews are turned off for the sender. In that
+     *          case the message should say nothing about previews, so that the sender's choice
+     *          does not affect what the people receiving it see.
+     */
+    public readonly getSnapshotForSending = (): MessageComposerUrlPreviewSnapshot | undefined => {
+        if (!this.urlPreviewVisible) return undefined;
+
+        this.computeSnapshotDebounced.flush();
+        return this.getSnapshot();
+    };
+
+    /**
      * The {@link EncryptedFile}s of preview images seeded from an event's existing bundle, keyed by
      * matched URL, so that editing can resend them rather than re-uploading the image.
      */

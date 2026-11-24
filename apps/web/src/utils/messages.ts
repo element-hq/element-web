@@ -139,20 +139,30 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
 /*
  * Attaches URL preview bundle to message event (MSC4095)
  *
+ * Links whose preview has loaded are bundled in full. Links whose preview has not loaded are
+ * bundled as just the URL, and links the user removed the preview for are left out.
+ *
+ * No bundle is attached when `urlPreviewSnapshot` is undefined, which is the case when the sender
+ * has URL previews turned off. An empty bundle would tell receiving clients to show no previews.
+ *
  * Returns TRUE if event has been cancelled while uploading files
  * FALSE if event is not cancelled
  */
 export async function attachUrlPreviews(
     client: MatrixClient,
     room: Room,
-    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot | undefined,
     content: RoomMessageEventContent,
     messageHasLinks: boolean,
     encryptedImageCache: ReadonlyMap<string, EncryptedFile> = new Map(),
 ): Promise<boolean> {
+    if (urlPreviewSnapshot === undefined) return false;
+
     const isRoomEncrypted = room.hasEncryptionStateEvent();
-    const previewsToAttach = urlPreviewSnapshot.entries
-        .filter((entry) => entry.include && entry.status === "loaded")
+    // Previews the user removed in the composer are left out.
+    const entriesToAttach = urlPreviewSnapshot.entries.filter((entry) => entry.include);
+    const previewsToAttach = entriesToAttach
+        .filter((entry) => entry.status === "loaded")
         .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview);
 
     let eventId: string | undefined = undefined;
@@ -255,7 +265,15 @@ export async function attachUrlPreviews(
     if (isRoomEncrypted && previewsToAttach.some((preview) => isBundledImage(preview.image)))
         putSendingMessageInTimeline();
 
-    const bundle = await Promise.all(previewsToAttach.map(bundleFromPreview));
+    const bundle = await Promise.all(
+        entriesToAttach.map(async (entry): Promise<BundledUrlPreview> => {
+            if (entry.status === "loaded") return bundleFromPreview(entry.preview);
+            // The preview is still loading or could not be loaded here. Sending only the URL asks
+            // the clients that receive the message to load the preview themselves, whereas leaving
+            // it out would tell them not to show one.
+            return { "matrix:matched_url": entry.matched_url };
+        }),
+    );
 
     if (messageHasLinks) content[BUNDLED_URL_PREVIEWS] = bundle;
 

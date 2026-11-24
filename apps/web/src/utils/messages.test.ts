@@ -166,6 +166,14 @@ describe("attachUrlPreviews", () => {
         expect(fetchSpy).not.toHaveBeenCalled();
     });
 
+    // The sender turning previews off for themselves must not decide what the people receiving the
+    // message see, so the message carries no bundle at all rather than an empty one.
+    it("does not attach a bundle when the sender has previews turned off", async () => {
+        const content = makeContent();
+        expect(await attachUrlPreviews(mxClient, mxRoom, undefined, content, true)).toBe(false);
+        expect(content).not.toHaveProperty("m.url_previews");
+    });
+
     // The bundle only describes links that are in the body, so a body with none gets no bundle even
     // when the composer still had previews loaded.
     it("does not attach a bundle when the message has no links", async () => {
@@ -174,9 +182,10 @@ describe("attachUrlPreviews", () => {
         expect(content["m.url_previews"]).toBeUndefined();
     });
 
-    // Removing a preview in the composer clears its `include`, and a preview that never finished
-    // loading has nothing to attach.
-    it("skips previews that are excluded or still loading", async () => {
+    // Removing a preview in the composer clears its `include`, so it is left out. A preview that
+    // has not loaded is sent as just its URL, which asks receiving clients to load it themselves.
+    // Leaving those out as well would give an empty bundle, which tells clients to show no previews.
+    it("skips excluded previews and sends only the URL of previews that have not loaded", async () => {
         const content = makeContent();
         const snap = snapshot();
         await attachUrlPreviews(
@@ -193,7 +202,10 @@ describe("attachUrlPreviews", () => {
             content,
             true,
         );
-        expect(content["m.url_previews"]).toEqual([]);
+        expect(content["m.url_previews"]).toEqual([
+            { "matrix:matched_url": "https://loading.example.com" },
+            { "matrix:matched_url": "https://failed.example.com" },
+        ]);
     });
 
     it("merges additionalBundleContent into the bundle", async () => {

@@ -144,7 +144,11 @@ interface ISendMessageComposerProps extends MatrixClientProps {
 }
 
 interface ISendMessageActionProps {
-    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
+    /**
+     * The composer's URL previews to bundle with the message, or undefined if URL previews are
+     * turned off for the sender.
+     */
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot | undefined;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
@@ -212,7 +216,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
             case KeyBindingAction.SendMessage: {
-                const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
+                const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshotForSending();
                 void this.sendMessage({ urlPreviewSnapshot });
                 event.preventDefault();
                 break;
