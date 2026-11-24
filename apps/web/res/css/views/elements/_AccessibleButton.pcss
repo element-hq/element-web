@@ -115,11 +115,6 @@ Please see LICENSE files in the repository root for full details.
         color: var(--cpd-color-text-on-solid-primary);
         background-color: var(--cpd-color-bg-critical-primary);
         border: 1px solid var(--cpd-color-bg-critical-primary);
-
-        &.mx_AccessibleButton_disabled {
-            color: var(--cpd-color-text-on-solid-primary);
-            background-color: var(--cpd-color-bg-critical-primary);
-        }
     }
 
     &.mx_AccessibleButton_kind_danger_outline {
@@ -133,10 +128,13 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
+    /* The colors of Compound's disabled Button, which drops the destructive red */
+    &.mx_AccessibleButton_kind_danger,
     &.mx_AccessibleButton_kind_danger_sm {
         &.mx_AccessibleButton_disabled {
             color: var(--cpd-color-text-disabled);
             background-color: var(--cpd-color-bg-subtle-primary);
+            border-color: var(--cpd-color-bg-subtle-primary);
         }
     }
 
