@@ -69,6 +69,8 @@ jobs:
                   repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
+                  # On PRs, brings in the merge commit's parents, for `changed_files` step
+                  fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 1 }}
 
             - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
@@ -78,10 +80,12 @@ jobs:
             - name: "Get modified files"
               id: changed_files
               if: github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
-              uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47
-              with:
-                  files: |
-                      apps/desktop/dockerbuild/**
+              run: |
+                  if git diff --quiet HEAD^1 HEAD -- apps/desktop/dockerbuild; then
+                      echo "any_modified=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "any_modified=true" >> "$GITHUB_OUTPUT"
+                  fi
 
             # This allows contributors to test changes to the dockerbuild image within a pull request
             - name: Build docker image

@@ -4,6 +4,11 @@ on:
     pull_request: {}
     workflow_call: {}
 
+concurrency:
+    # Cancel superseded PR runs. Every other run, including the publish workflow calling this one, gets its own group.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+    cancel-in-progress: true
+
 permissions:
     contents: read
 
