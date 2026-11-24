@@ -387,7 +387,7 @@ const OfflineDevice: React.FC<OfflineDeviceProps> = ({ dehydrationSupported, deh
             heading={
                 <SettingsHeader
                     hasRecommendedTag={hasRecommendedTag}
-                    label={_t("settings|encryption|offline_device|offline_device")}
+                    label={_t("settings|encryption|offline_device|title")}
                     annotation={annotation}
                 />
             }
