@@ -8,8 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 /* See readme.md for tips on writing these tests. */
 
-import { test } from ".";
+import { noNotificationRotation, test } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+
+test.use(noNotificationRotation);
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
