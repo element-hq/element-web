@@ -793,7 +793,14 @@ describe("<SessionManagerTab />", () => {
             fireEvent.click(signOutButton);
 
             // logout dialog opened
-            expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true);
+            expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true, {
+                onBeforeClose: expect.any(Function),
+            });
+
+            // the dialog must not close on background click, only via its own buttons
+            const { onBeforeClose } = modalSpy.mock.lastCall![5]!;
+            await expect(onBeforeClose!("backgroundClick")).resolves.toBe(false);
+            await expect(onBeforeClose!()).resolves.toBe(true);
         });
 
         it("Signs out of current device from kebab menu", async () => {
@@ -811,7 +818,9 @@ describe("<SessionManagerTab />", () => {
             fireEvent.click(getByLabelText("Remove this device"));
 
             // logout dialog opened
-            expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true);
+            expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true, {
+                onBeforeClose: expect.any(Function),
+            });
         });
 
         it("does not render sign out other devices option when only one device", async () => {
@@ -1201,7 +1210,9 @@ describe("<SessionManagerTab />", () => {
                 fireEvent.click(signOutButton);
 
                 // logout dialog opened
-                expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true);
+                expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true, {
+                    onBeforeClose: expect.any(Function),
+                });
             });
 
             it("does not allow signing out of all other devices from current session context menu", async () => {

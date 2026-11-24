@@ -22,9 +22,9 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.65.0
-    "playwright-core": 1.65.0
-    serve: 14.2.7
+    "@playwright/test": 1.65.1
+    "playwright-core": 1.65.1
+    serve: 14.2.8
     # Compound
     "@vector-im/compound-design-tokens": 11.3.0
     "@vector-im/compound-web": "10.4.0"
@@ -35,7 +35,7 @@ catalog:
     # fonts
     "@fontsource/inter": 5.3.0
     # vite
-    vite: 8.3.6
+    vite: 8.3.8
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 5.1.0
@@ -47,9 +47,9 @@ catalog:
     "@vitejs/plugin-react": 6.3.0
     unplugin-dts: 1.1.2
     # nx
-    nx: 24.0.5
+    nx: 24.0.6
     # oxc
-    oxlint: 1.90.0
+    oxlint: 1.93.0
 
 catalogs:
     ts6:
@@ -57,6 +57,13 @@ catalogs:
         "@types/node": ts6.0
 
 packageExtensions:
+    testcontainers:
+        dependencies:
+            # Keep a single testcontainers instance across workspaces. Otherwise debug's optional
+            # supports-color peer can resolve differently per workspace, splitting testcontainers into
+            # several copies, and exposeHostPorts() then registers the port forwarder in a different copy
+            # to the one starting the homeserver, so host.testcontainers.internal doesn't resolve.
+            supports-color: "^10.2.2"
     fdir:
         dependencies:
             # Fix missing type dependency
@@ -124,8 +131,11 @@ patchedDependencies:
     # at the end when the scroller shrinks (#1298) and reading the scroller's size with each scroll event (#1378)
     "@tanstack/virtual-core@3": patches/@tanstack__virtual-core@3.patch
     # Tweaks to record screenshot diffs as vitest artifacts
-    vitest-plugin-vis@5: patches/vitest-plugin-vis@5.1.5.patch
-    storybook-addon-vis@4: patches/storybook-addon-vis@4.3.1.patch
+    vitest-plugin-vis@5: patches/vitest-plugin-vis@5.7.0.patch
+    storybook-addon-vis@4: patches/storybook-addon-vis@4.8.0.patch
+    # Bundled types squash `@ts-expect-error` comments onto the line they cover, so they fail type checks
+    # https://github.com/storybookjs/storybook/issues/37336
+    "@storybook/react@10.6.7": patches/@storybook__react@10.6.7.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -143,7 +153,7 @@ overrides:
     pretty-format@30>react-is: 19.3.1
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001820
+    caniuse-lite: 1.0.30001826
 
     # Make sure we only have one instance of the widget API in the build;
     # failure to do so results in (unspecified) breakage in downstream builds
@@ -159,7 +169,7 @@ overrides:
     axios@>1.0.0 <=1.16.1: ^1.16.1
     # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
     esbuild@0 <0.28.1: 0.28.1
-    vitepress>vite: 8.3.6
+    vitepress>vite: 8.3.8
     # https://github.com/advisories/GHSA-qxg6-89mg-rqv8
     "@vitest/mocker@4 <4.1.12": ^4.1.12
     # https://github.com/advisories/GHSA-g2r8-wvmj-jf5w

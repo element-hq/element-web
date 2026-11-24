@@ -705,8 +705,8 @@ export default class EventListSummary extends React.Component<Props, State> {
     }
 
     /**
-     * Generate summaries for consecutive groups of events, using custom summaries where available
-     * and the built-in summary for the remaining events.
+     * Generate one summary per renderer and key in this collapsed tile, including events
+     * separated by other groups.
      * @returns the event list summary.
      */
     private generateGroupedSummary(): ReactNode {
@@ -716,38 +716,47 @@ export default class EventListSummary extends React.Component<Props, State> {
             for (const event of events) indexedUserEvents.set(event.index, [userId, event]);
         }
         const defaultIndices: number[] = [];
-        let current: { grouping: MessageGrouping | null; events: MatrixEvent[]; indices: number[] } | null = null;
+        type CustomSummaryGroup = { grouping: MessageGrouping; eventIndices: number[] };
+        // A key belongs to its renderer, so different renderers can use the same key independently.
+        const groupsByRenderer = new Map<object, Map<string, CustomSummaryGroup>>();
 
-        const finishCurrent = (): void => {
-            if (!current) return;
-            const customText = current.grouping?.summarize(current.events);
-            if (customText) {
-                summaries.push({ index: current.indices[0], summary: customText });
-            } else {
-                defaultIndices.push(...current.indices);
-            }
-            current = null;
-        };
-
-        // Aggregate built-in events together and order custom summaries by their first event.
+        // Collect every event with the same renderer and key, even when other events appear between them.
         this.props.events.forEach((event, index) => {
             const renderInfo = ModuleApi.instance.customComponents.getMessageRenderInfo(event);
             const grouping = renderInfo?.hasGrouping ? renderInfo.getGrouping() : null;
-            const sameGroup =
-                current &&
-                ((!current.grouping && !grouping) ||
-                    (current.grouping?.renderer === grouping?.renderer && current.grouping?.key === grouping?.key));
-            if (sameGroup && current) {
-                current.events.push(event);
-                current.indices.push(index);
+            if (!grouping) {
+                defaultIndices.push(index);
                 return;
             }
-            finishCurrent();
-            current = { grouping, events: [event], indices: [index] };
+
+            let groupsForRenderer = groupsByRenderer.get(grouping.renderer);
+            if (!groupsForRenderer) {
+                groupsForRenderer = new Map();
+                groupsByRenderer.set(grouping.renderer, groupsForRenderer);
+            }
+            let group = groupsForRenderer.get(grouping.key);
+            if (!group) {
+                group = { grouping, eventIndices: [] };
+                groupsForRenderer.set(grouping.key, group);
+            }
+            group.eventIndices.push(index);
         });
-        finishCurrent();
+
+        // Write one summary per group; events without a custom summary use the built-in summary.
+        for (const groupsForRenderer of groupsByRenderer.values()) {
+            for (const { grouping, eventIndices } of groupsForRenderer.values()) {
+                const events = eventIndices.map((index) => this.props.events[index]);
+                const customText = grouping.summarize(events);
+                if (customText) {
+                    summaries.push({ index: eventIndices[0], summary: customText });
+                } else {
+                    defaultIndices.push(...eventIndices);
+                }
+            }
+        }
 
         if (defaultIndices.length) {
+            defaultIndices.sort((a, b) => a - b);
             summaries.push({
                 index: defaultIndices[0],
                 summary: this.generateDefaultSummary(defaultIndices, indexedUserEvents),

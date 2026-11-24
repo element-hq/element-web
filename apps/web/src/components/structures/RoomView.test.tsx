@@ -896,15 +896,19 @@ describe("RoomView", () => {
         it("shows the join prompt when peeking fails", async () => {
             cli.getRoomSummary.mockResolvedValue({
                 room_id: room.roomId,
+                name: "Summary name",
                 world_readable: true,
                 guest_can_join: true,
                 num_joined_members: 1,
             });
             cli.peekInRoom.mockRejectedValue(new MatrixError({ errcode: "M_FORBIDDEN" }));
 
-            const instance = await getRoomViewInstance();
+            const ref = createRef<RoomView>();
+            await mountRoomView(ref, { oobData: { name: undefined } });
+            const instance = ref.current!;
 
             expect(screen.getByRole("button", { name: "Join the discussion" })).toBeInTheDocument();
+            expect(screen.getByText("Summary name can't be previewed. Do you want to join it?")).toBeInTheDocument();
             expect(instance.state.isPeeking).toBe(false);
         });
 

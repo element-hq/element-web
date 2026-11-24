@@ -6,9 +6,9 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render } from "@test-utils";
+import { fireEvent, render } from "@test-utils";
 import React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import * as stories from "./ReactionsRowButton.stories";
 
@@ -23,5 +23,17 @@ describe("ReactionsRowButton", () => {
     it("renders the selected reaction button", () => {
         const { container } = render(<Selected />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("reports hover and focus changes", () => {
+        const setHoveredOrFocused = vi.fn();
+        const { getByRole } = render(<Default setHoveredOrFocused={setHoveredOrFocused} />);
+        const button = getByRole("button");
+
+        fireEvent.mouseEnter(button);
+        fireEvent.mouseLeave(button);
+        fireEvent.focus(button);
+        fireEvent.blur(button);
+        expect(setHoveredOrFocused.mock.calls).toEqual([[true], [false], [true], [false]]);
     });
 });

@@ -92,6 +92,7 @@ export default withMermaid({
                     { text: "Install", link: "/install" },
                     { text: "Config", link: "/config" },
                     { text: "Custom home page", link: "/custom-home" },
+                    { text: "Modules", link: "/modules" },
                     { text: "Kubernetes", link: "/kubernetes" },
                     { text: "Jitsi", link: "/jitsi" },
                     { text: "Encryption", link: "/e2ee" },

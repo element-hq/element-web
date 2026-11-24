@@ -68,6 +68,12 @@ export interface Api extends DialogApiExtension, AccountAuthApiExtension, Profil
 }
 
 // @alpha
+export interface BaseSettings<T extends SettingValueType = SettingValueType> {
+    default: T;
+    supportedLevels: Level[];
+}
+
+// @alpha
 export interface BuiltinsApi {
     renderNotificationDecoration(roomId: string): React.ReactNode;
     renderRoomAvatar(roomId: string, size?: string): React.ReactNode;
@@ -99,6 +105,8 @@ export interface ClientApi {
     // @alpha
     readonly creationManagement: ClientCreationManagementApi;
     getRoom: (id: string) => Room | null;
+    // @alpha
+    readonly toDevice: ToDeviceApi;
     waitForClientStarted(): Promise<void>;
 }
 
@@ -317,13 +325,48 @@ export type HardwareKeyState = "absent" | "noSigningKey" | "open" | "authenticat
 export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
+    namespaced(this: void, namespace: string): I18nApi;
     register(this: void, translations: Partial<Translations>): void;
+    registerLanguage(this: void, language: string, translations: LanguageTranslations): void;
     translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;
 }
 
 // @alpha
 export type IdentityApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
+
+// @alpha
+export interface IncomingToDeviceMessage {
+    readonly content: unknown;
+    readonly sender: string;
+    readonly type: string;
+}
+
+// @public
+export interface LanguageTranslations {
+    // (undocumented)
+    [key: string]: string | LanguageTranslations;
+}
+
+// @alpha
+export enum Level {
+    // (undocumented)
+    ACCOUNT = "account",
+    // (undocumented)
+    CONFIG = "config",
+    // (undocumented)
+    DEFAULT = "default",
+    // (undocumented)
+    DEVICE = "device",
+    // (undocumented)
+    PLATFORM = "platform",
+    // (undocumented)
+    ROOM = "room",
+    // (undocumented)
+    ROOM_ACCOUNT = "room-account",
+    // (undocumented)
+    ROOM_DEVICE = "room-device"
+}
 
 // @alpha
 export type LocationRenderFunction = () => JSX.Element;
@@ -375,6 +418,10 @@ export class ModuleLoader {
     start(): Promise<void>;
 }
 
+// @alpha
+export interface ModuleSettingValues {
+}
+
 // @public
 export interface NavigationApi {
     openRoom(roomIdOrAlias: string, opts?: OpenRoomOptions): void;
@@ -393,6 +440,14 @@ export interface OpenRoomOptions {
 export type OriginalMessageComponentProps = {
     showUrlPreview?: boolean;
 };
+
+// @alpha
+export interface OutgoingToDeviceMessage {
+    readonly content: Record<string, unknown>;
+    readonly recipientDeviceId: string;
+    readonly recipientUserId: string;
+    readonly type: string;
+}
 
 // @alpha
 export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;
@@ -422,6 +477,8 @@ export interface RichVariables {
 // @public
 export interface Room {
     getLastActiveTimestamp: () => number;
+    // @alpha
+    getStateEvents(eventType: string): Watchable<RoomStateEvent[]>;
     id: string;
     isEncrypted: Watchable<boolean | undefined>;
     name: Watchable<string>;
@@ -437,6 +494,12 @@ export interface RoomListStoreApi {
 }
 
 // @alpha
+export interface RoomStateEvent {
+    content: Record<string, unknown>;
+    stateKey: string;
+}
+
+// @alpha
 export interface RoomViewProps {
     enableReadReceiptsAndMarkersOnActivity?: boolean;
     hideComposer?: boolean;
@@ -447,9 +510,24 @@ export interface RoomViewProps {
 }
 
 // @alpha
+export type SettingName<K extends string> = K extends `module.${string}` ? K extends keyof ModuleSettingValues ? K : never : K;
+
+// @alpha
 export interface SettingsApi {
+    // @deprecated
     getValue<T = any>(settingName: string, roomId?: string | null, excludeDefault?: boolean): T | undefined;
+    getValueWatchable<K extends string>(settingName: SettingName<K>, roomId?: string | null, excludeDefault?: boolean): Watchable<SettingValue<K>>;
+    registerSettings(settings: {
+        [K in keyof ModuleSettingValues]: BaseSettings<ModuleSettingValues[K]>;
+    }): void;
+    setValue<K extends string>(settingName: SettingName<K>, roomId: string | null, level: Level, value: SettingValue<K>): Promise<void>;
 }
+
+// @alpha
+export type SettingValue<K extends string> = K extends keyof ModuleSettingValues ? ModuleSettingValues[K] : any;
+
+// @alpha
+export type SettingValueType = null | string | number | boolean;
 
 // @alpha
 export interface SpacePanelItemProps {
@@ -485,6 +563,12 @@ export type SubstitutionValue = number | string | ReactNode | ((sub: string) => 
 // @public
 export type Tags = Record<string, SubstitutionValue>;
 
+// @alpha
+export interface ToDeviceApi {
+    onMessage(type: string, listener: (message: IncomingToDeviceMessage) => void): () => void;
+    sendMessage(message: OutgoingToDeviceMessage): Promise<void>;
+}
+
 // @public
 export type Translations = Record<string, {
     [ietfLanguageTag: string]: string;
@@ -493,6 +577,7 @@ export type Translations = Record<string, {
 // @alpha
 export const enum UIComponent {
     AddIntegrations = "UIComponent.addIntegrations",
+    CreateDM = "UIComponent.dmCreation",
     CreateRooms = "UIComponent.roomCreation",
     CreateSpaces = "UIComponent.spaceCreation",
     ExploreRooms = "UIComponent.exploreRooms",

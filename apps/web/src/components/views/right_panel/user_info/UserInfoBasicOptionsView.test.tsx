@@ -200,6 +200,7 @@ describe("<UserOptionsSection />", () => {
         render(<UserInfoBasicOptionsView {...defaultProps} />);
         const dmButton = screen.getByRole("button", { name: "Send message" });
         expect(dmButton).toBeInTheDocument();
+        expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateDM);
     });
 
     it("should not show directMessageButton when user is me", () => {

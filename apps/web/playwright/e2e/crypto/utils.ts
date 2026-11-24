@@ -332,6 +332,8 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
         await encryptionTab.getByRole("textbox").fill(recoveryKey);
         await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+        // Wait for the confirmation screen, so recovery is set up before the settings are closed
+        await encryptionTab.getByRole("button", { name: "Done" }).click();
         await app.settings.closeDialog();
         return recoveryKey;
     });
@@ -526,8 +528,9 @@ export const verifyApp = async (
     await bobElementApp.page.getByRole("button", { name: "Verify" }).click({ timeout: 5000 });
 
     // This requires creating a DM, so can take a while. Give it a longer timeout.
+    // Only Alice starts emoji verification: Bob's app then goes straight to the emoji. If Bob also clicked
+    // "Verify by emoji", the two starts would race, and the button is often gone before he can click it.
     await aliceRoomInfo.getByRole("button", { name: "Verify by emoji" }).click({ timeout: 30000 });
-    await bobElementApp.page.getByRole("button", { name: "Verify by emoji" }).click();
 
     await aliceRoomInfo.getByRole("button", { name: "They match" }).click();
     await bobElementApp.page.getByRole("button", { name: "They match" }).click();

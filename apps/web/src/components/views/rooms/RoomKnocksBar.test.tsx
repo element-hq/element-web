@@ -44,7 +44,7 @@ describe("RoomKnocksBar", () => {
     const room = new Room(roomId, client, userId);
     const state = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
 
-    type ButtonNames = "Approve" | "Deny" | "View" | "View message";
+    type ButtonNames = "Accept" | "Decline" | "View" | "View message";
     const getButton = (name: ButtonNames) => screen.getByRole("button", { name });
     const getComponent = (room: Room) =>
         render(
@@ -198,31 +198,31 @@ describe("RoomKnocksBar", () => {
 
             type TestCase = [string, ButtonNames, () => void];
             it.each<TestCase>([
-                ["deny request fails", "Deny", () => vi.spyOn(client, "kick").mockRejectedValue(error)],
-                ["deny request succeeds", "Deny", () => vi.spyOn(client, "kick").mockResolvedValue({})],
-                ["approve request fails", "Approve", () => vi.spyOn(client, "invite").mockRejectedValue(error)],
-                ["approve request succeeds", "Approve", () => vi.spyOn(client, "invite").mockResolvedValue({})],
+                ["deny request fails", "Decline", () => vi.spyOn(client, "kick").mockRejectedValue(error)],
+                ["deny request succeeds", "Decline", () => vi.spyOn(client, "kick").mockResolvedValue({})],
+                ["approve request fails", "Accept", () => vi.spyOn(client, "invite").mockRejectedValue(error)],
+                ["approve request succeeds", "Accept", () => vi.spyOn(client, "invite").mockResolvedValue({})],
             ])("toggles the disabled attribute for the buttons when a %s", async (_, buttonName, setup) => {
                 setup();
                 getComponent(room);
                 fireEvent.click(getButton(buttonName));
-                expect(getButton("Deny")).toHaveAttribute("disabled");
-                expect(getButton("Approve")).toHaveAttribute("disabled");
+                expect(getButton("Decline")).toHaveAttribute("disabled");
+                expect(getButton("Accept")).toHaveAttribute("disabled");
                 await act(() => flushPromises());
-                expect(getButton("Deny")).not.toHaveAttribute("disabled");
-                expect(getButton("Approve")).not.toHaveAttribute("disabled");
+                expect(getButton("Decline")).not.toHaveAttribute("disabled");
+                expect(getButton("Accept")).not.toHaveAttribute("disabled");
             });
 
             it("disables the deny button if the power level is insufficient", () => {
                 vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
                 getComponent(room);
-                expect(getButton("Deny")).toHaveAttribute("disabled");
+                expect(getButton("Decline")).toHaveAttribute("disabled");
             });
 
             it("calls kick on deny", async () => {
                 vi.spyOn(client, "kick").mockResolvedValue({});
                 getComponent(room);
-                fireEvent.click(getButton("Deny"));
+                fireEvent.click(getButton("Decline"));
                 await act(() => flushPromises());
                 expect(client.kick).toHaveBeenCalledWith(roomId, bob.userId);
             });
@@ -230,7 +230,7 @@ describe("RoomKnocksBar", () => {
             it("displays an error when a deny request fails", async () => {
                 vi.spyOn(client, "kick").mockRejectedValue(error);
                 getComponent(room);
-                fireEvent.click(getButton("Deny"));
+                fireEvent.click(getButton("Decline"));
                 await act(() => flushPromises());
                 expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                     title: error.name,
@@ -241,13 +241,13 @@ describe("RoomKnocksBar", () => {
             it("disables the approve button if the power level is insufficient", () => {
                 vi.spyOn(room, "canInvite").mockReturnValue(false);
                 getComponent(room);
-                expect(getButton("Approve")).toHaveAttribute("disabled");
+                expect(getButton("Accept")).toHaveAttribute("disabled");
             });
 
             it("calls invite on approve", async () => {
                 vi.spyOn(client, "invite").mockResolvedValue({});
                 getComponent(room);
-                fireEvent.click(getButton("Approve"));
+                fireEvent.click(getButton("Accept"));
                 await act(() => flushPromises());
                 expect(client.invite).toHaveBeenCalledWith(roomId, bob.userId);
             });
@@ -255,7 +255,7 @@ describe("RoomKnocksBar", () => {
             it("displays an error when an approval fails", async () => {
                 vi.spyOn(client, "invite").mockRejectedValue(error);
                 getComponent(room);
-                fireEvent.click(getButton("Approve"));
+                fireEvent.click(getButton("Accept"));
                 await act(() => flushPromises());
                 expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                     title: error.name,

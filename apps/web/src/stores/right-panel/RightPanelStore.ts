@@ -397,9 +397,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 }
                 return !!card.state?.widgetId;
             case RightPanelPhases.DocumentViewer:
-                // Also drop a card stored before the lab was turned off, so disabling it closes any
-                // viewer that was left open rather than restoring it on the next load.
-                if (!SettingsStore.getValue("feature_pdf_viewer")) return false;
                 if (!card.state?.documentViewer) {
                     logger.warn("removed card from right panel because of missing documentViewer in card state");
                 }

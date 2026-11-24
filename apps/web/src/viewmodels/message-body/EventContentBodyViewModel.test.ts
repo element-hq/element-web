@@ -21,6 +21,7 @@ import {
     ambiguousLinkTooltipRenderer,
     spoilerRenderer,
     codeBlockRenderer,
+    emoticonRenderer,
 } from "../../renderer";
 import PlatformPeg from "../../PlatformPeg";
 import type BasePlatform from "../../BasePlatform";
@@ -38,6 +39,7 @@ vi.mock("../../renderer", () => ({
     keywordPillRenderer: vi.fn(),
     ambiguousLinkTooltipRenderer: vi.fn(),
     codeBlockRenderer: vi.fn(),
+    emoticonRenderer: vi.fn(),
     spoilerRenderer: vi.fn(),
 }));
 
@@ -466,6 +468,7 @@ describe("EventContentBodyViewModel", () => {
             ambiguousLinkTooltipRenderer,
             spoilerRenderer,
             codeBlockRenderer,
+            emoticonRenderer,
         );
     });
 
@@ -488,6 +491,6 @@ describe("EventContentBodyViewModel", () => {
         );
         tearDownAfterTest(vm);
 
-        expect(mockedCombineRenderers).toHaveBeenCalledWith(mentionPillRenderer);
+        expect(mockedCombineRenderers).toHaveBeenCalledWith(mentionPillRenderer, emoticonRenderer);
     });
 });

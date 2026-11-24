@@ -189,10 +189,10 @@ test.describe("Room list sections", () => {
 
             // A room is in the People section because it is a direct message, not because it carries
             // a tag, so neither section accepts the other's rooms.
-            await dragRoomToSection(page, "regular room", "People");
+            await dragRoomToSection(page, "regular room", "People", { isAccepted: false });
             await assertRoomInSection(page, "Rooms", "regular room");
 
-            await dragRoomToSection(page, "my dm", "Rooms");
+            await dragRoomToSection(page, "my dm", "Rooms", { isAccepted: false });
             await assertRoomInSection(page, "People", "my dm");
 
             // A section that takes any room still accepts the direct message
@@ -578,7 +578,7 @@ test.describe("Room list sections", () => {
             await bot.createRoom({ name: "invited room", invite: [user.userId] });
 
             await expandInvitesSection(page);
-            await dragRoomToSection(page, "my room", "Invites");
+            await dragRoomToSection(page, "my room", "Invites", { isAccepted: false });
 
             // The room stays where it was
             await assertRoomInSection(page, "Rooms", "my room");
@@ -599,7 +599,7 @@ test.describe("Room list sections", () => {
             await bot.createRoom({ name: "invited room", invite: [user.userId] });
             await expandInvitesSection(page);
 
-            await dragRoomToSection(page, "invited room", "Favourites", false);
+            await dragRoomToSection(page, "invited room", "Favourites", { canBeDragged: false });
 
             // The invited room stays in the Invites section
             await assertRoomInSection(page, "Invites", "invited room");

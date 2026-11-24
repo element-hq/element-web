@@ -41,7 +41,7 @@ exports[`<AddExistingToSpaceDialog /> > looks as expected 1`] = `
               height="40px"
               loading="lazy"
               referrerpolicy="no-referrer"
-              src="http://this.is.a.url/avatar.url/room.png"
+              src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=40&height=40&method=crop&allow_redirect=true"
               width="40px"
             />
           </span>

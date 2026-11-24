@@ -43,8 +43,7 @@
         "encryption_enabled": "Titkosítás engedélyezve",
         "loading": "Betöltés…",
         "options": "Beállítások",
-        "preferences": "Beállítások",
-        "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
+        "preferences": "Beállítások"
     },
     "composer": {
         "url_preview": {
@@ -210,6 +209,7 @@
         "empty": {
             "no_chats": "Még nincsenek csevegések",
             "no_chats_description": "Kezdje azzal, hogy üzenetet küld valakinek, vagy létrehoz egy szobát",
+            "no_chats_description_no_dm": "Kezdje azzal, hogy létrehoz egy szobát",
             "no_chats_description_no_room_rights": "Kezdje azzal, hogy üzenetet küld valakinek",
             "no_invites": "Nincs olvasatlan meghívója",
             "no_mentions": "Nincs olvasatlan említése",
@@ -371,7 +371,6 @@
             "enabled_dm": "Az itt található üzenetek végpontok közti titkosítással rendelkeznek. Ellenőrizze %(displayName)s felhasználót a profilján – kattintson a profilképére.",
             "enabled_local": "Az üzenetek ebben a beszélgetésben végponti titkosítással lesznek védve.",
             "parameters_changed": "Néhány titkosítási paraméter megváltozott.",
-            "state_enabled": "A szobában lévő üzenetek és állapotesemények végpontok közti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak kattintson a profilképére.",
             "unsupported": "A szobában használt titkosítás nem támogatott."
         },
         "mab": {

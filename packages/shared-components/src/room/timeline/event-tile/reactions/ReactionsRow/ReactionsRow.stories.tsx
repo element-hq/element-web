@@ -41,6 +41,7 @@ const MockReactionButton = ({ content, count, isSelected }: Readonly<MockReactio
         },
         {
             onClick: fn(),
+            setHoveredOrFocused: fn(),
         },
     );
 
