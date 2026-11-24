@@ -259,7 +259,7 @@ overrides:
   matrix-widget-api: ^1.20.0
   '@types/node': 25.9.3
   config-file-ts: 0.2.8-rc1
-  node-abi: 4.40.0
+  node-abi: 4.43.0
   markdown-it: ^14.3.0
   axios@>1.0.0 <=1.16.1: ^1.16.1
   esbuild@0 <0.28.1: 0.28.1
@@ -331,7 +331,7 @@ importers:
         version: 3.39.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#main&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/7d6fbd336d8145fa5d719d792ac64c32af9e9b52#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/208ef89d7c3a2dddfa517aadd3a114513c24966a#path:/eslint
       eslint-plugin-element-web:
         specifier: workspace:*
         version: link:packages/eslint-plugin-element-web
@@ -457,8 +457,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       electron:
-        specifier: 44.11.3
-        version: 44.11.3(supports-color@8.1.1)
+        specifier: 44.11.5
+        version: 44.11.5(supports-color@8.1.1)
       electron-builder:
         specifier: 26.18.0
         version: 26.18.0(electron-builder-squirrel-windows@26.18.0)(supports-color@8.1.1)
@@ -507,7 +507,7 @@ importers:
         version: 7.29.14
       '@element-hq/element-call-component':
         specifier: 0.28.2
-        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d)(react-dom@19.3.1)(react@19.3.1)
+        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3)(react-dom@19.3.1)(react@19.3.1)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -633,7 +633,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3
       matrix-widget-api:
         specifier: ^1.20.0
         version: 1.20.0
@@ -8443,8 +8443,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@44.11.3:
-    resolution: {integrity: sha512-yVzJBAM7hfK/gkD3LHvFD4gfHLj1f6cL3yYgzX8pHQyWyz8U9FTfTj9WOFdwzLj5ta+/oIKDD4BsBTLYiFa2Tg==}
+  electron@44.11.5:
+    resolution: {integrity: sha512-FgtBBAgWRyT/k2LbXDvlnHQRtc35sfp4UaWjYvktsh2HWWYSnfA/DnYGEOxQUZXpcp4EELj37x5zSSrh585nwg==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -8592,8 +8592,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/7d6fbd336d8145fa5d719d792ac64c32af9e9b52#path:/eslint:
-    resolution: {gitHosted: true, integrity: sha512-JLoTgrR7KUw/JoOydBzTsxSLXJ2m56SYYtDhsXlGbjkMVe4zS6miHKzeJ8dFSu2AzpQxbAkjSsxkZ3s/N8yp/w==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/7d6fbd336d8145fa5d719d792ac64c32af9e9b52}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/208ef89d7c3a2dddfa517aadd3a114513c24966a#path:/eslint:
+    resolution: {gitHosted: true, integrity: sha512-wU5lluTED/Ri0zj1L1+pCu2xzFW7nst8lbBZG9Y2eRRTusvCryPTjOz5kS/0bc2iYmuBWCPM+8l8DvHjySsQJQ==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/208ef89d7c3a2dddfa517aadd3a114513c24966a}
     version: 0.0.0
 
   eslint-plugin-react-web-api@5.30.3:
@@ -9873,8 +9873,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d:
-    resolution: {gitHosted: true, integrity: sha512-m5w0dANZxNAFjJ9I9zyN9p1EJa3ksHRTVVEChTbCAzWGXzj6RI+hFuFE+wdToNpqZEPofGnHQE/1jcRSJQo0wg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3:
+    resolution: {gitHosted: true, integrity: sha512-bRCxgK2CdaXAWs8jh7/sB7G76PwRHLNfy0AnBwFGggossd944WP0A6NPGGPaahU37ne5PbmZiOuJ2fMgdC79Eg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3}
     version: 45.1.0
     engines: {node: '>=22.0.0'}
 
@@ -10220,8 +10220,8 @@ packages:
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
 
-  node-abi@4.40.0:
-    resolution: {integrity: sha512-GuvqvtrOk+AC27RidBxBsMzVNkwNl7PjHgc4NXbmdvSVLgIUjpaqcG1FjNRYnt2Yn9Ytq+Ln37XsBaglUcte/w==}
+  node-abi@4.43.0:
+    resolution: {integrity: sha512-sey5XPoGJ2VBCcwtHhvwSbMMkYvXyvZkn+FjHsoFij3bcWjJRN4+3Zt7GsZOkgZ8J0maJFCWsYtralZDJVQncg==}
     engines: {node: '>=22.12.0'}
 
   node-api-version@0.2.1:
@@ -15379,7 +15379,7 @@ snapshots:
     dependencies:
       '@malept/cross-spawn-promise': 2.0.0
       debug: 4.4.3(supports-color@8.1.1)
-      node-abi: 4.40.0
+      node-abi: 4.43.0
       node-api-version: 0.2.1
       node-gyp: 12.4.0
       read-binary-file-arch: 1.0.6(supports-color@8.1.1)
@@ -15409,11 +15409,11 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d)(react-dom@19.3.1)(react@19.3.1)':
+  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
-      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d
+      matrix-js-sdk: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
@@ -21085,7 +21085,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@44.11.3(supports-color@8.1.1):
+  electron@44.11.5(supports-color@8.1.1):
     dependencies:
       '@electron-internal/extract-zip': 1.0.5
       '@electron/get': 5.1.0(supports-color@8.1.1)
@@ -21223,7 +21223,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/7d6fbd336d8145fa5d719d792ac64c32af9e9b52#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/208ef89d7c3a2dddfa517aadd3a114513c24966a#path:/eslint: {}
 
   eslint-plugin-react-web-api@5.30.3(@typescript/typescript6@6.0.2)(eslint@10.12.0)(supports-color@7.2.0)(typescript@7.0.2):
     dependencies:
@@ -22707,7 +22707,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/969d2f364fbff52d67b478655818af485fe8914d:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3:
     dependencies:
       '@babel/runtime': 8.0.7
       '@matrix-org/matrix-sdk-crypto-wasm': 19.0.1
@@ -23045,7 +23045,7 @@ snapshots:
       lower-case: 2.0.2
       tslib: 2.8.1
 
-  node-abi@4.40.0:
+  node-abi@4.43.0:
     dependencies:
       semver: 7.7.4
 
