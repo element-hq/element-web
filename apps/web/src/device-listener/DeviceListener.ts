@@ -109,6 +109,7 @@ export class DeviceListener {
         this.running = false;
 
         SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
+        this.deviceClientInformationSettingWatcherRef = undefined;
 
         dis.unregister(this.dispatcherRef);
 

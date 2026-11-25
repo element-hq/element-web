@@ -8,14 +8,25 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { afterEach, describe, it, expect, vi } from "vitest";
-import { Level } from "@element-hq/element-web-module-api";
+import { Level, type Watchable } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../settings/SettingsStore";
 import { SettingsApi } from "./SettingsApi";
 import { SettingLevel } from "../settings/SettingLevel";
 
 describe("SettingsApi", () => {
+    // Stops each watch started by a test, as a watched watchable keeps a watcher on the settings store
+    let unwatchAll: (() => void)[] = [];
+
+    // Watches `watchable` until the end of the test.
+    function watch<T>(watchable: Watchable<T>, listener: (value: T) => void = vi.fn()): void {
+        watchable.watch(listener);
+        unwatchAll.push(() => watchable.unwatch(listener));
+    }
+
     afterEach(() => {
+        for (const unwatch of unwatchAll) unwatch();
+        unwatchAll = [];
         vi.restoreAllMocks();
         // Device-level settings are saved in localStorage, which reset() doesn't clear.
         localStorage.clear();
@@ -47,7 +58,7 @@ describe("SettingsApi", () => {
         const api = new SettingsApi();
         const watchable = api.getValueWatchable("language");
         const fn = vi.fn();
-        watchable.watch(fn);
+        watch(watchable, fn);
 
         await SettingsStore.setValue("language", null, SettingLevel.DEVICE, "fr");
 
@@ -62,7 +73,7 @@ describe("SettingsApi", () => {
         const api = new SettingsApi();
         const watchable = api.getValueWatchable("ircDisplayNameWidth", "!roomA");
         const fn = vi.fn();
-        watchable.watch(fn);
+        watch(watchable, fn);
         expect(watchable.value).toBe(100);
 
         // A change in another room doesn't notify this watchable
@@ -78,7 +89,7 @@ describe("SettingsApi", () => {
         const api = new SettingsApi();
         api.registerSettings({ "module.test.excludeDefault": { default: true, supportedLevels: [Level.DEVICE] } });
         const watchable = api.getValueWatchable("module.test.excludeDefault", null, true);
-        watchable.watch(vi.fn());
+        watch(watchable);
         expect(watchable.value).toBeNull();
 
         await api.setValue("module.test.excludeDefault", null, Level.DEVICE, false);
@@ -95,7 +106,7 @@ describe("SettingsApi", () => {
         expect(watchable.value).toBe(false);
 
         await api.setValue("module.test.stale", null, Level.DEVICE, true);
-        watchable.watch(vi.fn());
+        watch(watchable);
 
         expect(watchable.value).toBe(true);
     });
