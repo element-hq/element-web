@@ -1538,6 +1538,7 @@ export const SETTINGS: Settings = {
     "Electron.shareSystemAudio": {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|voip|share_system_audio"),
+        description: _td("settings|voip|share_system_audio_description"),
         default: false,
     },
     "Developer.elementCallUrl": {

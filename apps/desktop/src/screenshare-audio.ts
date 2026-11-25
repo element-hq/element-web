@@ -8,20 +8,26 @@ Please see LICENSE files in the repository root for full details.
 /*
  * Screen-share audio on Linux and Windows 11.
  *
- * Windows: Chromium can record the system mix minus everything our own processes play ("loopbackWithoutChrome",
- * Windows process loopback in exclude mode, Windows 11 and later), so we just hand that device back to Electron.
+ * Sharing a whole screen shares the audio of every application except Element itself (Element plays the call, so
+ * sharing it would echo everyone back to themselves). Sharing a window shares only the audio of the application that
+ * owns the window. Where we cannot tell which application that is (on Wayland the portal does not say), we fall back
+ * to every application except Element.
+ *
+ * Windows: Chromium has loopback devices built on Windows process loopback (Windows 11 and later):
+ * "loopbackWithoutChrome" records everything except our own process tree, and "applicationLoopback:<pid>" records
+ * only the given process tree. We hand the right one back to Electron.
  *
  * Linux: Electron can only add audio to a getDisplayMedia() stream with `audio: "loopback"`, which on Linux records the
  * monitor of the default output device. That includes the call itself, so everyone on the call hears themselves.
  *
  * Instead, while a share with audio is running, we start a PipeWire loopback that exposes a virtual microphone fed
- * by every application's playback except our own. A script added to each frame then attaches that microphone to the
+ * by the playback of the shared applications. A script added to each frame then attaches that microphone to the
  * stream getDisplayMedia() returns, so Element Call publishes it as the screen share's audio. The loopback stops
  * once nothing records from it any more, or when Element exits.
  */
 
 import { execFile, spawn, type ChildProcess } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, readlinkSync } from "node:fs";
 import { release } from "node:os";
 import { type Streams, type WebContents, webFrameMain } from "electron";
 
@@ -48,6 +54,7 @@ export interface PipeWireObject {
         "props"?: Record<string, unknown>;
         "output-node-id"?: number;
         "output-port-id"?: number;
+        "input-node-id"?: number;
         "input-port-id"?: number;
     };
 }
@@ -60,6 +67,8 @@ export interface LinkPlan {
     inUse: boolean;
     /** [output port id, input port id] pairs to connect. */
     links: [number, number][];
+    /** Ids of links into the mix from streams that should no longer be shared. */
+    unlinks: number[];
 }
 
 /**
@@ -75,31 +84,46 @@ export function mixChannelsFor(channel: unknown): string[] {
 }
 
 /**
- * Work out which playback ports still need linking into the mix, and whether the loopback is still wanted.
+ * Work out which playback ports still need linking into the mix, which links should go, and whether the loopback is
+ * still wanted.
  *
  * @param objects - the output of `pw-dump`.
- * @param isOwnStream - whether a stream belongs to Element, given its `application.process.id`. Our own playback
- *   (the other people on the call) must never be shared back to them.
+ * @param shouldShare - whether to share a stream, given its `application.process.id`. Our own playback (the other
+ *   people on the call) must never be shared back to them.
  * @param stopIfUnused - whether to stop when nothing records from the source.
  */
 export function planLinks(
     objects: PipeWireObject[],
-    isOwnStream: (pid: number) => boolean,
+    shouldShare: (pid: number) => boolean,
     stopIfUnused: boolean,
 ): LinkPlan {
     const nodes = new Map<number, Record<string, unknown>>();
+    const clients = new Map<number, Record<string, unknown>>();
     for (const o of objects) {
         if (o.type === "PipeWire:Interface:Node") nodes.set(o.id, o.info?.props ?? {});
+        else if (o.type === "PipeWire:Interface:Client") clients.set(o.id, o.info?.props ?? {});
     }
+    // PulseAudio clients carry their process id on the stream. Native PipeWire clients only on their client object.
+    // (Not "pipewire.sec.pid": for PulseAudio clients that is the pipewire-pulse server.)
+    const processId = (node: Record<string, unknown>): number =>
+        Number(node["application.process.id"] ?? clients.get(node["client.id"] as number)?.["application.process.id"]);
     const nodeId = (name: string): number | undefined =>
         [...nodes].find(([, props]) => props["node.name"] === name)?.[0];
     const mix = nodeId(MIX_NODE_NAME);
     const source = nodeId(SOURCE_NODE_NAME);
-    if (mix === undefined || source === undefined) return { keepRunning: false, inUse: false, links: [] };
+    if (mix === undefined || source === undefined) return { keepRunning: false, inUse: false, links: [], unlinks: [] };
 
-    const links = objects.filter((o) => o.type === "PipeWire:Interface:Link").map((o) => o.info ?? {});
+    const linkObjects = objects.filter((o) => o.type === "PipeWire:Interface:Link");
+    const links = linkObjects.map((o) => o.info ?? {});
     const inUse = links.some((l) => l["output-node-id"] === source);
-    if (!inUse && stopIfUnused) return { keepRunning: false, inUse, links: [] };
+    if (!inUse && stopIfUnused) return { keepRunning: false, inUse, links: [], unlinks: [] };
+
+    const isShared = (node: Record<string, unknown> | undefined): boolean =>
+        node?.["media.class"] === "Stream/Output/Audio" &&
+        // Loopback and filter streams (EasyEffects, module-loopback, ...) replay audio that we already take directly
+        // from the application, so linking them as well would double it.
+        !node["node.link-group"] &&
+        shouldShare(processId(node));
 
     const ports = objects.filter((o) => o.type === "PipeWire:Interface:Port");
     const mixInputs = new Map<unknown, number>();
@@ -114,18 +138,52 @@ export function planLinks(
     for (const port of ports) {
         const props = port.info?.props ?? {};
         if (port.info?.direction !== "output" || props["port.monitor"]) continue;
-        const node = nodes.get(props["node.id"] as number);
-        if (node?.["media.class"] !== "Stream/Output/Audio") continue;
-        // Loopback and filter streams (EasyEffects, module-loopback, ...) replay audio that we already take directly
-        // from the application, so linking them as well would double it.
-        if (node["node.link-group"]) continue;
-        if (isOwnStream(Number(node["application.process.id"]))) continue;
+        if (!isShared(nodes.get(props["node.id"] as number))) continue;
         for (const channel of mixChannelsFor(props["audio.channel"])) {
             const input = mixInputs.get(channel);
             if (input !== undefined && !existing.has(`${port.id}:${input}`)) wanted.push([port.id, input]);
         }
     }
-    return { keepRunning: true, inUse, links: wanted };
+    // A share of another window, or a stream that changed hands: drop what should no longer be shared.
+    const unlinks = linkObjects
+        .filter((o) => o.info?.["input-node-id"] === mix && !isShared(nodes.get(Number(o.info?.["output-node-id"]))))
+        .map((o) => o.id);
+    return { keepRunning: true, inUse, links: wanted, unlinks };
+}
+
+/**
+ * Which applications' audio a share includes: every application except Element, a single application given by its
+ * main process id, or none (when the shared window is Element's own).
+ */
+export type AudioScope = { apps: "all" } | { apps: "one"; pid: number } | { apps: "none" };
+
+/**
+ * Parse a desktopCapturer source id ("screen:<id>:<n>" or "window:<handle>:<n>"). On Windows the handle is the HWND,
+ * on X11 the X window id. On Wayland every portal pick is reported as a window whose handle is no window id at all.
+ */
+export function parseSourceId(id: string): { type: "screen" | "window"; handle: number } | null {
+    const match = /^(screen|window):(\d+):/.exec(id);
+    return match ? { type: match[1] as "screen" | "window", handle: Number(match[2]) } : null;
+}
+
+/**
+ * Decide what a share of the given source includes.
+ *
+ * @param sourceId - the desktopCapturer source id that was picked.
+ * @param findWindowApp - the main process id of the application owning a window, or undefined if unknown.
+ * @param isOwnProcess - whether a process belongs to Element.
+ */
+export async function audioScopeFor(
+    sourceId: string,
+    findWindowApp: (handle: number) => Promise<number | undefined>,
+    isOwnProcess: (pid: number) => boolean,
+): Promise<AudioScope> {
+    const source = parseSourceId(sourceId);
+    if (source?.type !== "window") return { apps: "all" };
+    const pid = await findWindowApp(source.handle).catch(() => undefined);
+    if (!pid) return { apps: "all" };
+    if (isOwnProcess(pid)) return { apps: "none" };
+    return { apps: "one", pid };
 }
 
 /**
@@ -150,12 +208,95 @@ export function isDescendantOf(
     return false;
 }
 
-function run(command: string, args: string[]): Promise<string> {
+function run(command: string, args: string[], env?: Record<string, string>): Promise<string> {
     return new Promise((resolve, reject) => {
-        execFile(command, args, { maxBuffer: 64 * 1024 * 1024 }, (err, stdout) =>
-            err ? reject(err) : resolve(stdout),
+        execFile(
+            command,
+            args,
+            { maxBuffer: 64 * 1024 * 1024, timeout: 10000, windowsHide: true, env: env && { ...process.env, ...env } },
+            (err, stdout) => (err ? reject(err) : resolve(stdout)),
         );
     });
+}
+
+/**
+ * Walk up from `pid` while the parent runs the same executable, like Chromium does on Windows: a window can belong to
+ * a child process of the application, which then plays its audio from somewhere else in the tree.
+ */
+export function appRootProcess(
+    pid: number,
+    readExe: (pid: number) => string,
+    readParent: (pid: number) => number,
+): number {
+    let root = pid;
+    for (let depth = 0; depth < 64; depth++) {
+        try {
+            const parent = readParent(root);
+            if (parent <= 1 || readExe(parent) !== readExe(root)) break;
+            root = parent;
+        } catch {
+            break;
+        }
+    }
+    return root;
+}
+
+const linuxParent = (pid: number): number => {
+    const stat = readFileSync(`/proc/${pid}/stat`, "utf8");
+    return Number(stat.slice(stat.lastIndexOf(")") + 2).split(" ")[1]);
+};
+
+/** The main process of the application owning an X11 window, from its _NET_WM_PID. Undefined on Wayland. */
+export async function findX11WindowApp(
+    handle: number,
+    runCommand: (command: string, args: string[]) => Promise<string> = run,
+): Promise<number | undefined> {
+    const output = await runCommand("xprop", ["-id", String(handle), "_NET_WM_PID"]);
+    const pid = Number(/[=]\s*(\d+)/.exec(output)?.[1]);
+    if (!pid) return undefined;
+    return appRootProcess(pid, (p) => readlinkSync(`/proc/${p}/exe`), linuxParent);
+}
+
+// Mirrors Chromium's GetAppMainProcessId (desktop_capture_devices_util_win.cc): the window's process; for UWP apps
+// (hosted by ApplicationFrameHost) the process of their CoreWindow; then up through parents running the same
+// executable. The window handle comes in through the environment, so nothing is pasted into the script.
+const WINDOWS_FIND_APP_SCRIPT = `
+$ErrorActionPreference = 'Stop'
+Add-Type -Namespace ElementScreenshare -Name User32 -MemberDefinition @'
+[DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
+[DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindowExW(IntPtr parent, IntPtr after, string cls, string title);
+'@
+$hwnd = [IntPtr][int64]$env:ELEMENT_SCREENSHARE_HWND
+$id = [uint32]0
+[void][ElementScreenshare.User32]::GetWindowThreadProcessId($hwnd, [ref]$id)
+$p = Get-CimInstance Win32_Process -Filter "ProcessId=$id"
+if ($p.Name -eq 'ApplicationFrameHost.exe') {
+    $core = [ElementScreenshare.User32]::FindWindowExW($hwnd, [IntPtr]::Zero, 'Windows.UI.Core.CoreWindow', $null)
+    $id = [uint32]0
+    if ($core -ne [IntPtr]::Zero) { [void][ElementScreenshare.User32]::GetWindowThreadProcessId($core, [ref]$id) }
+    $id
+    return
+}
+while ($p -and $p.ExecutablePath) {
+    $parent = Get-CimInstance Win32_Process -Filter "ProcessId=$($p.ParentProcessId)"
+    if (-not $parent -or $parent.ExecutablePath -ne $p.ExecutablePath) { break }
+    $p = $parent
+}
+$p.ProcessId
+`;
+
+/** The main process of the application owning a Windows window. */
+export async function findWindowsWindowApp(
+    handle: number,
+    runCommand: (command: string, args: string[], env: Record<string, string>) => Promise<string> = run,
+): Promise<number | undefined> {
+    const output = await runCommand(
+        "powershell.exe",
+        ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", WINDOWS_FIND_APP_SCRIPT],
+        { ELEMENT_SCREENSHARE_HWND: String(handle) },
+    );
+    const pid = Number(output.trim().split(/\s+/).pop());
+    return pid > 0 ? pid : undefined;
 }
 
 /** Runs the PipeWire loopback while a screen share needs it. */
@@ -165,6 +306,7 @@ export class ScreenshareAudio {
     private startedAt = 0;
     private everUsed = false;
     private polling = false;
+    private app: number | undefined;
 
     public constructor(
         private readonly runCommand: (command: string, args: string[]) => Promise<string> = run,
@@ -179,11 +321,17 @@ export class ScreenshareAudio {
     /**
      * Start the loopback, or keep the running one for a new share. Resolves once the virtual microphone exists, with
      * false if PipeWire is unavailable.
+     *
+     * @param app - the main process id of the only application to share, or undefined for all except Element.
      */
-    public async start(): Promise<boolean> {
+    public async start(app?: number): Promise<boolean> {
         this.startedAt = Date.now();
         this.everUsed = false;
-        if (this.process) return true;
+        this.app = app;
+        if (this.process) {
+            await this.poll();
+            return true;
+        }
 
         const props = (mediaClass: string, name: string, description: string, extra: string): string =>
             `media.class=${mediaClass} node.name=${name} node.description="${description}" ${extra}`;
@@ -244,23 +392,28 @@ export class ScreenshareAudio {
         try {
             objects ??= await this.dump();
             const stopIfUnused = this.everUsed || Date.now() - this.startedAt > UNUSED_TIMEOUT_MS;
-            const ownPids = new Map<number, boolean>();
-            const isOwn = (pid: number): boolean => {
-                if (!ownPids.has(pid)) ownPids.set(pid, isDescendantOf(pid, process.pid));
-                return ownPids.get(pid)!;
+            const app = this.app;
+            const decided = new Map<number, boolean>();
+            const shouldShare = (pid: number): boolean => {
+                if (!decided.has(pid)) {
+                    const own = isDescendantOf(pid, process.pid);
+                    decided.set(pid, !own && (app === undefined || isDescendantOf(pid, app)));
+                }
+                return decided.get(pid)!;
             };
-            const plan = planLinks(objects, isOwn, stopIfUnused);
+            const plan = planLinks(objects, shouldShare, stopIfUnused);
             if (plan.inUse) this.everUsed = true;
             if (!plan.keepRunning) {
                 this.stop();
                 return;
             }
             // A link can fail if the stream went away in the meantime; the next poll sorts that out.
-            await Promise.all(
-                plan.links.map(([output, input]) =>
+            await Promise.all([
+                ...plan.unlinks.map((link) => this.runCommand("pw-link", ["-d", String(link)]).catch(() => {})),
+                ...plan.links.map(([output, input]) =>
                     this.runCommand("pw-link", [String(output), String(input)]).catch(() => {}),
                 ),
-            );
+            ]);
         } catch (err) {
             console.error("Screen share audio: failed to update the PipeWire graph", err);
         } finally {
@@ -276,6 +429,11 @@ const screenshareAudio = new ScreenshareAudio();
  * when the page sets `restrictOwnAudio`, which Element Call does not, so we name it directly.
  */
 export const WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO = { id: "loopbackWithoutChrome", name: "System audio" };
+
+/** Chromium's loopback device for one application's process tree. */
+export function windowsApplicationLoopback(pid: number): { id: string; name: string } {
+    return { id: `applicationLoopback:${pid}`, name: "Application audio" };
+}
 
 // Windows 11 is version 10.0.22000. Chromium only supports leaving out its own audio from there on
 // (media::IsWindowsProcessLoopbackCaptureSupported); older versions would capture the call too.
@@ -296,15 +454,25 @@ export function isScreenshareAudioEnabled(): boolean {
     return isScreenshareAudioSupported() && !!Store.instance?.get("shareSystemAudio");
 }
 
+function findWindowApp(handle: number): Promise<number | undefined> {
+    return process.platform === "win32" ? findWindowsWindowApp(handle) : findX11WindowApp(handle);
+}
+
+function isOwnProcess(pid: number): boolean {
+    return pid === process.pid || (process.platform === "linux" && isDescendantOf(pid, process.pid));
+}
+
 /**
  * Wrap a display-media request callback so that, when the page asked for audio and a source was picked, the share
- * gets system audio. On Windows that is Chromium's loopback device. On Linux the PipeWire loopback is started before
- * the video is handed back, and the audio is attached in the renderer by {@link addScreenshareAudio}.
+ * gets the audio of the shared window's application, or of every application except Element for a whole screen. On
+ * Windows that is one of Chromium's loopback devices. On Linux the PipeWire loopback is started before the video is
+ * handed back, and the audio is attached in the renderer by {@link addScreenshareAudio}.
  */
 export function wrapDisplayMediaCallback(
     request: { audioRequested: boolean },
     callback: (streams: Streams) => void,
     audio: ScreenshareAudio = screenshareAudio,
+    findApp: (handle: number) => Promise<number | undefined> = findWindowApp,
 ): (streams: Streams) => void {
     if (!request.audioRequested || !isScreenshareAudioEnabled()) return callback;
     return (streams) => {
@@ -314,16 +482,27 @@ export function wrapDisplayMediaCallback(
             callback(streams);
             return;
         }
-        if (process.platform === "win32") {
-            // Electron's types only list "loopback" and "loopbackWithMute", but it also accepts any {id, name}
-            // audio device (the "escape hatch" in ElectronBrowserContext::DisplayMediaDeviceChosen).
-            callback({ ...streams, audio: WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO as unknown as Streams["audio"] });
-            return;
-        }
-        void audio
-            .start()
-            .catch((err) => console.error("Screen share audio: failed to start", err))
-            .finally(() => callback(streams));
+        void (async (): Promise<void> => {
+            const scope = await audioScopeFor(video.id, findApp, isOwnProcess).catch((): AudioScope => ({
+                apps: "all",
+            }));
+            if (process.platform === "win32") {
+                if (scope.apps === "none") return callback(streams);
+                const device =
+                    scope.apps === "one" ? windowsApplicationLoopback(scope.pid) : WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO;
+                // Electron's types only list "loopback" and "loopbackWithMute", but it also accepts any {id, name}
+                // audio device (the "escape hatch" in ElectronBrowserContext::DisplayMediaDeviceChosen).
+                return callback({ ...streams, audio: device as unknown as Streams["audio"] });
+            }
+            try {
+                // Sharing Element's own window: no audio, and no leftover loopback for the renderer to pick up.
+                if (scope.apps === "none") audio.stop();
+                else await audio.start(scope.apps === "one" ? scope.pid : undefined);
+            } catch (err) {
+                console.error("Screen share audio: failed to start", err);
+            }
+            callback(streams);
+        })();
     };
 }
 
