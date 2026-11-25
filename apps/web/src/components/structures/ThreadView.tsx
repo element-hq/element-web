@@ -420,6 +420,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 threadId={this.state.thread?.id}
                 liveTimeline={this.state?.thread?.timelineSet?.getLiveTimeline()}
                 narrow={this.state.narrow}
+                replyToEvent={this.state.replyToEvent}
             >
                 <RoomUploadContextProvider threadRelation={this.threadRelation}>
                     <BaseCard
