@@ -462,8 +462,6 @@ export class ImageBodyViewModel
             return;
         }
 
-        const content = this.props.mxEvent.getContent<ImageContent>();
-
         let httpUrl = this.state.contentUrl;
         if (
             this.props.mediaEventHelper?.media.isEncrypted &&
@@ -492,7 +490,6 @@ export class ImageBodyViewModel
             permalinkCreator: this.props.permalinkCreator,
             thumbnailInfo,
             initialSrc: httpUrl,
-            initialName: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
         };
 
         Modal.createDialog(NavigableImageViewDialog, params, "mx_Dialog_lightbox", undefined, true);

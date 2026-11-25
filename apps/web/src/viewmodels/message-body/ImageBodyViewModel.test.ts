@@ -855,7 +855,6 @@ describe("ImageBodyViewModel", () => {
             expect.any(Function),
             expect.objectContaining({
                 initialSrc: "https://server/full.png",
-                initialName: "demo image",
                 initialEvent: expect.any(Object),
                 thumbnailInfo: {
                     width: 100,
@@ -898,7 +897,6 @@ describe("ImageBodyViewModel", () => {
             expect.any(Function),
             expect.objectContaining({
                 initialSrc: "blob:safe-thumbnail",
-                initialName: "Attachment",
             }),
             "mx_Dialog_lightbox",
             undefined,

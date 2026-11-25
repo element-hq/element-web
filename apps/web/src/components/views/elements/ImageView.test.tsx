@@ -14,6 +14,11 @@ import { render, fireEvent, waitFor } from "test-utils-rtl";
 import fetchMock from "@fetch-mock/vitest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { stubClient } from "test-utils";
+import {
+    MockViewModel,
+    type LightboxNavigationViewActions,
+    type LightboxNavigationViewSnapshot,
+} from "@element-hq/web-shared-components";
 
 import ImageView from "./ImageView";
 import { FileDownloader } from "../../../utils/FileDownloader";
@@ -21,6 +26,18 @@ import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 
 vi.mock("../../../utils/FileDownloader");
+
+class TestNavigationViewModel
+    extends MockViewModel<LightboxNavigationViewSnapshot>
+    implements LightboxNavigationViewActions
+{
+    public goToPrevious = vi.fn();
+    public goToNext = vi.fn();
+
+    public constructor(snapshot: Partial<LightboxNavigationViewSnapshot> = {}) {
+        super({ canGoToPrevious: true, canGoToNext: true, isNavigating: false, ...snapshot });
+    }
+}
 
 describe("<ImageView />", () => {
     afterEach(() => {
@@ -98,94 +115,48 @@ describe("<ImageView />", () => {
     });
 
     describe("navigation", () => {
-        it("shows no navigation buttons unless callbacks are given", () => {
-            const { queryByRole, container } = render(
-                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} />,
-            );
+        it("shows no navigation buttons without a navigation view model", () => {
+            const { queryByRole } = render(<ImageView src="https://example.com/image.png" onFinished={vi.fn()} />);
             expect(queryByRole("button", { name: "Previous" })).toBeNull();
             expect(queryByRole("button", { name: "Next" })).toBeNull();
-            expect(container.querySelector(".mx_ImageView_nav")).toBeNull();
         });
 
-        it("shows only the buttons for which a callback is given, keeping both gutters", () => {
-            const onNext = vi.fn();
-            const { getByRole, queryByRole, container } = render(
-                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onNext={onNext} />,
+        it("shows the navigation buttons beside the image", () => {
+            const navigation = new TestNavigationViewModel({ canGoToPrevious: false });
+            const { getByRole, queryByRole } = render(
+                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} navigation={navigation} />,
             );
             expect(queryByRole("button", { name: "Previous" })).toBeNull();
-            expect(container.querySelectorAll(".mx_ImageView_nav")).toHaveLength(2);
 
             fireEvent.click(getByRole("button", { name: "Next" }));
-            expect(onNext).toHaveBeenCalled();
+            expect(navigation.goToNext).toHaveBeenCalled();
         });
 
         it("navigates with the arrow keys", () => {
-            const onPrev = vi.fn();
-            const onNext = vi.fn();
+            const navigation = new TestNavigationViewModel();
             const onFinished = vi.fn();
             const { container } = render(
-                <ImageView
-                    src="https://example.com/image.png"
-                    onFinished={onFinished}
-                    onPrev={onPrev}
-                    onNext={onNext}
-                />,
+                <ImageView src="https://example.com/image.png" onFinished={onFinished} navigation={navigation} />,
             );
             const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
 
             fireEvent.keyDown(dialog, { key: "ArrowLeft" });
-            expect(onPrev).toHaveBeenCalledTimes(1);
+            expect(navigation.goToPrevious).toHaveBeenCalledTimes(1);
             fireEvent.keyDown(dialog, { key: "ArrowRight" });
-            expect(onNext).toHaveBeenCalledTimes(1);
+            expect(navigation.goToNext).toHaveBeenCalledTimes(1);
             expect(onFinished).not.toHaveBeenCalled();
         });
 
-        it("ignores arrow keys at the boundaries and while navigating", () => {
-            const onNext = vi.fn();
-            const { container, getByRole, rerender } = render(
-                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onNext={onNext} />,
-            );
-            const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
-            fireEvent.keyDown(dialog, { key: "ArrowLeft" }); // no onPrev
-            expect(() => fireEvent.keyDown(dialog, { key: "ArrowLeft" })).not.toThrow();
-
-            rerender(
-                <ImageView
-                    src="https://example.com/image.png"
-                    onFinished={vi.fn()}
-                    onNext={onNext}
-                    navigationInProgress={true}
-                />,
-            );
-            expect(getByRole("button", { name: "Next" })).toHaveAttribute("aria-disabled", "true");
-            fireEvent.keyDown(dialog, { key: "ArrowRight" });
-            expect(onNext).not.toHaveBeenCalled();
-        });
-
-        it("keeps focus inside the lightbox when the focused button disappears", () => {
-            const { getByRole, container, rerender } = render(
-                <ImageView src="https://example.com/1.png" onFinished={vi.fn()} onPrev={vi.fn()} onNext={vi.fn()} />,
-            );
-            getByRole("button", { name: "Next" }).focus();
-
-            // Reached the newest image: the Next button goes away
-            rerender(<ImageView src="https://example.com/2.png" onFinished={vi.fn()} onPrev={vi.fn()} />);
-            expect(document.activeElement).toBe(getByRole("button", { name: "Previous" }));
-
-            // Only image left: both buttons go away
-            rerender(<ImageView src="https://example.com/2.png" onFinished={vi.fn()} />);
-            expect(document.activeElement).toBe(container.querySelector('[role="dialog"]'));
-        });
-
         it("resets zoom and rotation when the image changes", () => {
+            const navigation = new TestNavigationViewModel();
             const { container, getByRole, rerender } = render(
-                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} onNext={vi.fn()} />,
+                <ImageView src="https://example.com/image.png" onFinished={vi.fn()} navigation={navigation} />,
             );
             const image = container.querySelector<HTMLImageElement>(".mx_ImageView_image")!;
             fireEvent.click(getByRole("button", { name: "Rotate Right" }));
             expect(image.style.transform).toContain("rotate(90deg)");
 
-            rerender(<ImageView src="https://example.com/other.png" onFinished={vi.fn()} onNext={vi.fn()} />);
+            rerender(<ImageView src="https://example.com/other.png" onFinished={vi.fn()} navigation={navigation} />);
             expect(image.getAttribute("src")).toBe("https://example.com/other.png");
             expect(image.style.transform).toContain("rotate(0deg)");
         });

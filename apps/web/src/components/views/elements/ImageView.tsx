@@ -11,10 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef, type CSSProperties, useEffect } from "react";
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { Button, Tooltip } from "@vector-im/compound-web";
 import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
     CloseIcon,
     DownloadIcon,
     OverflowHorizontalIcon,
@@ -23,7 +20,12 @@ import {
     ZoomInIcon,
     ZoomOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, MessageTimestampView } from "@element-hq/web-shared-components";
+import {
+    useCreateAutoDisposedViewModel,
+    MessageTimestampView,
+    LightboxNavigationView,
+    type LightboxNavigationViewModel,
+} from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -87,20 +89,10 @@ interface IProps {
     onFinished(): void;
 
     /**
-     * Go to the previous (older) image. When set, a "Previous" button is shown next to the image and
-     * the left arrow key navigates.
+     * Previous/next navigation between images. When set, "Previous" and "Next" buttons are shown
+     * beside the image as the view model allows, and the left and right arrow keys navigate.
      */
-    onPrev?(): void;
-    /**
-     * Go to the next (newer) image. When set, a "Next" button is shown next to the image and the
-     * right arrow key navigates.
-     */
-    onNext?(): void;
-    /**
-     * Whether a previous/next navigation is in progress (e.g. older history is being fetched).
-     * Disables the navigation buttons meanwhile.
-     */
-    navigationInProgress?: boolean;
+    navigation?: LightboxNavigationViewModel;
 }
 
 interface IState {
@@ -148,8 +140,6 @@ export default class ImageView extends React.Component<IProps, IState> {
     private focusLock = createRef<any>();
     private imageWrapper = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();
-    private prevButton = createRef<HTMLButtonElement>();
-    private nextButton = createRef<HTMLButtonElement>();
 
     private downloadFunction?: () => Promise<void>;
 
@@ -174,7 +164,6 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: IProps): void {
-        this.keepFocusAfterNavigationChange(prevProps);
         if (prevProps.src === this.props.src) return;
 
         // A new image is being shown (prev/next navigation): forget the zoom, rotation and panning
@@ -351,13 +340,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         switch (action) {
             case KeyBindingAction.ArrowLeft:
             case KeyBindingAction.ArrowRight: {
+                const { navigation } = this.props;
                 // Leave the arrow keys to the context menu while it is open
-                if (this.state.contextMenuDisplayed || this.props.navigationInProgress) break;
-                const navigate = action === KeyBindingAction.ArrowLeft ? this.props.onPrev : this.props.onNext;
-                if (!navigate) break;
+                if (!navigation || this.state.contextMenuDisplayed) break;
                 ev.stopPropagation();
                 ev.preventDefault();
-                navigate();
+                if (action === KeyBindingAction.ArrowLeft) navigation.goToPrevious();
+                else navigation.goToNext();
                 break;
             }
             case KeyBindingAction.Escape:
@@ -467,49 +456,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
-    /**
-     * When the focused previous/next button disappears (the start or end of the images was reached),
-     * focus would fall out of the lightbox. Keep it inside so the keyboard keeps working.
-     */
-    private keepFocusAfterNavigationChange(prevProps: IProps): void {
-        const lostPrev = !!prevProps.onPrev && !this.props.onPrev;
-        const lostNext = !!prevProps.onNext && !this.props.onNext;
-        if (!lostPrev && !lostNext) return;
-        if (document.activeElement && document.activeElement !== document.body) return;
-
-        const fallback = (lostNext ? this.prevButton.current : this.nextButton.current) ?? this.focusLock.current;
-        fallback?.focus();
-    }
-
-    /**
-     * The gutter on one side of the image holding the previous/next button. The gutter is always
-     * rendered (even when its button is not) so the image stays centred.
-     */
-    private renderNavigation(direction: "prev" | "next"): JSX.Element {
-        const onClick = direction === "prev" ? this.props.onPrev : this.props.onNext;
-        const label = direction === "prev" ? _t("action|previous") : _t("action|next");
-        const Icon = direction === "prev" ? ChevronLeftIcon : ChevronRightIcon;
-
-        return (
-            <div className={`mx_ImageView_nav mx_ImageView_nav_${direction} cpd-theme-dark`}>
-                {onClick && (
-                    <Tooltip label={label}>
-                        <Button
-                            ref={direction === "prev" ? this.prevButton : this.nextButton}
-                            iconOnly
-                            kind="secondary"
-                            size="lg"
-                            Icon={Icon}
-                            aria-label={label}
-                            onClick={onClick}
-                            disabled={this.props.navigationInProgress}
-                        />
-                    </Tooltip>
-                )}
-            </div>
-        );
-    }
-
     private renderContextMenu(): JSX.Element {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuDisplayed && this.props.mxEvent) {
@@ -529,7 +475,6 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const showEventMeta = !!this.props.mxEvent;
-        const showNavigation = !!(this.props.onPrev || this.props.onNext);
 
         let transitionClassName;
         if (this.animatingLoading) transitionClassName = "mx_ImageView_image_animatingLoading";
@@ -627,6 +572,27 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
+        const image = (
+            <div
+                className="mx_ImageView_image_wrapper"
+                ref={this.imageWrapper}
+                onMouseDown={this.props.onFinished}
+                onMouseMove={this.onMoving}
+                onMouseUp={this.onEndMoving}
+                onMouseLeave={this.onEndMoving}
+            >
+                <img
+                    src={this.props.src}
+                    style={style}
+                    alt={this.props.name}
+                    ref={this.image}
+                    className={`mx_ImageView_image ${transitionClassName}`}
+                    draggable={true}
+                    onMouseDown={this.onStartMoving}
+                />
+            </div>
+        );
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -634,7 +600,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                     "onKeyDown": this.onKeyDown,
                     "role": "dialog",
                     "aria-label": _t("lightbox|title"),
-                    "tabIndex": -1,
                 }}
                 className="mx_ImageView"
                 ref={this.focusLock}
@@ -688,28 +653,13 @@ export default class ImageView extends React.Component<IProps, IState> {
                         {this.renderContextMenu()}
                     </div>
                 </div>
-                <div className="mx_ImageView_content">
-                    {showNavigation && this.renderNavigation("prev")}
-                    <div
-                        className="mx_ImageView_image_wrapper"
-                        ref={this.imageWrapper}
-                        onMouseDown={this.props.onFinished}
-                        onMouseMove={this.onMoving}
-                        onMouseUp={this.onEndMoving}
-                        onMouseLeave={this.onEndMoving}
-                    >
-                        <img
-                            src={this.props.src}
-                            style={style}
-                            alt={this.props.name}
-                            ref={this.image}
-                            className={`mx_ImageView_image ${transitionClassName}`}
-                            draggable={true}
-                            onMouseDown={this.onStartMoving}
-                        />
-                    </div>
-                    {showNavigation && this.renderNavigation("next")}
-                </div>
+                {this.props.navigation ? (
+                    <LightboxNavigationView vm={this.props.navigation} className="mx_ImageView_content">
+                        {image}
+                    </LightboxNavigationView>
+                ) : (
+                    <div className="mx_ImageView_content">{image}</div>
+                )}
             </FocusLock>
         );
     }
