@@ -16,13 +16,24 @@ import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload
 
 export class WatchableProfile extends Watchable<Profile> {
     private loggedOut = false;
+    private dispatcherRef?: string;
 
     public constructor() {
         super({});
         this.value = this.getProfile();
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileChange);
-        defaultDispatcher.register(this.onAction);
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+    }
+
+    /**
+     * Stops listening to the dispatcher and the profile store. Only expected to be called in tests, as the
+     * module API's profile otherwise lives as long as the app.
+     */
+    public destroy(): void {
+        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileChange);
+        defaultDispatcher.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
     }
 
     private getProfile(client = OwnProfileStore.instance.matrixClient): Profile {
