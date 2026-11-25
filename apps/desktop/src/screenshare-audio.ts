@@ -6,9 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /*
- * Screen-share audio on Linux.
+ * Screen-share audio on Linux and Windows 11.
  *
- * Electron can only add audio to a getDisplayMedia() stream with `audio: "loopback"`, which on Linux records the
+ * Windows: Chromium can record the system mix minus everything our own processes play ("loopbackWithoutChrome",
+ * Windows process loopback in exclude mode, Windows 11 and later), so we just hand that device back to Electron.
+ *
+ * Linux: Electron can only add audio to a getDisplayMedia() stream with `audio: "loopback"`, which on Linux records the
  * monitor of the default output device. That includes the call itself, so everyone on the call hears themselves.
  *
  * Instead, while a share with audio is running, we start a PipeWire loopback that exposes a virtual microphone fed
@@ -19,6 +22,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { execFile, spawn, type ChildProcess } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { release } from "node:os";
 import { type Streams, type WebContents, webFrameMain } from "electron";
 
 import Store from "./store.js";
@@ -267,15 +271,35 @@ export class ScreenshareAudio {
 
 const screenshareAudio = new ScreenshareAudio();
 
+/**
+ * Chromium's loopback device for the system mix without the browser's own audio. Electron only picks it by itself
+ * when the page sets `restrictOwnAudio`, which Element Call does not, so we name it directly.
+ */
+export const WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO = { id: "loopbackWithoutChrome", name: "System audio" };
+
+// Windows 11 is version 10.0.22000. Chromium only supports leaving out its own audio from there on
+// (media::IsWindowsProcessLoopbackCaptureSupported); older versions would capture the call too.
+const WINDOWS_11_BUILD = 22000;
+
+/** Whether this platform can share system audio without also sharing the call. */
+export function isScreenshareAudioSupported(
+    platform: string = process.platform,
+    osRelease: string = release(),
+): boolean {
+    if (platform === "linux") return true;
+    if (platform === "win32") return Number(osRelease.split(".")[2]) >= WINDOWS_11_BUILD;
+    return false;
+}
+
 /** Whether system audio should be added to screen shares that ask for it. */
 export function isScreenshareAudioEnabled(): boolean {
-    return process.platform === "linux" && !!Store.instance?.get("shareSystemAudio");
+    return isScreenshareAudioSupported() && !!Store.instance?.get("shareSystemAudio");
 }
 
 /**
- * Wrap a display-media request callback so that, when the page asked for audio and a source was picked, the
- * loopback is running before the video is handed back. The audio itself is attached in the renderer by
- * {@link addScreenshareAudio}, because Electron cannot return an arbitrary audio device here.
+ * Wrap a display-media request callback so that, when the page asked for audio and a source was picked, the share
+ * gets system audio. On Windows that is Chromium's loopback device. On Linux the PipeWire loopback is started before
+ * the video is handed back, and the audio is attached in the renderer by {@link addScreenshareAudio}.
  */
 export function wrapDisplayMediaCallback(
     request: { audioRequested: boolean },
@@ -288,6 +312,12 @@ export function wrapDisplayMediaCallback(
         const video = streams.video;
         if (!video || !("id" in video) || !video.id) {
             callback(streams);
+            return;
+        }
+        if (process.platform === "win32") {
+            // Electron's types only list "loopback" and "loopbackWithMute", but it also accepts any {id, name}
+            // audio device (the "escape hatch" in ElectronBrowserContext::DisplayMediaDeviceChosen).
+            callback({ ...streams, audio: WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO as unknown as Streams["audio"] });
             return;
         }
         void audio

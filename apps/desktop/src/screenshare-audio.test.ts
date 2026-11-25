@@ -12,6 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     addScreenshareAudio,
     isDescendantOf,
+    isScreenshareAudioSupported,
     MIX_NODE_NAME,
     mixChannelsFor,
     type PipeWireObject,
@@ -19,12 +20,16 @@ import {
     ScreenshareAudio,
     SOURCE_LABEL,
     SOURCE_NODE_NAME,
+    WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO,
     wrapDisplayMediaCallback,
 } from "./screenshare-audio.js";
 
-const { mockStore } = vi.hoisted(() => ({
+const { mockStore, osRelease } = vi.hoisted(() => ({
     mockStore: { get: vi.fn<(key: string) => unknown>() },
+    osRelease: vi.fn<() => string>(() => "10.0.22631"),
 }));
+
+vi.mock("node:os", () => ({ release: osRelease }));
 
 vi.mock("electron", () => ({ webFrameMain: { fromId: vi.fn() } }));
 vi.mock("./store.js", () => ({ default: { instance: mockStore } }));
@@ -76,6 +81,18 @@ function graph(extra: PipeWireObject[] = []): PipeWireObject[] {
 }
 
 const isOwn = (pid: number): boolean => pid === 300;
+
+describe("isScreenshareAudioSupported", () => {
+    it.each([
+        ["linux", "7.3.6-arch1-1", true],
+        ["win32", "10.0.22631", true],
+        ["win32", "10.0.22000", true],
+        ["win32", "10.0.19045", false],
+        ["darwin", "25.1.0", false],
+    ])("%s %s -> %s", (platform, release, expected) => {
+        expect(isScreenshareAudioSupported(platform, release)).toBe(expected);
+    });
+});
 
 describe("mixChannelsFor", () => {
     it.each([
@@ -239,10 +256,35 @@ describe("wrapDisplayMediaCallback", () => {
         expect(audio.start).not.toHaveBeenCalled();
     });
 
+    it("hands Windows 11 Chromium's loopback device without our own audio", () => {
+        setPlatform("win32");
+        const audio = { start: vi.fn() } as unknown as ScreenshareAudio;
+        const callback = vi.fn();
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio)({ video });
+        expect(callback).toHaveBeenCalledWith({ video, audio: WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO });
+        expect(audio.start).not.toHaveBeenCalled();
+    });
+
+    it("leaves a cancelled Windows share without audio", () => {
+        setPlatform("win32");
+        const callback = vi.fn();
+        const cancelled = { video: { id: "", name: "" } };
+        wrapDisplayMediaCallback({ audioRequested: true }, callback)(cancelled);
+        expect(callback).toHaveBeenCalledWith(cancelled);
+    });
+
+    it("returns the callback unchanged on Windows 10", () => {
+        setPlatform("win32");
+        osRelease.mockReturnValueOnce("10.0.19045");
+        const callback = vi.fn();
+        expect(wrapDisplayMediaCallback({ audioRequested: true }, callback)).toBe(callback);
+    });
+
     it.each([
         ["audio was not requested", false, "linux", true],
         ["the setting is off", true, "linux", false],
-        ["the platform is not Linux", true, "win32", true],
+        ["the setting is off on Windows", true, "win32", false],
+        ["the platform is macOS", true, "darwin", true],
     ])("returns the callback unchanged when %s", (_, audioRequested, platform, enabled) => {
         setPlatform(platform);
         mockStore.get.mockReturnValue(enabled);
