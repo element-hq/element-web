@@ -28,7 +28,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import { execFile, spawn, type ChildProcess } from "node:child_process";
-import { readdirSync, readFileSync, readlinkSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, readlinkSync } from "node:fs";
 import { homedir, release } from "node:os";
 import path from "node:path";
 import { type BrowserWindow, dialog, type Streams, type WebContents, webFrameMain } from "electron";
@@ -382,6 +382,21 @@ export function parsePortalPick(lines: string[]): PortalPick | undefined {
     return pick;
 }
 
+// Where systemd's busctl is installed: merged-/usr and older layouts, and NixOS's system profile.
+const SYSTEM_BIN_DIRS = ["/usr/bin", "/bin", "/run/current-system/sw/bin"];
+
+/**
+ * A system tool's full path from a fixed list of system folders, so that nothing on PATH can stand in for it.
+ * Undefined if it is not installed there.
+ */
+export function findSystemTool(
+    name: string,
+    dirs: string[] = SYSTEM_BIN_DIRS,
+    exists: (file: string) => boolean = existsSync,
+): string | undefined {
+    return dirs.map((dir) => path.posix.join(dir, name)).find(exists);
+}
+
 /**
  * Watches the session bus while the portal picker is open, to learn what the user picked. Read only, limited to
  * mutter's screen-cast calls and the replies of GNOME Shell and KDE's portal, and stopped as soon as the share starts.
@@ -391,8 +406,11 @@ export class PortalPickWatcher {
     private child: ChildProcess | null;
 
     public constructor(
-        spawnMonitor: (args: string[]) => ChildProcess = (args) =>
-            spawn("busctl", args, { stdio: ["ignore", "pipe", "ignore"] }),
+        spawnMonitor: (args: string[]) => ChildProcess = (args) => {
+            const busctl = findSystemTool("busctl");
+            if (!busctl) throw new Error("busctl not found");
+            return spawn(busctl, args, { stdio: ["ignore", "pipe", "ignore"] });
+        },
     ) {
         let child: ChildProcess | null = null;
         try {

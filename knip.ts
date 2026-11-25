@@ -93,8 +93,6 @@ export default {
             ignoreBinaries: [
                 // Used by the fetch-package script (optional)
                 "gpg",
-                // Used on GNOME Wayland to see what the screen-share portal picked (screenshare-audio.ts)
-                "busctl",
             ],
         },
         "modules": {

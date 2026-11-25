@@ -13,6 +13,7 @@ import {
     addScreenshareAudio,
     appRootProcess,
     askAudioScope,
+    findSystemTool,
     findX11WindowByTitle,
     parseKdeRestoreData,
     parsePortalPick,
@@ -1066,5 +1067,14 @@ describe("parseKdeRestoreData", () => {
             },
         });
         expect(parsePortalPick([reply])).toMatchObject({ type: "window", window: { wmClass: "org.kde.konsole" } });
+    });
+});
+
+describe("findSystemTool", () => {
+    it("takes the first system folder that has the tool", () => {
+        const exists = (file: string): boolean =>
+            file === "/bin/busctl" || file === "/run/current-system/sw/bin/busctl";
+        expect(findSystemTool("busctl", undefined, exists)).toBe("/bin/busctl");
+        expect(findSystemTool("busctl", ["/usr/bin"], () => false)).toBeUndefined();
     });
 });
