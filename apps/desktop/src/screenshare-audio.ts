@@ -10,9 +10,9 @@ Please see LICENSE files in the repository root for full details.
  *
  * Sharing a whole screen shares the audio of every application except Element itself (Element plays the call, so
  * sharing it would echo everyone back to themselves). Sharing a window shares only the audio of the application that
- * owns the window. On Wayland the portal does not say what was picked. On GNOME we learn it by watching the portal ask
- * GNOME Shell for its windows and mutter to record one (see {@link PortalPickWatcher}); elsewhere, or when the window's
- * application cannot be found, we ask which application's audio to share.
+ * owns the window. On Wayland the portal does not say what was picked. On GNOME and KDE we learn it from the session
+ * bus (see {@link PortalPickWatcher}); elsewhere, or when the window's application cannot be found, we ask which
+ * application's audio to share.
  *
  * Windows: Chromium has loopback devices built on Windows process loopback (Windows 11 and later):
  * "loopbackWithoutChrome" records everything except our own process tree, and "applicationLoopback:<pid>" records
@@ -288,9 +288,61 @@ export type PortalPick = { type: "monitor" } | { type: "window"; window?: ShellW
 type BusValue = { type?: string; data?: unknown };
 
 /**
- * Read GNOME's screen-cast portal from `busctl monitor --json=short` lines: the window list GNOME Shell hands it
- * (org.gnome.Shell.Introspect.GetWindows) and what it asks mutter to record (RecordMonitor or RecordWindow). The last
- * Record call wins.
+ * Read what KDE's portal (xdg-desktop-portal-kde) says it shares, from the restore data it returns for every share:
+ * a Qt QDataStream map of "outputs" (screens, including a virtual one), "region", "virtualSize" and "windows" (each
+ * window's app id and title). Data this does not understand gives undefined.
+ */
+export function parseKdeRestoreData(bytes: number[]): PortalPick | undefined {
+    const data = Buffer.from(bytes);
+    // Find a map key (a QString: byte length, then UTF-16BE) and return the offset of its QVariant value.
+    const valueAfterKey = (key: string): number | undefined => {
+        const encoded = Buffer.alloc(4 + key.length * 2);
+        encoded.writeUInt32BE(key.length * 2, 0);
+        for (let i = 0; i < key.length; i++) encoded.writeUInt16BE(key.charCodeAt(i), 4 + i * 2);
+        const at = data.indexOf(encoded);
+        return at < 0 ? undefined : at + encoded.length;
+    };
+    const readString = (offset: number): [string, number] => {
+        const length = data.readUInt32BE(offset);
+        if (length === 0xffffffff) return ["", offset + 4];
+        const chars: number[] = [];
+        for (let i = 0; i < length; i += 2) chars.push(data.readUInt16BE(offset + 4 + i));
+        return [String.fromCharCode(...chars), offset + 4 + length];
+    };
+    try {
+        const windowsAt = valueAfterKey("windows");
+        if (windowsAt !== undefined) {
+            // A user type: type id, null flag, type name (QByteArray), then the list: count, then app id and title.
+            let offset = windowsAt + 5;
+            offset += 4 + data.readUInt32BE(offset);
+            const count = data.readUInt32BE(offset);
+            if (count > 0) {
+                const [appId, afterAppId] = readString(offset + 4);
+                const [title] = readString(afterAppId);
+                return {
+                    type: "window",
+                    window: { appId: appId ? `${appId}.desktop` : undefined, wmClass: appId, title },
+                };
+            }
+        }
+        // A list: type id, null flag, count.
+        const outputsAt = valueAfterKey("outputs");
+        if (outputsAt !== undefined && data.readUInt32BE(outputsAt + 5) > 0) return { type: "monitor" };
+        // A rectangle: type id, null flag, then left, top, right, bottom; a null one is (0, 0, -1, -1).
+        const regionAt = valueAfterKey("region");
+        if (regionAt !== undefined && data.readInt32BE(regionAt + 13) >= data.readInt32BE(regionAt + 5)) {
+            return { type: "monitor" };
+        }
+    } catch {
+        // Truncated or a different layout.
+    }
+    return undefined;
+}
+
+/**
+ * Read the screen-cast portal from `busctl monitor --json=short` lines. On GNOME: the window list GNOME Shell hands it
+ * (org.gnome.Shell.Introspect.GetWindows) and what it asks mutter to record (RecordMonitor or RecordWindow). On KDE:
+ * the restore data xdg-desktop-portal-kde returns from Start. The last pick wins.
  */
 export function parsePortalPick(lines: string[]): PortalPick | undefined {
     const windows = new Map<string, ShellWindow>();
@@ -314,6 +366,12 @@ export function parsePortalPick(lines: string[]): PortalPick | undefined {
                     clientType: typeof value("client-type") === "number" ? (value("client-type") as number) : undefined,
                 });
             }
+        } else if (payload?.type === "ua{sv}") {
+            const results = (payload.data?.[1] ?? {}) as Record<string, BusValue>;
+            const restore = results.restore_data?.data as [string, number, BusValue] | undefined;
+            if (restore?.[0] === "KDE" && Array.isArray(restore[2]?.data)) {
+                pick = parseKdeRestoreData(restore[2].data as number[]) ?? pick;
+            }
         } else if (message.member === "RecordMonitor") {
             pick = { type: "monitor" };
         } else if (message.member === "RecordWindow") {
@@ -326,7 +384,7 @@ export function parsePortalPick(lines: string[]): PortalPick | undefined {
 
 /**
  * Watches the session bus while the portal picker is open, to learn what the user picked. Read only, limited to
- * mutter's screen-cast calls and GNOME Shell's replies, and stopped as soon as the share starts.
+ * mutter's screen-cast calls and the replies of GNOME Shell and KDE's portal, and stopped as soon as the share starts.
  */
 export class PortalPickWatcher {
     private readonly lines: string[] = [];
@@ -346,6 +404,8 @@ export class PortalPickWatcher {
                 "type=method_call,interface=org.gnome.Mutter.ScreenCast.Session",
                 "--match",
                 "type=method_return,sender=org.gnome.Shell",
+                "--match",
+                "type=method_return,sender=org.freedesktop.impl.portal.desktop.kde",
             ]);
             child.on("error", () => this.stop());
             let pending = "";
@@ -357,7 +417,8 @@ export class PortalPickWatcher {
                         (line) =>
                             line.includes("RecordMonitor") ||
                             line.includes("RecordWindow") ||
-                            line.includes("a{ta{sv}}"),
+                            line.includes("a{ta{sv}}") ||
+                            line.includes("restore_data"),
                     ),
                 );
             });
@@ -472,7 +533,7 @@ export async function resolveShellWindow(
         const members = lookup.unitProcesses(desktopId);
         if (members?.length) return decide(members);
     }
-    if (window.clientType === 1 && window.title) {
+    if ((window.clientType === undefined || window.clientType === 1) && window.title) {
         const pid = await lookup.x11WindowProcess(window.title).catch(() => undefined);
         if (pid) return decide([pid]);
     }
@@ -1005,7 +1066,7 @@ async function waylandAudioScope(
 /**
  * Wrap a display-media request callback so that, when the page asked for audio and a source was picked, the share
  * gets the audio of the shared window's application, or of every application except Element for a whole screen. On
- * Wayland the portal does not say what was picked: on GNOME it is read off the session bus ({@link PortalPickWatcher});
+ * Wayland the portal does not say what was picked: on GNOME and KDE it is read off the session bus ({@link PortalPickWatcher});
  * otherwise the user chooses the application (see {@link askAudioScope}).
  * On Windows that is one of Chromium's loopback devices. On Linux the PipeWire loopback is started before the video is
  * handed back, and the audio is attached in the renderer by {@link addScreenshareAudio}.

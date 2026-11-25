@@ -14,6 +14,7 @@ import {
     appRootProcess,
     askAudioScope,
     findX11WindowByTitle,
+    parseKdeRestoreData,
     parsePortalPick,
     parseWaylandClients,
     resolveShellWindow,
@@ -1011,5 +1012,52 @@ describe("findX11WindowByTitle", () => {
                 : '_NET_WM_NAME(UTF8_STRING) = "Other"\n_NET_WM_PID(CARDINAL) = 98';
         });
         expect(await findX11WindowByTitle('Say "hi"', runCommand)).toBe(99);
+    });
+});
+
+describe("parseKdeRestoreData", () => {
+    // What xdg-desktop-portal-kde 6.8 returned for a Konsole window picked in its dialog.
+    const konsole =
+        "000000040000000e006f0075007400700075007400730000000900000000000000000c0072006500670069006f006e00000013000000000000000000ffffffffffffffff00000016007600690072007400750061006c00530069007a0065000000150000000780000004380000000e00770069006e0064006f00770073000100000000000019514c6973743c57696e646f77526573746f7265496e666f3e00000000010000001e006f00720067002e006b00640065002e006b006f006e0073006f006c00650000001c0054006f006e0065002020140020004b006f006e0073006f006c0065";
+    const bytes = (hex: string): number[] => [...Buffer.from(hex, "hex")];
+    // The same data with no window and one output (the screen), or with a region instead.
+    const noWindows = (hex: string): string =>
+        hex.replace(/(514c6973743c57696e646f77526573746f7265496e666f3e00)00000001.*$/, "$100000000");
+    const withOutputs = (hex: string): string => hex.replace("0000000900000000", "0000000900000001");
+    const withRegion = (hex: string): string =>
+        hex.replace("00000013000000000000000000ffffffffffffffff", "000000130000000000000000000000006300000063");
+
+    it("reads a picked window", () => {
+        expect(parseKdeRestoreData(bytes(konsole))).toEqual({
+            type: "window",
+            window: { appId: "org.kde.konsole.desktop", wmClass: "org.kde.konsole", title: "Tone \u2014 Konsole" },
+        });
+    });
+
+    it("reads a picked screen or region", () => {
+        expect(parseKdeRestoreData(bytes(withOutputs(noWindows(konsole))))).toEqual({ type: "monitor" });
+        expect(parseKdeRestoreData(bytes(withRegion(noWindows(konsole))))).toEqual({ type: "monitor" });
+    });
+
+    it("gives up when nothing it knows was picked, or on unknown data", () => {
+        expect(parseKdeRestoreData(bytes(noWindows(konsole)))).toBeUndefined();
+        expect(parseKdeRestoreData([1, 2, 3])).toBeUndefined();
+    });
+
+    it("is found in the portal's reply", () => {
+        const reply = JSON.stringify({
+            type: "method_return",
+            payload: {
+                type: "ua{sv}",
+                data: [
+                    0,
+                    {
+                        persist_mode: { type: "u", data: 1 },
+                        restore_data: { type: "(suv)", data: ["KDE", 1, { type: "ay", data: bytes(konsole) }] },
+                    },
+                ],
+            },
+        });
+        expect(parsePortalPick([reply])).toMatchObject({ type: "window", window: { wmClass: "org.kde.konsole" } });
     });
 });
