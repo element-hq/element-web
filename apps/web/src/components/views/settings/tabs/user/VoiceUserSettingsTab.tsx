@@ -232,6 +232,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                 <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
                     {webcamDropdown}
                     <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name="Electron.shareSystemAudio" level={SettingLevel.PLATFORM} hideIfCannotSet />
                 </SettingsSubsection>
                 <SettingsSection heading={_t("common|advanced")}>
                     <SettingsFlag

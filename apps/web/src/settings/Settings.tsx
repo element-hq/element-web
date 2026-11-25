@@ -367,6 +367,7 @@ export interface Settings {
     "Electron.showTrayIcon": IBaseSetting<boolean>;
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
     "Electron.enableContentProtection": IBaseSetting<boolean>;
+    "Electron.shareSystemAudio": IBaseSetting<boolean>;
     "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
@@ -1532,6 +1533,11 @@ export const SETTINGS: Settings = {
     "Electron.enableContentProtection": {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|preferences|enable_content_protection"),
+        default: false,
+    },
+    "Electron.shareSystemAudio": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("settings|voip|share_system_audio"),
         default: false,
     },
     "Developer.elementCallUrl": {

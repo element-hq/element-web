@@ -88,6 +88,18 @@ const Settings: Record<string, Setting> = {
             Store.instance?.set("enableContentProtection", value);
         },
     },
+    "Electron.shareSystemAudio": {
+        // Needs PipeWire; see screenshare-audio.ts. Other platforms would need a different capture method.
+        supported(): boolean {
+            return process.platform === "linux";
+        },
+        async read(): Promise<any> {
+            return Store.instance?.get("shareSystemAudio");
+        },
+        async write(value: any): Promise<void> {
+            Store.instance?.set("shareSystemAudio", value);
+        },
+    },
 };
 
 ipcMain.handle("getSupportedSettings", async () => {
