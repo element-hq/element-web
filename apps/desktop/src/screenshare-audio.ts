@@ -10,7 +10,9 @@ Please see LICENSE files in the repository root for full details.
  *
  * Sharing a whole screen shares the audio of every application except Element itself (Element plays the call, so
  * sharing it would echo everyone back to themselves). Sharing a window shares only the audio of the application that
- * owns the window. On Wayland the portal does not say what was picked, so we ask which application's audio to share.
+ * owns the window. On Wayland the portal does not say what was picked. On GNOME we learn it by watching the portal ask
+ * GNOME Shell for its windows and mutter to record one (see {@link PortalPickWatcher}); elsewhere, or when the window's
+ * application cannot be found, we ask which application's audio to share.
  *
  * Windows: Chromium has loopback devices built on Windows process loopback (Windows 11 and later):
  * "loopbackWithoutChrome" records everything except our own process tree, and "applicationLoopback:<pid>" records
@@ -189,6 +191,36 @@ export function desktopEntryName(
 }
 
 /**
+ * The processes of each desktop application unit, by application id.
+ *
+ * @param pids - the running processes.
+ * @param readCgroup - a process's cgroup.
+ */
+export function appUnits(pids: number[], readCgroup: (pid: number) => string): Map<string, number[]> {
+    const byId = new Map<string, number[]>();
+    for (const pid of pids) {
+        let appId: string | undefined;
+        try {
+            appId = appIdFromCgroup(readCgroup(pid));
+        } catch {
+            continue;
+        }
+        if (appId) byId.set(appId, [...(byId.get(appId) ?? []), pid]);
+    }
+    return byId;
+}
+
+/** The topmost of the given processes' application roots. */
+function topmostRoots(
+    members: number[],
+    rootOf: (pid: number) => number,
+    isDescendant: (pid: number, ancestor: number) => boolean,
+): number[] {
+    const roots = [...new Set(members.map(rootOf))];
+    return roots.filter((pid) => !roots.some((other) => other !== pid && isDescendant(pid, other)));
+}
+
+/**
  * The applications running in desktop application units, whether or not they play audio now, without Element.
  *
  * @param pids - the running processes.
@@ -206,26 +238,14 @@ export function listRunningApps(
     nameOf: (appId: string) => string | undefined,
     isDescendant: (pid: number, ancestor: number) => boolean,
 ): AudioApp[] {
-    const byId = new Map<string, number[]>();
-    for (const pid of pids) {
-        let appId: string | undefined;
-        try {
-            appId = appIdFromCgroup(readCgroup(pid));
-        } catch {
-            continue;
-        }
-        if (appId) byId.set(appId, [...(byId.get(appId) ?? []), pid]);
-    }
     const apps: AudioApp[] = [];
-    for (const [appId, members] of byId) {
+    for (const [appId, members] of appUnits(pids, readCgroup)) {
         if (members.some(isOwnProcess)) continue;
         const name = nameOf(appId);
         if (!name) continue;
         // Keep only the topmost processes: a terminal's unit also holds everything started from it, which are
         // descendants of the terminal anyway and shown on their own once they play.
-        const roots = [...new Set(members.map(rootOf))];
-        const top = roots.filter((pid) => !roots.some((other) => other !== pid && isDescendant(pid, other)));
-        apps.push({ pids: top, name, playing: false });
+        apps.push({ pids: topmostRoots(members, rootOf, isDescendant), name, playing: false });
     }
     return apps;
 }
@@ -248,6 +268,240 @@ export function mergeAudioApps(running: AudioApp[], playing: AudioApp[]): AudioA
             ? { ...app, name: `${app.name} (${app.pids[0]})` }
             : app,
     );
+}
+
+/** A window as GNOME Shell describes it to the screen-cast portal. */
+export interface ShellWindow {
+    /** The desktop file id ("org.gnome.Console.desktop"), or "window:<n>" if GNOME could not match one. */
+    appId?: string;
+    /** On Wayland the client's app_id, on X11 its WM_CLASS. */
+    wmClass?: string;
+    title?: string;
+    /** 0 for Wayland clients, 1 for X11 (XWayland) clients. */
+    clientType?: number;
+}
+
+/** What the user picked in GNOME's screen-cast dialog. */
+export type PortalPick = { type: "monitor" } | { type: "window"; window?: ShellWindow };
+
+/** A D-Bus variant in `busctl --json` output. */
+type BusValue = { type?: string; data?: unknown };
+
+/**
+ * Read GNOME's screen-cast portal from `busctl monitor --json=short` lines: the window list GNOME Shell hands it
+ * (org.gnome.Shell.Introspect.GetWindows) and what it asks mutter to record (RecordMonitor or RecordWindow). The last
+ * Record call wins.
+ */
+export function parsePortalPick(lines: string[]): PortalPick | undefined {
+    const windows = new Map<string, ShellWindow>();
+    let pick: PortalPick | undefined;
+    for (const line of lines) {
+        let message: { member?: string; payload?: { type?: string; data?: unknown[] } };
+        try {
+            message = JSON.parse(line);
+        } catch {
+            continue;
+        }
+        const payload = message.payload;
+        if (payload?.type === "a{ta{sv}}") {
+            const list = (payload.data?.[0] ?? {}) as Record<string, Record<string, BusValue>>;
+            for (const [id, props] of Object.entries(list)) {
+                const value = (key: string): unknown => props[key]?.data;
+                windows.set(id, {
+                    appId: typeof value("app-id") === "string" ? (value("app-id") as string) : undefined,
+                    wmClass: typeof value("wm-class") === "string" ? (value("wm-class") as string) : undefined,
+                    title: typeof value("title") === "string" ? (value("title") as string) : undefined,
+                    clientType: typeof value("client-type") === "number" ? (value("client-type") as number) : undefined,
+                });
+            }
+        } else if (message.member === "RecordMonitor") {
+            pick = { type: "monitor" };
+        } else if (message.member === "RecordWindow") {
+            const props = (payload?.data?.[0] ?? {}) as Record<string, BusValue>;
+            pick = { type: "window", window: windows.get(String(props["window-id"]?.data)) };
+        }
+    }
+    return pick;
+}
+
+/**
+ * Watches the session bus while the portal picker is open, to learn what the user picked. Read only, limited to
+ * mutter's screen-cast calls and GNOME Shell's replies, and stopped as soon as the share starts.
+ */
+export class PortalPickWatcher {
+    private readonly lines: string[] = [];
+    private child: ChildProcess | null;
+
+    public constructor(
+        spawnMonitor: (args: string[]) => ChildProcess = (args) =>
+            spawn("busctl", args, { stdio: ["ignore", "pipe", "ignore"] }),
+    ) {
+        let child: ChildProcess | null = null;
+        try {
+            child = spawnMonitor([
+                "--user",
+                "monitor",
+                "--json=short",
+                "--match",
+                "type=method_call,interface=org.gnome.Mutter.ScreenCast.Session",
+                "--match",
+                "type=method_return,sender=org.gnome.Shell",
+            ]);
+            child.on("error", () => this.stop());
+            let pending = "";
+            child.stdout?.on("data", (chunk: Buffer) => {
+                const parts = (pending + chunk.toString()).split("\n");
+                pending = parts.pop() ?? "";
+                this.lines.push(
+                    ...parts.filter(
+                        (line) =>
+                            line.includes("RecordMonitor") ||
+                            line.includes("RecordWindow") ||
+                            line.includes("a{ta{sv}}"),
+                    ),
+                );
+            });
+        } catch {
+            child = null;
+        }
+        this.child = child;
+    }
+
+    /** What was picked, waiting briefly for the monitor to catch up. Undefined if it cannot tell. */
+    public async pick(waitMs = 1000): Promise<PortalPick | undefined> {
+        const until = Date.now() + waitMs;
+        let pick = parsePortalPick(this.lines);
+        while (!pick && this.child && Date.now() < until) {
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            pick = parsePortalPick(this.lines);
+        }
+        return pick;
+    }
+
+    public stop(): void {
+        this.child?.kill();
+        this.child = null;
+    }
+}
+
+/**
+ * The processes connected to a Wayland display, from `ss -xpn`: the peers of the compositor's sockets on it.
+ *
+ * @param ssOutput - the output of `ss -xpn`.
+ * @param socketName - the display's socket ("wayland-0").
+ */
+export function parseWaylandClients(ssOutput: string, socketName: string): number[] {
+    const processesByInode = new Map<string, string>();
+    const peerInodes: string[] = [];
+    for (const line of ssOutput.split("\n").slice(1)) {
+        const fields = line.trim().split(/\s+/);
+        if (fields.length < 8) continue;
+        const [, , , , local, localInode, , peerInode] = fields;
+        processesByInode.set(localInode, fields.slice(8).join(" "));
+        if (local.endsWith(`/${socketName}`)) peerInodes.push(peerInode);
+    }
+    const pids = new Set<number>();
+    for (const inode of peerInodes) {
+        for (const match of (processesByInode.get(inode) ?? "").matchAll(/pid=(\d+)/g)) pids.add(Number(match[1]));
+    }
+    return [...pids];
+}
+
+// Parts of a window class that say nothing about the application.
+const GENERIC_CLASS_PARTS = new Set([
+    "com",
+    "org",
+    "net",
+    "io",
+    "app",
+    "de",
+    "uk",
+    "www",
+    "desktop",
+    "window",
+    "github",
+]);
+
+/** The distinctive words of a window class ("com.mojang.minecraft" → ["mojang", "minecraft"]). */
+export function windowClassWords(wmClass: string | undefined): string[] {
+    return (wmClass ?? "")
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter((word) => word.length >= 3 && !GENERIC_CLASS_PARTS.has(word));
+}
+
+/** How {@link resolveShellWindow} looks things up. */
+export interface WindowLookup {
+    /** The processes of the desktop application unit with this id, if one runs. */
+    unitProcesses(appId: string): number[] | undefined;
+    /** The process of the X11 window with this title. */
+    x11WindowProcess(title: string): Promise<number | undefined>;
+    /** The processes connected to the Wayland display. */
+    waylandClients(): Promise<number[]>;
+    /** A process's command line, lower case. */
+    commandLine(pid: number): string;
+    isOwnProcess(pid: number): boolean;
+    rootOf(pid: number): number;
+    isDescendant(pid: number, ancestor: number): boolean;
+}
+
+/**
+ * The main processes of the application owning a window GNOME Shell described, "own" if it is Element, or undefined
+ * if it cannot be told:
+ * 1. a window GNOME matched to a desktop file: that application's unit;
+ * 2. an X11 window: its _NET_WM_PID, found by title;
+ * 3. otherwise the one Wayland client whose command line has a distinctive word of the window class (Minecraft's
+ *    "com.mojang.minecraft" is a java process started by its launcher).
+ */
+export async function resolveShellWindow(
+    window: ShellWindow,
+    lookup: WindowLookup,
+): Promise<number[] | "own" | undefined> {
+    const decide = (members: number[]): number[] | "own" | undefined => {
+        if (members.length === 0) return undefined;
+        if (members.some((pid) => lookup.isOwnProcess(pid))) return "own";
+        return topmostRoots(
+            members,
+            (pid) => lookup.rootOf(pid),
+            (pid, other) => lookup.isDescendant(pid, other),
+        );
+    };
+
+    const desktopId = /^(.+)\.desktop$/.exec(window.appId ?? "")?.[1];
+    if (desktopId) {
+        const members = lookup.unitProcesses(desktopId);
+        if (members?.length) return decide(members);
+    }
+    if (window.clientType === 1 && window.title) {
+        const pid = await lookup.x11WindowProcess(window.title).catch(() => undefined);
+        if (pid) return decide([pid]);
+    }
+    const words = windowClassWords(window.wmClass);
+    if (words.length > 0) {
+        const clients = await lookup.waylandClients().catch((): number[] => []);
+        const matches = clients.filter((pid) => {
+            const commandLine = lookup.commandLine(pid);
+            return words.some((word) => commandLine.includes(word));
+        });
+        const roots = decide(matches);
+        if (roots === "own" || (roots && roots.length === 1)) return roots;
+    }
+    return undefined;
+}
+
+/** The process of the X11 window with this exact title, from the window manager's client list. */
+export async function findX11WindowByTitle(
+    title: string,
+    runCommand: (command: string, args: string[]) => Promise<string> = run,
+): Promise<number | undefined> {
+    const list = await runCommand("xprop", ["-root", "_NET_CLIENT_LIST"]);
+    for (const id of list.match(/0x[0-9a-f]+/gi) ?? []) {
+        const props = await runCommand("xprop", ["-id", id, "_NET_WM_NAME", "_NET_WM_PID"]).catch(() => "");
+        const name = /_NET_WM_NAME\([^)]*\) = "((?:[^"\\]|\\.)*)"/.exec(props)?.[1]?.replace(/\\(.)/g, "$1");
+        const pid = Number(/_NET_WM_PID\(CARDINAL\) = (\d+)/.exec(props)?.[1]);
+        if (name === title && pid) return pid;
+    }
+    return undefined;
 }
 
 /**
@@ -692,6 +946,52 @@ function isOwnProcess(pid: number): boolean {
     return pid === process.pid || (process.platform === "linux" && isDescendantOf(pid, process.pid));
 }
 
+/** Looks up windows GNOME Shell described, on this machine. */
+const systemWindowLookup = (): WindowLookup => {
+    const pids = (): number[] =>
+        readdirSync("/proc")
+            .filter((name) => /^\d+$/.test(name))
+            .map(Number);
+    return {
+        unitProcesses: (appId) => appUnits(pids(), (pid) => readFileSync(`/proc/${pid}/cgroup`, "utf8")).get(appId),
+        x11WindowProcess: (title) => findX11WindowByTitle(title),
+        waylandClients: async () =>
+            parseWaylandClients(await run("ss", ["-xpn"]), process.env.WAYLAND_DISPLAY || "wayland-0"),
+        commandLine: (pid) => {
+            try {
+                return readFileSync(`/proc/${pid}/cmdline`, "utf8").replaceAll("\0", " ").toLowerCase();
+            } catch {
+                return "";
+            }
+        },
+        isOwnProcess,
+        rootOf: (pid) => {
+            try {
+                return appRootProcess(pid, (p) => readlinkSync(`/proc/${p}/exe`), linuxParent);
+            } catch {
+                return pid;
+            }
+        },
+        isDescendant: (pid, ancestor) => isDescendantOf(pid, ancestor),
+    };
+};
+
+/**
+ * What the portal pick means for audio: a whole screen shares all but Element, a window its application (none for
+ * Element's own). Undefined when it cannot be told, e.g. on desktops other than GNOME.
+ */
+export async function scopeFromPortalPick(
+    pick: PortalPick | undefined,
+    lookup: WindowLookup,
+): Promise<AudioScope | undefined> {
+    if (!pick) return undefined;
+    if (pick.type === "monitor") return { apps: "all" };
+    if (!pick.window) return undefined;
+    const pids = await resolveShellWindow(pick.window, lookup).catch(() => undefined);
+    if (pids === "own") return { apps: "none" };
+    return pids ? { apps: "one", pids } : undefined;
+}
+
 /** On Wayland: ask which application to share. With no other application running, share all but Element. */
 async function waylandAudioScope(
     audio: ScreenshareAudio,
@@ -705,7 +1005,8 @@ async function waylandAudioScope(
 /**
  * Wrap a display-media request callback so that, when the page asked for audio and a source was picked, the share
  * gets the audio of the shared window's application, or of every application except Element for a whole screen. On
- * Wayland, where the portal does not say what was picked, the user chooses the application (see {@link askAudioScope}).
+ * Wayland the portal does not say what was picked: on GNOME it is read off the session bus ({@link PortalPickWatcher});
+ * otherwise the user chooses the application (see {@link askAudioScope}).
  * On Windows that is one of Chromium's loopback devices. On Linux the PipeWire loopback is started before the video is
  * handed back, and the audio is attached in the renderer by {@link addScreenshareAudio}.
  */
@@ -717,26 +1018,43 @@ export function wrapDisplayMediaCallback(
         findApp = findWindowApp,
         askApp = askAudioScope,
         wayland = isWayland(),
+        watchPortal = (): PortalPickWatcher => new PortalPickWatcher(),
+        windowLookup = systemWindowLookup,
     }: {
         audio?: ScreenshareAudio;
         findApp?: (handle: number) => Promise<number | undefined>;
         askApp?: (apps: AudioApp[]) => Promise<AudioScope>;
         wayland?: boolean;
+        watchPortal?: () => Pick<PortalPickWatcher, "pick" | "stop">;
+        windowLookup?: () => WindowLookup;
     } = {},
 ): (streams: Streams) => void {
     if (!request.audioRequested || !isScreenshareAudioEnabled()) return callback;
+    // On Wayland the portal picker opens right after this: watch it to learn what the user picks.
+    const watcher = process.platform === "linux" && wayland ? watchPortal() : undefined;
+    // Never leave the bus monitor running, e.g. if the picker is never answered.
+    const watchTimeout = watcher ? setTimeout(() => watcher.stop(), 10 * 60 * 1000) : undefined;
+    const stopWatching = (): void => {
+        clearTimeout(watchTimeout);
+        watcher?.stop();
+    };
     return (streams) => {
         // An empty id means the user cancelled the picker. (A WebFrameMain source is never passed by our handler.)
         const video = streams.video;
         if (!video || !("id" in video) || !video.id) {
+            stopWatching();
             callback(streams);
             return;
         }
         void (async (): Promise<void> => {
-            const scope =
-                process.platform === "linux" && wayland
-                    ? await waylandAudioScope(audio, askApp)
-                    : await audioScopeFor(video.id, findApp, isOwnProcess).catch((): AudioScope => ({ apps: "all" }));
+            let scope: AudioScope;
+            if (process.platform === "linux" && wayland) {
+                const pick = await watcher?.pick().catch(() => undefined);
+                stopWatching();
+                scope = (await scopeFromPortalPick(pick, windowLookup())) ?? (await waylandAudioScope(audio, askApp));
+            } else {
+                scope = await audioScopeFor(video.id, findApp, isOwnProcess).catch((): AudioScope => ({ apps: "all" }));
+            }
             if (process.platform === "win32") {
                 if (scope.apps === "none") return callback(streams);
                 const device =

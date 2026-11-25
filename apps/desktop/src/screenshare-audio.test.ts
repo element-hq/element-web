@@ -13,6 +13,11 @@ import {
     addScreenshareAudio,
     appRootProcess,
     askAudioScope,
+    findX11WindowByTitle,
+    parsePortalPick,
+    parseWaylandClients,
+    resolveShellWindow,
+    type WindowLookup,
     audioScopeFor,
     findWindowsWindowApp,
     findX11WindowApp,
@@ -624,6 +629,68 @@ describe("wrapDisplayMediaCallback", () => {
         expect(audio.start).not.toHaveBeenCalled();
     });
 
+    const noPick = (): { pick: () => Promise<undefined>; stop: () => void } => ({
+        pick: async () => undefined,
+        stop: vi.fn(),
+    });
+    const lookup = (overrides: Partial<WindowLookup> = {}): WindowLookup => ({
+        unitProcesses: () => undefined,
+        x11WindowProcess: async () => undefined,
+        waylandClients: async () => [],
+        commandLine: () => "",
+        isOwnProcess: (pid) => pid === 1,
+        rootOf: (pid) => pid,
+        isDescendant: () => false,
+        ...overrides,
+    });
+
+    it("shares the picked window's app on GNOME without asking", async () => {
+        const audio = { start: vi.fn(async () => true), listApps: vi.fn() } as unknown as ScreenshareAudio;
+        const askApp = vi.fn();
+        const stop = vi.fn();
+        const callback = vi.fn();
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            askApp,
+            wayland: true,
+            watchPortal: () => ({
+                pick: async () => ({ type: "window" as const, window: { appId: "org.gnome.Console.desktop" } }),
+                stop,
+            }),
+            windowLookup: () => lookup({ unitProcesses: (id) => (id === "org.gnome.Console" ? [300] : undefined) }),
+        })({ video: window });
+        await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
+        expect(audio.start).toHaveBeenCalledWith([300]);
+        expect(askApp).not.toHaveBeenCalled();
+        expect(stop).toHaveBeenCalled();
+    });
+
+    it("shares all but Element for a picked screen on GNOME", async () => {
+        const audio = { start: vi.fn(async () => true), listApps: vi.fn() } as unknown as ScreenshareAudio;
+        const askApp = vi.fn();
+        const callback = vi.fn();
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            askApp,
+            wayland: true,
+            watchPortal: () => ({ pick: async () => ({ type: "monitor" as const }), stop: vi.fn() }),
+        })({ video: window });
+        await vi.waitFor(() => expect(callback).toHaveBeenCalled());
+        expect(audio.start).toHaveBeenCalledWith(undefined);
+        expect(askApp).not.toHaveBeenCalled();
+    });
+
+    it("stops watching the portal when the picker is cancelled", () => {
+        const stop = vi.fn();
+        const callback = vi.fn();
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            wayland: true,
+            watchPortal: () => ({ pick: async () => undefined, stop }),
+        })({ video: { id: "", name: "" } });
+        expect(stop).toHaveBeenCalled();
+        expect(callback).toHaveBeenCalled();
+    });
+
     it("asks which app to share on Wayland", async () => {
         const audio = {
             start: vi.fn(async () => true),
@@ -631,7 +698,12 @@ describe("wrapDisplayMediaCallback", () => {
         } as unknown as ScreenshareAudio;
         const askApp = vi.fn(async () => ({ apps: "one" as const, pids: [250] }));
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            askApp,
+            wayland: true,
+            watchPortal: noPick,
+        })({
             video: window,
         });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
@@ -646,7 +718,12 @@ describe("wrapDisplayMediaCallback", () => {
         } as unknown as ScreenshareAudio;
         const askApp = vi.fn();
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            askApp,
+            wayland: true,
+            watchPortal: noPick,
+        })({
             video: window,
         });
         await vi.waitFor(() => expect(callback).toHaveBeenCalled());
@@ -662,7 +739,12 @@ describe("wrapDisplayMediaCallback", () => {
         } as unknown as ScreenshareAudio;
         const callback = vi.fn();
         const askApp = async (): Promise<{ apps: "none" }> => ({ apps: "none" });
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            askApp,
+            wayland: true,
+            watchPortal: noPick,
+        })({
             video: window,
         });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
@@ -811,5 +893,123 @@ describe("addScreenshareAudio", () => {
         const wrapped = mediaDevices.getDisplayMedia;
         addScreenshareAudio(mediaDevices, SOURCE_LABEL);
         expect(mediaDevices.getDisplayMedia).toBe(wrapped);
+    });
+});
+
+describe("parsePortalPick", () => {
+    const windows = JSON.stringify({
+        type: "method_return",
+        payload: {
+            type: "a{ta{sv}}",
+            data: [
+                {
+                    "2838073011": {
+                        "app-id": { type: "s", data: "window:102" },
+                        "wm-class": { type: "s", data: "com.mojang.minecraft" },
+                        "title": { type: "s", data: "Minecraft" },
+                        "client-type": { type: "u", data: 0 },
+                    },
+                },
+            ],
+        },
+    });
+    const record = (member: string, id?: number): string =>
+        JSON.stringify({
+            type: "method_call",
+            member,
+            payload: { type: "a{sv}", data: [id ? { "window-id": { type: "t", data: id } } : {}] },
+        });
+
+    it("finds the picked window", () => {
+        expect(parsePortalPick([windows, record("RecordWindow", 2838073011)])).toEqual({
+            type: "window",
+            window: { appId: "window:102", wmClass: "com.mojang.minecraft", title: "Minecraft", clientType: 0 },
+        });
+    });
+
+    it("finds a picked screen, and nothing before a pick", () => {
+        expect(parsePortalPick([windows, "not json", record("RecordMonitor")])).toEqual({ type: "monitor" });
+        expect(parsePortalPick([windows])).toBeUndefined();
+    });
+});
+
+describe("parseWaylandClients", () => {
+    it("lists the peers of the compositor's sockets", () => {
+        const ss = [
+            "Netid State Recv-Q Send-Q Local Address:Port Peer Address:Port Process",
+            'u_str ESTAB 0 0 /run/user/1000/wayland-0 100 * 200 users:(("gnome-shell",pid=7,fd=3))',
+            'u_str ESTAB 0 0 * 200 * 100 users:(("java",pid=42,fd=9))',
+            'u_str ESTAB 0 0 /run/user/1000/bus 300 * 400 users:(("dbus",pid=8,fd=3))',
+            'u_str ESTAB 0 0 * 400 * 300 users:(("other",pid=50,fd=4))',
+        ].join("\n");
+        expect(parseWaylandClients(ss, "wayland-0")).toEqual([42]);
+    });
+});
+
+describe("resolveShellWindow", () => {
+    const base: WindowLookup = {
+        unitProcesses: () => undefined,
+        x11WindowProcess: async () => undefined,
+        waylandClients: async () => [],
+        commandLine: () => "",
+        isOwnProcess: (pid) => pid === 1,
+        rootOf: (pid) => pid,
+        isDescendant: () => false,
+    };
+
+    it("uses the unit of a window GNOME matched to a desktop file", async () => {
+        const lookup = {
+            ...base,
+            unitProcesses: (id: string) => (id === "org.gnome.Console" ? [300, 301] : undefined),
+            isDescendant: (pid: number, a: number) => pid === 301 && a === 300,
+        };
+        expect(await resolveShellWindow({ appId: "org.gnome.Console.desktop" }, lookup)).toEqual([300]);
+    });
+
+    it("uses _NET_WM_PID for an X11 window", async () => {
+        const lookup = { ...base, x11WindowProcess: async (title: string) => (title === "Game" ? 77 : undefined) };
+        expect(await resolveShellWindow({ appId: "window:5", title: "Game", clientType: 1 }, lookup)).toEqual([77]);
+    });
+
+    it("matches a Wayland client by the window class", async () => {
+        const lookup = {
+            ...base,
+            waylandClients: async () => [10, 42, 1],
+            commandLine: (pid: number) =>
+                ({
+                    10: "/usr/bin/prismlauncher",
+                    42: "java -cp minecraft-26.3.jar net.minecraft.client.main.main",
+                    1: "electron",
+                })[pid] ?? "",
+        };
+        expect(await resolveShellWindow({ appId: "window:102", wmClass: "com.mojang.minecraft" }, lookup)).toEqual([
+            42,
+        ]);
+    });
+
+    it("recognises Element's own window", async () => {
+        const lookup = {
+            ...base,
+            waylandClients: async () => [1],
+            commandLine: () => "/usr/lib/electron /usr/lib/element/app.asar",
+        };
+        expect(await resolveShellWindow({ appId: "window:101", wmClass: "element" }, lookup)).toBe("own");
+    });
+
+    it("gives up when several clients match", async () => {
+        const lookup = { ...base, waylandClients: async () => [10, 11], commandLine: () => "/usr/bin/foo" };
+        expect(await resolveShellWindow({ appId: "window:3", wmClass: "foo" }, lookup)).toBeUndefined();
+    });
+});
+
+describe("findX11WindowByTitle", () => {
+    it("finds the window with that title", async () => {
+        const runCommand = vi.fn(async (_command: string, args: string[]) => {
+            if (args[0] === "-root") return "_NET_CLIENT_LIST(WINDOW): window id # 0x1, 0x2";
+            return args[1] === "0x2"
+                ? '_NET_WM_NAME(UTF8_STRING) = "Say \\"hi\\""\n_NET_WM_PID(CARDINAL) = 99'
+                : '_NET_WM_NAME(UTF8_STRING) = "Other"\n_NET_WM_PID(CARDINAL) = 98';
+        });
+        expect(await findX11WindowByTitle('Say "hi"', runCommand)).toBe(99);
     });
 });
