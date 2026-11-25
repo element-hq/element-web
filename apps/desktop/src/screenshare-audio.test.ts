@@ -39,6 +39,7 @@ import {
     SOURCE_NODE_NAME,
     WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO,
     windowsApplicationLoopback,
+    windowsPowerShell,
     wrapDisplayMediaCallback,
 } from "./screenshare-audio.js";
 
@@ -545,12 +546,18 @@ describe("findX11WindowApp", () => {
     });
 });
 
+describe("windowsPowerShell", () => {
+    it("is under the Windows system folder", () => {
+        expect(windowsPowerShell("D:\\Win")).toBe("D:\\Win\\System32\\WindowsPowerShell\\v1.0\\powershell.exe");
+    });
+});
+
 describe("findWindowsWindowApp", () => {
     it("passes the window handle through the environment and reads the pid", async () => {
         const runCommand = vi.fn(async () => "1234\r\n");
         await expect(findWindowsWindowApp(65794, runCommand)).resolves.toBe(1234);
         const [command, args, env] = runCommand.mock.calls[0] as unknown as [string, string[], Record<string, string>];
-        expect(command).toBe("powershell.exe");
+        expect(command).toMatch(/[\\/]System32[\\/]WindowsPowerShell[\\/]v1\.0[\\/]powershell\.exe$/i);
         expect(env).toEqual({ ELEMENT_SCREENSHARE_HWND: "65794" });
         expect(args.join(" ")).not.toContain("65794");
     });

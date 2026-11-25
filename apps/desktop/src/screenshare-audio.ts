@@ -764,13 +764,18 @@ while ($p -and $p.ExecutablePath) {
 $p.ProcessId
 `;
 
+/** PowerShell, by its full path so that nothing earlier on PATH can stand in for it. */
+export function windowsPowerShell(systemRoot = process.env.SystemRoot || "C:\\Windows"): string {
+    return path.win32.join(systemRoot, "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+}
+
 /** The main process of the application owning a Windows window. */
 export async function findWindowsWindowApp(
     handle: number,
     runCommand: (command: string, args: string[], env: Record<string, string>) => Promise<string> = run,
 ): Promise<number | undefined> {
     const output = await runCommand(
-        "powershell.exe",
+        windowsPowerShell(),
         ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", WINDOWS_FIND_APP_SCRIPT],
         { ELEMENT_SCREENSHARE_HWND: String(handle) },
     );
@@ -790,7 +795,7 @@ export class ScreenshareAudio {
     public constructor(
         private readonly runCommand: (command: string, args: string[]) => Promise<string> = run,
         private readonly spawnLoopback: (args: string[]) => ChildProcess = (args) =>
-            spawn("sh", args, { stdio: ["pipe", "ignore", "inherit"] }),
+            spawn("/bin/sh", args, { stdio: ["pipe", "ignore", "inherit"] }),
     ) {}
 
     public get running(): boolean {
