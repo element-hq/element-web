@@ -77,7 +77,7 @@ test.describe("Logout tests", () => {
         await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
         const dialog = page.getByRole("dialog", { name: "Remove this device" });
-        await dialog.getByRole("button", { name: "Get recovery key" }).click();
+        await dialog.getByRole("button", { name: "Create recovery key" }).click();
 
         const recoveryKey = await dialog.getByTestId("recoveryKey").innerText();
         await dialog.getByRole("button", { name: "Continue" }).click();
@@ -95,7 +95,7 @@ test.describe("Logout tests", () => {
         await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
         const dialog = page.getByRole("dialog", { name: "Remove this device" });
-        await dialog.getByRole("button", { name: "Get recovery key" }).click();
+        await dialog.getByRole("button", { name: "Create recovery key" }).click();
         await expect(dialog.getByText("Save your recovery key somewhere safe")).toBeVisible();
 
         // Clicking the dialog background must not dismiss the dialog
@@ -109,7 +109,7 @@ test.describe("Logout tests", () => {
 
         // The Cancel button still works and returns to the start screen
         await dialog.getByRole("button", { name: "Cancel" }).click();
-        await expect(dialog.getByRole("button", { name: "Get recovery key" })).toBeVisible();
+        await expect(dialog.getByRole("button", { name: "Create recovery key" })).toBeVisible();
     });
 
     test("Check the recovery key without leaving the logout dialog", async ({ page, app }) => {

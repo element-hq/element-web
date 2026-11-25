@@ -208,7 +208,7 @@ function warningText(warningType: WarningType): string {
         case "devices_reconfirmed":
             return "Any devices you're signed in to will need to be reconfirmed";
         case "dont_have_any_chats":
-            return "It looks like you don't have any chats yet. If this is correct, you can safely proceed with resetting your digital identity";
+            return "It looks like you don't have any encrypted chats yet. If this is correct, you can safely proceed with resetting your digital identity.";
         case "only_reset_if":
             return "Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.";
     }
