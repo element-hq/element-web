@@ -54,6 +54,12 @@ export class SDKContextClass {
     // It is only safe to set this once, as updating this value will NOT notify components using
     // this Context.
     protected _client?: MatrixClient;
+
+    /**
+     * Get the {@link MatrixClient}, or `undefined` if the user is not logged in.
+     *
+     * Equivalent to `useContext(MatrixClientContext)`.
+     */
     public get client(): MatrixClient | undefined {
         return this._client;
     }
