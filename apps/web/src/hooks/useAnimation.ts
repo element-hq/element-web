@@ -23,6 +23,7 @@ export function useAnimation(enabled: boolean, callback: (timestamp: DOMHighResT
     const handler = useCallback(
         (timestamp: DOMHighResTimeStamp) => {
             if (callback(timestamp)) {
+                // oxlint-disable-next-line react/immutability
                 handle.current = requestAnimationFrame(handler);
             } else {
                 debuglog("Finished animation!");

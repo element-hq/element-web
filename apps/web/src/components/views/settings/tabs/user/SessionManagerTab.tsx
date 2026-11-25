@@ -77,6 +77,13 @@ const useSignOut = (
             undefined, // className
             false, // isPriority
             true, // isStatic
+            {
+                onBeforeClose: async (reason) => {
+                    // Inhibit closure due to clicking in the background.
+                    // Recovery key steps must be cancelled via their own buttons (element-meta#3413)
+                    return reason !== "backgroundClick";
+                },
+            },
         );
     };
 
@@ -199,7 +206,7 @@ const SessionManagerTab: React.FC<{
 
     const onVerifyCurrentDevice = (): void => {
         const { finished } = Modal.createDialog(SetupEncryptionDialog);
-        finished.then(refreshDevices);
+        void finished.then(refreshDevices);
     };
 
     const onTriggerDeviceVerification = useCallback(
@@ -212,9 +219,9 @@ const SessionManagerTab: React.FC<{
                 verificationRequestPromise,
                 member: currentUserMember,
             });
-            finished.then(async () => {
+            void finished.then(async () => {
                 const request = await verificationRequestPromise;
-                request.cancel();
+                void request.cancel();
                 await refreshDevices();
             });
         },
@@ -247,7 +254,7 @@ const SessionManagerTab: React.FC<{
     const signOutAllOtherSessions =
         shouldShowOtherSessions && !disableMultipleSignout
             ? () => {
-                  onSignOutOtherDevices(Object.keys(otherDevices));
+                  void onSignOutOtherDevices(Object.keys(otherDevices));
               }
             : undefined;
 

@@ -521,7 +521,7 @@ export class VideoBodyViewModel
                 fetchingData: false,
             };
             this.updateSnapshotFromState();
-            this.props.videoRef.current?.play();
+            void this.props.videoRef.current?.play();
         } catch (error) {
             if (
                 this.isDisposed ||

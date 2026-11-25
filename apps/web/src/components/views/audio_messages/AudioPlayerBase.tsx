@@ -45,6 +45,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
 
     public componentDidMount(): void {
         // We don't need to de-register: the class handles this for us internally
+        // oxlint-disable-next-line element-web/no-leaked-emitter-listener
         this.props.playback.on(UPDATE_EVENT, this.onPlaybackUpdate);
 
         // Don't wait for the promise to complete - it will emit a progress update when it
@@ -61,7 +62,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
 
         switch (action) {
             case KeyBindingAction.Space:
-                this.playPauseRef.current?.toggleState();
+                void this.playPauseRef.current?.toggleState();
                 break;
             case KeyBindingAction.ArrowLeft:
                 this.seekRef.current?.left();

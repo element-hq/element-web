@@ -89,16 +89,19 @@ async function sendStickerFromPicker(page: Page) {
 
 async function expectTimelineSticker(page: Page, serverName: string, roomId: string, contentUri: string) {
     const contentId = contentUri.split("/").slice(-1)[0];
-    // Make sure it's in the right room
-    await expect(page.locator(".mx_EventTile_sticker > a")).toHaveAttribute("href", new RegExp(`/${roomId}/`));
+    // The sticker body intentionally has no room permalink. The current URL establishes the room,
+    // while the EventTileView body slot identifies the rendered sticker.
+    expect(page.url()).toContain(`/room/${roomId}`);
+    const stickerTile = page
+        .getByTestId("event-tile")
+        .filter({ has: page.locator(`img[alt="${STICKER_NAME}"]`) })
+        .last();
+    const stickerImage = stickerTile.getByTestId("event-tile-slot-body").locator(`img[alt="${STICKER_NAME}"]`);
 
     // Make sure the image points at the sticker image. We will briefly show it
     // using the thumbnail URL, but as soon as that fails, we will switch to the
     // download URL.
-    await expect(page.locator(`img[alt="${STICKER_NAME}"]`)).toHaveAttribute(
-        "src",
-        new RegExp(`/${serverName}/${contentId}`),
-    );
+    await expect(stickerImage).toHaveAttribute("src", new RegExp(`/${serverName}/${contentId}`));
 }
 
 async function expectFileTile(page: Page, roomId: string, contentUri: string) {

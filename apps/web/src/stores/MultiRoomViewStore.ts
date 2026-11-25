@@ -37,7 +37,7 @@ export class MultiRoomViewStore {
             : new RoomViewStore(this.dispatcher, this.sdkContextClass, roomId);
 
         // RoomView component does not render the room unless you call viewRoom
-        store.viewRoom({
+        void store.viewRoom({
             action: Action.ViewRoom,
             room_id: roomId,
             metricsTrigger: undefined,
@@ -53,6 +53,7 @@ export class MultiRoomViewStore {
      * Remove a RVS instance that was created by {@link getRoomViewStoreForRoom}.
      */
     public removeRoomViewStore(roomId: string): void {
+        this.stores.get(roomId)?.destroy();
         const didRemove = this.stores.delete(roomId);
         if (!didRemove) {
             logger.warn(`removeRoomViewStore called with ${roomId} but no store exists for this room.`);

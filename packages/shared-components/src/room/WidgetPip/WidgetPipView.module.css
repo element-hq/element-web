@@ -27,6 +27,16 @@ Please see LICENSE files in the repository root for full details.
     align-items: center;
 }
 
+.avatar {
+    flex-shrink: 0;
+}
+
+.name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .roundedCornerContainer {
     border-radius: var(--cpd-space-4x);
     overflow: hidden;

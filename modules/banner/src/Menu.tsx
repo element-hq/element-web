@@ -5,14 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ComponentProps, type FC, type JSX, useState } from "react";
+import { type FC, type JSX, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
 import styled, { useTheme } from "styled-components";
 import { InlineSpinner } from "@vector-im/compound-web";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type I18nApi } from "@element-hq/element-web-module-api";
 
-import { type StaticConfig } from "./config";
+import { type MenuConfig, type StaticConfig } from "./config";
 import Logo from "./Logo.tsx";
 import TriggerIcon from "./trigger.svg?react";
 
@@ -49,7 +49,7 @@ const Trigger = styled.button`
     width: ${({ theme }): string => theme.triggerWidth};
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.triggerBackgroundColorHover};
         color: ${({ theme }): string => theme.triggerColorContrast};
     }
@@ -79,7 +79,7 @@ const CloseButton = styled.button`
     border-radius: 8px;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 
@@ -100,7 +100,7 @@ const CategoryHeading = styled.h2`
 
 const LinkButton = styled.a`
     font-size: 14px;
-    color: var(--cpd-color-text-action-primary);
+    color: ${({ theme }): string => theme.menuButtonColor};
     font-weight: var(--cpd-font-weight-medium);
     display: flex;
     border-radius: 8px;
@@ -108,11 +108,11 @@ const LinkButton = styled.a`
     align-items: center;
 
     &:link {
-        color: var(--cpd-color-text-action-primary);
+        color: inherit;
     }
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: ${({ theme }): string => theme.menuButtonBackgroundColorHover};
     }
 
@@ -152,14 +152,17 @@ const Overlay = styled(motion.div)`
     left: 0;
 `;
 
+type Data = Omit<StaticConfig, keyof MenuConfig>;
+
 interface Props {
-    api: Api;
-    config: StaticConfig | Error | null; // null for loading
+    i18n: I18nApi;
+    config: MenuConfig;
+    data: Data | Error | null; // null for loading
     fallbackLogoUrl: string;
 }
 
 const Category: FC<{
-    data: StaticConfig["categories"][number];
+    data: Data["categories"][number];
 }> = ({ data }) => {
     return (
         <div>
@@ -173,31 +176,33 @@ const Category: FC<{
     );
 };
 
-const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
+const Menu: FC<Props> = ({ i18n, config, data, fallbackLogoUrl }) => {
     const theme = useTheme();
     const width = parseInt(theme.menuWidth.slice(0, -2), 10);
     const [open, setOpen] = useState(false);
 
     let content: JSX.Element;
-    const logoProps: Omit<ComponentProps<typeof Logo>, "api"> = {
-        src: fallbackLogoUrl,
-    };
+    let logoJsx: JSX.Element = (
+        <Logo
+            src={config.logo_url ?? fallbackLogoUrl}
+            height={config.logo_height !== undefined ? `${config.logo_height}px` : undefined}
+            i18n={i18n}
+        />
+    );
+    if (config.logo_href) {
+        logoJsx = <a href={config.logo_href}>{logoJsx}</a>;
+    }
 
-    if (config instanceof Error) {
-        content = <CentredContainer>{api.i18n.translate("univention_error")}</CentredContainer>;
-    } else if (config) {
+    if (data instanceof Error) {
+        content = <CentredContainer>{i18n.translate("univention_error")}</CentredContainer>;
+    } else if (data) {
         content = (
             <>
-                {config.categories.map((category) => (
+                {data.categories.map((category) => (
                     <Category key={category.name} data={category} />
                 ))}
             </>
         );
-        if (config.logo_url) {
-            logoProps.src = config.logo_url;
-        }
-        logoProps.height = config.logo_height !== undefined ? `${config.logo_height}px` : undefined;
-        logoProps.href = config.logo_href;
     } else {
         content = (
             <CentredContainer>
@@ -209,7 +214,7 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
     return (
         <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
-                <Trigger aria-haspopup={true} aria-expanded={open} aria-label={api.i18n.translate("trigger_label")}>
+                <Trigger aria-haspopup={true} aria-expanded={open} aria-label={i18n.translate("trigger_label")}>
                     <TriggerIcon />
                 </Trigger>
             </Dialog.Trigger>
@@ -232,14 +237,14 @@ const Menu: FC<Props> = ({ api, config, fallbackLogoUrl }) => {
                                 animate={{ x: 0 }}
                                 exit={{ x: -width }}
                                 transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-                                aria-label={api.i18n.translate("menu_label")}
+                                aria-label={i18n.translate("menu_label")}
                             >
                                 <Dialog.Title>
                                     <SidebarHeading>
-                                        <Logo {...logoProps} api={api} />
+                                        {logoJsx}
                                         <Dialog.Close asChild>
                                             <CloseButton
-                                                aria-label={api.i18n.translate("close_label")}
+                                                aria-label={i18n.translate("close_label")}
                                                 onClick={() => setOpen(false)}
                                             >
                                                 <svg

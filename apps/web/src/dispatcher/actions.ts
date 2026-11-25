@@ -379,11 +379,6 @@ export enum Action {
     OpenSpotlight = "open_spotlight",
 
     /**
-     * Fired when the room loaded.
-     */
-    RoomLoaded = "room_loaded",
-
-    /**
      * Opens right panel with 3pid invite information
      */
     View3pidInvite = "view_3pid_invite",
@@ -392,6 +387,12 @@ export enum Action {
      * Opens right panel room summary and focuses the search input. Use with a FocusMessageSearchPayload.
      */
     FocusMessageSearch = "focus_search",
+
+    /**
+     * Opens the given event's attachment in its document viewer in the right panel. Use with an
+     * OpenDocumentViewerPayload.
+     */
+    OpenDocumentViewer = "open_document_viewer",
 
     /**
      * Open the direct message dialog

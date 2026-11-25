@@ -27,6 +27,10 @@ import {
     type ISearchUserDirectoryResult,
     type IGetMediaConfigResult,
     type IRtcTransportsResult,
+    type IRtcLivekitGetTokenFromWidgetRequestData,
+    type IRtcLivekitGetTokenFromWidgetResponseData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    type IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -41,20 +45,15 @@ import {
     type TimelineEvents,
     type Room,
     type MatrixClient,
+    UNSTABLE_ELEMENT_FUNCTIONAL_USERS,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    type ApprovalOpts,
-    type CapabilitiesOpts,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
-import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
@@ -63,11 +62,10 @@ import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SDKContextClass } from "../../contexts/SDKContextClass";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import { ModuleApi } from "../../modules/Api";
 import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
-import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
+import SdkConfig from "../../SdkConfig.ts";
 
 function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
@@ -124,6 +122,8 @@ export class ElementWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4515RtcTransports);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitGetToken);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4533RtcLivekitDelegateDelayedLeave);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157SendDelayedEvent);
             this.allowedCapabilities.add(MatrixCapabilities.MSC4157UpdateDelayedEvent);
@@ -145,6 +145,10 @@ export class ElementWidgetDriver extends WidgetDriver {
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomEncryption).raw,
+            );
+            // So the call can ignore bots when picking who to ring and deciding whether the room is a DM
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forStateEvent(EventDirection.Receive, UNSTABLE_ELEMENT_FUNCTIONAL_USERS.name).raw,
             );
             const clientUserId = MatrixClientPeg.safeGet().getSafeUserId();
             // For the legacy membership type
@@ -225,6 +229,7 @@ export class ElementWidgetDriver extends WidgetDriver {
                 EventType.CallSDPStreamMetadataChangedPrefix,
                 EventType.CallReplaces,
                 EventType.CallEncryptionKeysPrefix,
+                "m.rtc.encryption_key",
             ];
             for (const eventType of sendRecvToDevice) {
                 this.allowedCapabilities.add(
@@ -258,20 +263,10 @@ export class ElementWidgetDriver extends WidgetDriver {
         });
 
         // Try the new module API first, then fall back to legacy paths
-        let approved: Set<string> | undefined;
-        approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
+        const approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
             toWidgetDescriptor(this.forWidget, this.inRoomId),
             requested,
         );
-        if (!approved) {
-            if (WidgetPermissionCustomisations.preapproveCapabilities) {
-                approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
-            } else {
-                const opts: CapabilitiesOpts = { approvedCapabilities: undefined };
-                ModuleRunner.instance.invoke(WidgetLifecycle.CapabilitiesRequest, opts, this.forWidget, requested);
-                approved = opts.approvedCapabilities;
-            }
-        }
         if (approved) {
             approved.forEach((cap) => {
                 allowedSoFar.add(cap);
@@ -435,14 +430,13 @@ export class ElementWidgetDriver extends WidgetDriver {
         targetRoomId: string | null = null,
     ): Promise<ISendDelayedEventDetails> {
         const { client, roomId } = this.getSendEventTarget(targetRoomId);
-        const delayOpts = { delay };
 
         let r: SendDelayedEventResponse | null;
         if (stateKey !== null) {
             // state event
             r = await client._unstable_sendDelayedStateEvent(
                 roomId,
-                delayOpts,
+                delay,
                 eventType as keyof StateEvents,
                 content satisfies StateEvents[keyof StateEvents],
                 stateKey,
@@ -451,7 +445,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             // message event
             r = await client._unstable_sendDelayedEvent(
                 roomId,
-                delayOpts,
+                delay,
                 null,
                 eventType as keyof TimelineEvents,
                 content as TimelineEvents[keyof TimelineEvents],
@@ -479,7 +473,7 @@ export class ElementWidgetDriver extends WidgetDriver {
         const r = await client._unstable_sendStickyDelayedEvent(
             roomId,
             stickyDurationMs,
-            { delay },
+            delay,
             null,
             eventType as keyof TimelineEvents,
             content as TimelineEvents[keyof TimelineEvents] & { msc4354_sticky_key: string },
@@ -543,7 +537,16 @@ export class ElementWidgetDriver extends WidgetDriver {
                     const content = userContentMap[deviceId];
                     const stringifiedContent = JSON.stringify(content);
                     invertedContentMap[stringifiedContent] = invertedContentMap[stringifiedContent] || [];
-                    invertedContentMap[stringifiedContent].push({ userId, deviceId });
+                    // "*" means every device, which the server expands for plaintext sends
+                    // but we have to for encrypted ones
+                    let deviceIds = [deviceId];
+                    if (deviceId === "*") {
+                        const devices = await crypto.getUserDeviceInfo([userId], true);
+                        deviceIds = [...(devices.get(userId)?.keys() ?? [])];
+                    }
+                    for (const id of deviceIds) {
+                        invertedContentMap[stringifiedContent].push({ userId, deviceId: id });
+                    }
                 }
             }
 
@@ -658,16 +661,9 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
         // Try the new module API first, then fall back to legacy path
-        let approved: boolean | undefined = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
+        const approved = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
             toWidgetDescriptor(this.forWidget, this.inRoomId),
         );
-
-        if (!approved) {
-            // Legacy module API fallback
-            const legacyOpts: ApprovalOpts = { approved: undefined };
-            ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, legacyOpts, this.forWidget);
-            approved = legacyOpts.approved;
-        }
 
         if (approved) {
             return observer.update({
@@ -748,12 +744,53 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     public async getRtcTransports(): Promise<IRtcTransportsResult> {
         const client = MatrixClientPeg.safeGet();
-        // Delegate to the authenticated CS endpoint (MSC4143). Any error (e.g. the
-        // homeserver not supporting it) propagates and is turned into a widget error
-        // response by ClientWidgetApi. The js-sdk Transport and widget-api IRtcTransport
-        // types are structurally identical.
-        const transports = await client._unstable_getRTCTransports();
-        return { rtc_transports: transports };
+        try {
+            // Delegate to the authenticated CS endpoint (MSC4519). The js-sdk Transport and
+            // widget-api IRtcTransport types are structurally identical.
+            const transports = await client.cachedRtcTransports.wait();
+            return { rtc_transports: transports ?? [] };
+        } catch (e) {
+            // If the homeserver does not support the API, fall back to legacy well-known lookup.
+            if (
+                e instanceof MatrixError &&
+                e.errcode === "M_UNRECOGNIZED" &&
+                SdkConfig.get("enable_client_well_known_lookups")
+            ) {
+                const wellKnown = await client.waitForClientWellKnown();
+                const foci = wellKnown?.["org.matrix.msc4143.rtc_foci"];
+                if (foci !== undefined) {
+                    if (Array.isArray(foci)) return { rtc_transports: foci };
+                    else logger.warn(`org.matrix.msc4143.rtc_foci is not an array in .well-known`);
+                }
+            }
+            // Re-throw to turn the error into a widget error response
+            throw e;
+        }
+    }
+
+    /**
+     * Obtains a JWT for a LiveKit SFU on the widget's behalf by calling the
+     * homeserver's `/rtc/livekit/get_token` endpoint (MSC4195).
+     * @experimental Part of MSC4533
+     */
+    public async getRtcLivekitToken(
+        data: IRtcLivekitGetTokenFromWidgetRequestData,
+    ): Promise<IRtcLivekitGetTokenFromWidgetResponseData> {
+        // Errors are re-thrown so that MatrixErrors reach the widget as matrix_api_error details
+        return { ...(await MatrixClientPeg.safeGet().getLivekitToken(data)) };
+    }
+
+    /**
+     * Hands a MatrixRTC session's delayed leave event over to the homeserver on
+     * the widget's behalf by calling `/rtc/livekit/delegate_delayed_leave` (MSC4195).
+     * @experimental Part of MSC4533
+     */
+    public async delegateRtcLivekitDelayedLeave(
+        data: IRtcLivekitDelegateDelayedLeaveFromWidgetRequestData,
+    ): Promise<IRtcLivekitDelegateDelayedLeaveFromWidgetResponseData> {
+        // Errors are re-thrown so that the widget can detect homeservers without support (M_UNRECOGNIZED)
+        await MatrixClientPeg.safeGet()._unstable_delegateDelayedLeave(data);
+        return {};
     }
 
     public async readEventRelations(
@@ -839,7 +876,7 @@ export class ElementWidgetDriver extends WidgetDriver {
      */
     public getKnownRooms(): string[] {
         return MatrixClientPeg.safeGet()
-            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .getVisibleRooms()
             .map((r) => r.roomId);
     }
 

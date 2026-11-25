@@ -22,7 +22,6 @@ import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-w
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import {
     OverflowHorizontalIcon,
     MinusIcon,
@@ -41,7 +40,7 @@ import dis from "../../../dispatcher/dispatcher";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ContextMenuButton } from "../../structures/ContextMenu";
-import PersistedElement, { getPersistKey } from "./PersistedElement";
+import PersistedElement, { DEFAULT_PERSISTED_Z_INDEX, getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
 import WidgetAvatar from "../avatars/WidgetAvatar";
@@ -53,7 +52,6 @@ import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
 import { parseUrl } from "../../../utils/UrlUtils";
@@ -155,6 +153,8 @@ export default class AppTile extends React.Component<IProps, IState> {
     private allowedWidgetsWatchRef?: string;
     private persistKey: string;
     private messaging?: WidgetMessaging;
+    // The widget API whose events we are listening to, which the messaging hands us when it starts
+    private listenedWidgetApi: ClientWidgetApi | null = null;
     private dispatcherRef?: string;
     private unmounted = false;
 
@@ -202,11 +202,6 @@ export default class AppTile extends React.Component<IProps, IState> {
     private hasPermissionToLoadSync = (props: IProps): boolean => {
         if (this.usingLocalWidget()) return true;
         if (!props.room) return true; // user widgets always have permissions
-
-        // Legacy module API (synchronous)
-        const opts: ApprovalOpts = { approved: undefined };
-        ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(this.props.app));
-        if (opts.approved) return true;
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
         const allowed =
@@ -319,7 +314,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onAllowedWidgetsChange = (): void => {
-        this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+        void this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
             if (this.unmounted) return;
 
             if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
@@ -378,7 +373,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Sync check already approved — start immediately, no need to re-check.
             this.startWidget();
         } else {
-            this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
+            void this.resolvePermissionToLoad(this.props).then((hasPermissionToLoad) => {
                 if (this.unmounted) return;
                 this.setState({ hasPermissionToLoad });
                 if (hasPermissionToLoad) {
@@ -427,6 +422,11 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
+
+        // The messaging can outlive this tile, e.g. while another container keeps the widget alive,
+        // so stop listening to it and to its widget API rather than relying on it to stop
+        if (this.listenedWidgetApi) this.onMessagingStop(this.listenedWidgetApi);
+        this.stopMessagingListeners();
     }
 
     private setupMessagingListeners(): void {
@@ -440,6 +440,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private readonly onMessagingStart = (widgetApi: ClientWidgetApi): void => {
+        this.listenedWidgetApi = widgetApi;
         widgetApi.on("ready", this.onWidgetReady);
         widgetApi.on("error:preparing", this.updateRequiresClient);
         // emits when the capabilities have been set up or changed
@@ -447,6 +448,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private readonly onMessagingStop = (widgetApi: ClientWidgetApi): void => {
+        if (this.listenedWidgetApi === widgetApi) this.listenedWidgetApi = null;
         widgetApi.off("ready", this.onWidgetReady);
         widgetApi.off("error:preparing", this.updateRequiresClient);
         widgetApi.off("capabilitiesNotified", this.updateRequiresClient);
@@ -469,7 +471,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private startWidget(): void {
-        this.messaging?.prepare().then(() => {
+        void this.messaging?.prepare().then(() => {
             if (this.unmounted) return;
             this.setState({ initialising: false });
         });
@@ -791,7 +793,9 @@ export default class AppTile extends React.Component<IProps, IState> {
                     appTileBody = (
                         <div className="mx_AppTile_persistedWrapper">
                             <PersistedElement
-                                zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9}
+                                zIndex={
+                                    this.props.miniMode ? zIndexAboveOtherPersistentElements : DEFAULT_PERSISTED_Z_INDEX
+                                }
                                 persistKey={this.persistKey}
                                 moveRef={this.props.movePersistedElement}
                             >

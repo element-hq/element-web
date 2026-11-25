@@ -130,7 +130,11 @@ test.describe("Account user settings tab", () => {
         await expect(page.getByRole("tooltip")).toHaveText("Account");
     });
 
-    test("should support adding and removing a profile picture", async ({ uut, page }) => {
+    test("should support adding and removing a profile picture", async ({ uut, page, browserName }) => {
+        // Firefox and WebKit block service workers (see playwright.config.ts), so the avatar thumbnail is
+        // requested without the access token, which the test homeserver rejects with a 404.
+        test.skip(browserName !== "chromium", "needs the service worker to load authenticated media");
+
         const profileSettings = uut.locator(".mx_UserProfileSettings");
         // Upload a picture
         await profileSettings.getByAltText("Upload").setInputFiles(getSampleFilePath("riot.png"));

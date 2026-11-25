@@ -20,7 +20,6 @@
         "back": "Reen",
         "cancel": "Nuligi",
         "change": "Ŝanĝi",
-        "click_to_copy": "Klaku por kopii",
         "close": "Fermi",
         "collapse": "Maletendi",
         "complete": "Fini",
@@ -849,7 +848,6 @@
         "name_mxid_share_room": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), aŭ <a>diskonigu la ĉambron</a>.",
         "name_mxid_share_space": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), aŭ <a>diskonigu ĉi tiun aron</a>.",
         "recents_section": "Freŝaj interparoloj",
-        "room_failed_partial": "Ni sendis la aliajn, sed la ĉi-subaj personoj ne povis ricevi inviton al <RoomName/>",
         "room_failed_partial_title": "Ne povis sendi iujn invitojn",
         "room_failed_title": "Malsukcesis inviti uzantojn al %(roomName)s",
         "send_link_prompt": "Aŭ sendu invitan ligilon",
@@ -939,7 +937,6 @@
         "bridge_state_manager": "Ĉi tiu ponto estas administrata de <user />.",
         "bridge_state_workspace": "Laborspaco: <networkLink/>",
         "currently_experimental": "Nuntempe eksperimenta.",
-        "custom_themes": "Subteni aldonadon de propraj haŭtoj",
         "element_call_video_rooms": "Element Call videoĉambroj",
         "group_developer": "Programisto",
         "group_encryption": "Ĉifrado",
@@ -997,8 +994,6 @@
     "language_dropdown_label": "Lingva falmenuo",
     "leave_room_dialog": {
         "last_person_warning": "Vi estas la nura persono tie ĉi. Se vi foriros, neniu alia plu povos aliĝi, inkluzive vin mem.",
-        "leave_room_question": "Ĉu vi certe volas forlasi la ĉambron '%(roomName)s'?",
-        "leave_space_question": "Ĉu vi certe volas forlasi la aron «%(spaceName)s»?",
         "room_rejoin_warning": "Ĉi tiu ĉambro ne estas publika. Vi ne povos re-aliĝi sen invito.",
         "space_rejoin_warning": "Ĉi tiu aro ne estas publika. Vi ne povos re-aliĝi sen invito."
     },
@@ -1052,8 +1047,7 @@
         "level_activity": "Aktiveco",
         "level_none": "Neniu",
         "mark_all_read": "Marki ĉion legita",
-        "mentions_keywords": "Mencioj kaj ĉefvortoj",
-        "message_didnt_send": "Mesaĝo ne sendiĝis. Klaku por akiri informojn."
+        "mentions_keywords": "Mencioj kaj ĉefvortoj"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s petas kontrolon"
@@ -1133,8 +1127,6 @@
         "count_of_successfully_restored_keys": "Sukcese rehavis %(sessionCount)s ŝlosilojn",
         "enter_key_description": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurajn mesaĝojn per enigo de via Sekureca ŝlosio.",
         "enter_key_title": "Enigu Sekurecan ŝlosilon",
-        "enter_phrase_description": "Aliru vian historion de sekuraj mesaĝoj kaj agordu sekurigitajn mesaĝojn per enigo de via Sekureca frazo.",
-        "enter_phrase_title": "Enigu Sekurecan frazon",
         "incorrect_security_phrase_dialog": "Ne povis malĉifri savkopion per ĉi tiu Sekureca frazo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan frazon.",
         "incorrect_security_phrase_title": "Malĝusta Sekureca frazo",
         "key_backup_warning": "<b>Averto</b>: vi agordu ŝlosilan savkopion nur per fidata komputilo.",
@@ -1145,7 +1137,6 @@
         "load_error_content": "Ne povas legi staton de savkopio",
         "load_keys_progress": "%(completed)s el %(total)s ŝlosiloj rehaviĝis",
         "no_backup_error": "Neniu savkopio troviĝis!",
-        "phrase_forgotten_text": "Se vi forgesis vian Sekurecan frazon, vi povas <button1>uzi vian Sekurecan ŝlosilon</button1> aŭ <button2>agordi novajn elekteblojn de rehavo</button2>",
         "recovery_key_mismatch_description": "Ne povis malĉifri savkopion per ĉi tiu Sekureca ŝlosilo: bonvolu kontroli, ĉu vi enigis la ĝustan Sekurecan ŝlosilon.",
         "recovery_key_mismatch_title": "Malakordo de Sekureca ŝlosilo",
         "restore_failed_error": "Ne povas rehavi savkopion"
@@ -1510,8 +1501,6 @@
             "custom_font_description": "Agordu la nomon de tiparo instalita en via sistemo kaj %(brand)s provos ĝin uzi.",
             "custom_font_name": "Nomo de sistema tiparo",
             "custom_font_size": "Uzi propran grandon",
-            "custom_theme_error_downloading": "Eraris elŝuto de informoj pri haŭto.",
-            "custom_theme_invalid": "Nevalida skemo de haŭto.",
             "font_size": "Grando de tiparo",
             "image_size_default": "Ordinara",
             "layout_bubbles": "Mesaĝaj vezikoj",
@@ -1722,7 +1711,6 @@
             "verified_sessions": "Kontrolitaj salutaĵoj",
             "verify_session": "Kontroli salutaĵon"
         },
-        "show_breadcrumbs": "Montri tujirilojn al freŝe rigarditaj ĉambroj super la listo de ĉambroj",
         "show_chat_effects": "Montri grafikaĵojn en babilujo (ekz. movbildojn, ricevante konfetojn)",
         "show_displayname_changes": "Montri ŝanĝojn de vidigaj nomoj",
         "show_read_receipts": "Montri legokonfirmojn senditajn de aliaj uzantoj",
@@ -2149,10 +2137,6 @@
         "reply": {
             "error_loading": "Ne povas enlegi la responditan okazon; aŭ ĝi ne ekzistas, aŭ vi ne rajtas vidi ĝin.",
             "in_reply_to": "<a>Responde al</a> <pill>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Vi estas direktota al ekstera retejo por aŭtentikigi vian konton por uzo kun %(integrationsUrl)s. Ĉu vi volas daŭrigi tion?",
-            "dialog_title": "Aldoni kunigon"
         },
         "self_redaction": "Mesaĝo foriĝis",
         "send_state_failed": "Malsukcesis sendi",

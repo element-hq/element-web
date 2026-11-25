@@ -67,7 +67,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         this.props.verifier.on(VerifierEvent.ShowSas, this.onVerifierShowSas);
         this.props.verifier.on(VerifierEvent.Cancel, this.onVerifierCancel);
-        this.fetchOpponentProfile();
+        void this.fetchOpponentProfile();
     }
 
     public componentWillUnmount(): void {
@@ -75,6 +75,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             this.props.verifier.cancel(new Error("User cancel"));
         }
         this.props.verifier.removeListener(VerifierEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.removeListener(VerifierEvent.Cancel, this.onVerifierCancel);
     }
 
     private async fetchOpponentProfile(): Promise<void> {
@@ -125,7 +126,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
     };
 
     private onSasMatchesClick = (): void => {
-        this.showSasEvent?.confirm();
+        void this.showSasEvent?.confirm();
         this.setState({
             phase: PHASE_WAIT_FOR_PARTNER_TO_CONFIRM,
         });

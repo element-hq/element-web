@@ -265,7 +265,7 @@ export class EventTileActionBarViewModel
             this.addListenerCleanup(() => roomState.off(RoomStateEvent.Events, this.onRoomEvent));
         }
 
-        MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
+        void MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
         void this.updateDownloadPermission(++this.downloadPermissionRequestId);
     }
 

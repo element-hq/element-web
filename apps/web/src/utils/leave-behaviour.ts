@@ -24,7 +24,6 @@ import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import { type AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { bulkSpaceBehaviour } from "./space";
 import { SDKContextClass } from "../contexts/SDKContextClass";
-import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
 
 export async function leaveRoomBehaviour(
@@ -39,11 +38,7 @@ export async function leaveRoomBehaviour(
     }
 
     let leavingAllVersions = true;
-    const history = matrixClient.getRoomUpgradeHistory(
-        roomId,
-        true,
-        SettingsStore.getValue("feature_dynamic_room_predecessors"),
-    );
+    const history = matrixClient.getRoomUpgradeHistory(roomId, true);
     if (history && history.length > 0) {
         const currentRoom = history[history.length - 1];
         if (currentRoom.roomId !== roomId) {
@@ -196,7 +191,7 @@ export const leaveSpace = (space: Room): void => {
         },
         "mx_LeaveSpaceDialog_wrapper",
     );
-    finished.then(async ([leave, rooms]) => {
+    void finished.then(async ([leave, rooms]) => {
         if (!leave) return;
         await bulkSpaceBehaviour(space, rooms!, (room) => leaveRoomBehaviour(space.client, room.roomId));
 

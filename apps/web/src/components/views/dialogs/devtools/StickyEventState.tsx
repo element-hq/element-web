@@ -57,7 +57,7 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
                     type="critical"
                     title={_t("common|error")}
                     actions={
-                        <button onClick={onBack} type="button">
+                        <button onClick={onBack} className="mx_LegacyDialogButton" type="button">
                             {_t("action|back")}
                         </button>
                     }
@@ -113,7 +113,7 @@ export const StickyStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
                 {uniqueEventTypes.map((eventType) => (
                     <button
                         key={eventType}
-                        className="mx_DevTools_button"
+                        className="mx_LegacyDialogButton mx_DevTools_button"
                         onClick={() => setEventType(eventType)}
                         type="button"
                     >

@@ -21,7 +21,7 @@ export async function randomArray(size: number): Promise<string> {
             if (err) {
                 reject(err);
             } else {
-                resolve(buf.toString("base64").replace(/=+$/g, ""));
+                resolve(buf.toString("base64").replace(/[=]+$/g, ""));
             }
         });
     });
@@ -40,7 +40,8 @@ export function loadJsonFile<T extends JsonDocument>(...paths: string[]): T {
         return {} as T;
     }
 
-    const file = fs.readFileSync(joinedPaths, { encoding: "utf-8" });
+    // Editors on Windows commonly save UTF-8 files with a byte order mark, which JSON.parse rejects.
+    const file = fs.readFileSync(joinedPaths, { encoding: "utf-8" }).replace(/^\uFEFF/, "");
     return JSON.parse(file);
 }
 

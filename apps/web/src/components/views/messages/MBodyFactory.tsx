@@ -6,12 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
     ImageBodyView,
+    MediaPreviewGroupPreview,
     RedactedBodyView,
     VideoBodyView,
     useCreateAutoDisposedViewModel,
@@ -29,15 +30,32 @@ import { RedactedBodyViewModel } from "../../../viewmodels/message-body/Redacted
 import { getRedactedBodyViewModelProps } from "../../../viewmodels/room/timeline/event-tile/EventTileRedactedBodyState";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { type MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { MBodyTileViewModel } from "../../../viewmodels/message-body/MBodyTileViewModel";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
-export function FileBodyFactory({
-    mxEvent,
-    mediaEventHelper,
-    forExport,
-    showFileInfo,
-}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
+type FileBodyProps = Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">;
+
+export function FileBodyFactory(props: FileBodyProps): JSX.Element {
+    // Only the standalone m.file body uses the preview tile. Image/video/audio bodies embed this as a
+    // fallback for media they cannot render themselves — sometimes download-only (`showFileInfo: false`)
+    // in the panels which don't render the media, e.g. the files and notification panels — and those,
+    // like exports, keep the classic file body.
+    if (props.forExport || props.showFileInfo === false || props.mxEvent.getContent().msgtype !== MsgType.File) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    // preview file body can't handle this, let the legacy file body handle it
+    if (props.mediaEventHelper === undefined) {
+        return <LegacyFileBody {...props} />;
+    }
+
+    return <PreviewFileBody mediaEventHelper={props.mediaEventHelper} mxEvent={props.mxEvent} />;
+}
+
+/// the old look for files, still used for images, videos, audio, voice messages
+function LegacyFileBody({ mxEvent, mediaEventHelper, forExport, showFileInfo }: FileBodyProps): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
@@ -66,6 +84,22 @@ export function FileBodyFactory({
     }, [mxEvent, mediaEventHelper, forExport, showFileInfo, timelineRenderingType, vm]);
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
+}
+
+interface PreviewFileBodyProps {
+    mxEvent: MatrixEvent;
+    mediaEventHelper: MediaEventHelper;
+}
+
+/// the new preview file tile
+function PreviewFileBody({ mxEvent, mediaEventHelper }: PreviewFileBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new MBodyTileViewModel(mxEvent, mediaEventHelper));
+
+    return (
+        <div className="mx_EventTile_content">
+            <MediaPreviewGroupPreview vm={vm} />
+        </div>
+    );
 }
 
 export function VideoBodyFactory({

@@ -193,7 +193,10 @@ test.describe("RightPanel", () => {
                 await dialog.getByRole("switch", { name: "Leave room" }).click();
                 await dialog.getByLabel("reason").fill("This room should be reported");
                 await dialog.getByRole("button", { name: "Send report" }).click();
-                await page.getByRole("dialog", { name: "Leave room" }).getByRole("button", { name: "Leave" }).click();
+                await page
+                    .getByRole("dialog", { name: `Leave '${ROOM_NAME}'?` })
+                    .getByRole("button", { name: "Leave" })
+                    .click();
 
                 // Dialog should have gone
                 await expect(page.locator(".mx_Dialog")).toHaveCount(0);

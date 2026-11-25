@@ -32,11 +32,19 @@ if [ "$js_sdk_dep" = "github:matrix-org/matrix-js-sdk#develop" ]; then
         git -C matrix-js-sdk fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF
         git -C matrix-js-sdk -c advice.detachedHead=false checkout $JS_SDK_GITHUB_BASE_REF
     fi
+
+    # Install matrix-js-sdk's build dependencies
     pnpm -C matrix-js-sdk install --frozen-lockfile --ignore-scripts
 
-    # Link into into element-web & the monorepo
-    pnpm -C apps/web link ./matrix-js-sdk
-    pnpm link ./matrix-js-sdk
+    # Rather than using `pnpm link` (or `pnpm install ./matrix-js-sdk`, which
+    # does the same thing), we build the js-sdk into a tarball and then install
+    # that.
+    #
+    # This is preferable because it better reflects the behaviour when doing a clean
+    # `pnpm install` in a checkout of element-web: for example, js-sdk dependencies may
+    # be hoisted and shared with element-web, and there is no tsconfig.json.
+    pnpm -C matrix-js-sdk pack --out matrix-js-sdk.tgz
+    pnpm -C apps/web install $(pwd)/matrix-js-sdk/matrix-js-sdk.tgz
 else
-    echo "layered.sh: Skipping matrix-js-sdk fetch and link as package.json pins $js_sdk_dep"
+    echo "layered.sh: Skipping matrix-js-sdk fetch and install as package.json pins $js_sdk_dep"
 fi

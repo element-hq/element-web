@@ -14,7 +14,8 @@ env:
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     lint:
@@ -55,18 +56,19 @@ jobs:
                       install: normal
                       command: "lint:unused-settings"
         name: ${{ matrix.name }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-              if: matrix.install != ''
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
+                  # Nothing to cache for the jobs that do not install
+                  cache: ${{ matrix.install != '' }}
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: false
 
             - name: Install Dependencies (layered)
               if: matrix.install == 'layered'
@@ -95,56 +97,97 @@ jobs:
 
     zizmor:
         name: Zizmor Github Actions lint
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             security-events: write
+            contents: read
+            actions: read
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+              uses: zizmorcore/zizmor-action@1b4550e929643b8b26a62303c6bd64814271a4f1 # v0.9.2
 
     i18n:
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - name: Element Web
-                      path: "apps/web"
-                      allowed-hardcoded-keys: |
-                          console_dev_note
-                          labs|element_call_video_rooms
-                          labs|feature_disable_call_per_sender_encryption
-                          voip|element_call
-                          error|invalid_json
-                          error|misconfigured
-                          welcome|title_element
-                          devtools|settings|elementCallUrl
-                          labs|sliding_sync_description
-                          settings|voip|noise_suppression_description
-                          settings|voip|echo_cancellation_description
-                    - name: Element Desktop
-                      path: "apps/desktop"
-                    - name: Shared Components
-                      path: "packages/shared-components"
-        name: "i18n Check (${{ matrix.name }})"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
-        permissions:
-            pull-requests: read
-        with:
-            hardcoded-words: "Element"
-            packageManager: pnpm
-            path: ${{ matrix.path }}
-            allowed-hardcoded-keys: ${{ matrix.allowed-hardcoded-keys }}
+        name: i18n Check
+        runs-on: ubuntu-26.04
+        env:
+            HARDCODED_WORDS: Element
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+              with:
+                  persist-credentials: false
+                  # Brings in the merge commit's parents, so the PR's changes are its diff from the first
+                  fetch-depth: 2
+
+            # Other translation files are only changed by Localazy, as other changes confuse it in lossy ways
+            - name: Assert only en_EN was modified
+              if: |
+                  github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotRobot' && github.event.pull_request.user.login != 't3chguy'
+              run: |
+                  if git diff --name-only HEAD^1 HEAD -- \
+                      ':(glob)apps/web/src/i18n/strings/*' \
+                      ':(glob)apps/desktop/src/i18n/strings/*' \
+                      ':(glob)packages/shared-components/src/i18n/strings/*' \
+                      ':(exclude,glob)**/en_EN.json' | grep .; then
+                      echo "::error::Only translation files modified by 'pnpm i18n' can be committed - other translation files will confuse Localazy in lossy ways."
+                      exit 1
+                  fi
+
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
+              with:
+                  cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: true
+                  require-lockfile: true
+
+            # Each project is checked on its own as they allow different hardcoded keys
+            - name: Run i18n (Element Web)
+              working-directory: apps/web
+              run: pnpm run i18n
+              env:
+                  ALLOWED_HARDCODED_KEYS: |
+                      console_dev_note
+                      labs|element_call_video_rooms
+                      labs|feature_matrixrtc_slots
+                      labs|feature_matrixrtc_slots_description
+                      voip|element_call
+                      error|invalid_json
+                      error|misconfigured
+                      welcome|title_element
+                      devtools|settings|elementCallUrl
+                      labs|sliding_sync_description
+                      settings|voip|noise_suppression_description
+                      settings|voip|echo_cancellation_description
+                      labs|feature_element_call_react
+                      devtools|settings|elementCallMockComponent
+
+            - name: Run i18n (Element Desktop)
+              if: ${{ !cancelled() }}
+              working-directory: apps/desktop
+              run: pnpm run i18n
+
+            - name: Run i18n (Shared Components)
+              if: ${{ !cancelled() }}
+              working-directory: packages/shared-components
+              run: pnpm run i18n
+              env:
+                  ALLOWED_HARDCODED_KEYS: |
+                      voip|element_call_mock|title
+
+            - name: Assert no changes
+              if: ${{ !cancelled() }}
+              run: git diff --exit-code
 
     # Dummy job to simplify branch protections
     ci:
         name: Static Analysis
         needs: [lint, i18n, zizmor]
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-slim
         steps:
             - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
               run: exit 1

@@ -13,14 +13,15 @@ import { type QueryDict } from "matrix-js-sdk/src/utils";
 
 import { parseQsFromFragment, searchParamsToQueryDict } from "./url_utils";
 
-let lastLocationHashSet: string | null = null;
+// The hashes we have set whose hashchange events have not fired yet, oldest first, encoded as the browser does.
+let pendingLocationHashes: string[] = [];
 
 export interface IScreen {
     screen: string;
     params: QueryDict;
 }
 
-export function getScreenFromLocation(location: Location): IScreen {
+export function getScreenFromLocation(location: Location | URL): IScreen {
     const fragparts = parseQsFromFragment(location);
     return {
         screen: fragparts.location.substring(1),
@@ -30,7 +31,7 @@ export function getScreenFromLocation(location: Location): IScreen {
 
 // Here, we do some crude URL analysis to allow
 // deep-linking.
-function routeUrl(location: Location): void {
+function routeUrl(location: Location | URL): void {
     if (!window.matrixChat) return;
 
     logger.log("Routing URL ", location.href);
@@ -38,12 +39,26 @@ function routeUrl(location: Location): void {
     window.matrixChat.showScreen(s.screen, s.params);
 }
 
-function onHashChange(): void {
-    if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
-        // we just set this: no need to route it!
+/**
+ * Encode the given hash the same way the browser does when navigating to it, so it can be compared with
+ * `location.hash`.
+ */
+function encodeHash(hash: string): string {
+    return new URL(hash, "https://localhost/").hash;
+}
+
+function onHashChange(ev: HashChangeEvent): void {
+    // Use the URL this event is for rather than the current location: the hash may have changed again
+    // before the event fires, e.g. if we set it in onNewScreen, and we would then miss this navigation.
+    const location = ev.newURL ? new URL(ev.newURL) : window.location;
+
+    const pendingIndex = pendingLocationHashes.indexOf(location.hash);
+    if (pendingIndex >= 0) {
+        // we set this ourselves: no need to route it! Events fire in order, so drop any older hashes too.
+        pendingLocationHashes = pendingLocationHashes.slice(pendingIndex + 1);
         return;
     }
-    routeUrl(window.location);
+    routeUrl(location);
 }
 
 // This will be called whenever the SDK changes screens,
@@ -51,15 +66,17 @@ function onHashChange(): void {
 export function onNewScreen(screen: string, replaceLast = false): void {
     logger.log("newscreen " + screen);
     const hash = "#/" + screen;
-    lastLocationHashSet = hash;
+    const encodedHash = encodeHash(hash);
+    const currentHash = window.location.hash;
 
-    // if the new hash is a substring of the old one then we are stripping fields e.g `via` so replace history
-    if (
-        screen.startsWith("room/") &&
-        window.location.hash.includes("/$") === hash.includes("/$") && // only if both did or didn't contain event link
-        window.location.hash.startsWith(hash)
-    ) {
+    // if the new hash is the old one without its query, we are stripping fields e.g `via` so replace history
+    if (screen.startsWith("room/") && currentHash.startsWith(encodedHash + "?")) {
         replaceLast = true;
+    }
+
+    // The browser only fires hashchange if the hash actually changes
+    if (currentHash !== encodedHash) {
+        pendingLocationHashes.push(encodedHash);
     }
 
     if (replaceLast) {

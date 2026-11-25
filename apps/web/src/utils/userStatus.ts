@@ -78,7 +78,7 @@ function validateMCallStatus(rawCallStatus: unknown): UserStatus | undefined {
  * Takes both MSC4426 user status fields (m.status and m.call) and returns a UserStatus
  * object that reflects the information they represent.
  */
-export function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
+function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
     const validatedUserStatus = validateUserStatus(userStatus);
     if (validatedUserStatus) return validatedUserStatus;
 
@@ -148,7 +148,7 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
 export async function clearAllUserStatus(client: MatrixClient): Promise<void> {
     const rawUserStatus = await client.getExtendedProfileProperty(client.getSafeUserId(), "org.matrix.msc4426.status");
     if (rawUserStatus) {
-        await client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
+        await client.deleteExtendedProfileProperty("org.matrix.msc4426.status");
     }
 
     const rawCallStatus = await client.getExtendedProfileProperty(client.getSafeUserId(), "org.matrix.msc4426.call");
@@ -165,12 +165,9 @@ export async function clearAllUserStatus(client: MatrixClient): Promise<void> {
  * @param onCall Whether the user is currently on a call.
  */
 export function setUserOnCall(client: MatrixClient, onCall: boolean): Promise<void> {
-    return client.setExtendedProfileProperty(
-        "org.matrix.msc4426.call",
-        onCall
-            ? {
-                  call_joined_ts: Date.now(),
-              }
-            : null,
-    );
+    if (!onCall) {
+        return client.deleteExtendedProfileProperty("org.matrix.msc4426.call");
+    }
+
+    return client.setExtendedProfileProperty("org.matrix.msc4426.call", { call_joined_ts: Date.now() });
 }

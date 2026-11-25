@@ -8,8 +8,8 @@
 // @vitest-environment happy-dom
 
 import { it, describe, expect } from "vitest";
+import { mkRoomMember, stubClient, tearDownAfterTest } from "test-utils";
 
-import { mkRoomMember, stubClient } from "../../../../test/test-utils";
 import { FacePileViewModel } from "./FacePileViewModel";
 
 describe("FacePileViewModel", () => {
@@ -25,6 +25,7 @@ describe("FacePileViewModel", () => {
             members,
             size: 20,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot().memberAvatarViewModels).toHaveLength(3);
     });
 
@@ -36,6 +37,7 @@ describe("FacePileViewModel", () => {
             members,
             size: 20,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot().memberAvatarViewModels).toHaveLength(2);
 
         vm.updateMembers([

@@ -16,8 +16,8 @@ import { withViewDocs } from "../../../.storybook/withViewDocs";
 type WidgetPipViewProps = WidgetPipViewSnapshot & WidgetPipViewActions;
 
 // Helper components that are provided outside of this storybook
-const RoomAvatarMock: React.FC = () => (
-    <div style={{ width: 20, height: 20, borderRadius: "50%", backgroundColor: "grey" }} />
+const RoomAvatarMock: React.FC<{ className?: string; size: string }> = ({ className, size }) => (
+    <div className={className} style={{ width: size, height: size, borderRadius: "50%", backgroundColor: "grey" }} />
 );
 const PersistentAppMock: React.FC = () => <div style={{ backgroundColor: "grey", flexGrow: 1 }} />;
 
@@ -63,8 +63,14 @@ const Template: StoryFn<typeof WidgetPipViewWrapper> = (args) => <WidgetPipViewW
 /**
  * Rendered when using a widget with just a grey background.
  */
-export const WithGreyWidget = Template.bind({});
-WithGreyWidget.args = {};
+export const Default = Template.bind({});
+Default.args = {};
+
+/**
+ * Rendered with a long name that should be ellipsised.
+ */
+export const WithLongName = Template.bind({});
+WithLongName.args = { roomName: "Looooooooooooooooooooooooooooooong room name" };
 
 /**
  * Rendered when using a transparent background widget like Element Call.

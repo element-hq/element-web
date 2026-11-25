@@ -45,8 +45,8 @@ const RoomListViewWrapperImpl = ({
     setScrollToIndex,
     changeRoomSection,
     changeSectionOrder,
-    onSectionDragStart,
-    onSectionDragEnd,
+    onSectionOrRoomDragStart,
+    onSectionOrRoomDragEnd,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -62,8 +62,8 @@ const RoomListViewWrapperImpl = ({
         setScrollToIndex,
         changeRoomSection,
         changeSectionOrder,
-        onSectionDragStart,
-        onSectionDragEnd,
+        onSectionOrRoomDragStart,
+        onSectionOrRoomDragEnd,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -105,6 +105,7 @@ const meta = {
         },
         sections: mockSections,
         canCreateRoom: true,
+        canStartChat: true,
         // Action properties (callbacks)
         onToggleFilter: fn(),
         createChatRoom: fn(),
@@ -121,8 +122,8 @@ const meta = {
         setScrollToIndex: fn(),
         changeRoomSection: fn(),
         changeSectionOrder: fn(),
-        onSectionDragStart: fn(),
-        onSectionDragEnd: fn(),
+        onSectionOrRoomDragStart: fn(),
+        onSectionOrRoomDragEnd: fn(),
     },
     parameters: {
         design: {

@@ -1,0 +1,411 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<LayoutSwitcher /> > should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="layoutPanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h2
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Message layout
+      </h2>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root mx_LayoutSwitcher_LayoutSelector"
+      >
+        <div
+          class="_field mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+        >
+          <label
+            aria-label="Modern"
+            class="_label"
+            for="radix-react-use-id-1"
+          >
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+            >
+              <div
+                class="_container"
+              >
+                <input
+                  checked=""
+                  class="_input"
+                  id="radix-react-use-id-1"
+                  name="layout"
+                  title=""
+                  type="radio"
+                  value="group"
+                />
+                <div
+                  class="_ui"
+                />
+              </div>
+              <span>
+                Modern
+              </span>
+            </div>
+            <hr
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+            />
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+              role="presentation"
+            >
+              <div
+                aria-atomic="true"
+                aria-live="off"
+                class="_root mx_EventTile _stateOwnEvent _layoutGroup"
+                data-event-id="$9999999999999999999999999999999999999999999"
+                data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                data-testid="event-tile"
+                tabindex="-1"
+              >
+                <div
+                  class="_slotSender"
+                  data-testid="event-tile-slot-sender"
+                >
+                  <div
+                    class="mx_DisambiguatedProfile _disambiguatedProfile"
+                    data-event-density="default"
+                    data-event-layout="group"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <span
+                      class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                      dir="auto"
+                    >
+                      Alice
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="_slotAvatar"
+                  data-testid="event-tile-slot-avatar"
+                >
+                  <span
+                    class="_avatar mx_BaseAvatar _avatar-imageless"
+                    data-color="2"
+                    data-testid="avatar-img"
+                    data-type="round"
+                    role="presentation"
+                    style="--cpd-avatar-size: 30px;"
+                    title="@userId:matrix.org"
+                  >
+                    A
+                  </span>
+                </div>
+                <div
+                  class="_line mx_EventTile_line"
+                  data-testid="event-tile-line"
+                  id="1"
+                >
+                  <div
+                    class="_slotBody"
+                    data-testid="event-tile-slot-body"
+                  >
+                    <div
+                      class="mx_MTextBody mx_EventTile_content _root _text"
+                      data-event-density="default"
+                      data-event-layout="group"
+                    >
+                      <div
+                        class="mx_EventTile_body translate"
+                        dir="auto"
+                      >
+                        Hey you. You're the best!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div
+          class="_field mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+        >
+          <label
+            aria-label="Message bubbles"
+            class="_label"
+            for="radix-react-use-id-2"
+          >
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+            >
+              <div
+                class="_container"
+              >
+                <input
+                  class="_input"
+                  id="radix-react-use-id-2"
+                  name="layout"
+                  title=""
+                  type="radio"
+                  value="bubble"
+                />
+                <div
+                  class="_ui"
+                />
+              </div>
+              <span>
+                Message bubbles
+              </span>
+            </div>
+            <hr
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+            />
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+              role="presentation"
+            >
+              <div
+                aria-atomic="true"
+                aria-live="off"
+                class="_root mx_EventTile _stateOwnEvent _layoutBubble"
+                data-event-id="$9999999999999999999999999999999999999999999"
+                data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                data-testid="event-tile"
+                tabindex="-1"
+              >
+                <div
+                  class="_slotSender"
+                  data-testid="event-tile-slot-sender"
+                >
+                  <div
+                    class="mx_DisambiguatedProfile _disambiguatedProfile"
+                    data-event-density="default"
+                    data-event-layout="bubble"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <span
+                      class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                      dir="auto"
+                    >
+                      Alice
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="_slotAvatar"
+                  data-testid="event-tile-slot-avatar"
+                >
+                  <span
+                    class="_avatar mx_BaseAvatar _avatar-imageless"
+                    data-color="2"
+                    data-testid="avatar-img"
+                    data-type="round"
+                    role="presentation"
+                    style="--cpd-avatar-size: 30px;"
+                    title="@userId:matrix.org"
+                  >
+                    A
+                  </span>
+                </div>
+                <div
+                  class="_line mx_EventTile_line"
+                  data-testid="event-tile-line"
+                  id="2"
+                >
+                  <div
+                    class="_slotBody"
+                    data-testid="event-tile-slot-body"
+                  >
+                    <div
+                      class="mx_MTextBody mx_EventTile_content _root _text"
+                      data-event-density="default"
+                      data-event-layout="bubble"
+                    >
+                      <div
+                        class="mx_EventTile_body translate"
+                        dir="auto"
+                      >
+                        Hey you. You're the best!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div
+          class="_field mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+        >
+          <label
+            aria-label="IRC (experimental)"
+            class="_label"
+            for="radix-react-use-id-3"
+          >
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+            >
+              <div
+                class="_container"
+              >
+                <input
+                  class="_input"
+                  id="radix-react-use-id-3"
+                  name="layout"
+                  title=""
+                  type="radio"
+                  value="irc"
+                />
+                <div
+                  class="_ui"
+                />
+              </div>
+              <span>
+                IRC (experimental)
+              </span>
+            </div>
+            <hr
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+            />
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview mx_IRCLayout"
+              role="presentation"
+            >
+              <div
+                aria-atomic="true"
+                aria-live="off"
+                class="_root mx_EventTile _stateOwnEvent _layoutIrc"
+                data-event-id="$9999999999999999999999999999999999999999999"
+                data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                data-testid="event-tile"
+                tabindex="-1"
+              >
+                <div
+                  class="_slotTimestamp"
+                  data-testid="event-tile-slot-timestamp"
+                >
+                  <span
+                    aria-hidden="true"
+                  />
+                </div>
+                <div
+                  class="_slotAvatar"
+                  data-testid="event-tile-slot-avatar"
+                >
+                  <span
+                    class="_avatar mx_BaseAvatar _avatar-imageless"
+                    data-color="2"
+                    data-testid="avatar-img"
+                    data-type="round"
+                    role="presentation"
+                    style="--cpd-avatar-size: 14px;"
+                    title="@userId:matrix.org"
+                  >
+                    A
+                  </span>
+                </div>
+                <div
+                  class="_slotSender"
+                  data-testid="event-tile-slot-sender"
+                >
+                  <div
+                    class="mx_DisambiguatedProfile _disambiguatedProfile"
+                    data-event-density="default"
+                    data-event-layout="irc"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <span
+                      class="mx_Username_color2 _disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+                      dir="auto"
+                    >
+                      Alice
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="_line mx_EventTile_line"
+                  data-testid="event-tile-line"
+                  id="3"
+                >
+                  <div
+                    class="_slotBody"
+                    data-testid="event-tile-slot-body"
+                  >
+                    <div
+                      class="mx_MTextBody mx_EventTile_content _root _text"
+                      data-event-density="default"
+                      data-event-layout="irc"
+                    >
+                      <div
+                        class="mx_EventTile_body translate"
+                        dir="auto"
+                      >
+                        Hey you. You're the best!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </form>
+      <form
+        class="_root"
+      >
+        <div
+          class="_inline-field"
+        >
+          <div
+            class="_inline-field-control"
+          >
+            <div
+              class="_container"
+            >
+              <input
+                aria-describedby="radix-react-use-id-4"
+                class="_input"
+                id="radix-react-use-id-5"
+                name="compactLayout"
+                role="switch"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body"
+          >
+            <label
+              class="_label"
+              for="radix-react-use-id-5"
+            >
+              Show compact text and messages
+            </label>
+            <span
+              class="_message _help-message"
+              id="radix-react-use-id-4"
+            >
+              Modern layout must be selected to use this feature.
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="_separator"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;

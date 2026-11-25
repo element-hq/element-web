@@ -10,7 +10,6 @@
 import { it, describe, expect, vi } from "vitest";
 import { type EventTimeline, EventType, type MatrixEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "node:stream";
-
 import {
     mkEvent,
     mkMessage,
@@ -18,7 +17,9 @@ import {
     mkStubRoom,
     stubClient,
     TestSDKContext,
-} from "../../../../../../test/test-utils";
+    tearDownAfterTest,
+} from "test-utils";
+
 import { getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "./call-mocks";
 import { RootCallTileViewModel } from "./RootCallTileViewModel";
 import {
@@ -112,6 +113,7 @@ describe("RootCallTileViewModel", () => {
             mxEvent,
             legacyCallHandler,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().tileType).toStrictEqual("ongoing-call-dm");
     });
@@ -130,6 +132,7 @@ describe("RootCallTileViewModel", () => {
             mxEvent,
             legacyCallHandler,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().tileType).toStrictEqual("ongoing-call-room");
     });
@@ -144,6 +147,7 @@ describe("RootCallTileViewModel", () => {
             mxEvent,
             legacyCallHandler,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-dm");
     });
@@ -162,6 +166,7 @@ describe("RootCallTileViewModel", () => {
             mxEvent,
             legacyCallHandler,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-room");
     });
 
@@ -179,6 +184,7 @@ describe("RootCallTileViewModel", () => {
             mxEvent,
             legacyCallHandler,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-room");
 
         // Tile type should update on event

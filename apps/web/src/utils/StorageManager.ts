@@ -179,34 +179,42 @@ async function checkSyncStore(): Promise<StoreCheck> {
 }
 
 async function checkCryptoStore(): Promise<StoreCheck> {
-    // check first if there is a rust crypto store
     try {
         const rustDbExists = await IndexedDBCryptoStore.exists(getIDBFactory()!, RUST_CRYPTO_STORE_NAME);
         log(`Rust Crypto store using IndexedDB contains data? ${rustDbExists}`);
 
-        if (rustDbExists) {
-            // There was an existing rust database, so consider it healthy.
-            return { exists: true, healthy: true };
-        } else {
-            // No rust store, so let's check if there is a legacy store not yet migrated.
-            try {
-                const legacyIdbExists = await IndexedDBCryptoStore.existsAndIsNotMigrated(
-                    getIDBFactory()!,
-                    LEGACY_CRYPTO_STORE_NAME,
-                );
-                log(`Legacy Crypto store using IndexedDB contains non migrated data? ${legacyIdbExists}`);
-                return { exists: legacyIdbExists, healthy: true };
-            } catch (e) {
-                error("Legacy crypto store using IndexedDB inaccessible", e);
-            }
-
-            // No need to check local storage or memory as rust stack doesn't support them.
-            // Given that rust stack requires indexeddb, set healthy to false.
-            return { exists: false, healthy: false };
-        }
+        // No need to check local storage or memory as the rust stack doesn't support them.
+        // A missing store is not in itself unhealthy: that is the normal state before the first
+        // login. `checkConsistency` separately flags the case where we expected data to be there.
+        return { exists: rustDbExists, healthy: true };
     } catch (e) {
         error("Rust crypto store using IndexedDB inaccessible", e);
         return { exists: false, healthy: false };
+    }
+}
+
+/**
+ * Check whether this session was created by a version of the application which used the legacy
+ * (libolm) crypto stack, and was never migrated to the Rust crypto stack.
+ *
+ * The rust store is checked first, because a session which *was* migrated successfully still has
+ * the legacy database sitting on disk alongside the rust one.
+ *
+ * @returns true if there is a legacy crypto store and no rust crypto store.
+ */
+export async function hasUnmigratedLegacyCryptoStore(): Promise<boolean> {
+    const idb = getIDBFactory();
+    if (!idb) return false;
+
+    try {
+        if (await IndexedDBCryptoStore.exists(idb, RUST_CRYPTO_STORE_NAME)) return false;
+
+        const legacyDbExists = await IndexedDBCryptoStore.exists(idb, LEGACY_CRYPTO_STORE_NAME);
+        log(`Legacy crypto store using IndexedDB contains data? ${legacyDbExists}`);
+        return legacyDbExists;
+    } catch (e) {
+        error("Crypto stores using IndexedDB inaccessible", e);
+        return false;
     }
 }
 

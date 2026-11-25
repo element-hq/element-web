@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click_to_copy": "Clique para copiar",
         "close": "Fechar",
         "collapse": "Recolher",
         "complete": "Concluir",
@@ -42,7 +41,6 @@
         "decline_and_block": "Recusar e bloquear",
         "decline_invite": "Recusar convite",
         "delete": "Excluir",
-        "deny": "Negar",
         "disable": "Desativar",
         "disconnect": "Desconectar",
         "dismiss": "Dispensar",
@@ -940,7 +938,6 @@
             "warning": "Se você não excluiu a opção de recuperação, um invasor pode estar tentando acessar sua conta. Altere a senha da sua conta e defina imediatamente uma nova opção de recuperação nas Configurações."
         },
         "set_up_recovery": "Configurar a recuperação",
-        "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
         "set_up_toast_title": "Configurar o backup online",
         "turn_on_key_storage": "Ativar o armazenamento de chaves",
         "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
@@ -1329,7 +1326,6 @@
             "preparing": "Preparando convites..."
         },
         "recents_section": "Conversas recentes",
-        "room_failed_partial": "Nós enviamos aos outros, mas as pessoas abaixo não puderam ser convidadas para <RoomName/>",
         "room_failed_partial_title": "Alguns convites não puderam ser enviados",
         "room_failed_title": "Falha ao convidar usuários para %(roomName)s",
         "send_link_prompt": "Ou envie o link do convite",
@@ -1444,16 +1440,12 @@
         "bridge_state_workspace": "Espaço de trabalho: <networkLink/>",
         "click_for_info": "Clique para mais informações",
         "currently_experimental": "Atualmente experimental.",
-        "custom_themes": "Permite adicionar temas personalizados",
-        "dynamic_room_predecessors": "Predecessores de salas dinâmicas",
-        "dynamic_room_predecessors_description": "Habilitar MSC3946 (para dar suporte a arquivos de chat para quem chegar mais tarde)",
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "exclude_insecure_devices": "Excluir dispositivos inseguros ao enviar/receber mensagens",
         "exclude_insecure_devices_description": "Quando esse modo estiver ativado, as mensagens criptografadas não serão compartilhadas com dispositivos não verificados e as mensagens de dispositivos não verificados serão mostradas como um erro. Observe que, se você ativar esse modo, talvez não consiga se comunicar com usuários que não verificaram seus dispositivos.",
         "experimental_description": "Está se sentindo experimental? Experimente nossas últimas ideias em desenvolvimento. Esses recursos não estão finalizados; eles podem ser instáveis, podem mudar ou podem ser descartados completamente.<a> Saiba mais</a> .",
         "experimental_section": "Pré-visualizações antecipadas",
         "extended_profiles_msc_support": "Requer que seu servidor ofereça suporte ao MSC4133",
-        "feature_disable_call_per_sender_encryption": "Desativar a criptografia por remetente para Element Call",
         "feature_wysiwyg_composer_description": "Use rich text em vez de Markdown no compositor de mensagens.",
         "group_developer": "Desenvolvedor",
         "group_encryption": "Criptografia",
@@ -1463,7 +1455,6 @@
         "group_profile": "Perfil",
         "group_rooms": "Salas",
         "group_spaces": "Espaços",
-        "group_themes": "Temas",
         "group_threads": "Tópicos",
         "group_ui": "Interface do usuário",
         "group_voip": "Voz e vídeo",
@@ -1538,8 +1529,6 @@
     "language_dropdown_label": "Menu suspenso de idiomas",
     "leave_room_dialog": {
         "last_person_warning": "Você é a única pessoa aqui. Se você sair, ninguém poderá se juntar no futuro, inclusive você.",
-        "leave_room_question": "Tem certeza de que deseja sair da sala '%(roomName)s'?",
-        "leave_space_question": "Tem certeza de que deseja sair desse espaço '%(spaceName)s'?",
         "room_leave_admin_warning": "Você é o único administrador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_leave_mod_warning": "Você é o único moderador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_rejoin_warning": "Esta sala não é pública. Você não poderá entrar novamente sem um convite.",
@@ -1608,7 +1597,6 @@
     },
     "member_list_back_action_label": "Membros da sala",
     "message_edit_dialog_title": "Edições na mensagem",
-    "migrating_crypto": "Aguente firme. Estamos atualizando %(brand)s para tornar a criptografia mais rápida e confiável.",
     "mobile_guide": {
         "toast_accept": "Usar o aplicativo",
         "toast_description": "%(brand)s é experimental em um navegador da Web móvel. Para uma melhor experiência e os recursos mais recentes, use nosso aplicativo nativo gratuito.",
@@ -1643,7 +1631,6 @@
         "mentions_and_keywords": "@menções e palavras-chave",
         "mentions_and_keywords_description": "Receba notificações apenas com menções e palavras-chave conforme definido em suas <a>configurações</a>",
         "mentions_keywords": "Menções e palavras-chave!",
-        "message_didnt_send": "A mensagem não foi enviada. Clique para mais informações.",
         "mute_description": "Você não receberá nenhuma notificação"
     },
     "notifier": {
@@ -1761,8 +1748,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s chaves foram restauradas com sucesso",
         "enter_key_description": "Acesse o seu histórico de mensagens seguras e configure as mensagens seguras, ao inserir a sua Chave de Recuperação.",
         "enter_key_title": "Digite a Chave de Recuperação",
-        "enter_phrase_description": "Acesse o seu histórico de mensagens seguras e configure mensagens seguras digitando a sua Frase de Segurança.",
-        "enter_phrase_title": "Digite a Frase de Segurança",
         "incorrect_security_phrase_dialog": "O backup não pôde ser descriptografado com esta Frase de Segurança: verifique se você digitou a Frase de Segurança correta.",
         "incorrect_security_phrase_title": "Frase de Segurança incorreta",
         "key_backup_warning": "<b>Atenção</b>: você só deve configurar o backup de chave em um computador de sua confiança.",
@@ -1774,7 +1759,6 @@
         "load_error_content": "Não foi possível carregar o status do backup",
         "load_keys_progress": "%(completed)s de %(total)s chaves restauradas",
         "no_backup_error": "Nenhum backup encontrado!",
-        "phrase_forgotten_text": "Se você esqueceu a sua Frase de Segurança, você pode <button1>usar a sua Chave de Recuperação</button1> ou <button2>definir novas opções de recuperação</button2>",
         "recovery_key_mismatch_description": "O backup não pôde ser descriptografado com essa chave de recuperação: verifique se você inseriu a chave de recuperação correta.",
         "recovery_key_mismatch_title": "Incompatibilidade da chave de recuperação",
         "restore_failed_error": "Não foi possível restaurar o backup"
@@ -1943,7 +1927,6 @@
         "join_button_account": "Inscrever-se",
         "join_failed_needs_invite": "Para ver %(roomName)s, você precisa de um convite",
         "join_the_discussion": "Participar da discussão",
-        "join_title": "Entre na sala para participar",
         "join_title_account": "Participar da conversa com uma conta",
         "joining": "Juntando-se…",
         "joining_room": "Entrando na sala…",
@@ -2350,11 +2333,6 @@
             "custom_font_description": "Defina o nome de uma fonte instalada no seu sistema e o %(brand)s tentará usá-la.",
             "custom_font_name": "Nome da fonte do sistema",
             "custom_font_size": "Usar tamanho personalizado",
-            "custom_theme_add": "Adicionar tema personalizado",
-            "custom_theme_downloading": "Baixando tema personalizado...",
-            "custom_theme_error_downloading": "Erro ao baixar o tema",
-            "custom_theme_help": "Insira o URL de um tema personalizado que você deseja aplicar.",
-            "custom_theme_invalid": "Esquema inválido de tema.",
             "dialog_title": "<strong>Configurações:</strong> Aparência",
             "font_size": "Tamanho da fonte",
             "font_size_default": "%(fontSize)s (padrão)",
@@ -2405,14 +2383,6 @@
             },
             "confirm_key_storage_off": "Tem certeza de que deseja manter o armazenamento de chaves desativado?",
             "confirm_key_storage_off_description": "Se você sair de todos os seus dispositivos, perderá o histórico de mensagens e precisará verificar todos os seus contatos existentes novamente. <a>Saiba mais</a>",
-            "delete_key_storage": {
-                "breadcrumb_page": "Excluir armazenamento de chaves",
-                "confirm": "Excluir armazenamento de chaves",
-                "description": "A exclusão do armazenamento de chaves removerá sua identidade criptográfica e as chaves de mensagem do servidor e desativará os seguintes recursos de segurança:",
-                "list_first": "Você não terá histórico de mensagens criptografadas em novos dispositivos",
-                "list_second": "Você perderá o acesso às suas mensagens criptografadas se estiver desconectado de %(brand)s em todos os lugares",
-                "title": "Tem certeza de que deseja desativar o armazenamento de chaves e excluí-lo?"
-            },
             "device_not_verified_button": "Verificar este dispositivo",
             "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
             "device_not_verified_title": "Dispositivo não verificado",
@@ -2429,7 +2399,6 @@
                 "change_recovery_key": "Alterar chave de recuperação",
                 "change_recovery_key_description": "Anote esta nova chave de recuperação em algum lugar seguro. Então clique em Continue para confirmar a alteração.",
                 "change_recovery_key_title": "Alterar a chave de recuperação?",
-                "description": "Recupere sua identidade criptográfica e histórico de mensagens com uma chave de recuperação se você tiver perdido todos os seus dispositivos existentes.",
                 "enter_key_error": "A chave de recuperação que você inseriu não está correta.",
                 "enter_recovery_key": "Insira a chave de recuperação",
                 "forgot_recovery_key": "Esqueceu a chave de recuperação?",
@@ -2440,10 +2409,8 @@
                 "set_up_recovery_confirm_button": "Concluir a configuração",
                 "set_up_recovery_confirm_description": "Digite a chave de recuperação mostrada na tela anterior para concluir a configuração da recuperação.",
                 "set_up_recovery_confirm_title": "Digite sua chave de recuperação para confirmar",
-                "set_up_recovery_description": "Seu armazenamento de chaves é protegido por uma chave de recuperação. Se precisar de uma nova chave de recuperação após a configuração, você pode recriá-la selecionando '%(changeRecoveryKeyButton)s'.",
                 "set_up_recovery_save_key_description": "Anote essa chave de recuperação em algum lugar seguro, como um gerenciador de senhas, uma nota criptografada ou um cofre físico.",
                 "set_up_recovery_save_key_title": "Salve sua chave de recuperação",
-                "set_up_recovery_secondary_description": "Depois de clicar em continuar, geraremos uma chave de recuperação para você.",
                 "title": "Recuperação"
             },
             "title": "Criptografia"
@@ -2829,7 +2796,6 @@
             "web_session": "Sessão web"
         },
         "show_avatar_changes": "Mostrar alterações na foto do perfil",
-        "show_breadcrumbs": "Mostrar atalhos para salas recentemente visualizadas acima da lista de salas",
         "show_chat_effects": "Mostrar efeitos na conversa (por exemplo: animações ao receber confetes)",
         "show_displayname_changes": "Mostrar alterações de nome e sobrenome",
         "show_join_leave": "Mostrar mensagens de entrada/saída (convites/remoções/bans não são afetados)",
@@ -3142,9 +3108,7 @@
         "show_thread_filter": "Exibir:"
     },
     "threads_activity_centre": {
-        "header": "Atividade de tópicos",
-        "no_rooms_with_threads_notifs": "Você ainda não tem salas com notificações de tópicos.",
-        "no_rooms_with_unread_threads": "Você ainda não tem salas com tópicos não lidos."
+        "header": "Atividade de tópicos"
     },
     "time": {
         "date_at_time": "%(date)s às %(time)s",
@@ -3417,10 +3381,6 @@
             "error_loading": "Não é possível carregar o evento que foi respondido, ele não existe ou você não tem permissão para visualizá-lo.",
             "in_reply_to": "<a>Em resposta a</a> <pill>",
             "in_reply_to_for_export": "Em resposta a <a>esta mensagem</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Você será redirecionado para um site de terceiros para poder autenticar a sua conta, tendo em vista usar o serviço %(integrationsUrl)s. Deseja prosseguir?",
-            "dialog_title": "Adicionar uma integração"
         },
         "self_redaction": "Mensagem apagada",
         "send_state_encrypting": "Criptografando sua mensagem...",

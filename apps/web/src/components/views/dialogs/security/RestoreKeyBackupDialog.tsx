@@ -21,7 +21,6 @@ import AccessibleButton from "../../elements/AccessibleButton";
 import BaseDialog from "../BaseDialog";
 
 enum RestoreType {
-    Passphrase = "passphrase",
     RecoveryKey = "recovery_key",
     SecretStorage = "secret_storage",
 }
@@ -47,8 +46,6 @@ interface IState {
     recoveryKey: string;
     recoverInfo: KeyBackupRestoreResult | null;
     recoveryKeyValid: boolean;
-    forceRecoveryKey: boolean;
-    passPhrase: string;
     restoreType: RestoreType | null;
     progress: {
         stage: ProgressState | string;
@@ -76,15 +73,13 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             recoveryKey: "",
             recoverInfo: null,
             recoveryKeyValid: false,
-            forceRecoveryKey: false,
-            passPhrase: "",
             restoreType: null,
             progress: { stage: ProgressState.PreFetch },
         };
     }
 
     public componentDidMount(): void {
-        this.loadBackupStatus();
+        void this.loadBackupStatus();
     }
 
     private onCancel = (): void => {
@@ -95,12 +90,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         this.props.onFinished(true);
     };
 
-    private onUseRecoveryKeyClick = (): void => {
-        this.setState({
-            forceRecoveryKey: true,
-        });
-    };
-
     private progressCallback = (data: IState["progress"]): void => {
         this.setState({
             progress: data,
@@ -109,7 +98,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
     private onResetRecoveryClick = (): void => {
         this.props.onFinished(false);
-        accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
+        void accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
     };
 
     /**
@@ -131,38 +120,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             recoveryKey: e.target.value,
             recoveryKeyValid: this.isValidRecoveryKey(e.target.value),
         });
-    };
-
-    private onPassPhraseNext = async (): Promise<void> => {
-        const crypto = MatrixClientPeg.safeGet().getCrypto();
-        if (!crypto) return;
-        this.setState({
-            loading: true,
-            restoreError: null,
-            restoreType: RestoreType.Passphrase,
-        });
-        try {
-            // We do still restore the key backup: we must ensure that the key backup key
-            // is the right one and restoring it is currently the only way we can do this.
-            const recoverInfo = await crypto.restoreKeyBackupWithPassphrase(this.state.passPhrase, {
-                progressCallback: this.progressCallback,
-            });
-
-            if (!this.props.showSummary) {
-                this.props.onFinished(true);
-                return;
-            }
-            this.setState({
-                loading: false,
-                recoverInfo,
-            });
-        } catch (e) {
-            logger.log("Error restoring backup", e);
-            this.setState({
-                loading: false,
-                restoreError: e,
-            });
-        }
     };
 
     private onRecoveryKeyNext = async (): Promise<void> => {
@@ -198,12 +155,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 restoreError: e,
             });
         }
-    };
-
-    private onPassPhraseChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        this.setState({
-            passPhrase: e.target.value,
-        });
     };
 
     private async restoreWithSecretStorage(): Promise<boolean> {
@@ -297,12 +248,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     }
 
     public render(): React.ReactNode {
-        const backupHasPassphrase =
-            this.state.backupInfo &&
-            this.state.backupInfo.auth_data &&
-            this.state.backupInfo.auth_data.private_key_salt &&
-            this.state.backupInfo.auth_data.private_key_iterations;
-
         let content;
         let title;
         if (this.state.loading) {
@@ -381,51 +326,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         hasCancel={false}
                         focus={true}
                     />
-                </div>
-            );
-        } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
-            title = _t("restore_key_backup_dialog|enter_phrase_title");
-            content = (
-                <div>
-                    <p>
-                        {_t("restore_key_backup_dialog|key_backup_warning", {}, { b: (sub) => <strong>{sub}</strong> })}
-                    </p>
-                    <p>{_t("restore_key_backup_dialog|enter_phrase_description")}</p>
-
-                    <form className="mx_RestoreKeyBackupDialog_primaryContainer">
-                        <input
-                            data-testid="passphraseInput"
-                            type="password"
-                            className="mx_RestoreKeyBackupDialog_passPhraseInput"
-                            onChange={this.onPassPhraseChange}
-                            value={this.state.passPhrase}
-                            autoFocus={true}
-                        />
-                        <DialogButtons
-                            primaryButton={_t("action|next")}
-                            onPrimaryButtonClick={this.onPassPhraseNext}
-                            primaryIsSubmit={true}
-                            hasCancel={true}
-                            onCancel={this.onCancel}
-                            focus={false}
-                        />
-                    </form>
-                    {_t(
-                        "restore_key_backup_dialog|phrase_forgotten_text",
-                        {},
-                        {
-                            button1: (s) => (
-                                <AccessibleButton kind="link_inline" onClick={this.onUseRecoveryKeyClick}>
-                                    {s}
-                                </AccessibleButton>
-                            ),
-                            button2: (s) => (
-                                <AccessibleButton kind="link_inline" onClick={this.onResetRecoveryClick}>
-                                    {s}
-                                </AccessibleButton>
-                            ),
-                        },
-                    )}
                 </div>
             );
         } else {

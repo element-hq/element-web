@@ -3,14 +3,39 @@
 Banner module for Element Web.
 Allows rendering a top bar with slide out left panel menu.
 
-Supports the following configuration options:
+# Configuration
 
-| Key           | Type   | Description                                                                                    |
-| ------------- | ------ | ---------------------------------------------------------------------------------------------- |
-| logo_url      | string | URL to the logo to render in the banner                                                        |
-| logo_link_url | string | URL to send the user to when clicking the logo in the banner                                   |
-| title         | string | The title to render next to the logo, falls back to top level `brand` variable if unspecified. |
-| menu          | `Menu` | Data to render in the banner menu                                                              |
+Configuration for the module should be provided via a
+[Configuration](https://web-docs.element.dev/config.html) setting of
+`io.element.element-web-modules.banner`.
+
+## Example
+
+```json
+{
+    "io.element.element-web-modules.banner": {
+        "logo_url": "https://raw.githubusercontent.com/element-hq/logos/refs/heads/master/element/Element%20Logomark%20%20-%20Transparent%20-%2064px.png",
+        "logo_link_url": "https://element.io",
+        "menu": {
+            "type": "static",
+            "categories": []
+        }
+    }
+}
+```
+
+## Reference
+
+The following configuration options are supported within the
+`io.element.element-web-modules.banner` object:
+
+| Key          | Type   | Description                                                                                    |
+| ------------ | ------ | ---------------------------------------------------------------------------------------------- |
+| logo_url     | string | URL to the logo to render in the banner                                                        |
+| logo_height  | number | Height of the banner logo in pixels, defaults to 35 if omitted                                 |
+| heading_href | string | URL to send the user to when clicking the logo or title in the banner                          |
+| title        | string | The title to render next to the logo, falls back to top level `brand` variable if unspecified. |
+| menu         | `Menu` | Data to render in the banner menu                                                              |
 
 The `Menu` type is fulfilled by the following discriminated union:
 
@@ -51,6 +76,29 @@ The `Link` type is fulfilled by the following interface:
 | logo_url    | string, optional | URL to the logo to render in the menu, defaults to banner logo if omitted |
 | logo_href   | string, optional | URL to send the user to when clicking the logo in the menu                |
 | logo_height | number, optional | Height of the logo in pixels, defaults to 32 if omitted                   |
+
+## Theming
+
+Most of the styles can be configured via the `theme` variable in the top level config. All values are optional strings.
+The following theme variables are used by this module:
+
+| Key                              | Default                                      | Description                                                   |
+| -------------------------------- | -------------------------------------------- | ------------------------------------------------------------- |
+| textColor                        | var(--cpd-color-text-primary)                | Colour of the banner text and menu button text                |
+| subheadingColor                  | var(--cpd-color-text-secondary)              | Colour of the subheading text in the menu                     |
+| bannerBackgroundColor            | var(--cpd-color-bg-canvas-default)           | Background colour of the banner                               |
+| bannerHeight                     | 60px                                         | Height of the banner                                          |
+| triggerWidth                     | 69px                                         | Width of the trigger button                                   |
+| triggerBackgroundColor           | var(--cpd-color-bg-subtle-secondary)         | Background colour of the trigger button                       |
+| triggerBackgroundColorHover      | var(--cpd-color-bg-accent-hovered)           | Background colour of the trigger button when hovered          |
+| triggerBackgroundColorPressed    | var(--cpd-color-bg-accent-pressed)           | Background colour of the trigger button when pressed          |
+| triggerColor                     | var(--cpd-color-icon-primary)                | Colour of the trigger button icon                             |
+| triggerColorContrast             | var(--cpd-color-icon-on-solid-primary)       | Colour of the trigger button icon when hovered/pressed        |
+| menuWidth                        | 320px                                        | Width of the popover menu when open                           |
+| menuBackgroundColor              | var(--cpd-color-bg-canvas-default)           | Background colour of the popover menu                         |
+| menuButtonColor                  | var(--cpd-color-text-primary)                | Colour of the button text inside the menu                     |
+| menuButtonBackgroundColorHover   | var(--cpd-color-bg-action-secondary-hovered) | Background colour of the buttons inside the menu when hovered |
+| menuButtonBackgroundColorPressed | var(--cpd-color-bg-action-secondary-pressed) | Background colour of the buttons inside the menu when pressed |
 
 ## Copyright & License
 

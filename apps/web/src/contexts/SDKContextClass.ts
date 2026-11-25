@@ -32,6 +32,7 @@ import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
 import { CallStore } from "../stores/CallStore";
 import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
+import { DocumentPipStore } from "../stores/DocumentPipStore";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -53,6 +54,12 @@ export class SDKContextClass {
     // It is only safe to set this once, as updating this value will NOT notify components using
     // this Context.
     protected _client?: MatrixClient;
+
+    /**
+     * Get the {@link MatrixClient}, or `undefined` if the user is not logged in.
+     *
+     * Equivalent to `useContext(MatrixClientContext)`.
+     */
     public get client(): MatrixClient | undefined {
         return this._client;
     }
@@ -76,11 +83,15 @@ export class SDKContextClass {
     protected _Notifier?: Notifier;
     protected _CallStore?: CallStore;
     protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
+    protected _DocumentPipStore?: DocumentPipStore;
+
+    // Kept so that test contexts can stop listening to the dispatcher
+    protected dispatcherRef?: string;
 
     public constructor() {
         SettingController.sdkContext = this;
 
-        defaultDispatcher.register(this.onDispatch);
+        this.dispatcherRef = defaultDispatcher.register(this.onDispatch);
     }
 
     private onDispatch = (payload: ActionPayload): void => {
@@ -160,7 +171,7 @@ export class SDKContextClass {
     public get spaceStore(): SpaceStore {
         if (!this._SpaceStore) {
             this._SpaceStore = new SpaceStore(defaultDispatcher, this);
-            this._SpaceStore.start();
+            void this._SpaceStore.start();
         }
         return this._SpaceStore;
     }
@@ -215,9 +226,14 @@ export class SDKContextClass {
     public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
         if (!this._LatestRtcNotificationEventStore) {
             this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
-            this._LatestRtcNotificationEventStore.start();
+            void this._LatestRtcNotificationEventStore.start();
         }
         return this._LatestRtcNotificationEventStore;
+    }
+
+    public get documentPipStore(): DocumentPipStore {
+        this._DocumentPipStore ??= new DocumentPipStore(this);
+        return this._DocumentPipStore;
     }
 
     public onLoggedOut(): void {

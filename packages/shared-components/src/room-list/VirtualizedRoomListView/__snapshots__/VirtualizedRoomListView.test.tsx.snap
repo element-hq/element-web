@@ -97,7 +97,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                           />
                         </svg>
                         <div
-                          class="_unread-counter_1147r_8"
+                          class="_unread-counter_19zi2_8"
                         />
                       </div>
                     </div>
@@ -395,7 +395,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                           />
                         </svg>
                         <span
-                          class="_unread-counter_1147r_8"
+                          class="_unread-counter_19zi2_8"
                         >
                           5
                         </span>

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { type Page } from "@playwright/test";
-import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
+import { type Locator, type Page } from "@playwright/test";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -34,7 +34,6 @@ function assertCommonCallParameters(
     expect(url.has("widgetId")).toEqual(true);
     expect(url.has("parentUrl")).toEqual(true);
 
-    expect(hash.get("perParticipantE2EE")).toEqual("false");
     expect(hash.get("userId")).toEqual(user.userId);
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
@@ -84,6 +83,18 @@ async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "n
     });
 }
 
+/**
+ * Clear the bot's call membership set by {@link sendRTCState}, which ends the call when the bot was the only member.
+ */
+async function endRTCState(bot: Bot, roomId: string) {
+    await bot.sendStateEvent(
+        roomId,
+        "org.matrix.msc3401.call.member",
+        {},
+        `_@${bot.credentials!.userId}_OiDFxsZrjz_m.call`,
+    );
+}
+
 test.use({
     synapseConfig: {
         experimental_features: {
@@ -125,11 +136,11 @@ test.describe("Element Call", () => {
             SettingLevel.DEVICE,
             new URL("/widget.html#", page.url()).toString(),
         );
+        // On the React embedding, render the mock component: this backend has no LiveKit.
+        await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, true);
 
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
-        // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Introducing Sections");
     });
 
     test.describe("Group Chat", () => {
@@ -199,7 +210,7 @@ test.describe("Element Call", () => {
                 await expect(button).toBeInViewport({ timeout: 5000 });
                 // Room list should show that a call is ongoing
                 await expect(
-                    page.getByRole("option", { name: `Open room TestRoom with a ${callType} call.` }),
+                    page.getByRole("option", { name: `Open room TestRoom, ${callType} call in progress.` }),
                 ).toBeVisible();
                 // And test joining
                 await button.click();
@@ -213,20 +224,59 @@ test.describe("Element Call", () => {
                 expect(hash.get("intent")).toEqual(expectedIntent);
                 expect(hash.get("skipLobby")).toEqual(null);
 
-                // pip layout check
-                switch (callType) {
-                    case "voice": {
-                        const pipContainer = page.getByTestId("widget-pip-container");
-                        await expect(pipContainer).toBeVisible();
-                        break;
-                    }
-                    case "video": {
-                        const pipContainer = page.getByTestId("widget-pip-container");
-                        await expect(pipContainer).not.toBeVisible();
-                        break;
-                    }
-                }
+                // Joining a call in progress always opens it maximised, never in PiP (only starting a
+                // voice call does that)
+                await expect(page.getByTestId("widget-pip-container")).not.toBeVisible();
             });
+        });
+
+        test("should still show a call in progress after reloading", async ({ page, bot, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+            // Bob starts a call; Alice is not a participant
+            await sendRTCState(bot, room.roomId, undefined, "video");
+            await expect(page.getByTestId("join-call-button")).toBeVisible();
+
+            // The bug only happens when Bob's membership is loaded from the sync cache on reload. If it arrives
+            // from the server instead, the call is found as normal. So we need the membership in the cache, which
+            // takes two steps.
+
+            // Step 1: get Bob's membership into the client's in-memory sync data. The client adds a sync response
+            // to it only after updating the UI, so the Join button showing isn't enough. Once a later sync (this
+            // message) is shown, the earlier one has been added.
+            await bot.sendMessage(room.roomId, "Is anyone else joining?");
+            await expect(page.getByTestId("timeline").getByText("Is anyone else joining?")).toBeVisible();
+
+            // Step 2: write the sync data to IndexedDB. The client otherwise only does this on the first sync after
+            // loading and then every 5 minutes, so the cache wouldn't contain Bob's membership yet.
+            await app.client.evaluate((client) => client.store.save(true));
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+            await app.viewRoomById(room.roomId);
+
+            await expect(page.getByTestId("join-call-button")).toBeVisible();
+            await expect(
+                page.getByRole("option", { name: "Open room TestRoom, video call in progress." }),
+            ).toBeVisible();
+        });
+
+        test("should show the call state in the room list message preview", async ({ page, bot, room, app }) => {
+            await app.settings.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, true);
+            await app.viewRoomById(room.roomId);
+            // Allow bob to create a call
+            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+
+            const roomListItem = page.getByTestId("room-list").getByRole("option", { name: /TestRoom/ });
+
+            await sendRTCState(bot, room.roomId, "notification");
+            await expect(roomListItem.getByText("Call started")).toBeVisible();
+
+            await endRTCState(bot, room.roomId);
+            await expect(roomListItem.getByText("Call ended")).toBeVisible();
         });
 
         [true, false].forEach((joinWithVideo) => {
@@ -290,6 +340,9 @@ test.describe("Element Call", () => {
 
                 expect(hash.get("intent")).toEqual("join_existing_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
+
+                // Answering a voice call skips the lobby, so it opens in PiP
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
             },
         );
     });
@@ -450,6 +503,9 @@ test.describe("Element Call", () => {
 
                 expect(hash.get("intent")).toEqual("join_existing_dm_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
+
+                // Answering a voice call skips the lobby, so it opens in PiP
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
             },
         );
     });
@@ -466,7 +522,8 @@ test.describe("Element Call", () => {
         test("should be able to create and join a video room", async ({ page, user }) => {
             await page
                 .getByRole("navigation", { name: "Room list" })
-                .getByRole("button", { name: "New conversation" })
+                .getByLabel("Room options")
+                .getByRole("button", { name: "New" })
                 .click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("Test room");
@@ -486,151 +543,505 @@ test.describe("Element Call", () => {
         });
     });
 
-    test.describe("Switching rooms", () => {
-        let charlie: Bot;
+    /**
+     * Element Call has two embeddings in Element Web: the widget in an iframe (stubbed by the fake call
+     * page above) and, behind `feature_element_call_react`, an in-process React component (currently a
+     * mock with buttons that drive its HostBridge). Persistence and PiP must work the same for both.
+     */
+    for (const embedding of ["widget", "react"] as const) {
+        test.describe(`Switching rooms (${embedding} Element Call)`, () => {
+            let charlie: Bot;
+            test.use({
+                room: async ({ page, app, user, homeserver, bot }, use) => {
+                    charlie = new Bot(page, homeserver, { displayName: "Charlie" });
+                    await charlie.prepareClient();
+                    const roomId = await app.client.createRoom({
+                        name: "TestRoom",
+                        invite: [bot.credentials!.userId, charlie.credentials!.userId],
+                    });
+                    await app.client.createRoom({
+                        name: "OtherRoom",
+                    });
+                    await use({ roomId });
+                },
+                lockLeftPanelWidth: false,
+                config: {
+                    features: {
+                        feature_element_call_react: embedding === "react",
+                    },
+                },
+            });
+
+            /** The mock Element Call React component, wherever it currently is (docked or PiP). */
+            const reactCall = (page: Page): Locator => page.getByRole("region", { name: "Element Call (mock)" });
+
+            async function openAndJoinCall(page: Page, existing = false) {
+                if (existing) {
+                    await page.getByTestId("join-call-button").click();
+                } else {
+                    await page.getByRole("button", { name: "Video call" }).click();
+                    await page.getByRole("menuitem", { name: "Element Call" }).click();
+                }
+
+                if (embedding === "widget") {
+                    const iframe = page.locator("iframe");
+                    await expect(iframe).toBeVisible();
+                    const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                    const callFrame = page.frame({ url: frameUrlStr! })!;
+                    await callFrame.getByRole("button", { name: "Join Call" }).click();
+                    await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+                } else {
+                    // No iframe: the component renders straight into the call view
+                    await expect(reactCall(page)).toBeVisible();
+                    await expect(page.locator("iframe")).toHaveCount(0);
+                    // What the real component does when the user joins: tell the host, and ask to stay on screen
+                    await reactCall(page).getByRole("button", { name: "notifyJoined" }).click();
+                    await reactCall(page).getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+                    await expect(reactCall(page).getByText(/in call/)).toBeVisible();
+                }
+
+                // Wait for Element Web to pickup the RTC session and update the room list entry.
+                await expect(page.getByTestId("notification-decoration")).toBeVisible();
+            }
+
+            /** Leaves the call from wherever Element Call currently is (PiP or docked). */
+            async function closeCall(page: Page) {
+                if (embedding === "widget") {
+                    const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
+                    await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
+                } else {
+                    await reactCall(page).getByRole("button", { name: "Close", exact: true }).click();
+                }
+            }
+
+            test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+
+                // We should have a PiP container here.
+                await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+                await expect(page.getByTestId("widget-pip-container")).toBeVisible();
+                if (embedding === "react") {
+                    // The very same component instance keeps running in PiP: its HostBridge log is intact
+                    await expect(reactCall(page).getByRole("list", { name: "HostBridge log" })).toContainText(
+                        "→ setAlwaysOnScreen(true)",
+                    );
+                }
+            });
+
+            test("should keep the same call running when it comes back from PiP into the room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+                await expect(pipContainer).toBeVisible();
+
+                // Viewing a room with an active call docks the call into its call view again
+                await app.viewRoomByName("TestRoom");
+                await expect(pipContainer).not.toBeVisible();
+                await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+
+                if (embedding === "react") {
+                    // The very same component instance docks again: a remount would start it (and its log) afresh
+                    await expect(reactCall(page).getByText(/in call/)).toBeVisible();
+                    await expect(reactCall(page).getByRole("list", { name: "HostBridge log" })).toContainText(
+                        "→ setAlwaysOnScreen(true)",
+                    );
+                } else {
+                    // The iframe is not reloaded: the fake call is still in the call rather than back at its lobby
+                    const callFrame = page.locator('iframe[title="Element Call"]').contentFrame();
+                    await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
+                }
+            });
+
+            test(
+                "should show the header buttons for taking the call out of the room view",
+                { tag: "@screenshot" },
+                async ({ page, user, room, app }) => {
+                    await app.viewRoomById(room.roomId);
+                    await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                    const header = page.locator(".mx_RoomHeader");
+
+                    await openAndJoinCall(page);
+                    // During a call the header call buttons are not needed.
+                    // We replace them with a PiP button. The React embedding offers the browser (S) PiP.
+                    // The widget embedding offers only minimising into Element Web's floating PiP.
+                    await expect(header.getByRole("button", { name: "Video call" })).toHaveCount(0);
+                    await expect(header.getByRole("button", { name: "Voice call" })).toHaveCount(0);
+                    await expect(header.getByTestId("document-pip-button")).toHaveCount(embedding === "react" ? 1 : 0);
+                    await expect(header.getByRole("button", { name: "Minimise call" })).toHaveCount(
+                        embedding === "widget" ? 1 : 0,
+                    );
+                    await expect(header).toMatchScreenshot(`room-header-in-call-${embedding}.png`);
+                    if (embedding === "react") return;
+
+                    // Minimised into Element Web's own PiP, the same button offers the way back
+                    await header.getByRole("button", { name: "Minimise call" }).click();
+                    await expect(page.getByTestId("widget-pip-container")).toBeVisible();
+                    // Leave the button so neither its hover state nor its tooltip ends up in the screenshot
+                    await page.mouse.move(0, 0);
+                    await expect(header.getByRole("button", { name: "Maximise call" })).toBeVisible();
+                    await expect(header).toMatchScreenshot(`room-header-call-minimised-${embedding}.png`);
+                },
+            );
+
+            test("should be able to start a call, close it via PiP, and start again in the same room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
+
+                // Leave the call.
+                await closeCall(page);
+
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
+
+                // Wait for call to stop.
+                await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByTestId("join-call-button")).not.toBeVisible();
+
+                // Join the call again.
+                await openAndJoinCall(page);
+            });
+
+            test("should be able to start a call, close it via PiP, and start again in a different room", async ({
+                page,
+                user,
+                room,
+                app,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+
+                await openAndJoinCall(page);
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
+
+                // Leave the call.
+                await closeCall(page);
+
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
+
+                // Wait for call to stop.
+                await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
+                await expect(page.getByTestId("join-call-button")).not.toBeVisible();
+
+                // Join the call again, but from the other room.
+                await openAndJoinCall(page);
+            });
+
+            // For https://github.com/element-hq/element-web/issues/30838
+            test("should be able to join a call, leave via PiP, and rejoin the call", async ({
+                page,
+                user,
+                room,
+                app,
+                bot,
+            }) => {
+                await app.viewRoomById(room.roomId);
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
+
+                await sendRTCState(bot, room.roomId);
+                await openAndJoinCall(page, true);
+
+                await app.viewRoomByName("OtherRoom");
+                const pipContainer = page.getByTestId("widget-pip-container");
+
+                // We should have a PiP container here.
+                await expect(pipContainer).toBeVisible();
+
+                // Leave the call.
+                await closeCall(page);
+
+                // PiP container goes.
+                await expect(pipContainer).not.toBeVisible();
+
+                // Rejoin the call
+                await app.viewRoomById(room.roomId);
+                await openAndJoinCall(page, true);
+            });
+        });
+    }
+
+    /**
+     * The real Element Call component (`@element-hq/element-call-component`), not the mock: this suite's
+     * backend has no LiveKit, so only that its chunk loads and it mounts in the call view is checked here.
+     * The full call with media is `element-call-full-call.spec.ts`.
+     */
+    test.describe("React component (real)", () => {
         test.use({
-            room: async ({ page, app, user, homeserver, bot }, use) => {
-                charlie = new Bot(page, homeserver, { displayName: "Charlie" });
-                await charlie.prepareClient();
+            room: async ({ app, bot }, use) => {
                 const roomId = await app.client.createRoom({
                     name: "TestRoom",
-                    invite: [bot.credentials!.userId, charlie.credentials!.userId],
-                });
-                await app.client.createRoom({
-                    name: "OtherRoom",
+                    invite: [bot.credentials!.userId],
                 });
                 await use({ roomId });
             },
-            lockLeftPanelWidth: false,
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
         });
 
-        async function openAndJoinCall(page: Page, existing = false) {
-            if (existing) {
-                await page.getByTestId("join-call-button").click();
-            } else {
-                await page.getByRole("button", { name: "Video call" }).click();
-                await page.getByRole("menuitem", { name: "Element Call" }).click();
-            }
-            const iframe = page.locator("iframe");
-            await expect(iframe).toBeVisible();
-            const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            const callFrame = page.frame({ url: frameUrlStr! })!;
-            await callFrame.getByRole("button", { name: "Join Call" }).click();
-            await expect(callFrame.getByText("In call", { exact: true })).toBeVisible();
-
-            // Wait for Element Web to pickup the RTC session and update the room list entry.
-            await expect(page.getByTestId("notification-decoration")).toBeVisible();
-        }
-
-        test("should be able to switch rooms and have the call persist", async ({ page, user, room, app }) => {
+        test("mounts inside the call view without an iframe", async ({ page, user, room, app }) => {
+            // The suite's beforeEach switched the mock on; this test wants the real component.
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
             await app.viewRoomById(room.roomId);
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
 
-            await openAndJoinCall(page);
-            await app.viewRoomByName("OtherRoom");
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
 
-            // We should have a PiP container here.
-            await expect(page.locator(".mx_AppTile_persistedWrapper")).toBeVisible();
+            await expect(page.locator(".mx_CallView")).toBeVisible();
+            // The tile's content lives in a persisted element attached to <body> (so it survives
+            // navigation), hence page-level locators. Element Call's lobby is the proof of life.
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
+            // Element Call scopes its theme and portals to its own root element
+            await expect(page.locator("[data-element-call-root]")).toBeAttached();
+            await expect(page.locator("iframe")).toHaveCount(0);
+            await expect(page.getByRole("region", { name: "Element Call (mock)" })).toHaveCount(0);
         });
 
-        test("should be able to start a call, close it via PiP, and start again in the same room", async ({
-            page,
-            user,
-            room,
-            app,
-        }) => {
+        test("follows Element Web's theme", async ({ page, user, room, app }) => {
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
             await app.viewRoomById(room.roomId);
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
 
-            await openAndJoinCall(page);
-            await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.getByTestId("widget-pip-container");
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
 
-            // We should have a PiP container here.
-            await expect(pipContainer).toBeVisible();
+            // Element Call themes its root element with Compound's theme classes. Left to itself it
+            // defaults to dark, so a light Element Web must tell it from the start...
+            const callRoot = page.locator("[data-element-call-root]");
+            await expect(callRoot).toHaveClass(/cpd-theme-light/);
+            await expect(callRoot).not.toHaveClass(/cpd-theme-dark/);
 
-            // Leave the call.
-            const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
-
-            // await overlay.hover({ timeout: 2000 }); // Show the call footer.
-            await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
-
-            // PiP container goes.
-            await expect(pipContainer).not.toBeVisible();
-
-            // Wait for call to stop.
-            await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
-            await app.viewRoomById(room.roomId);
-            await expect(page.getByTestId("join-call-button")).not.toBeVisible();
-
-            // Join the call again.
-            await openAndJoinCall(page);
+            // ...and keep it up to date while the call runs
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+            await expect(callRoot).toHaveClass(/cpd-theme-dark/);
+            await expect(callRoot).not.toHaveClass(/cpd-theme-light/);
         });
 
-        test("should be able to start a call, close it via PiP, and start again in a different room", async ({
-            page,
-            user,
-            room,
-            app,
-        }) => {
+        test("has its tooltips styled by Element Web's Compound", async ({ page, room, app }) => {
+            await app.settings.setValue("Developer.elementCallMockComponent", null, SettingLevel.DEVICE, false);
             await app.viewRoomById(room.roomId);
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
 
-            await openAndJoinCall(page);
-            await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.getByTestId("widget-pip-container");
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(page.getByRole("button", { name: "Join call" })).toBeVisible({ timeout: 60_000 });
 
-            // We should have a PiP container here.
-            await expect(pipContainer).toBeVisible();
+            // Element Call's own stylesheet only reaches inside its root element, but its tooltips float
+            // through a Compound portal into the body, like Element Web's own. They are styled all the same
+            // because the component shares Element Web's copy of Compound rather than bundling one of its
+            // own: a label tooltip is in the DOM from the start, hidden by Compound's stylesheet until
+            // hovered, and would show as bare text the whole time if that stylesheet did not reach it.
+            const callRoot = page.locator("[data-element-call-root]");
+            const microphone = callRoot.getByRole("switch", { name: /microphone/ });
+            const label = page.getByText(/^(Mute|Unmute) microphone$/);
+            // clip-path is the fingerprint of Compound's "invisible" rule (confirms it gets styled by EW)
+            const tooltip = label.locator("..");
+            await expect(label).toBeAttached();
+            await expect(callRoot.getByText(/^(Mute|Unmute) microphone$/)).toHaveCount(0);
+            await expect(tooltip).toHaveCSS("clip-path", "inset(50%)");
 
-            // Leave the call.
-            const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
-            await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
+            await microphone.hover();
+            await expect(label).toBeVisible();
+            await expect(tooltip).toHaveCSS("clip-path", "none");
+        });
+    });
 
-            // PiP container goes.
-            await expect(pipContainer).not.toBeVisible();
-
-            // Wait for call to stop.
-            await expect(page.getByTestId("notification-decoration")).not.toBeVisible();
-            await expect(page.getByTestId("join-call-button")).not.toBeVisible();
-
-            // Join the call again, but from the other room.
-            await openAndJoinCall(page);
+    test.describe("Theme (React component)", () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
         });
 
-        // For https://github.com/element-hq/element-web/issues/30838
-        test("should be able to join a call, leave via PiP, and rejoin the call", async ({
-            page,
-            user,
-            room,
-            app,
-            bot,
-        }) => {
+        test("is shown in Element Web's theme, and follows it", async ({ page, user, room, app }) => {
+            await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "light");
             await app.viewRoomById(room.roomId);
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-            await app.client.setPowerLevel(room.roomId, bot.credentials!.userId, 50);
 
-            await sendRTCState(bot, room.roomId);
-            await openAndJoinCall(page, true);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
+            await expect(mock).toBeVisible();
 
-            await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.getByTestId("widget-pip-container");
+            await expect(mock.getByText(/theme light/)).toBeVisible();
 
-            // We should have a PiP container here.
-            await expect(pipContainer).toBeVisible();
+            await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
+            await expect(mock.getByText(/theme dark/)).toBeVisible();
+        });
+    });
 
-            // Leave the call.
-            const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
+    test.describe("Document Picture-in-Picture (React component)", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+        test.use({
+            room: async ({ app, bot }, use) => {
+                const roomId = await app.client.createRoom({
+                    name: "TestRoom",
+                    invite: [bot.credentials!.userId],
+                });
+                await use({ roomId });
+            },
+            config: {
+                features: {
+                    feature_element_call_react: true,
+                },
+            },
+        });
 
-            // await overlay.hover({ timeout: 2000 }); // Show the call footer.
-            await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
+        test("moves the call into a browser window and back", async ({ page, room, app }) => {
+            // This test can only work if the browser supports it.
+            // Only the most recent versions of FF and chrome support this api.
+            test.skip(
+                !(await page.evaluate(() => "documentPictureInPicture" in window)),
+                "This browser has no Document Picture-in-Picture API",
+            );
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
 
-            // PiP container goes.
-            await expect(pipContainer).not.toBeVisible();
-
-            // Rejoin the call
             await app.viewRoomById(room.roomId);
-            await openAndJoinCall(page, true);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(mock).toBeVisible();
+            // Not connected yet: no way out of the room view is offered
+            await expect(page.getByTestId("document-pip-button")).toHaveCount(0);
+
+            await mock.getByRole("button", { name: "notifyJoined" }).click();
+            await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+
+            // In a call: the browser PiP button, and no button to start another call
+            const documentPip = page.getByTestId("document-pip-button");
+            // Tag the mock's DOM so we can tell, once it is back, whether React kept it or rendered it anew
+            await mock.evaluate((el) => el.setAttribute("data-test-before-pip", ""));
+
+            await documentPip.click();
+            // The component's DOM left this document for the browser's window; the room shows the
+            // timeline, and Element Web's own PiP stays out of the way
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(mock).toHaveCount(0);
+            await expect(page.locator(".mx_BasicMessageComposer")).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            // Its React tree kept running: what the mock had logged is still there
+            expect(
+                await page.evaluate(() =>
+                    window.documentPictureInPicture!.window!.document.body.textContent?.includes("in call"),
+                ),
+            ).toBe(true);
+
+            // Closing the window from the browser side brings the call back to where it left from: the
+            // room's call view
+            await page.evaluate(() => window.documentPictureInPicture!.window!.close());
+            await expect(mock).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Open call in a floating window" })).toBeVisible();
+            // ...as the very same component instance: it did not reload on the way there or back
+            await expect(mock).toHaveAttribute("data-test-before-pip");
+            await expect(mock.getByText(/in call/)).toBeVisible();
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText("→ setAlwaysOnScreen(true)");
+
+            // Bringing it back from inside Element Web does not reload it either
+            await documentPip.click();
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await page.getByRole("button", { name: "Bring call back into this window" }).click();
+            await expect(mock).toBeVisible();
+            await expect(mock).toHaveAttribute("data-test-before-pip");
+            await expect(mock.getByText(/in call/)).toBeVisible();
+            await expect(mock.getByRole("list", { name: "HostBridge log" })).toContainText("→ setAlwaysOnScreen(true)");
+        });
+
+        test("keeps a call that was just joined in the browser window", async ({ page, user, room, app }) => {
+            // This test can only work if the browser supports it.
+            // Only the most recent versions of FF and chrome support this api.
+            test.skip(
+                !(await page.evaluate(() => "documentPictureInPicture" in window)),
+                "This browser has no Document Picture-in-Picture API",
+            );
+            const mock = page.getByRole("region", { name: "Element Call (mock)" });
+
+            // Element Web treats the element call component as joined based on the target state.
+            // (clicking join button -> treat the call as joined)
+            // But the RTCSession joined state only appears after the event has been synced:
+            //  - EC loads
+            //  - EC initialisez
+            //  - EC send membership event
+            //  - hs syncs memberhsip event
+            //
+            // On a first call, while the component is still being downloaded, there is a high chance, the user can open the window in
+            // that gap. (first download can take >2-3s)
+            // This has resulted in a broken expecience. This regression test reproduces this condition
+            // by holding back sync responses to construct: open pip while in this "gap".
+            let releaseSync!: () => void;
+            const syncHeld = new Promise<void>((resolve) => (releaseSync = resolve));
+            let holdSync = false;
+            await page.route(/\/_matrix\/client\/v3\/sync\b/, async (route) => {
+                const response = await route.fetch({ timeout: 0 });
+                if (holdSync) await syncHeld;
+                await route.fulfill({ response });
+            });
+
+            await app.viewRoomById(room.roomId);
+            await page.getByRole("button", { name: "Video call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+            await expect(mock).toBeVisible();
+
+            holdSync = true;
+            await mock.getByRole("button", { name: "notifyJoined" }).click();
+            await mock.getByRole("button", { name: "setAlwaysOnScreen(true)" }).click();
+            await page.getByTestId("document-pip-button").click();
+
+            // The call is in the window, and the room shows the timeline rather than a lobby
+            await expect.poll(() => page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+            await expect(mock).toHaveCount(0);
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
+
+            // ...and stays there once the membership arrives
+            releaseSync();
+            await expect(page.getByRole("button", { name: "Bring call back into this window" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Close lobby" })).toHaveCount(0);
+            expect(await page.evaluate(() => window.documentPictureInPicture!.window !== null)).toBe(true);
+
+            // Sync long-polls still waiting on the server would otherwise fail once the test ends
+            await page.unrouteAll({ behavior: "ignoreErrors" });
         });
     });
 

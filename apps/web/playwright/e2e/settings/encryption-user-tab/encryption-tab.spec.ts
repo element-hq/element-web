@@ -43,7 +43,9 @@ test.describe("Encryption tab", () => {
                 // The user's device is in an unverified state, therefore the only option available to them here is to verify it
                 const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
                 await expect(verifyButton).toBeVisible();
-                await expect(content).toMatchScreenshot("verify-device-encryption-tab.png");
+                await expect(content).toMatchScreenshot("verify-device-encryption-tab.png", {
+                    mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+                });
                 await verifyButton.click();
 
                 await util.verifyDevice(recoveryKey);
@@ -81,7 +83,9 @@ test.describe("Encryption tab", () => {
                 const dialog = util.getEncryptionTabContent();
                 const enterKeyButton = dialog.getByRole("button", { name: "Enter recovery key" });
                 await expect(enterKeyButton).toBeVisible();
-                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png");
+                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png", {
+                    mask: [dialog.getByTestId("deviceId"), dialog.getByTestId("sessionKey")],
+                });
                 await enterKeyButton.click();
 
                 // Fill the recovery key
@@ -126,11 +130,13 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("switch", { name: "Allow key storage" }).click();
 
-            await expect(
-                page.getByRole("heading", { name: "Are you sure you want to turn off key storage and delete it?" }),
-            ).toBeVisible();
+            // Stacked dialogs share a title id, so locate this one by its heading rather than its accessible name
+            const dialog = page.getByRole("dialog").filter({
+                has: page.getByRole("heading", { name: "Are you sure you want to delete key storage?" }),
+            });
+            await expect(dialog).toBeVisible();
 
-            await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
+            await expect(dialog).toMatchScreenshot("delete-key-storage-confirm.png");
 
             const deleteRequestPromises = [
                 page.waitForRequest((req) => req.url().endsWith("/account_data/m.cross_signing.master")),
@@ -141,8 +147,10 @@ test.describe("Encryption tab", () => {
                 page.waitForRequest((req) => req.url().includes("/account_data/m.secret_storage.key.")),
             ];
 
-            await page.getByRole("button", { name: "Delete key storage" }).click();
+            await dialog.getByRole("button", { name: "Delete" }).click();
 
+            // The dialog stays open until key storage has been deleted
+            await expect(dialog).toBeHidden();
             await expect(page.getByRole("switch", { name: "Allow key storage" })).not.toBeChecked();
 
             for (const prom of deleteRequestPromises) {
@@ -170,11 +178,11 @@ test.describe("Encryption tab", () => {
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // First try cancelling and restarting
-            await page.getByRole("button", { name: "Cancel" }).click();
+            await page.getByRole("button", { name: "Go back" }).click();
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Then click outside the dialog and restart
-            await page.locator("li").filter({ hasText: "Encryption" }).click({ force: true });
+            await page.getByRole("heading", { name: "Settings" }).click({ force: true, position: { x: 0, y: 0 } });
             await page.getByRole("button", { name: "Can't confirm?" }).click();
 
             // Finally we actually continue

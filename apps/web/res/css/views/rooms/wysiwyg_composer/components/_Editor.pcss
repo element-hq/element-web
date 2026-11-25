@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
     /* These are set in Javascript */
     --avatar-letter: "";
     --avatar-background: unset;
+    --user-status: none;
     --placeholder: "";
 
     @keyframes visualbell {
@@ -148,6 +149,15 @@ Please see LICENSE files in the repository root for full details.
                 color: var(--avatar-color, $avatar-initial-color);
                 font-weight: bold;
                 font-size: $font-10-4px;
+            }
+
+            /* Pseudo element for rendering the user status emoji on mention pills. It is a
+            pseudo element rather than a child node because the pill's text content is used
+            verbatim when the message is serialised, so a real node would put the emoji in the
+            sent message. */
+            &::after {
+                content: var(--user-status);
+                margin-inline-start: var(--cpd-space-1x);
             }
         }
     }

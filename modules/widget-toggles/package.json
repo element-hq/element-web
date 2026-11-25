@@ -1,13 +1,15 @@
 {
     "name": "@element-hq/element-web-module-widget-toggle",
     "private": true,
-    "version": "1.0.0",
+    "version": "1.1.0",
     "type": "module",
     "main": "lib/index.js",
     "license": "SEE LICENSE IN README.md",
     "scripts": {
         "build": "nx build",
         "lint:types": "nx lint:types",
+        "i18n:sort": "matrix-sort-i18n src/translations.json",
+        "i18n:lint": "oxfmt src/translations.json",
         "test:unit": "nx test:unit"
     },
     "devDependencies": {
@@ -20,6 +22,7 @@
         "@types/react": "^19",
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
+        "matrix-web-i18n": "catalog:",
         "react": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",
@@ -28,8 +31,8 @@
         "vitest": "catalog:"
     },
     "dependencies": {
-        "@vector-im/compound-design-tokens": "^10.0.0",
-        "@vector-im/compound-web": "^9.0.0",
+        "@vector-im/compound-design-tokens": "^11.0.0",
+        "@vector-im/compound-web": "^10.0.0",
         "matrix-widget-api": "^1.17.0",
         "styled-components": "^6.3.11",
         "zod": "^4.3.6"

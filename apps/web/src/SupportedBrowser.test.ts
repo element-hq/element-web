@@ -8,20 +8,27 @@ Please see LICENSE files in the repository root for full details.
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
+import browserslist from "browserslist";
 
 import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "./SupportedBrowser";
+import { getMinimumBrowserVersions } from "../supportedBrowsers.ts";
 import ToastStore from "./stores/ToastStore";
-import GenericToast from "./components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 
 vi.mock("matrix-js-sdk/src/logger");
+// Only used by the build-time getMinimumBrowserVersions: the app reads the versions baked in by the build
+vi.mock("browserslist", () => ({ default: vi.fn() }));
 
 describe("SupportedBrowser", () => {
     beforeEach(() => {
-        vi.resetAllMocks();
         localStorage.clear();
         getBrowserSupport.clear();
+    });
+
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     const testUserAgentFactory =
@@ -68,19 +75,19 @@ describe("SupportedBrowser", () => {
     // Grabbed from https://www.whatismybrowser.com/guides/the-latest-user-agent/
     it.each([
         // Safari 26.0 on macOS
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_8_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Safari/605.1.15",
         // Latest Firefox on macOS Sonoma
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:152.0) Gecko/20100101 Firefox/152.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 15.7; rv:159.0) Gecko/20100101 Firefox/159.0",
         // Latest Edge on Windows
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.4078.65",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.4314.58",
         // Latest Edge on macOS
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.4078.65",
+        "Mozilla/5.0 (Macintosh; Intel Mac  OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.4314.58",
         // Latest Firefox on Windows
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:159.0) Gecko/20100101 Firefox/159.0",
         // Latest Firefox on Linux
-        "Mozilla/5.0 (X11; Linux i686; rv:152.0) Gecko/20100101 Firefox/152.0",
+        "Mozilla/5.0 (X11; Linux i686; rv:159.0) Gecko/20100101 Firefox/159.0",
         // Latest Chrome on Windows
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
     ])("should not warn for supported browsers", testUserAgentFactory());
 
     it.each([
@@ -117,5 +124,19 @@ describe("SupportedBrowser", () => {
         checkBrowserSupport();
         expect(warnLogSpy).toHaveBeenCalledWith("Browser unsupported, but user has previously accepted");
         expect(toastSpy).not.toHaveBeenCalled();
+    });
+});
+
+describe("getMinimumBrowserVersions", () => {
+    it("picks the oldest version of each browser, comparing versions as numbers", () => {
+        vi.mocked(browserslist).mockReturnValue(["chrome 100", "chrome 99", "safari 26.1", "safari 18.5", "Edge 141"]);
+
+        expect(getMinimumBrowserVersions()).toEqual({ chrome: 99, safari: 18, edge: 141 });
+    });
+
+    it("ignores non-numeric versions", () => {
+        vi.mocked(browserslist).mockReturnValue(["safari TP", "safari 26.0"]);
+
+        expect(getMinimumBrowserVersions()).toEqual({ safari: 26 });
     });
 });

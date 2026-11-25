@@ -10,6 +10,7 @@
     align-items: center;
     gap: var(--cpd-space-1x);
     max-width: 100%;
+    min-width: 0;
 
     span {
         font: var(--cpd-font-body-md-medium);

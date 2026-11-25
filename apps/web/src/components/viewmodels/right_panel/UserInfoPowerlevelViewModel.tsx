@@ -5,7 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import { logger } from "@sentry/browser";
+import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomMember, type Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -67,8 +67,8 @@ export const useUserInfoPowerlevelViewModel = (user: RoomMember, room: Room): Us
             if (!powerLevelEvent) return;
 
             const myUserId = cli.getUserId();
-            const myPower = powerLevelEvent.getContent().users[myUserId || ""];
-            if (myPower && parseInt(myPower) <= powerLevel && myUserId !== target) {
+            const myPower = myUserId ? room.getMember(myUserId)?.powerLevel : undefined;
+            if (myPower !== undefined && myPower <= powerLevel && myUserId !== target) {
                 const { finished } = Modal.createDialog(QuestionDialog, {
                     title: _t("common|warning"),
                     description: (
@@ -83,7 +83,7 @@ export const useUserInfoPowerlevelViewModel = (user: RoomMember, room: Room): Us
 
                 const [confirmed] = await finished;
                 if (!confirmed) return;
-            } else if (myUserId === target && myPower && parseInt(myPower) > powerLevel) {
+            } else if (myUserId === target && myPower !== undefined && myPower > powerLevel) {
                 // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
                 try {
                     if (!(await warnSelfDemote(room?.isSpaceRoom()))) return;

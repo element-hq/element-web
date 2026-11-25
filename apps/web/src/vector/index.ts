@@ -15,6 +15,7 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseAppUrl } from "./url_utils";
+import { preloadCryptoIfLoggedIn } from "./preloadCrypto";
 import "./modernizr.cjs";
 import { polyfillTouchEvent } from "../@types/polyfill";
 
@@ -107,6 +108,8 @@ const supportedBrowser = checkBrowserFeatures();
 // the browser to use as much parallelism as it can.
 // Load parallelism is based on research in https://github.com/element-hq/element-web/issues/12253
 async function start(): Promise<void> {
+    preloadCryptoIfLoggedIn();
+
     if (shouldPolyFillIntlSegmenter()) {
         await import(/* webpackChunkName: "intl-segmenter-polyfill" */ "@formatjs/intl-segmenter/polyfill-force.js");
     }
@@ -120,7 +123,6 @@ async function start(): Promise<void> {
         loadLanguage,
         loadTheme,
         loadApp,
-        loadModules,
         loadPlugins,
         showError,
         showIncompatibleBrowser,
@@ -174,8 +176,6 @@ async function start(): Promise<void> {
         // await things settling so that any errors we have to render have features like i18n running
         await settled(loadThemePromise, loadLanguagePromise);
 
-        const loadModulesPromise = loadModules();
-        await settled(loadModulesPromise);
         const loadPluginsPromise = loadPlugins();
         await settled(loadPluginsPromise);
 
@@ -223,7 +223,6 @@ async function start(): Promise<void> {
         // assert things started successfully
         // ##################################
         await loadPluginsPromise;
-        await loadModulesPromise;
         await loadThemePromise;
         await loadLanguagePromise;
 

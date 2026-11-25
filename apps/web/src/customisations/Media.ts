@@ -6,13 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { getHttpUriForMxc, type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
-import type { MediaCustomisations, Media } from "@element-hq/element-web-module-api";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";
+import { type PublicInterface } from "../test/test-utils/@types/common.ts";
 
 // Populate this class with the details of your customisations when copying it.
 
@@ -25,7 +25,7 @@ import { UserFriendlyError } from "../languageHandler";
  * A media object is a representation of a "source media" and an optional
  * "thumbnail media", derived from event contents or external sources.
  */
-class MediaImplementation implements Media {
+class MediaImplementation {
     private client: MatrixClient;
 
     // Per above, this constructor signature can be whatever is helpful for you.
@@ -108,14 +108,31 @@ class MediaImplementation implements Media {
      * @param {number} width The desired width of the thumbnail.
      * @param {number} height The desired height of the thumbnail.
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
+     * @param {boolean} animated Whether the server should keep the animation of animated media. Left out of the URL
+     * when undefined, which lets the server pick (normally static).
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null {
+    public getThumbnailOfSourceHttp(
+        width: number,
+        height: number,
+        mode: ResizeMethod = "scale",
+        animated?: boolean,
+    ): string | null {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
-        // eslint-disable-next-line no-restricted-properties
-        return this.client.mxcUrlToHttp(this.srcMxc, width, height, mode, false, true);
+        // `mxcUrlToHttp` can't set `animated`.
+        return getHttpUriForMxc(
+            this.client.baseUrl,
+            this.srcMxc,
+            width,
+            height,
+            mode,
+            false,
+            true,
+            undefined,
+            animated,
+        );
     }
 
     /**
@@ -149,9 +166,7 @@ class MediaImplementation implements Media {
     }
 }
 
-export type { Media };
-
-type BaseMedia = MediaCustomisations<Partial<MediaEventContent>, MatrixClient, IPreparedMedia>;
+export type Media = PublicInterface<MediaImplementation>;
 
 /**
  * Creates a media object from event content.
@@ -159,17 +174,15 @@ type BaseMedia = MediaCustomisations<Partial<MediaEventContent>, MatrixClient, I
  * @param {MatrixClient} client Optional client to use.
  * @returns {MediaImplementation} The media object.
  */
-export const mediaFromContent: BaseMedia["mediaFromContent"] = (
-    content: Partial<MediaEventContent>,
-    client?: MatrixClient,
-): Media => new MediaImplementation(prepEventContentAsMedia(content), client);
+export const mediaFromContent = (content: Partial<MediaEventContent>, client?: MatrixClient): Media =>
+    new MediaImplementation(prepEventContentAsMedia(content), client);
 
 /**
  * Creates a media object from an MXC URI.
  * @param {string} mxc The MXC URI.
  * @param {MatrixClient} client Optional client to use.
- * @returns {MediaImplementation} The media object.
+ * @returns {Media} The media object.
  */
-export const mediaFromMxc: BaseMedia["mediaFromMxc"] = (mxc?: string, client?: MatrixClient): Media => {
+export const mediaFromMxc = (mxc?: string, client?: MatrixClient): Media => {
     return mediaFromContent({ url: mxc }, client);
 };

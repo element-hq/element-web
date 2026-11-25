@@ -73,26 +73,26 @@ test.describe("Room Directory", () => {
 
         // Wait for all the messages to be displayed
         await expect(
-            page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("test49"),
+            page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").getByText("test49"),
         ).toBeVisible();
 
         // Display the first message
         await page.goto(`/#/room/${roomAId}/${eventId}`);
 
         // Wait for the first message to be displayed
-        await expect(page.locator(".mx_MTextBody .mx_EventTile_body").getByText("test0")).toBeInViewport();
+        await expect(page.getByTestId("event-tile-slot-body").getByText("test0")).toBeInViewport();
 
         // Display Room B
         await app.viewRoomById(roomBId);
 
         // Let the app settle to avoid flakiness
-        await page.waitForTimeout(500);
+        await expect(page.locator(".mx_RoomHeader").getByRole("heading", { level: 1 })).toHaveText("Room B");
 
         // Display Room A
         await app.viewRoomById(roomAId);
 
         // The timeline should display the first message
         // The previous position before switching to Room B should be remembered
-        await expect(page.locator(".mx_MTextBody .mx_EventTile_body").getByText("test0")).toBeInViewport();
+        await expect(page.getByTestId("event-tile-slot-body").getByText("test0")).toBeInViewport();
     });
 });

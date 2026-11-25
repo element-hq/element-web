@@ -27,7 +27,6 @@
         "cancel": "Cancelar",
         "change": "Cambiar",
         "clear": "Borrar",
-        "click_to_copy": "Haz clic para copiar",
         "close": "Cerrar",
         "collapse": "Encoger",
         "complete": "Completar",
@@ -42,7 +41,6 @@
         "decline_and_block": "Rechazar y bloquear",
         "decline_invite": "Rechazar invitación",
         "delete": "Borrar",
-        "deny": "Denegar",
         "disable": "Desactivar",
         "disconnect": "Desconectarse",
         "dismiss": "Omitir",
@@ -819,7 +817,6 @@
             "title": "Método de recuperación eliminado",
             "warning": "Si no eliminó el método de recuperación, es posible que un atacante esté intentando acceder a su cuenta. Cambie la contraseña de su cuenta y configure un nuevo método de recuperación inmediatamente en Configuración."
         },
-        "set_up_recovery_toast_description": "Genera una clave de recuperación que puede usarse para restaurar el histórico de mensajes encriptados en caso de que pierdas el acceso a tus dispositivos.",
         "set_up_toast_title": "Configurar copia de seguridad segura",
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
         "verification": {
@@ -1119,7 +1116,6 @@
         "name_mxid_share_room": "Invita a alguien usando su nombre, nombre de usuario (ej.: <userId/>) o <a>compartiendo esta sala</a>.",
         "name_mxid_share_space": "Invita a más gente usando su nombre, nombre de usuario (ej.: <userId/>) o <a>compartiendo el enlace a este espacio</a>.",
         "recents_section": "Conversaciones recientes",
-        "room_failed_partial": "Hemos enviado el resto, pero no hemos podido invitar las siguientes personas a la sala <RoomName/>",
         "room_failed_partial_title": "No se han podido enviar algunas invitaciones",
         "room_failed_title": "Ocurrió un error al invitar usuarios a %(roomName)s",
         "send_link_prompt": "O envía un enlace de invitación",
@@ -1229,8 +1225,6 @@
         "bridge_state_workspace": "Entorno de trabajo: <networkLink/>",
         "click_for_info": "Haz clic para más info.",
         "currently_experimental": "Actualmente en fase experimental.",
-        "custom_themes": "Soporta la adición de temas personalizados",
-        "dynamic_room_predecessors": "Predecesores dinámicos de la sala",
         "element_call_video_rooms": "Salas de vídeo Element Call",
         "experimental_description": "¿Te apetece probar cosas experimentales? Aquí encontrarás nuestras ideas en desarrollo. No están terminadas, pueden ser inestables, cambiar o dejar de estar disponibles. <a>Más información</a>.",
         "feature_wysiwyg_composer_description": "Usar texto con formato en lugar de Markdown en el editor de mensajes.",
@@ -1242,7 +1236,6 @@
         "group_profile": "Perfil",
         "group_rooms": "Salas",
         "group_spaces": "Espacios",
-        "group_themes": "Temas",
         "group_threads": "Hilos",
         "group_voip": "Voz y vídeo",
         "group_widgets": "Accesorios",
@@ -1307,8 +1300,6 @@
     "language_dropdown_label": "Lista selección de idiomas",
     "leave_room_dialog": {
         "last_person_warning": "Eres la única persona aquí. Si te vas, no podrá unirse nadie en el futuro, incluyéndote a ti.",
-        "leave_room_question": "¿Salir de la sala «%(roomName)s»?",
-        "leave_space_question": "¿Salir del espacio «%(spaceName)s»?",
         "room_rejoin_warning": "Esta sala no es pública. No podrás volver a unirte sin una invitación.",
         "space_rejoin_warning": "Este espacio es privado. No podrás volverte a unir sin una invitación."
     },
@@ -1395,7 +1386,6 @@
         "mentions_and_keywords": "@menciones y palabras clave",
         "mentions_and_keywords_description": "Recibir notificaciones solo cuando me mencionen o escriban una palabra vigilada configurada en los <a>ajustes</a>",
         "mentions_keywords": "Menciones y palabras clave",
-        "message_didnt_send": "Mensaje no enviado. Haz clic para más info.",
         "mute_description": "No recibirás ninguna notificación"
     },
     "notifier": {
@@ -1505,8 +1495,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s claves restauradas con éxito",
         "enter_key_description": "Accede a tu historial de mensajes seguros y configúralos introduciendo tu clave de seguridad.",
         "enter_key_title": "Introduce la clave de seguridad",
-        "enter_phrase_description": "Accede a tu historia de mensajes seguros o configúralos escribiendo tu frase de seguridad.",
-        "enter_phrase_title": "Introducir la frase de seguridad",
         "incorrect_security_phrase_dialog": "No se ha podido descifrar la copia de seguridad con esa frase. Por favor, comprueba que hayas escrito bien la frase de seguridad.",
         "incorrect_security_phrase_title": "Frase de seguridad incorrecta",
         "key_backup_warning": "<b>Advertencia</b>: deberías configurar la copia de seguridad de claves solamente usando un ordenador de confianza.",
@@ -1518,7 +1506,6 @@
         "load_error_content": "No se puede cargar el estado de la copia de seguridad",
         "load_keys_progress": "%(completed)s de %(total)s llaves restauradas",
         "no_backup_error": "¡No se encontró una copia de seguridad!",
-        "phrase_forgotten_text": "Si has olvidado tu frase de seguridad puedes usar tu <button1>clave de seguridad</button1> o <button2>configurar nuevos métodos de recuperación</button2>",
         "recovery_key_mismatch_description": "La copia de seguridad no se ha podido descifrar con esta clave: por favor, comprueba que la que has introducido es correcta.",
         "recovery_key_mismatch_title": "Las claves de seguridad no coinciden",
         "restore_failed_error": "No se pudo restaurar la copia de seguridad"
@@ -1639,7 +1626,6 @@
         "join_button_account": "Registrarse",
         "join_failed_needs_invite": "Para ver %(roomName)s necesitas una invitación",
         "join_the_discussion": "Unirme a la Sala",
-        "join_title": "Únete a la sala para participar",
         "join_title_account": "Unirse a la conversación con una cuenta",
         "joining": "Uniéndose…",
         "joining_room": "Uniéndose a la sala…",
@@ -1980,8 +1966,6 @@
             "custom_font_description": "Escribe el nombre de la fuente instalada en tu sistema y %(brand)s intentará usarla.",
             "custom_font_name": "Nombre de la fuente",
             "custom_font_size": "Usar un tamaño personalizado",
-            "custom_theme_error_downloading": "Error al descargar la información del tema.",
-            "custom_theme_invalid": "Esquema de tema inválido.",
             "font_size": "Tamaño del texto",
             "image_size_default": "Por defecto",
             "image_size_large": "Grande",
@@ -1999,11 +1983,6 @@
         "emoji_autocomplete": "Sugerir emojis mientras escribes",
         "enable_markdown": "Activar Markdown",
         "enable_markdown_description": "Empieza tu mensaje con <code>/plain</code> para enviarlo sin markdown.",
-        "encryption": {
-            "recovery": {
-                "set_up_recovery_secondary_description": "Después de hacer clic en continuar te generaremos una clave de recuperación."
-            }
-        },
         "general": {
             "account_management_section": "Gestión de la cuenta",
             "account_section": "Cuenta",
@@ -2280,7 +2259,6 @@
             "verify_session": "Verificar sesión",
             "web_session": "Sesión web"
         },
-        "show_breadcrumbs": "Incluir encima de la lista de salas unos atajos a las últimas salas que hayas visto",
         "show_chat_effects": "Mostrar efectos de chat (animaciones al recibir ciertos mensajes, como confeti)",
         "show_displayname_changes": "Muestra cambios en los nombres",
         "show_join_leave": "Mostrar mensajes de entrada y salida de la sala (seguirás viendo invitaciones, gente quitada y vetos)",
@@ -2810,10 +2788,6 @@
             "error_loading": "No se pudo cargar el evento al que se respondió, bien porque no existe o no tiene permiso para verlo.",
             "in_reply_to": "<a>Respondiendo a </a> <pill>",
             "in_reply_to_for_export": "En respuesta a <a>este mensaje</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Estás a punto de ir a un sitio externo para que puedas iniciar sesión con tu cuenta y usarla en %(integrationsUrl)s. ¿Quieres seguir?",
-            "dialog_title": "Añadir una Integración"
         },
         "self_redaction": "Mensaje eliminado",
         "send_state_encrypting": "Cifrando tu mensaje…",

@@ -26,20 +26,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import {
-    act,
-    createEvent,
-    fireEvent,
-    getAllByLabelText,
-    getByLabelText,
-    getByText,
-    queryByLabelText,
-    render,
-    type RenderOptions,
-    screen,
-    waitFor,
-} from "test-utils-rtl";
-import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { act, getByLabelText, getByText, render, type RenderOptions, screen, waitFor } from "test-utils-rtl";
 import userEvent from "@testing-library/user-event";
 import { filterConsole, setupAsyncStoreWithClient, stubClient } from "test-utils";
 
@@ -54,7 +41,8 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import SdkConfig from "../../../../SdkConfig";
 import dispatcher from "../../../../dispatcher/dispatcher";
 import { CallStore } from "../../../../stores/CallStore";
-import { type Call } from "../../../../models/Call";
+import { type Call, ConnectionState, ElementCall } from "../../../../models/Call";
+import { DocumentPipStore } from "../../../../stores/DocumentPipStore";
 import * as ShieldUtils from "../../../../utils/ShieldUtils";
 import { WidgetLayoutStore } from "../../../../stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
@@ -123,6 +111,7 @@ describe("RoomHeader", () => {
         // Mock CallStore.instance.getCall to return null by default
         // Individual tests can override this when they need a specific Call object
         vi.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
+        vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([]);
 
         // Reset the mock RoomViewStore
         mockRoomViewStore.isViewingCall.mockReturnValue(false);
@@ -244,6 +233,17 @@ describe("RoomHeader", () => {
         expect(voiceButton).toBeInTheDocument();
     });
 
+    it("anchors each call button's tooltip on the button rather than its icon", () => {
+        mockRoomMembers(room, 2);
+        render(<RoomHeader room={room} />, getWrapper());
+
+        for (const name of ["Video call", "Voice call"]) {
+            const button = screen.getByRole("button", { name });
+            expect(document.getElementById(button.getAttribute("aria-labelledby")!)).toHaveTextContent(name);
+            expect(button.querySelector("[aria-labelledby]")).toBeNull();
+        }
+    });
+
     it("should not show voice call button in managed hybrid environments", async () => {
         mockRoomMembers(room, 2);
         vi.spyOn(SdkConfig, "get").mockReturnValue({ widget_build_url: "https://widget.build.url" });
@@ -345,8 +345,8 @@ describe("RoomHeader", () => {
 
         it("should not show call buttons in a room with more than 2 members", () => {
             mockRoomMembers(room, 3);
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            expect(queryByLabelText(container, "Video call")).not.toBeInTheDocument();
+            render(<RoomHeader room={room} />, getWrapper());
+            expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
         });
     });
 
@@ -388,8 +388,8 @@ describe("RoomHeader", () => {
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "Ongoing call")) {
+            render(<RoomHeader room={room} />, getWrapper());
+            for (const button of screen.getAllByRole("button", { name: "Ongoing call" })) {
                 expect(button).toHaveAttribute("aria-disabled", "true");
             }
         });
@@ -419,9 +419,9 @@ describe("RoomHeader", () => {
         beforeEach(async () => {
             SdkConfig.put({});
             // Enable Element Call
-            client._unstable_getRTCTransports = vi
-                .fn()
-                .mockResolvedValue([{ type: "livekit", livekit_service_url: "https://example.org" }]);
+            vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
+            ]);
             // And ensure the CallStore has the transports configured.
             await setupAsyncStoreWithClient(CallStore.instance, client);
         });
@@ -453,6 +453,96 @@ describe("RoomHeader", () => {
 
             await user.click(videoCallButton);
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
+        });
+
+        describe("while connected to a call", () => {
+            /** A connected call that is an `ElementCall`, as the React component transport requires. */
+            const connectedElementCall = (): Call =>
+                Object.create(
+                    ElementCall.prototype,
+                    Object.getOwnPropertyDescriptors({
+                        ...createMockCall(ROOM_ID, 3, CallType.Video, true),
+                        connectionState: ConnectionState.Connected,
+                    }),
+                );
+
+            beforeEach(async () => {
+                mockRoomMembers(room, 3);
+                vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
+                vi.spyOn(CallStore.instance, "getCall").mockReturnValue(connectedElementCall());
+                vi.spyOn(DocumentPipStore, "isSupported", "get").mockReturnValue(true);
+                // The widget transport by default; the setting persists across tests, so set it explicitly
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, false);
+            });
+
+            it("offers minimising into PiP instead of starting a call", async () => {
+                const user = userEvent.setup();
+                mockRoomViewStore.isViewingCall.mockReturnValue(true);
+                render(<RoomHeader room={room} />, getWrapper());
+
+                expect(screen.queryByRole("button", { name: "Video call" })).not.toBeInTheDocument();
+                expect(screen.queryByRole("button", { name: "Voice call" })).not.toBeInTheDocument();
+                const minimise = screen.getByRole("button", { name: "Minimise call" });
+
+                const dispatcherSpy = vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
+                await user.click(minimise);
+                expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: false }));
+            });
+
+            it("offers maximising when the call is in PiP", () => {
+                mockRoomViewStore.isViewingCall.mockReturnValue(false);
+                render(<RoomHeader room={room} />, getWrapper());
+                expect(screen.getByRole("button", { name: "Maximise call" })).toBeInTheDocument();
+            });
+
+            it("offers a browser Picture-in-Picture window for the React component", async () => {
+                const user = userEvent.setup();
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                const open = vi.spyOn(SDKContextClass.instance.documentPipStore, "open").mockResolvedValue();
+                render(<RoomHeader room={room} />, getWrapper());
+
+                const button = screen.getByRole("button", { name: "Open call in a floating window" });
+                expect(button).toBe(screen.getByTestId("document-pip-button"));
+                await user.click(button);
+                expect(open).toHaveBeenCalledWith(CallStore.instance.getCall(ROOM_ID));
+            });
+
+            it("offers to bring the call back while it is in the browser window", async () => {
+                const user = userEvent.setup();
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                const call = CallStore.instance.getCall(ROOM_ID) as ElementCall;
+                vi.spyOn(SDKContextClass.instance.documentPipStore, "call", "get").mockReturnValue(call);
+                const close = vi.spyOn(SDKContextClass.instance.documentPipStore, "close").mockImplementation(() => {});
+                render(<RoomHeader room={room} />, getWrapper());
+
+                await user.click(screen.getByRole("button", { name: "Bring call back into this window" }));
+                expect(close).toHaveBeenCalled();
+            });
+
+            it("offers only the browser window for the React component", async () => {
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                mockRoomViewStore.isViewingCall.mockReturnValue(true);
+                render(<RoomHeader room={room} />, getWrapper());
+                // Element Web's own PiP is not offered where the browser's is
+                expect(screen.getByTestId("document-pip-button")).toBeInTheDocument();
+                expect(screen.queryByRole("button", { name: "Minimise call" })).not.toBeInTheDocument();
+                expect(screen.queryByRole("button", { name: "Maximise call" })).not.toBeInTheDocument();
+            });
+
+            it("does not offer the browser window for the widget transport", async () => {
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, false);
+                render(<RoomHeader room={room} />, getWrapper());
+                expect(screen.queryByTestId("document-pip-button")).not.toBeInTheDocument();
+                expect(screen.getByRole("button", { name: "Maximise call" })).toBeInTheDocument();
+            });
+
+            it("does not offer the browser window without browser support", async () => {
+                await SettingsStore.setValue("feature_element_call_react", null, SettingLevel.DEVICE, true);
+                vi.spyOn(DocumentPipStore, "isSupported", "get").mockReturnValue(false);
+                render(<RoomHeader room={room} />, getWrapper());
+                expect(screen.queryByTestId("document-pip-button")).not.toBeInTheDocument();
+                expect(screen.getByRole("button", { name: "Maximise call" })).toBeInTheDocument();
+            });
         });
 
         it("can't call if there's an ongoing (pinned) call", () => {
@@ -514,8 +604,8 @@ describe("RoomHeader", () => {
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
-            for (const button of getAllByLabelText(container, "Ongoing call")) {
+            render(<RoomHeader room={room} />, getWrapper());
+            for (const button of screen.getAllByRole("button", { name: "Ongoing call" })) {
                 expect(button).toHaveAttribute("aria-disabled", "true");
             }
         });
@@ -586,9 +676,9 @@ describe("RoomHeader", () => {
             vi.spyOn(CallStore.prototype, "connectedCalls", "get").mockReturnValue(
                 new Set([{ roomId: "some_other_room" } as Call]),
             );
-            const { container } = render(<RoomHeader room={room} />, getWrapper());
+            render(<RoomHeader room={room} />, getWrapper());
 
-            const [videoButton] = getAllByLabelText(container, "Ongoing call");
+            const [videoButton] = screen.getAllByRole("button", { name: "Ongoing call" });
 
             expect(videoButton).toHaveAttribute("aria-disabled", "true");
         });
@@ -715,10 +805,42 @@ describe("RoomHeader", () => {
             expect(elementCallButton).toBeInTheDocument();
             expect(legacyCallButton).toBeInTheDocument();
         });
+
+        it("anchors the tooltips of the call menus' buttons on the buttons", () => {
+            mockRoomMembers(room, 2);
+            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockImplementation(
+                (key) => key === ElementCallMemberEventType.name,
+            );
+            render(<RoomHeader room={room} />, getWrapper());
+
+            for (const name of ["Video call", "Voice call"]) {
+                const button = screen.getByRole("button", { name });
+                expect(button).toHaveAttribute("aria-haspopup", "menu");
+                expect(document.getElementById(button.getAttribute("aria-labelledby")!)).toHaveTextContent(name);
+                expect(button.querySelector("[aria-labelledby]")).toBeNull();
+            }
+        });
+
+        it("shows why voice calls are disabled in the voice call button's tooltip", () => {
+            mockRoomMembers(room, 2);
+            SdkConfig.add({
+                element_call: {
+                    use_exclusively: true,
+                },
+            });
+            // disallow element calls
+            vi.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(false);
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const reason = "You do not have permission to start voice calls";
+            const button = screen.getByRole("button", { name: reason });
+            expect(button).toHaveAttribute("aria-disabled", "true");
+            expect(document.getElementById(button.getAttribute("aria-labelledby")!)).toHaveTextContent(reason);
+        });
     });
 
     describe("public room", () => {
-        it("shows a globe", () => {
+        it("shows a globe", async () => {
             const joinRuleEvent = new MatrixEvent({
                 type: EventType.RoomJoinRules,
                 content: { join_rule: JoinRule.Public },
@@ -726,7 +848,7 @@ describe("RoomHeader", () => {
                 state_key: "",
                 room_id: room.roomId,
             });
-            room.addLiveEvents([joinRuleEvent], { addToState: true });
+            await room.addLiveEvents([joinRuleEvent], { addToState: true });
 
             render(<RoomHeader room={room} />, getWrapper());
 
@@ -809,6 +931,9 @@ describe("RoomHeader", () => {
                     getAvatarUrl: () => "mxc://avatar.url/image.png",
                     getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
                 },
+            ]);
+            vi.spyOn(CallStore.instance, "getConfiguredRTCTransports").mockReturnValue([
+                { type: "livekit", livekit_service_url: "https://example.org" },
             ]);
         });
 
@@ -919,41 +1044,6 @@ describe("RoomHeader", () => {
             });
             await waitFor(() => expect(getByLabelText(document.body, "Untrusted")).toBeInTheDocument());
         });
-    });
-
-    it("renders legacy additionalButtons", async () => {
-        const additionalButtons: ViewRoomOpts["buttons"] = [
-            {
-                icon: () => <>test-icon</>,
-                id: "test-id",
-                label: () => "test-label",
-                onClick: () => {},
-            },
-        ];
-        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
-        expect(screen.getByRole("button", { name: "test-label" })).toBeInTheDocument();
-    });
-
-    it("calls onClick-callback on legacyAdditionalButtons", () => {
-        const callback = vi.fn();
-        const additionalButtons: ViewRoomOpts["buttons"] = [
-            {
-                icon: () => <>test-icon</>,
-                id: "test-id",
-                label: () => "test-label",
-                onClick: callback,
-            },
-        ];
-
-        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
-
-        const button = screen.getByRole("button", { name: "test-label" });
-        const event = createEvent.click(button);
-        event.stopPropagation = vi.fn();
-        fireEvent(button, event);
-
-        expect(callback).toHaveBeenCalled();
-        expect(event.stopPropagation).toHaveBeenCalled();
     });
 
     describe("ask to join disabled", () => {

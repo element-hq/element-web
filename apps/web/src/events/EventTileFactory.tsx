@@ -29,7 +29,6 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
-import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
 import { type IEventTileType, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -48,6 +47,7 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
+import type { MessageRenderInfo } from "../modules/customComponentApi";
 import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
 import { MJitsiWidgetEventViewModel } from "../viewmodels/room/timeline/event-tile/MJitsiWidgetEventViewModel";
 import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/event-tile/MKeyVerificationRequestViewModel";
@@ -320,8 +320,7 @@ export function pickFactory(
     }
 
     if (evType === EventType.RoomCreate) {
-        const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor();
         if (!predecessor) {
             return noEventFactoryFactory();
         }
@@ -541,6 +540,7 @@ export function haveRendererForEvent(
     mxEvent: MatrixEvent,
     matrixClient: MatrixClient,
     showHiddenEvents: boolean,
+    messageRenderInfo?: MessageRenderInfo | null,
 ): boolean {
     // Only show "Message deleted" tile for plain message events, encrypted events,
     // and state events as they'll likely still contain enough keys to be relevant.
@@ -548,22 +548,22 @@ export function haveRendererForEvent(
         return false;
     }
 
-    // Check to see if we have any hints for this message, which indicates
-    // there is a custom renderer for the event.
-    if (ModuleApi.instance.customComponents.getHintsForMessage(mxEvent)) {
-        return true;
-    }
-
     // No tile for replacement events since they update the original tile
     if (mxEvent.isRelation(RelationType.Replace)) return false;
+
+    // A supplied resolution is shared with the caller's other event decisions.
+    const resolvedMessageRenderInfo =
+        messageRenderInfo === undefined
+            ? ModuleApi.instance.customComponents.getMessageRenderInfo(mxEvent)
+            : messageRenderInfo;
+    if (resolvedMessageRenderInfo) return true;
 
     const handler = pickFactory(mxEvent, matrixClient, showHiddenEvents);
     if (!handler) return false;
     if (handler === TextualEventFactory) {
         return hasText(mxEvent, matrixClient, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
-        const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor();
         return Boolean(predecessor);
     } else if (ElementCallEventType.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
         const intent = mxEvent.getContent()["m.intent"];

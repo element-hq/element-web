@@ -175,7 +175,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const button = screen.getByRole("button", { name: "More Options" });
         await user.click(button);
 
-        expect(screen.getByRole("menuitem", { name: "Copy room link" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Copy link" })).toBeInTheDocument();
     });
 
     it("should call onCopyRoomLink when copy link clicked", async () => {
@@ -185,7 +185,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const button = screen.getByRole("button", { name: "More Options" });
         await user.click(button);
 
-        const copyLinkOption = screen.getByRole("menuitem", { name: "Copy room link" });
+        const copyLinkOption = screen.getByRole("menuitem", { name: "Copy link" });
         await user.click(copyLinkOption);
 
         expect(mockCallbacks.onCopyRoomLink).toHaveBeenCalled();
@@ -296,5 +296,20 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         render(<TestComponent />);
 
         expect(screen.getByRole("menuitem", { name: "New section" })).toBeInTheDocument();
+    });
+
+    it("should hide the section entries when the room cannot change section", () => {
+        const TestComponent = (): JSX.Element => {
+            const vm = useMockedViewModel({ ...defaultSnapshot, canChangeSection: false }, mockCallbacks);
+            return <MoreOptionContent vm={vm} />;
+        };
+        render(<TestComponent />);
+
+        // Assigning a section does nothing for a room whose section is fixed, such as an invitation
+        expect(screen.queryByRole("menuitemcheckbox", { name: "Favourited" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("menuitemcheckbox", { name: "Low priority" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("menuitem", { name: "Move to" })).not.toBeInTheDocument();
+        // The remaining entries are unaffected
+        expect(screen.getByRole("menuitem", { name: "Leave room" })).toBeInTheDocument();
     });
 });

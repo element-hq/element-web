@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 import { test, expect } from "../../element-web-test";
 
 test.describe("Invites", () => {
@@ -15,10 +16,15 @@ test.describe("Invites", () => {
         },
     });
 
+    test.beforeEach(async ({ page, user, app }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+    });
+
     test("should render an invite view", { tag: "@screenshot" }, async ({ page, homeserver, user, bot, app }) => {
         const roomId = await bot.createRoom({ is_direct: true });
         await bot.inviteUser(roomId, user.userId);
-        await app.viewRoomByName("Bob");
+        await app.viewInvitedRoomByName("Bob");
         await expect(page.locator(".mx_RoomView")).toMatchScreenshot("Invites_room_view.png", {
             // Hide the mxid, which is not stable.
             css: `
@@ -32,7 +38,7 @@ test.describe("Invites", () => {
     test("should be able to decline an invite", async ({ page, homeserver, user, bot, app }) => {
         const roomId = await bot.createRoom({ is_direct: true });
         await bot.inviteUser(roomId, user.userId);
-        await app.viewRoomByName("Bob");
+        await app.viewInvitedRoomByName("Bob");
         await page.getByRole("button", { name: "Decline", exact: true }).click();
         await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
         await expect(
@@ -46,7 +52,7 @@ test.describe("Invites", () => {
         async ({ page, homeserver, user, bot, app }) => {
             const roomId = await bot.createRoom({ is_direct: true });
             await bot.inviteUser(roomId, user.userId);
-            await app.viewRoomByName("Bob");
+            await app.viewInvitedRoomByName("Bob");
             await page.getByRole("button", { name: "Decline and block" }).click();
             await page.getByLabel("Ignore user").click();
             await page.getByLabel("Report room").click();

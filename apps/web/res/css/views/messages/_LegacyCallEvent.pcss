@@ -129,18 +129,7 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_EventTile[data-layout="bubble"] {
-    .mx_EventTile_e2eIcon + .mx_LegacyCallEvent_wrapper {
-        .mx_LegacyCallEvent {
-            position: relative;
-
-            /* 5px (gap) + 14px (e2e icon size * mask-size) + 9px (margin-left of e2e icon) */
-            right: calc(5px + 14px + 9px);
-        }
-    }
-}
-
-.mx_EventTile_leftAlignedBubble {
+.mx_EventTile:has(> [data-testid="event-tile-line"] > [data-testid="event-tile-slot-body"] .mx_LegacyCallEvent) {
     .mx_LegacyCallEvent_wrapper {
         .mx_LegacyCallEvent {
             &.mx_LegacyCallEvent_narrow {

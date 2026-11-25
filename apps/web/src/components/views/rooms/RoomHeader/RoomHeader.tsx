@@ -11,6 +11,8 @@ import React, { type JSX, useCallback, useContext, useState } from "react";
 import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
+import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import PopInIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-in";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
@@ -19,7 +21,6 @@ import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/ver
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import { HistoryVisibility, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
-import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { Flex, Box, StatusTextView } from "@element-hq/web-shared-components";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -29,6 +30,7 @@ import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStore
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall";
+import { useDocumentPip } from "../../../../hooks/room/useDocumentPip";
 import { useRoomThreadNotifications } from "../../../../hooks/room/useRoomThreadNotifications.ts";
 import { useGlobalNotificationState } from "../../../../hooks/useGlobalNotificationState.ts";
 import { useFeatureEnabled } from "../../../../hooks/useSettings.ts";
@@ -36,7 +38,7 @@ import { useEncryptionStatus } from "../../../../hooks/useEncryptionStatus.ts";
 import { E2EStatus } from "../../../../utils/ShieldUtils.ts";
 import FacePile from "../../elements/FacePile.tsx";
 import { useRoomState } from "../../../../hooks/useRoomState.ts";
-import RoomAvatar from "../../avatars/RoomAvatar.tsx";
+import RoomAvatar from "../../avatars/RoomAvatar";
 import { formatCount } from "../../../../utils/FormattingUtils.ts";
 import PosthogTrackers from "../../../../PosthogTrackers.ts";
 import { VideoRoomChatButton } from "./VideoRoomChatButton.tsx";
@@ -58,15 +60,7 @@ import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 import { useUserStatus } from "../../../../hooks/useUserStatus.ts";
 import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
-function RoomHeaderButtons({
-    room,
-    legacyAdditionalButtons,
-    extraButtons,
-}: {
-    room: Room;
-    legacyAdditionalButtons?: ViewRoomOpts["buttons"];
-    extraButtons?: JSX.Element;
-}): JSX.Element {
+function RoomHeaderButtons({ room, extraButtons }: { room: Room; extraButtons?: JSX.Element }): JSX.Element {
     const sdkContext = useContext(SDKContext);
     const members = useRoomMembers(room, 2500);
     const memberCount = useRoomMemberCount(room, { throttleWait: 2500, includeInvited: true });
@@ -84,6 +78,7 @@ function RoomHeaderButtons({
         showVoiceCallButton,
         showVideoCallButton,
     } = useRoomCall(room);
+    const documentPip = useDocumentPip(room);
     const threadNotifications = useRoomThreadNotifications(room);
     const globalNotificationState = useGlobalNotificationState();
 
@@ -102,13 +97,23 @@ function RoomHeaderButtons({
         [callOptions, voiceCallClick],
     );
 
-    const toggleCallButton = (
+    const toggleCallButton = !documentPip.available ? (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>
             <IconButton onClick={toggleCall}>
                 <VideoCallIcon />
             </IconButton>
         </Tooltip>
-    );
+    ) : undefined;
+
+    // ...and the browser's, a window of its own that can leave the browser. Only the Element Call React
+    // component can be moved there, so this is only offered when the call is rendered that way.
+    const documentPipButton = documentPip.available ? (
+        <Tooltip label={documentPip.active ? _t("voip|document_pip_close") : _t("voip|document_pip_open")}>
+            <IconButton onClick={documentPip.toggle} data-testid="document-pip-button">
+                {documentPip.active ? <PopInIcon /> : <PopOutIcon />}
+            </IconButton>
+        </Tooltip>
+    ) : undefined;
 
     const joinCallButton = (
         <Tooltip
@@ -135,18 +140,6 @@ function RoomHeaderButtons({
             >
                 {_t("action|join")}
             </Button>
-        </Tooltip>
-    );
-
-    const videoCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|video_call")}>
-            <VideoCallIcon />
-        </Tooltip>
-    );
-
-    const voiceCallIconWithTooltip = (
-        <Tooltip label={videoCallDisabledReason ?? _t("voip|voice_call")}>
-            <VoiceCallIcon />
         </Tooltip>
     );
 
@@ -179,9 +172,9 @@ function RoomHeaderButtons({
                     trigger={
                         <IconButton
                             disabled={!!videoCallDisabledReason}
-                            aria-label={videoCallDisabledReason ?? _t("voip|video_call")}
+                            tooltip={videoCallDisabledReason ?? _t("voip|video_call")}
                         >
-                            {videoCallIconWithTooltip}
+                            <VideoCallIcon />
                         </IconButton>
                     }
                     side="left"
@@ -209,10 +202,10 @@ function RoomHeaderButtons({
             ) : (
                 <IconButton
                     disabled={!!videoCallDisabledReason}
-                    aria-label={videoCallDisabledReason ?? _t("voip|video_call")}
+                    tooltip={videoCallDisabledReason ?? _t("voip|video_call")}
                     onClick={videoClick}
                 >
-                    {videoCallIconWithTooltip}
+                    <VideoCallIcon />
                 </IconButton>
             )}
         </>
@@ -228,9 +221,9 @@ function RoomHeaderButtons({
                     trigger={
                         <IconButton
                             disabled={!!voiceCallDisabledReason}
-                            aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
+                            tooltip={voiceCallDisabledReason ?? _t("voip|voice_call")}
                         >
-                            {voiceCallIconWithTooltip}
+                            <VoiceCallIcon />
                         </IconButton>
                     }
                     side="left"
@@ -258,10 +251,10 @@ function RoomHeaderButtons({
             ) : (
                 <IconButton
                     disabled={!!voiceCallDisabledReason}
-                    aria-label={voiceCallDisabledReason ?? _t("voip|voice_call")}
+                    tooltip={voiceCallDisabledReason ?? _t("voip|voice_call")}
                     onClick={voiceClick}
                 >
-                    {voiceCallIconWithTooltip}
+                    <VoiceCallIcon />
                 </IconButton>
             )}
         </>
@@ -276,9 +269,13 @@ function RoomHeaderButtons({
     );
     let videoCallButton: JSX.Element | undefined = startVideoCallButton;
     let voiceCallButton: JSX.Element | undefined = startVoiceCallButton;
+    let pipButton: JSX.Element | undefined;
     if (isConnectedToCall) {
+        // In a call there is nothing to start: the two buttons are the two ways of taking the call out of
+        // the room view
         videoCallButton = toggleCallButton;
         voiceCallButton = undefined;
+        pipButton = documentPipButton;
     } else if (isViewingCall) {
         videoCallButton = closeLobbyButton;
         voiceCallButton = undefined;
@@ -286,6 +283,7 @@ function RoomHeaderButtons({
 
     if (!showVideoCallButton) {
         videoCallButton = undefined;
+        pipButton = undefined;
     }
 
     if (!showVoiceCallButton) {
@@ -302,30 +300,13 @@ function RoomHeaderButtons({
         <>
             {extraButtons}
 
-            {legacyAdditionalButtons?.map((props) => {
-                const label = props.label();
-
-                return (
-                    <Tooltip label={label} key={props.id}>
-                        <IconButton
-                            aria-label={label}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                props.onClick();
-                            }}
-                        >
-                            {typeof props.icon === "function" ? props.icon() : props.icon}
-                        </IconButton>
-                    </Tooltip>
-                );
-            })}
-
             {isViewingCall && <CallGuestLinkButton room={room} />}
 
             {activeCallSessionType && !isConnectedToCall && !isViewingCall ? (
                 joinCallButton
             ) : (
                 <>
+                    {!isVideoRoom && pipButton}
                     {!isVideoRoom && videoCallButton}
                     {!isVideoRoom && voiceCallButton}
                 </>
@@ -433,14 +414,11 @@ function historyVisibilityIcon(historyVisibility: HistoryVisibility): JSX.Elemen
 export default function RoomHeader({
     room,
     extraButtons,
-    legacyAdditionalButtons,
     oobData,
 }: {
     room: Room | LocalRoom;
     // Extra buttons added by a new element web module API module
     extraButtons?: JSX.Element;
-    // DEPRECATED: Buttons added by a legacy react-sdk module API module.
-    legacyAdditionalButtons?: ViewRoomOpts["buttons"];
     oobData?: IOOBData;
 }): JSX.Element {
     const sdkContext = useContext(SDKContext);
@@ -472,7 +450,7 @@ export default function RoomHeader({
                         oobData={oobData}
                         onClick={room instanceof LocalRoom ? undefined : onAvatarClick}
                         tabIndex={-1}
-                        aria-label={_t("room|header_avatar_open_settings_label")}
+                        altText={_t("room|header_avatar_open_settings_label")}
                     />
                 </WithPresenceIndicator>
                 {/* Disable on-click actions until the room is created */}
@@ -542,13 +520,7 @@ export default function RoomHeader({
                     </Box>
                 </button>
                 {/* If the room is local-only then we don't want to show any additional buttons, as it won't work */}
-                {room instanceof LocalRoom === false && (
-                    <RoomHeaderButtons
-                        room={room}
-                        legacyAdditionalButtons={legacyAdditionalButtons}
-                        extraButtons={extraButtons}
-                    />
-                )}
+                {room instanceof LocalRoom === false && <RoomHeaderButtons room={room} extraButtons={extraButtons} />}
             </Flex>
             {askToJoinEnabled && <RoomKnocksBar room={room} />}
         </CurrentRightPanelPhaseContextProvider>

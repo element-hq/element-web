@@ -1,0 +1,70 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* The page and zoom controls and the host's document surface. The frame around them comes from DocumentViewerView. */
+
+.pageForm,
+.zoomControls {
+    display: flex;
+    align-items: center;
+
+    /* Strip the fieldset's own border, spacing and min-width. */
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-inline-size: 0;
+}
+
+.pageForm {
+    gap: var(--cpd-space-2x);
+}
+
+.zoomControls {
+    gap: var(--cpd-space-1x);
+}
+
+.pageInput {
+    width: 4ch;
+    padding: var(--cpd-space-1x) var(--cpd-space-2x);
+    text-align: center;
+    color: var(--cpd-color-text-primary);
+    background: var(--cpd-color-bg-canvas-default);
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-primary);
+    border-radius: var(--cpd-radius-pill-effect);
+    font: var(--cpd-font-body-sm-medium);
+}
+
+.pageInput:focus-visible {
+    outline: var(--cpd-border-width-2) solid var(--cpd-color-border-focused);
+    outline-offset: 1px;
+}
+
+.pageSeparator,
+.pageTotal {
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-medium);
+}
+
+.zoomLevel {
+    /* Wide enough for "100%" so the buttons stay put as the level changes. */
+    min-width: 5ch;
+    text-align: center;
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-sm-semibold);
+}
+
+/* The host's document surface. Fills the shell's body, which is the positioning context. */
+.surface {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.surface > * {
+    width: 100%;
+    height: 100%;
+}

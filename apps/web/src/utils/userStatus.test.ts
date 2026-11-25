@@ -16,48 +16,10 @@ import {
     fetchUserStatus,
     setUserOnCall,
     setUserStatus,
-    userStatusFromProfile,
     userStatusTextWithinMaxLength,
 } from "./userStatus";
 
 describe("userStatus utils", () => {
-    describe("userStatusFromProfile", () => {
-        it("returns the user status if it is valid", () => {
-            expect(userStatusFromProfile({ emoji: "🐳", text: "Feeling a little blue" }, undefined)).toEqual({
-                emoji: "🐳",
-                text: "Feeling a little blue",
-            });
-        });
-
-        it("returns undefined if the user status is invalid and there is no call status", () => {
-            expect(userStatusFromProfile({ text: "Feeling a little blue" }, undefined)).toBeUndefined();
-        });
-
-        it("returns the call status if the user status is invalid but the call status is valid", () => {
-            expect(userStatusFromProfile({ text: "Feeling a little blue" }, { call_joined_ts: 12345 })).toEqual({
-                emoji: "📞",
-                text: "On a call",
-            });
-        });
-
-        it("prefers the user status over the call status if both are valid", () => {
-            expect(
-                userStatusFromProfile({ emoji: "🐳", text: "Feeling a little blue" }, { call_joined_ts: 12345 }),
-            ).toEqual({
-                emoji: "🐳",
-                text: "Feeling a little blue",
-            });
-        });
-
-        it("returns undefined if the call status has a non-positive call_joined_ts", () => {
-            expect(userStatusFromProfile(undefined, { call_joined_ts: 0 })).toBeUndefined();
-        });
-
-        it("returns undefined if neither status is valid", () => {
-            expect(userStatusFromProfile(undefined, undefined)).toBeUndefined();
-        });
-    });
-
     describe("userStatusTextWithinMaxLength", () => {
         it("returns true for text within the max length", () => {
             const text = "a".repeat(256);
@@ -77,7 +39,7 @@ describe("userStatus utils", () => {
         });
 
         it("sets the user status with valid input", async () => {
-            setUserStatus(client, { emoji: "🐳", text: "Feeling a little blue" });
+            await setUserStatus(client, { emoji: "🐳", text: "Feeling a little blue" });
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", {
                 emoji: "🐳",
@@ -155,7 +117,7 @@ describe("userStatus utils", () => {
 
             await clearAllUserStatus(client);
 
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status");
         });
 
         it("clears the call status", async () => {
@@ -163,7 +125,7 @@ describe("userStatus utils", () => {
 
             await clearAllUserStatus(client);
 
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call");
         });
     });
 
@@ -189,7 +151,7 @@ describe("userStatus utils", () => {
         it("clears the call status if onCall is false", async () => {
             await setUserOnCall(client, false);
 
-            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
+            expect(client.deleteExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call");
         });
     });
 });

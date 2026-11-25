@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi, describe, it, expect, beforeEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
 
 import { formatList, formatCount, formatCountLong } from "./FormattingUtils";
@@ -38,8 +38,11 @@ describe("FormattingUtils", () => {
 
     describe("formatList", () => {
         beforeEach(() => {
-            vi.resetAllMocks();
             vi.spyOn(SettingsStore, "getValue").mockReturnValue("en-GB");
+        });
+
+        afterEach(() => {
+            vi.resetAllMocks();
         });
 
         it("should return empty string when given empty list", () => {

@@ -533,7 +533,7 @@ export function tryInitStorage(): Promise<void> {
         global.mx_rage_initStoragePromise = global.mx_rage_store.connect();
 
         // Fire off a task in the background which will clean up old logs in the store
-        global.mx_rage_initStoragePromise.then(() => {
+        void global.mx_rage_initStoragePromise.then(() => {
             global.mx_rage_store.consume().catch((e) => {
                 logger.error("Error cleaning up rageshake store", e);
             });
@@ -549,7 +549,7 @@ export function flush(): void {
     if (!global.mx_rage_store) {
         return;
     }
-    global.mx_rage_store.flush();
+    void global.mx_rage_store.flush();
 }
 
 /**

@@ -31,6 +31,7 @@ import "./ipc.js";
 import "./seshat.js";
 import "./settings.js";
 import "./badge.js";
+import "./x509.js";
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { buildMenuTemplate } from "./vectormenu.js";
@@ -41,11 +42,13 @@ import { _t, AppLocalization } from "./language-helper.js";
 import { setDisplayMediaCallback } from "./displayMediaCallback.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
+import { handleWindowClose, revealMainWindow } from "./window-close.js";
 import { type RendererRecovery, setupRendererRecovery } from "./renderer-recovery.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
 import { getArgs } from "./args.js";
+import { configureSpellChecker } from "./spellcheck.js";
 import { type ConfigOptions, loadConfig } from "./config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -96,11 +99,6 @@ void configureSentry();
 process.on("uncaughtException", function (error: Error): void {
     console.log("Unhandled exception", error);
 });
-
-app.commandLine.appendSwitch("--enable-usermedia-screen-capturing");
-if (!app.commandLine.hasSwitch("enable-features")) {
-    app.commandLine.appendSwitch("enable-features", "WebRTCPipeWireCapturer");
-}
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
@@ -236,6 +234,12 @@ app.on("ready", async () => {
         console.log("No update_base_url is defined: auto update is disabled");
     }
 
+    configureSpellChecker(session.defaultSession, {
+        // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
+        enabled: store.get("spellCheckerEnabled", true),
+        dictionaryDownloadUrl: config.spell_checker_dictionary_download_url,
+    });
+
     // Set up i18n before loading storage as we need translations for dialogs
     global.appLocalization = new AppLocalization({
         components: [(): void => tray.initApplicationMenu(), (): void => Menu.setApplicationMenu(buildMenuTemplate())],
@@ -294,10 +298,6 @@ app.on("ready", async () => {
         setupMacosTitleBar(global.mainWindow);
     }
 
-    // Handle spellchecker
-    // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
-    global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
-
     // Create trayIcon icon
     if (store.get("minimizeToTray")) await tray.create();
 
@@ -349,25 +349,9 @@ app.on("ready", async () => {
     global.mainWindow.on("closed", () => {
         global.mainWindow = null;
     });
-    global.mainWindow.on("close", async (e) => {
-        // If we are not quitting and have a tray icon then minimize to tray
-        if (!global.appQuitting && (tray.hasTray() || process.platform === "darwin")) {
-            // On Mac, closing the window just hides it
-            // (this is generally how single-window Mac apps
-            // behave, eg. Mail.app)
-            e.preventDefault();
-
-            if (global.mainWindow?.isFullScreen()) {
-                global.mainWindow.once("leave-full-screen", () => global.mainWindow?.hide());
-
-                global.mainWindow.setFullScreen(false);
-            } else {
-                global.mainWindow?.hide();
-            }
-
-            return false;
-        }
-    });
+    global.mainWindow.on("close", (e) =>
+        handleWindowClose(e, global.mainWindow, { appQuitting: global.appQuitting, hasTray: tray.hasTray() }),
+    );
 
     if (process.platform === "win32") {
         // Handle forward/backward mouse buttons in Windows
@@ -446,9 +430,7 @@ app.on("second-instance", (ev, commandLine, workingDirectory) => {
         // brought to a working UI rather than a white screen. Routed through the capped recovery so a
         // relaunch can't re-arm a crash loop we've already given up on; a no-op for a healthy window.
         rendererRecovery?.recoverIfCrashed();
-        if (!global.mainWindow.isVisible()) global.mainWindow.show();
-        if (global.mainWindow.isMinimized()) global.mainWindow.restore();
-        global.mainWindow.focus();
+        revealMainWindow(global.mainWindow);
     }
 });
 

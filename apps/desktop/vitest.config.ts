@@ -8,8 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { defineProject } from "vitest/config";
 
 export default defineProject({
+    oxc: {
+        include: /\.[cm]?tsx?$/,
+    },
     test: {
-        include: ["src/**/*.test.ts"],
+        include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
         environment: "node",
         pool: "threads",
         globals: false,

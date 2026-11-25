@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useRef, useEffect, useState, useCallback, type DependencyList } from "react";
+import { useEffect, useEffectEvent, useState, useCallback, type DependencyList } from "react";
 import { type ListenerMap, type TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 // oxlint-disable-next-line no-restricted-imports
@@ -14,6 +14,9 @@ import type { EventEmitter } from "events";
 
 type Handler = (...args: any[]) => void;
 
+/**
+ * {@link useEventEmitter} for a {@link TypedEventEmitter}, restricting the event name to the emitter's events.
+ */
 export function useTypedEventEmitter<Events extends string, Arguments extends ListenerMap<Events>>(
     emitter: TypedEventEmitter<Events, Arguments> | undefined,
     eventName: Events,
@@ -26,32 +29,21 @@ export function useTypedEventEmitter<Events extends string, Arguments extends Li
  * Hook to wrap an EventEmitter on and off in hook lifecycle
  */
 export function useEventEmitter(emitter: EventEmitter | undefined, eventName: string | symbol, handler: Handler): void {
-    // Create a ref that stores handler
-    const savedHandler = useRef(handler);
+    const onEvent = useEffectEvent(handler);
 
-    // Update ref.current value if handler changes.
     useEffect(() => {
-        savedHandler.current = handler;
-    }, [handler]);
+        // allow disabling this hook by passing a falsy emitter
+        if (!emitter) return;
 
-    useEffect(
-        () => {
-            // allow disabling this hook by passing a falsy emitter
-            if (!emitter) return;
+        // Add event listener
+        emitter.on(eventName, onEvent);
 
-            // Create event listener that calls handler function stored in ref
-            const eventListener = (...args: any[]): void => savedHandler.current(...args);
-
-            // Add event listener
-            emitter.on(eventName, eventListener);
-
-            // Remove event listener on cleanup
-            return () => {
-                emitter.off(eventName, eventListener);
-            };
-        },
-        [eventName, emitter], // Re-run if eventName or emitter changes
-    );
+        // Remove event listener on cleanup.
+        return () => {
+            emitter.off(eventName, onEvent);
+        };
+        // Re-run if eventName or emitter changes
+    }, [eventName, emitter]);
 }
 
 type Mapper<T> = (...args: any[]) => T;
@@ -161,11 +153,12 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 rerunArgs.push(args);
                 return;
             }
+            // oxlint-disable-next-line react/immutability
             running = true;
             // Note: We need to use .then notation instead of async/await,
             // because async/await would cause this function to return a
             // promise, which `useEffect` doesn't like.
-            fn(...args)
+            void fn(...args)
                 .then((v) => {
                     if (!(v instanceof NoChange)) {
                         setValue(v);
@@ -174,11 +167,12 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 .finally(() => {
                     running = false;
                     if (rerunArgs.length != 0) {
+                        // oxlint-disable-next-line react/immutability
                         handler(...rerunArgs.shift());
                     }
                 });
         },
-        [fn, ...deps], // eslint-disable-line react-hooks/exhaustive-deps
+        [fn, ...deps], // oxlint-disable-line react-hooks/exhaustive-deps react/use-memo
     );
 
     // re-run when the emitter changes

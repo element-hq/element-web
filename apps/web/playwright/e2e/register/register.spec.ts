@@ -40,7 +40,7 @@ test.describe("Registration", () => {
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("server-picker.png");
             await expect(axe).toHaveNoViolations();
 
-            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
+            await page.getByRole("textbox", { name: "Other account provider" }).fill(homeserver.baseUrl);
             await page.getByRole("button", { name: "Continue", exact: true }).click();
             // wait for the dialog to go away
             await expect(page.getByRole("dialog")).not.toBeVisible();
@@ -82,7 +82,7 @@ test.describe("Registration", () => {
             // check that the device considers itself verified
             await page.getByRole("button", { name: "User menu", exact: true }).click();
             await page.getByRole("menuitem", { name: "All settings", exact: true }).click();
-            await page.getByRole("tab", { name: "Sessions", exact: true }).click();
+            await page.getByRole("tab", { name: "Devices", exact: true }).click();
             await expect(
                 page.getByTestId("current-session-section").getByTestId("device-metadata-isVerified"),
             ).toHaveText("Verified");
@@ -95,7 +95,7 @@ test.describe("Registration", () => {
     test("should require username to fulfil requirements and be available", async ({ homeserver, page }) => {
         await page.getByRole("button", { name: "Edit", exact: true }).click();
         await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
-        await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
+        await page.getByRole("textbox", { name: "Other account provider" }).fill(homeserver.baseUrl);
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         // wait for the dialog to go away
         await expect(page.getByRole("dialog")).not.toBeVisible();

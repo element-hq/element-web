@@ -41,7 +41,7 @@ const SettingsDropdown = ({
     const onOptionChange = useCallback(
         (value: string): void => {
             setValue(value); // local echo
-            SettingsStore.setValue(settingKey, roomId ?? null, level, value);
+            void SettingsStore.setValue(settingKey, roomId ?? null, level, value);
             onChange?.(value);
         },
         [settingKey, roomId, level, onChange],

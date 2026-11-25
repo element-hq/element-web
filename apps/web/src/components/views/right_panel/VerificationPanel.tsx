@@ -351,7 +351,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     };
 
     private onSasMatchesClick = (): void => {
-        this.state.sasEvent?.confirm();
+        void this.state.sasEvent?.confirm();
     };
 
     private onSasMismatchesClick = (): void => {
@@ -372,7 +372,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const { request } = this.props;
 
         // if we have a device ID and did not have one before, fetch the device's details
-        this.maybeGetOtherDevice();
+        void this.maybeGetOtherDevice();
 
         // if we have had a reply from the other side (ie, the phase is "ready") and we have not
         // yet done so, fetch the QR code
@@ -411,7 +411,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             const reciprocateQREvent = request.verifier.getReciprocateQrCodeCallbacks();
             this.setState({ sasEvent, reciprocateQREvent });
         }
-        this.onRequestChange();
+        void this.onRequestChange();
     }
 
     public componentWillUnmount(): void {

@@ -10,6 +10,7 @@ import { Field, Link, Menu, Root, TextControl } from "@vector-im/compound-web";
 
 import { _t, type UserStatus } from "..";
 import { EmojiPicker } from "../core/EmojiPicker";
+import { limitUserStatusInputText } from "../core/userStatus";
 import styles from "./CustomStatusView.module.css";
 import classNames from "classnames";
 
@@ -29,12 +30,28 @@ export interface CustomStatusViewProps {
      * "Cancel" while the text is empty.
      */
     onCancel: () => void;
+    /**
+     * Recently used emoji (unicode strings, most relevant first) to show in the
+     * picker's "Frequently Used" category. The category is hidden when empty or
+     * omitted.
+     */
+    recentEmojis?: string[];
+    /**
+     * Called with the chosen emoji unicode when it should be recorded as
+     * recently used.
+     */
+    onRecordRecentEmoji?: (unicode: string) => void;
 }
 
 /**
  * Editor for composing a custom user status text and choosing an emoji.
  */
-export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): JSX.Element {
+export function CustomStatusView({
+    onSave,
+    onCancel,
+    recentEmojis,
+    onRecordRecentEmoji,
+}: CustomStatusViewProps): JSX.Element {
     const [emoji, setEmoji] = useState(DEFAULT_EMOJI);
     const [text, setText] = useState("");
     const [pickerOpen, setPickerOpen] = useState(false);
@@ -44,8 +61,7 @@ export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): J
     const onChooseEmoji = useCallback((unicode: string): boolean => {
         setEmoji(unicode);
         setPickerOpen(false);
-        // Don't record custom-status emoji as recently used composer reactions.
-        return false;
+        return true;
     }, []);
 
     const commit = useCallback(() => {
@@ -99,6 +115,8 @@ export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): J
             >
                 <EmojiPicker
                     onChoose={onChooseEmoji}
+                    recentEmojis={recentEmojis}
+                    onRecordRecent={onRecordRecentEmoji}
                     onFinished={() => setPickerOpen(false)}
                     showQuickReactions={false}
                 />
@@ -106,7 +124,7 @@ export function CustomStatusView({ onSave, onCancel }: CustomStatusViewProps): J
             <Field name="custom-status" className={styles.textField}>
                 <TextControl
                     value={text}
-                    onChange={(ev) => setText(ev.currentTarget.value)}
+                    onChange={(ev) => setText(limitUserStatusInputText(ev.currentTarget.value))}
                     placeholder={_t("status|set_status|set_status_prompt")}
                     aria-label={_t("status|set_status|set_status_prompt")}
                     autoFocus

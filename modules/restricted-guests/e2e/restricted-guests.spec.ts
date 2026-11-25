@@ -296,6 +296,9 @@ for (const auth of ["mas", "legacy"] as const) {
                             await dialog.getByRole("button", { name: "Continue as guest" }).click();
 
                             await expect(page.getByText("Ask to join?")).toBeVisible();
+
+                            // Guests don't get the room list search panel
+                            await expect(page.getByRole("search")).not.toBeVisible();
                         },
                     );
                 } else {

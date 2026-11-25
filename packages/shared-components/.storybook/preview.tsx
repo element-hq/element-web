@@ -17,7 +17,14 @@ import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
-import { EventPresentationProvider, type EventDensity, type EventLayout, I18nApi, I18nContext } from "../src";
+import {
+    EventPresentationProvider,
+    type EventDensity,
+    type EventLayout,
+    I18nApi,
+    I18nContext,
+    LinkedTextContext,
+} from "../src";
 import { setLanguage } from "../src/core/i18n/i18n";
 import { type StoryContext } from "storybook/internal/csf";
 import { DragDropProvider } from "@dnd-kit/react";
@@ -161,6 +168,14 @@ const withI18nProvider: Decorator = (Story) => {
     );
 };
 
+const withLinkedTextProvider: Decorator = (Story) => {
+    return (
+        <LinkedTextContext.Provider value={{}}>
+            <Story />
+        </LinkedTextContext.Provider>
+    );
+};
+
 const withEventPresentationProvider: Decorator = (Story, context) => {
     return (
         <EventPresentationProvider
@@ -210,6 +225,7 @@ const preview: Preview = {
         withEventPresentationProvider,
         withTooltipProvider,
         withI18nProvider,
+        withLinkedTextProvider,
         withDragDropProvider,
     ],
     parameters: {
@@ -224,6 +240,26 @@ const preview: Preview = {
              * See: https://storybook.js.org/docs/next/writing-tests/accessibility-testing#test-behavior
              */
             test: "error",
+            config: {
+                rules: [
+                    /*
+                     * Enabled by default since axe-core 4.14. Our composite list items (room list, rich list,
+                     * thread summary, reactions, …) use an aria-label summary that cannot contain all of their
+                     * visible text. Fixing this needs a rethink of those accessible names.
+                     * Ignore temporarily until we fix this.
+                     */
+                    { id: "label-content-name-mismatch", enabled: false },
+                ],
+            },
+        },
+        viewport: {
+            options: {
+                visualTest: {
+                    name: "Visual test",
+                    styles: { width: "960px", height: "720px" },
+                },
+            },
+            defaultViewport: "visualTest",
         },
     },
     loaders: [languageLoader],

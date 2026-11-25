@@ -49,7 +49,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
             const isOutdated = isEventOutdated(payload.event);
             if (canvasRef.current && payload.action.startsWith(actionPrefix) && !isOutdated) {
                 const effect = payload.action.slice(actionPrefix.length);
-                lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current!));
+                void lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current!));
             }
         };
         const dispatcherRef = dis.register(onAction);
@@ -64,7 +64,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
             for (const effect in currentEffects) {
                 const effectModule: ICanvasEffect = currentEffects.get(effect)!;
                 if (effectModule && effectModule.isRunning) {
-                    effectModule.stop();
+                    void effectModule.stop();
                 }
             }
         };

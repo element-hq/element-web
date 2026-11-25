@@ -7,27 +7,24 @@ on:
 permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     update:
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
-
-            - name: Install Deps
-              run: "pnpm install --frozen-lockfile"
+                  cache: true
+                  install: true
+                  require-lockfile: true
 
             - name: Fetch Jitsi
               working-directory: apps/web
               run: "pnpm vendor:jitsi"
 
             - name: Create Pull Request
-              uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+              uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   branch: actions/jitsi-update

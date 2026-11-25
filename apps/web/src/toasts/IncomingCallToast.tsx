@@ -73,7 +73,7 @@ export const getIncomingCallToastKey = (callId: string, roomId: string): string 
  * @returns The timestamp to use as the expect start time to apply the `lifetime` to.
  */
 export const getNotificationEventSendTs = (event: MatrixEvent): number => {
-    const content = event.getContent() as Partial<IRTCNotificationContent>;
+    const content = event.getContent<Partial<IRTCNotificationContent>>();
     const sendTs = content.sender_ts;
     if (sendTs && Math.abs(sendTs - event.getTs()) >= 15000) {
         logger.warn(
@@ -162,7 +162,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     const sdkContext = useContext(SDKContext);
     const roomId = notificationEvent.getRoomId()!;
     // Use a partial type so ts still helps us to not miss any type checks.
-    const notificationContent = notificationEvent.getContent() as Partial<IRTCNotificationContent>;
+    const notificationContent = notificationEvent.getContent<Partial<IRTCNotificationContent>>();
     const room = sdkContext.client?.getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
     const [connectedCalls, setConnectedCalls] = useState<Call[]>(Array.from(CallStore.instance.connectedCalls));
@@ -191,7 +191,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
 
     // Dismiss if the notification event or call event is redacted
     useTypedEventEmitter(room, MatrixEventEvent.BeforeRedaction, (ev: MatrixEvent) => {
-        if ([ev.getId(), ev.getRelation()?.event_id].includes(ev.getId())) {
+        if ([notificationEvent.getId(), notificationEvent.getRelation()?.event_id].includes(ev.getId())) {
             dismissToast();
         }
     });
@@ -200,7 +200,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     const onCall = useCallback(
         (call: Call, callRoomId: string): void => {
             const roomId = notificationEvent.getRoomId();
-            if (!roomId && roomId !== callRoomId) return;
+            if (roomId !== callRoomId) return;
             if (call === null || call.participants.size === 0) {
                 dismissToast();
             }

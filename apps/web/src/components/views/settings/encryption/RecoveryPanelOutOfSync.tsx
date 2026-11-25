@@ -54,7 +54,7 @@ export function RecoveryPanelOutOfSync({
             heading={_t("settings|encryption|recovery|title")}
             subHeading={
                 <SettingsSubheader
-                    label={_t("settings|encryption|recovery|description")}
+                    label={_t("encryption|recovery_key_description")}
                     state="error"
                     stateMessage={_t("settings|encryption|recovery|key_storage_warning")}
                 />

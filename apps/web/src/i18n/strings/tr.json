@@ -27,7 +27,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
         "complete": "Tamamlandı",
@@ -40,7 +39,6 @@
         "create_account": "Hesap oluştur",
         "decline": "Reddet",
         "delete": "Sil",
-        "deny": "Reddet",
         "disable": "Devre dışı bırak",
         "disconnect": "Bağlantıyı kes",
         "dismiss": "Kapat",
@@ -886,7 +884,6 @@
             "warning": "Kurtarma yöntemini kaldırmadıysanız, bir saldırgan hesabınıza erişmeye çalışıyor olabilir. Hesap parolanızı değiştirin ve Ayarlar'da hemen yeni bir kurtarma yöntemi belirleyin."
         },
         "set_up_recovery": "Kurtarmayı ayarlayın",
-        "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
         "set_up_toast_title": "Güvenli Yedekleme kur",
         "unable_to_setup_keys_error": "Anahtarlar ayarlanamıyor",
         "verification": {
@@ -1233,7 +1230,6 @@
         "name_mxid_share_room": "Birini adını, kullanıcı adını ( <userId/> gibi) veya <a>bu odayı paylaş</a> kullanarak davet edin.",
         "name_mxid_share_space": "Birini adını, kullanıcı adını ( <userId/> gibi) veya <a>bu alanı paylaş</a> kullanarak davet edin.",
         "recents_section": "Güncel Sohbetler",
-        "room_failed_partial": "Başkalarına davetler iletilmekle beraber, aşağıdakiler <RoomName/> odasına davet edilemedi",
         "room_failed_partial_title": "Bazı davetler gönderilemiyor",
         "room_failed_title": "Kullanıcılar %(roomName)s adresine davet edilemedi",
         "send_link_prompt": "Veya davet bağlantısı gönder",
@@ -1347,16 +1343,12 @@
         "bridge_state_workspace": "Çalışma alanı: <networkLink/>",
         "click_for_info": "Daha fazla bilgi için tıklayın",
         "currently_experimental": "Şu anda deneysel.",
-        "custom_themes": "Özel temaların eklenmesini destekleyin",
-        "dynamic_room_predecessors": "Dinamik oda öncülleri",
-        "dynamic_room_predecessors_description": "MSC3946 etkinleştir (geç gelen oda arşivlerini desteklemek için)",
         "element_call_video_rooms": "Element Çağrısı video odaları",
         "exclude_insecure_devices": "Mesaj gönderirken/alırken güvenli olmayan cihazları hariç tut",
         "exclude_insecure_devices_description": "Bu mod etkinleştirildiğinde, şifrelenmiş mesajlar doğrulanmamış cihazlarla paylaşılmaz ve doğrulanmamış cihazlardan gelen mesajlar bir hata olarak gösterilir. Bu modu etkinleştirirseniz, cihazlarını doğrulamamış kullanıcılarla iletişim kuramayabileceğinizi unutmayın.",
         "experimental_description": "Deneysel mi hissediyorsunuz? Geliştirme aşamasındaki en son fikirlerimizi deneyin. Bu özellikler nihai değildir; kararsız olabilirler, değişebilirler veya tamamen kaldırılabilirler. <a>Daha fazla bilgi için</a>.",
         "experimental_section": "Erken önizlemeler",
         "extended_profiles_msc_support": "Sunucunuzun MSC4133 desteklemesini gerektirir",
-        "feature_disable_call_per_sender_encryption": "Element Call için gönderen başına şifrelemeyi devre dışı bırakın",
         "feature_wysiwyg_composer_description": "Mesaj oluşturucu olarak Markdown yerine zengin metin kullanın.",
         "group_developer": "Geliştirici",
         "group_encryption": "Şifreleme",
@@ -1366,7 +1358,6 @@
         "group_profile": "Profil",
         "group_rooms": "Odalar",
         "group_spaces": "Alanlar",
-        "group_themes": "Temalar",
         "group_threads": "Mesaj dizileri",
         "group_ui": "Kullanıcı arayüzü",
         "group_voip": "Ses & Video",
@@ -1441,8 +1432,6 @@
     "language_dropdown_label": "Dil Açılır Listesi",
     "leave_room_dialog": {
         "last_person_warning": "Buradaki tek kişi sensin. Ayrılırsanız, gelecekte siz de dahil olmak üzere hiç kimse katılamaz.",
-        "leave_room_question": "'%(roomName)s' odasından ayrılmak istediğinize emin misiniz ?",
-        "leave_space_question": "'%(spaceName)s' alanından ayrılmak istediğinizden emin misiniz?",
         "room_leave_admin_warning": "Bu odadaki tek yönetici sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_leave_mod_warning": "Bu odadaki tek moderatör sizsiniz. Ayrılırsanız, hiç kimse oda ayarlarını değiştiremez veya diğer önemli işlemleri yapamaz.",
         "room_rejoin_warning": "Bu oda herkese açık değildir. Davetiye olmadan tekrar katılamazsınız.",
@@ -1510,7 +1499,6 @@
     },
     "member_list_back_action_label": "Oda üyeleri",
     "message_edit_dialog_title": "Mesajları düzenle",
-    "migrating_crypto": "Sıkı durun. Şifrelemeyi daha hızlı ve daha güvenilir hale getirmek için %(brand)s güncelliyoruz.",
     "mobile_guide": {
         "toast_accept": "Uygulamayı kullan",
         "toast_description": "%(brand)s mobil web tarayıcısında deneyseldir. Daha iyi bir deneyim ve en yeni özellikler için ücretsiz yerel uygulamamızı kullanın.",
@@ -1545,7 +1533,6 @@
         "mentions_and_keywords": "@bahsetmeler ve anahtar kelimeler",
         "mentions_and_keywords_description": "Yalnızca <a>settings</a> ayarlarınızda ayarlanan bahsetmeler ve anahtar kelimelerle bildirim alın",
         "mentions_keywords": "Bahsetmeler ve anahtar kelimeler",
-        "message_didnt_send": "Mesaj gönderilmedi. Bilgi için tıklayınız.",
         "mute_description": "Hiçbir bildirim almayacaksınız"
     },
     "notifier": {
@@ -1658,8 +1645,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s anahtarları başarıyla geri yüklendi",
         "enter_key_description": "Güvenlik Anahtarınızı girerek güvenli mesaj geçmişinize erişin ve güvenli mesajlaşmayı ayarlayın.",
         "enter_key_title": "Güvenlik Anahtarını Girin",
-        "enter_phrase_description": "Güvenli mesaj geçmişinize erişin ve Güvenlik İfadenizi girerek güvenli mesajlaşmayı ayarlayın.",
-        "enter_phrase_title": "Güvenlik İfadesini Girin",
         "incorrect_security_phrase_dialog": "Bu Güvenlik İfadesi ile yedeklemenin şifresi çözülemedi: lütfen doğru Güvenlik İfadesini girdiğinizden emin olun.",
         "incorrect_security_phrase_title": "Yanlış Güvenlik İfadesi",
         "key_backup_warning": "<b>Uyarı</b> : Anahtar yedeklemesini yalnızca güvenilir bir bilgisayardan ayarlamalısınız.",
@@ -1671,7 +1656,6 @@
         "load_error_content": "Yedek durumu yüklenemiyor",
         "load_keys_progress": "%(completed)s / %(total)s anahtarlar geri yüklendi",
         "no_backup_error": "Yedek bulunamadı!",
-        "phrase_forgotten_text": "Güvenlik İfadenizi unuttuysanız, <button1>Güvenlik Anahtarınızı kullanabilirsiniz</button1> veya <button2>yeni kurtarma seçeneklerini ayarlayın</button2>",
         "recovery_key_mismatch_description": "Bu Güvenlik Anahtarı ile yedeklemenin şifresi çözülemedi: lütfen doğru Güvenlik Anahtarı'nı girdiğinizden emin olun.",
         "recovery_key_mismatch_title": "Güvenlik Anahtarı uyuşmazlığı",
         "restore_failed_error": "Yedekleme geri yüklenemiyor"
@@ -1838,7 +1822,6 @@
         "join_button_account": "Kayıt Ol",
         "join_failed_needs_invite": "%(roomName)s görüntülemek için bir davetiyeye ihtiyacınız var",
         "join_the_discussion": "Tartışmaya katılın",
-        "join_title": "Sohbete başlamak için odaya katılın",
         "join_title_account": "Konuşmaya bir hesapla katıl",
         "joining": "Katılınıyor…",
         "joining_room": "Odaya katılıyor…",
@@ -2228,11 +2211,6 @@
             "custom_font_description": "Sisteminizde yüklü bir yazı tipinin adını ayarlayın &%(brand)s onu kullanmaya çalışacaktır.",
             "custom_font_name": "Sistem yazı tipi adı",
             "custom_font_size": "Özel boyut kullan",
-            "custom_theme_add": "Özel tema ekle",
-            "custom_theme_downloading": "Özel tema indiriliyor…",
-            "custom_theme_error_downloading": "Tema indirilirken hata oluştu",
-            "custom_theme_help": "Uygulamak istediğiniz özel temanın URL'sini girin.",
-            "custom_theme_invalid": "Geçersiz tema taslağı.",
             "dialog_title": "<strong>Ayarlar:</strong> Görünüm",
             "font_size": "Yazı boyutu",
             "font_size_default": "%(fontSize)s (varsayılan)",
@@ -2279,13 +2257,6 @@
                 "session_key": "Oturum anahtarı:",
                 "title": "Gelişmiş"
             },
-            "delete_key_storage": {
-                "breadcrumb_page": "Anahtar depolamasını sil",
-                "confirm": "Anahtar depolamasını sil",
-                "description": "Anahtar depolamanın silinmesi kriptografik kimliğinizi ve mesaj anahtarlarınızı sunucudan kaldıracak ve aşağıdaki güvenlik özelliklerini kapatacaktır:",
-                "list_first": "Yeni cihazlarda şifrelenmiş mesaj geçmişine sahip olmayacaksınız",
-                "list_second": "%(brand)s adresinden her yerde oturumunuzu kapatırsanız şifrelenmiş mesajlarınıza erişiminizi kaybedersiniz"
-            },
             "device_not_verified_button": "Bu cihazı doğrulayın",
             "device_not_verified_description": "Şifreleme ayarlarınızı görüntülemek için bu cihazı doğrulamanız gerekiyor.",
             "device_not_verified_title": "Cihaz doğrulanmamış",
@@ -2297,7 +2268,6 @@
                 "change_recovery_key": "Kurtarma anahtarını değiştir",
                 "change_recovery_key_description": "Bu yeni kurtarma anahtarını güvenli bir yere kaydedin. Ardından değişikliği onaylamak için Devam'a tıklayın.",
                 "change_recovery_key_title": "Kurtarma anahtarını değiştir?",
-                "description": "Mevcut tüm cihazlarınızı kaybettiyseniz, kurtarma anahtarıyla şifreleme kimliğinizi ve mesaj geçmişinizi kurtarın.",
                 "enter_key_error": "Girdiğiniz kurtarma anahtarı doğru değil.",
                 "enter_recovery_key": "Kurtarma anahtarını girin",
                 "forgot_recovery_key": "Kurtarma anahtarınızı mı unuttunuz?",
@@ -2308,10 +2278,8 @@
                 "set_up_recovery_confirm_button": "Kurulumu tamamla",
                 "set_up_recovery_confirm_description": "Kurtarma işlemini tamamlamak için önceki ekranda gösterilen kurtarma anahtarını girin.",
                 "set_up_recovery_confirm_title": "Onaylamak için kurtarma anahtarınızı girin",
-                "set_up_recovery_description": "Anahtar depolama alanınız bir kurtarma anahtarı ile korunur. Kurulumdan sonra yeni bir kurtarma anahtarına ihtiyacınız varsa, '%(changeRecoveryKeyButton)s' seçeneğini seçerek yeniden oluşturabilirsiniz.",
                 "set_up_recovery_save_key_description": "Bu kurtarma anahtarını şifre yöneticisi, şifreli not veya fiziksel kasa gibi güvenli bir yere kaydedin.",
                 "set_up_recovery_save_key_title": "Kurtarma anahtarınızı güvenli bir yere kaydedin",
-                "set_up_recovery_secondary_description": "Devam'a tıkladıktan sonra, sizin için bir kurtarma anahtarı oluşturacağız.",
                 "title": "Kurtarma"
             },
             "title": "Şifreleme"
@@ -2678,7 +2646,6 @@
             "web_session": "Ağ üzerinden oturum"
         },
         "show_avatar_changes": "Profil resmi değişikliklerini göster",
-        "show_breadcrumbs": "Oda listesinin üzerinde en son kullanılan odaları göster",
         "show_chat_effects": "Sohbet efektlerini göster (ör. konfeti animasyonları)",
         "show_displayname_changes": "Görüntü adı değişikliklerini göster",
         "show_join_leave": "Katılma/ayrılma mesajlarını göster (davetler/çıkarmalar/engellemeler etkilenmez)",
@@ -2981,9 +2948,7 @@
         "show_thread_filter": "Göster:"
     },
     "threads_activity_centre": {
-        "header": "Mesaj dizileri etkinliği",
-        "no_rooms_with_threads_notifs": "Henüz mesaj dizisi bildirimleri olan odalarınız yok.",
-        "no_rooms_with_unread_threads": "Henüz okunmamış mesaj dizilerinin bulunduğu odalarınız yok."
+        "header": "Mesaj dizileri etkinliği"
     },
     "time": {
         "date_at_time": "%(date)s e %(time)s",
@@ -3255,10 +3220,6 @@
             "error_loading": "Yanıtlanan etkinlik yüklenemedi, etkinlik mevcut değil veya görüntüleme yetkiniz yok.",
             "in_reply_to": "<a>Cevap olarak</a> <pill>",
             "in_reply_to_for_export": "<a>bu mesaja</a> yanıt olarak"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Hesabınızı %(integrationsUrl)s ile kullanmak üzere doğrulayabilmeniz için üçüncü taraf bir siteye götürülmek üzeresiniz. Devam etmek istiyor musunuz ?",
-            "dialog_title": "Entegrasyon ekleyin"
         },
         "self_redaction": "Mesaj silindi",
         "send_state_encrypting": "Mesajınız şifreleniyor...",

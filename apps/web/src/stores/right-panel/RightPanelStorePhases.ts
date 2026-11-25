@@ -24,6 +24,7 @@ export enum RightPanelPhases {
     PinnedMessages = "PinnedMessages",
     Timeline = "Timeline",
     Extensions = "Extensions",
+    DocumentViewer = "DocumentViewer",
 
     // Thread stuff
     ThreadView = "ThreadView",

@@ -218,6 +218,11 @@ export default class ScrollPanel extends React.Component<IProps> {
 
         this.context?.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
 
+        if (this.unfillDebouncer) {
+            clearTimeout(this.unfillDebouncer);
+            this.unfillDebouncer = null;
+        }
+
         this.divScroll = null;
     }
 
@@ -229,8 +234,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         this.saveScrollState();
         this.updatePreventShrinking();
         this.props.onScroll?.(ev);
-        // noinspection JSIgnoredPromiseFromCall
-        this.checkFillState();
+        void this.checkFillState();
     };
 
     private onResize = (): void => {
@@ -249,10 +253,8 @@ export default class ScrollPanel extends React.Component<IProps> {
             return;
         }
         // We don't care if these two conditions race - they're different trees.
-        // noinspection JSIgnoredPromiseFromCall
-        this.restoreSavedScrollState();
-        // noinspection JSIgnoredPromiseFromCall
-        this.checkFillState(0, isFromPropsUpdate);
+        void this.restoreSavedScrollState();
+        void this.checkFillState(0, isFromPropsUpdate);
     };
 
     // return true if the content is fully scrolled down right now; else false.
@@ -408,8 +410,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             const refillDueToPropsUpdate = this.pendingFillDueToPropsUpdate;
             this.fillRequestWhileRunning = false;
             this.pendingFillDueToPropsUpdate = false;
-            // noinspection ES6MissingAwait
-            this.checkFillState(0, refillDueToPropsUpdate);
+            void this.checkFillState(0, refillDueToPropsUpdate);
         }
     };
 

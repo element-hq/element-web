@@ -1,0 +1,17 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.list {
+    width: 100%;
+    /* The list takes whatever height the search input leaves, so the input keeps its own. */
+    flex: 1;
+    min-height: 0;
+}
+
+.emptyList {
+    color: var(--cpd-color-text-secondary);
+}

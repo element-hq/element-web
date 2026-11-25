@@ -9,7 +9,7 @@ jobs:
         name: Build package
         environment: packages.element.io
         if: ${{ !startsWith(github.event.release.tag_name, 'module/') }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         env:
             R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
             R2_URL: ${{ vars.CF_R2_S3_API }}
@@ -70,7 +70,7 @@ jobs:
                   dpkg-gencontrol -v"$VERSION" -ldebian/tmp/DEBIAN/changelog
                   dpkg-deb -Zxz --root-owner-group --build debian/tmp element-web.deb
 
-            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: element-web.deb
                   path: apps/web/element-web.deb

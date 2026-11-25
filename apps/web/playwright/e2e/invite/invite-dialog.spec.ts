@@ -75,7 +75,7 @@ test.describe("Invite dialog", function () {
 
         // Expect a confirmation dialog, screenshot, and dismiss
         await expect(
-            page.locator(".mx_Dialog").getByRole("heading", { name: "Invite new contacts to this room?" }),
+            page.locator(".mx_Dialog").getByRole("heading", { name: "Invite new contacts to this chat?" }),
         ).toBeVisible();
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("confirm-invite-new-contact.png", {
             css: UNKNOWN_IDENTITY_USERS_DIALOG_HIDE_MXID_CSS,
@@ -96,7 +96,8 @@ test.describe("Invite dialog", function () {
             await rejectToast(page, "Verify this device");
             await page
                 .getByRole("navigation", { name: "Room list" })
-                .getByRole("button", { name: "New conversation" })
+                .getByLabel("Room options")
+                .getByRole("button", { name: "New" })
                 .click();
             await page.getByRole("menuitem", { name: "Start chat" }).click();
 
@@ -157,7 +158,7 @@ test.describe("Invite dialog", function () {
             await expect(page.getByText(`${botName} joined the room`)).toBeVisible();
 
             // Assert that the message is displayed at the bottom
-            await expect(page.locator(".mx_EventTile_last").getByText("Hello")).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByText("Hello")).toBeVisible();
         },
     );
 });

@@ -37,7 +37,7 @@ interface IRoomWidgets {
 export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetStore();
-        instance.start();
+        void instance.start();
         return instance;
     })();
 
@@ -52,6 +52,11 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
 
     public static get instance(): WidgetStore {
         return WidgetStore.internalInstance;
+    }
+
+    public destroy(): void {
+        super.destroy();
+        WidgetEchoStore.off("update", this.onWidgetEchoStoreUpdate);
     }
 
     private initRoom(roomId: string): void {

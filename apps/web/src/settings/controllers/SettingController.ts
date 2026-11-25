@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { type SettingLevel } from "../SettingLevel";
 import type SettingsStore from "../SettingsStore";
 import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { type CustomisationsApi } from "../../modules/customisationsApi.ts";
 
 /**
  * Represents a controller for individual settings to alter the reading behaviour
@@ -22,6 +23,8 @@ import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
 export default abstract class SettingController {
     public static sdkContext: SDKContextClass;
     public static settingsStore: typeof SettingsStore;
+    // Set by the ModuleApi when it's created
+    public static moduleCustomisations?: CustomisationsApi;
 
     /**
      * Gets the overridden value for the setting, if any. This must return null if the
@@ -87,4 +90,32 @@ export default abstract class SettingController {
     protected get sdkContext(): SDKContextClass {
         return SettingController.sdkContext;
     }
+}
+
+/**
+ * Normalises a setting's `controller` field into a list, keeping the order it was declared in.
+ * @param controller The controller, list of controllers, or nothing.
+ * @returns The controllers to consult, in declaration order.
+ */
+export function toControllers(controller?: SettingController | SettingController[]): SettingController[] {
+    if (!controller) return [];
+    return Array.isArray(controller) ? controller : [controller];
+}
+
+/**
+ * Gets whether any of the given controllers disables the setting.
+ * A reason given by one controller is preferred over a plain `true` from another, so that the
+ * UI can tell the user why the setting is disabled.
+ * @param controller The controller, list of controllers, or nothing.
+ * @returns The reason the setting is disabled, `true` if it is disabled without a reason,
+ * or `false` if it is not disabled.
+ */
+export function getSettingDisabled(controller?: SettingController | SettingController[]): boolean | string {
+    let disabled: boolean | string = false;
+    for (const c of toControllers(controller)) {
+        const settingDisabled = c.settingDisabled;
+        if (typeof settingDisabled === "string") return settingDisabled;
+        if (settingDisabled) disabled = true;
+    }
+    return disabled;
 }

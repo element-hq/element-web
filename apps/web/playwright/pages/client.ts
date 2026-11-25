@@ -438,7 +438,10 @@ export class Client {
      *   can be sent to XMLHttpRequest.send (typically a File).  Under node.js,
      *   a Buffer, String or ReadStream.
      */
-    public async uploadContent(file: Buffer, opts?: UploadOpts): Promise<Awaited<Upload["promise"]>> {
+    public async uploadContent(
+        file: Buffer,
+        opts?: Omit<UploadOpts, "abortController">,
+    ): Promise<Awaited<Upload["promise"]>> {
         const client = await this.prepareClient();
         return client.evaluate(
             async (cli: MatrixClient, { file, opts }) => cli.uploadContent(new Uint8Array(file), opts),

@@ -42,22 +42,20 @@ test.describe("Composer", () => {
             // Type a message
             await composer.pressSequentially("my message 0");
             // It has not been sent yet
-            await expect(page.locator(".mx_EventTile_body", { hasText: "my message 0" })).not.toBeVisible();
+            await expect(
+                page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 0" }),
+            ).not.toBeVisible();
 
             // Click send
             await page.getByRole("button", { name: "Send message" }).click();
             // It has been sent
-            await expect(
-                page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 0" }),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
 
             // Type another and press Enter afterward
             await composer.pressSequentially("my message 1");
             await composer.press("Enter");
             // It was sent
-            await expect(
-                page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 1" }),
-            ).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
         });
 
         test("can write formatted text", async ({ page }) => {
@@ -68,7 +66,9 @@ test.describe("Composer", () => {
             await composer.pressSequentially(" message");
             await page.getByRole("button", { name: "Send message" }).click();
             // Note: both "bold" and "message" are bold, which is probably surprising
-            await expect(page.locator(".mx_EventTile_body strong", { hasText: "bold message" })).toBeVisible();
+            await expect(
+                page.getByTestId("event-tile-slot-body").locator("strong", { hasText: "bold message" }),
+            ).toBeVisible();
         });
 
         test("should allow user to input emoji via graphical picker", async ({ page, app }) => {
@@ -79,7 +79,7 @@ test.describe("Composer", () => {
             await page.locator(".mx_ContextualMenu_background").click(); // Close emoji picker
             await page.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter"); // Send message
 
-            await expect(page.locator(".mx_EventTile_body", { hasText: "😇" })).toBeVisible();
+            await expect(page.getByTestId("event-tile-slot-body").filter({ hasText: "😇" })).toBeVisible();
         });
 
         test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
@@ -169,14 +169,14 @@ test.describe("Composer", () => {
                 await composer.pressSequentially("my message 3");
                 await composer.press("Enter");
                 // It has not been sent yet
-                await expect(page.locator(".mx_EventTile_body", { hasText: "my message 3" })).not.toBeVisible();
+                await expect(
+                    page.getByTestId("event-tile-slot-body").filter({ hasText: "my message 3" }),
+                ).not.toBeVisible();
 
                 // Press Control+Enter
                 await composer.press(`${CtrlOrMeta}+Enter`);
                 // It was sent
-                await expect(
-                    page.locator(".mx_EventTile_last .mx_EventTile_body", { hasText: "my message 3" }),
-                ).toBeVisible();
+                await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toBeVisible();
             });
         });
 
@@ -198,7 +198,7 @@ test.describe("Composer", () => {
             await expect(composer.getByText("Bob")).toBeVisible();
             await expect(composer).toMatchScreenshot("mention.png");
             await composer.press("Enter");
-            await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
+            await expect(page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body")).toContainText("Bob");
         });
 
         test("renders emoji autocomplete", { tag: "@screenshot" }, async ({ page }) => {

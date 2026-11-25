@@ -12,7 +12,7 @@ import { type Preview } from "./Preview";
 import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
-import { getHtmlText } from "../../../HtmlUtils";
+import { sanitizeHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
 
 export class MessageEventPreview implements Preview {
@@ -26,7 +26,10 @@ export class MessageEventPreview implements Preview {
 
         if (!eventContent?.["body"]) return null; // invalid for our purposes
 
-        let body = eventContent["body"].trim();
+        // The body of a decryption failure is an English placeholder set by the js-sdk
+        let body = event.isDecryptionFailure()
+            ? _t("timeline|decryption_failure|unable_to_decrypt")
+            : eventContent["body"].trim();
         if (!body) return null; // invalid event, no preview
         // A msgtype is actually required in the spec but the app is a bit softer on this requirement
         const msgtype = eventContent["msgtype"] ?? MsgType.Text;
@@ -48,7 +51,7 @@ export class MessageEventPreview implements Preview {
         }
 
         if (hasHtml) {
-            const sanitised = getHtmlText(body.replace(/<br\/?>/gi, "\n")); // replace line breaks before removing them
+            const sanitised = sanitizeHtmlText(body.replace(/<br\/?>/gi, "\n")); // replace line breaks before removing them
             // run it through DOMParser to fixup encoded html entities
             body = new DOMParser().parseFromString(sanitised, "text/html").documentElement.textContent;
         }

@@ -1,8 +1,8 @@
 # @element-hq/element-web-module-api
 
-API surface for extending Element Web in a safe & predictable way.
-
-This project is still in early development but aims to replace matrix-react-sdk-module-api and Element Web deprecated customisations.
+[Modules](../../docs/modules.md) are a mechanism for extending Element Web in a
+safe & predictable way. This project defines the API which all modules must be
+based on.
 
 ## Using the API
 
@@ -16,7 +16,7 @@ and a `load` method which is called when the module is to be loaded.
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 
 class ExampleModule implements Module {
-    public static readonly moduleApiVersion = "^0.1.0";
+    public static readonly moduleApiVersion = "^2.0.0";
 
     public constructor(private api: Api) {}
 
@@ -52,9 +52,72 @@ class ExampleModule implements Module {
 // ...
 ```
 
+### Using settings
+
+Modules can register their own settings and read or write them through `api.settings`.
+
+Declare the type of each setting using declaration merging on `ModuleSettingValues`. The usual place for this is an
+`index.d.ts` file in your module's source folder:
+
+```typescript
+// index.d.ts
+import "@element-hq/element-web-module-api";
+
+declare module "@element-hq/element-web-module-api" {
+    interface ModuleSettingValues {
+        "module.exampleModule.enabled": boolean;
+    }
+}
+```
+
+Then register the settings with their default values in `load`:
+
+```typescript
+import { Level } from "@element-hq/element-web-module-api";
+// ...
+class ExampleModule implements Module {
+    // ...
+    public async load(): Promise<void> {
+        this.api.settings.registerSettings({
+            "module.exampleModule.enabled": { default: false, supportedLevels: [Level.DEVICE] },
+        });
+    }
+}
+// ...
+```
+
+- Setting names must be of the form `module.<your module name>.<setting name>`, for example
+  `module.exampleModule.enabled`. Including your module's name avoids clashing with other modules.
+- Each setting can only be registered once. Registering a name that is already registered throws an error.
+- Settings must be registered before they are read or written.
+
+```typescript
+// Watchable<boolean>
+const enabled = this.api.settings.getValueWatchable("module.exampleModule.enabled");
+console.log(enabled.value);
+enabled.watch((value) => console.log("Setting changed to", value));
+
+await this.api.settings.setValue("module.exampleModule.enabled", null, Level.DEVICE, true);
+
+// Type errors: the value must be a boolean, and undeclared module settings are rejected
+await this.api.settings.setValue("module.exampleModule.enabled", null, Level.DEVICE, "yes");
+this.api.settings.getValueWatchable("module.exampleModule.typo");
+```
+
+`getValueWatchable` returns a `Watchable` that updates when the setting changes.
+
+Element Web's own settings can be read and written too, by name. They are not typed by this package, so their values
+are `any`:
+
+```typescript
+const language: Watchable<string> = this.api.settings.getValueWatchable("language");
+```
+
 ## Releases
 
 The API is versioned using semver, with the major version incremented for breaking changes.
+
+To carry out a release, see the documentation at [`../RELEASING.md`](../RELEASING.md).
 
 ## Copyright & License
 

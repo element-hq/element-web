@@ -13,7 +13,8 @@ env:
     # This must be set for fetchdep.sh to get the right branch
     PR_NUMBER: ${{ github.event.pull_request.number }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
-permissions: {} # No permissions required
+permissions:
+    contents: read
 jobs:
     build:
         name: "Build on ${{ matrix.image }}"
@@ -24,7 +25,7 @@ jobs:
                 image:
                     - ubuntu-24.04
                     - windows-2022
-                    - macos-14
+                    - macos-15
                 isDevelop:
                     - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
                 isPullRequest:
@@ -37,7 +38,7 @@ jobs:
                     - isPullRequest: true
                       image: windows-2022
                     - isPullRequest: true
-                      image: macos-14
+                      image: macos-15
         runs-on: ${{ matrix.image }}
         defaults:
             run:
@@ -47,16 +48,24 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
                   # Disable cache on Windows as it is slower than not caching
                   # https://github.com/actions/setup-node/issues/975
-                  cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
-                  node-version: "lts/*"
+                  cache: ${{ runner.os != 'Windows' }}
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: false
 
             - name: Fetch layered build
-              run: ./scripts/layered.sh
+              id: layered
+              env:
+                  # pnpm 12 on Windows breaks running scripts after switching to the pnpm version a git dependency pins
+                  PNPM_CONFIG_PM_ON_FAIL: ignore
+              run: |
+                  ./scripts/layered.sh
+                  VERSION=$(scripts/get-version-from-git.sh)
+                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
             - name: Copy config
               working-directory: apps/web
@@ -66,10 +75,11 @@ jobs:
               working-directory: apps/web
               env:
                   CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
+                  VERSION: ${{ steps.layered.outputs.version }}
+              run: pnpm run build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: webapp-${{ matrix.image }}
                   path: apps/web/webapp

@@ -27,6 +27,7 @@ import {
     type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, PublicIcon, ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -49,6 +50,19 @@ import { useSettingValue } from "../../../hooks/useSettings.ts";
 import { UIFeature } from "../../../settings/UIFeature.ts";
 import SpacePillButton from "../../structures/SpacePillButton.tsx";
 
+/**
+ * Creates a space.
+ *
+ * @param client - The client to create the space with.
+ * @param name - The name of the space. Leading and trailing whitespace is removed.
+ * @param isPublic - Whether the space is public.
+ * @param alias - The address of the space, used for public spaces.
+ * @param topic - The description of the space.
+ * @param avatar - The avatar of the space, as an MXC URI or a file to upload.
+ * @param createOpts - Extra options for the room creation request.
+ * @param otherOpts - Extra options for {@link createRoom}.
+ * @returns The ID of the new space, or null if creating it was aborted or failed.
+ */
 export const createSpace = async (
     client: MatrixClient,
     name: string,
@@ -60,7 +74,8 @@ export const createSpace = async (
     otherOpts: Partial<Omit<ICreateOpts, "createOpts">> = {},
 ): Promise<string | null> => {
     return createRoom(client, {
-        name,
+        // Leading and trailing whitespace is not part of the name.
+        name: name.trim(),
         topic,
         createOpts: {
             preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
@@ -91,7 +106,8 @@ const spaceNameValidator = withValidation({
     rules: [
         {
             key: "required",
-            test: async ({ value }) => !!value,
+            // A name made only of whitespace or zero-width characters would leave the space with no visible name.
+            test: ({ value }) => !!removeHiddenChars(value ?? ""),
             invalid: () => _t("create_space|name_required"),
         },
     ],
@@ -158,7 +174,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
                     const newName = ev.target.value;
                     if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
                         setAlias(`#${nameToLocalpart(newName)}:${domain}`);
-                        aliasFieldRef.current?.validate({ allowEmpty: true });
+                        void aliasFieldRef.current?.validate({ allowEmpty: true });
                     }
                     setName(newName);
                 }}
@@ -216,7 +232,8 @@ const SpaceCreateMenu: React.FC<{
 
     const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
     useEffect(() => {
-        cli.isVersionSupported("v1.4")
+        void cli
+            .isVersionSupported("v1.4")
             .then((supported) => {
                 return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
             })
@@ -233,7 +250,7 @@ const SpaceCreateMenu: React.FC<{
         // require & validate the space name field
         if (spaceNameField.current && !(await spaceNameField.current.validate({ allowEmpty: false }))) {
             spaceNameField.current.focus();
-            spaceNameField.current.validate({ allowEmpty: false, focused: true });
+            void spaceNameField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }
@@ -244,7 +261,7 @@ const SpaceCreateMenu: React.FC<{
             !(await spaceAliasField.current.validate({ allowEmpty: false }))
         ) {
             spaceAliasField.current.focus();
-            spaceAliasField.current.validate({ allowEmpty: false, focused: true });
+            void spaceAliasField.current.validate({ allowEmpty: false, focused: true });
             setBusy(false);
             return;
         }

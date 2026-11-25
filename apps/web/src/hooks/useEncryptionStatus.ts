@@ -22,7 +22,7 @@ export function useEncryptionStatus(client: MatrixClient, room: Room): E2EStatus
             throttle(
                 () => {
                     if (client.getCrypto()) {
-                        shieldStatusForRoom(client, room).then((e2eStatus) => {
+                        void shieldStatusForRoom(client, room).then((e2eStatus) => {
                             setE2eStatus(e2eStatus);
                         });
                     }
@@ -33,7 +33,10 @@ export function useEncryptionStatus(client: MatrixClient, room: Room): E2EStatus
         [client, room],
     );
 
-    useEffect(updateEncryptionStatus, [updateEncryptionStatus]);
+    useEffect(() => {
+        updateEncryptionStatus();
+        return () => updateEncryptionStatus.cancel();
+    }, [updateEncryptionStatus]);
 
     // shieldStatusForRoom depends on the room membership, each member's trust
     // status for each member, and each member's devices, so we update the

@@ -20,12 +20,45 @@ interface OptionProps {
     children?: ReactNode;
 }
 
-export const Option: React.FC<OptionProps> = ({ children, endAdornment, className, ...props }) => {
+export const Option: React.FC<OptionProps> = ({ children, endAdornment, className, onClick, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLLIElement>();
+    const optionClassName = classNames(className, "mx_SpotlightDialog_option");
+    const content = (
+        <>
+            {children}
+            <div className="mx_SpotlightDialog_option--endAdornment">
+                {onClick && (
+                    <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>
+                        ↵
+                    </kbd>
+                )}
+                {endAdornment}
+            </div>
+        </>
+    );
+
+    if (!onClick) {
+        return (
+            <li
+                {...props}
+                className={optionClassName}
+                onFocus={onFocus}
+                ref={ref}
+                tabIndex={-1}
+                aria-selected={isActive}
+                aria-disabled={true}
+                role="option"
+            >
+                {content}
+            </li>
+        );
+    }
+
     return (
         <AccessibleButton
             {...props}
-            className={classNames(className, "mx_SpotlightDialog_option")}
+            onClick={onClick}
+            className={optionClassName}
             onFocus={onFocus}
             ref={ref}
             tabIndex={-1}
@@ -33,13 +66,7 @@ export const Option: React.FC<OptionProps> = ({ children, endAdornment, classNam
             role="option"
             element="li"
         >
-            {children}
-            <div className="mx_SpotlightDialog_option--endAdornment">
-                <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>
-                    ↵
-                </kbd>
-                {endAdornment}
-            </div>
+            {content}
         </AccessibleButton>
     );
 };

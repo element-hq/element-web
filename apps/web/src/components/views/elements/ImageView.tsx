@@ -315,7 +315,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ev.preventDefault();
                 ev.stopPropagation();
                 if (this.downloadFunction) {
-                    this.downloadFunction();
+                    void this.downloadFunction();
                 }
                 break;
         }
@@ -535,6 +535,9 @@ export default class ImageView extends React.Component<IProps, IState> {
                 lockProps={{
                     "onKeyDown": this.onKeyDown,
                     "role": "dialog",
+                    // Like BaseDialog, make the dialog focusable so that clicking non-interactive content
+                    // focuses it rather than the body, keeping the Escape key handling working
+                    "tabIndex": -1,
                     "aria-label": _t("lightbox|title"),
                 }}
                 className="mx_ImageView"

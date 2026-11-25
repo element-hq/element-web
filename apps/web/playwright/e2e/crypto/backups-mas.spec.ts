@@ -51,7 +51,8 @@ test.describe("Encryption state after registration", () => {
 
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
@@ -83,7 +84,8 @@ test.describe("Key backup reset from elsewhere", () => {
 
         await page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
@@ -106,7 +108,7 @@ test.describe("Key backup reset from elsewhere", () => {
         // Should be the message we sent plus the room creation event
         await expect(page.locator(".mx_EventTile")).toHaveCount(2);
         await expect(
-            page.locator(".mx_RoomView_MessageList > .mx_EventTile_last").getByRole("status"),
+            page.locator(".mx_RoomView_MessageList > .mx_EventTile").last().getByRole("status"),
         ).toHaveAccessibleName("Your message was sent");
 
         // Wait for it to try uploading the key

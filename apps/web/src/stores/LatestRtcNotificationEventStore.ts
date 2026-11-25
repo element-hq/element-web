@@ -70,7 +70,7 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
 
     protected async onReady(): Promise<void> {
         this.callStore.on(CallStoreEvent.Call, this.onCallStoreEvent);
-        this.populateMap();
+        await this.populateMap();
     }
 
     protected async onNotReady(): Promise<void> {
@@ -91,12 +91,12 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
         } else if (call && !this.eventIdMap.has(roomId)) {
             // If there's a call, find the event id and add it to the map.
             if (call.participants.size) {
-                this.findAndSetNotificationEvent(call, roomId);
+                void this.findAndSetNotificationEvent(call, roomId);
             } else {
                 // This call just started but the participants haven't been added yet.
                 // So wait until participants are added and then compute the event id.
                 call.once(CallEvent.Participants, () => {
-                    this.findAndSetNotificationEvent(call, roomId);
+                    void this.findAndSetNotificationEvent(call, roomId);
                 });
             }
         }
@@ -105,13 +105,14 @@ export class LatestRtcNotificationEventStore extends AsyncStoreWithClient<EmptyO
     private async findAndSetNotificationEvent(call: ElementCall, roomId: string): Promise<void> {
         const room = this.getRoom(roomId);
         // Since we're running this logic as the call just started, this membership
-        // event corresponds to the person who started the call.
-        // The rtc notification event corresponding to this ongoing call will have
-        // a reference relation to this membership event.
-        const callMembershipEventId = call.session.getOldestMembership()?.eventId;
+        // event probably (but not necessarily! TODO: do something more robust)
+        // corresponds to the person who started the call.
+        // The rtc notification event corresponding to this ongoing call will
+        // hopefully have a reference relation to this membership event.
+        const oldestActiveMembership = call.session.memberships.at(0);
 
-        if (callMembershipEventId) {
-            const eventId = await getNotificationEventId(room, callMembershipEventId);
+        if (oldestActiveMembership) {
+            const eventId = await getNotificationEventId(room, oldestActiveMembership.eventId);
             this.eventIdMap.set(roomId, eventId);
             this.emit(LatestRtcNotificationEventUpdate, roomId, eventId);
         }

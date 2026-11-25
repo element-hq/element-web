@@ -83,9 +83,10 @@ describe("DateSeparatorViewModel", () => {
         vi.setSystemTime(nowDate.getTime());
         watchCallbacks.clear();
 
-        vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
+        vi.mocked(SettingsStore).getValue.mockImplementation((key: string): any => {
             if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
             if (key === "feature_jump_to_date") return false;
+            if (key === "language") return "en-US";
             return undefined;
         });
         vi.mocked(SettingsStore).watchSetting.mockImplementation((settingName, _roomId, cb): any => {
@@ -171,6 +172,30 @@ describe("DateSeparatorViewModel", () => {
         callback?.("feature_jump_to_date", null, null, null, true);
 
         expect(vm.getSnapshot().jumpToEnabled).toBeTruthy();
+    });
+
+    describe("onDatePicked", () => {
+        it("parses the date picker value as local midnight, not UTC midnight", async () => {
+            const vm = createViewModel();
+            const pickDate = vi.spyOn(vm, "pickDate").mockResolvedValue(undefined);
+
+            await vm.onDatePicked("2024-01-15");
+
+            // Passing the raw "2024-01-15" through would have it parsed as UTC midnight. Asserting on
+            // a locally constructed Date keeps this meaningful in every timezone, including UTC.
+            expect(pickDate).toHaveBeenCalledWith(new Date(2024, 0, 15));
+        });
+
+        it("requests the timestamp for local midnight on the picked day", async () => {
+            const localMidnight = new Date(2024, 0, 15).getTime();
+            mockTimestampToEvent.mockResolvedValue({ event_id: "$event", origin_server_ts: localMidnight });
+            const vm = createViewModel();
+
+            await vm.onDatePicked("2024-01-15");
+            await flushPromisesWithFakeTimers();
+
+            expect(mockTimestampToEvent).toHaveBeenCalledWith(roomId, localMidnight, Direction.Forward);
+        });
     });
 
     it("dispatches ViewRoom when pickDate resolves in active room", async () => {

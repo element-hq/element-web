@@ -13,9 +13,13 @@ import { type ComponentType } from "react";
  */
 export interface DialogOptions {
     /**
-     * The title of the dialog.
+     * The title of the dialog. If omitted, no title is shown.
      */
-    title: string;
+    title?: string;
+    /**
+     * Accessible name of the dialog. Use it when there is no `title`, so screen readers can still name the dialog.
+     */
+    ariaLabel?: string;
 }
 
 /**

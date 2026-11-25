@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { _t } from "../languageHandler";
 import type Notifier from "../Notifier";
-import GenericToast from "../components/views/toasts/GenericToast";
+import { GenericToast } from "@element-hq/web-shared-components";
 import ToastStore from "../stores/ToastStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getLocalNotificationAccountDataEventType } from "../utils/notifications";
@@ -22,7 +22,7 @@ export const showToast = (notifier: Notifier, fromMessageSend: boolean): void =>
         await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);
         const cli = MatrixClientPeg.safeGet();
         const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
-        cli.setAccountData(eventType, {
+        await cli.setAccountData(eventType, {
             is_silenced: false,
         });
     };

@@ -64,6 +64,10 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         };
     }
 
+    public componentWillUnmount(): void {
+        this.validateRecoveryKeyOnChange.cancel();
+    }
+
     private onCancel = (): void => {
         this.props.onFinished(false);
     };
@@ -127,7 +131,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         // We don't use Field's validation here because we want it in a separate place rather
         // than in a tooltip. Ideally we would refactor Field's validation logic so we could
         // re-use some of it.
-        this.validateRecoveryKeyOnChange();
+        void this.validateRecoveryKeyOnChange();
     };
 
     private onRecoveryKeyNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent): Promise<void> => {

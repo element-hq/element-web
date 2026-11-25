@@ -10,6 +10,7 @@ import React, { type JSX } from "react";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ResetIdentityBody, type ResetIdentityBodyVariant } from "../settings/encryption/ResetIdentityBody";
+import BaseDialog from "./BaseDialog";
 
 interface ResetIdentityDialogProps {
     /**
@@ -25,6 +26,13 @@ interface ResetIdentityDialogProps {
     onReset: () => void;
 
     /**
+     * When `variant` is `no_verification_method`, this function must be
+     * supplied. It will be called when the user clicks "Sign out", which
+     * replaces the cancel button in this variant.
+     */
+    onSignOut?: () => void;
+
+    /**
      * Which variant of this dialog to show.
      */
     variant: ResetIdentityBodyVariant;
@@ -33,7 +41,12 @@ interface ResetIdentityDialogProps {
 /**
  * The dialog for resetting the identity of the current user.
  */
-export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdentityDialogProps): JSX.Element {
+export function ResetIdentityDialog({
+    onFinished,
+    onReset,
+    onSignOut,
+    variant,
+}: ResetIdentityDialogProps): JSX.Element {
     const matrixClient = MatrixClientPeg.safeGet();
 
     const onResetWrapper: () => void = () => {
@@ -41,9 +54,50 @@ export function ResetIdentityDialog({ onFinished, onReset, variant }: ResetIdent
         // Close the dialog
         onFinished();
     };
+
+    /**
+     * Close the dialog, or sign out if the button is "Sign out".
+     */
+    const onCancelOrSignOut: () => void = () => {
+        // Normally, the cancel button will just close the dialog, but if
+        // there are no other viable verification methods, the only sensible
+        // option other than a reset is for the user to give up and sign
+        // out.
+        switch (variant) {
+            case "compromised":
+            case "forgot":
+            case "sync_failed":
+            case "confirm": {
+                onFinished();
+                break;
+            }
+            case "no_verification_method":
+            case "no_encrypted_rooms": {
+                // If we are in one of the modes meaning we have no
+                // verification methods, then we should have been supplied
+                // `onSignOut`...
+                if (onSignOut) {
+                    onSignOut();
+                } else {
+                    // ... but if that didn't happen for some reason,
+                    // just close the dialog as normal.
+                    onFinished();
+                }
+                break;
+            }
+            default: {
+                // Ensure we covered all cases above
+                const shouldNotExist: never = variant;
+                throw new Error(`Unhandled variant ${shouldNotExist}`);
+            }
+        }
+    };
+
     return (
         <MatrixClientContext.Provider value={matrixClient}>
-            <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onFinished} variant={variant} />
+            <BaseDialog fixedWidth={true} hasCancel={false}>
+                <ResetIdentityBody onReset={onResetWrapper} onCancelClick={onCancelOrSignOut} variant={variant} />
+            </BaseDialog>
         </MatrixClientContext.Provider>
     );
 }

@@ -18,6 +18,7 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 import styles from "./TextualBody.module.css";
 
 export const enum TextualBodyViewKind {
@@ -30,7 +31,6 @@ export const enum TextualBodyViewKind {
 export const enum TextualBodyViewBodyWrapperKind {
     NONE = "NONE",
     LINK = "LINK",
-    ACTION = "ACTION",
 }
 
 export interface TextualBodyViewSnapshot {
@@ -50,10 +50,6 @@ export interface TextualBodyViewSnapshot {
      * Href used when `bodyWrapper` is `LINK`.
      */
     bodyLinkHref?: string;
-    /**
-     * Accessible label used when `bodyWrapper` is `ACTION`.
-     */
-    bodyActionAriaLabel?: string;
     /**
      * Whether to render the edited marker.
      */
@@ -90,13 +86,10 @@ export interface TextualBodyViewSnapshot {
 
 export interface TextualBodyViewActions {
     /**
-     * Capture-phase click handler attached to the root message-body container.
+     * Click handler attached to the root message-body container.
+     * Runs in the bubble phase so that interactive children (e.g. pills) can handle their own clicks first.
      */
     onRootClick?: MouseEventHandler<HTMLDivElement>;
-    /**
-     * Activation handler used when `bodyWrapper` is `ACTION`.
-     */
-    onBodyActionClick?: MouseEventHandler<HTMLButtonElement>;
     /**
      * Click handler for the edited marker.
      */
@@ -151,7 +144,7 @@ function attachBodyRef(body: ReactElement, bodyRef?: TextualBodyContentRef): Rea
  * Renders a textual message body for timeline events.
  *
  * The view supports text, notice, emote, and caption layouts, optional
- * link or action wrappers, edited and moderation markers, and appended
+ * link wrapper, edited and moderation markers, and appended
  * URL previews.
  */
 export function TextualBodyView({
@@ -161,12 +154,12 @@ export function TextualBodyView({
     urlPreviews,
     className,
 }: Readonly<TextualBodyViewProps>): JSX.Element {
+    const eventPresentationAttributes = useEventPresentationAttributes();
     const {
         id,
         kind,
         bodyWrapper = TextualBodyViewBodyWrapperKind.NONE,
         bodyLinkHref,
-        bodyActionAriaLabel,
         showEditedMarker,
         editedMarkerText,
         editedMarkerAriaLabel,
@@ -237,17 +230,6 @@ export function TextualBodyView({
                 {renderedBody}
             </a>
         );
-    } else if (bodyWrapper === TextualBodyViewBodyWrapperKind.ACTION) {
-        renderedBody = (
-            <button
-                type="button"
-                aria-label={bodyActionAriaLabel}
-                className={styles.bodyAction}
-                onClick={vm.onBodyActionClick}
-            >
-                {renderedBody}
-            </button>
-        );
     }
 
     if (markers.length > 0) {
@@ -273,7 +255,10 @@ export function TextualBodyView({
 
     if (kind === TextualBodyViewKind.EMOTE) {
         return (
-            <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} dir="auto">
+            // onRootClick is used to handle clicks in links and other interactive elements, so we don't need to add keyboard events here.
+            // The interactive children will handle their own keyboard events.
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
+            <div id={id} className={rootClasses} onClick={vm.onRootClick} dir="auto" {...eventPresentationAttributes}>
                 *&nbsp;
                 <button type="button" className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
                     {emoteSenderName}
@@ -286,7 +271,10 @@ export function TextualBodyView({
     }
 
     return (
-        <div id={id} className={rootClasses} onClickCapture={vm.onRootClick}>
+        // onRootClick is used to handle clicks in links and other interactive elements, so we don't need to add keyboard events here.
+        // The interactive children will handle their own keyboard events.
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
+        <div id={id} className={rootClasses} onClick={vm.onRootClick} {...eventPresentationAttributes}>
             {renderedBody}
             {urlPreviews}
         </div>

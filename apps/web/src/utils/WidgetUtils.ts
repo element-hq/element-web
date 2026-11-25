@@ -534,8 +534,7 @@ export default class WidgetUtils {
     }
 
     public static editWidget(room: Room, app: IWidget): void {
-        // noinspection JSIgnoredPromiseFromCall
-        IntegrationManagers.sharedInstance()
+        void IntegrationManagers.sharedInstance()
             .getPrimaryManager()
             ?.open(room, "type_" + app.type, app.id);
     }

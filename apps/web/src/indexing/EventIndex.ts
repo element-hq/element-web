@@ -75,6 +75,8 @@ export default class EventIndex extends EventEmitter {
      * The current checkpoint that the crawler is working on.
      */
     private currentCheckpoint: ICrawlerCheckpoint | null = null;
+    // Flag to force adding initial checkpoints (e.g., after database recreation)
+    private forceAddInitialCheckpoints = false;
 
     /**
      * True if we need to add the initial checkpoints for encrypted rooms, once we've completed a sync.
@@ -105,6 +107,14 @@ export default class EventIndex extends EventEmitter {
         this.logger.debug("Loaded checkpoints", JSON.stringify(this.crawlerCheckpoints));
 
         this.registerListeners();
+    }
+
+    /**
+     * Mark that initial checkpoints should be added on next sync.
+     * This is used when the database is recreated (e.g., schema change).
+     */
+    public setForceAddInitialCheckpoints(force: boolean): void {
+        this.forceAddInitialCheckpoints = force;
     }
 
     /**
@@ -205,8 +215,10 @@ export default class EventIndex extends EventEmitter {
             if (!indexManager) return;
 
             // If the index was empty when we first started up, add the initial checkpoints, to back-populate the index.
-            if (this.needsInitialCheckpoints) {
+            // Also check forceAddInitialCheckpoints flag (used when database is recreated, e.g., schema change)
+            if (this.needsInitialCheckpoints || this.forceAddInitialCheckpoints) {
                 await this.addInitialCheckpoints();
+                this.forceAddInitialCheckpoints = false;
             }
 
             // Start the crawler if it's not already running.
@@ -262,7 +274,7 @@ export default class EventIndex extends EventEmitter {
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
-            this.addRoomCheckpoint(state.roomId, true);
+            await this.addRoomCheckpoint(state.roomId, true);
         }
     };
 
@@ -296,7 +308,7 @@ export default class EventIndex extends EventEmitter {
 
         this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
 
-        this.addRoomCheckpoint(room.roomId, false);
+        await this.addRoomCheckpoint(room.roomId, false);
     };
 
     /**
@@ -1022,7 +1034,7 @@ export default class EventIndex extends EventEmitter {
         };
 
         const encryptedRooms = rooms.filter(isRoomEncrypted);
-        encryptedRooms.forEach((room, index) => {
+        encryptedRooms.forEach((room) => {
             totalRooms.add(room.roomId);
         });
 

@@ -58,7 +58,8 @@ export class ElementAppPage {
     public async openCreateRoomDialog(roomKindname: "New room" | "New video room" = "New room"): Promise<Locator> {
         await this.page
             .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
+            .getByLabel("Room options")
+            .getByRole("button", { name: "New" })
             .click();
         await this.page.getByRole("menuitem", { name: roomKindname }).click();
         return this.page.locator(".mx_CreateRoomDialog");
@@ -132,6 +133,31 @@ export class ElementAppPage {
                 await dismissToasts();
             }
         }
+    }
+
+    /**
+     * Expands the Invites section in the room list and opens the given invited room.
+     *
+     * @param name The exact room name of the invite to find and click on/open.
+     */
+    public async viewInvitedRoomByName(name: string): Promise<void> {
+        const header = this.page.getByRole("button", { name: "Toggle Invites section" });
+        // Open the section if not already opened
+        if ((await header.getAttribute("aria-expanded")) !== "true") {
+            await header.click();
+        }
+
+        await this.viewRoomByName(name);
+    }
+
+    /**
+     * Expands the Invites section in the room list, opens the given invited room and accepts the invite.
+     *
+     * @param name The exact room name of the invite to accept.
+     */
+    public async acceptInvitedRoomByName(name: string): Promise<void> {
+        await this.viewInvitedRoomByName(name);
+        await this.page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
     }
 
     public async viewRoomById(roomId: string): Promise<void> {
@@ -245,6 +271,8 @@ export class ElementAppPage {
         const buffer = await readFile(samplePath);
         const name = path.basename(samplePath);
         const composer = this.getComposerField(location === "thread");
+        // The rich text editor isn't editable until it has loaded, and only handles pastes from then on
+        await expect(composer).toHaveAttribute("contenteditable", "true");
 
         await composer.evaluate(
             async (element, [buffer, name, type]) => {
@@ -363,7 +391,7 @@ export class ElementAppPage {
 
         if (options?.confirmUnknownUser) {
             await expect(
-                dialogLocator.getByRole("heading", { name: "Invite new contacts to this room?" }),
+                dialogLocator.getByRole("heading", { name: "Invite new contacts to this chat?" }),
             ).toBeVisible();
             await dialogLocator.getByRole("button", { name: "Invite" }).click();
         }

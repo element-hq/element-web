@@ -23,7 +23,6 @@
         "cancel": "キャンセル",
         "change": "変更",
         "clear": "消去",
-        "click_to_copy": "クリックでコピー",
         "close": "閉じる",
         "collapse": "折りたたむ",
         "complete": "完了",
@@ -1043,7 +1042,6 @@
         "name_mxid_share_room": "このルームに誰かを招待したい場合は、招待したいユーザーの名前、またはユーザー名（<userId/>の形式）を指定するか、<a>このルームを共有</a>してください。",
         "name_mxid_share_space": "このスペースに誰かを招待したい場合は、招待したいユーザーの名前、またはユーザー名（<userId/>の形式）を指定するか、<a>このスペースを共有</a>してください。",
         "recents_section": "最近会話したユーザー",
-        "room_failed_partial": "以下の人たちを<RoomName/>に招待できませんでした",
         "room_failed_partial_title": "いくつかの招待を送信できませんでした",
         "room_failed_title": "ユーザーを%(roomName)sに招待するのに失敗しました",
         "send_link_prompt": "もしくはリンクを送信",
@@ -1145,8 +1143,6 @@
         "bridge_state_workspace": "ワークスペース：<networkLink/>",
         "click_for_info": "クリックすると詳細を表示",
         "currently_experimental": "現在実験中。",
-        "custom_themes": "ユーザー定義のテーマの追加をサポート",
-        "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
         "element_call_video_rooms": "Element Callのビデオ通話ルーム",
         "experimental_description": "実験に参加したいですか？開発中のアイディアを試してください。これらの機能は完成していません。不安定な可能性や変更される可能性、また、開発が中止される可能性もあります。<a>詳細を確認</a>。",
         "experimental_section": "早期プレビュー",
@@ -1159,7 +1155,6 @@
         "group_profile": "プロフィール",
         "group_rooms": "ルーム",
         "group_spaces": "スペース",
-        "group_themes": "テーマ",
         "group_threads": "スレッド",
         "group_voip": "音声とビデオ",
         "group_widgets": "ウィジェット",
@@ -1223,8 +1218,6 @@
     "language_dropdown_label": "言語一覧",
     "leave_room_dialog": {
         "last_person_warning": "このルームの参加者はあなただけです。退出すると、今後あなたを含めて誰もこのルームに参加できなくなります。",
-        "leave_room_question": "このルーム「%(roomName)s」から退出してよろしいですか？",
-        "leave_space_question": "このスペース「%(spaceName)s」から退出してよろしいですか？",
         "room_rejoin_warning": "このルームは公開されていません。再度参加するには、招待が必要です。",
         "space_rejoin_warning": "このスペースは公開されていません。再度参加するには、招待が必要です。"
     },
@@ -1311,7 +1304,6 @@
         "mentions_and_keywords": "メンションとキーワード",
         "mentions_and_keywords_description": "メンションと、<a>設定</a>したキーワードのみを通知",
         "mentions_keywords": "メンションとキーワード",
-        "message_didnt_send": "メッセージが送信されませんでした。クリックすると詳細を表示します。",
         "mute_description": "通知を送信しません"
     },
     "notifier": {
@@ -1415,8 +1407,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s個の鍵が復元されました",
         "enter_key_description": "保護されたメッセージの履歴にアクセスし、安全なメッセージのやり取りを行うには、セキュリティーキーを入力してください。",
         "enter_key_title": "セキュリティーキーを入力",
-        "enter_phrase_description": "保護されたメッセージの履歴にアクセスし、安全なメッセージのやり取りを行うには、セキュリティーフレーズを入力してください。",
-        "enter_phrase_title": "セキュリティーフレーズを入力",
         "incorrect_security_phrase_dialog": "このセキュリティーフレーズではバックアップを復号化できませんでした。正しいセキュリティーフレーズを入力したことを確認してください。",
         "incorrect_security_phrase_title": "セキュリティーフレーズが正しくありません",
         "key_backup_warning": "<b>警告</b>：信頼済のコンピューターからのみ鍵のバックアップを設定してください。",
@@ -1428,7 +1418,6 @@
         "load_error_content": "バックアップの状態を読み込めません",
         "load_keys_progress": "計%(total)s個のうち%(completed)s個の鍵が復元されました",
         "no_backup_error": "バックアップがありません！",
-        "phrase_forgotten_text": "セキュリティーフレーズを紛失した場合は、<button1>セキュリティーキーを使用</button1>するか、<button2>新しい復旧用の手段</button2>を設定することができます",
         "recovery_key_mismatch_description": "このセキュリティーキーではバックアップを復号化できませんでした。正しいセキュリティーキーを入力したことを確認してください。",
         "recovery_key_mismatch_title": "セキュリティーキーが一致しません",
         "restore_failed_error": "バックアップを復元できません"
@@ -1538,7 +1527,6 @@
         "join_button_account": "サインアップ",
         "join_failed_needs_invite": "%(roomName)sを見るには招待が必要です",
         "join_the_discussion": "ルームに参加",
-        "join_title": "ルームに参加",
         "join_title_account": "アカウントで会話に参加",
         "joining": "参加しています…",
         "joining_room": "ルームに参加しています…",
@@ -1868,8 +1856,6 @@
             "custom_font_description": "システムにインストールされているフォントの名前を設定すると、%(brand)sはそれを使用します。",
             "custom_font_name": "システムフォントの名前",
             "custom_font_size": "ユーザー定義のサイズを使用",
-            "custom_theme_error_downloading": "テーマの情報をダウンロードする際にエラーが発生しました。",
-            "custom_theme_invalid": "テーマスキーマが無効です。",
             "font_size": "フォントの大きさ",
             "image_size_default": "既定値",
             "image_size_large": "大",
@@ -2172,7 +2158,6 @@
             "verify_session": "セッションを認証",
             "web_session": "Webセッション"
         },
-        "show_breadcrumbs": "ルームの一覧の上に、最近表示したルームのショートカットを表示",
         "show_chat_effects": "チャットのエフェクトを表示（紙吹雪などを受け取ったときのアニメーション）",
         "show_displayname_changes": "表示名の変更を表示",
         "show_join_leave": "参加/退出のメッセージを表示（招待/削除/ブロックには影響しません）",
@@ -2699,10 +2684,6 @@
             "error_loading": "返信されたイベントを読み込めません。存在しないか、表示する権限がありません。",
             "in_reply_to": "<pill>への<a>返信</a>",
             "in_reply_to_for_export": "<a>このメッセージ</a>への返信"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "%(integrationsUrl)sで使用するアカウントを認証するため、外部サイトに移動します。続行してよろしいですか？",
-            "dialog_title": "統合を追加"
         },
         "self_redaction": "メッセージが削除されました",
         "send_state_encrypting": "メッセージを暗号化しています…",

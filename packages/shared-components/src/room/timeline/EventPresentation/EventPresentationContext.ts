@@ -7,11 +7,7 @@
 
 import { createContext, useContext } from "react";
 
-/** Event tile layout selected by the host surface. */
-export type EventLayout = "group" | "bubble" | "irc";
-
-/** Density variant applied within an event layout. */
-export type EventDensity = "default" | "compact";
+import type { EventDensity, EventLayout } from "./EventPresentation.types";
 
 /** Presentation settings that shared event/timeline components can adapt to. */
 export interface EventPresentation {

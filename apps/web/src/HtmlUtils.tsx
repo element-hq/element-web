@@ -10,21 +10,23 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
-import sanitizeHtml, { type IOptions } from "sanitize-html";
+import { sanitizeHtml, type HtmlSanitizeOptions } from "@element-hq/element-web-shared-utils";
 import classNames from "classnames";
-import katex from "katex";
+import { once } from "lodash";
 import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
-import { PERMITTED_URL_SCHEMES, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
+import { LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
+import { getKatex } from "./utils/katex";
 
 export { linkifyAndSanitizeHtml } from "./Linkify";
+export { isUrlPermitted, sanitizeHtmlText } from "@element-hq/element-web-shared-utils";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -38,13 +40,17 @@ const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 // (Zero-Width Space, other whitespace)
 const EMOJI_SEPARATOR_REGEX = /[\u200B\s]/g;
 
-// Regex for emoji. This includes any RGI_Emoji sequence followed by an optional
-// emoji presentation VS (U+FE0F), but not those sequences that are followed by
-// a text presentation VS (U+FE0E). We also count lone regional indicators
-// (U+1F1E6-U+1F1FF). Technically this regex produces false negatives for emoji
-// followed by U+FE0E when the emoji doesn't have a text variant, but in
-// practice this doesn't matter.
-export const EMOJI_REGEX = (() => {
+/**
+ * Regex for emoji. This includes any RGI_Emoji sequence followed by an optional
+ * emoji presentation VS (U+FE0F), but not those sequences that are followed by
+ * a text presentation VS (U+FE0E). We also count lone regional indicators
+ * (U+1F1E6-U+1F1FF). Technically this regex produces false negatives for emoji
+ * followed by U+FE0E when the emoji doesn't have a text variant, but in
+ * practice this doesn't matter.
+ *
+ * Built on first use rather than at import, as compiling `\p{RGI_Emoji}` is slow enough to delay app startup.
+ */
+export const getEmojiRegex = once((): RegExp => {
     try {
         // Per our support policy, v mode is available to us, but we still don't
         // want the app to completely crash on older platforms. We use the
@@ -54,16 +60,16 @@ export const EMOJI_REGEX = (() => {
         // v mode not supported; fall back to matching nothing
         return /(?!)/;
     }
-})();
+});
 
-const BIGEMOJI_REGEX = (() => {
+const getBigEmojiRegex = once((): RegExp => {
     try {
-        return new RegExp(`^(${EMOJI_REGEX.source})+$`, "iv");
+        return new RegExp(`^(${getEmojiRegex().source})+$`, "iv");
     } catch {
-        // Fall back, just like for EMOJI_REGEX
+        // Fall back, just like for getEmojiRegex
         return /(?!)/;
     }
-})();
+});
 
 /*
  * Return true if the given string contains emoji
@@ -96,51 +102,28 @@ export function unicodeToShortcode(char: string): string {
 export function sanitizedHtmlNode(
     insaneHtml: string,
     className?: string,
-    sanitizeParams = sanitizeHtmlParams,
+    sanitizeParams: HtmlSanitizeOptions = sanitizeHtmlParams,
 ): ReactNode {
     const saneHtml = sanitizeHtml(insaneHtml, sanitizeParams);
 
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" className={className} />;
 }
 
-export function getHtmlText(insaneHtml: string): string {
-    return sanitizeHtml(insaneHtml, {
-        allowedTags: [],
-        allowedAttributes: {},
-        selfClosing: [],
-        allowedSchemes: [],
-        disallowedTagsMode: "discard",
-    });
-}
-
-/**
- * Tests if a URL from an untrusted source may be safely put into the DOM
- * The biggest threat here is javascript: URIs.
- * Note that the HTML sanitiser library has its own internal logic for
- * doing this, to which we pass the same list of schemes. This is used in
- * other places we need to sanitise URLs.
- * @returns true if permitted, otherwise false
- */
-export function isUrlPermitted(inputUrl: string): boolean {
-    try {
-        // URL parser protocol includes the trailing colon
-        return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
-    } catch {
-        return false;
-    }
-}
-
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: IOptions = {
+const composerSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
+        // Composer quotes intentionally preserve the source link/media
+        // presentation while shared URL validation still runs.
+        "a": (tagName, attribs) => ({ tagName, attribs }),
+        "img": (tagName, attribs) => ({ tagName, attribs }),
         "code": transformTags["code"],
         "*": transformTags["*"],
     },
 };
 
 // reduced set of allowed tags to avoid turning topics into Myspace
-const topicSanitizeHtmlParams: IOptions = {
+const topicSanitizeHtmlParams: HtmlSanitizeOptions = {
     ...sanitizeHtmlParams,
     allowedTags: [
         "font", // custom to matrix for IRC-style font coloring
@@ -270,7 +253,7 @@ export function formatEmojis(message: string | undefined, isHtmlMessage?: boolea
     let key = 0;
 
     for (const data of graphemeSegmenter.segment(message)) {
-        if (EMOJI_REGEX.test(data.segment)) {
+        if (getEmojiRegex().test(data.segment)) {
             if (text) {
                 result.push(text);
                 text = "";
@@ -308,9 +291,15 @@ export interface EventRenderOpts {
 }
 
 function analyseEvent(content: IContent, highlights?: string[], opts: EventRenderOpts = {}): EventAnalysis {
-    let sanitizeParams = sanitizeHtmlParams;
+    let sanitizeParams: HtmlSanitizeOptions = {
+        ...sanitizeHtmlParams,
+        transformTags: { ...sanitizeHtmlParams.transformTags },
+    };
     if (opts.forComposerQuote) {
-        sanitizeParams = composerSanitizeHtmlParams;
+        sanitizeParams = {
+            ...composerSanitizeHtmlParams,
+            transformTags: { ...composerSanitizeHtmlParams.transformTags },
+        };
     }
 
     if (opts.mediaIsVisible === false && sanitizeParams.transformTags?.["img"]) {
@@ -329,13 +318,14 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
 
     if (opts.linkify) {
         // Prevent mutating the source of sanitizeParams.
-        sanitizeParams = { ...sanitizeParams };
-        if (typeof sanitizeParams.allowedAttributes === "object") {
-            const attribs = { ...sanitizeParams.allowedAttributes };
-            // We allow data-linkified because TextualBody uses it to passthrough links.
-            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], `data-${LINKIFIED_DATA_ATTRIBUTE}`];
-            sanitizeParams.allowedAttributes = attribs;
-        } // else: No attibutes are are allowed for "a"
+        sanitizeParams = {
+            ...sanitizeParams,
+            additionalAllowedAttributes: {
+                ...sanitizeParams.additionalAllowedAttributes,
+                // We allow data-linkified because TextualBody uses it to passthrough links.
+                a: [...(sanitizeParams.additionalAllowedAttributes?.a ?? []), `data-${LINKIFIED_DATA_ATTRIBUTE}`],
+            },
+        };
     }
 
     try {
@@ -388,7 +378,9 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
             const isPlainText = phtml.body.innerHTML === phtml.body.textContent;
             isHtmlMessage = !isPlainText;
 
-            if (isHtmlMessage && SettingsStore.getValue("feature_latex_maths")) {
+            // KaTeX is loaded on demand; until it is, maths is left as the sender's fallback
+            const katex = getKatex();
+            if (isHtmlMessage && katex && SettingsStore.getValue("feature_latex_maths")) {
                 [...phtml.querySelectorAll<HTMLElement>("div[data-mx-maths], span[data-mx-maths]")].forEach((e) => {
                     e.outerHTML = katex.renderToString(decode(e.getAttribute("data-mx-maths")), {
                         throwOnError: false,
@@ -432,7 +424,7 @@ export function bodyToNode(content: IContent, highlights?: string[], opts: Event
         // messages.
         contentBodyTrimmed = contentBodyTrimmed.replace(EMOJI_SEPARATOR_REGEX, "");
 
-        const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
+        const match = getBigEmojiRegex().exec(contentBodyTrimmed);
         emojiBody =
             match?.[0]?.length === contentBodyTrimmed.length &&
             // Prevent user pills expanding for users with only emoji in
@@ -513,7 +505,7 @@ export function topicToHtml(
         topicHasEmoji = mightContainEmoji(isFormattedTopic ? htmlTopic! : topic);
 
         if (isFormattedTopic) {
-            safeTopic = sanitizeHtml(htmlTopic!, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
+            safeTopic = sanitizeHtml(htmlTopic, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
             if (topicHasEmoji) {
                 safeTopic = formatEmojis(safeTopic, true).join("");
             }

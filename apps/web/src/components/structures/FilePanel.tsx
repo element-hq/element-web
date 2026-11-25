@@ -56,6 +56,7 @@ class FilePanel extends React.Component<IProps, IState> {
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.
     private decryptingEvents = new Set<string>();
+    private unmounted = false;
     public noRoom = false;
     private card = createRef<HTMLDivElement>();
 
@@ -75,7 +76,7 @@ class FilePanel extends React.Component<IProps, IState> {
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
         const client = MatrixClientPeg.safeGet();
-        client.decryptEventIfNeeded(ev);
+        void client.decryptEventIfNeeded(ev);
 
         if (ev.isBeingDecrypted()) {
             this.decryptingEvents.add(ev.getId()!);
@@ -116,6 +117,7 @@ class FilePanel extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.safeGet();
 
         await this.updateTimelineSet(this.props.roomId);
+        if (this.unmounted) return;
 
         if (!client.isRoomEncrypted(this.props.roomId)) return;
 
@@ -134,6 +136,7 @@ class FilePanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
@@ -159,7 +162,7 @@ class FilePanel extends React.Component<IProps, IState> {
         });
 
         filter.filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
-        return room.getOrCreateFilteredTimelineSet(filter);
+        return room.getOrCreateFilteredTimelineSet(filter, { includeThreadedEvents: true });
     }
 
     private onPaginationRequest = (
@@ -292,6 +295,7 @@ class FilePanel extends React.Component<IProps, IState> {
                                 manageReadReceipts={false}
                                 manageReadMarkers={false}
                                 timelineSet={this.state.timelineSet}
+                                hideThreadedMessages={false}
                                 showUrlPreview={false}
                                 onPaginationRequest={this.onPaginationRequest}
                                 empty={emptyState}

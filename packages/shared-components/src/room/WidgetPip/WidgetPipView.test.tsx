@@ -14,16 +14,16 @@ import { getByTestId } from "storybook/test";
 
 import * as stories from "./WidgetPipView.stories.tsx";
 
-const { WithGreyWidget } = composeStories(stories);
+const { Default } = composeStories(stories);
 
 describe("WidgetPipView", () => {
-    it("renders with gray widget", () => {
-        const { container } = render(<WithGreyWidget />);
+    it("renders", () => {
+        const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
     });
     it("detects back click action", async () => {
         const onBackClick = vi.fn();
-        const { container, getByRole } = render(<WithGreyWidget onBackClick={onBackClick} />);
+        const { container, getByRole } = render(<Default onBackClick={onBackClick} />);
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Back" });
@@ -32,7 +32,7 @@ describe("WidgetPipView", () => {
     });
     it("detects double click triggers back", async () => {
         const onBackClick = vi.fn();
-        const { container } = render(<WithGreyWidget onStartMoving={onBackClick} />);
+        const { container } = render(<Default onStartMoving={onBackClick} />);
         expect(container).toMatchSnapshot();
 
         const pipContainer = getByTestId(container, "widget-pip-container");
@@ -41,7 +41,7 @@ describe("WidgetPipView", () => {
     });
     it("detects on mouse down for drag", async () => {
         const onStartMoving = vi.fn();
-        const { container } = render(<WithGreyWidget onStartMoving={onStartMoving} />);
+        const { container } = render(<Default onStartMoving={onStartMoving} />);
         expect(container).toMatchSnapshot();
 
         const pipContainer = getByTestId(container, "widget-pip-container");

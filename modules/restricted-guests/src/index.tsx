@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
+import { UIComponent, type Module, type Api, type ModuleFactory } from "@element-hq/element-web-module-api";
 import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
 import { name as ModuleName } from "../package.json";
@@ -13,17 +13,20 @@ import RoomPreviewBar from "./RoomPreviewBar.tsx";
 import AuthFooter from "./AuthFooter.tsx";
 import style from "./style.css" with { type: "css" };
 
-const GUEST_INVISIBLE_COMPONENTS = [
-    "UIComponent.sendInvites",
-    "UIComponent.roomCreation",
-    "UIComponent.spaceCreation",
-    "UIComponent.exploreRooms",
-    "UIComponent.roomOptionsMenu",
-    "UIComponent.addIntegrations",
+const GUEST_INVISIBLE_COMPONENTS: UIComponent[] = [
+    UIComponent.InviteUsers,
+    UIComponent.CreateRooms,
+    UIComponent.CreateDM,
+    UIComponent.CreateSpaces,
+    UIComponent.ExploreRooms,
+    UIComponent.RoomOptionsMenu,
+    UIComponent.AddIntegrations,
+    UIComponent.ReleaseAnnouncements,
+    UIComponent.FilterContainer,
 ];
 
 class RestrictedGuestsModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0";
+    public static readonly moduleApiVersion = "^2.6.0";
 
     private config?: ModuleConfig;
 
@@ -38,7 +41,10 @@ class RestrictedGuestsModule implements Module {
 
         document.adoptedStyleSheets.push(style);
 
-        this.api.i18n.register(Translations);
+        const i18n = this.api.i18n.namespaced(CONFIG_KEY);
+        for (const [language, translations] of Object.entries(Translations)) {
+            i18n.registerLanguage(language, translations);
+        }
 
         try {
             this.config = ModuleConfig.parse(rawConfig);
@@ -55,7 +61,7 @@ class RestrictedGuestsModule implements Module {
 
         // Room preview bar customisations (for Matrix guest support)
         this.api.customComponents.registerRoomPreviewBar((props, OriginalComponent) => (
-            <RoomPreviewBar {...props} api={this.api} config={this.config!}>
+            <RoomPreviewBar {...props} api={this.api} i18n={i18n} config={this.config!}>
                 <OriginalComponent {...props} />
             </RoomPreviewBar>
         ));
@@ -64,7 +70,7 @@ class RestrictedGuestsModule implements Module {
         // Login component customisations (for no guest support)
         this.api.customComponents.registerLoginComponent((props, OriginalComponent) => (
             <OriginalComponent {...props}>
-                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} config={this.config!} />
+                <AuthFooter onLoggedIn={props.onLoggedIn} api={this.api} i18n={i18n} config={this.config!} />
             </OriginalComponent>
         ));
     }
@@ -75,10 +81,10 @@ class RestrictedGuestsModule implements Module {
      * @param component - the name of the component that is checked
      * @returns true, if the user should see the component
      */
-    public readonly shouldShowComponent = (component: string): boolean => {
+    public readonly shouldShowComponent = (component: UIComponent): boolean => {
         const profile = this.api.profile.value;
         if (this.config && (profile.isGuest || profile.userId?.startsWith(this.config.guest_user_prefix))) {
-            return GUEST_INVISIBLE_COMPONENTS.includes(component);
+            return !GUEST_INVISIBLE_COMPONENTS.includes(component);
         }
 
         return true;

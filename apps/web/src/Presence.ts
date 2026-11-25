@@ -36,7 +36,7 @@ class Presence {
         while (this.unavailableTimer) {
             try {
                 await this.unavailableTimer.finished();
-                this.setState(SetPresence.Unavailable);
+                await this.setState(SetPresence.Unavailable);
             } catch {
                 /* aborted, stop got called */
             }
@@ -63,7 +63,7 @@ class Presence {
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.UserActivity) {
-            this.setState(SetPresence.Online);
+            void this.setState(SetPresence.Online);
             this.unavailableTimer?.restart();
         }
     };

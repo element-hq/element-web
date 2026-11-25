@@ -16,6 +16,7 @@ import {
     RelationType,
     EventTimeline,
     type MatrixClient,
+    type IRoomTimelineData,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -116,12 +117,9 @@ export const useReadPinnedEvents = (room?: Room): Set<string> => {
  * @param cli
  */
 async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixClient): Promise<MatrixEvent | null> {
-    const timelineSet = room.getUnfilteredTimelineSet();
-    // Get the event from the local timeline
-    const localEvent = timelineSet
-        ?.getTimelineForEvent(pinnedEventId)
-        ?.getEvents()
-        .find((e) => e.getId() === pinnedEventId);
+    // Use the room's own copy when it has one, including a thread reply that only lives in its thread's timeline:
+    // that copy is the one the room redacts, whereas a copy fetched from the server is never touched again.
+    const localEvent = room.findEventById(pinnedEventId);
 
     // Decrypt the event if it's encrypted
     // Can happen when the tab is refreshed and the pinned events card is opened directly
@@ -180,7 +178,59 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
 export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent> {
     const cli = useMatrixClientContext();
 
-    const events = useAsyncMemo(
+    // Editing a pinned message leaves the pinned ids untouched, and a pinned event fetched from
+    // the server only carries the edits that existed when it was fetched, so a later edit would go
+    // unnoticed. Collect the edits landing on a pinned event, keyed by the event they replace.
+    const [edits, setEdits] = useState(new Map<string, MatrixEvent>());
+
+    // Pinned events that have been redacted since they were fetched, by event id. The pinned events are only fetched
+    // again when the pinned ids change, and redacting a message doesn't change them.
+    const [redactedEvents, setRedactedEvents] = useState(new Map<string, MatrixEvent>());
+
+    // Fetch a pinned event again once it is redacted. If the room has the event loaded, fetchPinnedEvent returns the
+    // room's own, already redacted copy; otherwise it asks the server, which returns the redacted version.
+    const onPinnedEventRedacted = async (eventId: string | undefined): Promise<void> => {
+        if (!eventId || !pinnedEventIds.includes(eventId)) return;
+        const event = await fetchPinnedEvent(room, eventId, cli);
+        // Our own redaction first arrives as a local echo, before it is applied. Wait for the remote echo.
+        if (!event?.isRedacted()) return;
+        setRedactedEvents((redacted) => new Map(redacted).set(eventId, event));
+    };
+
+    // Fires for events the room has loaded, including messages that a retention policy expires on the client.
+    useTypedEventEmitter(room, RoomEvent.Redaction, (redaction: MatrixEvent): void => {
+        void onPinnedEventRedacted(redaction.getAssociatedId());
+    });
+
+    useTypedEventEmitter(
+        room,
+        RoomEvent.Timeline,
+        (
+            event: MatrixEvent,
+            _room: Room | undefined,
+            _toStartOfTimeline: boolean | undefined,
+            removed: boolean,
+            data: IRoomTimelineData,
+        ): void => {
+            // A backfilled edit can be older than the one already applied, so only live ones count.
+            if (removed || !data.liveEvent) return;
+
+            // A pinned event that the room has not loaded gets no RoomEvent.Redaction, only the redaction itself.
+            if (event.isRedaction()) {
+                void onPinnedEventRedacted(event.getAssociatedId());
+                return;
+            }
+
+            const relation = event.getRelation();
+            if (relation?.rel_type !== RelationType.Replace) return;
+
+            const editedEventId = relation.event_id;
+            if (!editedEventId || !pinnedEventIds.includes(editedEventId)) return;
+            setEdits((edits) => new Map(edits).set(editedEventId, event));
+        },
+    );
+
+    const fetchedEvents = useAsyncMemo(
         () => {
             const fetchPromises = pinnedEventIds.map((eventId) => () => fetchPinnedEvent(room, eventId, cli));
             // Fetch the pinned events in batches of 10
@@ -189,7 +239,21 @@ export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Ar
         [cli, room, pinnedEventIds],
         [],
     );
-    return filterBoolean(events);
+    const events = useMemo(
+        () => filterBoolean(fetchedEvents).map((event) => redactedEvents.get(event.getId()!) ?? event),
+        [fetchedEvents, redactedEvents],
+    );
+
+    // Replacing an event notifies whatever is rendering it, which is what refreshes the banner and
+    // the pinned messages card, so it has to happen after the render rather than during it.
+    useEffect(() => {
+        for (const event of events) {
+            const edit = edits.get(event.getId()!);
+            if (edit) event.makeReplaced(edit);
+        }
+    }, [events, edits]);
+
+    return events;
 }
 
 /**

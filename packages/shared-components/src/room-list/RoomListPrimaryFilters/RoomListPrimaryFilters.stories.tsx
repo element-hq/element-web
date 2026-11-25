@@ -65,7 +65,7 @@ export const NarrowContainer: Story = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: "180px", border: "1px dashed var(--cpd-color-border-interactive-secondary)" }}>
+            <div style={{ width: "170px", border: "1px dashed var(--cpd-color-border-interactive-secondary)" }}>
                 <Story />
             </div>
         ),
@@ -83,7 +83,7 @@ export const NarrowWithActiveWrappingFilter: Story = {
     },
     decorators: [
         (Story) => (
-            <div style={{ width: "180px", border: "1px dashed var(--cpd-color-border-interactive-secondary)" }}>
+            <div style={{ width: "170px", border: "1px dashed var(--cpd-color-border-interactive-secondary)" }}>
                 <Story />
             </div>
         ),

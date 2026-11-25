@@ -142,7 +142,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             MatrixClientPeg.safeGet().on(CallEventHandlerEvent.Incoming, this.onCallIncoming);
         }
 
-        this.checkProtocols(CHECK_PROTOCOLS_ATTEMPTS);
+        void this.checkProtocols(CHECK_PROTOCOLS_ATTEMPTS);
     }
 
     public stop(): void {
@@ -171,7 +171,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         if (!callId || this.isForcedSilent()) return;
         this.silencedCalls.delete(callId);
         this.emit(LegacyCallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
-        this.play(AudioID.Ring);
+        void this.play(AudioID.Ring);
     }
 
     public isCallSilenced(callId?: string): boolean {
@@ -221,7 +221,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             } else {
                 logger.log("Failed to check for protocol support: will retry", e);
                 window.setTimeout(() => {
-                    this.checkProtocols(maxTries - 1);
+                    void this.checkProtocols(maxTries - 1);
                 }, 10000);
             }
         }
@@ -506,14 +506,14 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                 );
 
                 if (pushRuleEnabled && tweakSetToRing && !this.isForcedSilent()) {
-                    this.play(AudioID.Ring);
+                    void this.play(AudioID.Ring);
                 } else {
                     this.silenceCall(call.callId);
                 }
                 break;
             }
             case CallState.InviteSent: {
-                this.play(AudioID.Ringback);
+                void this.play(AudioID.Ringback);
                 break;
             }
             case CallState.Ended: {
@@ -523,7 +523,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                 }
 
                 if (oldState === CallState.InviteSent && call.hangupParty === CallParty.Remote) {
-                    this.play(AudioID.Busy);
+                    void this.play(AudioID.Busy);
 
                     // Don't show a modal when we got rejected/the call was hung up
                     if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
@@ -550,11 +550,11 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                     });
                 } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
                     // don't play the end-call sound for calls that never got off the ground
-                    this.play(AudioID.CallEnd);
+                    void this.play(AudioID.CallEnd);
                 }
 
                 if (isNotNull(mappedRoomId)) {
-                    this.logCallStats(call, mappedRoomId);
+                    void this.logCallStats(call, mappedRoomId);
                 }
                 break;
             }
@@ -671,8 +671,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             true,
         );
 
-        finished.then(([allow]) => {
-            SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow ?? null);
+        void finished.then(([allow]) => {
+            void SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow ?? null);
         });
     }
 
@@ -733,9 +733,9 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         this.setActiveCallRoomId(roomId);
 
         if (type === CallType.Voice) {
-            call.placeVoiceCall();
+            await call.placeVoiceCall();
         } else if (type === "video") {
-            call.placeVideoCall();
+            await call.placeVideoCall();
         } else {
             logger.error("Unknown conf call type: " + type);
         }
@@ -838,7 +838,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             return;
         }
 
-        call.answer();
+        void call.answer();
         this.setActiveCallRoomId(roomId);
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -886,7 +886,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         if (consultFirst) {
             // if we're consulting, we just start by placing a call to the transfer
             // target (passing the transferee so the actual transfer can happen later)
-            this.dialNumber(destination, call);
+            await this.dialNumber(destination, call);
             return;
         }
 
@@ -914,7 +914,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                 return;
             }
 
-            this.placeCall(dmRoomId, call.type, call);
+            await this.placeCall(dmRoomId, call.type, call);
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: dmRoomId,
@@ -1004,7 +1004,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(w));
             if (!messaging?.widgetApi) return; // more "should never happen" words
 
-            messaging.widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+            void messaging.widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
         });
     }
 

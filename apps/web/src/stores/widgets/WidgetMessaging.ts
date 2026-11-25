@@ -54,7 +54,6 @@ import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWa
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
-import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
@@ -190,7 +189,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     private kind: WidgetKind;
     private readonly virtual: boolean;
     private readonly themeWatcher = new ThemeWatcher();
-    private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
+    private readUpToMap: { [roomIdOrThread: string]: string } = {}; // room ID (or room ID/thread root ID) to event ID
     // This promise will be called and needs to resolve before the widget will actually become sticky.
     private stickyPromise?: () => Promise<void>;
     // Holds events that should be fed to the widget once they finish decrypting
@@ -235,7 +234,6 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private runUrlTemplate(opts = { asPopout: false }): string {
-        const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
         const defaults: ITemplateParams = {
             widgetRoomId: this.roomId,
             currentUserId: this.client.getUserId()!,
@@ -247,7 +245,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
         };
-        const templated = this.widget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
+        const templated = this.widget.getCompleteUrl(defaults, opts?.asPopout);
 
         const parsed = new URL(templated);
 
@@ -271,7 +269,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private onThemeChange = (theme: string): void => {
-        this.widgetApi?.updateTheme({ name: theme });
+        void this.widgetApi?.updateTheme({ name: theme });
     };
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
@@ -437,8 +435,9 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                     const room = roomId ? this.client.getRoom(roomId) : undefined;
                     if (!room) return;
 
-                    // noinspection JSIgnoredPromiseFromCall
-                    IntegrationManagers.sharedInstance()?.getPrimaryManager()?.open(room, `type_${integType}`, integId);
+                    void IntegrationManagers.sharedInstance()
+                        ?.getPrimaryManager()
+                        ?.open(room, `type_${integType}`, integId);
                 },
             );
         }
@@ -462,9 +461,6 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     public async prepare(): Promise<void> {
-        // Ensure the variables are ready for us to be rendered before continuing
-        await (WidgetVariableCustomisations?.isReady?.() ?? Promise.resolve());
-
         if (this.scalarToken) return;
         try {
             if (WidgetUtils.isScalarUrl(this.widget.templateUrl)) {
@@ -523,7 +519,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private onEvent = (ev: MatrixEvent): void => {
-        this.client.decryptEventIfNeeded(ev);
+        void this.client.decryptEventIfNeeded(ev);
         this.feedEvent(ev);
     };
 
@@ -575,10 +571,15 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         const room = this.client.getRoom(roomId);
         if (room === null) return false;
 
-        const upToEventId = this.readUpToMap[ev.getRoomId()!];
+        // A thread reply lives in its thread's timeline, not the room's, so it gets a marker of its own:
+        // searched for in the room's timeline it would never be found and be taken as already seen.
+        const thread = ev.threadRootId === undefined ? null : room.getThread(ev.threadRootId);
+        const markerKey = thread === null ? roomId : `${roomId}/${thread.id}`;
+
+        const upToEventId = this.readUpToMap[markerKey];
         if (!upToEventId) {
             // There's no marker yet; start it at this event
-            this.readUpToMap[roomId] = evId;
+            this.readUpToMap[markerKey] = evId;
             return true;
         }
 
@@ -587,7 +588,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
 
         // Timelines are most recent last, so reverse the order and limit ourselves to 100 events
         // to avoid overusing the CPU.
-        const timeline = room.getLiveTimeline();
+        const timeline = thread?.liveTimeline ?? room.getLiveTimeline();
         const events = arrayFastClone(timeline.getEvents()).reverse().slice(0, 100);
 
         for (const timelineEvent of events) {
@@ -596,7 +597,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                 return false;
             } else if (timelineEvent.getId() === ev.getId()) {
                 // The event is after the marker; advance it
-                this.readUpToMap[roomId] = evId;
+                this.readUpToMap[markerKey] = evId;
                 return true;
             }
         }

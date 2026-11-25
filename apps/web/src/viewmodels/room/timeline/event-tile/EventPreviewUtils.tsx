@@ -6,7 +6,14 @@
  */
 
 import React, { type ReactNode } from "react";
-import { M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import {
+    M_POLL_START,
+    type MatrixEvent,
+    MatrixEventEvent,
+    MsgType,
+    type Room,
+    RoomEvent,
+} from "matrix-js-sdk/src/matrix";
 import { Disposables } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
@@ -47,14 +54,23 @@ export class EventPreviewContentCache {
 
 export class MatrixEventContentChangeListener {
     private mxEvent?: MatrixEvent;
+    private room?: Room;
     private callback?: () => void;
     private disposables?: Disposables;
 
-    public setEvent(mxEvent: MatrixEvent | undefined, callback: () => void): void {
-        if (this.mxEvent === mxEvent && this.callback === callback) return;
+    /**
+     * Report changes to the content of an event: edits, decryption and redaction.
+     *
+     * @param mxEvent - The event to watch.
+     * @param callback - Called when the event's content changes.
+     * @param room - The event's room, which reports the redaction once the content has been removed.
+     */
+    public setEvent(mxEvent: MatrixEvent | undefined, callback: () => void, room?: Room): void {
+        if (this.mxEvent === mxEvent && this.callback === callback && this.room === room) return;
 
         this.teardown();
         this.mxEvent = mxEvent;
+        this.room = room;
         this.callback = callback;
 
         if (!mxEvent) return;
@@ -62,12 +78,19 @@ export class MatrixEventContentChangeListener {
         this.disposables = new Disposables();
         this.disposables.trackListener(mxEvent, MatrixEventEvent.Replaced, callback);
         this.disposables.trackListener(mxEvent, MatrixEventEvent.Decrypted, callback);
+        if (room) {
+            // RoomEvent.Redaction passes the redaction event first.
+            this.disposables.trackListener(room, RoomEvent.Redaction, (redaction: unknown) => {
+                if ((redaction as MatrixEvent).getAssociatedId() === mxEvent.getId()) callback();
+            });
+        }
     }
 
     public teardown(): void {
         this.disposables?.dispose();
         this.disposables = undefined;
         this.mxEvent = undefined;
+        this.room = undefined;
         this.callback = undefined;
     }
 }

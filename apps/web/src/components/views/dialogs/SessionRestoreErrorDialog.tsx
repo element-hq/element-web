@@ -37,7 +37,7 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
             button: _t("action|sign_out"),
             danger: true,
         });
-        finished.then(([ok]) => this.props.onFinished(ok));
+        void finished.then(([ok]) => this.props.onFinished(ok));
     };
 
     private onRefreshClick = (): void => {
@@ -50,7 +50,7 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
         const brand = SdkConfig.get().brand;
 
         const clearStorageButton = (
-            <button onClick={this.onClearStorageClick} className="danger" type="button">
+            <button onClick={this.onClearStorageClick} className="mx_LegacyDialogButton danger" type="button">
                 {_t("error|session_restore|clear_storage_button")}
             </button>
         );

@@ -1,0 +1,140 @@
+diff --git a/dist/client/actions/match_image_snapshot_action.mjs b/dist/client/actions/match_image_snapshot_action.mjs
+index cba3868a9f343c6e1b59e1e7b2565d1bd36c9666..b863ec164cf2a6014440efd34e5c37cf0ff60d05 100644
+--- a/dist/client/actions/match_image_snapshot_action.mjs
++++ b/dist/client/actions/match_image_snapshot_action.mjs
+@@ -5,12 +5,12 @@ import { convertElementToCssSelector } from "../external/browser/selector.mjs";
+ import { normalizeMaskOptions } from "../mask.mjs";
+ import { compareImageSnapshot } from "../snapshot/compare_image_snapshot.mjs";
+ // src/client/actions/match_image_snapshot_action.ts
+-async function matchImageSnapshotAction(commands, taskId, subject, rawOptions) {
++async function matchImageSnapshotAction(commands, taskId, subject, rawOptions, task) {
+ 	const options = normalizeMaskOptions(rawOptions);
+ 	assertSnapshotKeyWithoutDash(options?.snapshotKey);
+ 	settleAnimations(options);
+ 	const info = await commands.prepareImageSnapshotComparison(taskId, parseImageSnapshotSubject(subject), options);
+-	return compareImageSnapshot(commands, taskId, info, options);
++	return compareImageSnapshot(commands, taskId, info, options, task);
+ }
+ function parseImageSnapshotSubject(subject) {
+ 	if (subject instanceof Element) return convertElementToCssSelector(subject);
+diff --git a/dist/client/actions/match_page_image_snapshot_action.mjs b/dist/client/actions/match_page_image_snapshot_action.mjs
+index 4620b4af5c46f69413b9289efc57b48ded157e5f..663fbca2594f89c4c1c42f674e7df8435e9d7e82 100644
+--- a/dist/client/actions/match_page_image_snapshot_action.mjs
++++ b/dist/client/actions/match_page_image_snapshot_action.mjs
+@@ -3,13 +3,13 @@ import { settleAnimations } from "../animations/settle_animations.mjs";
+ import { normalizeMaskOptions } from "../mask.mjs";
+ import { compareImageSnapshot } from "../snapshot/compare_image_snapshot.mjs";
+ // src/client/actions/match_page_image_snapshot_action.ts
+-async function matchPageImageSnapshotAction(commands, taskId, rawOptions) {
++async function matchPageImageSnapshotAction(commands, taskId, rawOptions, task) {
+ 	const options = normalizeMaskOptions(rawOptions);
+ 	assertSnapshotKeyWithoutDash(options?.snapshotKey);
+ 	settleAnimations(options);
+ 	const info = await commands.preparePageImageSnapshotComparison(taskId, options);
+ 	if (!info) return;
+-	return compareImageSnapshot(commands, taskId, info, options);
++	return compareImageSnapshot(commands, taskId, info, options, task);
+ }
+ export { matchPageImageSnapshotAction };
+ 
+diff --git a/dist/client/expect/to_match_image_snapshot.mjs b/dist/client/expect/to_match_image_snapshot.mjs
+index 5fe1a951b31262a1379fe7301cab136acc0b7458..e37fad554d3436e19c3177dce136c33735e19e22 100644
+--- a/dist/client/expect/to_match_image_snapshot.mjs
++++ b/dist/client/expect/to_match_image_snapshot.mjs
+@@ -7,7 +7,7 @@ function toMatchImageSnapshot(subject, options) {
+ 	const test = ctx.getCurrentTest();
+ 	if (!test) throw new Error("`toMatchImageSnapshot()` must be called in a test.");
+ 	if (test.concurrent) throw new Error("`toMatchImageSnapshot()` cannot be called in a concurrent test because concurrent tests run at the same time in the same iframe and affect each other's environment.");
+-	return matchImageSnapshotAction(ctx.commands, toTaskId(test), subject, options).then(() => success);
++	return matchImageSnapshotAction(ctx.commands, toTaskId(test), subject, options, test).then(() => success);
+ }
+ export { toMatchImageSnapshot };
+ 
+diff --git a/dist/client/page/to_match_image_snapshot.mjs b/dist/client/page/to_match_image_snapshot.mjs
+index f2785e2eec5deb7eefb9934b28e185832d9f477c..ed30ff99d09e6a27f4806ddfe4b146ff1a1f7da4 100644
+--- a/dist/client/page/to_match_image_snapshot.mjs
++++ b/dist/client/page/to_match_image_snapshot.mjs
+@@ -6,7 +6,7 @@ function toMatchImageSnapshot(options) {
+ 	const test = ctx.getCurrentTest();
+ 	if (!test) throw new Error("`toMatchImageSnapshot()` must be called in a test.");
+ 	if (test.concurrent) throw new Error("`toMatchImageSnapshot()` cannot be called in a concurrent test because concurrent tests run at the same time in the same iframe and affect each other's environment.");
+-	return matchPageImageSnapshotAction(ctx.commands, toTaskId(test), options);
++	return matchPageImageSnapshotAction(ctx.commands, toTaskId(test), options, test);
+ }
+ export { toMatchImageSnapshot };
+ 
+diff --git a/dist/client/snapshot/compare_image_snapshot.mjs b/dist/client/snapshot/compare_image_snapshot.mjs
+index 74913500f7249cb62b8c5238e4bfeba4755aa794..7c8c5a06e2f8450d03e8d811beb4babfe39bf0d7 100644
+--- a/dist/client/snapshot/compare_image_snapshot.mjs
++++ b/dist/client/snapshot/compare_image_snapshot.mjs
+@@ -8,8 +8,9 @@ import { alignImagesToSameSize } from "../image/align_images.mjs";
+ import { formatSnapshotPath, prettifyOptions } from "./compare_image_snapshot.logic.mjs";
+ import { resolve } from "pathe";
+ import dedent from "dedent";
++import { recordArtifact } from "vitest";
+ // src/client/snapshot/compare_image_snapshot.ts
+-async function compareImageSnapshot(commands, taskId, info, options) {
++async function compareImageSnapshot(commands, taskId, info, options, task) {
+ 	options = {
+ 		...info,
+ 		...options
+@@ -20,6 +21,9 @@ async function compareImageSnapshot(commands, taskId, info, options) {
+ 			await writeSnapshot(commands, resolve(info.projectRoot, info.baselinePath), resultImage);
+ 			return;
+ 		}
++		await recordVisualRegressionArtifact(task, `Snapshot \`${taskId}\` has no baseline image`, [
++			{ name: "actual", path: resolve(info.projectRoot, info.resultPath), contentType: "image/png", width: resultImage.width, height: resultImage.height }
++		]);
+ 		throw new Error(dedent`Snapshot \`${taskId}\` has no baseline image. Please review the new snapshot and update the baseline image.
+ 
+ 				Options:    ${prettifyOptions(options)}
+@@ -66,6 +70,11 @@ async function compareImageSnapshot(commands, taskId, info, options) {
+ 		const content = plan.layout === "regions" ? "baseline, result, diff of each region" : plan.reason ? `baseline, result, diff of the whole image; not cropped, ${plan.reason}` : "baseline, result, diff of the whole image";
+ 		review = `\nReview:     ${formatSnapshotPath(info.projectRoot, reviewPath)} (${content})`;
+ 	}
++	await recordVisualRegressionArtifact(task, `Snapshot \`${taskId}\` mismatched`, [
++		{ name: "reference", path: resolve(info.projectRoot, info.baselinePath), contentType: "image/png", width: baselineImage.width, height: baselineImage.height },
++		{ name: "actual", path: resolve(info.projectRoot, info.resultPath), contentType: "image/png", width: resultImage.width, height: resultImage.height },
++		{ name: "diff", path: resolve(info.projectRoot, info.diffPath), contentType: "image/png", width, height }
++	]);
+ 	throw new Error(dedent`Snapshot \`${taskId}\` mismatched
+ 
+ 					${options?.failureThreshold ? options?.failureThresholdType === "percent" ? `Expected image to match within ${options.failureThreshold}% but was differ by ${diffAmount}%.` : `Expected image to match within ${options.failureThreshold} pixels but was differ by ${diffAmount} pixels.` : `Expected image to match but was differ by ${options?.failureThresholdType === "percent" ? `${diffAmount}%` : `${diffAmount} pixels`}.`}${baselineImage.width !== resultImage.width || baselineImage.height !== resultImage.height ? `\nThe image size changed from ${baselineImage.width}x${baselineImage.height} to ${resultImage.width}x${resultImage.height}.` : ""}
+@@ -84,6 +93,23 @@ async function writeSnapshot(commands, path, image) {
+ 	const content = (await toDataURL(image)).split(",")[1];
+ 	return commands.writeFile(path, content, { encoding: "base64" });
+ }
++// Recorded as vitest's own built-in `internal:toMatchScreenshot`/"visual-regression" artifact shape
++// (the same one `@vitest/browser`'s native `toMatchScreenshot()` uses), so the HTML/UI reporter
++// renders these with its existing image-diff viewer. Unlike `context.annotate`, `recordArtifact`
++// has no "must be called during the test's own run" restriction, so this works equally from the
++// `afterEach`-based "auto" snapshot matcher and from an explicit assertion in a story's `play()`.
++// Still best-effort: never let a recording failure mask the real comparison error below.
++async function recordVisualRegressionArtifact(task, message, attachments) {
++	if (!task) return;
++	try {
++		await recordArtifact(task, {
++			type: "internal:toMatchScreenshot",
++			kind: "visual-regression",
++			message,
++			attachments
++		});
++	} catch {}
++}
+ export { compareImageSnapshot };
+ 
+ //# sourceMappingURL=compare_image_snapshot.mjs.map
+\ No newline at end of file
+diff --git a/dist/client/suite/auto_snapshot_matcher.mjs b/dist/client/suite/auto_snapshot_matcher.mjs
+index 501ea470e76fe01b344f045297b19501c74325db..ec48418e8bd82ce7b7a1667f02a33059efbedcc4 100644
+--- a/dist/client/suite/auto_snapshot_matcher.mjs
++++ b/dist/client/suite/auto_snapshot_matcher.mjs
+@@ -34,7 +34,7 @@ function autoSnapshotMatcher(commands, expect) {
+ 					if (effectiveFullPage) await matchPageImageSnapshotAction(commands, toTaskId(test), {
+ 						...options,
+ 						fullPage: true
+-					});
++					}, test);
+ 					else await expect(resolveSubject(meta?.subject ?? subject)).toMatchImageSnapshot(options);
+ 				} catch (error) {
+ 					errors.push([themeId, error]);

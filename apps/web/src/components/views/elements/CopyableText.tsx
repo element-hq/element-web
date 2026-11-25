@@ -11,9 +11,9 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import { CopyIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { IconButton } from "@vector-im/compound-web";
+import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../languageHandler";
-import { copyPlaintext } from "../../../utils/strings";
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
@@ -32,7 +32,7 @@ export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className"
     const onCopyClickInternal = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
         const text = getTextToCopy();
-        const successful = !!text && (await copyPlaintext(text));
+        const successful = !!text && (await copyPlainTextToClipboard(text));
         setTooltip(successful ? _t("common|copied") : _t("error|failed_copy"));
     };
 

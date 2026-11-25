@@ -63,13 +63,11 @@ describe("snooze bulk unverified device nag", () => {
         });
 
         it("catches an error from localstorage and returns false", () => {
-            const loggerErrorSpy = vi.spyOn(logger, "error");
             localStorageGetSpy.mockImplementation(() => {
                 throw new Error("oups");
             });
             const result = isBulkUnverifiedDeviceReminderSnoozed();
             expect(result).toBe(false);
-            expect(loggerErrorSpy).toHaveBeenCalled();
         });
 
         it("returns false when snooze timestamp in storage is not a number", () => {

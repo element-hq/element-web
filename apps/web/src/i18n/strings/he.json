@@ -19,7 +19,6 @@
         "back": "אחורה",
         "cancel": "ביטול",
         "change": "שנה",
-        "click_to_copy": "לחץ להעתקה",
         "close": "סגור",
         "collapse": "הִתמוֹטְטוּת",
         "complete": "מושלם",
@@ -823,7 +822,6 @@
         "name_email_mxid_share_room": "הזמינו מישהו המשתמש בשמו, כתובת הדוא\"ל, שם המשתמש (כמו <userId/>) או <a> שתפו את החדר הזה </a>.",
         "name_mxid_share_room": "הזמינו מישהו המשתמש בשמו, שם המשתמש (כמו <userId/>) או <a> שתפו את החדר הזה </a>.",
         "recents_section": "שיחות אחרונות",
-        "room_failed_partial": "ההזמנה נשלחה, פרט למשתמשים הבאים שלא ניתן להזמינם ל - <RoomName/>",
         "room_failed_partial_title": "לא ניתן לשלוח חלק מההזמנות",
         "room_failed_title": "נכשל בהזמנת משתמשים לחדר - %(roomName)",
         "start_conversation_name_email_mxid_prompt": "התחל שיחה עם מישהו המשתמש בשמו, כתובת הדוא\"ל או שם המשתמש שלו (כמו <userId/>).",
@@ -907,7 +905,6 @@
         "bridge_state_creator": "הגשר הזה נוצר על ידי משתמש <user />.",
         "bridge_state_manager": "הגשר הזה מנוהל על ידי משתמש <user />.",
         "bridge_state_workspace": "סביבת עבודה: <networkLink/>",
-        "custom_themes": "מיכה להוספת תבניות מותאמות אישית",
         "group_developer": "מפתח",
         "group_encryption": "הצפנה",
         "group_experimental": "נִסיוֹנִי",
@@ -958,7 +955,6 @@
     },
     "language_dropdown_label": "תפריט שפות",
     "leave_room_dialog": {
-        "leave_room_question": "האם אתה בטוח שברצונך לעזוב את החדר '%(roomName)s'?",
         "room_rejoin_warning": "חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה."
     },
     "lightbox": {
@@ -1100,8 +1096,6 @@
         "count_of_successfully_restored_keys": "שוחזר בהצלחה %(sessionCount)s מפתחות",
         "enter_key_description": "גש להיסטוריית ההודעות המאובטחות שלך והגדר הודעות מאובטחות על ידי הזנת מפתח האבטחה שלך.",
         "enter_key_title": "הזן מפתח אבטחה",
-        "enter_phrase_description": "גש להיסטוריית ההודעות המאובטחת שלך והגדר הודעות מאובטחות על ידי הזנת ביטוי האבטחה שלך.",
-        "enter_phrase_title": "הזן ביטוי אבטחה",
         "incorrect_security_phrase_dialog": "לא ניתן לפענח גיבוי עם ביטוי אבטחה זה: אנא ודא שהזנת את ביטוי האבטחה הנכון.",
         "incorrect_security_phrase_title": "ביטוי אבטחה שגוי",
         "key_backup_warning": "<b>אזהרה</b>: עליך להגדיר גיבוי מפתחות הצפנה רק ממחשב מהימן.",
@@ -1451,8 +1445,6 @@
             "custom_font_description": "הגדר את שם הגופן המותקן במערכת שלך ו- %(brand)s ים ינסו להשתמש בו.",
             "custom_font_name": "שם גופן מערכת",
             "custom_font_size": "השתמשו בגודל מותאם אישית",
-            "custom_theme_error_downloading": "שגיאה בהורדת מידע אודות ערכת הנושא.",
-            "custom_theme_invalid": "סכמת תבנית לא תקינה.",
             "font_size": "גודל אותיות",
             "image_size_default": "ברירת מחדל",
             "image_size_large": "גדול",
@@ -1646,7 +1638,6 @@
             "session_id": "זהות מושב",
             "verify_session": "אמת מושב"
         },
-        "show_breadcrumbs": "הצג קיצורים אל חדרים שנצפו לאחרונה מעל לרשימת החדרים",
         "show_chat_effects": "הצג אפקטים בצ'אט (אנימציות, למשל קונפטי)",
         "show_displayname_changes": "הצג שינויים של שמות",
         "show_join_leave": "הצג הודעות הצטרפות/עזיבה (הזמנות/הסרות/איסורים) לא מושפעים",
@@ -2033,10 +2024,6 @@
         "reply": {
             "error_loading": "לא ניתן לטעון אירוע שהשיב לו, או שהוא לא קיים או שאין לך הרשאה להציג אותו.",
             "in_reply_to": "<a> בתשובה ל- </a> <pill>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "אתה עומד להועבר לאתר של צד שלישי כדי שתוכל לאמת את חשבונך לשימוש עם %(integrationsUrl)s. האם אתה מקווה להמשיך?",
-            "dialog_title": "הוסף אינטגרציה"
         },
         "self_redaction": "הודעה נמחקה",
         "send_state_failed": "השליחה נכשלה",

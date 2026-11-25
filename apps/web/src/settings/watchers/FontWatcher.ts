@@ -56,7 +56,7 @@ export class FontWatcher implements IWatcher {
     }
 
     private updateFont(): void {
-        this.setRootFontSize(SettingsStore.getValue("fontSizeDelta"));
+        void this.setRootFontSize(SettingsStore.getValue("fontSizeDelta"));
         this.setSystemFont({
             useBundledEmojiFont: SettingsStore.getValue("useBundledEmojiFont"),
             useSystemFont: SettingsStore.getValue("useSystemFont"),
@@ -66,12 +66,12 @@ export class FontWatcher implements IWatcher {
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.UpdateFontSizeDelta) {
-            this.setRootFontSize(payload.delta);
+            void this.setRootFontSize(payload.delta);
         } else if (payload.action === Action.UpdateSystemFont) {
             this.setSystemFont(payload as UpdateSystemFontPayload);
         } else if (payload.action === Action.OnLoggedOut) {
             // Clear font overrides when logging out
-            this.setRootFontSize(FontWatcher.DEFAULT_DELTA);
+            void this.setRootFontSize(FontWatcher.DEFAULT_DELTA);
             this.setSystemFont({
                 useBundledEmojiFont: false,
                 useSystemFont: false,

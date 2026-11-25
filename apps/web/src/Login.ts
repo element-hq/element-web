@@ -20,7 +20,6 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type IMatrixClientCreds } from "./utils/createMatrixClient";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import { getOAuthClientId } from "./utils/oauth/registerClient";
 import { type IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
@@ -283,8 +282,6 @@ export async function sendLoginRequest(
         deviceId: data.device_id,
         accessToken: data.access_token,
     };
-
-    ModuleRunner.instance.extensions.cryptoSetup.examineLoginResponse(data, creds);
 
     return creds;
 }

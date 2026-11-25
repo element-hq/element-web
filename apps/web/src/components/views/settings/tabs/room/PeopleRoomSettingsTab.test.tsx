@@ -1,0 +1,268 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2023 Nordeck IT + Consulting GmbH
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+// @vitest-environment happy-dom
+
+import React from "react";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { act, fireEvent, render, screen } from "test-utils-rtl";
+import { flushPromises, getMockClientWithEventEmitter } from "test-utils";
+import {
+    EventTimeline,
+    EventType,
+    MatrixError,
+    MatrixEvent,
+    Room,
+    RoomMember,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+
+import ConfirmUserActionDialog from "../../../dialogs/ConfirmUserActionDialog";
+import ErrorDialog from "../../../dialogs/ErrorDialog";
+import { PeopleRoomSettingsTab } from "./PeopleRoomSettingsTab";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import Modal from "../../../../../Modal";
+
+describe("PeopleRoomSettingsTab", () => {
+    const client = getMockClientWithEventEmitter({
+        ban: vi.fn(),
+        getUserId: vi.fn(),
+        invite: vi.fn(),
+        kick: vi.fn(),
+        baseUrl: "https://server",
+        mxcUrlToHttp: (mxcUrl: string) => mxcUrl,
+    });
+    const roomId = "#ask-to-join:example.org";
+    const userId = "@alice:example.org";
+    const member = new RoomMember(roomId, userId);
+    const room = new Room(roomId, client, userId);
+    const state = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
+
+    const getButton = (name: "Accept" | "Decline and ban" | "Decline" | "See less" | "See more") =>
+        screen.getByRole("button", { name });
+    const getComponent = (room: Room) =>
+        render(
+            <MatrixClientContext.Provider value={client}>
+                <PeopleRoomSettingsTab room={room} />
+            </MatrixClientContext.Provider>,
+        );
+    const getGroup = () => screen.getByRole("group", { name: "Asking to join" });
+    const getParagraph = () => document.querySelector("p");
+
+    it("renders a heading", () => {
+        getComponent(room);
+        expect(screen.getByRole("heading")).toHaveTextContent("People");
+    });
+
+    it('renders a group "asking to join"', () => {
+        getComponent(room);
+        expect(getGroup()).toBeInTheDocument();
+    });
+
+    describe("without requests to join", () => {
+        it('renders a paragraph "no requests"', () => {
+            getComponent(room);
+            expect(getParagraph()).toHaveTextContent("No requests");
+        });
+    });
+
+    describe("with requests to join", () => {
+        const error = new MatrixError();
+        const knockUserId = "@albert.einstein:example.org";
+        const knockMember = new RoomMember(roomId, knockUserId);
+        const reason =
+            "There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle.";
+
+        beforeEach(() => {
+            vi.spyOn(Modal, "createDialog");
+            vi.spyOn(room, "canInvite").mockReturnValue(true);
+            vi.spyOn(room, "getMember").mockReturnValue(member);
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([knockMember]);
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
+
+            knockMember.setMembershipEvent(
+                new MatrixEvent({
+                    content: {
+                        avatar_url: "mxc://example.org/albert-einstein",
+                        displayname: "Albert Einstein",
+                        membership: KnownMembership.Knock,
+                        reason,
+                    },
+                    origin_server_ts: -464140800000,
+                    type: EventType.RoomMember,
+                }),
+            );
+        });
+
+        it("renders requests fully", () => {
+            getComponent(room);
+            expect(getGroup()).toMatchSnapshot();
+        });
+
+        it("renders requests reduced", () => {
+            knockMember.setMembershipEvent(
+                new MatrixEvent({
+                    content: {
+                        displayname: "albert.einstein",
+                        membership: KnownMembership.Knock,
+                    },
+                    type: EventType.RoomMember,
+                }),
+            );
+            getComponent(room);
+            expect(getGroup()).toMatchSnapshot();
+        });
+
+        it("allows to expand a reason", () => {
+            getComponent(room);
+            fireEvent.click(getButton("See more"));
+            expect(getGroup().querySelector("p")).toHaveTextContent(reason);
+        });
+
+        it("allows to collapse a reason", () => {
+            getComponent(room);
+            fireEvent.click(getButton("See more"));
+            fireEvent.click(getButton("See less"));
+            expect(getParagraph()).toHaveTextContent(`${reason.substring(0, 120)}…`);
+        });
+
+        it("does not truncate a reason unnecessarily", () => {
+            const reason = "I have no special talents. I am only passionately curious.";
+            knockMember.setMembershipEvent(
+                new MatrixEvent({
+                    content: {
+                        displayname: "albert.einstein",
+                        membership: KnownMembership.Knock,
+                        reason,
+                    },
+                    type: EventType.RoomMember,
+                }),
+            );
+            getComponent(room);
+            expect(getParagraph()).toHaveTextContent(reason);
+        });
+
+        it("disables the deny button if the power level is insufficient", () => {
+            vi.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(false);
+            getComponent(room);
+            expect(getButton("Decline")).toHaveAttribute("disabled");
+        });
+
+        it("calls kick on deny", () => {
+            vi.spyOn(client, "kick").mockResolvedValue({});
+            getComponent(room);
+            fireEvent.click(getButton("Decline"));
+            expect(client.kick).toHaveBeenCalledWith(roomId, knockUserId);
+        });
+
+        it("fails to deny a request", async () => {
+            vi.spyOn(client, "kick").mockRejectedValue(error);
+            getComponent(room);
+            fireEvent.click(getButton("Decline"));
+            await act(() => flushPromises());
+            expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                title: error.name,
+                description: error.message,
+            });
+        });
+
+        it("succeeds to deny a request", () => {
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
+            getComponent(room);
+            act(() => {
+                room.emit(RoomStateEvent.Update, state);
+            });
+            expect(getParagraph()).toHaveTextContent("No requests");
+        });
+
+        describe("ban", () => {
+            const mockConfirmDialog = (proceed: boolean, reason?: string): void => {
+                vi.mocked(Modal.createDialog).mockReturnValueOnce({
+                    finished: Promise.resolve([proceed, reason]),
+                    close: vi.fn(),
+                } as unknown as ReturnType<typeof Modal.createDialog>);
+            };
+
+            it("disables the ban button if the power level is insufficient", () => {
+                vi.spyOn(state, "hasSufficientPowerLevelFor").mockImplementation((action) => action !== "ban");
+                getComponent(room);
+                expect(getButton("Decline and ban")).toHaveAttribute("disabled");
+            });
+
+            it("asks for confirmation and calls ban with the reason", async () => {
+                mockConfirmDialog(true, "spam");
+                vi.spyOn(client, "ban").mockResolvedValue({});
+                getComponent(room);
+                fireEvent.click(getButton("Decline and ban"));
+                expect(getButton("Decline")).toHaveAttribute("disabled");
+                await act(() => flushPromises());
+                expect(Modal.createDialog).toHaveBeenCalledWith(
+                    ConfirmUserActionDialog,
+                    expect.objectContaining({ member: knockMember, askReason: true, danger: true }),
+                );
+                expect(client.ban).toHaveBeenCalledWith(roomId, knockUserId, "spam");
+            });
+
+            it("re-enables the buttons when the confirmation is cancelled", async () => {
+                mockConfirmDialog(false);
+                getComponent(room);
+                fireEvent.click(getButton("Decline and ban"));
+                await act(() => flushPromises());
+                expect(client.ban).not.toHaveBeenCalled();
+                expect(getButton("Decline and ban")).not.toHaveAttribute("disabled");
+            });
+
+            it("fails to ban a request", async () => {
+                mockConfirmDialog(true);
+                vi.spyOn(client, "ban").mockRejectedValue(error);
+                getComponent(room);
+                fireEvent.click(getButton("Decline and ban"));
+                await act(() => flushPromises());
+                expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                    title: error.name,
+                    description: error.message,
+                });
+                expect(getButton("Decline and ban")).not.toHaveAttribute("disabled");
+            });
+        });
+
+        it("disables the approve button if the power level is insufficient", () => {
+            vi.spyOn(room, "canInvite").mockReturnValue(false);
+            getComponent(room);
+            expect(getButton("Accept")).toHaveAttribute("disabled");
+        });
+
+        it("calls invite on approve", () => {
+            vi.spyOn(client, "invite").mockResolvedValue({});
+            getComponent(room);
+            fireEvent.click(getButton("Accept"));
+            expect(client.invite).toHaveBeenCalledWith(roomId, knockUserId);
+        });
+
+        it("fails to approve a request", async () => {
+            vi.spyOn(client, "invite").mockRejectedValue(error);
+            getComponent(room);
+            fireEvent.click(getButton("Accept"));
+            await act(() => flushPromises());
+            expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                title: error.name,
+                description: error.message,
+            });
+        });
+
+        it("succeeds to approve a request", () => {
+            vi.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
+            getComponent(room);
+            act(() => {
+                room.emit(RoomStateEvent.Update, state);
+            });
+            expect(getParagraph()).toHaveTextContent("No requests");
+        });
+    });
+});

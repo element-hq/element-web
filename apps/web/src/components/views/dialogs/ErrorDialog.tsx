@@ -75,7 +75,7 @@ export default class ErrorDialog extends React.Component<IProps, IState> {
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button
-                        className="mx_Dialog_primary"
+                        className="mx_LegacyDialogButton mx_Dialog_primary"
                         onClick={this.onClick}
                         autoFocus={this.props.focus}
                         type="button"

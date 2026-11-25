@@ -15,6 +15,14 @@
 
     display: flex;
     justify-content: center;
+    cursor: ew-resize;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }
 
 /* When type=border, we just render a 1px border */
@@ -52,10 +60,10 @@
 
 /* When type=border and the user hovers/focuses the separator, we make the separator thicker */
 .separator[data-separator-type="border"]:is(
-    [data-separator="hover"],
-    [data-separator="active"],
-    [data-separator="focus"]
-),
+        [data-separator="hover"],
+        [data-separator="active"],
+        [data-separator="focus"]
+    ),
 .separator[data-separator-type="border"]:focus-visible {
     .activeSeparatorContainer {
         .activeSeparator {
@@ -85,4 +93,9 @@
         /* Fade in/ fade out the border */
         transition: border 0.15s ease-in-out 0.3s;
     }
+}
+
+.dragIcon {
+    /* The important declaration is required to override the icon set by the library */
+    cursor: pointer !important;
 }

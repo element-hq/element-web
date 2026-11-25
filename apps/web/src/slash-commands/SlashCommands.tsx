@@ -72,8 +72,14 @@ export const Commands = [
         command: "spoiler",
         args: "<message>",
         description: _td("slash_command|spoiler"),
-        runFn: function (cli, roomId, threadId, message = "") {
-            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
+        runFn: function (cli, roomId, threadId, message) {
+            if (!message?.trim()) {
+                return reject(this.getUsage());
+            }
+            // forceHTML ensures we always get an HTML string even for plain text,
+            // so the spoiler span is never left with unescaped content.
+            const htmlMessage = htmlSerializeFromMdIfNeeded(message, { forceHTML: true });
+            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${htmlMessage}</span>`));
         },
         category: CommandCategories.messages,
     }),
@@ -608,7 +614,7 @@ export const Commands = [
 
                     return success(
                         finished.then(([confirmed]) => {
-                            if (confirmed) manuallyVerifyDevice(cli, deviceId, fingerprint);
+                            if (confirmed) void manuallyVerifyDevice(cli, deviceId, fingerprint);
                         }),
                     );
                 }
@@ -624,7 +630,7 @@ export const Commands = [
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId) {
             try {
-                cli.getCrypto()?.forceDiscardSession(roomId);
+                void cli.getCrypto()?.forceDiscardSession(roomId);
             } catch (e) {
                 return reject(e instanceof Error ? e.message : e);
             }
@@ -705,7 +711,10 @@ export const Commands = [
             // easter-egg for now: look up phone numbers through the thirdparty API
             // (very dumb phone number detection...)
             const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
-            if (!userId || ((!userId.startsWith("@") || !userId.includes(":")) && !isPhoneNumber)) {
+            // Validate with the same helper createRoom() uses to decide whether to send an invite. A looser
+            // check here lets an argument such as "@alice:example.com hello" be written to m.direct as a user
+            // ID that is then never invited, leaving an empty DM behind.
+            if (!userId || (getAddressType(userId) !== AddressType.MatrixUserId && !isPhoneNumber)) {
                 return reject(this.getUsage());
             }
 
@@ -755,7 +764,7 @@ export const Commands = [
                                     metricsViaKeyboard: true,
                                 });
                                 if (msg) {
-                                    cli.sendTextMessage(roomId, msg);
+                                    void cli.sendTextMessage(roomId, msg);
                                 }
                             })(),
                         );

@@ -59,7 +59,7 @@ export function formatRange(range: Range, action: Formatting): void {
 
 export function replaceRangeAndExpandSelection(range: Range, newParts: Part[]): void {
     const { model } = range;
-    model.transform(() => {
+    void model.transform(() => {
         const oldLen = range.length;
         const addedLen = range.replace(newParts);
         const firstOffset = range.start.asOffset(model);
@@ -70,7 +70,7 @@ export function replaceRangeAndExpandSelection(range: Range, newParts: Part[]): 
 
 export function replaceRangeAndMoveCaret(range: Range, newParts: Part[], offset = 0, atNodeEnd = false): void {
     const { model } = range;
-    model.transform(() => {
+    void model.transform(() => {
         const oldLen = range.length;
         const addedLen = range.replace(newParts);
         const firstOffset = range.start.asOffset(model);
@@ -113,7 +113,7 @@ export function replaceRangeAndAutoAdjustCaret(
         }
     }
     // Calculate new position with respect to the previous position
-    model.transform(() => {
+    void model.transform(() => {
         const offsetDirection = Math.sign(range.replace(newParts)); // Compensates for shrinkage or expansion
         const atEnd = distanceFromEnd === suffixLength;
         return lastStartingPosition

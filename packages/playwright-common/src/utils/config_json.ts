@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type BrowserContext, type Page } from "@playwright/test";
+import { type BrowserContext, type Page, type Route } from "@playwright/test";
 
 import { type Config, CONFIG_JSON } from "../index.js";
 
@@ -30,6 +30,11 @@ export function buildConfigJson(
                 base_url: homeserverBaseUrl,
             },
             ...additionalConfig.default_server_config,
+        },
+        // Merge rather than replace, so that a test setting one default keeps the others from CONFIG_JSON
+        setting_defaults: {
+            ...CONFIG_JSON.setting_defaults,
+            ...additionalConfig.setting_defaults,
         },
     };
     json["features"] = {
@@ -64,8 +69,14 @@ export async function routeConfigJson(
     labsFlags: string[] = [],
     disablePresence: boolean = false,
 ): Promise<void> {
-    await context.route(`http://localhost:8080/config.json*`, async (route) => {
+    const handler = async (route: Route): Promise<void> => {
         const json = buildConfigJson(homeserverBaseUrl, additionalConfig, labsFlags, disablePresence);
         await route.fulfill({ json });
-    });
+    };
+    // A path, so that Playwright resolves it against the context's `baseURL` and a `BASE_URL` other than the
+    // default dev server is served the same config. Deliberately not a `**/config.json` glob: other origins
+    // loaded by a test (an Element Call widget, say) have a `config.json` of their own to fetch.
+    await context.route("/config.json*", handler);
+    // Contexts created without a `baseURL` have nothing to resolve the path against; keep serving the default.
+    await context.route("http://localhost:8080/config.json*", handler);
 }

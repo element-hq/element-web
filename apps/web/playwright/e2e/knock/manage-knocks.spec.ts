@@ -8,9 +8,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Page } from "playwright-core";
+
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+
+/**
+ * Wait for the membership summary to settle on the given text, then expand it so that the
+ * individual events can be asserted. The summary text is only rendered while the summary is
+ * collapsed, so waiting for it means the group has stopped growing.
+ */
+async function expandMembershipSummary(page: Page, summaryText: string): Promise<void> {
+    const summary = page.locator(".mx_GenericEventListSummary", { hasText: summaryText });
+    await expect(summary).toBeVisible();
+    await summary.getByRole("button", { name: "Expand" }).click();
+}
 
 test.describe("Manage Knocks", () => {
     test.skip(isDendrite, "Dendrite does not have support for knocking");
@@ -44,11 +58,15 @@ test.describe("Manage Knocks", () => {
         const roomKnocksBar = page.locator(".mx_RoomKnocksBar");
         await expect(roomKnocksBar.getByRole("heading", { name: "Asking to join" })).toBeVisible();
         await expect(roomKnocksBar.getByText(/^Bob/)).toBeVisible();
-        await roomKnocksBar.getByRole("button", { name: "Approve" }).click();
+        await roomKnocksBar.getByRole("button", { name: "Accept" }).click();
 
         await expect(roomKnocksBar).not.toBeVisible();
 
-        await expect(page.getByText("Alice invited Bob")).toBeVisible();
+        // Bob accepts the invite automatically, so the knock, invite and join collapse into a
+        // membership summary; expand it to reveal the individual events.
+        await expandMembershipSummary(page, "Bob requested to join, was granted access, and joined");
+        await expect(page.getByText("Bob is requesting to join")).toBeVisible();
+        await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
 
     test("should deny knock using bar", async ({ page, app, bot, room }) => {
@@ -57,7 +75,7 @@ test.describe("Manage Knocks", () => {
         const roomKnocksBar = page.locator(".mx_RoomKnocksBar");
         await expect(roomKnocksBar.getByRole("heading", { name: "Asking to join" })).toBeVisible();
         await expect(roomKnocksBar.getByText(/^Bob/)).toBeVisible();
-        await roomKnocksBar.getByRole("button", { name: "Deny" }).click();
+        await roomKnocksBar.getByRole("button", { name: "Decline" }).click();
 
         await expect(roomKnocksBar).not.toBeVisible();
 
@@ -71,6 +89,10 @@ test.describe("Manage Knocks", () => {
                     e.getContent()?.displayname === "Bob",
             );
         });
+
+        // The knock and its denial are only two events, so they are shown individually rather
+        // than collapsed into a membership summary.
+        await expect(page.getByText("Alice rejected the request to join from Bob")).toBeVisible();
     });
 
     test("should approve knock using people tab", async ({ page, app, bot, room }) => {
@@ -81,10 +103,15 @@ test.describe("Manage Knocks", () => {
         const settingsGroup = page.getByRole("group", { name: "Asking to join" });
         await expect(settingsGroup.getByText(/^Bob/)).toBeVisible();
         await expect(settingsGroup.getByText("Hello, can I join?")).toBeVisible();
-        await settingsGroup.getByRole("button", { name: "Approve" }).click();
+        await settingsGroup.getByRole("button", { name: "Accept" }).click();
         await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
+        await app.settings.closeDialog();
 
-        await expect(page.getByText("Alice invited Bob")).toBeVisible();
+        // Bob accepts the invite automatically, so the knock, invite and join collapse into a
+        // membership summary; expand it to reveal the individual events.
+        await expandMembershipSummary(page, "Bob requested to join, was granted access, and joined");
+        await expect(page.getByText("Bob is requesting to join: Hello, can I join?")).toBeVisible();
+        await expect(page.getByText("Alice granted access to Bob")).toBeVisible();
     });
 
     test("should deny knock using people tab", async ({ page, app, bot, room }) => {
@@ -95,7 +122,7 @@ test.describe("Manage Knocks", () => {
         const settingsGroup = page.getByRole("group", { name: "Asking to join" });
         await expect(settingsGroup.getByText(/^Bob/)).toBeVisible();
         await expect(settingsGroup.getByText("Hello, can I join?")).toBeVisible();
-        await settingsGroup.getByRole("button", { name: "Deny" }).click();
+        await settingsGroup.getByRole("button", { name: "Decline", exact: true }).click();
         await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
 
         // Should receive Bob's "m.room.member" with "leave" membership when access is denied
@@ -108,5 +135,47 @@ test.describe("Manage Knocks", () => {
                     e.getContent()?.displayname === "Bob",
             );
         });
+        await app.settings.closeDialog();
+
+        // The knock and its denial are only two events, so they are shown individually rather
+        // than collapsed into a membership summary.
+        await expect(page.getByText("Alice rejected the request to join from Bob")).toBeVisible();
+    });
+
+    test("should ban knock using people tab", async ({ page, app, bot, room }) => {
+        await bot.knockRoom(room.roomId);
+
+        await app.settings.openRoomSettings("People");
+
+        const settingsGroup = page.getByRole("group", { name: "Asking to join" });
+        await expect(settingsGroup.getByText(/^Bob/)).toBeVisible();
+        await settingsGroup.getByRole("button", { name: "Decline and ban" }).click();
+        await confirmBan(page);
+        await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
+
+        await waitForBan(page, app, room.roomId, bot.credentials!.userId);
+        await app.settings.closeDialog();
+        await expect(page.getByText("Alice banned Bob: Knock spam")).toBeVisible();
     });
 });
+
+/** Fill in a reason in the ban confirmation dialog and confirm it. */
+async function confirmBan(page: Page): Promise<void> {
+    await page.getByRole("textbox", { name: "Reason" }).fill("Knock spam");
+    await page.getByRole("button", { name: "Ban from room" }).click();
+}
+
+/** Wait until the room has a "ban" membership event for the given user. */
+async function waitForBan(page: Page, app: ElementAppPage, roomId: string, userId: string): Promise<void> {
+    await waitForRoom(page, app.client, roomId, (room) =>
+        room
+            .getLiveTimeline()
+            .getEvents()
+            .some(
+                (e) =>
+                    e.getType() === "m.room.member" &&
+                    e.getStateKey() === userId &&
+                    e.getContent()?.membership === "ban",
+            ),
+    );
+}

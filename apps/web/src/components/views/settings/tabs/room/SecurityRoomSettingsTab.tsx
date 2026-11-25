@@ -54,7 +54,6 @@ interface IState {
     history: HistoryVisibility;
     hasAliases: boolean;
     encrypted: boolean | null;
-    stateEncrypted: boolean | null;
     showAdvancedSection: boolean;
 }
 
@@ -80,7 +79,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             ),
             hasAliases: false, // async loaded in componentDidMount
             encrypted: null, // async loaded in componentDidMount
-            stateEncrypted: null, // async loaded in componentDidMount
             showAdvancedSection: false,
         };
     }
@@ -91,9 +89,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({
             hasAliases: await this.hasAliases(),
             encrypted: Boolean(await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)),
-            stateEncrypted: Boolean(
-                await this.context.getCrypto()?.isStateEncryptionEnabledInRoom(this.props.room.roomId),
-            ),
         });
     }
 
@@ -141,7 +136,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                             kind="link_inline"
                                             onClick={() => {
                                                 dialog.close();
-                                                this.createNewRoom(false, true);
+                                                void this.createNewRoom(false, true);
                                             }}
                                         >
                                             {" "}
@@ -170,7 +165,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 },
             ),
         });
-        finished.then(([confirm]) => {
+        await finished.then(([confirm]) => {
             if (!confirm) {
                 this.setState({ encrypted: false });
                 return;
@@ -344,7 +339,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                         kind="link_inline"
                                         onClick={(): void => {
                                             dialog.close();
-                                            this.createNewRoom(true, false);
+                                            void this.createNewRoom(true, false);
                                         }}
                                     >
                                         {" "}
@@ -516,7 +511,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const client = this.context;
         const room = this.props.room;
         const isEncrypted = this.state.encrypted;
-        const isStateEncrypted = this.state.stateEncrypted;
         const isEncryptionLoading = isEncrypted === null;
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);
         const isEncryptionForceDisabled = shouldForceDisableEncryption(client);
@@ -569,14 +563,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                     />
                                     {isEncryptionForceDisabled && !isEncrypted && (
                                         <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
-                                    )}
-                                    {isStateEncrypted && (
-                                        <SettingsToggleInput
-                                            name="enable-state-encryption"
-                                            checked={isStateEncrypted}
-                                            label={_t("common|state_encryption_enabled")}
-                                            disabled={true}
-                                        />
                                     )}
                                     {encryptionSettings}
                                 </>

@@ -28,7 +28,7 @@ jobs:
             repository: ${{ matrix.repo }}
 
     prepare:
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         needs: checks
         env:
             # The order is specified bottom-up to avoid any races for allchange

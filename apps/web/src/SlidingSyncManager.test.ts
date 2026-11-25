@@ -95,7 +95,7 @@ describe("SlidingSyncManager", () => {
             vi.mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
 
             const setVisibleDone = vi.fn();
-            manager.setRoomVisible(roomId).then(setVisibleDone);
+            const setVisibleProm = manager.setRoomVisible(roomId).then(setVisibleDone);
 
             await waitFor(() => expect(client.getRoom).toHaveBeenCalledWith(roomId));
 
@@ -106,6 +106,7 @@ describe("SlidingSyncManager", () => {
             client.emit(ClientEvent.Room, stubRoom);
 
             await waitFor(() => expect(setVisibleDone).toHaveBeenCalled());
+            await setVisibleProm;
         });
     });
 

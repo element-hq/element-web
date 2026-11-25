@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     type MatrixEvent,
-    type IContent,
     type MatrixClient,
     EventType,
     MsgType,
@@ -21,10 +20,11 @@ import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
 import { getMessageModerationState, isLocationEvent, MessageModerationState } from "./EventUtils";
 import { ElementCallEventType } from "../call-types";
+import { ModuleApi } from "../modules/Api";
+import type { MessageRenderInfo } from "../modules/customComponentApi";
 
 const calcIsInfoMessage = (
     eventType: EventType | string,
-    content: IContent,
     isBubbleMessage: boolean,
     isLeftAlignedBubbleMessage: boolean,
 ): boolean => {
@@ -47,9 +47,12 @@ export function getEventDisplayInfo(
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,
     hideEvent?: boolean,
+    messageRenderInfo?: MessageRenderInfo | null,
 ): {
     isInfoMessage: boolean;
+    hideSender: boolean;
     hasRenderer: boolean;
+    hasRendererForReplyChain: boolean;
     isBubbleMessage: boolean;
     isLeftAlignedBubbleMessage: boolean;
     noBubbleEvent: boolean;
@@ -59,6 +62,13 @@ export function getEventDisplayInfo(
     const content = mxEvent.getContent();
     const msgtype = content.msgtype;
     const eventType = mxEvent.getType();
+
+    // Undefined means no message renderer has been retrieved yet,
+    // null means a message renderer has been retrieved and there is none.
+    const renderInfo =
+        messageRenderInfo === undefined
+            ? ModuleApi.instance.customComponents.getMessageRenderInfo(mxEvent)
+            : messageRenderInfo;
 
     let isSeeingThroughMessageHiddenForModeration = false;
     if (SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
@@ -88,7 +98,10 @@ export function getEventDisplayInfo(
         (eventType === EventType.RTCNotification ||
             eventType === EventType.CallInvite ||
             ElementCallEventType.matches(eventType));
-    let isInfoMessage = calcIsInfoMessage(eventType, content, isBubbleMessage, isLeftAlignedBubbleMessage);
+    let isInfoMessage =
+        calcIsInfoMessage(eventType, isBubbleMessage, isLeftAlignedBubbleMessage) ||
+        renderInfo?.hints.renderAsInfoMessage === true;
+    const hideSender = renderInfo?.hints.renderSenderProfile === false;
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent =
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
@@ -100,7 +113,8 @@ export function getEventDisplayInfo(
     // source tile when there's no regular tile for an event and also for
     // replace relations (which otherwise would display as a confusing
     // duplicate of the thing they are replacing).
-    if (hideEvent || !haveRendererForEvent(mxEvent, matrixClient, showHiddenEvents)) {
+    const hasRendererForReplyChain = haveRendererForEvent(mxEvent, matrixClient, showHiddenEvents, renderInfo);
+    if (hideEvent || !hasRendererForReplyChain) {
         // forcefully ask for a factory for a hidden event (hidden event setting is checked internally)
         factory = pickFactory(mxEvent, matrixClient, showHiddenEvents, true);
         if (factory === JSONEventFactory) {
@@ -138,7 +152,9 @@ export function getEventDisplayInfo(
 
     return {
         hasRenderer: !!factory,
+        hasRendererForReplyChain,
         isInfoMessage,
+        hideSender,
         isBubbleMessage,
         isLeftAlignedBubbleMessage,
         noBubbleEvent,

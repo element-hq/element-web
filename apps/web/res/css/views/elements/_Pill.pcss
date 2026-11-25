@@ -69,6 +69,18 @@ Please see LICENSE files in the repository root for full details.
         white-space: nowrap;
     }
 
+    .mx_Pill_userStatus {
+        margin-inline-start: var(--cpd-space-1x);
+        flex: 0 0 auto;
+    }
+
+    /* Pills with user status are flex so the status emoji stays visible if the
+       display name gets truncated. */
+    &.mx_Pill_withStatus {
+        display: inline-flex;
+        align-items: center;
+    }
+
     a& {
         text-overflow: ellipsis;
         white-space: nowrap;

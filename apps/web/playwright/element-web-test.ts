@@ -18,9 +18,12 @@ import {
     type TestFixtures as BaseTestFixtures,
     expect as baseExpect,
     type ToMatchScreenshotOptions,
+    type Config,
+    routeConfigJson,
 } from "@element-hq/element-web-playwright-common";
 
 import { type Credentials } from "./plugins/homeserver";
+import { FEATURES } from "../src/stores/ReleaseAnnouncementFeatures";
 import { ElementAppPage } from "./pages/ElementAppPage";
 import { Crypto } from "./pages/crypto";
 import { Bot, type CreateBotOpts } from "./pages/bot";
@@ -51,6 +54,24 @@ export interface TestFixtures extends BaseTestFixtures {
     webserver: Webserver;
 }
 
+/**
+ * Mark every release announcement as seen in the given config.json contents, unless it sets
+ * `releaseAnnouncementData` itself. Release announcements pop up over the UI whenever no toast is showing,
+ * which makes tests flaky, so they are hidden by default; a test opts in with `releaseAnnouncementData: {}`
+ * in `config.setting_defaults`.
+ *
+ * Applied to the `config` fixture automatically. Use it when serving config.json to another context yourself.
+ */
+export function hideReleaseAnnouncements(config: Partial<Config>): Partial<Config> {
+    return {
+        ...config,
+        setting_defaults: {
+            releaseAnnouncementData: Object.fromEntries(FEATURES.map((feature) => [feature, true])),
+            ...config.setting_defaults,
+        },
+    };
+}
+
 type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
 export type Fixtures = _Fixtures<CombinedTestFixtures, Services & WorkerOptions, CombinedTestFixtures>;
 export const test = base.extend<TestFixtures>({
@@ -73,7 +94,35 @@ export const test = base.extend<TestFixtures>({
          * Ignore temporarily until we fix this.
          */
         axe = axe.exclude(".mx_Separator");
+        /**
+         * Enabled by default since axe-core 4.14. Many of our components (e.g. room list items) use an
+         * aria-label summary that cannot contain all of their visible text.
+         * Ignore temporarily until we rethink those accessible names.
+         */
+        const disableRules = axe.disableRules.bind(axe);
+        axe.disableRules = (rules: string | string[]) =>
+            disableRules([...(Array.isArray(rules) ? rules : [rules]), "label-content-name-mismatch"]);
+        axe = axe.disableRules([]);
         await use(axe);
+    },
+
+    page: async ({ page, context, homeserver, config, labsFlags, disablePresence }, use, testInfo) => {
+        // Replace the base fixture's config.json; this route is registered later, so it takes precedence
+        await routeConfigJson(
+            context,
+            homeserver.baseUrl,
+            hideReleaseAnnouncements(config),
+            labsFlags,
+            disablePresence,
+        );
+
+        // Firefox and WebKit block service workers (see playwright.config.ts), so Element shows a
+        // "Failed to load service worker" toast, which can cover whatever the test clicks next.
+        if (testInfo.project.use.serviceWorkers === "block") {
+            const toast = page.locator(".mx_Toast_toast", { hasText: "Failed to load service worker" });
+            await page.addLocatorHandler(toast, () => toast.getByRole("button", { name: "OK" }).click());
+        }
+        await use(page);
     },
 
     app: async ({ page }, use) => {
@@ -128,7 +177,10 @@ export const expect = baseExpect.extend<Expectations>({
             .mx_DisambiguatedProfile_displayName {
                 color: var(--cpd-color-blue-1200) !important;
             }
-            .mx_BaseAvatar {
+            /* Avatar colours are derived from the random MXID, so pin them. */
+            /* Compound avatars rendered by shared components don't have the mx_BaseAvatar class so use a loose Compound class selector */
+            .mx_BaseAvatar,
+            [class*="_avatar-imageless_"] {
                 background-color: var(--cpd-color-fuchsia-1200) !important;
                 border-color: var(--cpd-color-fuchsia-1200) !important;
                 color: white !important;

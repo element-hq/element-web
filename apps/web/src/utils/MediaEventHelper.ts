@@ -15,6 +15,10 @@ import { type Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
 import { getBlobSafeMimeType } from "./blobs.ts";
+import { queryUploadedMediaCache } from "./UploadedMediaCache";
+
+// Consider this list of message types as "media".
+const MEDIA_MSG_TYPES: string[] = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video];
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
@@ -46,15 +50,21 @@ export class MediaEventHelper implements IDestroyable {
         );
     }
 
+    /**
+     * Whether the source of this media was uploaded by this client during this session, in which
+     * case its bytes are served from memory rather than downloaded again.
+     */
+    public get isFromLocalUpload(): boolean {
+        return queryUploadedMediaCache(this.media.srcMxc) !== undefined;
+    }
+
     public destroy(): void {
-        if (this.media.isEncrypted) {
-            if (this.sourceUrl.cachedValue) URL.revokeObjectURL(this.sourceUrl.cachedValue);
-            if (this.thumbnailUrl.cachedValue) URL.revokeObjectURL(this.thumbnailUrl.cachedValue);
-        }
+        if (this.sourceUrl.cachedValue?.startsWith("blob:")) URL.revokeObjectURL(this.sourceUrl.cachedValue);
+        if (this.thumbnailUrl.cachedValue?.startsWith("blob:")) URL.revokeObjectURL(this.thumbnailUrl.cachedValue);
     }
 
     private prepareSourceUrl = async (): Promise<string | null> => {
-        if (this.media.isEncrypted) {
+        if (this.media.isEncrypted || this.isFromLocalUpload) {
             const blob = await this.sourceBlob.value;
             return URL.createObjectURL(blob);
         } else {
@@ -63,7 +73,7 @@ export class MediaEventHelper implements IDestroyable {
     };
 
     private prepareThumbnailUrl = async (): Promise<string | null> => {
-        if (this.media.isEncrypted) {
+        if (this.media.isEncrypted || queryUploadedMediaCache(this.media.thumbnailMxc)) {
             const blob = await this.thumbnailBlob.value;
             if (blob === null) return null;
             return URL.createObjectURL(blob);
@@ -74,6 +84,12 @@ export class MediaEventHelper implements IDestroyable {
 
     private fetchSource = (): Promise<Blob> => {
         const content = this.event.getContent<MediaEventContent>();
+        const uploaded = queryUploadedMediaCache(this.media.srcMxc);
+        if (uploaded) {
+            return Promise.resolve(
+                uploaded.slice(0, uploaded.size, getBlobSafeMimeType(content.info?.mimetype ?? uploaded.type)),
+            );
+        }
         if (this.media.isEncrypted) {
             return decryptFile(content.file, content.info);
         }
@@ -91,6 +107,16 @@ export class MediaEventHelper implements IDestroyable {
         if (!this.media.hasThumbnail) return Promise.resolve(null);
 
         const content = this.event.getContent<ImageContent>();
+        const uploaded = queryUploadedMediaCache(this.media.thumbnailMxc);
+        if (uploaded) {
+            return Promise.resolve(
+                uploaded.slice(
+                    0,
+                    uploaded.size,
+                    getBlobSafeMimeType(content.info?.thumbnail_info?.mimetype ?? uploaded.type),
+                ),
+            );
+        }
         if (this.media.isEncrypted) {
             if (content.info?.thumbnail_file) {
                 return decryptFile(content.info.thumbnail_file, content.info.thumbnail_info);
@@ -121,12 +147,20 @@ export class MediaEventHelper implements IDestroyable {
         if (event.getType() !== EventType.RoomMessage) return false;
 
         const content = event.getContent();
-        const mediaMsgTypes: string[] = [MsgType.Video, MsgType.Audio, MsgType.Image, MsgType.File];
-        if (mediaMsgTypes.includes(content.msgtype!)) return true;
+        if (MEDIA_MSG_TYPES.includes(content.msgtype!)) return true;
         if (typeof content.url === "string") return true;
 
         // Finally, it's probably not media
         return false;
+    }
+
+    /**
+     * Determine if the media event in question has a caption
+     * @returns `true` if the event is an image, file, audio or video message with a caption, otherwise `false`.
+     */
+    public static hasCaption(event: MatrixEvent): boolean {
+        const content = event.getContent();
+        return MEDIA_MSG_TYPES.includes(content.msgtype!) && !!content.filename && content.filename !== content.body;
     }
 
     /**

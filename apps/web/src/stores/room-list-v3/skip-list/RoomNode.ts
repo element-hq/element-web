@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Filter, FilterKey } from "./filters";
+import type { AnyFilter, FilterKey } from "./filters";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 /**
@@ -62,18 +62,27 @@ export class RoomNode {
      * @param filterKeys An array of filter keys to check against.
      */
     public doesRoomMatchFilters(filterKeys: FilterKey[]): boolean {
-        return !filterKeys.some((key) => !this.filterKeysSet.has(key));
+        for (const key of filterKeys) {
+            if (!this.filterKeysSet.has(key)) return false;
+        }
+        return true;
     }
 
     /**
      * Populates {@link RoomNode#filterKeysSet} by checking if the associated room
-     * satisfies the given filters.
+     * satisfies the given filters. A {@link MultiKeyFilter} contributes the single
+     * key it picks for this room, if any.
      * @param filters A list of filters
      */
-    public applyFilters(filters: Filter[]): void {
-        this.filterKeysSet = new Set();
+    public applyFilters(filters: AnyFilter[]): void {
+        this.filterKeysSet.clear();
         for (const filter of filters) {
-            if (filter.matches(this.room)) this.filterKeysSet.add(filter.key);
+            if ("keyFor" in filter) {
+                const key = filter.keyFor(this.room);
+                if (key !== undefined) this.filterKeysSet.add(key);
+            } else if (filter.matches(this.room)) {
+                this.filterKeysSet.add(filter.key);
+            }
         }
     }
 }

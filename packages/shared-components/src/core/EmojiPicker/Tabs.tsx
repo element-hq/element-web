@@ -142,6 +142,7 @@ export const Tabs: React.FC<Props> = ({
     const tabRefs = useRef({} as Record<CategoryKey, React.RefObject<HTMLButtonElement | null>>);
     if (!tabRefs.current.recent) {
         for (const category of categories) {
+            // oxlint-disable-next-line react/immutability
             tabRefs.current[category.id] = React.createRef<HTMLButtonElement>();
         }
     }

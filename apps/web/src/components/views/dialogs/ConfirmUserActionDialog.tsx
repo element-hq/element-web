@@ -15,7 +15,6 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Field from "../elements/Field";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 
 interface IProps {
     // matrix-js-sdk (room) member object.
@@ -98,11 +97,6 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
         const name = this.props.member.name;
         const userId = this.props.member.userId;
 
-        const displayUserIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(userId, {
-            roomId: this.props.roomId,
-            withDisplayName: true,
-        });
-
         return (
             <BaseDialog
                 className={classNames("mx_ConfirmUserActionDialog", this.props.className)}
@@ -114,7 +108,7 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
                     <div className="mx_ConfirmUserActionDialog_user">
                         <div className="mx_ConfirmUserActionDialog_avatar">{avatar}</div>
                         <div className="mx_ConfirmUserActionDialog_name">{name}</div>
-                        <div className="mx_ConfirmUserActionDialog_userId">{displayUserIdentifier}</div>
+                        <div className="mx_ConfirmUserActionDialog_userId">{userId}</div>
                     </div>
 
                     {reasonBox}

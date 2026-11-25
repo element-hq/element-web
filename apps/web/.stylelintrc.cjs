@@ -49,6 +49,10 @@ module.exports = {
         "media-feature-range-notation": null,
         "declaration-property-value-no-unknown": null,
         "declaration-property-value-keyword-no-deprecated": null,
+        // Doesn't understand SCSS-style `$vars` mid-value; postcss-simple-vars resolves them at build time
+        "value-no-invalid": null,
+        // We nest with postcss-nested (plain-text `&` substitution), not standard CSS nesting
+        "selector-no-unmatchable": null,
         "csstools/value-no-unknown-custom-properties": [
             true,
             {
@@ -84,5 +88,6 @@ module.exports = {
         ],
         "nesting-selector-no-missing-scoping-root": null,
         "no-invalid-position-declaration": null,
+        "at-rule-prelude-no-invalid": [true, { ignoreAtRules: ["mixin"] }],
     },
 };

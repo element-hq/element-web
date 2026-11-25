@@ -22,7 +22,6 @@
         "cancel": "Cancelar",
         "change": "Cambiar",
         "clear": "Limpar",
-        "click_to_copy": "Click para copiar",
         "close": "Pechar",
         "collapse": "Pechar",
         "complete": "Completar",
@@ -946,7 +945,6 @@
         "name_mxid_share_room": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",
         "name_mxid_share_space": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte este espazo</a>.",
         "recents_section": "Conversas recentes",
-        "room_failed_partial": "Convidamos as outras, pero as persoas de aquí embaixo non foron convidadas a <RoomName/>",
         "room_failed_partial_title": "Non se puideron enviar algúns convites",
         "room_failed_title": "Fallou o convite das usuarias para %(roomName)s",
         "send_link_prompt": "Ou envía ligazón de convite",
@@ -1050,7 +1048,6 @@
         "bridge_state_manager": "Esta ponte está xestionada por <user />.",
         "bridge_state_workspace": "Espazo de traballo: <networkLink/>",
         "click_for_info": "Preme para máis info",
-        "custom_themes": "Permitir engadir decorados personalizados",
         "element_call_video_rooms": "Salas de chamadas de vídeo Element",
         "group_developer": "Desenvolvemento",
         "group_encryption": "Cifrado",
@@ -1059,7 +1056,6 @@
         "group_profile": "Perfil",
         "group_rooms": "Salas",
         "group_spaces": "Espazos",
-        "group_themes": "Decorados",
         "group_threads": "Conversas",
         "group_voip": "Voz e Vídeo",
         "join_beta": "Unirse á beta",
@@ -1114,8 +1110,6 @@
     "language_dropdown_label": "Selector de idioma",
     "leave_room_dialog": {
         "last_person_warning": "Es a única persoa aquí. Se saes, ninguén poderá unirse no futuro, incluíndote a ti.",
-        "leave_room_question": "Seguro que desexa saír da sala '%(roomName)s'?",
-        "leave_space_question": "Tes a certeza de querer deixar o espazo '%(spaceName)s'?",
         "room_rejoin_warning": "Esta sala non é pública. Non poderá volver a ela sen un convite.",
         "space_rejoin_warning": "Este espazo non é público. Non poderás volver a unirte sen un convite."
     },
@@ -1199,7 +1193,6 @@
         "mentions_and_keywords": "@mencións & palabras chave",
         "mentions_and_keywords_description": "Ter notificacións só cando te mencionan e con palabras chave que indiques nos <a>axustes</a>",
         "mentions_keywords": "Mencións e palabras chave",
-        "message_didnt_send": "Non se enviou a mensaxe. Click para info.",
         "mute_description": "Non recibirás ningunha notificación"
     },
     "notifier": {
@@ -1303,8 +1296,6 @@
         "count_of_successfully_restored_keys": "Restablecidas correctamente %(sessionCount)s chaves",
         "enter_key_description": "Accede ao teu historial de mensaxes seguras e asegura a comunicación escribindo a Chave de Seguridade.",
         "enter_key_title": "Escribe a Chave de Seguridade",
-        "enter_phrase_description": "Accede ao teu historial de mensaxes seguras e configura a comunicación segura escribindo a túa Frase de Seguridade.",
-        "enter_phrase_title": "Escribe a Frase de Seguridade",
         "incorrect_security_phrase_dialog": "Non se puido descifrar a Copia con esta Frase de Seguridade: comproba que escribiches a Frase de Seguridade correcta.",
         "incorrect_security_phrase_title": "Frase de Seguridade incorrecta",
         "key_backup_warning": "<b>Aviso</b>: só deberías realizar a copia de apoio desde un ordenador de confianza.",
@@ -1315,7 +1306,6 @@
         "load_error_content": "Non cargou o estado da copia",
         "load_keys_progress": "%(completed)s de %(total)s chaves restablecidas",
         "no_backup_error": "Non se atopou copia!",
-        "phrase_forgotten_text": "Se esqueceches a túa Frase de Seguridade podes <button1>usar a túa Chave de Seguridade</button1> ou <button2>establecer novas opcións de recuperación</button2>",
         "recovery_key_mismatch_description": "Non se puido descifrar a Copia con esta Chave de Seguridade: comproba que aplicaches a Chave de Seguridade correcta.",
         "recovery_key_mismatch_title": "Non concorda a Chave de Seguridade",
         "restore_failed_error": "Non se restableceu a copia"
@@ -1416,7 +1406,6 @@
         "join_button_account": "Rexistro",
         "join_failed_needs_invite": "Para ver %(roomName)s, precisas un convite",
         "join_the_discussion": "Súmate a conversa",
-        "join_title": "Únete á sala para participar",
         "join_title_account": "Únete a conversa cunha conta",
         "joining": "Entrando…",
         "jump_read_marker": "Ir a primeira mensaxe non lida.",
@@ -1735,8 +1724,6 @@
             "custom_font_description": "Escolle unha das tipografías instaladas no teu sistema e %(brand)s intentará utilizalas.",
             "custom_font_name": "Nome da letra do sistema",
             "custom_font_size": "Usar tamaño personalizado",
-            "custom_theme_error_downloading": "Erro ao descargar información do decorado.",
-            "custom_theme_invalid": "Esquema do decorado incorrecto.",
             "font_size": "Tamaño da letra",
             "image_size_default": "Por defecto",
             "image_size_large": "Grande",
@@ -1985,7 +1972,6 @@
             "verified_sessions_list_description": "Para a mellor seguridade, desconecta calquera outra sesión que xa non recoñezas ou uses.",
             "verify_session": "Verificar sesión"
         },
-        "show_breadcrumbs": "Mostrar atallos a salas vistas recentemente enriba da lista de salas",
         "show_chat_effects": "Mostrar efectos no chat (animacións na recepción, ex. confetti)",
         "show_displayname_changes": "Mostrar cambios do nome mostrado",
         "show_join_leave": "Mostrar unirse/saír (convites/eliminacións/vetos non afectados)",
@@ -2488,10 +2474,6 @@
             "error_loading": "Non se cargou o evento ao que respondía, ou non existe ou non ten permiso para velo.",
             "in_reply_to": "<a>En resposta a</a> <pill>",
             "in_reply_to_for_export": "En resposta a <a>esta mensaxe</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Vai ser redirixido a unha web de terceiros para poder autenticar a súa conta e así utilizar %(integrationsUrl)s. Quere continuar?",
-            "dialog_title": "Engadir unha integración"
         },
         "self_redaction": "Mensaxe eliminada",
         "send_state_failed": "Fallou o envío",

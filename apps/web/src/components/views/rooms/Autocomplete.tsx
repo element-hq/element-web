@@ -92,11 +92,12 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        this.complete(this.props.query, this.props.selection);
+        void this.complete(this.props.query, this.props.selection);
     }
 
     public componentWillUnmount(): void {
         this.autocompleter?.destroy();
+        clearTimeout(this.debounceCompletionsRequest);
     }
 
     private complete(query: string, selection: ISelectionRange): Promise<void> {
@@ -239,7 +240,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                     hide: false,
                 },
                 () => {
-                    this.complete(this.props.query, this.props.selection).then(() => {
+                    void this.complete(this.props.query, this.props.selection).then(() => {
                         resolve(this.countCompletions());
                     });
                 },

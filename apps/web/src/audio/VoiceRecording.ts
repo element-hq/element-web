@@ -66,6 +66,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorderWorklet?: AudioWorkletNode;
     private recorderProcessor?: ScriptProcessorNode;
     private recording = false;
+    private destroyed = false;
     private observable?: SimpleObservable<IRecordingUpdate>;
     private targetMaxLength: number | null = TARGET_MAX_LENGTH;
     public amplitudes: number[] = []; // at each second mark, generated
@@ -117,6 +118,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                     noiseSuppression: { ideal: MediaDeviceHandler.getAudioNoiseSuppression() },
                 },
             });
+            if (this.destroyed) return this.releaseMedia();
             this.recorderContext = createAudioContext({
                 // latencyHint: "interactive", // we don't want a latency hint (this causes data smoothing)
             });
@@ -127,6 +129,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 // Set up our worklet. We use this for timing information and waveform analysis: the
                 // web audio API prefers this be done async to avoid holding the main thread with math.
                 await recorderWorkletFactory(this.recorderContext);
+                if (this.destroyed) return this.releaseMedia();
 
                 this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
                 this.recorderSource.connect(this.recorderWorklet);
@@ -192,8 +195,8 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             if (this.recorderSource) this.recorderSource.disconnect();
             if (this.recorder) this.recorder.close();
             if (this.recorderContext) {
-                // noinspection ES6MissingAwait - not important that we wait
-                this.recorderContext.close();
+                // not important that we wait
+                void this.recorderContext.close();
             }
 
             throw e; // rethrow so upstream can handle it
@@ -244,8 +247,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         const secondsLeft = TARGET_MAX_LENGTH - this.recorderSeconds!;
         if (secondsLeft < 0) {
             // go over to make sure we definitely capture that last frame
-            // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
-            this.stop();
+            void this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
             Singleflight.for(this, "ending_soon").do(() => {
                 this.emit(RecordingState.EndingSoon, { secondsLeft });
@@ -271,9 +273,16 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         }
         this.observable = new SimpleObservable<IRecordingUpdate>();
         await this.makeRecorder();
+        if (this.destroyed) return;
         await this.recorder?.start();
         this.recording = true;
         this.emit(RecordingState.Started);
+    }
+
+    /** Releases the microphone and audio context acquired by a recording which will never start. */
+    private releaseMedia(): void {
+        void this.recorderContext?.close();
+        this.recorderStream?.getTracks().forEach((t) => t.stop());
     }
 
     public async stop(): Promise<void> {
@@ -306,12 +315,11 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     }
 
     public destroy(): void {
-        // noinspection JSIgnoredPromiseFromCall - not concerned about stop() being called async here
-        this.stop();
+        this.destroyed = true;
+        void this.stop();
         this.removeAllListeners();
         this.onDataAvailable = undefined;
         Singleflight.forgetAllFor(this);
-        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
         this.observable?.close();
     }
 }

@@ -1,0 +1,359 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { useCallback, useEffect, useImperativeHandle, useRef, type JSX, type ReactNode, type Ref } from "react";
+import {
+    TimelineView,
+    useCreateAutoDisposedViewModel,
+    useViewModel,
+    type TimelineItem,
+    type TimelineViewHandle,
+    ReadMarker,
+} from "@element-hq/web-shared-components";
+import { InlineSpinner } from "@vector-im/compound-web";
+import classNames from "classnames";
+
+import type { EventType, MatrixClient, MatrixEvent, RelationType, Relations, Room } from "matrix-js-sdk/src/matrix";
+import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
+import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
+import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
+import type { GetRelationsForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
+import { Layout } from "../../settings/enums/Layout";
+import { useSettingValue } from "../../hooks/useSettings";
+import { _t } from "../../languageHandler";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import type EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { DateSeparatorWrapper } from "./DateSeparatorWrapper";
+import type { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
+
+/**
+ * Lets a parent component drive the timeline imperatively. The method names match
+ * TimelinePanel's, so a parent can treat either panel alike.
+ */
+export interface NewTimelinePanelHandle {
+    /** Page up/down scroll the timeline; ctrl+home/end go to the start of the room and the live end. */
+    handleScrollKey(ev: React.KeyboardEvent | KeyboardEvent): void;
+    /** Go to the live end of the room (ctrl+end, escape). */
+    jumpToLiveTimeline(): void;
+    /** Go to the read marker, loading around it if it is not in the window (shift+page up). */
+    jumpToReadMarker(): void;
+    /** Mark everything read and drop the read marker (escape). */
+    forgetReadMarker(): void;
+}
+
+interface NewTimelinePanelProps {
+    /** Receives the panel's {@link NewTimelinePanelHandle} once it has mounted. */
+    ref?: Ref<NewTimelinePanelHandle>;
+    room: Room;
+    /** The message to show highlighted. A change after mount jumps to it, as a permalink does. */
+    highlightedEventId?: string;
+    /**
+     * Whether `highlightedEventId` still has to be scrolled into view. RoomView clears it
+     * once we report the jump through `onEventScrolledIntoView`, and sets it again when the
+     * same message is asked for again, so a second click on it jumps too.
+     *
+     * Default: true
+     */
+    eventScrollIntoView?: boolean;
+    /** Called once we have gone to `highlightedEventId`. */
+    onEventScrolledIntoView?: (eventId?: string) => void;
+    /**
+     * How messages are laid out. RoomView watches this setting for us, so a change
+     * arrives here as a new prop.
+     */
+    layout?: Layout;
+    /** Keep the panel mounted but invisible (e.g. while search results are shown). */
+    hidden?: boolean;
+    /** Used by tiles for permalinks in message bodies and context menus. */
+    permalinkCreator?: RoomPermalinkCreator;
+    /** Whether tiles render URL previews under messages. */
+    showUrlPreview?: boolean;
+    /** Whether tiles render reactions under messages. */
+    showReactions?: boolean;
+    /** Set while a message is being edited; the matching tile renders the edit composer. */
+    editState?: EditorStateTransfer;
+    /** Whether other users' read receipts are drawn beside messages (the `showReadReceipts` setting). */
+    showReadReceipts?: boolean;
+}
+
+/** Everything a timeline row needs from the panel to draw itself. */
+interface RenderItemContext {
+    roomId: string;
+    highlightedId: string | null;
+    effectiveLayout: Layout;
+    permalinkCreator?: RoomPermalinkCreator;
+    showUrlPreview?: boolean;
+    showReactions?: boolean;
+    showReadReceipts: boolean;
+    /** Other users' receipts for each message, as computed by the view model. */
+    readReceiptsByEvent: ReadonlyMap<string, IReadReceiptProps[]>;
+    /**
+     * Where each user's receipt avatar was last drawn. One object shared by every tile, so a
+     * receipt moving to a newer message can animate from its old row to its new one.
+     */
+    readReceiptMap: { [userId: string]: IReadReceiptPosition };
+    /** The message showing a "Sent" tick in place of read receipts, if any. */
+    lastSuccessfulEventId: string | null;
+    isTwelveHour: boolean;
+    alwaysShowTimestamps: boolean;
+    editState?: EditorStateTransfer;
+    getRelationsForEvent: GetRelationsForEvent;
+}
+
+/** Draws one timeline row. Kept outside the component so it isn't redefined per render. */
+function renderTimelineItem(item: TimelineItem, ctx: RenderItemContext): ReactNode {
+    switch (item.kind) {
+        case "date-separator":
+            // The same view model as the old timeline, so the label and
+            // jump-to-date menu behave identically in both.
+            return <DateSeparatorWrapper key={item.key} roomId={ctx.roomId} ts={item.ts} />;
+        case "read-marker":
+            // Rendered as a div because the timeline already puts each row in
+            // its own list item.
+            return (
+                <ReadMarker
+                    key={item.key}
+                    eventId={item.key}
+                    kind="current"
+                    as="div"
+                    label={_t("timeline|read_marker_new")}
+                />
+            );
+        case "loading":
+            return (
+                <div key={item.key} className="mx_NewTimelinePanel_loading">
+                    <InlineSpinner size={32} aria-label={_t("common|loading")} role="progressbar" />
+                </div>
+            );
+        // Nothing produces gap rows yet. The old timeline draws nothing for a break in
+        // history either, so until there is a design for one, neither do we.
+        case "gap":
+            return null;
+        case "event": {
+            const mxEvent = item.event as MatrixEvent;
+
+            // For now, all events go through the legacy adapter.
+            // As tiles are migrated to MVVM, this switch will
+            // send migrated types to their shared views instead.
+            return (
+                <LegacyEventTileAdapter
+                    key={item.key}
+                    mxEvent={mxEvent}
+                    continuation={item.continuation}
+                    lastInSection={item.lastInSection}
+                    lastSuccessful={item.key === ctx.lastSuccessfulEventId}
+                    layout={ctx.effectiveLayout}
+                    isSelectedEvent={ctx.highlightedId !== null && item.key === ctx.highlightedId}
+                    // A tile treats any edit state it is given as its own, so
+                    // only the message being edited may receive it.
+                    editState={ctx.editState?.getEvent().getId() === item.key ? ctx.editState : undefined}
+                    sendState={item.sendState}
+                    readReceipts={ctx.readReceiptsByEvent.get(item.key)}
+                    readReceiptMap={ctx.readReceiptMap}
+                    showReadReceipts={ctx.showReadReceipts}
+                    getRelationsForEvent={ctx.getRelationsForEvent}
+                    permalinkCreator={ctx.permalinkCreator}
+                    showUrlPreview={ctx.showUrlPreview}
+                    showReactions={ctx.showReactions}
+                    isTwelveHour={ctx.isTwelveHour}
+                    alwaysShowTimestamps={ctx.alwaysShowTimestamps}
+                />
+            );
+        }
+        default:
+            return null;
+    }
+}
+
+/**
+ * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
+ * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
+ */
+export function NewTimelinePanel({
+    ref,
+    room,
+    highlightedEventId,
+    eventScrollIntoView,
+    onEventScrolledIntoView,
+    layout,
+    hidden,
+    permalinkCreator,
+    showUrlPreview,
+    showReactions,
+    editState,
+    showReadReceipts = true,
+}: Readonly<NewTimelinePanelProps>): JSX.Element {
+    const client: MatrixClient = useMatrixClientContext();
+
+    // Read here rather than passed in, so changing either setting redraws the tiles.
+    const isTwelveHour = useSettingValue("showTwelveHourTimestamps");
+    const alwaysShowTimestamps = useSettingValue("alwaysShowTimestamps");
+
+    // Modern and Message Bubbles are fully supported. IRC layout is not yet: it
+    // needs the draggable name column the old timeline provides, so fall back to
+    // Modern for now (a known follow-up, listed on the tracking issue).
+    const effectiveLayout = layout === Layout.IRC ? Layout.Group : (layout ?? Layout.Group);
+
+    // Creating the view model does nothing on its own — it starts listening only
+    // when start() is called in the effect below. React can build one of these and
+    // throw it away, and anything it had already started would have leaked.
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RoomTimelineViewModel({
+                client,
+                room,
+                initialEventId: highlightedEventId,
+                showReadReceipts,
+            }),
+    );
+
+    useEffect(() => {
+        vm.start();
+        // Disposal is handled by useCreateAutoDisposedViewModel; no cleanup needed here.
+    }, [vm]);
+
+    // The setting can change while the room is open.
+    useEffect(() => {
+        vm.setShowReadReceipts(showReadReceipts);
+    }, [vm, showReadReceipts]);
+
+    useEffect(() => {
+        // Load the syntax highlighter up front. Code blocks fetch it the first time
+        // one is shown, and if that arrives late the block re-wraps after its row
+        // has been measured and the timeline jumps. Loading it now means the
+        // highlighting is ready before the first code block is drawn.
+        void import("highlight.js");
+    }, []);
+
+    // How a tile finds the reactions and edits attached to its message. Without
+    // this, no reactions are drawn at all.
+    const getRelationsForEvent = useCallback(
+        (eventId: string, relationType: RelationType | string, eventType: EventType | string): Relations | undefined =>
+            room.getUnfilteredTimelineSet().relations?.getChildEventsForEvent(eventId, relationType, eventType),
+        [room],
+    );
+
+    const snapshot = useViewModel(vm);
+    const { highlightedEventId: highlightedId, readReceiptsByEvent, lastSuccessfulEventId } = snapshot;
+
+    // Where each user's receipt avatar was last drawn; see RenderItemContext. Lives as long as
+    // the panel, which is recreated per room, just like MessagePanel's copy.
+    const readReceiptMap = useRef<{ [userId: string]: IReadReceiptPosition }>({});
+
+    const renderItem = useCallback(
+        (item: TimelineItem): ReactNode =>
+            renderTimelineItem(item, {
+                roomId: room.roomId,
+                highlightedId,
+                effectiveLayout,
+                permalinkCreator,
+                showUrlPreview,
+                showReactions,
+                showReadReceipts,
+                readReceiptsByEvent,
+                readReceiptMap: readReceiptMap.current,
+                lastSuccessfulEventId,
+                isTwelveHour,
+                alwaysShowTimestamps,
+                editState,
+                getRelationsForEvent,
+            }),
+        [
+            room.roomId,
+            highlightedId,
+            effectiveLayout,
+            permalinkCreator,
+            showUrlPreview,
+            showReactions,
+            showReadReceipts,
+            readReceiptsByEvent,
+            lastSuccessfulEventId,
+            isTwelveHour,
+            alwaysShowTimestamps,
+            editState,
+            getRelationsForEvent,
+        ],
+    );
+
+    const viewRef = useRef<TimelineViewHandle>(null);
+
+    // RoomView drives the timeline's keyboard shortcuts through this; see
+    // NewTimelinePanelHandle. Plain scrolling goes to the view. Jumping to the start of the
+    // room, the live end or the read marker may need messages loaded first, so those go to
+    // the view model, handed the view's own immediate scroll so it can scroll straight away
+    // when nothing needs loading.
+    useImperativeHandle<NewTimelinePanelHandle, NewTimelinePanelHandle>(
+        ref,
+        () => ({
+            handleScrollKey: (ev) => {
+                const view = viewRef.current;
+                if (!view) return;
+                switch (getKeyBindingsManager().getRoomAction(ev)) {
+                    case KeyBindingAction.ScrollUp:
+                        view.scrollByPage(-1);
+                        break;
+                    case KeyBindingAction.ScrollDown:
+                        view.scrollByPage(1);
+                        break;
+                    case KeyBindingAction.JumpToFirstMessage:
+                        // The start of the room, not just the top of what is loaded.
+                        vm.onJumpToStart(view.scrollNow);
+                        break;
+                    case KeyBindingAction.JumpToLatestMessage:
+                        // The live end of the room, not just the end of what is loaded — the
+                        // same distinction TimelinePanel makes for ctrl+end.
+                        vm.onJumpToLive(view.scrollNow);
+                        break;
+                }
+            },
+            jumpToLiveTimeline: () => {
+                if (viewRef.current) vm.onJumpToLive(viewRef.current.scrollNow);
+            },
+            jumpToReadMarker: () => {
+                if (viewRef.current) vm.onJumpToReadMarker(viewRef.current.scrollNow);
+            },
+            forgetReadMarker: () => vm.onMarkAllAsRead(),
+        }),
+        [vm],
+    );
+
+    // RoomView asks for a message after the timeline is open (a pinned message, a link to this
+    // room) by changing `highlightedEventId`, or by setting `eventScrollIntoView` again for the
+    // same one. The message the panel mounted with was loaded when the view model was created,
+    // so that one is only reported, not jumped to.
+    const lastRequestRef = useRef<{ eventId?: string; scrollIntoView: boolean } | null>(null);
+    useEffect(() => {
+        const scrollIntoView = eventScrollIntoView ?? true;
+        const last = lastRequestRef.current;
+        lastRequestRef.current = { eventId: highlightedEventId, scrollIntoView };
+        if (last && last.eventId === highlightedEventId && last.scrollIntoView === scrollIntoView) return;
+        const view = viewRef.current;
+        if (!highlightedEventId) {
+            // The highlighted message was dropped: back to the live end, as the old timeline does.
+            if (last?.eventId) {
+                vm.clearHighlight();
+                if (view) vm.onJumpToLive(view.scrollNow);
+            }
+            return;
+        }
+        if (!scrollIntoView) return;
+        if (last !== null && view) vm.jumpToEvent(highlightedEventId, view.scrollNow);
+        onEventScrolledIntoView?.(highlightedEventId);
+    }, [vm, highlightedEventId, eventScrollIntoView, onEventScrolledIntoView]);
+
+    return (
+        <div
+            className={classNames("mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper", {
+                mx_NewTimelinePanel_hidden: hidden,
+            })}
+        >
+            <TimelineView ref={viewRef} vm={vm} renderItem={renderItem} />
+        </div>
+    );
+}

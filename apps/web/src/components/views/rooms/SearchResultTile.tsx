@@ -23,6 +23,7 @@ import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 
 interface IProps {
     // a list of strings to be highlighted in the results
@@ -141,9 +142,11 @@ export default class SearchResultTile extends React.Component<IProps> {
         }
 
         return (
-            <li data-scroll-tokens={eventId}>
-                <ol>{ret}</ol>
-            </li>
+            <EventPresentationContextProvider layout={layout}>
+                <li data-scroll-tokens={eventId}>
+                    <ol>{ret}</ol>
+                </li>
+            </EventPresentationContextProvider>
         );
     }
 }

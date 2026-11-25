@@ -5,10 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Button, InlineSpinner, VisualList, VisualListItem } from "@vector-im/compound-web";
-import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
-import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import { Alert, Button, InlineSpinner, VisualList, VisualListItem } from "@vector-im/compound-web";
+import CheckCircle from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
+import Devices from "@vector-im/compound-design-tokens/assets/web/icons/devices";
+import Group from "@vector-im/compound-design-tokens/assets/web/icons/group";
+import UserProfileSolid from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
+import VisibilityOff from "@vector-im/compound-design-tokens/assets/web/icons/visibility-off";
 import React, { type JSX, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
@@ -25,7 +27,7 @@ interface ResetIdentityBodyProps {
     onReset: () => void;
 
     /**
-     * Called when the cancel button is clicked.
+     * Called when the "Go back" or "Sign out" button is clicked.
      */
     onCancelClick: () => void;
 
@@ -51,9 +53,16 @@ interface ResetIdentityBodyProps {
  *
  * "no_verification_method" is shown when the device is unverified and has no way of
  * obtaining the existing keys, and hence the identity needs to be reset to have
- * a cross-signed device.
+ * a cross-signed device. When this variant is used, a "Sign out" button is displayed
+ * instead of the normal cancel ("Go back") button.
  */
-export type ResetIdentityBodyVariant = "compromised" | "forgot" | "sync_failed" | "confirm" | "no_verification_method";
+export type ResetIdentityBodyVariant =
+    | "compromised"
+    | "forgot"
+    | "sync_failed"
+    | "confirm"
+    | "no_verification_method"
+    | "no_encrypted_rooms";
 
 /**
  * User interface component allowing the user to reset their cryptographic identity.
@@ -68,24 +77,42 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
     const [inProgress, setInProgress] = useState(false);
 
     return (
-        <EncryptionCard Icon={ErrorIcon} destructive={true} title={titleForVariant(variant)}>
+        <EncryptionCard
+            Icon={UserProfileSolid}
+            title={titleForVariant(variant)}
+            description={descriptionForVariant(variant)}
+        >
             <EncryptionCardEmphasisedContent>
-                <VisualList>
-                    <VisualListItem Icon={CheckIcon} success={true}>
-                        {_t("settings|encryption|advanced|breadcrumb_first_description")}
-                    </VisualListItem>
-                    <VisualListItem Icon={InfoIcon}>
-                        {_t("settings|encryption|advanced|breadcrumb_second_description")}
-                    </VisualListItem>
-                    <VisualListItem Icon={InfoIcon}>
-                        {_t("settings|encryption|advanced|breadcrumb_third_description")}
-                    </VisualListItem>
-                </VisualList>
+                {variant === "no_encrypted_rooms" ? (
+                    <VisualList>
+                        <VisualListItem Icon={CheckCircle} success={true}>
+                            {_t("settings|encryption|advanced|breadcrumb_first_description_no_encrypted_chats")}
+                        </VisualListItem>
+                    </VisualList>
+                ) : (
+                    <VisualList>
+                        <VisualListItem Icon={CheckCircle} success={true}>
+                            {_t("settings|encryption|advanced|breadcrumb_first_description")}
+                        </VisualListItem>
+                        <VisualListItem Icon={VisibilityOff}>
+                            {_t("settings|encryption|advanced|breadcrumb_second_description")}
+                        </VisualListItem>
+                        <VisualListItem Icon={Group}>
+                            {_t("settings|encryption|advanced|breadcrumb_third_description")}
+                        </VisualListItem>
+                        {destructiveForVariant(variant) && (
+                            <VisualListItem Icon={Devices}>
+                                {_t("settings|encryption|advanced|breadcrumb_fourth_description")}
+                            </VisualListItem>
+                        )}
+                    </VisualList>
+                )}
                 {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
             </EncryptionCardEmphasisedContent>
+            {alertForVariant(variant)}
             <EncryptionCardButtons>
                 <Button
-                    destructive={true}
+                    destructive={destructiveForVariant(variant)}
                     disabled={inProgress}
                     onClick={async () => {
                         setInProgress(true);
@@ -111,7 +138,7 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
                     </EncryptionCardEmphasisedContent>
                 ) : (
                     <Button kind="tertiary" onClick={onCancelClick}>
-                        {_t("action|cancel")}
+                        {cancelTextForVariant(variant)}
                     </Button>
                 )}
             </EncryptionCardButtons>
@@ -121,14 +148,74 @@ export function ResetIdentityBody({ onCancelClick, onReset, variant }: ResetIden
 
 function titleForVariant(variant: ResetIdentityBodyVariant): string {
     switch (variant) {
-        case "compromised":
         case "confirm":
             return _t("settings|encryption|advanced|breadcrumb_title");
+        case "compromised":
+            return _t("settings|encryption|advanced|breadcrumb_title_compromised");
         case "sync_failed":
             return _t("settings|encryption|advanced|breadcrumb_title_sync_failed");
         case "forgot":
             return _t("settings|encryption|advanced|breadcrumb_title_forgot");
         case "no_verification_method":
+        case "no_encrypted_rooms":
             return _t("settings|encryption|advanced|breadcrumb_title_cant_confirm");
+    }
+}
+
+function descriptionForVariant(variant: ResetIdentityBodyVariant): string | undefined {
+    switch (variant) {
+        case "no_verification_method":
+        case "no_encrypted_rooms":
+            return _t("settings|encryption|advanced|breadcrumb_description_no_verification_method");
+        case "confirm":
+            return _t("settings|encryption|advanced|breadcrumb_description");
+        case "compromised":
+        case "sync_failed":
+        case "forgot":
+            return undefined;
+    }
+}
+
+function alertForVariant(variant: string): JSX.Element | undefined {
+    switch (variant) {
+        case "confirm":
+            return (
+                <Alert
+                    className="mx_AlertNoIcon"
+                    type="critical"
+                    title={_t("settings|encryption|advanced|breadcrumb_alert_cant_confirm")}
+                />
+            );
+        case "no_verification_method":
+        case "compromised":
+        case "sync_failed":
+        case "forgot":
+            return undefined;
+    }
+}
+
+function cancelTextForVariant(variant: ResetIdentityBodyVariant): string {
+    switch (variant) {
+        case "confirm":
+        case "compromised":
+        case "sync_failed":
+        case "forgot":
+            return _t("action|go_back");
+        case "no_verification_method":
+        case "no_encrypted_rooms":
+            return _t("action|sign_out_before_verify");
+    }
+}
+
+function destructiveForVariant(variant: ResetIdentityBodyVariant): boolean {
+    switch (variant) {
+        case "no_verification_method":
+        case "no_encrypted_rooms":
+            return false;
+        case "confirm":
+        case "compromised":
+        case "sync_failed":
+        case "forgot":
+            return true;
     }
 }

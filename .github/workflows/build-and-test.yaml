@@ -50,12 +50,13 @@ env:
     NUM_RUNNERS: ${{ github.event_name == 'schedule' && 1 || 4 }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
-permissions: {} # No permissions required
+permissions:
+    contents: read
 
 jobs:
     prepare:
         name: "Build Element Web"
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         if: inputs.skip != true
         outputs:
             num-runners: ${{ env.NUM_RUNNERS }}
@@ -73,17 +74,22 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
+                  cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: false
 
             - name: Fetch layered build
+              id: layered
               env:
                   # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
-              run: scripts/layered.sh
+              run: |
+                  ./scripts/layered.sh
+                  VERSION=$(scripts/get-version-from-git.sh)
+                  echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
             - name: Copy config
               working-directory: apps/web
@@ -92,11 +98,12 @@ jobs:
             - name: Build
               env:
                   CI_PACKAGE: true
+                  VERSION: ${{ steps.layered.outputs.version }}
               working-directory: apps/web
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
+              run: pnpm run build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -115,11 +122,12 @@ jobs:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.prepare.outputs.num-runners }}"
         needs: prepare
         if: needs.prepare.outputs.skip == 'false'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         permissions:
             actions: read
             issues: read
             pull-requests: read
+            contents: read
         strategy:
             fail-fast: false
             matrix:
@@ -150,26 +158,24 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
-                  cache: "pnpm"
-                  cache-dependency-path: pnpm-lock.yaml
-                  node-version: "lts/*"
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+                  cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: true
+                  require-lockfile: true
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
               with:
                   needs-webkit: ${{ matrix.project == 'WebKit' }}
-                  write-cache: ${{ github.event_name != 'merge_group' }}
+                  write-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
@@ -184,7 +190,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
                   path: apps/web/blob-report
@@ -195,7 +201,7 @@ jobs:
         name: Modules Playwright tests
         needs: prepare
         if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
-        runs-on: ubuntu-24.04-arm
+        runs-on: ubuntu-26.04-arm
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
@@ -203,26 +209,24 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
-                  cache: "pnpm"
-                  cache-dependency-path: pnpm-lock.yaml
-                  node-version: "lts/*"
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+                  cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: true
+                  require-lockfile: true
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
               with:
                   needs-webkit: false
-                  write-cache: ${{ github.event_name != 'merge_group' }}
+                  write-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
 
             - name: Run Playwright tests
               run: pnpm test:playwright
@@ -232,7 +236,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: blob-report-modules
                   path: modules/blob-report
@@ -259,7 +263,7 @@ jobs:
         if: needs.prepare.outputs.run-all-desktop == 'true'
         strategy:
             matrix:
-                arch: [x64, ia32, arm64]
+                arch: [x64, arm64]
         with:
             arch: ${{ matrix.arch }}
             blob_report: true
@@ -270,19 +274,14 @@ jobs:
         uses: ./.github/workflows/build_desktop_linux.yaml
         strategy:
             matrix:
-                sqlcipher: [system, static]
                 arch: [amd64, arm64]
                 runAllTests:
                     - ${{ needs.prepare.outputs.run-all-desktop == 'true' }}
                 exclude:
-                    # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
-                    - runAllTests: false
-                      sqlcipher: system
-                    # Additionally skip arm64 system builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
+                    # Skip arm64 builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
                     - runAllTests: false
                       arch: arm64
         with:
-            sqlcipher: ${{ matrix.sqlcipher }}
             arch: ${{ matrix.arch }}
             blob_report: true
 
@@ -307,7 +306,10 @@ jobs:
             - build_ed_linux
             - build_ed_macos
         if: always()
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
+        env:
+            # Only some deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               if: needs.prepare.outputs.skip == 'false'
@@ -315,21 +317,23 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-              if: needs.prepare.outputs.skip == 'false'
-            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               if: needs.prepare.outputs.skip == 'false'
               with:
-                  cache: "pnpm"
-                  node-version: "lts/*"
+                  cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+                  install: false
+                  require-lockfile: true
 
-            - name: Install dependencies
+            # Merging the reports needs Playwright, from the workspace root's deps, and playwright-common's reporters
+            - name: Install Deps
               if: needs.prepare.outputs.skip == 'false'
-              run: pnpm install --frozen-lockfile
+              run: "pnpm install --frozen-lockfile --filter @element-hq/element-web-playwright-common"
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: needs.prepare.outputs.skip == 'false'
-              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
                   pattern: blob-report-*
                   path: all-blob-reports
@@ -342,14 +346,15 @@ jobs:
                       --config=playwright-merge.config.ts \
                       ./all-blob-reports
               env:
-                  # Only pass creds to the flaky-reporter on main branch runs, or in merge queues (knowing these may be false positives)
-                  GITHUB_TOKEN: ${{ case(github.event_name == 'merge_group' || github.ref_name == 'develop', secrets.ELEMENT_BOT_TOKEN, '') }}
+                  # Only pass creds to the flaky-reporter on main branch runs, or in develop merge queues (knowing these may be false positives).
+                  # Staging merge queues are skipped as they lack fixes already landed on develop.
+                  GITHUB_TOKEN: ${{ case((github.event_name == 'merge_group' && github.event.merge_group.base_ref == 'refs/heads/develop') || github.ref_name == 'develop', secrets.ELEMENT_BOT_TOKEN, '') }}
                   PLAYWRIGHT_HTML_TITLE: ${{ case(github.event_name == 'pull_request', format('Playwright Report PR-{0}', env.PR_NUMBER), 'Playwright Report') }}
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && needs.prepare.outputs.skip == 'false'
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: html-report
                   path: playwright-report

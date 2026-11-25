@@ -52,7 +52,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Simple message");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile.png",
                     screenshotOptions(page),
                 );
@@ -64,7 +64,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Fall through here");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile-fall-through.png",
                     screenshotOptions(page),
                 );
@@ -76,7 +76,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Do not replace me");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-tile-original.png",
                     screenshotOptions(page),
                 );
@@ -142,13 +142,128 @@ test.describe("Custom Component API", () => {
             await expect(imageView).toBeVisible();
             await expect(imageView.getByLabel("Download")).toBeVisible();
         });
+        test("should hide sender profile when the renderAsInfoMessage hint is set to true", async ({
+            page,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await app.viewRoomById(room.roomId);
+            await app.client.sendMessage(room.roomId, "Render as informational message");
+
+            await app.timeline.scrollToBottom();
+            const eventTile = page.locator(".mx_EventTile").filter({ hasText: "Render as informational message" });
+            await expect(eventTile).toHaveCount(1);
+            await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+            await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
+            await expect(page.getByText("Render as informational message")).toBeVisible();
+        });
+        test(
+            "should render formatted informational text at the size of a name-change event",
+            { tag: "@screenshot" },
+            async ({ page, room, app, user }) => {
+                await app.viewRoomById(room.roomId);
+                const formattedEvent = await app.client.sendMessage(room.roomId, {
+                    msgtype: "m.notice",
+                    body: "Render as **informational** message",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "Render as <strong>informational</strong> message",
+                });
+                const nameChange = await app.client.sendStateEvent(
+                    room.roomId,
+                    "m.room.member",
+                    { membership: "join", displayname: "Manny Renamed" },
+                    user.userId,
+                );
+
+                await app.timeline.scrollToBottom();
+                const nameChangeTile = page.locator(`[data-event-id="${nameChange.event_id}"]`);
+                const formattedTile = page.locator(`[data-event-id="${formattedEvent.event_id}"]`);
+                const nameChangeBody = nameChangeTile.getByTestId("event-tile-slot-body").locator(".mx_TextualEvent");
+                const formattedBody = formattedTile.getByTestId("event-tile-slot-body").locator(".mx_EventTile_body");
+
+                await expect(nameChangeBody).toContainText("display name to Manny Renamed");
+                await expect(formattedBody).toBeVisible();
+                await expect(formattedBody.locator("strong")).toHaveText("informational");
+                await expect(nameChangeTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+                await expect(formattedTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+                await expect(formattedBody).toHaveClass(/markdown-body/);
+
+                // Compare with a standard informational event instead of hard-coding its CSS values.
+                // Verify that the styling of the informational event matches that of a name change event.
+                const nameChangeTypography = await nameChangeBody.evaluate((element) => {
+                    const style = getComputedStyle(element);
+                    return { fontSize: style.fontSize, letterSpacing: style.letterSpacing };
+                });
+                await expect(formattedBody).toHaveCSS("font-size", nameChangeTypography.fontSize);
+                await expect(formattedBody).toHaveCSS("letter-spacing", nameChangeTypography.letterSpacing);
+
+                await page.mouse.move(0, 0);
+                await expect(page.locator(".mx_RoomView_timeline")).toMatchScreenshot(
+                    "informational-markdown-typography.png",
+                    screenshotOptions(page),
+                );
+            },
+        );
+        test("should group custom messages without the informational hint", async ({ page, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            for (let i = 1; i <= 3; i++) {
+                await app.client.sendEvent(room.roomId, null, "m.room.message", {
+                    "msgtype": "m.text",
+                    "body": `Grouped alpha ${i}`,
+                    "org.example.group": "alpha",
+                });
+            }
+
+            await app.timeline.scrollToBottom();
+            await expect(page.getByText(/Module grouped alpha: 3 messages/)).toBeVisible();
+            await page.getByRole("button", { name: "Expand" }).last().click();
+            await expect(page.getByText("Grouped alpha 1", { exact: true })).toBeVisible();
+            await expect(page.getByText("Grouped alpha 2", { exact: true })).toBeVisible();
+            await expect(page.getByText("Grouped alpha 3", { exact: true })).toBeVisible();
+        });
+        test("should keep informational-only messages outside custom summaries", async ({ page, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            for (const group of ["alpha", "beta"]) {
+                for (let i = 1; i <= 3; i++) {
+                    await app.client.sendEvent(room.roomId, null, "m.room.message", {
+                        "msgtype": "m.text",
+                        "body": `Grouped ${group} ${i}`,
+                        "org.example.group": group,
+                    });
+                }
+            }
+            await app.client.sendMessage(room.roomId, "Render as informational message");
+
+            await app.timeline.scrollToBottom();
+            await expect(
+                page.getByText(/Module grouped alpha: 3 messages.*Module grouped beta: 3 messages/),
+            ).toBeVisible();
+            await expect(page.getByText("Render as informational message")).toBeVisible();
+        });
+        test("should hide sender profile when the renderSenderProfile hint is set to false", async ({
+            page,
+            room,
+            app,
+        }) => {
+            await app.viewRoomById(room.roomId);
+            await app.viewRoomById(room.roomId);
+            await app.client.sendMessage(room.roomId, "Render without sender profile");
+
+            await app.timeline.scrollToBottom();
+            const eventTile = page.locator(".mx_EventTile").last();
+            await expect(eventTile.getByRole("button", { name: "View sender profile" })).not.toBeVisible();
+            await expect(eventTile.getByTestId("event-tile-slot-sender")).toHaveCount(0);
+            await expect(eventTile.getByTestId("event-tile-slot-avatar")).toBeVisible();
+            await expect(page.getByText("Render without sender profile")).toBeVisible();
+        });
         test(
             "should render the next registered component if the filter function throws",
             { tag: "@screenshot" },
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Crash the filter!");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-crash-handle-filter.png",
                     screenshotOptions(page),
                 );
@@ -160,7 +275,7 @@ test.describe("Custom Component API", () => {
             async ({ page, room, app }) => {
                 await app.viewRoomById(room.roomId);
                 await app.client.sendMessage(room.roomId, "Crash the renderer!");
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                await expect(page.locator(".mx_EventTile").last()).toMatchScreenshot(
                     "custom-component-crash-handle-renderer.png",
                     screenshotOptions(page),
                 );

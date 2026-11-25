@@ -27,7 +27,6 @@
         "cancel": "Afbryd",
         "change": "Skift",
         "clear": "Ryd",
-        "click_to_copy": "Klik for at kopiere",
         "close": "Luk",
         "collapse": "Fold sammen",
         "complete": "Færdiggør",
@@ -42,7 +41,6 @@
         "decline_and_block": "Afvis og blokér",
         "decline_invite": "Afvis invitation",
         "delete": "Slet",
-        "deny": "Nægt",
         "disable": "Deaktiver",
         "disconnect": "Afbryd forbindelsen",
         "dismiss": "Afvis",
@@ -1152,7 +1150,6 @@
         "name_mxid_share_room": "Inviter andre ved at bruge deres navn, brugernavn (f.eks. <userId/>) eller <a>del dette rum</a> .",
         "name_mxid_share_space": "Invitér nogen ved at bruge deres navn, brugernavn (som <userId/> eller <a>del denne klynge</a>",
         "recents_section": "Seneste samtaler",
-        "room_failed_partial": "Vi har sendt til de andre, men nedenstående personer kunne ikke blive inviteret til <RoomName/>",
         "room_failed_partial_title": "Nogle invitationer kunne ikke blive sendt",
         "room_failed_title": "Kunne ikke invitere brugere til %(roomName)s",
         "send_link_prompt": "Eller send invitationslink",
@@ -1264,9 +1261,6 @@
         "bridge_state_workspace": "Arbejdsområde: <networkLink/>",
         "click_for_info": "Klik for mere info",
         "currently_experimental": "I øjeblikket eksperimentel.",
-        "custom_themes": "Understøtter tilføjelse af brugerdefinerede temaer",
-        "dynamic_room_predecessors": "Dynamiske rumforgængere",
-        "dynamic_room_predecessors_description": "Aktivér MSC3946 (for at understøtte forsinkede rumarkiver)",
         "element_call_video_rooms": "Element Call video-rum",
         "experimental_description": "Er du i humør til at eksperimentere? Afprøv vores nyeste ideer, som stadig er under udvikling. Disse funktioner er ikke færdigukviklende; de kan være ustabile, kan ændres eller kan blive droppet helt. <a>Få mere at vide</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
@@ -1279,7 +1273,6 @@
         "group_profile": "Profil",
         "group_rooms": "Rum",
         "group_spaces": "Klynger",
-        "group_themes": "Temaer",
         "group_threads": "Tråde",
         "group_ui": "Brugergrænseflade",
         "group_voip": "Stemme & Video",
@@ -1354,8 +1347,6 @@
     "language_dropdown_label": "Rullemenu for sprog",
     "leave_room_dialog": {
         "last_person_warning": "Du er den eneste person her. Hvis du forlader rummet, vil ingen kunne deltage i fremtiden, heller ikke dig.",
-        "leave_room_question": "Er du sikker på, at du vil forlade rummet '%(roomName)s'?",
-        "leave_space_question": "Er du sikker på, at du vil forlade klyngen '%(spaceName)s'?",
         "room_leave_admin_warning": "Du er den eneste administrator i dette rum. Hvis du forlader det, vil ingen være i stand til at ændre dets indstillinger eller foretage andre vigtige handlinger.",
         "room_leave_mod_warning": "Du er den eneste moderator i dette rum. Hvis du forlader det, vil ingen kunne ændre rummets indstillinger eller foretage andre vigtige handlinger.",
         "room_rejoin_warning": "Dette rum er ikke offentligt. Du kan ikke deltage igen uden en invitation.",
@@ -1444,7 +1435,6 @@
         "mentions_and_keywords": "@omtaler og søgeord",
         "mentions_and_keywords_description": "Få kun notifikationer for omtaler og søgeord som konfigureret under <a>indstillinger</a>",
         "mentions_keywords": "Omtaler og nøgleord",
-        "message_didnt_send": "Beskeden blev ikke sendt. Klik for mere information.",
         "mute_description": "Du vil ikke modtage nogen notifikationer"
     },
     "notifier": {
@@ -1551,8 +1541,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s nøgler blev gendannet",
         "enter_key_description": "Få adgang til din sikre beskedhistorik, og opsæt sikker chat ved at indtaste din gendannelsesnøgle.",
         "enter_key_title": "Indtast gendannelsesnøgle",
-        "enter_phrase_description": "Få adgang til historikken for dine sikre beskeder og opsæt sikker beskedfunktion ved at indtaste din sikkerhedskode.",
-        "enter_phrase_title": "Indtast adgangsfrase",
         "incorrect_security_phrase_dialog": "Sikkerhedskopien kunne ikke dekrypteres med denne adgangsfrase: Kontrollér, at du har indtastet den korrekte.",
         "incorrect_security_phrase_title": "Forkert adgangsfrase",
         "key_backup_warning": "<b>Advarsel</b>: Du bør kun konfigurere nøglebackup fra en computer du stoler på.",
@@ -1564,7 +1552,6 @@
         "load_error_content": "Status for sikkerhedskopiering kunne ikke indlæses",
         "load_keys_progress": "%(completed)s af i alt %(total)s nøgler er restaureret",
         "no_backup_error": "Der blev ikke fundet nogen sikkerhedskopi",
-        "phrase_forgotten_text": "Hvis du har glemt din sikkerhedsfrase, kan du <button1>bruge din gendannelsesnøgle</button1> eller <button2>oprette nye gendannelsesmuligheder</button2>",
         "recovery_key_mismatch_description": "Sikkerhedskopien kunne ikke dekrypteres med denne gendannelsesnøgle: Bekræft venligst, at du har indtastet den korrekte gendannelsesnøgle.",
         "recovery_key_mismatch_title": "Uoverensstemmelse med gendannelsesnøgle",
         "restore_failed_error": "Kan ikke gendanne sikkerhedskopien"
@@ -1713,7 +1700,6 @@
         "join_button_account": "Tilmeld dig",
         "join_failed_needs_invite": "For at se %(roomName)s skal du have en invitation.",
         "join_the_discussion": "Deltag i diskussionen",
-        "join_title": "Tilslut dig rummet, for at deltage",
         "join_title_account": "Deltag i samtalen med en konto",
         "joining": "Tilslutter...",
         "joining_room": "Tilslutter til rummet...",
@@ -2084,8 +2070,6 @@
             "custom_font_description": "Indstil navnet på en skrifttype installeret på dit system og %(brand)s vil forsøge at bruge den.",
             "custom_font_name": "Navn på systemskrifttype",
             "custom_font_size": "Brug brugerdefineret størrelse",
-            "custom_theme_error_downloading": "Fejl ved download af tema",
-            "custom_theme_invalid": "Ugyldigt temaskema.",
             "font_size": "Skriftstørrelse",
             "image_size_default": "Standard",
             "image_size_large": "Stor",
@@ -2110,12 +2094,8 @@
                 "breadcrumb_page": "Nulstil kryptering",
                 "other_people_device_title": "Andre personers enheder"
             },
-            "delete_key_storage": {
-                "list_first": "Du vil ikke kunne se historikken for krypterede beskeder på nye enheder"
-            },
             "recovery": {
-                "key_storage_warning": "Dit nøglelager er ikke synkroniseret. Klik på en af knapperne herunder for at løse problemet.",
-                "set_up_recovery_description": "Din nøgleopbevaring er beskyttet af en genoprettelsesnøgle. Hvis du har brug for en ny genoprettelsesnøgle efter opsætningen, kan du genskabe den ved at vælge '%(changeRecoveryKeyButton)s'."
+                "key_storage_warning": "Dit nøglelager er ikke synkroniseret. Klik på en af knapperne herunder for at løse problemet."
             }
         },
         "general": {
@@ -2451,7 +2431,6 @@
             "web_session": "Websession"
         },
         "show_avatar_changes": "Vis ændringer af profilbillede",
-        "show_breadcrumbs": "Vis genveje til senest viste rum over rumlisten",
         "show_chat_effects": "Vis chateffekter (animationer, når du modtager f.eks. konfetti)",
         "show_displayname_changes": "Vis ændringer af det viste navn",
         "show_join_leave": "Vis tilmeldings-/forladelsesbeskeder (invitationer/fjernelser/forbud påvirkes ikke)",
@@ -2750,9 +2729,7 @@
         "show_thread_filter": "Vis:"
     },
     "threads_activity_centre": {
-        "header": "Aktivitet i tråde",
-        "no_rooms_with_threads_notifs": "Du har ingen rum med notifikationer fra tråde endnu.",
-        "no_rooms_with_unread_threads": "Du har ingen rum med ulæste tråde."
+        "header": "Aktivitet i tråde"
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s",
@@ -3011,10 +2988,6 @@
             "error_loading": "Kunne ikke indlæse den begivenhed, der blev besvaret. Enten findes den ikke, eller du har ikke tilladelse til at se den.",
             "in_reply_to": "<a>Som svar til</a> <pill>",
             "in_reply_to_for_export": "Som svar på <a>denne besked</a>"
-        },
-        "scalar_starter_link": {
-            "dialog_description": "Du bliver nu omdirigeret til et tredjepartswebsted, hvor du kan godkende din konto til brug med %(integrationsUrl)s. Ønsker du at fortsætte?",
-            "dialog_title": "Tilføj en integration"
         },
         "self_redaction": "Besked slettet",
         "send_state_encrypting": "Krypterer din besked…",

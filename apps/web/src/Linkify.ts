@@ -7,9 +7,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import sanitizeHtml, { type IOptions } from "sanitize-html";
 import {
-    PERMITTED_URL_SCHEMES,
+    sanitizeHtml as sanitizeHtmlString,
+    type HtmlSanitizeAttributes,
+    type HtmlSanitizeOptions,
+} from "@element-hq/element-web-shared-utils";
+import {
     linkifyString as _linkifyString,
     linkifyHtml as _linkifyHtml,
     LinkifyMatrixOpaqueIdType,
@@ -30,14 +33,15 @@ import { Action } from "./dispatcher/actions";
 import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import SettingsStore from "./settings/SettingsStore";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 
-export const transformTags: NonNullable<IOptions["transformTags"]> = {
+export const transformTags = {
     // custom to matrix
     // add blank targets to all hyperlinks except vector URLs
-    "a": function (tagName: string, attribs: sanitizeHtml.Attributes) {
+    "a": function (tagName: string, attribs: HtmlSanitizeAttributes) {
         if (attribs.href) {
             attribs.target = "_blank"; // by default
 
@@ -56,7 +60,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         attribs.rel = "noreferrer noopener"; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
-    "img": function (tagName: string, attribs: sanitizeHtml.Attributes) {
+    "img": function (tagName: string, attribs: HtmlSanitizeAttributes) {
         let src = attribs.src;
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
@@ -89,10 +93,13 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         if (requestedHeight) {
             attribs.style += "height: 100%;";
         }
-        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height)!;
+        // Custom emoticons are often animated, so ask for animated thumbnails for them,
+        // unless the user turned animations off. Other images leave it to the server.
+        const animated = "data-mx-emoticon" in attribs ? SettingsStore.getValue("autoplayGifs") : undefined;
+        attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height, "scale", animated)!;
         return { tagName, attribs };
     },
-    "code": function (tagName: string, attribs: sanitizeHtml.Attributes) {
+    "code": function (tagName: string, attribs: HtmlSanitizeAttributes) {
         if (typeof attribs.class !== "undefined") {
             // Filter out all classes other than ones starting with language- for syntax highlighting.
             const classes = attribs.class.split(/\s/).filter(function (cl) {
@@ -102,7 +109,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         }
         return { tagName, attribs };
     },
-    "*": function (tagName: string, attribs: sanitizeHtml.Attributes) {
+    "*": function (tagName: string, attribs: HtmlSanitizeAttributes) {
         // Delete any style previously assigned, style is an allowedTag for font, span & img,
         // because attributes are stripped after transforming.
         // For img this is trusted as it is generated wholly within the img transformation method.
@@ -138,73 +145,13 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
 
         return { tagName, attribs };
     },
-};
+} satisfies NonNullable<HtmlSanitizeOptions["transformTags"]>;
 
-export const sanitizeHtmlParams: IOptions = {
-    allowedTags: [
-        // These tags are suggested by the spec https://spec.matrix.org/v1.10/client-server-api/#mroommessage-msgtypes
-        "font", // custom to matrix for IRC-style font coloring
-        "del", // for markdown
-        "s",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "blockquote",
-        "p",
-        "a",
-        "ul",
-        "ol",
-        "sup",
-        "sub",
-        "nl",
-        "li",
-        "b",
-        "i",
-        "u",
-        "strong",
-        "em",
-        "strike",
-        "code",
-        "hr",
-        "br",
-        "div",
-        "table",
-        "thead",
-        "caption",
-        "tbody",
-        "tr",
-        "th",
-        "td",
-        "pre",
-        "span",
-        "img",
-        "details",
-        "summary",
-    ],
-    allowedAttributes: {
-        // attribute sanitization happens after transformations, so we have to accept `style` for font, span & img
-        // but strip during the transformation.
-        // custom ones first:
-        font: ["color", "data-mx-bg-color", "data-mx-color", "style"], // custom to matrix
-        span: ["data-mx-maths", "data-mx-bg-color", "data-mx-color", "data-mx-spoiler", "style"], // custom to matrix
-        div: ["data-mx-maths"],
-        a: ["href", "name", "target", "rel"], // remote target: custom to matrix
-        // img tags also accept width/height, we just map those to max-width & max-height during transformation
-        img: ["src", "alt", "title", "style"],
-        ol: ["start"],
-        code: ["class"], // We don't actually allow all classes, we filter them in transformTags
-    },
-    // Lots of these won't come up by default because we don't allow them
-    selfClosing: ["img", "br", "hr", "area", "base", "basefont", "input", "link", "meta"],
-    // URL schemes we permit
-    allowedSchemes: PERMITTED_URL_SCHEMES,
-    allowProtocolRelative: false,
+// The shared package owns the Element Web baseline policy. These transforms
+// only add browser/app context which cannot be represented by a string-only
+// sanitizer: MXC thumbnail URLs and local permalink handling.
+export const sanitizeHtmlParams: HtmlSanitizeOptions = {
     transformTags,
-    // 50 levels deep "should be enough for anyone"
-    nestingLimit: 50,
 };
 
 /**
@@ -409,5 +356,5 @@ export function linkifyAndSanitizeHtml(
     dirtyHtml: string,
     options: LinkifyOpts = generateLinkedTextOptions(LinkedTextConfiguration),
 ): string {
-    return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
+    return sanitizeHtmlString(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
