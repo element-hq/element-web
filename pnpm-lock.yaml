@@ -506,8 +506,8 @@ importers:
         specifier: ^7.12.5
         version: 7.29.14
       '@element-hq/element-call-component':
-        specifier: 0.28.2
-        version: 0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3)(react-dom@19.3.1)(react@19.3.1)
+        specifier: 0.29.0
+        version: 0.29.0(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3)(react-dom@19.3.1)(react@19.3.1)
       '@element-hq/element-web-module-api':
         specifier: workspace:*
         version: link:../../packages/module-api
@@ -747,8 +747,8 @@ importers:
         specifier: ^7.12.7
         version: 7.29.7(@babel/core@7.29.13)(supports-color@10.2.2)
       '@element-hq/element-call-embedded':
-        specifier: 0.28.2
-        version: 0.28.2
+        specifier: 0.29.0
+        version: 0.29.0
       '@element-hq/element-web-playwright-common':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -2811,9 +2811,9 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-component@0.28.2':
-    resolution: {integrity: sha512-nATHTGmZojDBaAnRI3Se8kyCvZqjZEJprlj1llc5P2hqGv4DhX2/3jN5wY0RhdjtzniRxcXs0gOCsbQpBfAIlA==}
-    version: 0.28.2
+  '@element-hq/element-call-component@0.29.0':
+    resolution: {integrity: sha512-r3sr+vOP2Sd0hxKUxGSeo20MQVjhycGqbkwUKBxF/bVPJg5+VS7/29PqLHcgVwBTaJC7eZnvrbHejSfHfaJzjg==}
+    version: 0.29.0
     peerDependencies:
       '@vector-im/compound-design-tokens': ^11.0.0
       '@vector-im/compound-web': ^10.3.1
@@ -2821,8 +2821,8 @@ packages:
       react: ^19
       react-dom: ^19
 
-  '@element-hq/element-call-embedded@0.28.2':
-    resolution: {integrity: sha512-Ua6BG0ZQJ4yrv98mI9XIWpaHvRHAlAIb3ZyXgmWTJoaBRHA/zBpFSmpaJKL4IlQZeWw84YwI02m8GJK4jUbWSg==}
+  '@element-hq/element-call-embedded@0.29.0':
+    resolution: {integrity: sha512-xngVo9Ki5kodpttRXosmgXz3ptChR7j0PkP87A9kHHYCrqYAdybrnXy59CnnZCaQtZ/wX0+YQ4wVWoRO78asiw==}
 
   '@emnapi/core@1.11.0':
     resolution: {integrity: sha512-l9Oo58x0HOP5znGzVhYW9U3e5wVuA4LAZU2AGezTmkhO1CgQRFDhDg4nneHsu/t3WniXg9QrG2nIXL/ZS8ln8Q==}
@@ -15400,7 +15400,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-component@0.28.2(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3)(react-dom@19.3.1)(react@19.3.1)':
+  '@element-hq/element-call-component@0.29.0(@vector-im/compound-design-tokens@11.3.0)(@vector-im/compound-web@10.4.0)(matrix-js-sdk@matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/65fdce9a6ce5f936f202d52b83ba7cbb6ad154b3)(react-dom@19.3.1)(react@19.3.1)':
     dependencies:
       '@vector-im/compound-design-tokens': 11.3.0(@types/react@19.3.0)(react@19.3.1)
       '@vector-im/compound-web': 10.4.0(@fontsource/inconsolata@5.3.0)(@fontsource/inter@5.3.0)(@types/react-dom@19.3.0)(@types/react@19.3.0)(@vector-im/compound-design-tokens@11.3.0)(react-dom@19.3.1)(react@19.3.1)
@@ -15408,7 +15408,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@element-hq/element-call-embedded@0.28.2': {}
+  '@element-hq/element-call-embedded@0.29.0': {}
 
   '@emnapi/core@1.11.0':
     dependencies:
