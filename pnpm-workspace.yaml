@@ -4,6 +4,7 @@ ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
 dedupePeerDependents: true
 dedupePeers: true
+strictPeerDependencies: true
 
 packages:
     - "apps/*"
@@ -139,14 +140,22 @@ patchedDependencies:
 
 peerDependencyRules:
     allowedVersions:
+        # react-beautiful-dnd 13 and its react-redux 7 & use-memo-one dependencies only declare up to React 18
         react: "19"
+        # react-beautiful-dnd 13 only declares up to React 18
         react-dom: "19"
-        eslint: "8"
+        # vitepress 1's @vitejs/plugin-vue 5 only declares vite 5 & 6, we override vitepress's vite to 8
         vite: "8"
-        nx: "23"
+        # storybook-addon-vis, vitest-plugin-vis and @vitest/browser 4 (via @storybook/addon-vitest) declare vitest 4
+        vitest: "5"
+        # vitest-plugin-vis declares @vitest/browser-playwright 4
+        "@vitest/browser-playwright": "5"
+        # vitepress-plugin-mermaid declares mermaid 10 & 11
+        mermaid: "12"
+        # Only loaded by typescript-estree's opt-in experimental tsgo backend, which needs TS 7.1 and we don't enable
+        "@typescript-eslint/typescript-estree>@typescript/native": "7"
 
 allowedDeprecatedVersions:
-    eslint: "8"
     react-beautiful-dnd: "13"
 
 overrides:

@@ -41,6 +41,10 @@ jobs:
                     - name: Analyse Dead Code
                       install: normal
                       command: "lint:knip"
+                    # strictPeerDependencies only applies when the lockfile is re-resolved, so check it as-is too
+                    - name: Peer Dependencies Check
+                      install: normal
+                      command: "lint:peers"
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true

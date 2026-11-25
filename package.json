@@ -20,6 +20,7 @@
         "lint:js:fix": "oxlint --fix",
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
         "lint:knip": "knip --no-tag-hints && knip --strict --exclude unlisted,dependencies,binaries",
+        "lint:peers": "pnpm peers check",
         "lint:unused-settings": "node scripts/find-unused-settings.ts",
         "install:git-hooks": "husky",
         "postinstall": "node scripts/pnpm-link.ts",
