@@ -18,7 +18,11 @@ import {
     findX11WindowApp,
     isDescendantOf,
     isScreenshareAudioSupported,
+    appIdFromCgroup,
+    desktopEntryName,
     listAudioApps,
+    listRunningApps,
+    mergeAudioApps,
     MIX_NODE_NAME,
     mixChannelsFor,
     parseSourceId,
@@ -202,43 +206,152 @@ describe("listAudioApps", () => {
             (pid) => (pid === 201 ? 200 : pid),
         );
         expect(apps).toEqual([
-            { pid: 200, name: "firefox" },
-            { pid: 250, name: "mpv" },
+            { pids: [200], name: "firefox", playing: true },
+            { pids: [250], name: "mpv", playing: true },
+        ]);
+    });
+});
+
+describe("appIdFromCgroup", () => {
+    const at = (unit: string): string => `0::/user.slice/user-1000.slice/user@1000.service/app.slice/${unit}\n`;
+    it.each([
+        [at("app-gnome-librewolf-1014346.scope"), "librewolf"],
+        [at("app-gnome-io.element.Element-747963.scope"), "io.element.Element"],
+        [at("app-flatpak-org.mozilla.firefox-4242.scope"), "org.mozilla.firefox"],
+        [at("app-gnome-gnome\\x2dcontrol\\x2dcenter-99.scope"), "gnome-control-center"],
+        [at("app-org.kde.dolphin@a1b2c3.service"), "org.kde.dolphin"],
+        [at("app-Element-747963.scope"), "Element"],
+        [
+            at("app-dbus\\x2d:1.2\\x2dorg.gnome.Console.slice/dbus-:1.2-org.gnome.Console@0.service"),
+            "org.gnome.Console",
+        ],
+        [at("app-gnome\\x2dsession\\x2dmanager.slice/gnome-session-manager@gnome.service"), undefined],
+        [at("syncthing.service"), undefined],
+        ["0::/user.slice/user-1000.slice/session-2.scope\n", undefined],
+    ])("reads %j", (cgroup, appId) => {
+        expect(appIdFromCgroup(cgroup)).toBe(appId);
+    });
+});
+
+describe("desktopEntryName", () => {
+    const files: Record<string, string> = {
+        "/home/a/applications/librewolf.desktop":
+            "[Desktop Entry]\nType=Application\nName=LibreWolf\n[Desktop Action new]\nName=New Window\n",
+        "/usr/applications/helper.desktop": "[Desktop Entry]\nName=Helper\nNoDisplay=true\n",
+        "/usr/applications/librewolf.desktop": "[Desktop Entry]\nName=Not this one\n",
+    };
+    const readFile = (path: string): string => {
+        if (!(path in files)) throw new Error("ENOENT");
+        return files[path];
+    };
+    const dirs = ["/home/a/applications", "/usr/applications"];
+
+    it("reads the Name of the first .desktop file found", () => {
+        expect(desktopEntryName("librewolf", dirs, readFile)).toBe("LibreWolf");
+    });
+
+    it("leaves out hidden and missing entries", () => {
+        expect(desktopEntryName("helper", dirs, readFile)).toBeUndefined();
+        expect(desktopEntryName("missing", dirs, readFile)).toBeUndefined();
+    });
+});
+
+describe("listRunningApps", () => {
+    const unit = (name: string): string => `0::/user.slice/user-1000.slice/user@1000.service/app.slice/${name}\n`;
+    const cgroups: Record<number, string> = {
+        10: unit("app-gnome-librewolf-10.scope"),
+        11: unit("app-gnome-librewolf-10.scope"),
+        20: unit("app-gnome-todo-20.scope"),
+        30: unit("app-gnome-io.element.Element-30.scope"),
+        40: unit("app-gnome-xdg\\x2duser\\x2ddirs-40.scope"),
+        50: "0::/user.slice/user-1000.slice/session-2.scope\n",
+    };
+
+    it("keeps only a unit's topmost processes", () => {
+        const apps = listRunningApps(
+            [70, 71],
+            () => unit("app-gnome-org.gnome.Console-70.scope"),
+            () => false,
+            (pid) => pid,
+            () => "Console",
+            (pid, ancestor) => pid === ancestor || (pid === 71 && ancestor === 70),
+        );
+        expect(apps).toEqual([{ pids: [70], name: "Console", playing: false }]);
+    });
+
+    it("lists apps with a .desktop entry, once each, without Element", () => {
+        const names: Record<string, string> = {
+            "librewolf": "LibreWolf",
+            "todo": "Endeavour",
+            "io.element.Element": "Element",
+        };
+        const apps = listRunningApps(
+            [10, 11, 20, 30, 40, 50, 60],
+            (pid) => {
+                if (!(pid in cgroups)) throw new Error("ESRCH");
+                return cgroups[pid];
+            },
+            (pid) => pid === 30,
+            (pid) => (pid === 11 ? 10 : pid),
+            (appId) => names[appId],
+            (pid, ancestor) => pid === ancestor,
+        );
+        expect(apps).toEqual([
+            { pids: [10], name: "LibreWolf", playing: false },
+            { pids: [20], name: "Endeavour", playing: false },
+        ]);
+    });
+});
+
+describe("mergeAudioApps", () => {
+    it("marks running apps that play, adds playing apps outside units, playing first", () => {
+        const running = [
+            { pids: [20], name: "Endeavour", playing: false },
+            { pids: [10], name: "LibreWolf", playing: false },
+        ];
+        const playing = [
+            // LibreWolf's audio process walks up to its main process, 10.
+            { pids: [10], name: "LibreWolf audio", playing: true },
+            { pids: [90], name: "mpv", playing: true },
+        ];
+        expect(mergeAudioApps(running, playing)).toEqual([
+            { pids: [10], name: "LibreWolf", playing: true },
+            { pids: [90], name: "mpv", playing: true },
+            { pids: [20], name: "Endeavour", playing: false },
         ]);
     });
 
     it("tells apart two instances of the same app", () => {
-        const objects = [
-            node(1, { "media.class": "Stream/Output/Audio", "application.process.id": 10, "application.name": "mpv" }),
-            node(2, { "media.class": "Stream/Output/Audio", "application.process.id": 20, "application.name": "mpv" }),
+        const playing = [
+            { pids: [10], name: "mpv", playing: true },
+            { pids: [20], name: "mpv", playing: true },
         ];
-        expect(
-            listAudioApps(
-                objects,
-                () => false,
-                (pid) => pid,
-            ).map((app) => app.name),
-        ).toEqual(["mpv (10)", "mpv (20)"]);
+        expect(mergeAudioApps([], playing).map((app) => app.name)).toEqual(["mpv (10)", "mpv (20)"]);
     });
 });
 
 describe("askAudioScope", () => {
     const apps = [
-        { pid: 200, name: "Firefox" },
-        { pid: 250, name: "mpv" },
+        { pids: [200], name: "Firefox", playing: true },
+        { pids: [250, 251], name: "mpv", playing: false },
     ];
 
     it.each([
         [0, { apps: "all" }],
-        [1, { apps: "one", pid: 200 }],
-        [2, { apps: "one", pid: 250 }],
+        [1, { apps: "one", pids: [200] }],
+        [2, { apps: "one", pids: [250, 251] }],
         [3, { apps: "none" }],
     ])("maps button %i to %j", async (response, scope) => {
         showMessageBox.mockResolvedValueOnce({ response });
         await expect(askAudioScope(apps, null)).resolves.toEqual(scope);
         expect(showMessageBox).toHaveBeenLastCalledWith(
             expect.objectContaining({
-                buttons: ["screenshare_audio|all_apps", "Firefox", "mpv", "screenshare_audio|no_audio"],
+                buttons: [
+                    "screenshare_audio|all_apps",
+                    "screenshare_audio|playing",
+                    "mpv",
+                    "screenshare_audio|no_audio",
+                ],
                 defaultId: 0,
                 cancelId: 3,
             }),
@@ -299,7 +412,7 @@ describe("ScreenshareAudio", () => {
     it("shares only the given app's process tree", async () => {
         const audio = new ScreenshareAudio(runCommand, spawnLoopback);
         // Processes 200 and 250 are not descendants of this one, so only an exact match is shared.
-        await audio.start(250);
+        await audio.start([250]);
         expect(runCommand).toHaveBeenCalledWith("pw-link", ["251", "101"]);
         expect(runCommand).not.toHaveBeenCalledWith("pw-link", ["201", "101"]);
         audio.stop();
@@ -307,10 +420,10 @@ describe("ScreenshareAudio", () => {
 
     it("unlinks the previous app when a new share picks another window", async () => {
         const audio = new ScreenshareAudio(runCommand, spawnLoopback);
-        await audio.start(250);
+        await audio.start([250]);
         const stale = link(OTHER_APP, 251, MIX, 101);
         objects = graph([stale]);
-        await audio.start(200);
+        await audio.start([200]);
         expect(runCommand).toHaveBeenCalledWith("pw-link", ["-d", String(stale.id)]);
         expect(runCommand).toHaveBeenCalledWith("pw-link", ["201", "101"]);
         expect(spawnLoopback).toHaveBeenCalledTimes(1);
@@ -369,7 +482,10 @@ describe("audioScopeFor", () => {
 
     it("shares only the window's app", async () => {
         const findApp = vi.fn(async () => 200);
-        await expect(audioScopeFor("window:77:0", findApp, isOwnProcess)).resolves.toEqual({ apps: "one", pid: 200 });
+        await expect(audioScopeFor("window:77:0", findApp, isOwnProcess)).resolves.toEqual({
+            apps: "one",
+            pids: [200],
+        });
         expect(findApp).toHaveBeenCalledWith(77);
     });
 
@@ -473,7 +589,7 @@ describe("wrapDisplayMediaCallback", () => {
             wayland: false,
         })({ video: window });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
-        expect(audio.start).toHaveBeenCalledWith(200);
+        expect(audio.start).toHaveBeenCalledWith([200]);
     });
 
     it("shares no audio with Element's own window", async () => {
@@ -511,19 +627,19 @@ describe("wrapDisplayMediaCallback", () => {
     it("asks which app to share on Wayland", async () => {
         const audio = {
             start: vi.fn(async () => true),
-            listApps: vi.fn(async () => [{ pid: 250, name: "mpv" }]),
+            listApps: vi.fn(async () => [{ pids: [250], name: "mpv", playing: true }]),
         } as unknown as ScreenshareAudio;
-        const askApp = vi.fn(async () => ({ apps: "one" as const, pid: 250 }));
+        const askApp = vi.fn(async () => ({ apps: "one" as const, pids: [250] }));
         const callback = vi.fn();
         wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
             video: window,
         });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
-        expect(askApp).toHaveBeenCalledWith([{ pid: 250, name: "mpv" }]);
-        expect(audio.start).toHaveBeenCalledWith(250);
+        expect(askApp).toHaveBeenCalledWith([{ pids: [250], name: "mpv", playing: true }]);
+        expect(audio.start).toHaveBeenCalledWith([250]);
     });
 
-    it("does not ask on Wayland when no app is playing", async () => {
+    it("does not ask on Wayland when no other app is running", async () => {
         const audio = {
             start: vi.fn(async () => true),
             listApps: vi.fn(async () => []),
@@ -542,7 +658,7 @@ describe("wrapDisplayMediaCallback", () => {
         const audio = {
             start: vi.fn(),
             stop: vi.fn(),
-            listApps: vi.fn(async () => [{ pid: 250, name: "mpv" }]),
+            listApps: vi.fn(async () => [{ pids: [250], name: "mpv", playing: true }]),
         } as unknown as ScreenshareAudio;
         const callback = vi.fn();
         const askApp = async (): Promise<{ apps: "none" }> => ({ apps: "none" });

@@ -78,9 +78,10 @@
     },
     "screenshare_audio": {
         "all_apps": "All apps except %(brand)s",
-        "detail": "Your desktop does not tell %(brand)s which window you picked. Only apps that are playing sound right now are listed.",
+        "detail": "Your desktop does not tell %(brand)s which window you picked.",
         "message": "Which app's audio do you want to share?",
         "no_audio": "No audio",
+        "playing": "%(name)s (playing)",
         "title": "Share audio"
     },
     "store": {

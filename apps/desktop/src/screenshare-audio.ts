@@ -26,8 +26,9 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import { execFile, spawn, type ChildProcess } from "node:child_process";
-import { readFileSync, readlinkSync } from "node:fs";
-import { release } from "node:os";
+import { readdirSync, readFileSync, readlinkSync } from "node:fs";
+import { homedir, release } from "node:os";
+import path from "node:path";
 import { type BrowserWindow, dialog, type Streams, type WebContents, webFrameMain } from "electron";
 
 import Store from "./store.js";
@@ -92,11 +93,13 @@ function streamProcessId(node: Record<string, unknown>, clients: Map<number, Rec
     return Number(node["application.process.id"] ?? clients.get(Number(node["client.id"]))?.["application.process.id"]);
 }
 
-/** An application that is playing audio. */
+/** An application the user can choose to share the audio of. */
 export interface AudioApp {
-    /** Its main process. */
-    pid: number;
+    /** Its main processes. Its audio is whatever these and their descendants play. */
+    pids: number[];
     name: string;
+    /** Whether it is playing audio right now. */
+    playing: boolean;
 }
 
 /**
@@ -132,11 +135,117 @@ export function listAudioApps(
             node["node.name"];
         apps.set(root, typeof name === "string" && name ? name : String(root));
     }
-    const list = [...apps].map(([pid, name]) => ({ pid, name }));
+    return [...apps].map(([pid, name]) => ({ pids: [pid], name, playing: true }));
+}
+
+/**
+ * The application id in a process's cgroup, from the systemd unit desktops start applications in
+ * ("app[-<launcher>]-<id>-<random>.scope", "app[-<launcher>]-<id>[@<random>].service", or for D-Bus activated
+ * applications "app-dbus-:<bus>-<id>.slice"). Undefined for processes outside such a unit.
+ */
+export function appIdFromCgroup(cgroup: string): string | undefined {
+    const unit = /\/app\.slice\/([^/\n]+)/.exec(cgroup)?.[1];
+    if (!unit) return undefined;
+    // Dashes inside the id are escaped as \x2d, so the dashes left separate the parts.
+    const unescape = (text: string): string =>
+        text.replace(/\\x([0-9a-f]{2})/gi, (_, hex: string) => String.fromCharCode(parseInt(hex, 16)));
+    const dbus = /^app-dbus-:[\d.]+-(.+)\.slice$/.exec(unescape(unit));
+    if (dbus) return dbus[1];
+    const rest = /^app-(.+?)(?:-[^-]+\.scope|@[^@]*\.service|\.service)$/.exec(unit)?.[1];
+    const parts = rest?.split("-") ?? [];
+    if (parts.length === 1 || parts.length === 2) return unescape(parts[parts.length - 1]);
+    return undefined;
+}
+
+/** The directories holding .desktop files, in lookup order. */
+function applicationDirs(): string[] {
+    const home = process.env.XDG_DATA_HOME || path.join(homedir(), ".local/share");
+    const dirs = (process.env.XDG_DATA_DIRS || "/usr/local/share:/usr/share").split(":").filter(Boolean);
+    return [home, ...dirs].map((dir) => path.join(dir, "applications"));
+}
+
+/**
+ * The name of the application with the given id from its .desktop file, or undefined if it has none or hides
+ * itself (background services, autostart helpers).
+ */
+export function desktopEntryName(
+    appId: string,
+    dirs: string[] = applicationDirs(),
+    readFile: (path: string) => string = (path) => readFileSync(path, "utf8"),
+): string | undefined {
+    for (const dir of dirs) {
+        let text: string;
+        try {
+            text = readFile(path.join(dir, `${appId}.desktop`));
+        } catch {
+            continue;
+        }
+        const entry = /^\[Desktop Entry\]$([\s\S]*?)(?=^\[|(?![\s\S]))/m.exec(text)?.[1] ?? "";
+        const key = (name: string): string | undefined => new RegExp(`^${name}=(.*)$`, "m").exec(entry)?.[1].trim();
+        if (key("NoDisplay") === "true" || key("Hidden") === "true") return undefined;
+        return key("Name") || undefined;
+    }
+    return undefined;
+}
+
+/**
+ * The applications running in desktop application units, whether or not they play audio now, without Element.
+ *
+ * @param pids - the running processes.
+ * @param readCgroup - a process's cgroup.
+ * @param isOwnProcess - whether a process belongs to Element.
+ * @param rootOf - the main process of the application a process belongs to.
+ * @param nameOf - an application's display name, or undefined to leave it out.
+ * @param isDescendant - whether a process is (a descendant of) another.
+ */
+export function listRunningApps(
+    pids: number[],
+    readCgroup: (pid: number) => string,
+    isOwnProcess: (pid: number) => boolean,
+    rootOf: (pid: number) => number,
+    nameOf: (appId: string) => string | undefined,
+    isDescendant: (pid: number, ancestor: number) => boolean,
+): AudioApp[] {
+    const byId = new Map<string, number[]>();
+    for (const pid of pids) {
+        let appId: string | undefined;
+        try {
+            appId = appIdFromCgroup(readCgroup(pid));
+        } catch {
+            continue;
+        }
+        if (appId) byId.set(appId, [...(byId.get(appId) ?? []), pid]);
+    }
+    const apps: AudioApp[] = [];
+    for (const [appId, members] of byId) {
+        if (members.some(isOwnProcess)) continue;
+        const name = nameOf(appId);
+        if (!name) continue;
+        // Keep only the topmost processes: a terminal's unit also holds everything started from it, which are
+        // descendants of the terminal anyway and shown on their own once they play.
+        const roots = [...new Set(members.map(rootOf))];
+        const top = roots.filter((pid) => !roots.some((other) => other !== pid && isDescendant(pid, other)));
+        apps.push({ pids: top, name, playing: false });
+    }
+    return apps;
+}
+
+/**
+ * Combine the running applications with the ones playing audio: playing first, then by name. A playing application
+ * that is one of the running ones is shown once, marked as playing. (One started from a terminal is its own entry.)
+ */
+export function mergeAudioApps(running: AudioApp[], playing: AudioApp[]): AudioApp[] {
+    const apps = running.map((app) => ({ ...app }));
+    for (const app of playing) {
+        const owner = apps.find((r) => app.pids.some((pid) => r.pids.includes(pid)));
+        if (owner) owner.playing = true;
+        else apps.push({ ...app });
+    }
+    apps.sort((a, b) => Number(b.playing) - Number(a.playing) || a.name.localeCompare(b.name));
     // Two instances of the same application: tell them apart by process id.
-    return list.map((app) =>
-        list.some((other) => other !== app && other.name === app.name)
-            ? { ...app, name: `${app.name} (${app.pid})` }
+    return apps.map((app) =>
+        apps.some((other) => other !== app && other.name === app.name)
+            ? { ...app, name: `${app.name} (${app.pids[0]})` }
             : app,
     );
 }
@@ -210,7 +319,7 @@ export function planLinks(
  * Which applications' audio a share includes: every application except Element, a single application given by its
  * main process id, or none (when the shared window is Element's own).
  */
-export type AudioScope = { apps: "all" } | { apps: "one"; pid: number } | { apps: "none" };
+export type AudioScope = { apps: "all" } | { apps: "one"; pids: number[] } | { apps: "none" };
 
 /**
  * Parse a desktopCapturer source id ("screen:<id>:<n>" or "window:<handle>:<n>"). On Windows the handle is the HWND,
@@ -238,7 +347,7 @@ export async function audioScopeFor(
     const pid = await findWindowApp(source.handle).catch(() => undefined);
     if (!pid) return { apps: "all" };
     if (isOwnProcess(pid)) return { apps: "none" };
-    return { apps: "one", pid };
+    return { apps: "one", pids: [pid] };
 }
 
 /**
@@ -361,7 +470,7 @@ export class ScreenshareAudio {
     private startedAt = 0;
     private everUsed = false;
     private polling = false;
-    private app: number | undefined;
+    private app: number[] | undefined;
 
     public constructor(
         private readonly runCommand: (command: string, args: string[]) => Promise<string> = run,
@@ -377,9 +486,9 @@ export class ScreenshareAudio {
      * Start the loopback, or keep the running one for a new share. Resolves once the virtual microphone exists, with
      * false if PipeWire is unavailable.
      *
-     * @param app - the main process id of the only application to share, or undefined for all except Element.
+     * @param app - the main processes of the only application to share, or undefined for all except Element.
      */
-    public async start(app?: number): Promise<boolean> {
+    public async start(app?: number[]): Promise<boolean> {
         this.startedAt = Date.now();
         this.everUsed = false;
         this.app = app;
@@ -436,7 +545,7 @@ export class ScreenshareAudio {
         child?.stdin?.end();
     }
 
-    /** The applications currently playing audio, for the user to choose from. */
+    /** The running applications and the ones playing audio, for the user to choose from. */
     public async listApps(): Promise<AudioApp[]> {
         const rootOf = (pid: number): number => {
             try {
@@ -445,7 +554,25 @@ export class ScreenshareAudio {
                 return pid;
             }
         };
-        return listAudioApps(await this.dump(), (pid) => isDescendantOf(pid, process.pid), rootOf);
+        const isOwn = (pid: number): boolean => isDescendantOf(pid, process.pid);
+        const playing = listAudioApps(await this.dump(), isOwn, rootOf);
+        const pids = readdirSync("/proc")
+            .filter((name) => /^\d+$/.test(name))
+            .map(Number);
+        const names = new Map<string, string | undefined>();
+        const nameOf = (appId: string): string | undefined => {
+            if (!names.has(appId)) names.set(appId, desktopEntryName(appId));
+            return names.get(appId);
+        };
+        const running = listRunningApps(
+            pids,
+            (pid) => readFileSync(`/proc/${pid}/cgroup`, "utf8"),
+            isOwn,
+            rootOf,
+            nameOf,
+            (pid, root) => isDescendantOf(pid, root),
+        );
+        return mergeAudioApps(running, playing);
     }
 
     private async dump(): Promise<PipeWireObject[]> {
@@ -464,7 +591,7 @@ export class ScreenshareAudio {
             const shouldShare = (pid: number): boolean => {
                 if (!decided.has(pid)) {
                     const own = isDescendantOf(pid, process.pid);
-                    decided.set(pid, !own && (app === undefined || isDescendantOf(pid, app)));
+                    decided.set(pid, !own && (app === undefined || app.some((root) => isDescendantOf(pid, root))));
                 }
                 return decided.get(pid)!;
             };
@@ -533,7 +660,7 @@ export async function askAudioScope(
     const brand = getConfig().brand;
     const buttons = [
         _t("screenshare_audio|all_apps", { brand }),
-        ...apps.map((app) => app.name),
+        ...apps.map((app) => (app.playing ? _t("screenshare_audio|playing", { name: app.name }) : app.name)),
         _t("screenshare_audio|no_audio"),
     ];
     const options = {
@@ -549,7 +676,7 @@ export async function askAudioScope(
     const { response } = await (parent ? dialog.showMessageBox(parent, options) : dialog.showMessageBox(options));
     if (response === 0) return { apps: "all" };
     const app = apps[response - 1];
-    return app ? { apps: "one", pid: app.pid } : { apps: "none" };
+    return app ? { apps: "one", pids: app.pids } : { apps: "none" };
 }
 
 /** Whether screen sharing goes through the xdg-desktop-portal picker, as electron-main.ts decides. */
@@ -565,7 +692,7 @@ function isOwnProcess(pid: number): boolean {
     return pid === process.pid || (process.platform === "linux" && isDescendantOf(pid, process.pid));
 }
 
-/** On Wayland: ask which application to share, if any is playing. Otherwise share all but Element, as for a screen. */
+/** On Wayland: ask which application to share. With no other application running, share all but Element. */
 async function waylandAudioScope(
     audio: ScreenshareAudio,
     askApp: (apps: AudioApp[]) => Promise<AudioScope>,
@@ -613,16 +740,21 @@ export function wrapDisplayMediaCallback(
             if (process.platform === "win32") {
                 if (scope.apps === "none") return callback(streams);
                 const device =
-                    scope.apps === "one" ? windowsApplicationLoopback(scope.pid) : WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO;
+                    scope.apps === "one"
+                        ? windowsApplicationLoopback(scope.pids[0])
+                        : WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO;
                 // Electron's types only list "loopback" and "loopbackWithMute", but it also accepts any {id, name}
                 // audio device (the "escape hatch" in ElectronBrowserContext::DisplayMediaDeviceChosen).
                 return callback({ ...streams, audio: device as unknown as Streams["audio"] });
             }
-            console.log("Screen share audio: sharing", scope.apps === "one" ? `process ${scope.pid}` : scope.apps);
+            console.log(
+                "Screen share audio: sharing",
+                scope.apps === "one" ? `processes ${scope.pids.join(", ")}` : scope.apps,
+            );
             try {
                 // Sharing Element's own window: no audio, and no leftover loopback for the renderer to pick up.
                 if (scope.apps === "none") audio.stop();
-                else await audio.start(scope.apps === "one" ? scope.pid : undefined);
+                else await audio.start(scope.apps === "one" ? scope.pids : undefined);
             } catch (err) {
                 console.error("Screen share audio: failed to start", err);
             }
