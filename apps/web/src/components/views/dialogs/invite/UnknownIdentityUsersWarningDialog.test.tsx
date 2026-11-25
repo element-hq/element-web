@@ -21,6 +21,7 @@ describe("UnknownIdentityUsersWarningDialog", () => {
     beforeEach(() => {
         getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
+            baseUrl: "https://server",
         });
     });
 

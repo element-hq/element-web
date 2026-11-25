@@ -28,7 +28,6 @@ import {
     type MediaEventInfo,
 } from "matrix-js-sdk/src/types";
 import encrypt from "matrix-encrypt-attachment";
-import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeElement } from "matrix-js-sdk/src/utils";
 import type { AttachmentSend } from "@matrix-org/analytics-events/types/typescript/AttachmentSend";
@@ -57,13 +56,11 @@ import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog"
 import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
-import { blobIsAnimated } from "./utils/Image.ts";
+import { blobIsAnimated, blobIsHiDpiPng } from "./utils/Image.ts";
 import { PosthogAnalytics } from "./PosthogAnalytics.ts";
 import { cacheUploadedMedia } from "./utils/UploadedMediaCache";
-
-// scraped out of a macOS hidpi (5660ppm) screenshot png
-//                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
-const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
+import { stripFileMetadata } from "./utils/media/stripFileMetadata";
+import { MetadataStripError } from "./utils/media/MetadataStripError";
 
 export class UploadCanceledError extends Error {}
 export class UploadFailedError extends Error {
@@ -104,30 +101,7 @@ async function loadImageElement(imageFile: File): Promise<{
 
     // check for hi-dpi PNGs and fudge display resolution as needed.
     // this is mainly needed for macOS screencaps
-    let parsePromise = Promise.resolve(false);
-    if (imageFile.type === "image/png") {
-        // in practice macOS happens to order the chunks so they fall in
-        // the first 0x1000 bytes (thanks to a massive ICC header).
-        // Thus we could slice the file down to only sniff the first 0x1000
-        // bytes (but this makes extractPngChunks choke on the corrupt file)
-        const headers = imageFile; //.slice(0, 0x1000);
-        parsePromise = readFileAsArrayBuffer(headers)
-            .then((arrayBuffer) => {
-                const buffer = new Uint8Array(arrayBuffer);
-                const chunks = extractPngChunks(buffer);
-                for (const chunk of chunks) {
-                    if (chunk.name === "pHYs") {
-                        if (chunk.data.byteLength !== PHYS_HIDPI.length) return false;
-                        return chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
-                    }
-                }
-                return false;
-            })
-            .catch((e) => {
-                console.error("Failed to parse PNG", e);
-                return false;
-            });
-    }
+    const parsePromise = imageFile.type === "image/png" ? blobIsHiDpiPng(imageFile) : Promise.resolve(false);
 
     const [hidpi] = await Promise.all([parsePromise, imgPromise]);
     const width = hidpi ? img.width >> 1 : img.width;
@@ -491,6 +465,7 @@ export default class ContentMessages {
         }
 
         let uploadAll = false;
+        let stripMetadata = SettingsStore.getValue("feature_strip_upload_metadata");
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
         let promBefore: Promise<any> = Promise.resolve();
@@ -505,13 +480,18 @@ export default class ContentMessages {
                     currentIndex: i,
                     totalFiles: okFiles.length,
                 });
-                const [shouldContinue, shouldUploadAll] = await finished;
+                const [shouldContinue, shouldUploadAll, shouldStripMetadata] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
                     uploadAll = true;
                 }
+                if (shouldStripMetadata !== undefined) {
+                    stripMetadata = shouldStripMetadata;
+                }
             }
             sentFileTypes.push(file.type.split("/")[0]);
+            // Capture the choice for this file, as the send may run after later dialogs have changed it.
+            const stripThisFile = stripMetadata;
 
             promBefore = doMaybeLocalRoomAction(
                 roomId,
@@ -523,6 +503,7 @@ export default class ContentMessages {
                         matrixClient,
                         replyToEvent ?? undefined,
                         loopPromiseBefore,
+                        stripThisFile,
                     ),
                 matrixClient,
             );
@@ -584,6 +565,12 @@ export default class ContentMessages {
         dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
     }
 
+    /**
+     * Uploads a file and sends it to a room as a message.
+     *
+     * @param stripMetadata - whether to remove metadata such as location from images first.
+     *     If it cannot be removed then the file is not sent. Defaults to whether the labs feature is enabled.
+     */
     public async sendContentToRoom(
         file: File,
         roomId: string,
@@ -591,6 +578,7 @@ export default class ContentMessages {
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
+        stripMetadata: boolean = SettingsStore.getValue("feature_strip_upload_metadata"),
     ): Promise<void> {
         const fileName = file.name || _t("common|attachment");
         const content: Omit<MediaEventContent, "info"> & { info: Partial<MediaEventInfo> } = {
@@ -627,6 +615,13 @@ export default class ContentMessages {
         }
 
         try {
+            if (stripMetadata) {
+                // Fails rather than sending the original if the metadata can't be removed.
+                file = await stripFileMetadata(file);
+                content.info.size = file.size;
+                if (upload.cancelled) throw new UploadCanceledError();
+            }
+
             if (file.type.startsWith("image/")) {
                 content.msgtype = MsgType.Image;
                 try {
@@ -700,6 +695,11 @@ export default class ContentMessages {
                 if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
                     desc = _t("upload_failed_size", {
                         fileName: upload.fileName,
+                    });
+                } else if (unwrappedError instanceof MetadataStripError) {
+                    desc = _t("upload_failed_metadata", {
+                        fileName: upload.fileName,
+                        option: _t("upload_file|strip_metadata"),
                     });
                 }
                 Modal.createDialog(ErrorDialog, {

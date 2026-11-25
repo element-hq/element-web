@@ -127,6 +127,7 @@ describe("<TextualBody />", () => {
             getRooms: () => [defaultRoom, otherRoom],
             getAccountData: (): MatrixEvent | undefined => undefined,
             isGuest: () => false,
+            baseUrl: "https://server",
             mxcUrlToHttp: (s: string) => s,
             getUserId: () => "@user:example.com",
             fetchRoomEvent: () => {
@@ -379,6 +380,7 @@ describe("<TextualBody />", () => {
                 on: (): void => undefined,
                 removeListener: (): void => undefined,
                 isGuest: () => false,
+                baseUrl: "https://server",
                 mxcUrlToHttp: (s: string) => s,
                 doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
             });
@@ -540,6 +542,7 @@ describe("<TextualBody />", () => {
                 getAccountData: (): MatrixClient | undefined => undefined,
                 getUrlPreview: (url: string) => new Promise(() => {}),
                 isGuest: () => false,
+                baseUrl: "https://server",
                 mxcUrlToHttp: (s: string) => s,
                 doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
             });
@@ -627,6 +630,7 @@ describe("<TextualBody />", () => {
                 getAccountData: (): MatrixEvent | undefined => undefined,
                 getUrlPreview: vi.fn().mockResolvedValue(ogData()),
                 isGuest: () => false,
+                baseUrl: "https://server",
                 mxcUrlToHttp: (s: string) => s,
                 doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
             });
@@ -685,7 +689,11 @@ describe("<TextualBody />", () => {
             await renderPreviews();
 
             const button = await screen.findByRole("button", { name: "View image" });
-            expect(button.querySelector("img")).toHaveAttribute("src", "mxc://example.org/preview");
+            // The tile shows the server's thumbnail; the lightbox below opens the full image.
+            expect(button.querySelector("img")).toHaveAttribute(
+                "src",
+                expect.stringContaining("/thumbnail/example.org/preview?"),
+            );
             expect(screen.queryByRole("img", { name: "matrix.org" })).not.toBeInTheDocument();
             fireEvent.click(button);
             expect(createDialog).toHaveBeenCalledWith(
@@ -756,9 +764,6 @@ describe("<TextualBody />", () => {
         });
 
         it("shows the thumbnail in the tile and the original image in the lightbox", async () => {
-            // Thumbnail URLs get a size, so they can be told apart from the original's.
-            // eslint-disable-next-line no-restricted-properties
-            matrixClient.mxcUrlToHttp = vi.fn((mxc: string, width?: number) => (width ? `${mxc}/thumbnail` : mxc));
             vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
                 ogData({ ...ogImage, "og:image:type": "image/gif" }),
             );
@@ -766,7 +771,10 @@ describe("<TextualBody />", () => {
 
             await renderPreviews();
 
-            expect(screen.getByAltText("Matrix")).toHaveAttribute("src", "mxc://example.org/preview/thumbnail");
+            expect(screen.getByAltText("Matrix")).toHaveAttribute(
+                "src",
+                expect.stringContaining("https://server/_matrix/media/v3/thumbnail/example.org/preview?"),
+            );
             fireEvent.click(screen.getByRole("button", { name: "View image" }));
             expect(createDialog).toHaveBeenCalledWith(
                 ImageView,

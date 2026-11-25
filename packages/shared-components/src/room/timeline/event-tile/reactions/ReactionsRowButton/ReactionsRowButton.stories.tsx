@@ -31,6 +31,7 @@ const ReactionsRowButtonViewWrapperImpl = ({
     tooltipCaption,
     tooltipOpen,
     onClick,
+    setHoveredOrFocused,
     ...snapshotProps
 }: WrapperProps): JSX.Element => {
     const tooltipVm = useMockedViewModel(
@@ -49,6 +50,7 @@ const ReactionsRowButtonViewWrapperImpl = ({
         },
         {
             onClick: onClick ?? fn(),
+            setHoveredOrFocused: setHoveredOrFocused ?? fn(),
         },
     );
 

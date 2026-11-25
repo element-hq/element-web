@@ -7,13 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { type FrameLocator, type Page } from "@playwright/test";
 import {
-    closeReleaseAnnouncementIfExists,
     populateLocalStorageWithCredentials,
     rejectToast,
     routeConfigJson,
 } from "@element-hq/element-web-playwright-common";
 
-import { test, expect } from "../../element-web-test";
+import { test, expect, hideReleaseAnnouncements } from "../../element-web-test";
 
 /**
  * A real call between two users through the real Element Call, against a real MatrixRTC backend (Synapse +
@@ -41,7 +40,6 @@ test.skip(({ homeserverType }) => homeserverType !== "synapse", "Needs Synapse's
 async function settleNewSession(page: Page): Promise<void> {
     await rejectToast(page, "Verify this device");
     await rejectToast(page, "Notifications");
-    await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
 }
 
 /**
@@ -122,7 +120,7 @@ for (const embedding of ["widget", "react"] as const) {
                     permissions: ["microphone", "camera"],
                 });
                 const bobPage = await bobContext.newPage();
-                await routeConfigJson(bobContext, homeserver.baseUrl, config);
+                await routeConfigJson(bobContext, homeserver.baseUrl, hideReleaseAnnouncements(config));
                 await populateLocalStorageWithCredentials(bobPage, bob);
 
                 // A plain, unencrypted room with both in it. Element Web's own room creation lets everyone

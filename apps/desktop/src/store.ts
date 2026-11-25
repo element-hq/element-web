@@ -130,8 +130,8 @@ class StorageWriter {
 /**
  * Storage writer for secrets using safeStorage.
  *
- * Uses the asynchronous safeStorage APIs so that reads and writes of secrets do not block the
- * main process on the OS keychain.
+ * Uses the asynchronous safeStorage APIs, which do not block the main process on the OS keychain
+ * and which support key rotation via the `shouldReEncrypt` flag on decryption.
  */
 class SafeStorageWriter extends StorageWriter {
     /**
@@ -163,7 +163,50 @@ class SafeStorageWriter extends StorageWriter {
     }
 
     public async get(key: string): Promise<string | undefined> {
-        const ciphertext = this.store.get<string, string | undefined>(this.getKey(key));
+        const storeKey = this.getKey(key);
+        const ciphertext = this.store.get<string, string | undefined>(storeKey);
+        const decrypted = await this.decrypt(ciphertext);
+        if (!decrypted) return undefined;
+        if (decrypted.shouldReEncrypt) {
+            // safeStorage has rotated its key, or a stronger one is now available, so write the
+            // secret back under the new key. Failing to do so is not fatal - we still have the
+            // secret - so don't let it break the read.
+            try {
+                await this.reEncrypt(storeKey, ciphertext, decrypted.result);
+            } catch (e) {
+                console.error("Failed to re-encrypt secret after key rotation", e);
+            }
+        }
+        return decrypted.result;
+    }
+
+    /**
+     * As {@link get}, but never writes the secret back, even when safeStorage asks for it to be
+     * re-encrypted. The migration paths must be able to read every secret before deciding whether
+     * to write anything at all, so they cannot use a read which has a write as a side effect.
+     */
+    public async getWithoutReEncrypt(key: string): Promise<string | undefined> {
+        return (await this.decrypt(this.store.get<string, string | undefined>(this.getKey(key))))?.result;
+    }
+
+    /**
+     * Write a secret back under safeStorage's current key, unless the stored value has changed since
+     * it was read. This does not go through {@link set}, which would supersede any newer `set()` of
+     * the key, and it must not recreate a secret which was deleted while it was being read.
+     */
+    private async reEncrypt(
+        storeKey: `safeStorage.${string}`,
+        readCiphertext: string | undefined,
+        secret: string,
+    ): Promise<void> {
+        const ciphertext = await safeStorage.encryptStringAsync(secret);
+        // A set() or delete() of this key has finished since we read it, so our copy is out of date.
+        // A set() which is still encrypting will overwrite our value when it finishes.
+        if (this.store.get(storeKey) !== readCiphertext) return;
+        this.store.set(storeKey, ciphertext.toString("base64"));
+    }
+
+    private async decrypt(ciphertext: string | undefined): Promise<Electron.DecryptStringAsyncReturnValue | undefined> {
         if (!ciphertext) {
             // No secret stored.
             return undefined;
@@ -172,16 +215,14 @@ class SafeStorageWriter extends StorageWriter {
 
         let asyncError: unknown;
         try {
-            // TODO: honour `shouldReEncrypt` by writing the secret back under safeStorage's new key.
-            // This will be enabled in a follow-up change.
-            const { result } = await safeStorage.decryptStringAsync(ciphertextBuffer);
-            return result;
+            return await safeStorage.decryptStringAsync(ciphertextBuffer);
         } catch (e) {
             asyncError = e;
         }
 
         const legacySecret = this.decryptLegacy(ciphertextBuffer);
-        if (legacySecret !== undefined) return legacySecret;
+        // Move the secret to the asynchronous API's key, as the synchronous API is going away.
+        if (legacySecret !== undefined) return { result: legacySecret, shouldReEncrypt: true };
 
         // The secret exists but cannot be decrypted in this session. Returning undefined here (as
         // we used to) is indistinguishable from "no secret stored", which makes callers create or
@@ -199,14 +240,16 @@ class SafeStorageWriter extends StorageWriter {
      * did (on KDE, "<app> Keys" rather than "Chromium Keys"), so it cannot decrypt secrets written by versions
      * of the app which used the synchronous API. See element-web#35802.
      *
-     * The stored ciphertext is left as it is, so earlier versions of the app can still read it.
+     * Secrets decrypted this way are re-encrypted with the asynchronous API when read through {@link get}, so
+     * they stay readable once the synchronous API is removed. Versions of the app which only use the
+     * synchronous API can no longer read them after that.
      *
      * @param ciphertext - The encrypted secret.
      * @returns The secret, or undefined if not on Linux or the synchronous API cannot decrypt it either.
      */
     private decryptLegacy(ciphertext: Buffer): string | undefined {
-        // TODO: the synchronous API is removed in Electron 46. Before upgrading, migrate these secrets to the
-        // asynchronous API, or they become unreadable.
+        // TODO: the synchronous API is removed in Electron 46. Secrets which have not been read (and so
+        // re-encrypted) by then become unreadable.
         if (process.platform !== "linux") return undefined;
         try {
             return safeStorage.decryptString(ciphertext);
@@ -544,7 +587,7 @@ class Store extends ElectronStore<StoreData> {
             const decrypted = new Map<string, string | undefined>();
             try {
                 for (const key in data) {
-                    decrypted.set(secrets.getKey(key), await secrets.get(key));
+                    decrypted.set(secrets.getKey(key), await secrets.getWithoutReEncrypt(key));
                 }
             } catch (e) {
                 // Abort the migration with the data untouched and stick with the basic_text backend

@@ -1,0 +1,443 @@
+{
+    "a11y": {
+        "seek_bar_label": "Bara de căutare audio"
+    },
+    "action": {
+        "back": "Înapoi",
+        "cancel": "Anulați",
+        "click": "Selectați",
+        "close": "Închideți",
+        "collapse": "Restrângeți",
+        "delete": "Ștergeți",
+        "dismiss": "Închideți",
+        "download": "Descărcați",
+        "edit": "Editați",
+        "explore_rooms": "Explorați camerele",
+        "go": "Accesați",
+        "hide": "Ascundeți",
+        "invite": "Invitați",
+        "new_conversation": "Nou",
+        "new_room": "Cameră nouă",
+        "new_section": "Secțiune nouă",
+        "new_video_room": "Cameră video nouă",
+        "no": "Nu",
+        "open_menu": "Deschideți meniul",
+        "pause": "Întrerupeți",
+        "pin": "Fixați",
+        "play": "Redați",
+        "react": "Reacționați",
+        "remove": "Eliminați",
+        "remove_this_device": "Eliminați acest dispozitiv",
+        "reply": "Răspundeți",
+        "reply_in_thread": "Răspundeți în fir",
+        "retry": "Reîncercați",
+        "save": "Salvați",
+        "search": "Căutați",
+        "start_chat": "Începeți conversația",
+        "unpin": "Anulați fixarea",
+        "view_source": "Vizualizați sursa",
+        "yes": "Da"
+    },
+    "common": {
+        "attachment": "Atașament",
+        "encryption_enabled": "Criptare activată",
+        "loading": "Se încarcă…",
+        "options": "Opțiuni",
+        "preferences": "Preferințe"
+    },
+    "composer": {
+        "url_preview": {
+            "clear_all": "Ștergeți tot",
+            "collapse": "Restrângeți previzualizările URL-urilor",
+            "failed": "Nu s-a putut prelua previzualizarea",
+            "loading": "Se preia previzualizarea…",
+            "n_links": {
+                "one": "%(count)s link",
+                "few": "%(count)s linkuri",
+                "other": "%(count)s de linkuri"
+            },
+            "remove": "Eliminați previzualizarea URL-ului"
+        }
+    },
+    "devtools": {
+        "custom_themes": {
+            "add": "Adăugați o temă personalizată",
+            "downloading": "Se descarcă tema personalizată…",
+            "error_already_installed": "O temă cu acest nume este deja instalată.",
+            "error_downloading": "Eroare la descărcarea temei",
+            "error_invalid": "Schema temei este nevalidă.",
+            "error_save_failed": "Nu s-a putut salva modificarea. Este posibil ca procesul să se finalizeze în fundal.",
+            "help": "Introduceți adresa URL a unei teme personalizate pe care doriți să o aplicați.",
+            "installed_heading": "Teme personalizate instalate",
+            "refresh": "Descărcați din nou tema",
+            "url_label": "URL-ul temei personalizate"
+        },
+        "toggle_event": "Sursa evenimentului"
+    },
+    "document_viewer": {
+        "error_load": "Nu se poate încărca acest fișier.",
+        "loading": "Se încarcă documentul…"
+    },
+    "emoji": {
+        "categories": "Categorii",
+        "category_activities": "Activități",
+        "category_animals_nature": "Animale și natură",
+        "category_flags": "Steaguri",
+        "category_food_drink": "Mâncare și băutură",
+        "category_frequently_used": "Utilizate frecvent",
+        "category_objects": "Obiecte",
+        "category_smileys_people": "Emoticoane și oameni",
+        "category_symbols": "Simboluri",
+        "category_travel_places": "Călătorii și locuri",
+        "quick_reactions": "Reacții rapide"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Anulați căutarea",
+        "emoji_picker": "Selector de emoji"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "Veți pierde istoricul conversațiilor criptate și va trebui să vă resetați identitatea digitală dacă eliminați toate dispozitivele.",
+            "error": "Nu s-a putut șterge backupul cheilor. Încercați din nou."
+        }
+    },
+    "error": {
+        "legacy_crypto_unsupported": {
+            "actions": "Vă rugăm fie să treceți la versiunea anterioară <b>%(version)s</b>, fie să eliminați acest dispozitiv.",
+            "description": "%(brand)s a fost actualizat de la o versiune foarte veche și nu poate migra datele de criptare locale într-un format nou.",
+            "title": "Acest dispozitiv nu poate fi utilizat"
+        }
+    },
+    "keyboard": {
+        "shift": "Shift"
+    },
+    "left_panel": {
+        "open_dial_pad": "Deschideți tastatura numerică",
+        "separator_label": "Faceți click sau trageți pentru a extinde"
+    },
+    "menus": {
+        "user_menu": {
+            "clear_status": "Ștergeți starea",
+            "create_an_account": "Creați un cont",
+            "got_an_account": "Aveți deja un cont?",
+            "sign_in": "Conectați-vă",
+            "title": "Meniu utilizator"
+        }
+    },
+    "notifications": {
+        "all_messages": "Toate mesajele",
+        "default_settings": "Potriviți setările implicite",
+        "mark_all_read": "Marcați totul ca citit",
+        "mentions_keywords": "Mențiuni și cuvinte-cheie",
+        "message_didnt_send": "Mesajul nu a fost trimis. Selectați pentru informații.",
+        "mute_room": "Dezactivați notificările din cameră"
+    },
+    "pdf_viewer": {
+        "page_label": "Pagina %(page)s din %(total)s",
+        "page_number": "Numărul paginii",
+        "zoom": "Zoom",
+        "zoom_in": "Măriți",
+        "zoom_out": "Micșorați"
+    },
+    "release_announcement": {
+        "room_list_section_close": "OK",
+        "room_list_section_description": "Grupați-vă conversațiile în secțiuni pentru a le menține organizate și ușor de parcurs.",
+        "room_list_section_title": "Vă prezentăm secțiunile"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Opțiuni pentru cameră"
+        },
+        "history_visibility_badge": {
+            "private": "Membrii noi nu pot vedea istoricul",
+            "shared": "Membrii noi pot vedea istoricul",
+            "world_readable": "Oricine poate vedea istoricul"
+        },
+        "jump_read_marker": "Derulați până la primul mesaj necitit.",
+        "jump_to_bottom_button": "Derulați până la cele mai recente mesaje",
+        "jump_to_date": "Derulați până la data respectivă",
+        "jump_to_date_beginning": "Începutul camerei",
+        "jump_to_date_prompt": "Alegeți o dată la care să vă deplasați",
+        "knock_sent": "Cererea de alăturare a fost trimisă",
+        "pinned_message_badge": "Mesaj fixat",
+        "status_bar": {
+            "contact_account_provider": "Contactați furnizorul de cont",
+            "delete_all": "Ștergeți tot",
+            "exceeded_resource_limit_description": "Contactați furnizorul contului dvs. pentru a continua utilizarea serviciului.",
+            "exceeded_resource_limit_title": "Mesajul dvs. nu a fost trimis deoarece acest serviciu a depășit limita de resurse.",
+            "failed_to_create_room_title": "Nu s-a putut iniția o conversație cu acest utilizator",
+            "homeserver_blocked_title": "Mesajul dvs. nu a fost trimis deoarece acest serviciu a fost blocat de furnizorul contului.",
+            "monthly_user_limit_reached_title": "Mesajul dvs. nu a fost trimis deoarece acest serviciu a atins limita lunară de utilizatori activi.",
+            "requires_consent_agreement_title": "Nu puteți trimite mesaje până nu citiți și acceptați termenii și condițiile noastre.",
+            "retry_all": "Reîncercați tot",
+            "select_messages_to_retry": "Puteți selecta toate mesajele sau doar unele dintre ele pentru a încerca din nou sau a le șterge",
+            "server_connectivity_lost_description": "Mesajele trimise vor fi stocate până când conexiunea va fi restabilită.",
+            "server_connectivity_lost_title": "S-a pierdut conexiunea la server.",
+            "some_messages_not_sent": "Unele mesaje nu au fost trimise"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Deschideți camera %(roomName)s",
+            "drag_cancelled": "Glisarea a fost anulată",
+            "drag_end": "%(source)s a fost plasat pe %(target)s",
+            "drag_end_after": "%(source)s a fost plasat după %(target)s",
+            "drag_end_before": "%(source)s a fost plasat înainte de %(target)s",
+            "drag_end_original": "%(source)s a revenit la poziția inițială",
+            "drag_instructions": "Apăsați tasta spațiu pentru a începe sau a opri glisarea, tastele săgeată pentru a vă deplasa și tasta Escape pentru a anula.",
+            "drag_over": "%(source)s se află deasupra %(target)s",
+            "drag_over_after": "%(source)s va fi plasat după %(target)s",
+            "drag_over_before": "%(source)s va fi plasat înainte de %(target)s",
+            "drag_over_original": "%(source)s va reveni la poziția inițială",
+            "drag_start": "Se glisează %(source)s",
+            "invitation": "Deschideți invitația camerei %(roomName)s.",
+            "mention": {
+                "one": "Deschideți camera %(roomName)s cu 1 mențiune necitită.",
+                "few": "Deschideți camera %(roomName)s cu %(count)s mențiuni necitite.",
+                "other": "Deschideți camera %(roomName)s cu %(count)s de mențiuni necitite."
+            },
+            "unread": {
+                "one": "Deschideți camera %(roomName)s cu 1 mesaj necitit.",
+                "few": "Deschideți camera %(roomName)s cu %(count)s mesaje necitite.",
+                "other": "Deschideți camera %(roomName)s cu %(count)s de mesaje necitite."
+            },
+            "unsent_message": "Deschideți camera %(roomName)s cu un mesaj neexpediat.",
+            "video_call": "Deschideți camera %(roomName)s, apel video în curs.",
+            "voice_call": "Deschideți camera %(roomName)s, apel vocal în curs."
+        },
+        "appearance": "Aspect",
+        "chat_moved": "Conversație mutată",
+        "collapse_all_sections": "Restrângeți toate secțiunile",
+        "collapse_filters": "Reduceți lista de filtre",
+        "empty": {
+            "no_chats": "Nu există încă nicio conversație",
+            "no_chats_description": "Începeți prin a trimite un mesaj cuiva sau prin a crea o cameră",
+            "no_chats_description_no_room_rights": "Începeți prin a trimite mesaje cuiva",
+            "no_invites": "Nu aveți nicio invitație necitită",
+            "no_mentions": "Nu aveți nicio mențiune necitită",
+            "no_people": "Nu aveți încă conversații directe cu nimeni",
+            "no_people_description": "Puteți deselecta filtrele pentru a vedea celelalte conversații",
+            "no_rooms": "Nu sunteți încă în nicio cameră",
+            "no_rooms_description": "Puteți deselecta filtrele pentru a vedea celelalte conversații",
+            "no_unread": "Felicitări! Nu aveți mesaje necitite.",
+            "show_activity": "Vedeți toată activitatea",
+            "show_chats": "Afișați toate conversațiile"
+        },
+        "expand_all_sections": "Extindeți toate secțiunile",
+        "expand_filters": "Extindeți lista de filtre",
+        "filters": {
+            "favourite": "Favorite",
+            "invites": "Invitații",
+            "low_priority": "Prioritate scăzută",
+            "mentions": "Mențiuni",
+            "people": "Persoane",
+            "rooms": "Camere",
+            "unread": "Necitite"
+        },
+        "list_title": "Lista camerelor",
+        "more_options": {
+            "copy_link": "Copiați linkul",
+            "favourited": "Favorită",
+            "leave_room": "Părăsiți camera",
+            "low_priority": "Prioritate scăzută",
+            "mark_read": "Marcați ca citită",
+            "mark_unread": "Marcați ca necitită",
+            "move_to_section": "Mutați în",
+            "remove_from_section": "Elimină din secțiune"
+        },
+        "notification_options": "Opțiuni de notificare",
+        "open_space_menu": "Deschideți meniul spațiului",
+        "primary_filters": "Filtre pentru lista camerelor",
+        "room": {
+            "more_options": "Mai multe opțiuni"
+        },
+        "room_options": "Opțiuni pentru cameră",
+        "section_created": "Secțiune creată",
+        "section_creation": {
+            "description": "Secțiunile sunt doar pentru dvs.",
+            "label": "Numele secțiunii"
+        },
+        "section_header": {
+            "edit_section": "Editați secțiunea",
+            "more_options": "Mai multe opțiuni",
+            "remove_section": "Eliminați secțiunea",
+            "toggle": "Comutați secțiunea %(section)s",
+            "toggle_unread": "Comutați secțiunea %(section)s cu camere necitite"
+        },
+        "show_message_previews": "Afișați previzualizările mesajelor",
+        "sort": "Sortați",
+        "sort_type": {
+            "activity": "Activitate recentă",
+            "atoz": "A-Z",
+            "unread_first": "Cele necitite mai întâi"
+        },
+        "space_menu": {
+            "home": "Pagina pricipală a spațiului",
+            "space_settings": "Setările spațiului"
+        },
+        "unread_messages": "Mesaje necitite"
+    },
+    "status": {
+        "set_status": {
+            "away": "Absent(ă)",
+            "be_right_back": "Revin imediat",
+            "choose_emoji": "Alegeți un emoji",
+            "custom": "Personalizat…",
+            "focus_time": "Timp de concentrare",
+            "in_a_meeting": "Într-o ședință",
+            "on_the_road": "Pe drum",
+            "set_status_prompt": "Care este statusul dvs.?"
+        }
+    },
+    "terms": {
+        "tac_button": "Citiți termenii și condițiile"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nu puteți iniția un fir din acest mesaj."
+    },
+    "time": {
+        "about_day_ago": "acum aproximativ o zi",
+        "about_hour_ago": "acum aproximativ o oră",
+        "about_minute_ago": "acum aproximativ un minut",
+        "few_seconds_ago": "acum câteva secunde",
+        "in_about_day": "peste aproximativ o zi",
+        "in_about_hour": "peste aproximativ o oră",
+        "in_about_minute": "peste aproximativ un minut",
+        "in_few_seconds": "peste câteva secunde",
+        "in_n_days": "peste %(num)s zile",
+        "in_n_hours": "peste %(num)s ore",
+        "in_n_minutes": "peste %(num)s minute",
+        "n_days_ago": "acum %(num)s zile",
+        "n_hours_ago": "acum %(num)s ore",
+        "n_minutes_ago": "acum %(num)s minute"
+    },
+    "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Apel respins",
+                "call_declined_by_us": "Ați respins un apel"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s a inițiat un apel",
+                    "join_button": "Alăturați-vă"
+                },
+                "dm": {
+                    "call_started": "Apel inițiat",
+                    "title": "Apel în curs"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s s-a alăturat",
+                        "few": "%(count)s s-au alăturat",
+                        "other": "%(count)s s-au alăturat"
+                    },
+                    "title": "Apel de grup în curs"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Apelul de grup s-a încheiat"
+                }
+            },
+            "video_call_title": "Apel video",
+            "voice_call_title": "Apel vocal"
+        },
+        "decryption_failure": {
+            "blocked": "Expeditorul v-a blocat accesul la acest mesaj deoarece dispozitivul dvs. nu este verificat",
+            "historical_event_no_key_backup": "Mesajele anterioare nu sunt disponibile pe acest dispozitiv.",
+            "historical_event_unverified_device": "Trebuie să verificați acest dispozitiv pentru a avea acces la mesajele anterioare.",
+            "historical_event_user_not_joined": "Nu aveți acces la acest mesaj",
+            "sender_identity_previously_verified": "Identitatea digitală verificată a expeditorului a fost resetată",
+            "sender_unsigned_device": "Trimis de pe un dispozitiv nesigur.",
+            "unable_to_decrypt": "Nu s-a putut decripta mesajul"
+        },
+        "download_action_decrypting": "Se decriptează",
+        "download_action_downloading": "Se descarcă",
+        "e2e_state": "Starea criptării end-to-end",
+        "m.audio": {
+            "audio_player": "Player audio",
+            "error_downloading_audio": "Eroare la descărcarea fișierului audio",
+            "unnamed_audio": "Fișier audio fără nume"
+        },
+        "m.file": {
+            "error_invalid": "Fișier nevalid"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s a schimbat avatarul camerei în <img/>",
+            "removed": "%(senderDisplayName)s a eliminat avatarul camerei."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Încercare ignorată de a dezactiva criptarea",
+            "disabled": "Criptarea nu este activată",
+            "enabled": "Mesajele din această cameră sunt criptate end-to-end. Când se alătură persoane, le puteți verifica în profilul lor, trebuie doar să selectați poza de profil a acestora.",
+            "enabled_dm": "Mesajele de aici sunt criptate end-to-end. Verificați pe %(displayName)s în profilul său, selectându-i poza de profil.",
+            "enabled_local": "Mesajele din această conversație vor fi criptate end-to-end.",
+            "parameters_changed": "Au fost modificați anumiți parametri de criptare.",
+            "unsupported": "Criptarea utilizată de această cameră nu este acceptată."
+        },
+        "mab": {
+            "collapse_reply_chain": "Restrângeți citatele",
+            "copy_link_thread": "Copiați linkul către fir",
+            "expand_reply_chain": "Extindeți citatele",
+            "label": "Acțiuni pentru mesaj",
+            "view_in_room": "Vizualizați în cameră"
+        },
+        "message_shared_by": "%(displayName)s (%(userId)s) a distribuit acest mesaj deoarece nu erați în cameră când a fost trimis.",
+        "message_timestamp_received_at": "Primit la: %(dateTime)s",
+        "message_timestamp_sent_at": "Trimis la: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Ați ignorat acest utilizator, așa că mesajul său este ascuns. <a>Afișați-l oricum.</a>"
+        },
+        "pending_moderation": "Mesaj în așteptarea moderării",
+        "pending_moderation_reason": "Mesaj în așteptarea moderării: %(reason)s",
+        "url_preview": {
+            "show_n_more": {
+                "one": "Afișați încă %(count)s previzualizare",
+                "few": "Afișați încă %(count)s previzualizări",
+                "other": "Afișați încă %(count)s de previzualizări"
+            },
+            "view_audio": "Vizualizați audio",
+            "view_file": "Vizualizați fișier",
+            "view_image": "Vizualizați imaginea",
+            "view_video": "Vizualizați video"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Conectați un dispozitiv nou",
+        "open_feedback": "Feedback",
+        "open_home": "Acasă",
+        "open_security": "Securitate și confidențialitate",
+        "open_settings": "Toate setările"
+    },
+    "voip": {
+        "element_call_mock": {
+            "config_label": "Configurație efectivă",
+            "configuration": "Configurație",
+            "host_bridge_facts": "supportsReactions: %(supportsReactions)s · allowJoinUnmutedViaIntent: %(allowJoinUnmutedViaIntent)s · close: %(close)s",
+            "in_call": "în timpul apelului",
+            "in_lobby": "în lobby",
+            "initialized_with": "initializeElementCall: %(value)s",
+            "log_label": "Jurnal HostBridge",
+            "mute_audio": "Dezactivați sunet",
+            "mute_video": "Dezactivați sunetul videoclipului",
+            "no_participants": "Nu participă nimeni la acest apel",
+            "participants": "Participanți",
+            "status": "%(roomId)s · intenție %(intent)s · %(state)s · temă %(theme)s · limbă %(language)s",
+            "title": "Element Call (simulat)",
+            "unknown_room": "Cameră necunoscută %(roomId)s",
+            "unmute_audio": "Activați sunetul",
+            "unmute_video": "Activați sunetul videoclipului"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Mutați la stânga",
+            "move_right": "Mutați la dreapta",
+            "remove": "Eliminați pentru toți",
+            "revoke": "Revocați permisiunile",
+            "screenshot": "Faceți o captură de ecran",
+            "start_audio_stream": "Porniți fluxul audio"
+        }
+    }
+}

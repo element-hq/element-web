@@ -197,7 +197,7 @@ export class UrlPreviewGroupViewModel
         const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
         if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
             this.snapshot.merge({
-                previews: [],
+                previews: this.stablePreviews([]),
                 totalPreviewCount: 0,
                 previewsLimited: false,
                 overPreviewLimit: false,
@@ -252,11 +252,26 @@ export class UrlPreviewGroupViewModel
         }
 
         this.snapshot.merge({
-            previews: (previews ?? []).filter((p): p is UrlPreview => !!p && !this.hiddenLinks.has(p.link)),
+            previews: this.stablePreviews(
+                (previews ?? []).filter((p): p is UrlPreview => !!p && !this.hiddenLinks.has(p.link)),
+            ),
             totalPreviewCount: links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: links.length > MAX_PREVIEWS_WHEN_LIMITED,
         });
+    }
+
+    /**
+     * Returns the list already in the snapshot when it and the new list are both empty.
+     *
+     * The snapshot only notifies its subscribers when a field changes identity, and most
+     * messages have nothing to preview: a new empty list each time the snapshot is recomputed
+     * would render every one of them again for no change.
+     * @param previews The newly computed previews.
+     */
+    private stablePreviews(previews: UrlPreview[]): UrlPreview[] {
+        const current = this.snapshot.current.previews;
+        return previews.length === 0 && current.length === 0 ? current : previews;
     }
 
     /**

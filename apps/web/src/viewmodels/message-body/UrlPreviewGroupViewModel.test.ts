@@ -76,6 +76,7 @@ function getViewModel({
     onImageClicked: Mock<(preview: UrlPreview) => void>;
 } {
     const client = getMockClientWithEventEmitter({
+        baseUrl: "https://server",
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     });
@@ -110,6 +111,24 @@ describe("UrlPreviewGroupViewModel", () => {
 
     it("should return no previews by default", () => {
         expect(getViewModel().vm.getSnapshot()).toMatchSnapshot();
+    });
+    it("should not notify subscribers while there is still nothing to preview", async () => {
+        const { vm } = getViewModel();
+        const listener = vi.fn();
+        vm.subscribe(listener);
+        // What a message without links does as it mounts
+        await vm.updateEventElement(document.createElement("div"));
+        await vm.updateUrlPreviewVisible(true);
+        await vm.updateMediaVisible(true);
+        expect(listener).not.toHaveBeenCalled();
+    });
+    it("should not notify subscribers again for a message that opted out of previews", async () => {
+        const { vm } = getViewModel({ showPreview: false });
+        await vm.updateUrlPreviewVisible(true);
+        const listener = vi.fn();
+        vm.subscribe(listener);
+        await vm.updateMediaVisible(true);
+        expect(listener).not.toHaveBeenCalled();
     });
     it("should preview a single valid URL", async () => {
         const { vm, client } = getViewModel();
@@ -212,11 +231,8 @@ describe("UrlPreviewGroupViewModel", () => {
             "matrix:image:size": 10000,
         });
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
+        client.mxcUrlToHttp.mockImplementation((url) => {
             expect(url).toEqual(IMAGE_MXC);
-            if (width) {
-                return "https://example.org/image/thumb";
-            }
             return "https://example.org/image/src";
         });
         const msg = document.createElement("div");

@@ -35,6 +35,7 @@ describe("<MStickerBody/>", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
+        baseUrl: "https://server",
         getRoom: vi.fn(),
         getRooms: vi.fn().mockReturnValue([]),
         getIgnoredUsers: vi.fn(),

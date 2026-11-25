@@ -15,17 +15,10 @@ import { SettingLevel } from "../settings/SettingLevel";
 import ToastStore from "./ToastStore";
 import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
+import { FEATURES, type Feature } from "./ReleaseAnnouncementFeatures";
 
-/**
- * The features are shown in the array order.
- * We include a `_test_dummy` value to enable tests to function even where there are no running release announcements.
- * This value must be at the end of the list.
- */
-const FEATURES = ["room_list_section", "_test_dummy1", "_test_dummy2"] as const;
-/**
- * All the features that can be shown in the release announcements.
- */
-export type Feature = (typeof FEATURES)[number];
+export type { Feature };
+
 /**
  * The stored settings for the release announcements.
  * The boolean is at true when the user has viewed the feature

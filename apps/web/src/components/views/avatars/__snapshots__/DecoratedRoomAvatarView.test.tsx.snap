@@ -18,7 +18,7 @@ exports[`<DecoratedRoomAvatarView /> > should not render a decoration 1`] = `
       height="32px"
       loading="lazy"
       referrerpolicy="no-referrer"
-      src="http://this.is.a.url/avatar.url/room.png"
+      src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
       width="32px"
     />
   </span>
@@ -47,7 +47,7 @@ exports[`<DecoratedRoomAvatarView /> > should render a low priority room decorat
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>
@@ -92,7 +92,7 @@ exports[`<DecoratedRoomAvatarView /> > should render a public room decoration 1`
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>
@@ -137,7 +137,7 @@ exports[`<DecoratedRoomAvatarView /> > should render a video room decoration 1`]
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>
@@ -182,7 +182,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the busy presence 1`] = `
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>
@@ -242,7 +242,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the offline presence 1`] = 
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>
@@ -302,7 +302,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the online presence 1`] = `
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>
@@ -360,7 +360,7 @@ exports[`<DecoratedRoomAvatarView /> > should render the unavailable presence 1`
         height="32px"
         loading="lazy"
         referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
+        src="https://matrix-client.matrix.org/_matrix/media/v3/thumbnail/avatar.url/room?width=32&height=32&method=crop&allow_redirect=true"
         width="32px"
       />
     </span>

@@ -11,7 +11,7 @@ import { type Browser, type Page } from "@playwright/test";
 import { type StartedHomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/HomeserverContainer";
 import { routeConfigJson } from "@element-hq/element-web-playwright-common";
 
-import { test, expect } from "../../element-web-test.ts";
+import { test, expect, hideReleaseAnnouncements } from "../../element-web-test.ts";
 import { logInAccountMas, registerAccountMas } from ".";
 import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
@@ -262,6 +262,6 @@ async function verifyUsingOtherDevice(deviceToVerifyPage: Page, alreadyVerifiedD
  */
 async function newContext(browser: Browser, config: Partial<Partial<Config>>, homeserver: StartedHomeserverContainer) {
     const otherContext = await browser.newContext();
-    await routeConfigJson(otherContext, homeserver.baseUrl, config);
+    await routeConfigJson(otherContext, homeserver.baseUrl, hideReleaseAnnouncements(config));
     return otherContext;
 }

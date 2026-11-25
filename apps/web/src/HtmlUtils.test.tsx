@@ -339,9 +339,7 @@ describe("bodyToNode", () => {
     it.each([[true], [false]])(
         "uses the app-specific MXC image transform when mediaIsVisible is %s",
         (mediaIsVisible) => {
-            const cli = getMockClientWithEventEmitter({
-                mxcUrlToHttp: vi.fn().mockReturnValue("https://example.org/img"),
-            });
+            getMockClientWithEventEmitter({ baseUrl: "https://example.org" });
             const { className, formattedBody } = bodyToNode(
                 {
                     "body": "![foo](mxc://going/knowwhere) Hello there",
@@ -360,13 +358,12 @@ describe("bodyToNode", () => {
                 },
             );
 
-            const { asFragment } = render(
+            const { asFragment, container } = render(
                 <span className={className} dir="auto" dangerouslySetInnerHTML={{ __html: formattedBody! }} />,
             );
             expect(asFragment()).toMatchSnapshot();
             // We do not want to download untrusted media.
-            // eslint-disable-next-line no-restricted-properties
-            expect(cli.mxcUrlToHttp).toHaveBeenCalledTimes(mediaIsVisible ? 1 : 0);
+            expect(container.querySelector("img")?.hasAttribute("src")).toBe(mediaIsVisible);
         },
     );
 

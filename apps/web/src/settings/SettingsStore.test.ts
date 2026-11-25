@@ -293,4 +293,52 @@ describe("SettingsStore", () => {
             });
         });
     });
+
+    describe("registerModuleSettings", () => {
+        it("should return the default value of a registered setting", () => {
+            SettingsStore.registerModuleSettings({
+                "module.test.withDefault": { default: true, supportedLevels: [SettingLevel.DEVICE] },
+            });
+            expect(SettingsStore.getValue("module.test.withDefault" as SettingKey)).toBe(true);
+            expect(SettingsStore.getValue("module.test.withDefault" as SettingKey, null, true)).toBeNull();
+        });
+
+        it.each(["language", "module.noSettingName", "module..emptyModuleName", "module.emptySettingName."])(
+            "should reject the badly formed name %s",
+            (settingName) => {
+                expect(() =>
+                    SettingsStore.registerModuleSettings({
+                        [settingName]: { default: "xx", supportedLevels: [SettingLevel.DEVICE] },
+                    }),
+                ).toThrow(`Module setting "${settingName}" must be named "module.<module name>.<setting name>"`);
+            },
+        );
+
+        it("should not register anything when a name is badly formed", () => {
+            expect(() =>
+                SettingsStore.registerModuleSettings({
+                    "module.test.valid": { default: "valid", supportedLevels: [SettingLevel.DEVICE] },
+                    "language": { default: "xx", supportedLevels: [SettingLevel.DEVICE] },
+                }),
+            ).toThrow();
+            expect(SettingsStore.getValue("language")).not.toBe("xx");
+            // The valid name wasn't registered either, so it can still be registered.
+            expect(() =>
+                SettingsStore.registerModuleSettings({
+                    "module.test.valid": { default: "valid", supportedLevels: [SettingLevel.DEVICE] },
+                }),
+            ).not.toThrow();
+        });
+
+        it("should reject settings that are already registered", () => {
+            SettingsStore.registerModuleSettings({
+                "module.test.duplicate": { default: 1, supportedLevels: [SettingLevel.DEVICE] },
+            });
+            expect(() =>
+                SettingsStore.registerModuleSettings({
+                    "module.test.duplicate": { default: 2, supportedLevels: [SettingLevel.DEVICE] },
+                }),
+            ).toThrow('Setting "module.test.duplicate" is already registered');
+        });
+    });
 });

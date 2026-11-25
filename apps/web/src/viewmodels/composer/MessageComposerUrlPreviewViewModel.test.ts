@@ -30,6 +30,7 @@ function getViewModel({ visible } = { visible: true }): {
     client: { getUrlPreview: Mock; mxcUrlToHttp: Mock };
 } {
     const client = {
+        baseUrl: "https://server",
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     } as unknown as MatrixClient;
@@ -57,10 +58,11 @@ const BUNDLE_ENTRY_WITH_IMAGE = {
     "og:image:height": 128,
 };
 
-type MockClient = { getUrlPreview: Mock; mxcUrlToHttp: Mock };
+type MockClient = { baseUrl: string; getUrlPreview: Mock; mxcUrlToHttp: Mock };
 
 function getMockClient(): MockClient {
     return {
+        baseUrl: "https://server",
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     };
@@ -260,9 +262,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             "matrix:image:size": 10000,
         });
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
+        client.mxcUrlToHttp.mockImplementation((url) => {
             expect(url).toEqual(IMAGE_MXC);
-            if (width) return "https://example.org/image/thumb";
             return "https://example.org/image/src";
         });
         vm.updateWithText({ content: "https://example.org", debounced: false });
@@ -280,7 +281,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
                                 fileSize: 10000,
                                 height: 128,
                                 imageFull: "https://example.org/image/src",
-                                imageThumb: "https://example.org/image/thumb",
+                                imageThumb:
+                                    "https://server/_matrix/media/v3/thumbnail/example.org/abc?width=478&height=200&method=scale&allow_redirect=true",
                                 mxcImageFull: "mxc://example.org/abc",
                                 playable: false,
                                 width: 128,

@@ -8,11 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { type Locator, type Page } from "@playwright/test";
-import {
-    closeReleaseAnnouncementIfExists,
-    rejectToast,
-    rejectToastIfExists,
-} from "@element-hq/element-web-playwright-common";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -145,8 +141,6 @@ test.describe("Element Call", () => {
 
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
-        // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncementIfExists(page, "Introducing Sections");
     });
 
     test.describe("Group Chat", () => {

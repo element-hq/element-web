@@ -20,6 +20,8 @@ import { decryptFile } from "./DecryptFile";
 vi.mock("./DecryptFile", () => ({ decryptFile: vi.fn() }));
 
 const IMAGE_MXC = "mxc://example.org/abc";
+const IMAGE_THUMB =
+    "https://server/_matrix/media/v3/thumbnail/example.org/abc?width=478&height=200&method=scale&allow_redirect=true";
 const BASIC_PREVIEW_OGDATA = {
     "og:title": "This is an example!",
     "og:description": "This is a description",
@@ -41,6 +43,7 @@ function getFetcher(showTooltips = false): {
     moduleApi: { getPreview: Mock };
 } {
     const client = {
+        baseUrl: "https://server",
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
         doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
@@ -141,9 +144,8 @@ describe("UrlPreviewFetcher", () => {
             "matrix:image:size": 10000,
         });
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
+        client.mxcUrlToHttp.mockImplementation((url) => {
             expect(url).toEqual(IMAGE_MXC);
-            if (width) return "https://example.org/image/thumb";
             return "https://example.org/image/src";
         });
         const preview = await fetcher.fetchPreview("https://example.org", true);
@@ -310,8 +312,7 @@ describe("UrlPreviewFetcher", () => {
     it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
         const { fetcher, client } = getFetcher();
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            if (width) return "https://example.org/image/thumb";
+        client.mxcUrlToHttp.mockImplementation((url) => {
             return "https://example.org/image/src";
         });
         client.getUrlPreview.mockResolvedValueOnce({
@@ -380,8 +381,7 @@ describe("UrlPreviewFetcher", () => {
     ])("handles different kinds of opengraph responses %s", async (og) => {
         const { fetcher, client } = getFetcher();
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            if (width) return "https://example.org/image/thumb";
+        client.mxcUrlToHttp.mockImplementation((url) => {
             return "https://example.org/image/src";
         });
         client.getUrlPreview.mockResolvedValueOnce(og);
@@ -411,7 +411,7 @@ describe("UrlPreviewFetcher", () => {
 
         /** The UrlPreview.image that IMAGE_BUNDLE resolves to once the media is mocked. */
         const IMAGE_PREVIEW: NonNullable<UrlPreview["image"]> = {
-            imageThumb: "https://example.org/image/thumb",
+            imageThumb: IMAGE_THUMB,
             imageFull: "https://example.org/image/src",
             imageType: "image/png",
             mxcImageFull: IMAGE_MXC,
@@ -422,9 +422,8 @@ describe("UrlPreviewFetcher", () => {
 
         function mockMedia(client: { mxcUrlToHttp: Mock }): void {
             // eslint-disable-next-line no-restricted-properties
-            client.mxcUrlToHttp.mockImplementation((url, width) => {
+            client.mxcUrlToHttp.mockImplementation((url) => {
                 expect(url).toEqual(IMAGE_MXC);
-                if (width) return "https://example.org/image/thumb";
                 return "https://example.org/image/src";
             });
         }

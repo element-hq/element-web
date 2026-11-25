@@ -100,6 +100,7 @@ import { Filter } from "./Filter";
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
 const AVATAR_SIZE = "24px";
+const NO_PUBLIC_ROOMS: IPublicRoomsChunkRoom[] = [];
 
 interface IProps {
     initialText?: string;
@@ -381,6 +382,12 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     useDebouncedCallback(filter === Filter.People, searchPeople, searchParams);
     useDebouncedCallback(filter === Filter.People, searchProfileInfo, searchParams);
 
+    // Public rooms are only shown under their own filters. Leaving them out otherwise means that a search still
+    // running when its filter is removed does not change the results when it finishes, as that would move the
+    // keyboard selection back to the first option.
+    const shownPublicRooms =
+        filter === Filter.PublicRooms || filter === Filter.PublicSpaces ? publicRooms : NO_PUBLIC_ROOMS;
+
     const possibleResults = useMemo<Result[]>(() => {
         const visibleRooms = findVisibleRooms(cli);
         const roomResults = visibleRooms.map(toRoomResult);
@@ -430,9 +437,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             })),
             ...roomResults,
             ...userResults,
-            ...publicRooms.map(toPublicRoomResult),
+            ...shownPublicRooms.map(toPublicRoomResult),
         ].filter((result) => filter === null || result.filter.includes(filter));
-    }, [cli, userDirectorySearchResults, profile, publicRooms, filter]);
+    }, [cli, userDirectorySearchResults, profile, shownPublicRooms, filter]);
 
     const results = useMemo<Record<Section, Result[]>>(() => {
         const results: Record<Section, Result[]> = {
@@ -523,8 +530,15 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         const newQuery = transformSearchTerm(e.currentTarget.value);
         _setQuery(newQuery);
     };
+    // The first option stays selected as the results change, until the user moves the selection themselves, so that
+    // results arriving late do not take the selection from under them. Declared before the effect below so it runs first.
+    const userMovedSelection = useRef(false);
+    useEffect(() => {
+        userMovedSelection.current = false;
+    }, [trimmedQuery, filter]);
     useEffect(() => {
         const timeout = setTimeout(() => {
+            if (userMovedSelection.current) return;
             const node = rovingContext.state.nodes[0];
             if (node) {
                 rovingContext.dispatch({
@@ -1242,6 +1256,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         if (node) {
+            userMovedSelection.current = true;
             rovingContext.dispatch({
                 type: RovingStateActionType.SetFocus,
                 payload: { node },

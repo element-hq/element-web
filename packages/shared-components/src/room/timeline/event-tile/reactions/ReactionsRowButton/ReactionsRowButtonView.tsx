@@ -52,6 +52,10 @@ export interface ReactionsRowButtonViewActions {
      * Called when the user activates the reaction button.
      */
     onClick: () => void;
+    /**
+     * Called when the button gains or loses hover or focus, so custom reaction images can animate only then.
+     */
+    setHoveredOrFocused: (hoveredOrFocused: boolean) => void;
 }
 
 export type ReactionsRowButtonViewModel = ViewModel<ReactionsRowButtonViewSnapshot> & ReactionsRowButtonViewActions;
@@ -96,6 +100,10 @@ export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewPr
                 aria-label={ariaLabel}
                 aria-disabled={ariaDisabled}
                 onClick={isDisabled ? undefined : vm.onClick}
+                onMouseEnter={() => vm.setHoveredOrFocused(true)}
+                onMouseLeave={() => vm.setHoveredOrFocused(false)}
+                onFocus={() => vm.setHoveredOrFocused(true)}
+                onBlur={() => vm.setHoveredOrFocused(false)}
             >
                 {reactionContent}
                 <span className={styles.reactionsRowButtonCount} aria-hidden="true">
