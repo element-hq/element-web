@@ -18,6 +18,7 @@ import {
     type MatrixRTCSession,
     MatrixRTCSessionEvent,
     type MatrixRTCSessionEventHandlerMap,
+    RTC_CALL_INTENT_VIDEO,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import {
@@ -115,7 +116,7 @@ describe("ElementCallMock", () => {
             skipLobby: true,
             hideScreensharing: true,
         });
-        expect(shown.effective.callIntent).toBe("video");
+        expect(shown.effective.callIntent).toBe(RTC_CALL_INTENT_VIDEO);
     });
 
     it("shows the theme and language it is given, and follows changes to them", () => {

@@ -82,6 +82,14 @@ export default defineProject({
         globals: false,
         environment: "node",
         pool: "threads",
+        server: {
+            deps: {
+                // Vitest hands ES modules under node_modules to Node's own loader, which rejects directory
+                // imports like `matrix-js-sdk/lib/matrixrtc`. Processing the component through Vite instead
+                // resolves these imports to the directory's index file.
+                inline: [/@element-hq\/element-call-component/],
+            },
+        },
         projects: [
             {
                 extends: true,
