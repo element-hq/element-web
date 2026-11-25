@@ -3041,7 +3041,7 @@
             "permissions": "Allow microphone and camera access",
             "request_permissions": "Request",
             "share_system_audio": "Include audio from other apps when sharing your screen",
-            "share_system_audio_description": "Sharing a window includes that app's audio. Sharing a whole screen includes all apps except Element.",
+            "share_system_audio_description": "Sharing a window includes that app's audio. Sharing a whole screen includes all apps except Element. On Wayland, you choose the app after picking what to share.",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
             "video_section": "Video settings",

@@ -12,11 +12,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     addScreenshareAudio,
     appRootProcess,
+    askAudioScope,
     audioScopeFor,
     findWindowsWindowApp,
     findX11WindowApp,
     isDescendantOf,
     isScreenshareAudioSupported,
+    listAudioApps,
     MIX_NODE_NAME,
     mixChannelsFor,
     parseSourceId,
@@ -37,7 +39,12 @@ const { mockStore, osRelease } = vi.hoisted(() => ({
 
 vi.mock("node:os", () => ({ release: osRelease }));
 
-vi.mock("electron", () => ({ webFrameMain: { fromId: vi.fn() } }));
+const { showMessageBox } = vi.hoisted(() => ({
+    showMessageBox: vi.fn<(...args: unknown[]) => Promise<{ response: number }>>(),
+}));
+vi.mock("electron", () => ({ webFrameMain: { fromId: vi.fn() }, dialog: { showMessageBox } }));
+vi.mock("./language-helper.js", () => ({ _t: (key: string) => key }));
+vi.mock("./config.js", () => ({ getConfig: () => ({ brand: "Element" }) }));
 vi.mock("./store.js", () => ({ default: { instance: mockStore } }));
 
 const MIX = 10;
@@ -171,6 +178,71 @@ describe("planLinks", () => {
     it("keeps running while the source is recorded", () => {
         const plan = planLinks(graph([link(SOURCE, 111, RECORDER, 999)]), allButOwn, true);
         expect(plan).toMatchObject({ keepRunning: true, inUse: true });
+    });
+});
+
+describe("listAudioApps", () => {
+    it("lists other apps once each, by name, without Element or filter streams", () => {
+        const objects = graph([
+            node(60, {
+                "media.class": "Stream/Output/Audio",
+                "application.process.id": 201,
+                "application.name": "Firefox",
+            }),
+            {
+                id: 60,
+                type: "PipeWire:Interface:Client",
+                info: { props: { "application.process.id": 250, "application.name": "mpv" } },
+            },
+        ]);
+        // Process 201 is a child of Firefox's main process 200.
+        const apps = listAudioApps(
+            objects,
+            (pid) => pid === 300,
+            (pid) => (pid === 201 ? 200 : pid),
+        );
+        expect(apps).toEqual([
+            { pid: 200, name: "firefox" },
+            { pid: 250, name: "mpv" },
+        ]);
+    });
+
+    it("tells apart two instances of the same app", () => {
+        const objects = [
+            node(1, { "media.class": "Stream/Output/Audio", "application.process.id": 10, "application.name": "mpv" }),
+            node(2, { "media.class": "Stream/Output/Audio", "application.process.id": 20, "application.name": "mpv" }),
+        ];
+        expect(
+            listAudioApps(
+                objects,
+                () => false,
+                (pid) => pid,
+            ).map((app) => app.name),
+        ).toEqual(["mpv (10)", "mpv (20)"]);
+    });
+});
+
+describe("askAudioScope", () => {
+    const apps = [
+        { pid: 200, name: "Firefox" },
+        { pid: 250, name: "mpv" },
+    ];
+
+    it.each([
+        [0, { apps: "all" }],
+        [1, { apps: "one", pid: 200 }],
+        [2, { apps: "one", pid: 250 }],
+        [3, { apps: "none" }],
+    ])("maps button %i to %j", async (response, scope) => {
+        showMessageBox.mockResolvedValueOnce({ response });
+        await expect(askAudioScope(apps, null)).resolves.toEqual(scope);
+        expect(showMessageBox).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                buttons: ["screenshare_audio|all_apps", "Firefox", "mpv", "screenshare_audio|no_audio"],
+                defaultId: 0,
+                cancelId: 3,
+            }),
+        );
     });
 });
 
@@ -387,7 +459,7 @@ describe("wrapDisplayMediaCallback", () => {
     it("starts the loopback before handing back the picked source", async () => {
         const audio = { start: vi.fn(async () => true) } as unknown as ScreenshareAudio;
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio)({ video });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, wayland: false })({ video });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video }));
         expect(audio.start).toHaveBeenCalledWith(undefined);
     });
@@ -395,7 +467,11 @@ describe("wrapDisplayMediaCallback", () => {
     it("starts the loopback for only the shared window's app", async () => {
         const audio = { start: vi.fn(async () => true) } as unknown as ScreenshareAudio;
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio, async () => 200)({ video: window });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            findApp: async () => 200,
+            wayland: false,
+        })({ video: window });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
         expect(audio.start).toHaveBeenCalledWith(200);
     });
@@ -403,7 +479,11 @@ describe("wrapDisplayMediaCallback", () => {
     it("shares no audio with Element's own window", async () => {
         const audio = { start: vi.fn(), stop: vi.fn() } as unknown as ScreenshareAudio;
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio, async () => process.pid)({ video: window });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio,
+            findApp: async () => process.pid,
+            wayland: false,
+        })({ video: window });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
         expect(callback).toHaveBeenCalledTimes(1);
         expect(audio.start).not.toHaveBeenCalled();
@@ -413,23 +493,72 @@ describe("wrapDisplayMediaCallback", () => {
     it("still hands back the source if the loopback fails", async () => {
         const audio = { start: vi.fn(async () => Promise.reject(new Error("no pipewire"))) };
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio as unknown as ScreenshareAudio)({ video });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, {
+            audio: audio as unknown as ScreenshareAudio,
+            wayland: false,
+        })({ video });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video }));
     });
 
     it("does nothing when the picker was cancelled", () => {
         const audio = { start: vi.fn() } as unknown as ScreenshareAudio;
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio)({ video: { id: "", name: "" } });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio })({ video: { id: "", name: "" } });
         expect(callback).toHaveBeenCalled();
         expect(audio.start).not.toHaveBeenCalled();
+    });
+
+    it("asks which app to share on Wayland", async () => {
+        const audio = {
+            start: vi.fn(async () => true),
+            listApps: vi.fn(async () => [{ pid: 250, name: "mpv" }]),
+        } as unknown as ScreenshareAudio;
+        const askApp = vi.fn(async () => ({ apps: "one" as const, pid: 250 }));
+        const callback = vi.fn();
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
+            video: window,
+        });
+        await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
+        expect(askApp).toHaveBeenCalledWith([{ pid: 250, name: "mpv" }]);
+        expect(audio.start).toHaveBeenCalledWith(250);
+    });
+
+    it("does not ask on Wayland when no app is playing", async () => {
+        const audio = {
+            start: vi.fn(async () => true),
+            listApps: vi.fn(async () => []),
+        } as unknown as ScreenshareAudio;
+        const askApp = vi.fn();
+        const callback = vi.fn();
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
+            video: window,
+        });
+        await vi.waitFor(() => expect(callback).toHaveBeenCalled());
+        expect(askApp).not.toHaveBeenCalled();
+        expect(audio.start).toHaveBeenCalledWith(undefined);
+    });
+
+    it("shares no audio on Wayland when the user says so", async () => {
+        const audio = {
+            start: vi.fn(),
+            stop: vi.fn(),
+            listApps: vi.fn(async () => [{ pid: 250, name: "mpv" }]),
+        } as unknown as ScreenshareAudio;
+        const callback = vi.fn();
+        const askApp = async (): Promise<{ apps: "none" }> => ({ apps: "none" });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, askApp, wayland: true })({
+            video: window,
+        });
+        await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
+        expect(audio.start).not.toHaveBeenCalled();
+        expect(audio.stop).toHaveBeenCalled();
     });
 
     it("hands Windows 11 Chromium's loopback device without our own audio for a screen", async () => {
         setPlatform("win32");
         const audio = { start: vi.fn() } as unknown as ScreenshareAudio;
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, audio)({ video });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { audio, wayland: false })({ video });
         await vi.waitFor(() =>
             expect(callback).toHaveBeenCalledWith({ video, audio: WINDOWS_LOOPBACK_WITHOUT_OWN_AUDIO }),
         );
@@ -439,7 +568,7 @@ describe("wrapDisplayMediaCallback", () => {
     it("hands Windows 11 the shared window's application loopback", async () => {
         setPlatform("win32");
         const callback = vi.fn();
-        wrapDisplayMediaCallback({ audioRequested: true }, callback, undefined, async () => 4321)({ video: window });
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { findApp: async () => 4321 })({ video: window });
         await vi.waitFor(() =>
             expect(callback).toHaveBeenCalledWith({ video: window, audio: windowsApplicationLoopback(4321) }),
         );
@@ -449,12 +578,7 @@ describe("wrapDisplayMediaCallback", () => {
     it("shares no audio with Element's own window on Windows", async () => {
         setPlatform("win32");
         const callback = vi.fn();
-        wrapDisplayMediaCallback(
-            { audioRequested: true },
-            callback,
-            undefined,
-            async () => process.pid,
-        )({
+        wrapDisplayMediaCallback({ audioRequested: true }, callback, { findApp: async () => process.pid })({
             video: window,
         });
         await vi.waitFor(() => expect(callback).toHaveBeenCalledWith({ video: window }));
