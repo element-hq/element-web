@@ -8,9 +8,8 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@test-utils";
 import userEvent from "@testing-library/user-event";
-// Real pointer input, for the parts of this that CSS :hover decides. Kept apart from the dispatched
-// kind, whose untrusted events leave the browser's last input modality, and so :focus-visible, alone.
-import { userEvent as pointer } from "vitest/browser";
+// Use real browser input for interactions that depend on CSS :hover or :focus-visible.
+import { commands, userEvent as browserUser } from "vitest/browser";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
 
@@ -131,14 +130,14 @@ describe("<RoomListItemView />", () => {
     it("should show hover menu when showMoreOptionsMenu is true", async () => {
         render(<WithHoverMenu />);
 
-        await pointer.hover(screen.getByRole("option"));
+        await browserUser.hover(screen.getByRole("option"));
         expect(trigger("More Options")).not.toBeNull();
     });
 
     it("should hide hover menu when showMoreOptionsMenu is false", async () => {
         render(<WithoutHoverMenu />);
 
-        await pointer.hover(screen.getByRole("option"));
+        await browserUser.hover(screen.getByRole("option"));
         expect(trigger("More Options")).toBeNull();
     });
 
@@ -147,10 +146,10 @@ describe("<RoomListItemView />", () => {
         const option = screen.getByRole("option");
         expect(trigger("More Options")).toBeNull();
 
-        await pointer.hover(option);
+        await browserUser.hover(option);
         expect(trigger("More Options")).not.toBeNull();
 
-        await pointer.unhover(option);
+        await browserUser.unhover(option);
         await waitFor(() => expect(trigger("More Options")).toBeNull());
     });
 
@@ -160,7 +159,7 @@ describe("<RoomListItemView />", () => {
             render(<WithHoverMenu showNotificationMenu={true} />);
             const option = screen.getByRole("option");
 
-            await pointer.hover(option);
+            await browserUser.hover(option);
             // Dispatched rather than clicked for real, which would leave the browser treating the
             // next programmatic focus as a mouse focus and defeat the keyboard test below.
             fireEvent.pointerDown(trigger(name)!, { button: 0, pointerType: "mouse" });
@@ -190,5 +189,31 @@ describe("<RoomListItemView />", () => {
         option.blur();
         await waitFor(() => expect(option.className).not.toMatch(/keyboardActive/));
         expect(moreButton).not.toBeVisible();
+    });
+
+    it("restores focus to the notification trigger after clicking the row and tabbing to it", async () => {
+        render(
+            <>
+                <WithHoverMenu showNotificationMenu={true} />
+                <button type="button">Next control</button>
+            </>,
+        );
+
+        await browserUser.click(screen.getByRole("option"));
+        await browserUser.keyboard("{Tab}{Tab}");
+        const notificationButton = screen.getByRole("button", { name: "Notification options" });
+        expect(notificationButton).toHaveFocus();
+
+        await browserUser.keyboard("{Enter}");
+        await screen.findByRole("menu", { name: "Notification options" });
+        await commands.parkPointer();
+        await browserUser.keyboard("{ArrowDown}{Escape}");
+
+        await waitFor(() => expect(notificationButton).toHaveFocus());
+        expect(notificationButton).toBeVisible();
+
+        await browserUser.keyboard("{Tab}");
+        expect(screen.getByRole("button", { name: "Next control" })).toHaveFocus();
+        await waitFor(() => expect(notificationButton).not.toBeInTheDocument());
     });
 });
