@@ -148,9 +148,17 @@ async function collectClientInfo(client: MatrixClient, body: FormData): Promise<
 }
 
 /**
+ * How long to spend finding out the homeserver's version, so that a slow or unreachable homeserver doesn't stop
+ * the report from being sent.
+ */
+const SERVER_VERSION_TIMEOUT_MS = 5000;
+
+/**
  * Collects information about the home server.
  */
 async function collectSynapseSpecific(client: MatrixClient, body: FormData): Promise<void> {
+    // One time limit for all the requests below, as each is tried only if the one before it fails.
+    const signal = AbortSignal.timeout(SERVER_VERSION_TIMEOUT_MS);
     try {
         // XXX: This is synapse-specific but better than nothing until MSC support for a server version endpoint
         const data = await client.http.request<Record<string, any>>(
@@ -160,6 +168,7 @@ async function collectSynapseSpecific(client: MatrixClient, body: FormData): Pro
             undefined,
             {
                 prefix: "/_synapse/admin/v1",
+                abortSignal: signal,
             },
         );
         Object.keys(data).forEach((key) => {
@@ -169,7 +178,7 @@ async function collectSynapseSpecific(client: MatrixClient, body: FormData): Pro
         try {
             // XXX: This relies on the federation listener being delegated via well-known
             // or at the same place as the client server endpoint
-            const data = await getServerVersionFromFederationApi(client);
+            const data = await getServerVersionFromFederationApi(client, signal);
             body.append("matrix_hs_name", data.server.name);
             body.append("matrix_hs_version", data.server.version);
         } catch {
@@ -178,6 +187,7 @@ async function collectSynapseSpecific(client: MatrixClient, body: FormData): Pro
                 const res = await fetch(client.http.getUrl("/login"), {
                     method: "GET",
                     mode: "cors",
+                    signal,
                 });
                 if (res.headers.has("server")) {
                     body.append("matrix_hs_server", res.headers.get("server")!);

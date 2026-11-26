@@ -21,7 +21,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "test-utils";
 
 import SpotlightDialog from "./SpotlightDialog";
@@ -355,6 +355,57 @@ describe("Spotlight Dialog", () => {
             filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
             expect(filterChip).not.toBeInTheDocument();
         });
+
+        it("keeps the keyboard selection when a public room search finishes after its filter was cleared", async () => {
+            const search = Promise.withResolvers<Awaited<ReturnType<MatrixClient["publicRooms"]>>>();
+            vi.mocked(mockedClient.publicRooms).mockReturnValue(search.promise);
+            render(<SpotlightDialog initialFilter={Filter.PublicSpaces} onFinished={() => null} />);
+            // start the debounced search, which is left running
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+            expect(mockedClient.publicRooms).toHaveBeenCalled();
+
+            const input = document.querySelector(".mx_SpotlightDialog_searchBox input")!;
+            fireEvent.keyDown(input, { key: "Backspace" });
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+            const firstOption = input.getAttribute("aria-activedescendant");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            const selectedOption = input.getAttribute("aria-activedescendant");
+            expect(selectedOption).not.toBe(firstOption);
+
+            await act(async () => {
+                search.resolve({ chunk: [testPublicRoom], total_room_count_estimate: 1 });
+                await flushPromisesWithFakeTimers();
+            });
+            // let any change of selection that the results cause happen
+            await act(async () => {
+                vi.advanceTimersByTime(200);
+            });
+
+            expect(input).toHaveAttribute("aria-activedescendant", selectedOption);
+        });
+
+        it("keeps a keyboard selection made straight after the filter was cleared", async () => {
+            render(<SpotlightDialog initialFilter={Filter.PublicSpaces} onFinished={() => null} />);
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const input = document.querySelector(".mx_SpotlightDialog_searchBox input")!;
+            fireEvent.keyDown(input, { key: "Backspace" });
+            // move the selection before the dialog has run its deferred reset of the selection
+            const firstOption = input.getAttribute("aria-activedescendant");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            const selectedOption = input.getAttribute("aria-activedescendant");
+            expect(selectedOption).not.toBe(firstOption);
+
+            await act(async () => {
+                vi.advanceTimersByTime(200);
+            });
+
+            expect(input).toHaveAttribute("aria-activedescendant", selectedOption);
+        });
+
         it("with people filter", async () => {
             render(
                 <SpotlightDialog

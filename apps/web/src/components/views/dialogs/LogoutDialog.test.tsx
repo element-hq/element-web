@@ -142,14 +142,14 @@ describe("LogoutDialog", () => {
     it("Prompts user to set up recovery if there is a backup on the server but no secret storage", async () => {
         mockCrypto.getKeyBackupInfo.mockResolvedValue({} as KeyBackupInfo);
         const rendered = renderComponent();
-        await rendered.findByText("Get recovery key");
+        await rendered.findByText("Create recovery key");
         expect(rendered.container).toMatchSnapshot();
     });
 
     it("Prompts user to set up recovery if there is no backup on the server", async () => {
         mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
         const rendered = renderComponent();
-        await rendered.findByText("Get recovery key");
+        await rendered.findByText("Create recovery key");
         expect(rendered.container).toMatchSnapshot();
     });
 
@@ -215,7 +215,7 @@ describe("LogoutDialog", () => {
 
         mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
         const rendered = renderComponent();
-        await rendered.findByText("Get recovery key");
+        await rendered.findByText("Create recovery key");
         expect(rendered.container).toMatchSnapshot();
     });
 
@@ -227,7 +227,7 @@ describe("LogoutDialog", () => {
                 throw new Error("beep");
             });
             const rendered = renderComponent();
-            await expect(rendered.findByText("Get recovery key")).resolves.toBeVisible();
+            await expect(rendered.findByText("Create recovery key")).resolves.toBeVisible();
         });
     });
 
@@ -243,7 +243,7 @@ describe("LogoutDialog", () => {
             mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
             mockCrypto.isSecretStorageReady.mockResolvedValue(true);
             renderComponent({ onFinished });
-            fireEvent.click(await screen.findByRole("button", { name: "Generate new recovery key" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Create new recovery key" }));
         }
 
         it("generates a key in the dialog when recovery is set up", async () => {
@@ -255,7 +255,7 @@ describe("LogoutDialog", () => {
         it("generates a key in the dialog when recovery is not set up", async () => {
             mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
             renderComponent();
-            fireEvent.click(await screen.findByRole("button", { name: "Get recovery key" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Create recovery key" }));
             await expect(screen.findByText(keyFlow(false))).resolves.toBeVisible();
             expect(dispatch.dispatch).not.toHaveBeenCalled();
         });
@@ -278,7 +278,7 @@ describe("LogoutDialog", () => {
         it("confirms the backup is set up once finished when recovery was not set up", async () => {
             mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
             renderComponent();
-            fireEvent.click(await screen.findByRole("button", { name: "Get recovery key" }));
+            fireEvent.click(await screen.findByRole("button", { name: "Create recovery key" }));
             fireEvent.click(await screen.findByRole("button", { name: "Stub finish" }));
             await expect(screen.findByText("Your backup is now fully set up")).resolves.toBeVisible();
             expect(screen.queryByText("Your new recovery key is now active")).not.toBeInTheDocument();
