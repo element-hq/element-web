@@ -60,6 +60,41 @@ const consoleFunctionsToLevels = {
 type LogFunctionName = keyof typeof consoleFunctionsToLevels;
 
 // A class which monkey-patches the global console and stores log lines.
+/**
+ * The deepest `Error.cause` to include in a log line. Stops a chain which refers back to itself from
+ * looping forever.
+ */
+const MAX_ERROR_CAUSE_DEPTH = 5;
+
+/**
+ * Convert a value passed to a console function into the text written to the log.
+ *
+ * Errors include their `cause`, as that often holds the underlying error (for example the
+ * `DOMException` from a failed IndexedDB request) which explains the error being logged.
+ *
+ * @param arg - the value passed to the console function.
+ * @param depth - how many causes deep this value is.
+ * @returns the text to write to the log.
+ */
+function formatLogArg(arg: unknown, depth = 0): string {
+    let text: string;
+    if (arg instanceof DOMException) {
+        text = arg.message + ` (${arg.name} | ${arg.code})`;
+    } else if (arg instanceof Error) {
+        text = arg.message + (arg.stack ? `\n${arg.stack}` : "");
+    } else if (typeof arg === "object") {
+        return JSON.stringify(arg, getCircularReplacer());
+    } else {
+        // Left as-is so that joining the line handles it as it always has.
+        return arg as string;
+    }
+
+    if (arg.cause !== undefined && depth < MAX_ERROR_CAUSE_DEPTH) {
+        text += `\nCaused by: ${formatLogArg(arg.cause, depth + 1)}`;
+    }
+    return text;
+}
+
 export class ConsoleLogger {
     private logs = "";
     private originalFunctions: { [key in LogFunctionName]?: LogFunction } = {};
@@ -86,17 +121,7 @@ export class ConsoleLogger {
         const ts = new Date().toISOString();
 
         // Convert objects and errors to helpful things
-        args = args.map((arg) => {
-            if (arg instanceof DOMException) {
-                return arg.message + ` (${arg.name} | ${arg.code})`;
-            } else if (arg instanceof Error) {
-                return arg.message + (arg.stack ? `\n${arg.stack}` : "");
-            } else if (typeof arg === "object") {
-                return JSON.stringify(arg, getCircularReplacer());
-            } else {
-                return arg;
-            }
-        });
+        args = args.map((arg) => formatLogArg(arg));
 
         // Some browsers support string formatting which we're not doing here
         // so the lines are a little more ugly but easy to implement / quick to
