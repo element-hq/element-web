@@ -42,7 +42,11 @@ export interface SendMessageParams {
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     roomContext: Pick<IRoomState, "timelineRenderingType" | "room">;
-    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
+    /**
+     * The composer's URL previews to bundle with the message, or undefined if URL previews are
+     * turned off for the sender.
+     */
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot | undefined;
 }
 
 export async function sendMessage(

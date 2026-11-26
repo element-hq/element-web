@@ -56,27 +56,32 @@ describe("<EventEditor />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should preserve the com.beeper.linkpreviews field when editing an event", () => {
-        const cli = createTestClient();
-        const linkPreviews = [{ "og:title": "Example", "matrix:image:size": 1234, "og:url": "https://example.com" }];
-        const mxEvent = mkEvent({
-            event: true,
-            type: EventType.RoomMessage,
-            room: "!roomId",
-            user: "@alice:example.com",
-            content: {
-                "body": "https://example.com",
-                "msgtype": MsgType.Text,
-                "com.beeper.linkpreviews": linkPreviews,
-            },
-        });
+    it.each(["m.url_previews", "com.beeper.linkpreviews"])(
+        "should preserve the %s field when editing an event",
+        (field) => {
+            const cli = createTestClient();
+            const linkPreviews = [
+                { "og:title": "Example", "matrix:image:size": 1234, "og:url": "https://example.com" },
+            ];
+            const mxEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: "!roomId",
+                user: "@alice:example.com",
+                content: {
+                    body: "https://example.com",
+                    msgtype: MsgType.Text,
+                    [field]: linkPreviews,
+                },
+            });
 
-        const { getByLabelText } = renderTimelineEventEditor(cli, { mxEvent });
-        const content = getByLabelText("Event Content") as HTMLTextAreaElement;
-        expect(JSON.parse(content.value)["com.beeper.linkpreviews"]).toEqual(linkPreviews);
-    });
+            const { getByLabelText } = renderTimelineEventEditor(cli, { mxEvent });
+            const content = getByLabelText("Event Content") as HTMLTextAreaElement;
+            expect(JSON.parse(content.value)[field]).toEqual(linkPreviews);
+        },
+    );
 
-    it("should omit the com.beeper.linkpreviews field when the edited event has none", () => {
+    it("should omit the bundled URL previews when the edited event has none", () => {
         const cli = createTestClient();
         const mxEvent = mkEvent({
             event: true,
@@ -91,6 +96,7 @@ describe("<EventEditor />", () => {
 
         const { getByLabelText } = renderTimelineEventEditor(cli, { mxEvent });
         const content = getByLabelText("Event Content") as HTMLTextAreaElement;
+        expect(JSON.parse(content.value)).not.toHaveProperty("m.url_previews");
         expect(JSON.parse(content.value)).not.toHaveProperty("com.beeper.linkpreviews");
     });
 

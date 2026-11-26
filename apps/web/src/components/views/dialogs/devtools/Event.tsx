@@ -16,6 +16,7 @@ import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import withValidation from "../../elements/Validation";
 import SyntaxHighlight from "../../elements/SyntaxHighlight";
+import { BUNDLED_URL_PREVIEWS, UNSTABLE_BUNDLED_URL_PREVIEWS } from "../../../../utils/bundledUrlPreviews";
 
 export const stringify = (object: object): string => {
     return JSON.stringify(object, null, 2);
@@ -199,8 +200,11 @@ export const TimelineEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack })
                 rel_type: "m.replace",
                 event_id: getBaseEventId(mxEvent),
             },
-            ...("com.beeper.linkpreviews" in originalContent
-                ? { "com.beeper.linkpreviews": originalContent["com.beeper.linkpreviews"] }
+            ...(BUNDLED_URL_PREVIEWS in originalContent
+                ? { [BUNDLED_URL_PREVIEWS]: originalContent[BUNDLED_URL_PREVIEWS] }
+                : {}),
+            ...(UNSTABLE_BUNDLED_URL_PREVIEWS in originalContent
+                ? { [UNSTABLE_BUNDLED_URL_PREVIEWS]: originalContent[UNSTABLE_BUNDLED_URL_PREVIEWS] }
                 : {}),
         };
 

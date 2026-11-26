@@ -61,7 +61,7 @@ export function EditMessageComposerWrapper(props: IEditMessageComposerProps): JS
             return await attachUrlPreviews(
                 props.mxClient,
                 room,
-                vm.getSnapshot(),
+                vm.getSnapshotForSending(),
                 newContent,
                 linksIn(newContent.body).size !== 0,
                 vm.getEncryptedImageCache(),

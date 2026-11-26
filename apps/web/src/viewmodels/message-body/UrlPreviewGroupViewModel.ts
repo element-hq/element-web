@@ -13,12 +13,8 @@ import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/t
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
-import { type RoomMessageEventContent } from "../../../@types/url-preview";
-import SettingsStore from "../../settings/SettingsStore";
+import { getBundledUrlPreviews } from "../../utils/bundledUrlPreviews";
 import type { UrlPreviewApi } from "../../modules/UrlPreviewApi";
-
-// From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
-export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
 
@@ -169,8 +165,8 @@ export class UrlPreviewGroupViewModel
      */
     private async computeSnapshot(): Promise<void> {
         // MSC4095: an empty bundled previews array means the sender opted out of previews.
-        const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
-        if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
+        const bundledPreviews = getBundledUrlPreviews(this.props.mxEvent.getContent());
+        if (bundledPreviews?.length === 0) {
             this.snapshot.merge({
                 previews: this.stablePreviews([]),
                 totalPreviewCount: 0,
@@ -190,29 +186,25 @@ export class UrlPreviewGroupViewModel
         const content = this.props.mxEvent.getContent();
         const urlPreviewKind = this.props.urlPreviewKind;
         if (
+            bundledPreviews &&
             content.msgtype === MsgType.Text &&
             (urlPreviewKind === "bundledonly" || urlPreviewKind === "preferbundled")
         ) {
-            const messageContent = content as RoomMessageEventContent;
-            const bundledPreviews = messageContent[BUNDLED_LINK_PREVIEWS];
-
-            if (bundledPreviews && Array.isArray(bundledPreviews)) {
-                // In "bundledonly" the user has asked that nothing about this encrypted message
-                // reaches the homeserver, so entries carrying only a matched_url are dropped
-                // rather than resolved via /preview_url.
-                const allowServerFallback = urlPreviewKind !== "bundledonly";
-                previews = (
-                    await Promise.all(
-                        bundledPreviews
-                            .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                            .map((preview) =>
-                                this.fetcher
-                                    .previewFromBundle(preview, this.props.mxEvent, loadMedia, allowServerFallback)
-                                    .catch((_) => null),
-                            ),
-                    )
-                ).filter((p) => !!p);
-            }
+            // In "bundledonly" the user has asked that nothing about this encrypted message
+            // reaches the homeserver, so entries carrying only a matched URL are dropped
+            // rather than resolved via /preview_url.
+            const allowServerFallback = urlPreviewKind !== "bundledonly";
+            previews = (
+                await Promise.all(
+                    bundledPreviews
+                        .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                        .map((preview) =>
+                            this.fetcher
+                                .previewFromBundle(preview, this.props.mxEvent, loadMedia, allowServerFallback)
+                                .catch((_) => null),
+                        ),
+                )
+            ).filter((p) => !!p);
         }
 
         if (urlPreviewKind === "fetchonly" || urlPreviewKind === "preferbundled") {
@@ -249,11 +241,10 @@ export class UrlPreviewGroupViewModel
      * @param eventElement
      */
     public async updateEventElement(eventElement: HTMLDivElement | HTMLSpanElement): Promise<void> {
-        const urlPreviewBundleEnabled = SettingsStore.getValue("feature_msc4095_url_preview_bundle");
-        const previewBundle = this.props.mxEvent.getContent<RoomMessageEventContent>()["com.beeper.linkpreviews"];
+        const previewBundle = getBundledUrlPreviews(this.props.mxEvent.getContent());
 
-        if (urlPreviewBundleEnabled && previewBundle !== undefined) {
-            this.links = previewBundle.map((entry) => entry.matched_url);
+        if (previewBundle !== undefined) {
+            this.links = previewBundle.map((entry) => entry["matrix:matched_url"]);
             return this.computeSnapshot();
         }
 

@@ -24,8 +24,8 @@ import { type UrlPreview, type UrlPreviewImage, type UrlPreviewImageBundled } fr
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { type UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
-import SettingsStore from "../settings/SettingsStore";
+import { type BundledUrlPreview, type RoomMessageEventContent } from "../../@types/url-preview";
+import { BUNDLED_URL_PREVIEWS } from "./bundledUrlPreviews";
 import { uploadFile } from "../ContentMessages";
 import { mediaFromMxc } from "../customisations/Media";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
@@ -139,22 +139,30 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
 /*
  * Attaches URL preview bundle to message event (MSC4095)
  *
+ * Links whose preview has loaded are bundled in full. Links whose preview has not loaded are
+ * bundled as just the URL, and links the user removed the preview for are left out.
+ *
+ * No bundle is attached when `urlPreviewSnapshot` is undefined, which is the case when the sender
+ * has URL previews turned off. An empty bundle would tell receiving clients to show no previews.
+ *
  * Returns TRUE if event has been cancelled while uploading files
  * FALSE if event is not cancelled
  */
 export async function attachUrlPreviews(
     client: MatrixClient,
     room: Room,
-    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot | undefined,
     content: RoomMessageEventContent,
     messageHasLinks: boolean,
     encryptedImageCache: ReadonlyMap<string, EncryptedFile> = new Map(),
 ): Promise<boolean> {
-    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return false;
+    if (urlPreviewSnapshot === undefined) return false;
 
     const isRoomEncrypted = room.hasEncryptionStateEvent();
-    const previewsToAttach = urlPreviewSnapshot.entries
-        .filter((entry) => entry.include && entry.status === "loaded")
+    // Previews the user removed in the composer are left out.
+    const entriesToAttach = urlPreviewSnapshot.entries.filter((entry) => entry.include);
+    const previewsToAttach = entriesToAttach
+        .filter((entry) => entry.status === "loaded")
         .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview);
 
     let eventId: string | undefined = undefined;
@@ -199,9 +207,9 @@ export async function attachUrlPreviews(
      * if the UrlPreview contains an image and we are in an encrypted room, it uploads
      * the image to create a bundled with an EncryptedFile
      */
-    async function bundleFromPreview(preview: UrlPreview): Promise<UnstableBundledUrlPreviewSingle> {
-        const out: UnstableBundledUrlPreviewSingle = {
-            "matched_url": preview.link,
+    async function bundleFromPreview(preview: UrlPreview): Promise<BundledUrlPreview> {
+        const out: BundledUrlPreview = {
+            "matrix:matched_url": preview.link,
             "og:url": preview.ogUrl,
             "og:title": preview.title,
             "og:description": preview.description,
@@ -228,7 +236,7 @@ export async function attachUrlPreviews(
         // the image a second time and produce an undecryptable image.
         const alreadyEncrypted = encryptedImageCache.get(preview.link);
         if (alreadyEncrypted !== undefined) {
-            out["beeper:image:encryption"] = alreadyEncrypted;
+            out["matrix:image:encrypted"] = alreadyEncrypted;
             return out;
         }
 
@@ -244,7 +252,7 @@ export async function attachUrlPreviews(
                 return out;
             }
 
-            out["beeper:image:encryption"] = file;
+            out["matrix:image:encrypted"] = file;
         } catch (e) {
             // do not print error if it exited because of the message sending was aborted
             if (!abortController.signal.aborted) console.error(e);
@@ -257,9 +265,17 @@ export async function attachUrlPreviews(
     if (isRoomEncrypted && previewsToAttach.some((preview) => isBundledImage(preview.image)))
         putSendingMessageInTimeline();
 
-    const bundle = await Promise.all(previewsToAttach.map(bundleFromPreview));
+    const bundle = await Promise.all(
+        entriesToAttach.map(async (entry): Promise<BundledUrlPreview> => {
+            if (entry.status === "loaded") return bundleFromPreview(entry.preview);
+            // The preview is still loading or could not be loaded here. Sending only the URL asks
+            // the clients that receive the message to load the preview themselves, whereas leaving
+            // it out would tell them not to show one.
+            return { "matrix:matched_url": entry.matched_url };
+        }),
+    );
 
-    if (messageHasLinks) content["com.beeper.linkpreviews"] = bundle;
+    if (messageHasLinks) content[BUNDLED_URL_PREVIEWS] = bundle;
 
     // by this point the image has already uploaded, and a real message is already in timeline
     // so remove the fake message

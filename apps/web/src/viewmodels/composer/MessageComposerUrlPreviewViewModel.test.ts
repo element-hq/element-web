@@ -7,14 +7,14 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, type Mock, beforeAll, afterAll, afterEach } from "vitest";
+import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest";
 
 import { MatrixEvent, MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
 import { type MessageComposerUrlPreviewSnapshotEntry } from "@element-hq/web-shared-components";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import { UrlPreviewApi } from "../../modules/UrlPreviewApi";
-import SettingsStore from "../../settings/SettingsStore";
 
 const IMAGE_MXC = "mxc://example.org/abc";
 const BASIC_PREVIEW_OGDATA = {
@@ -44,13 +44,13 @@ function getViewModel({ visible } = { visible: true }): {
 }
 
 const BUNDLE_ENTRY_ONE = {
-    "matched_url": "https://example.org/one",
+    "matrix:matched_url": "https://example.org/one",
     "og:title": "Bundled one",
     "og:description": "First bundled preview",
     "og:url": "https://example.org/one",
 };
 const BUNDLE_ENTRY_WITH_IMAGE = {
-    "matched_url": "https://example.org/image",
+    "matrix:matched_url": "https://example.org/image",
     "og:title": "Bundled with image",
     "og:image": IMAGE_MXC,
     "og:image:type": "image/png",
@@ -71,22 +71,14 @@ function getMockClient(): MockClient {
 /**
  * `restoreFromMessage` starts fetching immediately, so `client` must already be set up with the
  * responses the test expects. Pass one built with {@link getMockClient}.
- *
- * It reads the bundle feature flag from SettingsStore rather than from props, so `urlPreviewBundle`
- * is applied by stubbing that lookup. Mocks are restored in `afterEach`.
  */
 function restoreViewModel(
     content: RoomMessageEventContent,
-    { visible = true, urlPreviewBundle = true, client = getMockClient() } = {},
+    { visible = true, client = getMockClient() } = {},
 ): {
     vm: MessageComposerUrlPreviewViewModel;
     client: MockClient;
 } {
-    const originalGetValue = SettingsStore.getValue.bind(SettingsStore);
-    vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) =>
-        setting === "feature_msc4095_url_preview_bundle" ? urlPreviewBundle : originalGetValue(setting),
-    );
-
     const vm = MessageComposerUrlPreviewViewModel.restoreFromMessage({
         client: client as unknown as MatrixClient,
         moduleUrlPreviewApi: new UrlPreviewApi(),
@@ -224,6 +216,25 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         });
     });
 
+    // Typing is debounced, so a message sent straight after typing a link would otherwise be sent
+    // with a snapshot that does not know about the link yet.
+    it("should include a link typed just before sending in the snapshot for sending", () => {
+        const { vm, client } = getViewModel();
+        client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
+        vm.updateWithText({ content: "https://example.org", debounced: true });
+        expect(vm.getSnapshot().entries).toEqual([]);
+
+        expect(vm.getSnapshotForSending()?.entries.map(getEntrySummary)).toEqual([
+            { matched_url: "https://example.org", include: true, status: "loading" },
+        ]);
+    });
+
+    it("should have no snapshot for sending when previews are not visible", () => {
+        const { vm } = getViewModel({ visible: false });
+        vm.updateWithText({ content: "https://example.org", debounced: false });
+        expect(vm.getSnapshotForSending()).toBeUndefined();
+    });
+
     it("should hide preview when made invisible", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
@@ -300,33 +311,29 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         });
     });
     describe("restoreFromMessage", () => {
-        afterEach(() => {
-            vi.restoreAllMocks();
-        });
-
         it("should seed previews from the event's bundle without refetching them", async () => {
             const { vm, client } = restoreViewModel({
                 "msgtype": MsgType.Text,
-                "body": `Look at ${BUNDLE_ENTRY_ONE.matched_url} please`,
-                "com.beeper.linkpreviews": [BUNDLE_ENTRY_ONE],
+                "body": `Look at ${BUNDLE_ENTRY_ONE["matrix:matched_url"]} please`,
+                "m.url_previews": [BUNDLE_ENTRY_ONE],
             });
 
             await vi.waitFor(() => {
                 expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
-                    { matched_url: BUNDLE_ENTRY_ONE.matched_url, include: true, status: "loaded" },
+                    { matched_url: BUNDLE_ENTRY_ONE["matrix:matched_url"], include: true, status: "loaded" },
                 ]);
             });
             expect(vm.getSnapshot()).toMatchObject({
-                content: `Look at ${BUNDLE_ENTRY_ONE.matched_url} please`,
-                contentLinks: new Set([BUNDLE_ENTRY_ONE.matched_url]),
+                content: `Look at ${BUNDLE_ENTRY_ONE["matrix:matched_url"]} please`,
+                contentLinks: new Set([BUNDLE_ENTRY_ONE["matrix:matched_url"]]),
                 entries: [
                     {
                         preview: {
-                            link: BUNDLE_ENTRY_ONE.matched_url,
+                            link: BUNDLE_ENTRY_ONE["matrix:matched_url"],
                             title: "Bundled one",
                             description: "First bundled preview",
                             siteName: "example.org",
-                            ogUrl: BUNDLE_ENTRY_ONE.matched_url,
+                            ogUrl: BUNDLE_ENTRY_ONE["matrix:matched_url"],
                         },
                     },
                 ],
@@ -338,8 +345,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         it("should not report a message seeded from a bundle as modified", () => {
             const { vm } = restoreViewModel({
                 "msgtype": MsgType.Text,
-                "body": BUNDLE_ENTRY_ONE.matched_url,
-                "com.beeper.linkpreviews": [BUNDLE_ENTRY_ONE],
+                "body": BUNDLE_ENTRY_ONE["matrix:matched_url"],
+                "m.url_previews": [BUNDLE_ENTRY_ONE],
             });
             expect(vm.getSnapshot().isModified).toBe(false);
         });
@@ -351,8 +358,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             const { vm } = restoreViewModel(
                 {
                     "msgtype": MsgType.Text,
-                    "body": BUNDLE_ENTRY_WITH_IMAGE.matched_url,
-                    "com.beeper.linkpreviews": [BUNDLE_ENTRY_WITH_IMAGE],
+                    "body": BUNDLE_ENTRY_WITH_IMAGE["matrix:matched_url"],
+                    "m.url_previews": [BUNDLE_ENTRY_WITH_IMAGE],
                 },
                 { client },
             );
@@ -373,13 +380,13 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         it("should exclude links in the body that the bundle omits", async () => {
             const { vm, client } = restoreViewModel({
                 "msgtype": MsgType.Text,
-                "body": `${BUNDLE_ENTRY_ONE.matched_url} https://example.org/removed`,
-                "com.beeper.linkpreviews": [BUNDLE_ENTRY_ONE],
+                "body": `${BUNDLE_ENTRY_ONE["matrix:matched_url"]} https://example.org/removed`,
+                "m.url_previews": [BUNDLE_ENTRY_ONE],
             });
 
             await vi.waitFor(() => {
                 expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
-                    { matched_url: BUNDLE_ENTRY_ONE.matched_url, include: true, status: "loaded" },
+                    { matched_url: BUNDLE_ENTRY_ONE["matrix:matched_url"], include: true, status: "loaded" },
                     { matched_url: "https://example.org/removed", include: false, status: "failed" },
                 ]);
             });
@@ -387,14 +394,39 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             expect(client.getUrlPreview).not.toHaveBeenCalled();
         });
 
-        it("should request a preview for a bundle entry that only carries matched_url", async () => {
+        // Messages sent before MSC4095 was accepted use different field names. Their encrypted
+        // image must still be remembered, so that editing resends it rather than re-uploading it.
+        it("should seed previews from a bundle sent in the unstable format", async () => {
+            const encryptedFile = { url: "mxc://example.org/encrypted" } as EncryptedFile;
+            const { vm, client } = restoreViewModel({
+                "msgtype": MsgType.Text,
+                "body": "https://example.org/old",
+                "com.beeper.linkpreviews": [
+                    {
+                        "matched_url": "https://example.org/old",
+                        "og:title": "Bundled in the unstable format",
+                        "beeper:image:encryption": encryptedFile,
+                    },
+                ],
+            });
+
+            await vi.waitFor(() => {
+                expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
+                    { matched_url: "https://example.org/old", include: true, status: "loaded" },
+                ]);
+            });
+            expect(vm.getEncryptedImageCache().get("https://example.org/old")).toBe(encryptedFile);
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+        });
+
+        it("should request a preview for a bundle entry that only carries the matched URL", async () => {
             const client = getMockClient();
             client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
             const { vm } = restoreViewModel(
                 {
                     "msgtype": MsgType.Text,
                     "body": "https://example.org",
-                    "com.beeper.linkpreviews": [{ matched_url: "https://example.org" }],
+                    "m.url_previews": [{ "matrix:matched_url": "https://example.org" }],
                 },
                 { client },
             );
@@ -414,7 +446,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
                 {
                     "msgtype": MsgType.Text,
                     "body": "https://example.org/other",
-                    "com.beeper.linkpreviews": [BUNDLE_ENTRY_ONE],
+                    "m.url_previews": [BUNDLE_ENTRY_ONE],
                 },
                 { client },
             );
@@ -446,32 +478,12 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             });
         });
 
-        it("should ignore the bundle when the bundle feature is disabled", async () => {
-            const client = getMockClient();
-            client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-            const { vm } = restoreViewModel(
-                {
-                    "msgtype": MsgType.Text,
-                    "body": BUNDLE_ENTRY_ONE.matched_url,
-                    "com.beeper.linkpreviews": [BUNDLE_ENTRY_ONE],
-                },
-                { urlPreviewBundle: false, client },
-            );
-
-            await vi.waitFor(() => {
-                expect(client.getUrlPreview).toHaveBeenCalledWith(BUNDLE_ENTRY_ONE.matched_url, expect.anything());
-                expect(vm.getSnapshot().entries.map(getEntrySummary)).toEqual([
-                    { matched_url: BUNDLE_ENTRY_ONE.matched_url, include: true, status: "loaded" },
-                ]);
-            });
-        });
-
         it("should render no entries when previews are not visible", () => {
             const { vm, client } = restoreViewModel(
                 {
                     "msgtype": MsgType.Text,
-                    "body": BUNDLE_ENTRY_ONE.matched_url,
-                    "com.beeper.linkpreviews": [BUNDLE_ENTRY_ONE],
+                    "body": BUNDLE_ENTRY_ONE["matrix:matched_url"],
+                    "m.url_previews": [BUNDLE_ENTRY_ONE],
                 },
                 { visible: false },
             );

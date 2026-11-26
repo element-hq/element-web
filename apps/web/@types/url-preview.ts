@@ -11,7 +11,16 @@ import {
 } from "matrix-js-sdk/src/types";
 
 /**
- * Bundled URL previews in MSC-4095
+ * Bundled URL previews in MSC4095
+ *
+ * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
+ */
+interface BundledUrlPreviews {
+    "m.url_previews"?: BundledUrlPreview[];
+}
+
+/**
+ * Bundled URL previews as they were sent before MSC4095 was accepted.
  *
  * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
  */
@@ -20,13 +29,9 @@ interface UnstableBundledUrlPreviews {
 }
 
 /**
- * Single item in bundled URL previews in MSC4095
- *
- * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
+ * The fields of a bundled URL preview that are named the same in the stable and unstable formats.
  */
-export interface UnstableBundledUrlPreviewSingle {
-    "matched_url": string;
-    "beeper:image:encryption"?: EncryptedFile;
+interface BundledUrlPreviewOpenGraph {
     "matrix:image:size"?: number;
     "og:image"?: string;
     "og:url"?: string;
@@ -37,4 +42,24 @@ export interface UnstableBundledUrlPreviewSingle {
     "og:description"?: string;
 }
 
-export type RoomMessageEventContent = SdkRoomMessageEventContent & UnstableBundledUrlPreviews;
+/**
+ * Single item in bundled URL previews in MSC4095
+ *
+ * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
+ */
+export interface BundledUrlPreview extends BundledUrlPreviewOpenGraph {
+    "matrix:matched_url": string;
+    "matrix:image:encrypted"?: EncryptedFile;
+}
+
+/**
+ * Single item in bundled URL previews, as sent before MSC4095 was accepted.
+ *
+ * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
+ */
+export interface UnstableBundledUrlPreviewSingle extends BundledUrlPreviewOpenGraph {
+    "matched_url": string;
+    "beeper:image:encryption"?: EncryptedFile;
+}
+
+export type RoomMessageEventContent = SdkRoomMessageEventContent & BundledUrlPreviews & UnstableBundledUrlPreviews;
