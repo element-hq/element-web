@@ -22,7 +22,7 @@ import demoImage from "../../../../../static/wideImage.png";
 import demoVideo from "../../../../../static/videoPreviewDemo.webm?inline";
 import demoAudio from "../../../../../static/audioDemo.ogg";
 
-const { AllTypes, SingleText, Collapsed, Expanded } = composeStories(stories);
+const { AllTypes, SingleText, Collapsed, Expanded, LinkPreviewsDismissable } = composeStories(stories);
 
 const icon = { icon: <span data-testid="icon">icon</span>, color: "rgb(66, 0, 166)" };
 
@@ -171,6 +171,12 @@ describe("MediaPreviewGroupPreview", () => {
             render(<Expanded />);
 
             expect(screen.getByRole("button", { name: "Collapse" })).toBeInTheDocument();
+        });
+
+        it("renders the dismissable link previews story with a close button per preview", () => {
+            render(<LinkPreviewsDismissable />);
+
+            expect(screen.getAllByRole("button", { name: "Close preview" })).toHaveLength(2);
         });
     });
 });

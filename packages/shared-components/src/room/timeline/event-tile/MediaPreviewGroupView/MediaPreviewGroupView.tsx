@@ -26,8 +26,16 @@ export type MediaPreviewGroupEntryTextContent = {
  * - full: show full image contained in tile
  * - banner: show image covering tile, height 100px
  * - tallbanner: show image covering tile, height 300px
+ * - thumbnail: show image covering a fixed 130x142px box, for the "side" layout
+ * - logo: show a small image such as a site logo centred in the same 130x142px box, for the "side" layout
  */
-export type ImageSize = "full" | "banner" | "tallbanner";
+export type ImageSize = "full" | "banner" | "tallbanner" | "thumbnail" | "logo";
+
+/**
+ * - stacked: media above icon, text and buttons (default)
+ * - side: media left, text right, no icon
+ */
+export type MediaPreviewLayout = "stacked" | "side";
 
 export type MediaPreviewGroupEntryImageContent = {
     type: "image";
@@ -123,10 +131,23 @@ export type MediaPreviewGroupEntryBase = {
      */
     body: string;
     /**
+     * optional: footer line below the body, e.g. a link's host
+     */
+    footer?: string;
+    /**
+     * optional: tile layout, defaults to "stacked"
+     */
+    layout?: MediaPreviewLayout;
+    /**
      * buttons to add to the right of the tile
      */
     buttons?: MediaPreviewEntryButton[];
-} & MediaPreviewIcon;
+    /**
+     * Invoked when the user closes this entry with the button at its top right.
+     * Omit for an entry that cannot be dismissed, such as an attachment.
+     */
+    onDismiss?: () => void;
+} & Partial<MediaPreviewIcon>;
 
 export type MediaPreviewGroupTextEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryTextContent;
 export type MediaPreviewGroupImageEntry = MediaPreviewGroupEntryBase & MediaPreviewGroupEntryImageContent;
