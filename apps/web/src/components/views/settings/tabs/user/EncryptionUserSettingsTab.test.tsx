@@ -10,11 +10,11 @@
 import React from "react";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { act, render, screen } from "test-utils-rtl";
-import { createTestClient, withClientContextRenderOptions } from "test-utils";
+import { createTestClient, TestSDKContext, withClientContextRenderOptions } from "test-utils";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { EncryptionUserSettingsTab, type State } from "./EncryptionUserSettingsTab";
 import Modal from "../../../../../Modal";
@@ -24,12 +24,23 @@ import { DeviceListener } from "../../../../../device-listener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
+    let sdkContext: TestSDKContext;
 
     beforeEach(() => {
         matrixClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = matrixClient;
+
         vi.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockResolvedValue(true);
+
         // Recovery key is available
         vi.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue("default key");
+
+        // Asking for user verification status gives a valid response
+        vi.spyOn(matrixClient.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+
         // Secrets are cached
         vi.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
             privateKeysInSecretStorage: true,
@@ -41,6 +52,7 @@ describe("<EncryptionUserSettingsTab />", () => {
             },
         });
 
+        // The device is verified
         vi.spyOn(DeviceListener.sharedInstance(), "getDeviceState").mockReturnValue("ok");
     });
 
@@ -48,7 +60,9 @@ describe("<EncryptionUserSettingsTab />", () => {
         vi.resetAllMocks();
     });
 
-    function renderComponent(props: { initialState?: State } = {}) {
+    function renderComponent(
+        props: { initialState?: State; dehydrationSupported?: boolean; dehydratedDeviceId?: string | null } = {},
+    ) {
         return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
     }
 
@@ -85,6 +99,22 @@ describe("<EncryptionUserSettingsTab />", () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         renderComponent();
         await waitFor(() => expect(screen.getByText("Backup")).toBeInTheDocument());
+    });
+
+    it("should display the dehydrated device section when dehydrated device exists", async () => {
+        // Given key storage is enabled
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
+        // And we have a dehydrated device
+        const props = { dehydrationSupported: true, dehydratedDeviceId: "DEHYDDEV" };
+
+        // When we render the tab
+        const encryptionTab = renderComponent(props);
+
+        // Then we can see the dehydrated devices section
+        await waitFor(() =>
+            expect(encryptionTab.getByRole("heading", { name: "Offline device Active", level: 2 })).toBeInTheDocument(),
+        );
     });
 
     it("should not display the recovery panel when key storage is not enabled", async () => {

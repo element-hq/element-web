@@ -25,15 +25,25 @@ interface SettingsHeaderProps {
      * The label for the header.
      */
     label: string;
+    /**
+     * An optional annotation to place next to the main heading.
+     */
+    annotation?: React.ReactNode;
 }
 
-export function SettingsHeader({ hasRecommendedTag = false, label, as = "h2" }: SettingsHeaderProps): JSX.Element {
+export function SettingsHeader({
+    hasRecommendedTag = false,
+    label,
+    annotation,
+    as = "h2",
+}: SettingsHeaderProps): JSX.Element {
     const classes = classNames("mx_SettingsHeader", {
         mx_SettingsHeader_recommended: hasRecommendedTag,
     });
     return (
         <Heading className={classes} as={as} size="sm" weight="semibold">
             {label}
+            {annotation}
         </Heading>
     );
 }

@@ -27,6 +27,7 @@ import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter"
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeviceListener, CurrentDeviceEvents, type DeviceState } from "../../../../../device-listener";
 import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
+import { SettingsHeader } from "../../SettingsHeader";
 
 /**
  * The state in the encryption settings tab.
@@ -58,12 +59,32 @@ interface Props {
      * If the tab should start in a state other than the default
      */
     initialState?: State;
+    /**
+     * Is dehydration supported on our homeserver?
+     *
+     * undefined = still checking
+     * true = yes, it is supported
+     * false = no, it is not supported
+     */
+    dehydrationSupported?: boolean;
+    /**
+     * The ID of the dehydrated device.
+     *
+     * undefined = still checking for a dehydrated device
+     * null = there is no dehydrated device
+     * string = there is a dehydrated device with this ID
+     */
+    dehydratedDeviceId?: string | null;
 }
 
 /**
  * The encryption settings tab.
  */
-export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Props>): JSX.Element {
+export function EncryptionUserSettingsTab({
+    initialState = "main",
+    dehydrationSupported,
+    dehydratedDeviceId,
+}: Readonly<Props>): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
     const deviceState = useTypedEventEmitterState(
@@ -131,6 +152,11 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         onChangeRecoveryKeyClick={(setupNewKey) =>
                                             setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
                                         }
+                                    />
+                                    <Separator kind="section" />
+                                    <OfflineDevice
+                                        dehydrationSupported={dehydrationSupported}
+                                        dehydratedDeviceId={dehydratedDeviceId}
                                     />
                                     <Separator kind="section" />
                                 </>
@@ -296,3 +322,79 @@ export async function encryptionSettingsStateForKeyStorageOutOfSyncForgotRecover
         return "change_recovery_key";
     }
 }
+
+interface OfflineDeviceProps {
+    /**
+     * Is dehydration supported on our homeserver?
+     *
+     * undefined = still checking
+     * true = yes, it is supported
+     * false = no, it is not supported
+     */
+    dehydrationSupported?: boolean;
+    /**
+     * The ID of the dehydrated device.
+     *
+     * undefined = still checking for a dehydrated device
+     * null = there is no dehydrated device
+     * string = there is a dehydrated device with this ID
+     */
+    dehydratedDeviceId: string | null | undefined;
+}
+
+const OfflineDevice: React.FC<OfflineDeviceProps> = ({ dehydrationSupported, dehydratedDeviceId }) => {
+    let hasRecommendedTag;
+    let annotation;
+
+    if (dehydratedDeviceId) {
+        // We have a dehydrated device
+        hasRecommendedTag = false;
+        annotation = (
+            <div className="mx_SettingsHeader_annotation mx_SettingsHeader_annotation_active">
+                {_t("settings|encryption|offline_device|offline_device_active")}
+            </div>
+        );
+    } else if (dehydrationSupported === true) {
+        // We don't have a dehydrated device (or we don't know yet) but we could
+        hasRecommendedTag = false;
+        annotation = undefined;
+
+        // AJB: for #29080 use this:
+        // if (dehydratedDeviceId === undefined) {
+        //     // Still checking whether we have a dehydrated device
+        //     hasRecommendedTag = false;
+        //     annotation = undefined;
+        // } else {
+        //     // Dehydration is supported but we are not using it
+        //     hasRecommendedTag = true;
+        //     annotation = undefined;
+        // }
+    } else if (dehydrationSupported === undefined) {
+        // We are still checking whether dehydration is supported
+        hasRecommendedTag = false;
+        annotation = undefined;
+    } else {
+        // Dehydration is not supported
+        hasRecommendedTag = false;
+        annotation = (
+            <div className="mx_SettingsHeader_annotation">
+                {_t("settings|encryption|offline_device|offline_device_not_available")}
+            </div>
+        );
+    }
+
+    return (
+        <SettingsSection
+            legacy={false}
+            heading={
+                <SettingsHeader
+                    hasRecommendedTag={hasRecommendedTag}
+                    label={_t("settings|encryption|offline_device|title")}
+                    annotation={annotation}
+                />
+            }
+            subHeading={_t("settings|encryption|offline_device|offline_device_description")}
+            data-testid="offlineDevice"
+        />
+    );
+};

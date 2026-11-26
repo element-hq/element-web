@@ -560,7 +560,6 @@
         "save": "Save",
         "saved": "Saved",
         "saving": "Saving…",
-        "secure_backup": "Secure Backup",
         "select_all": "Select all",
         "server": "Server",
         "settings": "Settings",
@@ -2556,6 +2555,12 @@
                 "recovery_requires_key_storage": "Key storage must be turned on to set up recovery",
                 "title": "Key storage"
             },
+            "offline_device": {
+                "offline_device_active": "Active",
+                "offline_device_description": "The offline device feature allows you to receive encrypted messages even when you are not signed in to any devices.",
+                "offline_device_not_available": "Not available",
+                "title": "Offline device"
+            },
             "recovery": {
                 "backup_set_up_hint": "To change your recovery key, go to <b>Settings → Encryption → Backup</b>",
                 "backup_set_up_title": "Your backup is now fully set up",
@@ -2840,8 +2845,6 @@
             "bulk_options_accept_all_invites": "Accept all %(invitedRooms)s invites",
             "bulk_options_reject_all_invites": "Reject all %(invitedRooms)s invites",
             "bulk_options_section": "Bulk options",
-            "dehydrated_device_description": "The offline device feature allows you to receive encrypted messages even when you are not logged in to any devices",
-            "dehydrated_device_enabled": "Offline device enabled",
             "dialog_title": "<strong>Settings:</strong> Security & Privacy",
             "e2ee_default_disabled_warning": "Your account provider has disabled end-to-end encryption by default in private rooms & Direct Messages.",
             "enable_message_search": "Enable message search in encrypted rooms",
