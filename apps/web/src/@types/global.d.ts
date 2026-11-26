@@ -137,6 +137,8 @@ declare global {
         // Settings
         setSettingValue(settingName: string, value: any): Promise<void>;
         getSettingValue(settingName: string): Promise<any>;
+        // Logs
+        getMainProcessLogs(): Promise<string>;
         // X.509 hardware key IPC
         x509?: X509Api;
     }

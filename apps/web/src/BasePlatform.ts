@@ -314,6 +314,15 @@ export default abstract class BasePlatform {
         return [];
     }
 
+    /**
+     * Get logs kept outside the page, such as by the desktop app's main process, to include in bug reports.
+     *
+     * @returns the logs, each with an id to name it in the report. Empty if there are none.
+     */
+    public async getExtraLogsForReport(): Promise<{ id: string; lines: string }[]> {
+        return [];
+    }
+
     public supportsDesktopCapturer(): boolean {
         return false;
     }

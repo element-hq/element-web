@@ -461,6 +461,11 @@ export default class ElectronPlatform extends BasePlatform {
         return this.ipc.call("getDesktopCapturerSources", options);
     }
 
+    public async getExtraLogsForReport(): Promise<{ id: string; lines: string }[]> {
+        const lines = await this.electron.getMainProcessLogs();
+        return lines ? [{ id: "electron-main", lines }] : [];
+    }
+
     public supportsDesktopCapturer(): boolean {
         return true;
     }

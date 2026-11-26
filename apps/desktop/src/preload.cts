@@ -79,6 +79,11 @@ contextBridge.exposeInMainWorld("electron", {
         return ipcRenderer.invoke("getSettingValue", settingName);
     },
 
+    // Logs
+    async getMainProcessLogs(): Promise<string> {
+        return ipcRenderer.invoke("getMainProcessLogs");
+    },
+
     // X.509 hardware-key IPC
     x509: {
         getUserCertificate: () => ipcRenderer.invoke("x509", "getUserCertificate"),

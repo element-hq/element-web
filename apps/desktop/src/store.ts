@@ -19,6 +19,7 @@ import { app, safeStorage, dialog, type SafeStorage, type Session } from "electr
 
 import { _t } from "./language-helper.js";
 import { getConfig } from "./config.js";
+import { mainProcessLog } from "./main-process-log.js";
 
 /**
  * String union type representing all the safeStorage backends.
@@ -77,6 +78,7 @@ export async function clearData(electronSession: Session): Promise<void> {
     // https://github.com/element-hq/element-web/issues/34838 for the detailed
     // investigation.
     Store.instance?.clear();
+    mainProcessLog.clear();
     electronSession.flushStorageData();
     await electronSession.clearStorageData();
 }

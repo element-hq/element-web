@@ -8,6 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// Must come first so that console output from the other imports is captured in the log file.
+import "./capture-main-process-log.js";
 // Squirrel on windows starts the app with various flags as hooks to tell us when we've been installed/uninstalled etc.
 import "./squirrelhooks.js";
 import {
@@ -50,6 +52,7 @@ import { getIconPath } from "./icon.js";
 import { getArgs } from "./args.js";
 import { configureSpellChecker } from "./spellcheck.js";
 import { type ConfigOptions, loadConfig } from "./config.js";
+import { getStartupMessage, mainProcessLog } from "./main-process-log.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -104,6 +107,22 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
     console.log("Other instance detected: exiting");
     app.exit();
+}
+
+// Only the instance holding the lock writes the log file, so two instances never rotate it under each other.
+if (gotLock) {
+    mainProcessLog.start(
+        path.join(app.getPath("userData"), "logs"),
+        getStartupMessage({
+            name: app.getName(),
+            version: app.getVersion(),
+            pid: process.pid,
+            platform: process.platform,
+            arch: process.arch,
+            electronVersion: process.versions.electron,
+            argv: process.argv,
+        }),
+    );
 }
 
 // Register the scheme the app is served from as 'standard'
