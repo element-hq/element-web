@@ -87,6 +87,7 @@ export default defineProject({
                 // Vitest hands ES modules under node_modules to Node's own loader, which rejects directory
                 // imports like `matrix-js-sdk/lib/matrixrtc`. Processing the component through Vite instead
                 // resolves these imports to the directory's index file.
+                // TODO: We should be able to remove this once https://github.com/element-hq/element-call/blob/main/src/UrlConfiguration.ts#L20-L25 has been corrected.
                 inline: [/@element-hq\/element-call-component/],
             },
         },
