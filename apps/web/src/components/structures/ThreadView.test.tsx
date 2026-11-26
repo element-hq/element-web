@@ -37,6 +37,8 @@ import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx"
 import { TimelineRenderingType } from "../../contexts/RoomContext.ts";
 import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload.ts";
 import { SDKContext } from "../../contexts/SDKContext.ts";
+import ContentMessages from "../../ContentMessages.ts";
+import type { ComposerInsertFilesPayload } from "../../dispatcher/payloads/ComposerInsertFilePayload.ts";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -190,6 +192,45 @@ describe("ThreadView", () => {
             ROOM_ID,
             rootEvent2.getId(),
             expectedMessageBody(rootEvent2, "yolo"),
+        );
+    });
+
+    it("sends a file as a reply to the event being replied to", async () => {
+        const spy = vi.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom").mockResolvedValue();
+        await getComponent();
+
+        act(() => {
+            dispatcher.dispatch(
+                {
+                    action: "reply_to_event",
+                    event: rootEvent,
+                    context: TimelineRenderingType.Thread,
+                },
+                true,
+            );
+        });
+
+        const file = new File(["hello"], "hello.txt", { type: "text/plain" });
+        act(() => {
+            dispatcher.dispatch(
+                {
+                    action: Action.ComposerFileInsert,
+                    files: [file],
+                    timelineRenderingType: TimelineRenderingType.Thread,
+                } satisfies ComposerInsertFilesPayload,
+                true,
+            );
+        });
+
+        await waitFor(() =>
+            expect(spy).toHaveBeenCalledWith(
+                [file],
+                ROOM_ID,
+                expect.objectContaining({ rel_type: RelationType.Thread, event_id: rootEvent.getId() }),
+                rootEvent,
+                mockClient,
+                TimelineRenderingType.Thread,
+            ),
         );
     });
 
