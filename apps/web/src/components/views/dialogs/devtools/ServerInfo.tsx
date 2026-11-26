@@ -26,13 +26,16 @@ interface IServerWellKnown {
     };
 }
 
-export async function getServerVersionFromFederationApi(client: MatrixClient): Promise<IServerWellKnown> {
+export async function getServerVersionFromFederationApi(
+    client: MatrixClient,
+    signal?: AbortSignal,
+): Promise<IServerWellKnown> {
     let baseUrl = client.getHomeserverUrl();
 
     try {
         const hsName = MatrixClientPeg.safeGet().getDomain();
         // We don't use the js-sdk Autodiscovery module here as it only support client well-known, not server ones.
-        const response = await fetch(`https://${hsName}/.well-known/matrix/server`);
+        const response = await fetch(`https://${hsName}/.well-known/matrix/server`, { signal });
         const json = await response.json();
         if (json["m.server"]) {
             baseUrl = `https://${json["m.server"]}`;
@@ -41,7 +44,7 @@ export async function getServerVersionFromFederationApi(client: MatrixClient): P
         console.warn(e);
     }
 
-    const response = await fetch(`${baseUrl}/_matrix/federation/v1/version`);
+    const response = await fetch(`${baseUrl}/_matrix/federation/v1/version`, { signal });
     return response.json();
 }
 
