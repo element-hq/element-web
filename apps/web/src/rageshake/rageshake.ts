@@ -483,6 +483,27 @@ function selectQuery<T>(
 }
 
 /**
+ * Log errors which nothing caught, as the browser reports them to the console itself, bypassing
+ * the console functions which {@link ConsoleLogger} wraps.
+ *
+ * @param target - the window to listen to.
+ * @param consoleLogger - the logger to log the errors to.
+ */
+export function logUncaughtErrors(target: Window, consoleLogger: ConsoleLogger): void {
+    target.addEventListener("error", (event) => {
+        // `error` is missing for errors from scripts on other origins, and can be any value which was thrown.
+        consoleLogger.log(
+            "E",
+            "Uncaught error:",
+            event.error ?? `${event.message} at ${event.filename}:${event.lineno}:${event.colno}`,
+        );
+    });
+    target.addEventListener("unhandledrejection", (event) => {
+        consoleLogger.log("E", "Unhandled promise rejection:", event.reason);
+    });
+}
+
+/**
  * Configure rage shaking support for sending bug reports.
  * Modifies globals.
  * @param {boolean} setUpPersistence When true (default), the persistence will
@@ -495,11 +516,7 @@ export function init(setUpPersistence = true): Promise<void> {
     }
     global.mx_rage_logger = new ConsoleLogger();
     global.mx_rage_logger.monkeyPatch(window.console);
-
-    // log unhandled rejections in the rageshake
-    window.addEventListener("unhandledrejection", (event) => {
-        global.mx_rage_logger.log("error", `Unhandled promise rejection: ${event.reason}`);
-    });
+    logUncaughtErrors(window, global.mx_rage_logger);
 
     if (setUpPersistence) {
         return tryInitStorage();
