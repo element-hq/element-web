@@ -53,7 +53,11 @@ async function idbTransaction(
         await idbInit();
     }
     return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], mode);
+        // Strict durability: this database holds the pickle key, whose loss
+        // makes the crypto store unreadable. Chromium's default (relaxed)
+        // durability does not flush on commit, so an unclean shutdown can lose
+        // a committed write (https://github.com/element-hq/element-web/issues/27969).
+        const txn = idb!.transaction([table], mode, { durability: "strict" });
         txn.onerror = reject;
 
         const objectStore = txn.objectStore(table);
