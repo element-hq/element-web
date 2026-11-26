@@ -37,6 +37,12 @@ import { getCircularReplacer } from "../utils/JSON";
 
 const FLUSH_RATE_MS = 30 * 1000;
 
+/**
+ * Matches the value of a `token=` URL parameter, such as an `access_token` or a `loginToken`, to remove it from
+ * log lines. It runs to the end of the parameter, as tokens can contain characters like `_`.
+ */
+const TOKEN_PATTERN = /(token=)[^&#\s"']+/gi;
+
 /** the length of log data we keep in indexeddb (and include in the reports), if there are more than 24 hours of logs */
 const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 
@@ -100,7 +106,7 @@ export class ConsoleLogger {
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         let line = `${ts} ${level} ${args.join(" ")}\n`;
         // Do some cleanup
-        line = line.replace(/token=[a-zA-Z0-9-]+/gm, "token=xxxxx");
+        line = line.replace(TOKEN_PATTERN, "$1xxxxx");
         // Using + really is the quickest way in JS
         // http://jsperf.com/concat-vs-plus-vs-join
         this.logs += line;

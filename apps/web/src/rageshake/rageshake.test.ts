@@ -9,6 +9,26 @@ import { describe, expect, it } from "vitest";
 
 import { ConsoleLogger, logUncaughtErrors } from "./rageshake";
 
+describe("ConsoleLogger", () => {
+    function logLine(...args: string[]): string {
+        const consoleLogger = new ConsoleLogger();
+        consoleLogger.log("I", ...args);
+        return consoleLogger.flush();
+    }
+
+    it.each([
+        ["a token with only letters, digits and dashes", "token=abc-123", "token=xxxxx"],
+        ["a token containing underscores", "access_token=syt_abc_123", "access_token=xxxxx"],
+        ["a loginToken, keeping its case", "?loginToken=syl_abc_123&other=1", "?loginToken=xxxxx&other=1"],
+        ["a token followed by a fragment", "?loginToken=syl_abc#/home", "?loginToken=xxxxx#/home"],
+        ["a token in quotes", `"https://hs/?access_token=syt_abc"`, `"https://hs/?access_token=xxxxx"`],
+        ["each of several tokens", "a?token=one_1 b?token=two_2", "a?token=xxxxx b?token=xxxxx"],
+    ])("removes %s", (_, text, expected) => {
+        const line = logLine("Opening URL:", text);
+        expect(line).toContain(`Opening URL: ${expected}\n`);
+    });
+});
+
 describe("logUncaughtErrors", () => {
     function setUp(): { target: Window; consoleLogger: ConsoleLogger } {
         const target = new EventTarget() as unknown as Window;
