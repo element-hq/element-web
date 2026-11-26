@@ -33,7 +33,8 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
-import { getCircularReplacer } from "../utils/JSON";
+import { consoleFunctionsToLevels, formatLogArg, type LogFunctionName } from "./logFormat";
+import { listenForWorkerLogs } from "./workerLogs";
 
 const FLUSH_RATE_MS = 30 * 1000;
 
@@ -44,14 +45,6 @@ const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 const MAX_LOG_SIZE_24H = 1024 * 1024 * 100; // 100 MB
 
 type LogFunction = (...args: (Error | DOMException | object | string)[]) => void;
-const consoleFunctionsToLevels = {
-    log: "I",
-    info: "I",
-    warn: "W",
-    error: "E",
-    debug: "D",
-} as const;
-type LogFunctionName = keyof typeof consoleFunctionsToLevels;
 
 // A class which monkey-patches the global console and stores log lines.
 export class ConsoleLogger {
@@ -80,17 +73,7 @@ export class ConsoleLogger {
         const ts = new Date().toISOString();
 
         // Convert objects and errors to helpful things
-        args = args.map((arg) => {
-            if (arg instanceof DOMException) {
-                return arg.message + ` (${arg.name} | ${arg.code})`;
-            } else if (arg instanceof Error) {
-                return arg.message + (arg.stack ? `\n${arg.stack}` : "");
-            } else if (typeof arg === "object") {
-                return JSON.stringify(arg, getCircularReplacer());
-            } else {
-                return arg;
-            }
-        });
+        args = args.map((arg) => formatLogArg(arg));
 
         // Some browsers support string formatting which we're not doing here
         // so the lines are a little more ugly but easy to implement / quick to
@@ -495,6 +478,11 @@ export function init(setUpPersistence = true): Promise<void> {
     }
     global.mx_rage_logger = new ConsoleLogger();
     global.mx_rage_logger.monkeyPatch(window.console);
+
+    // Workers have their own console, so they send their lines here to be stored with ours.
+    listenForWorkerLogs(({ source, level, line }) => {
+        global.mx_rage_logger.log(level, `[${source}]`, line);
+    });
 
     // log unhandled rejections in the rageshake
     window.addEventListener("unhandledrejection", (event) => {

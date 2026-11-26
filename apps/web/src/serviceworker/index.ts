@@ -10,8 +10,11 @@ import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { idbLoad } from "../utils/StorageAccess";
 import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
+import { forwardLogsToRageshake } from "../rageshake/workerLogs";
 
 declare const self: ServiceWorkerGlobalScope;
+
+forwardLogsToRageshake("service-worker");
 
 const serverSupportMap: {
     [serverUrl: string]: {

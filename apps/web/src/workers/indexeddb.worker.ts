@@ -8,6 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { IndexedDBStoreWorker } from "matrix-js-sdk/src/indexeddb-worker";
 
+import { forwardLogsToRageshake } from "../rageshake/workerLogs";
+
+forwardLogsToRageshake("indexeddb-worker");
+
 const ctx: Worker = self as any;
 
 // eslint-disable-next-line @typescript-eslint/unbound-method

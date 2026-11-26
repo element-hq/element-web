@@ -9,6 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { type WorkerPayload } from "./worker";
 import { arrayRescale, arraySmoothingResample } from "../utils/arrays";
 import { PLAYBACK_WAVEFORM_SAMPLES } from "../audio/consts";
+import { forwardLogsToRageshake } from "../rageshake/workerLogs";
+
+forwardLogsToRageshake("playback-worker");
 
 const ctx: Worker = self as any;
 
