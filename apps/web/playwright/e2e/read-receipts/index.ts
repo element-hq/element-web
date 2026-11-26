@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
 import type { MatrixEvent, Room, IndexedDBStore, ReceiptType } from "matrix-js-sdk/src/matrix";
-import { test as base, expect } from "../../element-web-test";
+import { test as base, expect, type Fixtures } from "../../element-web-test";
 import { type Bot } from "../../pages/bot";
 import { type Client } from "../../pages/client";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
@@ -52,6 +52,26 @@ export const test = base.extend<{
         await use(new Helpers(page, app, bot));
     },
 });
+
+/**
+ * Stops Synapse rotating its notification counts, for the tests of redactions.
+ *
+ * Every 30 seconds Synapse rotates the notifications it has stored into a summary for each room. Redacting a message
+ * deletes its notification, but not its share of a summary that already counts it
+ * (https://github.com/element-hq/synapse/issues/15698), so a rotation between a message and its redaction left the
+ * room counting the redacted message, and the test failed. Without rotation, Synapse counts the stored notifications.
+ *
+ * `synapseConfig` is worker-scoped, so use this at the top level of a spec file.
+ */
+export const noNotificationRotation: Fixtures = {
+    synapseConfig: [
+        async ({ synapseConfig }, use) => {
+            // Rotation is a background task, so run those on a worker that does not exist
+            await use({ ...synapseConfig, run_background_tasks_on: "no_such_worker" });
+        },
+        { scope: "worker" },
+    ],
+};
 
 /**
  * A utility that is able to find messages based on their content, by looking

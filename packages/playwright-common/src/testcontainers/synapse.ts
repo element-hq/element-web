@@ -161,6 +161,8 @@ export interface SynapseConfig {
     };
     allow_guest_access: boolean;
     experimental_features: Record<string, boolean>;
+    /** The worker that runs background tasks such as rotating notification counts, the main process if unset */
+    run_background_tasks_on?: string;
     matrix_rtc?: {
         transports: Array<{ type: string; [field: string]: string }>;
     };
