@@ -17,6 +17,7 @@ describe("CustomStatusView", () => {
         render(<CustomStatusView onSave={vi.fn()} onCancel={vi.fn()} />);
         expect(screen.getByRole("textbox")).toHaveValue("");
         expect(screen.getByRole("textbox")).toHaveAttribute("placeholder", "Status (required)");
+        expect(screen.getByRole("textbox")).toBeRequired();
         expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Save" })).not.toBeInTheDocument();
     });
