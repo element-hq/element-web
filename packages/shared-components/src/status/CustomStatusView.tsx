@@ -125,7 +125,7 @@ export function CustomStatusView({
                 <TextControl
                     value={text}
                     onChange={(ev) => setText(limitUserStatusInputText(ev.currentTarget.value))}
-                    placeholder={_t("status|set_status|set_status_prompt")}
+                    placeholder={_t("status|set_status|custom_status_placeholder")}
                     aria-label={_t("status|set_status|set_status_prompt")}
                     autoFocus
                 />
