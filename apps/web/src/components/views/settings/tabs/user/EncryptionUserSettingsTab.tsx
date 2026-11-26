@@ -346,18 +346,19 @@ const OfflineDevice: React.FC<OfflineDeviceProps> = ({ dehydrationSupported, deh
     let hasRecommendedTag;
     let annotation;
 
-    if (dehydrationSupported === true) {
-        if (dehydratedDeviceId) {
-            // Dehydration is supported and we are using it
-            hasRecommendedTag = false;
-            annotation = (
-                <div className="mx_SettingsHeader_annotation mx_SettingsHeader_annotation_active">
-                    {_t("settings|encryption|offline_device|offline_device_active")}
-                </div>
-            );
-        } else if (dehydratedDeviceId === undefined) {
-            // Dehydration is supported but we are still checking whether we are
-            // using it
+    if (dehydratedDeviceId) {
+        // We have a dehydrated device
+        hasRecommendedTag = false;
+        annotation = (
+            <div className="mx_SettingsHeader_annotation mx_SettingsHeader_annotation_active">
+                {_t("settings|encryption|offline_device|offline_device_active")}
+            </div>
+        );
+    } else if (dehydrationSupported === true) {
+        // We don't have a dehydrated device (or we don't know yet) but we could
+
+        if (dehydratedDeviceId === undefined) {
+            // Still checking whether we have a dehydrated device
             hasRecommendedTag = false;
             annotation = undefined;
         } else {
