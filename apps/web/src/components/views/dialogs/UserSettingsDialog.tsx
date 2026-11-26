@@ -134,7 +134,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         false,
     );
 
-    // TODO: for #29080 use this:
+    // AJB: for #29080 use this:
     // const showEnableDehydrationIndicator = dehydrationSupported && dehydratedDeviceId === null;
     const showEnableDehydrationIndicator = false;
 

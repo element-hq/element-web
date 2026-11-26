@@ -291,7 +291,7 @@ describe("<UserSettingsDialog />", () => {
         });
     });
 
-    it.skip("TODO enable with #29080 - displays an indicator when user can enable dehydrated device", async () => {
+    it.skip("AJB enable with #29080 - displays an indicator when user can enable dehydrated device", async () => {
         // Given the user does have secret storage (so that won't cause an indicator)
         vi.mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue("foo");
 
