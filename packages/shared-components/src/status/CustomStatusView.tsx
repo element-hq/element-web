@@ -125,8 +125,11 @@ export function CustomStatusView({
                 <TextControl
                     value={text}
                     onChange={(ev) => setText(limitUserStatusInputText(ev.currentTarget.value))}
-                    placeholder={_t("status|set_status|set_status_prompt")}
+                    placeholder={_t("status|set_status|custom_status_placeholder")}
                     aria-label={_t("status|set_status|set_status_prompt")}
+                    // Not the native `required` attribute, as that would make the browser block an empty submit
+                    // with its own validation message; an empty submit is already ignored in onSubmit.
+                    aria-required="true"
                     autoFocus
                 />
             </Field>
