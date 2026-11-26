@@ -36,17 +36,10 @@ test.describe("1:1 chat room", () => {
         await page.getByRole("menuitem", { name: "Leave room" }).click();
         await page.getByRole("button", { name: "Leave" }).click();
 
-        // wait till the leave has come down sync: until then the old room still counts as our DM with
-        // the other user, and opening a chat with them below would show that room again
-        await expect
-            .poll(() =>
-                app.client.evaluate(
-                    (cli, userId) =>
-                        cli.getRooms().some((room) => room.getMyMembership() === "join" && !!room.getMember(userId)),
-                    user2.userId,
-                ),
-            )
-            .toBe(false);
+        // wait till the room was left
+        await expect(
+            page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile").getByText(user2.displayName!),
+        ).not.toBeVisible();
         // avoid race condition with routing: wait for the app to navigate away from the left room
         await expect(page).toHaveURL(/#\/home/);
 

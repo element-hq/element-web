@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mkRoom, resetAsyncStoreWithClient, setupAsyncStoreWithClient, stubClient } from "test-utils/test-utils";
 
@@ -24,6 +25,7 @@ import { MetaSpace } from "../stores/spaces";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { CallStore } from "../stores/CallStore";
 import { type Call } from "../models/Call";
+import { isRoomLeftPendingSync } from "./room/leftRooms";
 
 vi.mock("../Modal.tsx");
 
@@ -57,6 +59,9 @@ describe("leaveRoomBehaviour", () => {
     });
 
     afterEach(async () => {
+        // forget any room left by the test, as sync would
+        room.emit(RoomEvent.MyMembership, room, KnownMembership.Leave, KnownMembership.Join);
+        space.emit(RoomEvent.MyMembership, space, KnownMembership.Leave, KnownMembership.Join);
         SDKContextClass.instance.spaceStore.setActiveSpace(MetaSpace.Home);
         await resetAsyncStoreWithClient(SDKContextClass.instance.spaceStore);
         vi.restoreAllMocks();
@@ -102,6 +107,18 @@ describe("leaveRoomBehaviour", () => {
         await leaveRoomBehaviour(client, room.roomId);
 
         expect(mockCall.disconnect).toHaveBeenCalled();
+    });
+
+    it("remembers the room as left until sync updates our membership in it", async () => {
+        client.leaveRoomChain.mockResolvedValueOnce({ [room.roomId]: new Error("failed to leave") });
+        await leaveRoomBehaviour(client, room.roomId);
+        expect(isRoomLeftPendingSync(room.roomId)).toBe(false);
+
+        await leaveRoomBehaviour(client, room.roomId);
+        expect(isRoomLeftPendingSync(room.roomId)).toBe(true);
+
+        room.emit(RoomEvent.MyMembership, room, KnownMembership.Leave, KnownMembership.Join);
+        expect(isRoomLeftPendingSync(room.roomId)).toBe(false);
     });
 
     it("returns to the home page after leaving a room outside of a space that was being viewed", async () => {
