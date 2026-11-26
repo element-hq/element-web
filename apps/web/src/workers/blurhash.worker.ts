@@ -9,6 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { encode } from "blurhash";
 
 import { type WorkerPayload } from "./worker";
+import { forwardLogsToRageshake } from "../rageshake/workerLogs";
+
+forwardLogsToRageshake("blurhash-worker");
 
 const ctx: Worker = self as any;
 

@@ -546,6 +546,28 @@ describe("Rageshakes", () => {
         }
     });
 
+    it("should include logs from the platform", async () => {
+        const mockConsoleLogger = {
+            flush: vi.fn().mockReturnValue("renderer line\n"),
+        } as unknown as Mocked<ConsoleLogger>;
+        mockPlatformPeg({
+            getExtraLogsForReport: vi.fn().mockResolvedValue([{ id: "electron-main", lines: "main line\n" }]),
+        });
+
+        const prevLogger = global.mx_rage_logger;
+        global.mx_rage_logger = mockConsoleLogger;
+        try {
+            const formData = await collectBugReport({ sendLogs: true }, false);
+            const logs = formData.getAll("compressed-log") as Blob[];
+            await expect(Promise.all(logs.map((log) => log.text()))).resolves.toEqual([
+                "renderer line\n",
+                "main line\n",
+            ]);
+        } finally {
+            global.mx_rage_logger = prevLogger;
+        }
+    });
+
     it("should collect logs for downloadBugReport", async () => {
         const mockConsoleLogger = {
             flush: vi.fn(),

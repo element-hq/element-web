@@ -47,6 +47,7 @@ describe("ElectronPlatform", () => {
         initialise: initialiseValues,
         setSettingValue: vi.fn().mockResolvedValue(undefined),
         getSettingValue: vi.fn().mockResolvedValue(undefined),
+        getMainProcessLogs: vi.fn().mockResolvedValue(""),
     } as unknown as MockedObject<Electron>;
 
     const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
@@ -351,6 +352,24 @@ describe("ElectronPlatform", () => {
             const [, { name, args }] = mockElectron.send.mock.calls[0];
             expect(name).toEqual("destroyPickleKey");
             expect(args).toEqual([userId, deviceId]);
+        });
+    });
+
+    describe("getExtraLogsForReport", () => {
+        it("returns the main process logs", async () => {
+            mockElectron.getMainProcessLogs.mockResolvedValue("line 1\n");
+            const platform = tearDownAfterTest(new ElectronPlatform());
+
+            await expect(platform.getExtraLogsForReport()).resolves.toEqual([
+                { id: "electron-main", lines: "line 1\n" },
+            ]);
+        });
+
+        it("returns nothing when the main process has no logs", async () => {
+            mockElectron.getMainProcessLogs.mockResolvedValue("");
+            const platform = tearDownAfterTest(new ElectronPlatform());
+
+            await expect(platform.getExtraLogsForReport()).resolves.toEqual([]);
         });
     });
 

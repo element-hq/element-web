@@ -78,3 +78,15 @@ describe("preload x509 ipc", () => {
         expectInvoked("signData", "SERIAL1", data);
     });
 });
+
+describe("preload getMainProcessLogs", () => {
+    it("invokes getMainProcessLogs and returns its result", async () => {
+        // @ts-ignore `tsc` complains about needing to enable `allowImportingTsExtensions`, but vitest is happy to import this.
+        await import("./preload.cts");
+        const electron = exposed.get("electron") as { getMainProcessLogs(): Promise<string> };
+        invoke.mockResolvedValueOnce("line 1\n");
+
+        await expect(electron.getMainProcessLogs()).resolves.toBe("line 1\n");
+        expect(invoke).toHaveBeenLastCalledWith("getMainProcessLogs");
+    });
+});

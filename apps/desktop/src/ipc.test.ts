@@ -11,6 +11,7 @@ import { desktopCapturer, nativeImage, TouchBar } from "electron";
 import { getConfig } from "./config.js";
 import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import { clearData } from "./store.js";
+import { mainProcessLog } from "./main-process-log.js";
 
 const { ipcHandlers, mockStore, send, randomArray, defaultSession } = vi.hoisted(() => ({
     ipcHandlers: {} as Record<string, (...args: unknown[]) => unknown>,
@@ -220,6 +221,18 @@ describe("ipcCall: clearStorage", () => {
 
         expect(clearData).toHaveBeenCalledExactlyOnceWith(session);
         expect(send).toHaveBeenCalledWith("ipcReply", { id: 15, reply: null });
+    });
+});
+
+describe("getMainProcessLogs", () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("returns the contents of the main process log", async () => {
+        vi.spyOn(mainProcessLog, "read").mockResolvedValue("2026-11-25T09:15:11.007Z I hello\n");
+
+        await expect(ipcHandlers["getMainProcessLogs"]({})).resolves.toBe("2026-11-25T09:15:11.007Z I hello\n");
     });
 });
 

@@ -10,6 +10,7 @@ import { expect, describe, it, beforeAll, beforeEach, vi, MockInstance, afterEac
 import { app, dialog, safeStorage } from "electron";
 
 import Store, { Mode, SafeStorageDecryptionError, clearData } from "./store.js";
+import { mainProcessLog } from "./main-process-log.js";
 
 // In-memory ElectronStore replacement so the tests don't touch the filesystem or real config.
 const backing = new Map<string, unknown>();
@@ -608,6 +609,7 @@ describe("Store secret encryption (safeStorage)", () => {
 
     describe("clearData", () => {
         it("clears the store and flushes then clears the session's storage data", async () => {
+            const clearLog = vi.spyOn(mainProcessLog, "clear");
             backing.set("fakeDataItem", false);
             const electronSession = {
                 flushStorageData: vi.fn(),
@@ -617,8 +619,10 @@ describe("Store secret encryption (safeStorage)", () => {
             await clearData(electronSession);
 
             expect(backing.size).toBe(0);
+            expect(clearLog).toHaveBeenCalled();
             expect(electronSession.flushStorageData).toHaveBeenCalled();
             expect(electronSession.clearStorageData).toHaveBeenCalled();
+            clearLog.mockRestore();
         });
     });
 

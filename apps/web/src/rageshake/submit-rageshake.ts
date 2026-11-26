@@ -315,6 +315,7 @@ async function collectLogs(
 
     progressCallback?.(_t("bug_reporting|collecting_logs"));
     const logs = await rageshake.getLogsForReport();
+    logs.push(...((await PlatformPeg.get()?.getExtraLogsForReport()) ?? []));
     for (const entry of logs) {
         // encode as UTF-8
         let buf = new TextEncoder().encode(entry.lines);
