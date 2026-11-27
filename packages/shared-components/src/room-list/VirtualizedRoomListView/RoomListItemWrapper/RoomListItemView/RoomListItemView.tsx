@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useEffect, useRef, useState, type ReactNode, type Ref } from "react";
+import React, { type JSX, memo, useCallback, useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 import classNames from "classnames";
 import { useMergeRefs } from "react-merge-refs";
 
@@ -187,13 +187,22 @@ export const RoomListItemView = memo(function RoomListItemView({
     const mergedRef = useMergeRefs([ref, internalRef]);
     const item = useViewModel(vm);
 
-    // Reveal the hover menu when the row is focused via the keyboard (not the mouse), and keep it
-    // revealed while focus moves onto the menu buttons so they stay reachable by Tab. A pure CSS
-    // :focus-visible rule can't do the latter: it drops the instant focus leaves the row for a child,
-    // hiding the menu mid-Tab and dropping focus to <body>. A :focus-within rule reveals it for mouse
-    // focus too, which clutters selected/clicked rows. So we mark keyboard focus in JS (using the
-    // browser's own :focus-visible determination) and keep it set until focus leaves the row entirely.
+    // Reveal the hover menu when the row or one of its buttons receives keyboard focus. Keep it
+    // visible while focus moves within the row or its menus so the buttons stay reachable by Tab
+    // and can receive focus again when a menu closes.
     const [keyboardActive, setKeyboardActive] = useState(false);
+
+    // The hover menu is mounted on demand rather than rendered for every row and hidden with CSS,
+    // because its icon buttons carry label tooltips, and a mounted tooltip costs a subtree, a portal
+    // and a Floating-UI context each.
+    const [pointerOver, setPointerOver] = useState(false);
+    // Counted rather than held as a boolean: both menus report into it, and a boolean would take
+    // either one's close as meaning neither is open.
+    const [openMenus, setOpenMenus] = useState(0);
+    const onMenuOpenChange = useCallback(
+        (open: boolean) => setOpenMenus((count) => Math.max(0, count + (open ? 1 : -1))),
+        [],
+    );
 
     useEffect(() => {
         if (isFocused) {
@@ -201,10 +210,14 @@ export const RoomListItemView = memo(function RoomListItemView({
         }
     }, [isFocused]);
 
+    const onMouseMove = (): void => setPointerOver(true);
+    const onMouseLeave = (): void => setPointerOver(false);
+
     const onItemFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
         onFocus(item.id, e);
-        // Only when focus enters the row from outside via the keyboard.
-        if (!e.currentTarget.contains(e.relatedTarget) && e.currentTarget.matches(":focus-visible")) {
+        // Tab can reach a menu button from a mouse-focused row. Focus events from the
+        // portaled menu also bubble here, so check that the focus target is in the row.
+        if (e.currentTarget.contains(e.target) && e.target.matches(":focus-visible")) {
             setKeyboardActive(true);
         }
     };
@@ -243,11 +256,20 @@ export const RoomListItemView = memo(function RoomListItemView({
                 onClick={vm.onOpenRoom}
                 onFocus={onItemFocus}
                 onBlur={onItemBlur}
+                // `mousemove` rather than `mouseenter`, which a list scrolling under a stationary
+                // cursor fires for every row it passes.
+                onMouseMove={onMouseMove}
+                onMouseLeave={onMouseLeave}
                 tabIndex={isFocused ? 0 : -1}
                 aria-selected={props.role === "option" ? isSelected : undefined}
                 {...props}
             >
-                <RoomListItemContent vm={vm} renderAvatar={renderAvatar} />
+                <RoomListItemContent
+                    vm={vm}
+                    renderAvatar={renderAvatar}
+                    showHoverMenu={pointerOver || keyboardActive || openMenus > 0}
+                    onMenuOpenChange={onMenuOpenChange}
+                />
             </Flex>
         </RoomListItemContextMenu>
     );

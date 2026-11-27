@@ -22,6 +22,8 @@ export interface RoomListItemHoverMenuProps {
     showNotificationMenu: boolean;
     /** The room item view model */
     vm: RoomListItemViewModel;
+    /** Reports each menu opening and closing to the row, which keeps this mounted meanwhile */
+    onMenuOpenChange?: (open: boolean) => void;
 }
 
 /**
@@ -32,11 +34,12 @@ export const RoomListItemHoverMenu: React.FC<RoomListItemHoverMenuProps> = ({
     showMoreOptionsMenu,
     showNotificationMenu,
     vm,
+    onMenuOpenChange,
 }): JSX.Element => {
     return (
         <Flex className={styles.hoverMenu} align="center" gap="var(--cpd-space-1x)">
-            {showMoreOptionsMenu && <RoomListItemMoreOptionsMenu vm={vm} />}
-            {showNotificationMenu && <RoomListItemNotificationMenu vm={vm} />}
+            {showMoreOptionsMenu && <RoomListItemMoreOptionsMenu vm={vm} onOpenChange={onMenuOpenChange} />}
+            {showNotificationMenu && <RoomListItemNotificationMenu vm={vm} onOpenChange={onMenuOpenChange} />}
         </Flex>
     );
 };

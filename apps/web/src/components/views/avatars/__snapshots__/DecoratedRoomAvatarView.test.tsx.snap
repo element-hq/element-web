@@ -53,7 +53,6 @@ exports[`<DecoratedRoomAvatarView /> > should render a low priority room decorat
     </span>
     <svg
       aria-label="This is a low priority room"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -98,7 +97,6 @@ exports[`<DecoratedRoomAvatarView /> > should render a public room decoration 1`
     </span>
     <svg
       aria-label="This room is public"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
@@ -143,7 +141,6 @@ exports[`<DecoratedRoomAvatarView /> > should render a video room decoration 1`]
     </span>
     <svg
       aria-label="This room is a video room"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -188,7 +185,6 @@ exports[`<DecoratedRoomAvatarView /> > should render the busy presence 1`] = `
     </span>
     <svg
       aria-label="Busy"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -248,7 +244,6 @@ exports[`<DecoratedRoomAvatarView /> > should render the offline presence 1`] = 
     </span>
     <svg
       aria-label="Offline"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -308,7 +303,6 @@ exports[`<DecoratedRoomAvatarView /> > should render the online presence 1`] = `
     </span>
     <svg
       aria-label="Online"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
       fill="currentColor"
@@ -366,7 +360,6 @@ exports[`<DecoratedRoomAvatarView /> > should render the unavailable presence 1`
     </span>
     <svg
       aria-label="Away"
-      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"

@@ -8,8 +8,8 @@
 // @vitest-environment happy-dom
 
 import React from "react";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import { render, screen } from "test-utils-rtl";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { fireEvent, render, screen } from "test-utils-rtl";
 import { mkStubRoom, stubClient } from "test-utils";
 
 import { DecoratedRoomAvatarView } from "./DecoratedRoomAvatarView";
@@ -98,5 +98,70 @@ describe("<DecoratedRoomAvatarView />", () => {
 
         expect(screen.getByLabelText(label)).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("badge tooltip gating", () => {
+        const LABEL = "This room is public";
+
+        // A mounted tooltip renders its label as text; unmounted, the label survives only as the
+        // decoration's own accessible name.
+        const tooltip = (): HTMLElement | null => screen.queryByText(LABEL);
+        const decoration = (): HTMLElement => screen.getByLabelText(LABEL);
+        const avatar = (): HTMLElement => decoration().parentElement!;
+
+        const matchMedia = window.matchMedia.bind(window);
+
+        function setHoverCapability(canHover: boolean): void {
+            vi.spyOn(window, "matchMedia").mockImplementation((query) => {
+                const result = matchMedia(query);
+                if (query === "(hover: hover)") {
+                    Object.defineProperty(result, "matches", { value: canHover });
+                }
+                return result;
+            });
+        }
+
+        beforeEach(() => {
+            vi.mocked(useRoomAvatarViewModel).mockReturnValue({
+                ...defaultValue,
+                badgeDecoration: AvatarBadgeDecoration.PublicRoom,
+            });
+            setHoverCapability(true);
+        });
+
+        afterEach(() => vi.mocked(window.matchMedia).mockRestore());
+
+        it("should name the decoration while the tooltip is unmounted", () => {
+            render(<DecoratedRoomAvatarView room={room} />);
+
+            expect(decoration()).toBeInTheDocument();
+            expect(tooltip()).not.toBeInTheDocument();
+        });
+
+        it("should mount the tooltip while the pointer is over the avatar", () => {
+            render(<DecoratedRoomAvatarView room={room} />);
+
+            fireEvent.mouseMove(avatar());
+            expect(tooltip()).toBeInTheDocument();
+
+            fireEvent.mouseLeave(avatar());
+            expect(tooltip()).not.toBeInTheDocument();
+        });
+
+        it("should ignore an enter without movement, which a scrolling list fires per row", () => {
+            render(<DecoratedRoomAvatarView room={room} />);
+
+            fireEvent.mouseEnter(avatar());
+            expect(tooltip()).not.toBeInTheDocument();
+        });
+
+        it("should keep the tooltip mounted where the pointer cannot hover", () => {
+            // Touch reaches the tooltip by long press, which Compound handles on the tooltip's own
+            // anchor, so a tooltip that mounts on hover would never be reachable at all.
+            setHoverCapability(false);
+            render(<DecoratedRoomAvatarView room={room} />);
+
+            expect(tooltip()).toBeInTheDocument();
+        });
     });
 });

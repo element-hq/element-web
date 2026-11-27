@@ -26,6 +26,10 @@ export interface RoomListItemContentProps {
     renderAvatar: (room: Room) => ReactNode;
     /** Whether the item is being dragged */
     isDragging?: boolean;
+    /** Whether to mount the hover menu, which the row reveals on hover, keyboard focus or an open menu */
+    showHoverMenu?: boolean;
+    /** Reports each hover menu popover opening and closing to the row */
+    onMenuOpenChange?: (open: boolean) => void;
 }
 
 /**
@@ -37,6 +41,8 @@ export const RoomListItemContent = memo(function RoomListItemContent({
     vm,
     renderAvatar,
     isDragging = false,
+    showHoverMenu = false,
+    onMenuOpenChange,
 }: RoomListItemContentProps): JSX.Element {
     const item = useViewModel(vm);
 
@@ -69,11 +75,12 @@ export const RoomListItemContent = memo(function RoomListItemContent({
                         </Text>
                     )}
                 </div>
-                {!isDragging && (item.showMoreOptionsMenu || item.showNotificationMenu) && (
+                {!isDragging && showHoverMenu && (item.showMoreOptionsMenu || item.showNotificationMenu) && (
                     <RoomListItemHoverMenu
                         showMoreOptionsMenu={item.showMoreOptionsMenu}
                         showNotificationMenu={item.showNotificationMenu}
                         vm={vm}
+                        onMenuOpenChange={onMenuOpenChange}
                     />
                 )}
 

@@ -37,19 +37,26 @@ export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomList
 export interface RoomListItemMoreOptionsMenuProps {
     /** The room item view model */
     vm: RoomListItemViewModel;
+    /** Reports the popover opening and closing to the row, which keeps the hover menu mounted meanwhile */
+    onOpenChange?: (open: boolean) => void;
 }
 
 /**
  * The more options menu for room list items.
  * Displays additional room actions like mark as read/unread, favorite, invite, etc.
  */
-export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuProps): JSX.Element {
+export function RoomListItemMoreOptionsMenu({ vm, onOpenChange }: RoomListItemMoreOptionsMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
+
+    const onMenuOpenChange = (open: boolean): void => {
+        setOpen(open);
+        onOpenChange?.(open);
+    };
 
     return (
         <Menu
             open={open}
-            onOpenChange={setOpen}
+            onOpenChange={onMenuOpenChange}
             title={_t("room_list|room|more_options")}
             showTitle={false}
             align="start"

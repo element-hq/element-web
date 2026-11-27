@@ -29,22 +29,29 @@ export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomList
 export interface RoomListItemNotificationMenuProps {
     /** The room item view model */
     vm: RoomListItemViewModel;
+    /** Reports the popover opening and closing to the row, which keeps the hover menu mounted meanwhile */
+    onOpenChange?: (open: boolean) => void;
 }
 
 /**
  * The notification settings menu for room list items.
  * Displays options to change notification settings.
  */
-export function RoomListItemNotificationMenu({ vm }: RoomListItemNotificationMenuProps): JSX.Element {
+export function RoomListItemNotificationMenu({ vm, onOpenChange }: RoomListItemNotificationMenuProps): JSX.Element {
     const snapshot = useViewModel(vm);
     const [open, setOpen] = useState(false);
     const isMuted = snapshot.roomNotifState === RoomNotifState.Mute;
     const checkComponent = <CheckIcon width="24px" height="24px" color="var(--cpd-color-icon-primary)" />;
 
+    const onMenuOpenChange = (open: boolean): void => {
+        setOpen(open);
+        onOpenChange?.(open);
+    };
+
     return (
         <Menu
             open={open}
-            onOpenChange={setOpen}
+            onOpenChange={onMenuOpenChange}
             title={_t("room_list|notification_options")}
             showTitle={false}
             align="start"

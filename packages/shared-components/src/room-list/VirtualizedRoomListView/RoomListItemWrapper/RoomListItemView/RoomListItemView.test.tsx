@@ -6,8 +6,10 @@
  */
 
 import React from "react";
-import { render, screen, waitFor } from "@test-utils";
+import { fireEvent, render, screen, waitFor } from "@test-utils";
 import userEvent from "@testing-library/user-event";
+// Use real browser input for interactions that depend on CSS :hover or :focus-visible.
+import { commands, userEvent as browserUser } from "vitest/browser";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
 
@@ -123,15 +125,56 @@ describe("<RoomListItemView />", () => {
         expect(screen.queryByTestId("notification-decoration")).toBeNull();
     });
 
-    it("should show hover menu when showMoreOptionsMenu is true", () => {
-        const { container } = render(<WithHoverMenu />);
-        expect(container.querySelector('[aria-label="More Options"]')).not.toBeNull();
+    const trigger = (name: string): HTMLElement | null => screen.queryByRole("button", { name });
+
+    it("should show hover menu when showMoreOptionsMenu is true", async () => {
+        render(<WithHoverMenu />);
+
+        await browserUser.hover(screen.getByRole("option"));
+        expect(trigger("More Options")).not.toBeNull();
     });
 
-    it("should hide hover menu when showMoreOptionsMenu is false", () => {
-        const { container } = render(<WithoutHoverMenu />);
-        expect(container.querySelector('[aria-label="More Options"]')).toBeNull();
+    it("should hide hover menu when showMoreOptionsMenu is false", async () => {
+        render(<WithoutHoverMenu />);
+
+        await browserUser.hover(screen.getByRole("option"));
+        expect(trigger("More Options")).toBeNull();
     });
+
+    it("should mount the hover menu only while the pointer is over the row", async () => {
+        render(<WithHoverMenu />);
+        const option = screen.getByRole("option");
+        expect(trigger("More Options")).toBeNull();
+
+        await browserUser.hover(option);
+        expect(trigger("More Options")).not.toBeNull();
+
+        await browserUser.unhover(option);
+        await waitFor(() => expect(trigger("More Options")).toBeNull());
+    });
+
+    it.each(["More Options", "Notification options"])(
+        "should keep the hover menu mounted while the %s menu is open",
+        async (name) => {
+            render(<WithHoverMenu showNotificationMenu={true} />);
+            const option = screen.getByRole("option");
+
+            await browserUser.hover(option);
+            // Dispatched rather than clicked for real, which would leave the browser treating the
+            // next programmatic focus as a mouse focus and defeat the keyboard test below.
+            fireEvent.pointerDown(trigger(name)!, { button: 0, pointerType: "mouse" });
+            await screen.findByRole("menu", { name });
+
+            // The menu opens in a portal, so the pointer is over that rather than the row, and the
+            // row must not unmount the trigger the menu hangs off.
+            fireEvent.mouseLeave(option);
+
+            // Searched among hidden nodes because the open menu is modal, which puts everything
+            // outside it, the trigger included, behind an aria-hidden.
+            expect(screen.queryByRole("button", { name, hidden: true })).not.toBeNull();
+            expect(screen.getByRole("menu", { name })).toBeInTheDocument();
+        },
+    );
 
     it("reveals the hover menu on keyboard focus and clears it when focus leaves", async () => {
         // isFocused focuses the row via the keyboard on mount, so the hover menu is revealed.
@@ -146,5 +189,31 @@ describe("<RoomListItemView />", () => {
         option.blur();
         await waitFor(() => expect(option.className).not.toMatch(/keyboardActive/));
         expect(moreButton).not.toBeVisible();
+    });
+
+    it("restores focus to the notification trigger after clicking the row and tabbing to it", async () => {
+        render(
+            <>
+                <WithHoverMenu showNotificationMenu={true} />
+                <button type="button">Next control</button>
+            </>,
+        );
+
+        await browserUser.click(screen.getByRole("option"));
+        await browserUser.keyboard("{Tab}{Tab}");
+        const notificationButton = screen.getByRole("button", { name: "Notification options" });
+        expect(notificationButton).toHaveFocus();
+
+        await browserUser.keyboard("{Enter}");
+        await screen.findByRole("menu", { name: "Notification options" });
+        await commands.parkPointer();
+        await browserUser.keyboard("{ArrowDown}{Escape}");
+
+        await waitFor(() => expect(notificationButton).toHaveFocus());
+        expect(notificationButton).toBeVisible();
+
+        await browserUser.keyboard("{Tab}");
+        expect(screen.getByRole("button", { name: "Next control" })).toHaveFocus();
+        await waitFor(() => expect(notificationButton).not.toBeInTheDocument());
     });
 });
