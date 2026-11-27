@@ -16,6 +16,7 @@ import BaseEventIndexManager, {
     type ICrawlerCheckpoint,
     type IEventAndProfile,
     type IIndexStats,
+    type IIndexedEvent,
     type ISearchArgs,
     type ILoadArgs,
 } from "../../indexing/BaseEventIndexManager";
@@ -79,6 +80,10 @@ export class SeshatIndexManager extends BaseEventIndexManager {
 
     public async loadFileEvents(args: ILoadArgs): Promise<IEventAndProfile[]> {
         return this.ipc.call("loadFileEvents", args);
+    }
+
+    public async loadEventIds(args: ILoadArgs): Promise<IIndexedEvent[]> {
+        return this.ipc.call("loadEventIds", args);
     }
 
     public async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
