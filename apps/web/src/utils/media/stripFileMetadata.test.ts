@@ -333,6 +333,34 @@ describe("stripFileMetadata", () => {
         });
     });
 
+    describe("MP3", () => {
+        it("removes ID3v2 and ID3v1 tags", async () => {
+            const stripped = await stripFileMetadata(fixture("audio.mp3", "audio/mpeg"));
+            const bytes = await bytesOf(stripped);
+
+            expect(containsAscii(bytes, "Leaky")).toBe(false);
+            expect(containsAscii(bytes, "ID3")).toBe(false);
+            expect(containsAscii(bytes.subarray(-128), "TAG")).toBe(false);
+            // The file now starts with an MPEG frame header.
+            expect(bytes[0]).toBe(0xff);
+            expect(bytes[1] & 0xe0).toBe(0xe0);
+
+            await expect(stripFileMetadata(stripped)).resolves.toBe(stripped);
+        });
+
+        it("removes an APEv2 tag", async () => {
+            const audio = await bytesOf(await stripFileMetadata(fixture("audio.mp3", "audio/mpeg")));
+            const items = Buffer.from("LeakyApeItems", "latin1");
+            const footer = new Uint8Array(32);
+            footer.set(Buffer.from("APETAGEX", "latin1"));
+            dataView(footer).setUint32(8, 2000, true);
+            dataView(footer).setUint32(12, items.length + 32, true);
+            const file = new File([audio, items, footer], "a.mp3", { type: "audio/mpeg" });
+
+            expect(await bytesOf(await stripFileMetadata(file))).toEqual(audio);
+        });
+    });
+
     describe("WAV", () => {
         it("removes the INFO list", async () => {
             const stripped = await stripFileMetadata(fixture("audio.wav", "audio/wav"));
@@ -429,6 +457,7 @@ describe("canStripFileMetadata", () => {
         "image/webp",
         "image/gif",
         "image/bmp",
+        "audio/mpeg",
         "audio/wav",
         "IMAGE/JPEG",
     ])("supports %s", (type) => {
@@ -439,7 +468,6 @@ describe("canStripFileMetadata", () => {
         "text/plain",
         "application/pdf",
         "video/mp4",
-        "audio/mpeg",
         "image/svg+xml",
         "image/tiff",
         "image/heic",

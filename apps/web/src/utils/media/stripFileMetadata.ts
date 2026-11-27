@@ -9,6 +9,7 @@ import { stripBmpMetadata } from "./stripBmpMetadata";
 import { stripGifMetadata } from "./stripGifMetadata";
 import { stripJpegMetadata } from "./stripJpegMetadata";
 import { MetadataStripError } from "./MetadataStripError";
+import { stripMp3Metadata } from "./stripMp3Metadata";
 import { stripPngMetadata } from "./stripPngMetadata";
 import { stripWavMetadata } from "./stripWavMetadata";
 import { stripWebpMetadata } from "./stripWebpMetadata";
@@ -24,7 +25,7 @@ type StripImplementation = (file: File) => Promise<File>;
  * + HEIF
  * + AVIF
  * + SVG
- * + Audio files other than WAV
+ * + Audio files other than MP3 and WAV
  * + Video files
  */
 const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
@@ -36,6 +37,8 @@ const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
     ["image/bmp", stripBmpMetadata],
     ["image/x-bmp", stripBmpMetadata],
     ["image/x-ms-bmp", stripBmpMetadata],
+    ["audio/mpeg", stripMp3Metadata],
+    ["audio/mp3", stripMp3Metadata],
     ["audio/wav", stripWavMetadata],
     ["audio/wave", stripWavMetadata],
     ["audio/x-wav", stripWavMetadata],
