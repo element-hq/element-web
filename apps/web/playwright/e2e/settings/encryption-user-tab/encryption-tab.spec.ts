@@ -78,7 +78,7 @@ test.describe("Encryption tab", () => {
                 await util.verifyDevice(recoveryKey);
 
                 // (Scroll to top to prevent flakes we have seen on some runs)
-                await content.evaluate(t => t.scrollTop = 0);
+                await content.evaluate((t) => (t.scrollTop = 0));
 
                 // Then we can see the Offline device section but it's not available
                 await content
