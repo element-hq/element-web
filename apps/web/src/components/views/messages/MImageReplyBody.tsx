@@ -23,7 +23,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
 import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
-import ImageView from "../elements/ImageView";
+import NavigableImageViewDialog from "./NavigableImageViewDialog";
 import { type IBodyProps } from "./IBodyProps";
 import { suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -91,8 +91,6 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
                 return;
             }
 
-            const content = this.props.mxEvent.getContent<ImageContent>();
-
             let httpUrl = this.state.contentUrl;
             if (
                 this.props.mediaEventHelper?.media.isEncrypted &&
@@ -102,23 +100,10 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
             }
 
             if (!httpUrl) return;
-            const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
-                src: httpUrl,
-                name: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
-                mxEvent: this.props.mxEvent,
-                permalinkCreator: this.props.permalinkCreator,
-            };
-
-            if (content.info) {
-                params.width = content.info.w;
-                params.height = content.info.h;
-                params.fileSize = content.info.size;
-            }
-
+            let thumbnailInfo: ComponentProps<typeof NavigableImageViewDialog>["thumbnailInfo"];
             if (this.image.current) {
                 const clientRect = this.image.current.getBoundingClientRect();
-
-                params.thumbnailInfo = {
+                thumbnailInfo = {
                     width: clientRect.width,
                     height: clientRect.height,
                     positionX: clientRect.x,
@@ -126,7 +111,14 @@ export class ImageBodyBaseInner extends React.Component<ImageBodyBaseProps, ISta
                 };
             }
 
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
+            const params: Omit<ComponentProps<typeof NavigableImageViewDialog>, "onFinished"> = {
+                initialEvent: this.props.mxEvent,
+                permalinkCreator: this.props.permalinkCreator,
+                thumbnailInfo,
+                initialSrc: httpUrl,
+            };
+
+            Modal.createDialog(NavigableImageViewDialog, params, "mx_Dialog_lightbox", undefined, true);
         }
     };
 

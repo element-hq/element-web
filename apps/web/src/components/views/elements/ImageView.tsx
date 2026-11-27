@@ -20,7 +20,12 @@ import {
     ZoomInIcon,
     ZoomOutIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, MessageTimestampView } from "@element-hq/web-shared-components";
+import {
+    useCreateAutoDisposedViewModel,
+    MessageTimestampView,
+    LightboxNavigationView,
+    type LightboxNavigationViewModel,
+} from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -82,6 +87,12 @@ interface IProps {
         height: number;
     };
     onFinished(): void;
+
+    /**
+     * Previous/next navigation between images. When set, "Previous" and "Next" buttons are shown
+     * beside the image as the view model allows, and the left and right arrow keys navigate.
+     */
+    navigation?: LightboxNavigationViewModel;
 }
 
 interface IState {
@@ -139,6 +150,8 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private animatingLoading = false;
     private imageIsLoaded = false;
+    // Whether the first image has loaded; only that one animates in from its thumbnail.
+    private hasLoadedOnce = false;
 
     public componentDidMount(): void {
         // We have to use addEventListener() because the listener
@@ -148,6 +161,24 @@ export default class ImageView extends React.Component<IProps, IState> {
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current?.addEventListener("load", this.imageLoaded);
+    }
+
+    public componentDidUpdate(prevProps: IProps): void {
+        if (prevProps.src === this.props.src) return;
+
+        // A new image is being shown (prev/next navigation): forget the zoom, rotation and panning
+        // of the previous one. The zoom is recalculated once the new image has loaded.
+        this.imageIsLoaded = false;
+        this.animatingLoading = false;
+        this.setState({
+            zoom: 0,
+            minZoom: MAX_SCALE,
+            maxZoom: MAX_SCALE,
+            rotation: 0,
+            translationX: 0,
+            translationY: 0,
+            moving: false,
+        });
     }
 
     public componentWillUnmount(): void {
@@ -161,9 +192,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         // First, we calculate the zoom, so that the image has the same size as
         // the thumbnail
         const { thumbnailInfo } = this.props;
-        if (thumbnailInfo?.width) {
+        if (thumbnailInfo?.width && !this.hasLoadedOnce) {
             this.setState({ zoom: thumbnailInfo.width / this.image.current.naturalWidth });
         }
+        this.hasLoadedOnce = true;
 
         // Once the zoom is set, we the image is considered loaded and we can
         // start animating it into the center of the screen
@@ -306,6 +338,17 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
+            case KeyBindingAction.ArrowLeft:
+            case KeyBindingAction.ArrowRight: {
+                const { navigation } = this.props;
+                // Leave the arrow keys to the context menu while it is open
+                if (!navigation || this.state.contextMenuDisplayed) break;
+                ev.stopPropagation();
+                ev.preventDefault();
+                if (action === KeyBindingAction.ArrowLeft) navigation.goToPrevious();
+                else navigation.goToNext();
+                break;
+            }
             case KeyBindingAction.Escape:
                 ev.stopPropagation();
                 ev.preventDefault();
@@ -529,6 +572,27 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
+        const image = (
+            <div
+                className="mx_ImageView_image_wrapper"
+                ref={this.imageWrapper}
+                onMouseDown={this.props.onFinished}
+                onMouseMove={this.onMoving}
+                onMouseUp={this.onEndMoving}
+                onMouseLeave={this.onEndMoving}
+            >
+                <img
+                    src={this.props.src}
+                    style={style}
+                    alt={this.props.name}
+                    ref={this.image}
+                    className={`mx_ImageView_image ${transitionClassName}`}
+                    draggable={true}
+                    onMouseDown={this.onStartMoving}
+                />
+            </div>
+        );
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -592,24 +656,13 @@ export default class ImageView extends React.Component<IProps, IState> {
                         {this.renderContextMenu()}
                     </div>
                 </div>
-                <div
-                    className="mx_ImageView_image_wrapper"
-                    ref={this.imageWrapper}
-                    onMouseDown={this.props.onFinished}
-                    onMouseMove={this.onMoving}
-                    onMouseUp={this.onEndMoving}
-                    onMouseLeave={this.onEndMoving}
-                >
-                    <img
-                        src={this.props.src}
-                        style={style}
-                        alt={this.props.name}
-                        ref={this.image}
-                        className={`mx_ImageView_image ${transitionClassName}`}
-                        draggable={true}
-                        onMouseDown={this.onStartMoving}
-                    />
-                </div>
+                {this.props.navigation ? (
+                    <LightboxNavigationView vm={this.props.navigation} className="mx_ImageView_content">
+                        {image}
+                    </LightboxNavigationView>
+                ) : (
+                    <div className="mx_ImageView_content">{image}</div>
+                )}
             </FocusLock>
         );
     }

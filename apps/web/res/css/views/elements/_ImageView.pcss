@@ -20,11 +20,17 @@ $button-gap: var(--cpd-space-3x);
     flex-direction: column;
 }
 
+.mx_ImageView_content {
+    height: calc(100% - var(--image-view-panel-height));
+}
+
 .mx_ImageView_image_wrapper {
     pointer-events: initial;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1;
+    min-width: 0;
     height: 100%;
     overflow: hidden;
 }
