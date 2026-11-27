@@ -82,6 +82,7 @@ describe("stripFileMetadata in a browser", () => {
         ["photo.jpg", "image/jpeg"],
         ["ultrahdr.jpg", "image/jpeg"],
         ["photo.png", "image/png"],
+        ["photo.webp", "image/webp"],
     ])("still displays %s as before", async (name, type) => {
         const file = await fixture(name, type);
         const stripped = await stripFileMetadata(file);

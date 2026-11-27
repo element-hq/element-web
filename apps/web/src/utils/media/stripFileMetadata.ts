@@ -10,6 +10,7 @@ import { stripGifMetadata } from "./stripGifMetadata";
 import { stripJpegMetadata } from "./stripJpegMetadata";
 import { MetadataStripError } from "./MetadataStripError";
 import { stripPngMetadata } from "./stripPngMetadata";
+import { stripWebpMetadata } from "./stripWebpMetadata";
 
 type StripImplementation = (file: File) => Promise<File>;
 
@@ -18,7 +19,6 @@ type StripImplementation = (file: File) => Promise<File>;
  * they are.
  * Known omissions:
  * + JPEG XL
- * + WEBP
  * + HEIC
  * + HEIF
  * + AVIF
@@ -30,6 +30,7 @@ const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
     ["image/jpeg", stripJpegMetadata],
     ["image/png", stripPngMetadata],
     ["image/apng", stripPngMetadata],
+    ["image/webp", stripWebpMetadata],
     ["image/gif", stripGifMetadata],
     ["image/bmp", stripBmpMetadata],
     ["image/x-bmp", stripBmpMetadata],

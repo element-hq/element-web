@@ -99,6 +99,18 @@ function pngChunks(bytes: Uint8Array): string[] {
     return chunks;
 }
 
+/** Lists the chunk IDs of a RIFF file, checking the RIFF size matches the file. */
+function riffChunks(bytes: Uint8Array): string[] {
+    expect(dataView(bytes).getUint32(4, true)).toBe(bytes.length - 8);
+    const chunks: string[] = [];
+    for (let offset = 12; offset < bytes.length;) {
+        const size = dataView(bytes).getUint32(offset + 4, true);
+        chunks.push(readAscii(bytes, offset, 4));
+        offset += 8 + size + (size & 1);
+    }
+    return chunks;
+}
+
 describe("stripFileMetadata", () => {
     describe("JPEG", () => {
         it("removes Exif, XMP, IPTC and comments but keeps the orientation and colour space", async () => {
@@ -275,6 +287,30 @@ describe("stripFileMetadata", () => {
         });
     });
 
+    describe("WebP", () => {
+        it("removes Exif and XMP but keeps the orientation", async () => {
+            const stripped = await stripFileMetadata(fixture("photo.webp", "image/webp"));
+            const bytes = await bytesOf(stripped);
+
+            expect(containsAscii(bytes, "Leaky")).toBe(false);
+            expect(riffChunks(bytes)).toEqual(["VP8X", "VP8 ", "EXIF"]);
+            // The VP8X flags say there is Exif but no XMP.
+            expect(bytes[20] & 0x0c).toBe(0x08);
+            const exifStart = Buffer.from(bytes).lastIndexOf("EXIF", undefined, "latin1");
+            const exifSize = dataView(bytes).getUint32(exifStart + 4, true);
+            expect(exifStart + 8 + exifSize).toBe(bytes.length);
+            const fields = readExifDisplayFields(bytes.subarray(exifStart + 8));
+            expect(fields.ifd0.get(ORIENTATION_TAG)).toBe(6);
+
+            await expect(stripFileMetadata(stripped)).resolves.toBe(stripped);
+        });
+
+        it("returns a simple-format WebP unchanged", async () => {
+            const file = fixture("static-logo.webp", "image/webp");
+            await expect(stripFileMetadata(file)).resolves.toBe(file);
+        });
+    });
+
     describe("GIF", () => {
         it("removes comments and XMP but keeps the animation", async () => {
             const original = await bytesOf(fixture("animated.gif", "image/gif"));
@@ -374,7 +410,7 @@ describe("stripFileMetadata", () => {
 });
 
 describe("canStripFileMetadata", () => {
-    it.each(["image/jpeg", "image/png", "image/apng", "image/gif", "image/bmp", "IMAGE/JPEG"])(
+    it.each(["image/jpeg", "image/png", "image/apng", "image/webp", "image/gif", "image/bmp", "IMAGE/JPEG"])(
         "supports %s",
         (type) => {
             expect(canStripFileMetadata(type)).toBe(true);
@@ -390,7 +426,6 @@ describe("canStripFileMetadata", () => {
         "image/tiff",
         "image/heic",
         "image/avif",
-        "image/webp",
         "image/jxl",
         "image/x-icon",
         "",

@@ -5,8 +5,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { MetadataStripError } from "./MetadataStripError";
+
 /** A piece of an output file: either a slice of the original file or newly written bytes. */
 export type FilePart = Blob | Uint8Array<ArrayBuffer>;
+
+/**
+ * Reads `[start, end)` of a blob, throwing if the blob is too short.
+ */
+export async function readBytes(blob: Blob, start: number, end: number): Promise<Uint8Array<ArrayBuffer>> {
+    const bytes = new Uint8Array(await blob.slice(start, end).arrayBuffer());
+    if (bytes.length !== end - start) {
+        throw new MetadataStripError(`Unexpected end of file reading ${start}-${end}`);
+    }
+    return bytes;
+}
 
 /**
  * Reads a whole blob into memory.

@@ -127,6 +127,7 @@ Supported formats:
 
 - JPEG
 - PNG/APNG
+- WebP
 - GIF
 - BMP
 
