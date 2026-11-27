@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { stripBmpMetadata } from "./stripBmpMetadata";
+import { stripGifMetadata } from "./stripGifMetadata";
 import { stripJpegMetadata } from "./stripJpegMetadata";
 import { MetadataStripError } from "./MetadataStripError";
 import { stripPngMetadata } from "./stripPngMetadata";
@@ -21,7 +23,6 @@ type StripImplementation = (file: File) => Promise<File>;
  * + HEIF
  * + AVIF
  * + SVG
- * + GIF
  * + Audio files
  * + Video files
  */
@@ -29,6 +30,10 @@ const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
     ["image/jpeg", stripJpegMetadata],
     ["image/png", stripPngMetadata],
     ["image/apng", stripPngMetadata],
+    ["image/gif", stripGifMetadata],
+    ["image/bmp", stripBmpMetadata],
+    ["image/x-bmp", stripBmpMetadata],
+    ["image/x-ms-bmp", stripBmpMetadata],
 ]);
 
 /**
