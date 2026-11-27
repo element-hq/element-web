@@ -115,11 +115,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 {},
                                 {
                                     photo: (sub) => (
-                                        <ExternalLink
-                                            href="themes/element/img/backgrounds/lake.jpg"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
+                                        <ExternalLink href="themes/element/img/backgrounds/lake.jpg">
                                             {sub}
                                         </ExternalLink>
                                     ),
@@ -127,11 +123,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                         <ExternalLink href="https://www.flickr.com/golan">{sub}</ExternalLink>
                                     ),
                                     terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://creativecommons.org/licenses/by-sa/4.0/"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
+                                        <ExternalLink href="https://creativecommons.org/licenses/by-sa/4.0/">
                                             {sub}
                                         </ExternalLink>
                                     ),
@@ -144,21 +136,13 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 {},
                                 {
                                     colr: (sub) => (
-                                        <ExternalLink
-                                            href="https://github.com/matrix-org/twemoji-colr"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
+                                        <ExternalLink href="https://github.com/matrix-org/twemoji-colr">
                                             {sub}
                                         </ExternalLink>
                                     ),
                                     author: (sub) => <ExternalLink href="https://mozilla.org">{sub}</ExternalLink>,
                                     terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://www.apache.org/licenses/LICENSE-2.0"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
+                                        <ExternalLink href="https://www.apache.org/licenses/LICENSE-2.0">
                                             {sub}
                                         </ExternalLink>
                                     ),
@@ -179,11 +163,12 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                         </ExternalLink>
                                     ),
                                     terms: (sub) => (
-                                        <ExternalLink
-                                            href="https://creativecommons.org/licenses/by/4.0/"
-                                            rel="noreferrer noopener"
-                                            target="_blank"
-                                        >
+                                        <ExternalLink href="https://creativecommons.org/licenses/by/4.0/">
+                                            {sub}
+                                        </ExternalLink>
+                                    ),
+                                    sable: (sub) => (
+                                        <ExternalLink href="https://git.sable.moe/SableClient/twemoji">
                                             {sub}
                                         </ExternalLink>
                                     ),

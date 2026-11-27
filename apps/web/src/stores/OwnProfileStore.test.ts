@@ -124,7 +124,7 @@ describe("OwnProfileStore", () => {
                 client.getSafeUserId(),
                 "org.matrix.msc4426.call",
             );
-            expect(ownProfileStore.userStatus).toEqual({ emoji: "📞", text: "On a call" });
+            expect(ownProfileStore.userStatus).toEqual({ emoji: "🎧", text: "On a call" });
         });
 
         it("should update the user status when a UserProfileUpdate event is received for the current user", async () => {
