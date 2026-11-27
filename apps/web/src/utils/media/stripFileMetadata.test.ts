@@ -275,6 +275,62 @@ describe("stripFileMetadata", () => {
         });
     });
 
+    describe("BMP", () => {
+        /** Builds a 1x1 BMP with a BITMAPV5HEADER and the given colour space and profile. */
+        function bmp(colourSpace: string, profile: string, reserved = 0): Uint8Array<ArrayBuffer> {
+            const pixelOffset = 14 + 124;
+            const profileOffset = 124 + 4;
+            const bytes = new Uint8Array(pixelOffset + 4 + profile.length);
+            const view = dataView(bytes);
+            bytes.set(latin1("BM"));
+            view.setUint32(2, bytes.length, true);
+            view.setUint16(6, reserved, true);
+            view.setUint32(10, pixelOffset, true);
+            view.setUint32(14, 124, true);
+            view.setInt32(18, 1, true);
+            view.setInt32(22, 1, true);
+            view.setUint16(26, 1, true);
+            view.setUint16(28, 24, true);
+            // The colour space is stored as a big-endian four-character code read as a little-endian number.
+            bytes.set(latin1(colourSpace).reverse(), 14 + 56);
+            view.setUint32(14 + 112, profileOffset, true);
+            view.setUint32(14 + 116, profile.length, true);
+            bytes.set(latin1("\x00\x00\xff\x00"), pixelOffset);
+            bytes.set(latin1(profile), 14 + profileOffset);
+            return bytes;
+        }
+
+        it("removes the path to a linked colour profile", async () => {
+            const original = bmp("LINK", "C:\\Users\\Leaky\\profile.icc\0");
+            const stripped = await stripFileMetadata(new File([original], "a.bmp", { type: "image/bmp" }));
+            const bytes = await bytesOf(stripped);
+
+            expect(bytes.length).toBe(original.length);
+            expect(containsAscii(bytes, "Leaky")).toBe(false);
+            expect(readAscii(bytes.slice(14 + 56, 14 + 60).reverse(), 0, 4)).toBe("sRGB");
+            expect(dataView(bytes).getUint32(14 + 116, true)).toBe(0);
+            // The pixel is untouched.
+            expect(bytes.subarray(138, 142)).toEqual(original.subarray(138, 142));
+        });
+
+        it("clears the reserved header fields", async () => {
+            const stripped = await stripFileMetadata(
+                new File([bmp("sRGB", "", 0x1234)], "a.bmp", { type: "image/bmp" }),
+            );
+            expect(dataView(await bytesOf(stripped)).getUint16(6, true)).toBe(0);
+        });
+
+        it("keeps an embedded colour profile", async () => {
+            const file = new File([bmp("MBED", "fake-icc-profile")], "a.bmp", { type: "image/bmp" });
+            await expect(stripFileMetadata(file)).resolves.toBe(file);
+        });
+
+        it("rejects a file which is not a BMP", async () => {
+            const file = new File(["not a bmp at all"], "a.bmp", { type: "image/bmp" });
+            await expect(stripFileMetadata(file)).rejects.toBeInstanceOf(MetadataStripError);
+        });
+    });
+
     it("returns files of other types unchanged", async () => {
         const file = new File(["LeakyText"], "notes.txt", { type: "text/plain" });
         await expect(stripFileMetadata(file)).resolves.toBe(file);
@@ -296,7 +352,7 @@ describe("stripFileMetadata", () => {
 });
 
 describe("canStripFileMetadata", () => {
-    it.each(["image/jpeg", "image/png", "image/apng", "IMAGE/JPEG"])("supports %s", (type) => {
+    it.each(["image/jpeg", "image/png", "image/apng", "image/bmp", "IMAGE/JPEG"])("supports %s", (type) => {
         expect(canStripFileMetadata(type)).toBe(true);
     });
 
@@ -309,7 +365,6 @@ describe("canStripFileMetadata", () => {
         "image/tiff",
         "image/heic",
         "image/avif",
-        "image/bmp",
         "image/webp",
         "image/gif",
         "image/jxl",
