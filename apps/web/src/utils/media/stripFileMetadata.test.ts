@@ -275,6 +275,28 @@ describe("stripFileMetadata", () => {
         });
     });
 
+    describe("GIF", () => {
+        it("removes comments and XMP but keeps the animation", async () => {
+            const original = await bytesOf(fixture("animated.gif", "image/gif"));
+            const stripped = await stripFileMetadata(fixture("animated.gif", "image/gif"));
+            const bytes = await bytesOf(stripped);
+
+            expect(containsAscii(original, "XMP DataXMP")).toBe(true);
+            expect(containsAscii(bytes, "Leaky")).toBe(false);
+            expect(containsAscii(bytes, "XMP DataXMP")).toBe(false);
+            expect(containsAscii(bytes, "NETSCAPE2.0")).toBe(true);
+            expect(bytes.at(-1)).toBe(0x3b);
+
+            await expect(stripFileMetadata(stripped)).resolves.toBe(stripped);
+        });
+
+        it("rejects a truncated file", async () => {
+            const bytes = await bytesOf(fixture("animated.gif", "image/gif"));
+            const file = new File([bytes.subarray(0, 40)], "a.gif", { type: "image/gif" });
+            await expect(stripFileMetadata(file)).rejects.toBeInstanceOf(MetadataStripError);
+        });
+    });
+
     describe("BMP", () => {
         /** Builds a 1x1 BMP with a BITMAPV5HEADER and the given colour space and profile. */
         function bmp(colourSpace: string, profile: string, reserved = 0): Uint8Array<ArrayBuffer> {
@@ -352,9 +374,12 @@ describe("stripFileMetadata", () => {
 });
 
 describe("canStripFileMetadata", () => {
-    it.each(["image/jpeg", "image/png", "image/apng", "image/bmp", "IMAGE/JPEG"])("supports %s", (type) => {
-        expect(canStripFileMetadata(type)).toBe(true);
-    });
+    it.each(["image/jpeg", "image/png", "image/apng", "image/gif", "image/bmp", "IMAGE/JPEG"])(
+        "supports %s",
+        (type) => {
+            expect(canStripFileMetadata(type)).toBe(true);
+        },
+    );
 
     it.each([
         "text/plain",
@@ -366,7 +391,6 @@ describe("canStripFileMetadata", () => {
         "image/heic",
         "image/avif",
         "image/webp",
-        "image/gif",
         "image/jxl",
         "image/x-icon",
         "",

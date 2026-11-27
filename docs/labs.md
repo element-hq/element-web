@@ -127,6 +127,7 @@ Supported formats:
 
 - JPEG
 - PNG/APNG
+- GIF
 - BMP
 
 Other files, including other image formats, video and audio, are uploaded unchanged.
