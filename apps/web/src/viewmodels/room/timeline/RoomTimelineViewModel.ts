@@ -1066,16 +1066,15 @@ export class RoomTimelineViewModel
         const eventId = this.lastBottomEventId;
         if (!eventId || eventId === this.lastSentReceiptEventId) return;
 
-        const event = this.timelineWindow.getEvents().find((e) => e.getId() === eventId);
-        if (!event) return;
+        const events = this.timelineWindow.getEvents();
+        const index = events.findIndex((e) => e.getId() === eventId);
+        if (index === -1) return;
+        const event = events[index];
 
-        // Don't rewind — only advance if this event is newer than the last receipted one.
-        if (this.lastSentReceiptEventId) {
-            const lastSentEvent = this.timelineWindow
-                .getEvents()
-                .find((e) => e.getId() === this.lastSentReceiptEventId);
-            if (lastSentEvent && lastSentEvent.getTs() >= event.getTs()) return;
-        }
+        // Don't rewind: only move on to a message after the last one we sent a receipt for.
+        // Compared by position rather than timestamp, since servers' clocks differ.
+        const lastSentIndex = events.findIndex((e) => e.getId() === this.lastSentReceiptEventId);
+        if (lastSentIndex >= index) return;
 
         this.lastSentReceiptEventId = eventId;
         const receiptType = SettingsStore.getValue("sendReadReceipts", this.opts.room.roomId)
@@ -1298,8 +1297,11 @@ export class RoomTimelineViewModel
     }
 
     /**
-     * Tear-down: save scroll position and advance the FullyRead marker.
+     * Tear-down: send any read receipt still waiting, save scroll position and advance the
+     * FullyRead marker.
      *
+     * - Sends a read receipt still waiting on its timer, as when the room is left within
+     *   half a second of opening it. Dropping it would leave the room unread.
      * - Saves the current scroll position to localStorage so the next visit
      *   resumes here. Clears the saved position only when the user is at the
      *   visual bottom (so the next visit starts fresh at the live end).
@@ -1313,6 +1315,7 @@ export class RoomTimelineViewModel
         if (this.readReceiptDebounceTimer !== null) {
             clearTimeout(this.readReceiptDebounceTimer);
             this.readReceiptDebounceTimer = null;
+            this.sendAutoReadReceipt();
         }
         if (this.decryptDebounceTimer !== null) {
             clearTimeout(this.decryptDebounceTimer);

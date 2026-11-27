@@ -901,6 +901,34 @@ describe("RoomTimelineViewModel", () => {
 
             expect(vi.mocked(client.sendReadReceipt).mock.calls.length).toBe(callsAfterBottom);
         });
+
+        it("moves on to a later message that has an earlier timestamp", async () => {
+            // Servers' clocks differ, so a message can arrive after one with a later timestamp.
+            seedTimeline([makeMessage("$a", { ts: 2000 }), makeMessage("$b", { ts: 1000 })]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            const items = vm.getSnapshot().items;
+            vm.onVisibleRangeChanged(0, indexOfKey(items, "$a"));
+            await flushReceiptDebounce();
+
+            vm.onVisibleRangeChanged(0, indexOfKey(items, "$b"));
+
+            await vi.waitFor(() => expect(client.sendReadReceipt).toHaveBeenCalledTimes(2), { timeout: 2000 });
+            expect(vi.mocked(client.sendReadReceipt).mock.calls[1][0]?.getId()).toBe("$b");
+        });
+
+        it("sends a receipt still waiting when the room is left", async () => {
+            seedTimeline([makeMessage("$a"), makeMessage("$b")]);
+            const vm = await createStartedViewModel();
+            vm.onAnchorReached();
+            vm.onVisibleRangeChanged(0, vm.getSnapshot().items.length - 1);
+
+            // Left straight away, before the receipt's timer runs out.
+            vm.dispose();
+
+            expect(client.sendReadReceipt).toHaveBeenCalledTimes(1);
+            expect(vi.mocked(client.sendReadReceipt).mock.calls[0][0]?.getId()).toBe("$b");
+        });
     });
 
     describe("dispose", () => {

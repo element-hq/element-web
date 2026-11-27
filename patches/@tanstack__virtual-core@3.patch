@@ -1,5 +1,5 @@
 diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
-index 0524d9a..4c350d4 100644
+index 0524d9a..ad9a3a2 100644
 --- a/dist/esm/index.d.ts
 +++ b/dist/esm/index.d.ts
 @@ -83,6 +83,12 @@ export interface VirtualizerOptions<TScrollElement extends Element | Window, TIt
@@ -15,9 +15,19 @@ index 0524d9a..4c350d4 100644
      followOnAppend?: FollowOnAppend;
      scrollEndThreshold?: number;
      isScrollingResetDelay?: number;
-@@ -196,6 +202,9 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
+@@ -159,6 +165,7 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
+     private scheduleScrollReconcile;
+     private getScrollStateTarget;
+     private reconcileScroll;
++    private _reconcileScrollStep;
+     private getSize;
+     private getScrollOffset;
+     private getMeasurementOptions;
+@@ -195,7 +202,11 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
+     private _elementMaxScrollOffset;
      private _momentumStop;
      private _stopMomentum;
++    private _isUnscrollable;
      private _clampedBy;
 +    private _readDefaultRect;
 +    private _setScrollRect;
@@ -25,8 +35,31 @@ index 0524d9a..4c350d4 100644
      private getVirtualDistanceFromEnd;
      getDistanceFromEnd: () => number;
      isAtEnd: (threshold?: number) => boolean;
+@@ -222,6 +233,22 @@ export declare class Virtualizer<TScrollElement extends Element | Window, TItemE
+     takeSnapshot: () => Array<VirtualItem>;
+     private _scrollToOffset;
+     private getCommandWrittenOffset;
++    /**
++     * Whether a scroll command (`scrollToIndex`, `scrollToOffset`, `scrollBy`,
++     * `scrollToEnd`) has written a position that no scroll event has reported
++     * back yet. While it has, `scrollOffset`, `range`, `getVirtualItems()` and
++     * `isAtEnd()` still describe the position before the command. An
++     * `onChange` fired in between (a row measured, the scroll element resized)
++     * pairs the current sizes with that old position. A consumer that acts on
++     * the position in `onChange` can skip such a notify: the read-back always
++     * brings another.
++     *
++     * `false` for a smooth write, whose scroll events keep `scrollOffset`
++     * current, and for a correction, which is folded into `scrollOffset` at
++     * once. A write the element never reports stops being pending when
++     * reconcile retargets or gives up on the command, with a notify.
++     */
++    isScrollPending: () => boolean;
+     private _awaitingCommandReadBack;
+     private _followOffsetTarget;
+     measure: () => void;
 diff --git a/dist/esm/index.js b/dist/esm/index.js
-index abe4b49..3018fe4 100644
+index abe4b49..7cf0e7e 100644
 --- a/dist/esm/index.js
 +++ b/dist/esm/index.js
 @@ -5,8 +5,12 @@ import { IosGesture, isIOSWebKit, momentumOverridesWrites } from "./ios-gesture.
@@ -102,7 +135,40 @@ index abe4b49..3018fe4 100644
              this._flushHoldIfReady(true);
              if (this.scrollState) {
                this.scheduleScrollReconcile();
-@@ -1049,7 +1065,7 @@ class Virtualizer {
+@@ -637,7 +653,7 @@ class Virtualizer {
+         }
+       }
+       this._flushHoldIfReady(false);
+-      this._retryClampedAdjustment();
++      this._retryClampedAdjustment(true);
+     };
+     this._classifyScrollEvent = (offset, isScrolling, elementMax) => {
+       var _a;
+@@ -651,7 +667,7 @@ class Virtualizer {
+         clampedMaxAtWrite: ((_a = this._clampedAdjustment) == null ? void 0 : _a.maxAtWrite) ?? null
+       });
+     };
+-    this._retryClampedAdjustment = () => {
++    this._retryClampedAdjustment = (committed = false) => {
+       if (this._clampedAdjustment === null || !this.scrollElement || !this.options.enabled || !this._canWriteScroll()) {
+         return;
+       }
+@@ -660,6 +676,14 @@ class Virtualizer {
+       if (max > maxAtWrite + 0.5) {
+         this._clampedAdjustment = target > max + 0.5 ? { target, maxAtWrite: max } : null;
+         this._scrollToOffset(target);
++      } else if (committed && this._isUnscrollable()) {
++        this._clampedAdjustment = null;
++        if (this.scrollOffset !== null && this.scrollOffset > 0) {
++          this.scrollOffset = 0;
++        }
++        if (this.pendingWrite !== null && approxEqual(this.pendingWrite.target, target)) {
++          this.pendingWrite.target = 0;
++        }
+       }
+     };
+     this._writeAwaitingCommand = () => {
+@@ -1049,7 +1073,7 @@ class Virtualizer {
        const itemSize = this.itemSizeCache.get(key) ?? cachedSize;
        const delta = size - itemSize;
        if (delta !== 0) {
@@ -111,7 +177,19 @@ index abe4b49..3018fe4 100644
          const prevTotalSize = wasAtEnd ? this._getLayoutTotalSize() : 0;
          const scrollOffset = this.getScrollOffset();
          const isFirstMeasure = !this.itemSizeCache.has(key);
-@@ -1226,6 +1242,30 @@ class Virtualizer {
+@@ -1220,12 +1244,42 @@ class Virtualizer {
+         })
+       );
+     };
++    this._isUnscrollable = () => {
++      const layoutMax = this._getLayoutTotalSize() + this.options.scrollMargin - this.getSize();
++      if (layoutMax > 0) return false;
++      const elementMax = this._elementMaxScrollOffset();
++      return elementMax !== null && elementMax <= 0.5;
++    };
+     this._clampedBy = (target) => {
+       const elementMax = this._elementMaxScrollOffset();
+       if (elementMax === null) return null;
        const maxAtWrite = elementMax + this._holdOffset;
        return target > maxAtWrite + 0.5 ? { target, maxAtWrite } : null;
      };
@@ -142,3 +220,48 @@ index abe4b49..3018fe4 100644
      this.getVirtualDistanceFromEnd = () => {
        return Math.max(
          this._getLayoutTotalSize() + this.options.scrollMargin - this.getSize() - this.getScrollOffset(),
+@@ -1328,7 +1382,9 @@ class Virtualizer {
+         this.targetWindow.cancelAnimationFrame(this.rafId);
+         this.rafId = null;
+       }
++      const wasPending = this.isScrollPending();
+       this.scrollState = null;
++      if (wasPending) this.notify(false);
+     };
+     this.getTotalSize = () => Math.max(this._getLayoutTotalSize() - this._holdOffset, 0);
+     this._getLayoutTotalSize = () => {
+@@ -1397,6 +1453,7 @@ class Virtualizer {
+       return write;
+     };
+     this.getCommandWrittenOffset = () => this.scrollState !== null && this.pendingWrite !== null && !this.pendingWrite.smooth ? this.pendingWrite.target : null;
++    this.isScrollPending = () => this._awaitingCommandReadBack();
+     this._awaitingCommandReadBack = () => {
+       const writtenOffset = this.getCommandWrittenOffset();
+       return !(isIOSWebKit() && this._iosGesture.dragging()) && writtenOffset !== null && !approxEqual(writtenOffset, this.getScrollOffset());
+@@ -1444,6 +1501,7 @@ class Virtualizer {
+         adjustments: delta,
+         behavior
+       });
++      if (write.target < 0) write.target = 0;
+       if (this.scrollOffset !== null) {
+         if (this.pendingWrite === write) this.scrollOffset += delta;
+         if (this.scrollOffset < 0) this.scrollOffset = 0;
+@@ -1466,7 +1524,18 @@ class Virtualizer {
+     const offsetInfo = state.toEnd ? [Math.max(this.getMaxScrollOffset(), 0)] : state.index != null ? this.getOffsetForIndex(state.index, state.align) : void 0;
+     return offsetInfo ? offsetInfo[0] : state.lastTargetOffset;
+   }
++  // A write the element never reports (clamped where it already was, or
++  // dropped) stays pending until reconcile retargets or retires its command.
++  // That ends the pending position with no scroll event to say so, so a
++  // consumer that waited for the read-back to act on the position is told.
+   reconcileScroll() {
++    const wasPending = this.isScrollPending();
++    this._reconcileScrollStep();
++    if (wasPending && !this.isScrollPending()) {
++      this.notify(false);
++    }
++  }
++  _reconcileScrollStep() {
+     if (!this.scrollState) return;
+     const el = this.scrollElement;
+     if (!el) return;
