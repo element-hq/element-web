@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { SynapseContainer as BaseSynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 const DOCKER_IMAGE =
-    "ghcr.io/element-hq/synapse:develop@sha256:046ec82ee1ac83e16e0a95429a1a58cc6ba186304b0577acd2a1fa50be64196b";
+    "ghcr.io/element-hq/synapse:develop@sha256:506fd520f3397ff38b9fb311816732af9d7811269ee9bd0e73b4dab0d7f039aa";
 
 /**
  * SynapseContainer which freezes the docker digest to stabilise tests,
