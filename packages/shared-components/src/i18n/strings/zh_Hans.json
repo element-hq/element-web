@@ -275,6 +275,7 @@
             "be_right_back": "马上回来",
             "choose_emoji": "选择 Emoji",
             "custom": "自定义…",
+            "custom_status_placeholder": "状态（必填）",
             "focus_time": "专注时间",
             "in_a_meeting": "正在开会",
             "on_the_road": "在路上",

@@ -209,6 +209,7 @@
         "empty": {
             "no_chats": "Inga chattar än",
             "no_chats_description": "Kom igång genom att skicka meddelanden till någon eller genom att skapa ett rum",
+            "no_chats_description_no_dm": "Börja med att skapa ett rum",
             "no_chats_description_no_room_rights": "Kom igång genom att skicka meddelanden till någon.",
             "no_invites": "Du har inga olästa inbjudningar",
             "no_mentions": "Du har inga olästa omnämnanden",
@@ -280,6 +281,7 @@
             "be_right_back": "Jag är strax tillbaka",
             "choose_emoji": "Välj emoji",
             "custom": "Anpassad…",
+            "custom_status_placeholder": "Status (obligatoriskt)",
             "focus_time": "Fokustid",
             "in_a_meeting": "I ett möte",
             "on_the_road": "På resande fot",

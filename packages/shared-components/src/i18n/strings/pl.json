@@ -212,6 +212,7 @@
         "empty": {
             "no_chats": "Nie ma jeszcze żadnych czatów",
             "no_chats_description": "Zacznij od wysłania wiadomości lub utworzenia pokoju",
+            "no_chats_description_no_dm": "Zacznij od utworzenia pokoju",
             "no_chats_description_no_room_rights": "Zacznij od wysłania komuś wiadomości",
             "no_invites": "Nie masz żadnych nieprzeczytanych zaproszeń",
             "no_mentions": "Nie masz żadnych nieprzeczytanych wzmianek",
@@ -283,6 +284,7 @@
             "be_right_back": "Zaraz wracam",
             "choose_emoji": "Wybierz Emoji",
             "custom": "Własny…",
+            "custom_status_placeholder": "Status (wymagane)",
             "focus_time": "W trakcie skupienia",
             "in_a_meeting": "Na spotkaniu",
             "on_the_road": "W trasie",

@@ -60,7 +60,8 @@
         "logo_alt": "Portalens logotyp",
         "logo_link_label": "Visa portal",
         "menu_label": "Meny",
-        "trigger_label": "Visa meny"
+        "trigger_label": "Visa meny",
+        "univention_error": "Det gick inte att hämta den centrala navigeringen från portalen"
     },
     "uk": {
         "close_label": "Закрити меню",
