@@ -568,7 +568,7 @@ export default class ContentMessages {
     /**
      * Uploads a file and sends it to a room as a message.
      *
-     * @param stripMetadata - whether to remove metadata such as location from images first.
+     * @param stripMetadata - whether to remove metadata such as location from images and audio first.
      *     If it cannot be removed then the file is not sent. Defaults to whether the labs feature is enabled.
      */
     public async sendContentToRoom(

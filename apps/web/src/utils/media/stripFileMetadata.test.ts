@@ -333,6 +333,18 @@ describe("stripFileMetadata", () => {
         });
     });
 
+    describe("WAV", () => {
+        it("removes the INFO list", async () => {
+            const stripped = await stripFileMetadata(fixture("audio.wav", "audio/wav"));
+            const bytes = await bytesOf(stripped);
+
+            expect(containsAscii(bytes, "Leaky")).toBe(false);
+            expect(riffChunks(bytes)).toEqual(["fmt ", "data"]);
+
+            await expect(stripFileMetadata(stripped)).resolves.toBe(stripped);
+        });
+    });
+
     describe("BMP", () => {
         /** Builds a 1x1 BMP with a BITMAPV5HEADER and the given colour space and profile. */
         function bmp(colourSpace: string, profile: string, reserved = 0): Uint8Array<ArrayBuffer> {
@@ -410,12 +422,18 @@ describe("stripFileMetadata", () => {
 });
 
 describe("canStripFileMetadata", () => {
-    it.each(["image/jpeg", "image/png", "image/apng", "image/webp", "image/gif", "image/bmp", "IMAGE/JPEG"])(
-        "supports %s",
-        (type) => {
-            expect(canStripFileMetadata(type)).toBe(true);
-        },
-    );
+    it.each([
+        "image/jpeg",
+        "image/png",
+        "image/apng",
+        "image/webp",
+        "image/gif",
+        "image/bmp",
+        "audio/wav",
+        "IMAGE/JPEG",
+    ])("supports %s", (type) => {
+        expect(canStripFileMetadata(type)).toBe(true);
+    });
 
     it.each([
         "text/plain",

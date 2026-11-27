@@ -115,8 +115,8 @@ Renders Element Call as a React component instead of a widget.
 
 ## Remove location and other metadata from uploads (`feature_strip_upload_metadata`)
 
-Removes metadata which could identify the sender from images before they are uploaded. The image itself is not
-re-encoded, so its quality is unchanged, and the parts needed to display it correctly are kept: orientation,
+Removes metadata which could identify the sender from images and audio before they are uploaded. The media itself
+is not re-encoded, so its quality is unchanged, and the parts needed to display it correctly are kept: orientation,
 colour space, etc.
 
 The upload dialog shows a "Remove location and other metadata" option, ticked by default, for files whose
@@ -130,5 +130,6 @@ Supported formats:
 - WebP
 - GIF
 - BMP
+- WAV audio
 
-Other files, including other image formats, video and audio, are uploaded unchanged.
+Other files, including other image and audio formats and video, are uploaded unchanged.

@@ -10,20 +10,21 @@ import { stripGifMetadata } from "./stripGifMetadata";
 import { stripJpegMetadata } from "./stripJpegMetadata";
 import { MetadataStripError } from "./MetadataStripError";
 import { stripPngMetadata } from "./stripPngMetadata";
+import { stripWavMetadata } from "./stripWavMetadata";
 import { stripWebpMetadata } from "./stripWebpMetadata";
 
 type StripImplementation = (file: File) => Promise<File>;
 
 /**
- * The stripper for each supported MIME type. Only image types are listed: other files are sent exactly as
- * they are.
+ * The stripper for each supported MIME type. Only image and audio types are listed: other files are sent
+ * exactly as they are.
  * Known omissions:
  * + JPEG XL
  * + HEIC
  * + HEIF
  * + AVIF
  * + SVG
- * + Audio files
+ * + Audio files other than WAV
  * + Video files
  */
 const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
@@ -35,6 +36,10 @@ const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
     ["image/bmp", stripBmpMetadata],
     ["image/x-bmp", stripBmpMetadata],
     ["image/x-ms-bmp", stripBmpMetadata],
+    ["audio/wav", stripWavMetadata],
+    ["audio/wave", stripWavMetadata],
+    ["audio/x-wav", stripWavMetadata],
+    ["audio/vnd.wave", stripWavMetadata],
 ]);
 
 /**
@@ -48,8 +53,8 @@ export function canStripFileMetadata(mimeType: string): boolean {
 
 /**
  * Removes metadata which could identify the sender, such as location, device, timestamps and authorship,
- * from an image. The image itself is never re-encoded, and the orientation, colour and HDR information
- * needed to display it correctly are kept.
+ * from an image or audio file. The media itself is never re-encoded, and the orientation, colour and HDR
+ * information needed to display an image correctly are kept.
  *
  * The format is chosen from `file.type`; files of other types are returned unchanged.
  *
