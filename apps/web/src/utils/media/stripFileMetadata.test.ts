@@ -361,6 +361,27 @@ describe("stripFileMetadata", () => {
         });
     });
 
+    describe("FLAC", () => {
+        it("removes Vorbis comments and keeps the stream info", async () => {
+            const original = await bytesOf(fixture("audio.flac", "audio/flac"));
+            const stripped = await stripFileMetadata(fixture("audio.flac", "audio/flac"));
+            const bytes = await bytesOf(stripped);
+
+            expect(containsAscii(bytes, "Leaky")).toBe(false);
+            expect(readAscii(bytes, 0, 4)).toBe("fLaC");
+            // STREAMINFO is unchanged and still comes first.
+            expect(bytes[4] & 0x7f).toBe(0);
+            expect(bytes.subarray(5, 42)).toEqual(original.subarray(5, 42));
+
+            await expect(stripFileMetadata(stripped)).resolves.toBe(stripped);
+        });
+
+        it("rejects a file which is not a FLAC file", async () => {
+            const file = new File(["not a flac file"], "a.flac", { type: "audio/flac" });
+            await expect(stripFileMetadata(file)).rejects.toBeInstanceOf(MetadataStripError);
+        });
+    });
+
     describe("WAV", () => {
         it("removes the INFO list", async () => {
             const stripped = await stripFileMetadata(fixture("audio.wav", "audio/wav"));
@@ -458,6 +479,7 @@ describe("canStripFileMetadata", () => {
         "image/gif",
         "image/bmp",
         "audio/mpeg",
+        "audio/flac",
         "audio/wav",
         "IMAGE/JPEG",
     ])("supports %s", (type) => {

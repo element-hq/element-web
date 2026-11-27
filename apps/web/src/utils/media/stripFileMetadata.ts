@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { stripBmpMetadata } from "./stripBmpMetadata";
+import { stripFlacMetadata } from "./stripFlacMetadata";
 import { stripGifMetadata } from "./stripGifMetadata";
 import { stripJpegMetadata } from "./stripJpegMetadata";
 import { MetadataStripError } from "./MetadataStripError";
@@ -25,7 +26,7 @@ type StripImplementation = (file: File) => Promise<File>;
  * + HEIF
  * + AVIF
  * + SVG
- * + Audio files other than MP3 and WAV
+ * + Audio files other than MP3, FLAC and WAV
  * + Video files
  */
 const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
@@ -39,6 +40,8 @@ const STRIP_IMPLEMENTATIONS = new Map<string, StripImplementation>([
     ["image/x-ms-bmp", stripBmpMetadata],
     ["audio/mpeg", stripMp3Metadata],
     ["audio/mp3", stripMp3Metadata],
+    ["audio/flac", stripFlacMetadata],
+    ["audio/x-flac", stripFlacMetadata],
     ["audio/wav", stripWavMetadata],
     ["audio/wave", stripWavMetadata],
     ["audio/x-wav", stripWavMetadata],

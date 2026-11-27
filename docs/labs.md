@@ -130,6 +130,6 @@ Supported formats:
 - WebP
 - GIF
 - BMP
-- MP3 and WAV audio
+- MP3, FLAC and WAV audio
 
 Other files, including other image and audio formats and video, are uploaded unchanged.
