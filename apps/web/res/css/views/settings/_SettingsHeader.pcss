@@ -9,6 +9,7 @@
     display: flex;
     align-items: center;
     gap: var(--cpd-space-2x);
+    color: var(--cpd-color-text-primary);
     /* Override margin from common.pcss */
     margin: 0;
 
@@ -25,4 +26,18 @@
         background-color: var(--cpd-color-icon-critical-primary);
         clip-path: circle(4px);
     }
+
+    .mx_SettingsHeader_annotation {
+        color: var(--cpd-color-text-secondary);
+        font: var(--cpd-font-body-sm-medium);
+    }
+
+    .mx_SettingsHeader_annotation_active {
+        color: var(--cpd-color-text-action-accent);
+        font-weight: var(--cpd-font-weight-medium);
+    }
+}
+
+.mx_SettingsHeader:has(.mx_SettingsHeader_annotation) {
+    align-items: end;
 }

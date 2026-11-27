@@ -107,6 +107,9 @@ export default class ElectronPlatform extends BasePlatform {
         }
         this.electron = window.electron;
 
+        // The IPC bridge has no way to remove listeners: they last as long as the window, as the platform does
+        /* oxlint-disable element-web/no-leaked-emitter-listener */
+
         /*
             IPC Call `check_updates` returns:
             true if there is an update available
@@ -206,6 +209,8 @@ export default class ElectronPlatform extends BasePlatform {
             });
         });
 
+        /* oxlint-enable element-web/no-leaked-emitter-listener */
+
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
 
         this.initialised = this.initialise();
@@ -238,6 +243,11 @@ export default class ElectronPlatform extends BasePlatform {
     public async getConfig(): Promise<IConfigOptions | undefined> {
         await this.initialised;
         return this.config;
+    }
+
+    public destroy(): void {
+        super.destroy();
+        BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
     private onBreadcrumbsUpdate = (): void => {

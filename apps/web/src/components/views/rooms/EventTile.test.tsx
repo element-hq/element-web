@@ -52,7 +52,9 @@ import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.t
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import PlatformPeg from "../../../PlatformPeg";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider.tsx";
+import { ModuleApi } from "../../../modules/Api";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -454,6 +456,29 @@ describe("EventTile", () => {
             expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
         });
 
+        it("renders formatted informational message bodies with the markdown class", () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Render as **informational** message",
+                formattedMsg: "Render as <strong>informational</strong> message",
+                format: "org.matrix.custom.html",
+                event: true,
+            });
+            vi.spyOn(ModuleApi.instance.customComponents, "getMessageRenderInfo").mockReturnValue({
+                hints: { renderAsInfoMessage: true },
+                hasGrouping: false,
+                getGrouping: () => null,
+            });
+
+            const { container } = getComponent();
+
+            expect(container.querySelector('[data-testid="event-tile-slot-sender"]')).toBeNull();
+            expect(container.querySelector('[data-testid="event-tile-slot-avatar"]')).not.toBeNull();
+            const body = container.querySelector(".mx_EventTile_content .mx_EventTile_body.markdown-body");
+            expect(body).toContainHTML("Render as <strong>informational</strong> message");
+        });
+
         it("renders the notification avatar independently from the sender details", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
             const details = container.querySelector('[data-testid="event-tile-slot-sender"]')?.parentElement;
@@ -683,7 +708,7 @@ describe("EventTile", () => {
         });
 
         it("does not render the message action bar on hover while editing", async () => {
-            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+            const { container } = getComponent({ editState: new EditorStateTransfer(mxEvent) });
 
             await userEvent.hover(getTile(container));
 
@@ -713,7 +738,7 @@ describe("EventTile", () => {
         });
 
         it("does not render the message context menu while editing", () => {
-            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+            const { container } = getComponent({ editState: new EditorStateTransfer(mxEvent) });
 
             expect(container.querySelector(".mx_EventTile_line")).toBeNull();
             expect(screen.queryByTestId("mx_MessageContextMenu")).toBeNull();

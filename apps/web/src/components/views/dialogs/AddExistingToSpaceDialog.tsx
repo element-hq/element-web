@@ -31,7 +31,6 @@ import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import LazyRenderList from "../elements/LazyRenderList";
-import { useSettingValue } from "../../../hooks/useSettings";
 import { filterBoolean } from "../../../utils/arrays";
 import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
@@ -133,13 +132,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     onFinished,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const msc3946ProcessDynamicPredecessor = useSettingValue("feature_dynamic_room_predecessors");
     const visibleRooms = useMemo(
-        () =>
-            cli
-                ?.getVisibleRooms(msc3946ProcessDynamicPredecessor)
-                .filter((r) => r.getMyMembership() === KnownMembership.Join) ?? [],
-        [cli, msc3946ProcessDynamicPredecessor],
+        () => cli?.getVisibleRooms().filter((r) => r.getMyMembership() === KnownMembership.Join) ?? [],
+        [cli],
     );
 
     const scrollRef = useRef<HTMLDivElement | null>(null);

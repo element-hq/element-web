@@ -80,7 +80,6 @@ export class EncryptionEventViewModel
     ): EncryptionEventViewSnapshotInterface {
         const newSnapshot: EncryptionEventViewSnapshotInterface = {
             state: EncryptionEventState.CHANGED,
-            encryptedStateEvents: undefined,
             userName: undefined,
             timestamp: props.timestamp,
         };
@@ -92,12 +91,8 @@ export class EncryptionEventViewModel
             const isRoomLocal = isLocalRoom(room);
             const prevContent = props.mxEvent.getPrevContent() as RoomEncryptionEventContent;
             const dmPartner = roomId ? DMRoomMap.shared().getUserIdForRoomId(roomId) : undefined;
-            const stateEncrypted = Boolean(
-                content["io.element.msc4362.encrypt_state_events"] && props.cli.enableEncryptedStateEvents,
-            );
 
             newSnapshot.state = EncryptionEventState.ENABLED;
-            newSnapshot.encryptedStateEvents = stateEncrypted;
 
             if (prevContent.algorithm === MEGOLM_ENCRYPTION_ALGORITHM) {
                 newSnapshot.state = EncryptionEventState.CHANGED;

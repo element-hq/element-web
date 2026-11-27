@@ -1,38 +1,112 @@
 {
-    "register_dialog_register_username_label": {
-        "en": "Username",
-        "de": "Benutzername"
+    "de_DE": {
+        "join_cta": "Als Gast beitreten",
+        "join_message": "Treten Sie dem Raum bei, um teilzunehmen",
+        "register_dialog_busy": "Erstelle dein Konto...",
+        "register_dialog_continue_label": "Als Gast fortfahren",
+        "register_dialog_error": "Die Anmeldung als Gastnutzer ist fehlgeschlagen.",
+        "register_dialog_existing_account": "Ich habe bereits einen Account.",
+        "register_dialog_field_label": "Name",
+        "register_dialog_register_username_label": "Benutzername",
+        "register_dialog_title": "Zugriff anfordern"
     },
-    "register_dialog_title": {
-        "en": "Request access",
-        "de": "Zugriff anfordern"
+    "en": {
+        "join_cta": "Join as guest",
+        "join_message": "Join the room to participate",
+        "register_dialog_busy": "Creating your account...",
+        "register_dialog_continue_label": "Continue as guest",
+        "register_dialog_error": "The account creation failed.",
+        "register_dialog_existing_account": "I already have an account.",
+        "register_dialog_field_label": "Name",
+        "register_dialog_register_username_label": "Username",
+        "register_dialog_title": "Request access"
     },
-    "register_dialog_busy": {
-        "en": "Creating your account...",
-        "de": "Erstelle dein Konto..."
+    "et": {
+        "join_cta": "Liitu külalisena",
+        "join_message": "Osalemiseks liitu jututoaga",
+        "register_dialog_busy": "Loon sinu kasutajakontot...",
+        "register_dialog_continue_label": "Jätka külalisena",
+        "register_dialog_error": "Kasutajakonto loomine ei õnnestunud",
+        "register_dialog_existing_account": "Mul juba on kasutajakonto olemas.",
+        "register_dialog_field_label": "Nimi",
+        "register_dialog_register_username_label": "Kasutajanimi",
+        "register_dialog_title": "Küsi ligipääsu"
     },
-    "register_dialog_continue_label": {
-        "en": "Continue as guest",
-        "de": "Als Gast fortfahren"
+    "fr": {
+        "join_cta": "Rejoindre en tant qu'invité",
+        "join_message": "Rejoindre le salon pour participer",
+        "register_dialog_busy": "Création de votre compte...",
+        "register_dialog_continue_label": "Continuer en tant qu'invité",
+        "register_dialog_error": "La création du compte a echoué",
+        "register_dialog_existing_account": "J'ai déjà un compte.",
+        "register_dialog_field_label": "Nom",
+        "register_dialog_register_username_label": "Nom d'utilisateur",
+        "register_dialog_title": "Demander l'accès"
     },
-    "register_dialog_field_label": {
-        "en": "Name",
-        "de": "Name"
+    "hr": {
+        "join_cta": "Pridruži se kao gost",
+        "join_message": "Pridružite se sobi kako biste sudjelovali",
+        "register_dialog_busy": "Izrada računa...",
+        "register_dialog_continue_label": "Nastavi kao gost",
+        "register_dialog_error": "Izrada računa nije uspjela.",
+        "register_dialog_existing_account": "Već imam račun.",
+        "register_dialog_field_label": "Naziv",
+        "register_dialog_register_username_label": "Korisničko ime",
+        "register_dialog_title": "Zatraži pristup"
     },
-    "register_dialog_existing_account": {
-        "en": "I already have an account.",
-        "de": "Ich habe bereits einen Account."
+    "hu": {
+        "join_cta": "Csatlakozás vendégként",
+        "join_message": "Csatlakozás a szobához a részvételhez",
+        "register_dialog_busy": "Fiók létrehozása…",
+        "register_dialog_continue_label": "Folytatás vendégként",
+        "register_dialog_error": "Nem sikerült a fiók létrehozása",
+        "register_dialog_existing_account": "Már van fiókom.",
+        "register_dialog_field_label": "Név",
+        "register_dialog_register_username_label": "Felhasználónév",
+        "register_dialog_title": "Hozzáférés kérése"
     },
-    "register_dialog_error": {
-        "en": "The account creation failed.",
-        "de": "Die Anmeldung als Gastnutzer ist fehlgeschlagen."
+    "pl": {
+        "join_cta": "Dołącz jako gość",
+        "join_message": "Dołącz do pokoju, aby uczestniczyć",
+        "register_dialog_busy": "Tworzenie konta...",
+        "register_dialog_continue_label": "Kontynuuj jako gość",
+        "register_dialog_error": "Nie udało się utworzyć konta.",
+        "register_dialog_existing_account": "Mam już konto.",
+        "register_dialog_field_label": "Nazwa",
+        "register_dialog_register_username_label": "Nazwa użytkownika",
+        "register_dialog_title": "Poproś o dostęp"
     },
-    "join_message": {
-        "en": "Join the room to participate",
-        "de": "Treten Sie dem Raum bei, um teilzunehmen"
+    "sv": {
+        "join_cta": "Gå med som gäst",
+        "join_message": "Gå med i rummet för att delta",
+        "register_dialog_busy": "Skapar ditt konto...",
+        "register_dialog_continue_label": "Fortsätt som gäst",
+        "register_dialog_error": "Det gick inte att skapa kontot.",
+        "register_dialog_existing_account": "Jag har redan ett konto.",
+        "register_dialog_field_label": "Namn",
+        "register_dialog_register_username_label": "Användarnamn",
+        "register_dialog_title": "Begär åtkomst"
     },
-    "join_cta": {
-        "en": "Join as guest",
-        "de": "Als Gast beitreten"
+    "uk": {
+        "join_cta": "Приєднатись як гість",
+        "join_message": "Приєднайтеся до кімнати, щоб взяти участь",
+        "register_dialog_busy": "Створення вашого облікового запису...",
+        "register_dialog_continue_label": "Продовжити як гість",
+        "register_dialog_error": "Не вдалося створити обліковий запис.",
+        "register_dialog_existing_account": "У мене вже є обліковий запис",
+        "register_dialog_field_label": "Ім'я",
+        "register_dialog_register_username_label": "Ім'я користувача",
+        "register_dialog_title": "Запитати доступ"
+    },
+    "zh_Hans": {
+        "join_cta": "以访客身份加入",
+        "join_message": "加入房间以参与",
+        "register_dialog_busy": "正在创建账户…",
+        "register_dialog_continue_label": "以访客身份继续",
+        "register_dialog_error": "账户创建失败。",
+        "register_dialog_existing_account": "我已有账户。",
+        "register_dialog_field_label": "名称",
+        "register_dialog_register_username_label": "用户名",
+        "register_dialog_title": "请求访问"
     }
 }

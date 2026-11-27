@@ -110,11 +110,11 @@ class StorageWriter {
         return `safeStorage.${key.replaceAll(".", "-")}`;
     }
 
-    public set(key: string, secret: string): void {
+    public async set(key: string, secret: string): Promise<void> {
         this.store.set(this.getKey(key), secret);
     }
 
-    public get(key: string): string | undefined {
+    public async get(key: string): Promise<string | undefined> {
         return this.store.get(this.getKey(key));
     }
 
@@ -129,28 +129,133 @@ class StorageWriter {
 
 /**
  * Storage writer for secrets using safeStorage.
+ *
+ * Uses the asynchronous safeStorage APIs, which do not block the main process on the OS keychain
+ * and which support key rotation via the `shouldReEncrypt` flag on decryption.
  */
 class SafeStorageWriter extends StorageWriter {
-    public set(key: string, secret: string): void {
-        this.store.set(this.getKey(key), safeStorage.encryptString(secret).toString("base64"));
+    /**
+     * The most recent `set()` call for each key which is still encrypting. Because encryption is
+     * asynchronous, a `set()` can finish after a later `set()` or `delete()` of the same key; it
+     * checks this map before writing so that it never overwrites the newer call's result.
+     */
+    private readonly pendingSets = new Map<string, object>();
+
+    public async set(key: string, secret: string): Promise<void> {
+        const storeKey = this.getKey(key);
+        const token = {};
+        this.pendingSets.set(storeKey, token);
+        try {
+            const ciphertext = await safeStorage.encryptStringAsync(secret);
+            // A later set() or delete() of this key has been called while we were encrypting, so
+            // our value is already out of date: drop it rather than overwrite the newer one.
+            if (this.pendingSets.get(storeKey) !== token) return;
+            this.store.set(storeKey, ciphertext.toString("base64"));
+        } finally {
+            if (this.pendingSets.get(storeKey) === token) this.pendingSets.delete(storeKey);
+        }
     }
 
-    public get(key: string): string | undefined {
-        const ciphertext = this.store.get<string, string | undefined>(this.getKey(key));
+    public delete(key: string): void {
+        // Supersede any set() of this key which is still encrypting, so it can't recreate the secret.
+        this.pendingSets.delete(this.getKey(key));
+        super.delete(key);
+    }
+
+    public async get(key: string): Promise<string | undefined> {
+        const storeKey = this.getKey(key);
+        const ciphertext = this.store.get<string, string | undefined>(storeKey);
+        const decrypted = await this.decrypt(ciphertext);
+        if (!decrypted) return undefined;
+        if (decrypted.shouldReEncrypt) {
+            // safeStorage has rotated its key, or a stronger one is now available, so write the
+            // secret back under the new key. Failing to do so is not fatal - we still have the
+            // secret - so don't let it break the read.
+            try {
+                await this.reEncrypt(storeKey, ciphertext, decrypted.result);
+            } catch (e) {
+                console.error("Failed to re-encrypt secret after key rotation", e);
+            }
+        }
+        return decrypted.result;
+    }
+
+    /**
+     * As {@link get}, but never writes the secret back, even when safeStorage asks for it to be
+     * re-encrypted. The migration paths must be able to read every secret before deciding whether
+     * to write anything at all, so they cannot use a read which has a write as a side effect.
+     */
+    public async getWithoutReEncrypt(key: string): Promise<string | undefined> {
+        return (await this.decrypt(this.store.get<string, string | undefined>(this.getKey(key))))?.result;
+    }
+
+    /**
+     * Write a secret back under safeStorage's current key, unless the stored value has changed since
+     * it was read. This does not go through {@link set}, which would supersede any newer `set()` of
+     * the key, and it must not recreate a secret which was deleted while it was being read.
+     */
+    private async reEncrypt(
+        storeKey: `safeStorage.${string}`,
+        readCiphertext: string | undefined,
+        secret: string,
+    ): Promise<void> {
+        const ciphertext = await safeStorage.encryptStringAsync(secret);
+        // A set() or delete() of this key has finished since we read it, so our copy is out of date.
+        // A set() which is still encrypting will overwrite our value when it finishes.
+        if (this.store.get(storeKey) !== readCiphertext) return;
+        this.store.set(storeKey, ciphertext.toString("base64"));
+    }
+
+    private async decrypt(ciphertext: string | undefined): Promise<Electron.DecryptStringAsyncReturnValue | undefined> {
         if (!ciphertext) {
             // No secret stored.
             return undefined;
         }
+        const ciphertextBuffer = Buffer.from(ciphertext, "base64");
+
+        let asyncError: unknown;
         try {
-            return safeStorage.decryptString(Buffer.from(ciphertext, "base64"));
+            return await safeStorage.decryptStringAsync(ciphertextBuffer);
         } catch (e) {
-            // The secret exists but cannot be decrypted in this session. Returning undefined here (as
-            // we used to) is indistinguishable from "no secret stored", which makes callers create or
-            // overwrite a fresh secret and permanently destroy the still-valid ciphertext. Throw a
-            // typed error instead so callers can preserve the data and recover on a later launch once
-            // the keychain is readable again. See element-web#32521 / #32715.
-            console.error("Failed to decrypt secret", e);
-            throw new SafeStorageDecryptionError("Failed to decrypt safeStorage secret", { cause: e });
+            asyncError = e;
+        }
+
+        const legacySecret = this.decryptLegacy(ciphertextBuffer);
+        // Move the secret to the asynchronous API's key, as the synchronous API is going away.
+        if (legacySecret !== undefined) return { result: legacySecret, shouldReEncrypt: true };
+
+        // The secret exists but cannot be decrypted in this session. Returning undefined here (as
+        // we used to) is indistinguishable from "no secret stored", which makes callers create or
+        // overwrite a fresh secret and permanently destroy the still-valid ciphertext. Throw a
+        // typed error instead so callers can preserve the data and recover on a later launch once
+        // the keychain is readable again. See element-web#32521 / #32715.
+        console.error("Failed to decrypt secret", asyncError);
+        throw new SafeStorageDecryptionError("Failed to decrypt safeStorage secret", { cause: asyncError });
+    }
+
+    /**
+     * Decrypt a secret with the synchronous safeStorage API, for ciphertext the asynchronous API cannot read.
+     *
+     * On Linux the asynchronous API can fetch its key from a different keyring entry than the synchronous API
+     * did (on KDE, "<app> Keys" rather than "Chromium Keys"), so it cannot decrypt secrets written by versions
+     * of the app which used the synchronous API. See element-web#35802.
+     *
+     * Secrets decrypted this way are re-encrypted with the asynchronous API when read through {@link get}, so
+     * they stay readable once the synchronous API is removed. Versions of the app which only use the
+     * synchronous API can no longer read them after that.
+     *
+     * @param ciphertext - The encrypted secret.
+     * @returns The secret, or undefined if not on Linux or the synchronous API cannot decrypt it either.
+     */
+    private decryptLegacy(ciphertext: Buffer): string | undefined {
+        // TODO: the synchronous API is removed in Electron 46. Secrets which have not been read (and so
+        // re-encrypted) by then become unreadable.
+        if (process.platform !== "linux") return undefined;
+        try {
+            return safeStorage.decryptString(ciphertext);
+        } catch (e) {
+            console.warn("Failed to decrypt secret with the synchronous safeStorage API", e);
+            return undefined;
         }
     }
 }
@@ -268,12 +373,30 @@ class Store extends ElectronStore<StoreData> {
     }
 
     /**
+     * Whether we can actually encrypt secrets.
+     *
+     * We need both `isEncryptionAvailable` and `isAsyncEncryptionAvailable` to be true to be able to encrypt secrets.
+     */
+    private async canEncrypt(): Promise<boolean> {
+        // TODO: `isEncryptionAvailable` is removed in Electron 45/46. Before upgrading, find another way to spot a
+        // Mac with no usable keychain (e.g. a test `encryptStringAsync`), since `isAsyncEncryptionAvailable` still
+        // reports true there and every secret would become unstorable.
+        if (!safeStorage.isEncryptionAvailable()) return false;
+        try {
+            return await safeStorage.isAsyncEncryptionAvailable();
+        } catch (e) {
+            console.error("Failed to initialise the async safeStorage encryptor", e);
+            return false;
+        }
+    }
+
+    /**
      * Normalise the backend to a sane value (exclude `unknown`), respect forcePlaintext mode,
      * and ensure that if an encrypted backend is picked that encryption is available, falling back to plaintext if not.
      * @param forcePlaintext - whether to force plaintext mode
      * @private
      */
-    private chooseBackend(forcePlaintext: boolean): SaneSafeStorageBackend {
+    private async chooseBackend(forcePlaintext: boolean): Promise<SaneSafeStorageBackend> {
         if (forcePlaintext) {
             return "plaintext";
         }
@@ -289,13 +412,13 @@ class Store extends ElectronStore<StoreData> {
             // https://github.com/electron/electron/issues/39789 https://github.com/microsoft/vscode/issues/185212
             const selectedBackend = safeStorage.getSelectedStorageBackend();
 
-            if (selectedBackend === "unknown" || !safeStorage.isEncryptionAvailable()) {
+            if (selectedBackend === "unknown" || !(await this.canEncrypt())) {
                 return "plaintext";
             }
             return selectedBackend;
         }
 
-        return safeStorage.isEncryptionAvailable() ? "system" : "plaintext";
+        return (await this.canEncrypt()) ? "system" : "plaintext";
     }
 
     /**
@@ -317,7 +440,7 @@ class Store extends ElectronStore<StoreData> {
         // The backend the existing data is written with if any
         let existingSafeStorageBackend = this.get("safeStorageBackend");
         // The backend and encryption status of the currently loaded backend
-        const backend = this.chooseBackend(this.mode === Mode.ForcePlaintext);
+        const backend = await this.chooseBackend(this.mode === Mode.ForcePlaintext);
 
         // Handle migrations
         if (existingSafeStorageBackend) {
@@ -327,12 +450,12 @@ class Store extends ElectronStore<StoreData> {
             }
 
             if (this.get("safeStorageBackendMigrate") && backend === "basic_text") {
-                this.migrateBasicTextToPlaintext();
+                await this.migrateBasicTextToPlaintext();
                 return false;
             }
 
             if (existingSafeStorageBackend === "plaintext" && backend !== "plaintext") {
-                this.migratePlaintextToEncrypted();
+                await this.migratePlaintextToEncrypted(backend);
                 // Ensure we update existingSafeStorageBackend so we don't fall into the "backend changed" clause below
                 existingSafeStorageBackend = this.get("safeStorageBackend");
             }
@@ -452,7 +575,7 @@ class Store extends ElectronStore<StoreData> {
         this.set("safeStorageBackendMigrate", true);
         relaunchApp();
     }
-    private migrateBasicTextToPlaintext(): void {
+    private async migrateBasicTextToPlaintext(): Promise<void> {
         const secrets = new SafeStorageWriter(this);
         console.info("Performing safeStorage migration");
         const data = this.get("safeStorage");
@@ -464,7 +587,7 @@ class Store extends ElectronStore<StoreData> {
             const decrypted = new Map<string, string | undefined>();
             try {
                 for (const key in data) {
-                    decrypted.set(secrets.getKey(key), secrets.get(key));
+                    decrypted.set(secrets.getKey(key), await secrets.getWithoutReEncrypt(key));
                 }
             } catch (e) {
                 // Abort the migration with the data untouched and stick with the basic_text backend
@@ -484,17 +607,22 @@ class Store extends ElectronStore<StoreData> {
         this.delete("safeStorageBackendMigrate");
         relaunchApp();
     }
-    private migratePlaintextToEncrypted(): void {
+
+    /**
+     * Encrypt secrets which were stored in plaintext, now that an encrypted backend is available.
+     * @param backend - the backend picked by {@link chooseBackend}. On macOS and Windows this is "system",
+     *     as `safeStorage.getSelectedStorageBackend` only exists on Linux.
+     */
+    private async migratePlaintextToEncrypted(backend: SaneSafeStorageBackend): Promise<void> {
         const secrets = new SafeStorageWriter(this);
-        const selectedSafeStorageBackend = safeStorage.getSelectedStorageBackend();
-        console.info(`Finishing safeStorage migration to ${selectedSafeStorageBackend}`);
+        console.info(`Finishing safeStorage migration to ${backend}`);
         const data = this.get("safeStorage");
         if (data) {
             for (const key in data) {
-                secrets.set(key, data[key]);
+                await secrets.set(key, data[key]);
             }
         }
-        this.recordSafeStorageBackend(selectedSafeStorageBackend);
+        this.recordSafeStorageBackend(backend);
     }
 
     /**
@@ -506,7 +634,7 @@ class Store extends ElectronStore<StoreData> {
      */
     public async getSecret(key: string): Promise<string | undefined> {
         await this.safeStorageReady();
-        return this.secrets!.get(key);
+        return await this.secrets!.get(key);
     }
 
     /**
@@ -523,7 +651,7 @@ class Store extends ElectronStore<StoreData> {
         await this.safeStorageReady();
         if (!this.secrets!.has(key)) return false;
         try {
-            this.secrets!.get(key);
+            await this.secrets!.get(key);
             return false;
         } catch (e) {
             if (!(e instanceof SafeStorageDecryptionError)) {
@@ -543,7 +671,7 @@ class Store extends ElectronStore<StoreData> {
      */
     public async setSecret(key: string, secret: string): Promise<void> {
         await this.safeStorageReady();
-        this.secrets!.set(key, secret);
+        await this.secrets!.set(key, secret);
     }
 
     /**

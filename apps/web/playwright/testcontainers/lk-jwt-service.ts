@@ -11,7 +11,7 @@ import { LIVEKIT_API_KEY, LIVEKIT_API_SECRET, LIVEKIT_HOST } from "./livekit";
 
 // Pinned by digest so upstream cannot break our tests; Renovate keeps it updated (see .github/renovate.json).
 const DOCKER_IMAGE =
-    "ghcr.io/element-hq/lk-jwt-service:0.7.0@sha256:e0c7cecfa74e2342a3e79d47e1d4ab4bd228fe05b1a4dc4ba7f807686b0c214b";
+    "ghcr.io/element-hq/lk-jwt-service:0.10.0@sha256:b821befeb148929825f1a9059253d9faa0764991f45c07a91db5ad21a81c2dde";
 
 const PORT = 8080;
 

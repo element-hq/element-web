@@ -9,6 +9,7 @@ import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import { DecryptionFailureReason } from "@element-hq/web-shared-components";
 import { describe, it, expect } from "vitest";
 
+import { tearDownAfterTest } from "test-utils/teardown";
 import { DecryptionFailureBodyViewModel } from "./DecryptionFailureBodyViewModel";
 
 describe("DecryptionFailureBodyViewModel", () => {
@@ -17,6 +18,7 @@ describe("DecryptionFailureBodyViewModel", () => {
             decryptionFailureCode: null,
             verificationState: true,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot()).toMatchObject({
             decryptionFailureReason: DecryptionFailureReason.UNABLE_TO_DECRYPT,
             isLocalDeviceVerified: true,
@@ -72,6 +74,7 @@ describe("DecryptionFailureBodyViewModel", () => {
         const vm = new DecryptionFailureBodyViewModel({
             decryptionFailureCode: code,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().decryptionFailureReason).toBe(reason);
     });
@@ -81,6 +84,7 @@ describe("DecryptionFailureBodyViewModel", () => {
             decryptionFailureCode: DecryptionFailureCode.UNKNOWN_ERROR,
             verificationState: false,
         });
+        tearDownAfterTest(vm);
         expect(vm.getSnapshot().isLocalDeviceVerified).toBe(false);
 
         vm.setVerificationState(true);
@@ -91,6 +95,7 @@ describe("DecryptionFailureBodyViewModel", () => {
         const vm = new DecryptionFailureBodyViewModel({
             decryptionFailureCode: DecryptionFailureCode.UNKNOWN_ERROR,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
 

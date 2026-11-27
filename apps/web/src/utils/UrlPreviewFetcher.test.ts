@@ -13,13 +13,15 @@ import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import type { UrlPreview } from "shared-types";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { type BundledUrlPreview } from "../../@types/url-preview";
 import { type UrlPreviewApi } from "../modules/UrlPreviewApi";
 import { decryptFile } from "./DecryptFile";
 
 vi.mock("./DecryptFile", () => ({ decryptFile: vi.fn() }));
 
 const IMAGE_MXC = "mxc://example.org/abc";
+const IMAGE_THUMB =
+    "https://server/_matrix/media/v3/thumbnail/example.org/abc?width=478&height=200&method=scale&allow_redirect=true";
 const BASIC_PREVIEW_OGDATA = {
     "og:title": "This is an example!",
     "og:description": "This is a description",
@@ -34,6 +36,7 @@ function getFetcher(showTooltips = false): {
     moduleApi: { getPreview: Mock };
 } {
     const client = {
+        baseUrl: "https://server",
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     } as unknown as MatrixClient;
@@ -132,9 +135,8 @@ describe("UrlPreviewFetcher", () => {
             "matrix:image:size": 10000,
         });
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
+        client.mxcUrlToHttp.mockImplementation((url) => {
             expect(url).toEqual(IMAGE_MXC);
-            if (width) return "https://example.org/image/thumb";
             return "https://example.org/image/src";
         });
         const preview = await fetcher.fetchPreview("https://example.org", true);
@@ -170,8 +172,7 @@ describe("UrlPreviewFetcher", () => {
     it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
         const { fetcher, client } = getFetcher();
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            if (width) return "https://example.org/image/thumb";
+        client.mxcUrlToHttp.mockImplementation((url) => {
             return "https://example.org/image/src";
         });
         client.getUrlPreview.mockResolvedValueOnce({
@@ -240,8 +241,7 @@ describe("UrlPreviewFetcher", () => {
     ])("handles different kinds of opengraph responses %s", async (og) => {
         const { fetcher, client } = getFetcher();
         // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            if (width) return "https://example.org/image/thumb";
+        client.mxcUrlToHttp.mockImplementation((url) => {
             return "https://example.org/image/src";
         });
         client.getUrlPreview.mockResolvedValueOnce(og);
@@ -250,8 +250,8 @@ describe("UrlPreviewFetcher", () => {
     });
 
     describe("previewFromBundle", () => {
-        const BASIC_BUNDLE: UnstableBundledUrlPreviewSingle = {
-            "matched_url": "https://example.org/page",
+        const BASIC_BUNDLE: BundledUrlPreview = {
+            "matrix:matched_url": "https://example.org/page",
             "og:title": "Bundled title",
             "og:description": "Bundled description",
             "og:url": "https://example.org/canonical",
@@ -260,7 +260,7 @@ describe("UrlPreviewFetcher", () => {
         const BASIC_BODY = "Check out https://example.org/page";
         const BASIC_EVENT = mkMessageEvent(BASIC_BODY);
 
-        const IMAGE_BUNDLE: UnstableBundledUrlPreviewSingle = {
+        const IMAGE_BUNDLE: BundledUrlPreview = {
             ...BASIC_BUNDLE,
             "og:image": IMAGE_MXC,
             "og:image:type": "image/png",
@@ -271,7 +271,7 @@ describe("UrlPreviewFetcher", () => {
 
         /** The UrlPreview.image that IMAGE_BUNDLE resolves to once the media is mocked. */
         const IMAGE_PREVIEW: NonNullable<UrlPreview["image"]> = {
-            imageThumb: "https://example.org/image/thumb",
+            imageThumb: IMAGE_THUMB,
             imageFull: "https://example.org/image/src",
             imageType: "image/png",
             mxcImageFull: IMAGE_MXC,
@@ -282,9 +282,8 @@ describe("UrlPreviewFetcher", () => {
 
         function mockMedia(client: { mxcUrlToHttp: Mock }): void {
             // eslint-disable-next-line no-restricted-properties
-            client.mxcUrlToHttp.mockImplementation((url, width) => {
+            client.mxcUrlToHttp.mockImplementation((url) => {
                 expect(url).toEqual(IMAGE_MXC);
-                if (width) return "https://example.org/image/thumb";
                 return "https://example.org/image/src";
             });
         }
@@ -304,10 +303,10 @@ describe("UrlPreviewFetcher", () => {
             expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
         });
 
-        it("should fallback to the matched_url when there is no title", async () => {
+        it("should fallback to the matched URL when there is no title", async () => {
             const { fetcher } = getFetcher();
             const preview = await fetcher.previewFromBundle(
-                { "matched_url": "https://example.org/page", "og:url": "https://example.org/page" },
+                { "matrix:matched_url": "https://example.org/page", "og:url": "https://example.org/page" },
                 BASIC_EVENT,
             );
             expect(preview!.title).toEqual("https://example.org/page");
@@ -322,11 +321,11 @@ describe("UrlPreviewFetcher", () => {
 
         // Unlike fetchPreview, the tooltip flag is computed against the raw og:title rather than
         // the resolved title, so a missing og:title still shows a tooltip even though the displayed
-        // title falls back to the matched_url.
+        // title falls back to the matched URL.
         it("should set showTooltipOnLink when tooltips are enabled and og:title is absent", async () => {
             const { fetcher } = getFetcher(true);
             const preview = await fetcher.previewFromBundle(
-                { "matched_url": "https://example.org/page", "og:url": "https://example.org/page" },
+                { "matrix:matched_url": "https://example.org/page", "og:url": "https://example.org/page" },
                 BASIC_EVENT,
             );
             expect(preview!.showTooltipOnLink).toBe(true);
@@ -336,7 +335,7 @@ describe("UrlPreviewFetcher", () => {
             const { fetcher } = getFetcher(true);
             const preview = await fetcher.previewFromBundle(
                 {
-                    "matched_url": "https://example.org/page",
+                    "matrix:matched_url": "https://example.org/page",
                     "og:title": "https://example.org/page",
                 },
                 BASIC_EVENT,
@@ -361,7 +360,7 @@ describe("UrlPreviewFetcher", () => {
         // The type and dimensions are optional on UrlPreview.image, and the tiles only need
         // imageThumb to render, so a bundle that omits them still gets a preview image. This
         // matches fetchPreview, which shows an image even when the server omits these fields.
-        it.each<[keyof UnstableBundledUrlPreviewSingle, Partial<NonNullable<UrlPreview["image"]>>]>([
+        it.each<[keyof BundledUrlPreview, Partial<NonNullable<UrlPreview["image"]>>]>([
             ["og:image:type", { imageType: undefined }],
             ["og:image:width", { width: undefined }],
             ["og:image:height", { height: undefined }],
@@ -406,12 +405,12 @@ describe("UrlPreviewFetcher", () => {
             expect(preview?.title).toEqual("Bundled title");
         });
 
-        it("should compute the siteName from the matched_url hostname", async () => {
+        it("should compute the siteName from the matched URL hostname", async () => {
             const { fetcher } = getFetcher();
             const preview = await fetcher.previewFromBundle(
                 {
                     ...BASIC_BUNDLE,
-                    matched_url: "https://sub.example.com:8443/some/path?q=1",
+                    "matrix:matched_url": "https://sub.example.com:8443/some/path?q=1",
                 },
                 mkMessageEvent("Check out https://sub.example.com:8443/some/path?q=1"),
             );
@@ -434,7 +433,7 @@ describe("UrlPreviewFetcher", () => {
                 {
                     ...BASIC_BUNDLE,
                     "og:url": url as string,
-                    "matched_url": url as string,
+                    "matrix:matched_url": url as string,
                 },
                 mkMessageEvent("Check out " + url),
             );
@@ -469,10 +468,13 @@ describe("UrlPreviewFetcher", () => {
             expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
         });
 
-        it("should fetch bundle from server if only matched_url is present", async () => {
+        it("should fetch bundle from server if only the matched URL is present", async () => {
             const { fetcher, client } = getFetcher();
             client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-            const preview = await fetcher.previewFromBundle({ matched_url: BASIC_BUNDLE.matched_url }, BASIC_EVENT);
+            const preview = await fetcher.previewFromBundle(
+                { "matrix:matched_url": BASIC_BUNDLE["matrix:matched_url"] },
+                BASIC_EVENT,
+            );
             expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
             expect(preview).not.toBeNull();
         });
@@ -481,7 +483,7 @@ describe("UrlPreviewFetcher", () => {
             const { fetcher, client } = getFetcher();
             client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
             const preview = await fetcher.previewFromBundle(
-                { matched_url: BASIC_BUNDLE.matched_url },
+                { "matrix:matched_url": BASIC_BUNDLE["matrix:matched_url"] },
                 BASIC_EVENT,
                 false,
                 false,
@@ -501,12 +503,12 @@ describe("UrlPreviewFetcher", () => {
                 key: { alg: "A256CTR", ext: true, k: "k", key_ops: ["encrypt", "decrypt"], kty: "oct" },
             } as EncryptedFile;
 
-            const ENCRYPTED_BUNDLE: UnstableBundledUrlPreviewSingle = {
+            const ENCRYPTED_BUNDLE: BundledUrlPreview = {
                 ...BASIC_BUNDLE,
                 "og:image:type": "image/png",
                 "og:image:width": 500,
                 "og:image:height": 400,
-                "beeper:image:encryption": ENCRYPTED_FILE,
+                "matrix:image:encrypted": ENCRYPTED_FILE,
             };
 
             let createObjectUrl: Mock;
@@ -593,7 +595,7 @@ describe("UrlPreviewFetcher", () => {
                 );
 
                 expect(preview!.image!.imageFull).toEqual("blob:decrypted-0");
-                expect(preview!.image!.mxcImageFull).toEqual(ENCRYPTED_FILE.url);
+                expect(preview!.image).toHaveProperty("mxcImageFull", ENCRYPTED_FILE.url);
                 // eslint-disable-next-line no-restricted-properties
                 expect(client.mxcUrlToHttp).not.toHaveBeenCalled();
             });

@@ -53,6 +53,8 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
                 onClick={openMenu}
                 title={_t("common|emoji")}
                 inputRef={button}
+                aria-haspopup={true}
+                aria-expanded={menuDisplayed}
             >
                 <ReactionIcon />
             </CollapsibleButton>

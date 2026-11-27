@@ -11,6 +11,8 @@ import { idbLoad } from "../utils/StorageAccess";
 import { ACCESS_TOKEN_NAME, tryDecryptToken } from "../utils/tokens/tokens";
 import { buildAndEncodePickleKey } from "../utils/tokens/pickling";
 
+declare const self: ServiceWorkerGlobalScope;
+
 const serverSupportMap: {
     [serverUrl: string]: {
         supportsAuthedMedia: boolean;
@@ -18,22 +20,49 @@ const serverSupportMap: {
     };
 } = {};
 
-global.addEventListener("install", (event) => {
+self.addEventListener("install", (event) => {
     // We skipWaiting() to update the service worker more frequently, particularly in development environments.
-    // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-    event.waitUntil(skipWaiting());
+    event.waitUntil(self.skipWaiting());
 });
 
-global.addEventListener("activate", (event) => {
+self.addEventListener("activate", (event) => {
     // We force all clients to be under our control, immediately. This could be old tabs.
-    // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-    event.waitUntil(clients.claim());
+    event.waitUntil(self.clients.claim());
 });
 
-// @ts-expect-error - the service worker types conflict with the DOM types available through TypeScript. Many hours
-// have been spent trying to convince the type system that there's no actual conflict, but it has yet to work. Instead
-// of trying to make it do the thing, we force-cast to something close enough where we can (and ignore errors otherwise).
-global.addEventListener("fetch", (event: FetchEvent) => {
+/**
+ * A tab's reply to a request for user info. The homeserver is missing when the tab has no logged-in session.
+ */
+interface UserInfo {
+    userId: string;
+    deviceId: string;
+    homeserver?: string;
+}
+
+/**
+ * Requests for user info sent to tabs which are awaiting a reply, keyed by the `responseKey` sent with the request.
+ */
+const pendingUserInfoRequests = new Map<string, (data: UserInfo) => void>();
+
+// Event handlers must be added during the initial evaluation of the worker script, so we register a single `message`
+// listener here and route each reply to the request awaiting it, rather than adding a listener per request.
+self.addEventListener("message", (event) => {
+    if (event.data?.type === "claim") {
+        // Sent by a tab which loaded without us in control, e.g. after a hard reload. `activate` will not run again
+        // for that tab, so claim it here, otherwise its media requests would bypass us and go out unauthenticated.
+        event.waitUntil(self.clients.claim());
+        return;
+    }
+
+    const responseKey = event.data?.responseKey;
+    if (typeof responseKey !== "string") return; // not a reply to one of our requests
+    const handler = pendingUserInfoRequests.get(responseKey);
+    if (!handler) return; // not for us, or already timed out
+    pendingUserInfoRequests.delete(responseKey);
+    handler(event.data);
+});
+
+self.addEventListener("fetch", (event) => {
     // This is the authenticated media (MSC3916) check, proxying what was unauthenticated to the authenticated variants.
 
     if (event.request.method !== "GET") {
@@ -67,8 +96,10 @@ global.addEventListener("fetch", (event: FetchEvent) => {
                 await new Promise<void>((resolve) => setTimeout(() => resolve(), Math.random() * 10));
 
                 // Locate the access token and homeserver url
-                // @ts-expect-error - service worker types are not available. See 'fetch' event handler.
-                const client = await global.clients.get(event.clientId);
+                const client = await self.clients.get(event.clientId);
+                if (!client) {
+                    throw new Error("No client found for request");
+                }
                 auth = await getAuthData(client);
 
                 // Is this request actually going to the homeserver?
@@ -117,9 +148,7 @@ async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: str
     );
 }
 
-// Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
-// unknown for now and force-cast it to something close enough later.
-async function getAuthData(client: unknown): Promise<{ accessToken: string; homeserver: string }> {
+async function getAuthData(client: Client): Promise<{ accessToken: string; homeserver: string }> {
     // Access tokens are encrypted at rest, so while we can grab the "access token", we'll need to do work to get the
     // real thing.
     // idbLoad is untyped; a token persisted with a pickle key is an encrypted payload, and one
@@ -132,6 +161,10 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
     // We need to extract a user ID and device ID from localstorage, which means calling WebPlatform for the
     // read operation. Service workers can't access localstorage.
     const { userId, deviceId, homeserver } = await askClientForUserIdParams(client);
+    if (!homeserver) {
+        // The tab has no client, e.g. it is logged out, so there is nothing to authenticate as.
+        throw new Error("SW: Tab has no logged-in session");
+    }
 
     // ... and this is why we need the user ID and device ID: they're index keys for the pickle key table.
     const pickleKeyData = await idbLoad("pickleKey", [userId, deviceId]);
@@ -164,11 +197,7 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
     }
 }
 
-// Ideally we'd use the `Client` interface for `client`, but since it's not available (see 'fetch' listener), we use
-// unknown for now and force-cast it to something close enough inside the function.
-async function askClientForUserIdParams(
-    client: unknown,
-): Promise<{ userId: string; deviceId: string; homeserver: string }> {
+async function askClientForUserIdParams(client: Client): Promise<UserInfo> {
     return new Promise((resolve, reject) => {
         // Dev note: this uses postMessage, which is a highly insecure channel. postMessage is typically visible to other
         // tabs, windows, browser extensions, etc, making it far from ideal for sharing sensitive information. This is
@@ -179,24 +208,24 @@ async function askClientForUserIdParams(
         // We could also potentially use some version of TLS to encrypt postMessage, though that feels way more involved
         // than just reading IndexedDB ourselves.
 
-        // Avoid stalling the tab in case something goes wrong.
-        const timeoutId = setTimeout(() => reject(new Error("timeout in postMessage")), 1000);
-
         // We don't need particularly good randomness here - we just use this to generate a request ID, so we know
         // which postMessage reply is for our active request.
         const responseKey = Math.random().toString(36);
 
-        // Add the listener first, just in case the tab is *really* fast.
-        const listener = (event: MessageEvent): void => {
-            if (event.data?.responseKey !== responseKey) return; // not for us
+        // Avoid stalling the tab in case something goes wrong.
+        const timeoutId = setTimeout(() => {
+            pendingUserInfoRequests.delete(responseKey);
+            reject(new Error("timeout in postMessage"));
+        }, 1000);
+
+        // Register the pending request first, just in case the tab is *really* fast.
+        pendingUserInfoRequests.set(responseKey, (data) => {
             clearTimeout(timeoutId); // do this as soon as possible, avoiding a race between resolve and reject.
-            resolve(event.data); // "unblock" the remainder of the thread, if that were such a thing in JavaScript.
-            global.removeEventListener("message", listener); // cleanup, since we're not going to do anything else.
-        };
-        global.addEventListener("message", listener);
+            resolve(data); // "unblock" the remainder of the thread, if that were such a thing in JavaScript.
+        });
 
         // Ask the tab for the information we need. This is handled by WebPlatform.
-        (client as Window).postMessage({ responseKey, type: "userinfo" });
+        client.postMessage({ responseKey, type: "userinfo" });
     });
 }
 

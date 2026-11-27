@@ -43,8 +43,7 @@
         "encryption_enabled": "加密已启用",
         "loading": "正在载入…",
         "options": "选项",
-        "preferences": "偏好",
-        "state_encryption_enabled": "实验性的状态加密已启用"
+        "preferences": "偏好"
     },
     "composer": {
         "url_preview": {
@@ -93,6 +92,12 @@
     "emoji_picker": {
         "cancel_search_label": "取消搜索",
         "emoji_picker": "Emoji 选择器"
+    },
+    "encryption": {
+        "delete_key_storage": {
+            "description": "如果移除所有设备，你将丢失加密聊天历史，并且需要重置数字身份。",
+            "error": "删除密钥存储失败。请重试。"
+        }
     },
     "error": {
         "legacy_crypto_unsupported": {
@@ -198,6 +203,7 @@
         "empty": {
             "no_chats": "暂无聊天",
             "no_chats_description": "首先向人们发送消息或创建房间。",
+            "no_chats_description_no_dm": "请先创建一个房间。",
             "no_chats_description_no_room_rights": "开始向某人发送消息",
             "no_invites": "你没有任何未读邀请",
             "no_mentions": "你没有任何未读提及",
@@ -358,7 +364,6 @@
             "enabled_dm": "此处的消息是端到端加密的。点选其个人资料中的头像以验证 %(displayName)s。",
             "enabled_local": "此聊天中的消息将被端到端加密。",
             "parameters_changed": "某些加密参数已被更改。",
-            "state_enabled": "此房间内的消息与状态事件已被端到端加密。当人员加入时，你可以点选其头像以验证其身份。",
             "unsupported": "该房间使用的加密方式不受支持。"
         },
         "mab": {

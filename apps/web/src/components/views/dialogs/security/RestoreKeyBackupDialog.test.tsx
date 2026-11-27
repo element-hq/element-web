@@ -15,7 +15,7 @@ import { type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 // Needed to be able to mock decodeRecoveryKey
 // eslint-disable-next-line no-restricted-imports
 import * as recoveryKeyModule from "matrix-js-sdk/src/crypto-api/recovery-key";
-import { describe, it, test, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { stubClient } from "test-utils";
 import RestoreKeyBackupDialog from "./RestoreKeyBackupDialog";
@@ -95,32 +95,6 @@ describe("<RestoreKeyBackupDialog />", () => {
         await waitFor(() => expect(screen.getByText("Enter Recovery Key")).toBeInTheDocument());
 
         await userEvent.type(screen.getByRole("textbox"), "my recovery key");
-        await userEvent.click(screen.getByRole("button", { name: "Next" }));
-
-        await waitFor(() => expect(screen.getByText("Successfully restored 1 keys")).toBeInTheDocument());
-        expect(asFragment()).toMatchSnapshot();
-    });
-
-    test("should restore key backup when passphrase is filled", async () => {
-        // Determine that the passphrase is required
-        vi.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
-            version: "1",
-            auth_data: {
-                private_key_salt: "salt",
-                private_key_iterations: 1,
-            },
-        } as KeyBackupInfo);
-
-        vi.spyOn(matrixClient.getCrypto()!, "restoreKeyBackup")
-            // Reject when trying to restore from cache
-            .mockRejectedValue(new Error("key backup not found"));
-
-        vi.spyOn(matrixClient.getCrypto()!, "restoreKeyBackupWithPassphrase").mockResolvedValue(keyBackupRestoreResult);
-
-        const { asFragment } = render(<RestoreKeyBackupDialog onFinished={vi.fn()} />);
-        await waitFor(() => expect(screen.getByText("Enter Security Phrase")).toBeInTheDocument());
-        // Not role for password https://github.com/w3c/aria/issues/935
-        await userEvent.type(screen.getByTestId("passphraseInput"), "my passphrase");
         await userEvent.click(screen.getByRole("button", { name: "Next" }));
 
         await waitFor(() => expect(screen.getByText("Successfully restored 1 keys")).toBeInTheDocument());

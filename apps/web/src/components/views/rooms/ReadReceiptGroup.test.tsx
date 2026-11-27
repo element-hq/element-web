@@ -98,7 +98,7 @@ describe("ReadReceiptGroup", () => {
 
         const member = new RoomMember(ROOM_ID, USER_ID);
         member.rawDisplayName = "Alice";
-        member.getMxcAvatarUrl = () => "http://placekitten.com/400/400";
+        member.getMxcAvatarUrl = () => "mxc://placekitten.com/kitten";
 
         const renderReadReceipt = (props?: Partial<ComponentProps<typeof ReadReceiptPerson>>) => {
             const currentDate = new Date(2024, 4, 15).getTime();

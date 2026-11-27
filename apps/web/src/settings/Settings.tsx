@@ -12,7 +12,7 @@ import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 import { type JsonDocument, type JsonValue } from "shared-types";
 // Import these directly from shared-components to avoid circular deps
-import { _t, _td } from "@element-hq/web-shared-components";
+import { _t, _td, type FilterId } from "@element-hq/web-shared-components";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 import { type PdfViewerState } from "../@types/pdf-viewer.ts";
@@ -29,7 +29,8 @@ import { SettingLevel } from "./SettingLevel";
 import type SettingController from "./controllers/SettingController";
 import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
-import { UIFeature } from "./UIFeature";
+import UIComponentController from "./controllers/UIComponentController";
+import { UIComponent, UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";
 import { TokenizerMode } from "./enums/TokenizerMode";
 import ReducedMotionController from "./controllers/ReducedMotionController";
@@ -216,6 +217,7 @@ export interface Settings {
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_latex_maths": IFeature;
+    "feature_strip_upload_metadata": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
     "feature_exclude_insecure_devices": IFeature;
@@ -227,17 +229,13 @@ export interface Settings {
     "feature_element_call_react": IFeature;
     "feature_matrixrtc_slots": IFeature;
     "feature_location_share_live": IFeature;
-    "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_pdf_viewer": IFeature;
     "feature_retention": IFeature;
     "feature_new_timeline": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
-    "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
-    "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -327,7 +325,6 @@ export interface Settings {
         allow?: string[];
         deny?: string[];
     }>;
-    "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     /**
      * This is the 2019-era low bandwidth that deals with disabling features of the
@@ -377,6 +374,7 @@ export interface Settings {
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.SectionExpansionState": IBaseSetting<SectionExpansionState>;
+    "RoomList.activeFilter": IBaseSetting<FilterId | null>;
     "RoomList.showSections": IBaseSetting<boolean>;
     "RoomList.showPeopleSection": IBaseSetting<boolean>;
     "composerUrlPreviewCollapsed": IBaseSetting<boolean>;
@@ -481,6 +479,15 @@ export const SETTINGS: Settings = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|latex_maths"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        default: false,
+    },
+    "feature_strip_upload_metadata": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|strip_upload_metadata"),
+        description: _td("labs|strip_upload_metadata_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -629,16 +636,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
     },
-    "feature_dynamic_room_predecessors": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|dynamic_room_predecessors"),
-        description: _td("labs|dynamic_room_predecessors_description"),
-        shouldWarn: true,
-        default: false,
-    },
     "feature_render_reaction_images": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -657,31 +654,11 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
-    // Covers every document viewer, not only PDFs. The key predates the Markdown viewer and is kept so
-    // that people who already turned the lab on keep it, and only for as long as the lab exists.
-    "feature_pdf_viewer": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|document_previews"),
-        description: _td("labs|document_previews_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],
         labsGroup: LabGroup.Ui,
         displayName: _td("labs|login_with_qr"),
         description: _td("labs|config_only"),
-        isFeature: true,
-        default: false,
-    },
-    "feature_msc4095_url_preview_bundle": {
-        labsGroup: LabGroup.Messaging,
-        displayName: _td("labs|url_preview_bundle"),
-        description: _td("labs|url_preview_bundle_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
         isFeature: true,
         default: false,
     },
@@ -764,16 +741,6 @@ export const SETTINGS: Settings = {
         description: _td("labs|unrealiable_e2e"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        default: false,
-    },
-    "feature_msc4362_encrypted_state_events": {
-        isFeature: true,
-        labsGroup: LabGroup.Encryption,
-        displayName: _td("labs|encrypted_state_events"),
-        description: _td("labs|encrypted_state_events_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        shouldWarn: true,
         default: false,
     },
     "feature_user_status": {
@@ -863,7 +830,7 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "userTimezone": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|preferences|user_timezone"),
         default: "",
         // Location leak
@@ -1184,11 +1151,7 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_encrypted_bundled_only"),
         default: true,
-        controller: new RequiresSettingsController([
-            UIFeature.URLPreviews,
-            "feature_msc4095_url_preview_bundle",
-            "urlPreviewsEnabled_e2ee",
-        ]),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled_e2ee"]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -1236,11 +1199,6 @@ export const SETTINGS: Settings = {
         },
         // Expses widget information
         shouldExportToRageshake: false,
-    },
-    "breadcrumbs": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|show_breadcrumbs"),
-        default: true,
     },
     "showHiddenEventsInTimeline": {
         displayName: _td("devtools|show_hidden_events"),
@@ -1440,6 +1398,14 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: {},
     },
+    /**
+     * Managed by the {@link RoomListViewModel}
+     * Store the primary filter selected in the room list so it survives a reload or relaunch
+     */
+    "RoomList.activeFilter": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: null,
+    },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
@@ -1509,10 +1475,12 @@ export const SETTINGS: Settings = {
     [UIFeature.AllowCreatingPublicSpaces]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
+        controller: new UIComponentController(UIComponent.PublicRooms),
     },
     [UIFeature.AllowCreatingPublicRooms]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
+        controller: new UIComponentController(UIComponent.PublicRooms),
     },
 
     // Electron-specific settings, they are stored by Electron and set/read over an IPC.

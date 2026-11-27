@@ -9,7 +9,7 @@
 
 import { it, describe, expect, vi } from "vitest";
 import { CallDirection, CallType } from "@element-hq/web-shared-components";
-import { mkRoom, stubClient } from "test-utils";
+import { mkRoom, stubClient, tearDownAfterTest } from "test-utils";
 
 import { BaseOngoingCallViewModel } from "./BaseOngoingCallTileViewModel";
 import { CallEvent } from "../../../../../../../models/Call";
@@ -54,6 +54,7 @@ describe("BaseOngoingCallViewModel", () => {
             const callStore = MockedCallStore.create(call);
 
             const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().startedByDisplayName).toStrictEqual("Alice");
         });
 
@@ -69,6 +70,7 @@ describe("BaseOngoingCallViewModel", () => {
 
             // Alice hasn't joined the call yet
             const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().isJoined).toStrictEqual(false);
 
             // Alice has joined call
@@ -89,10 +91,12 @@ describe("BaseOngoingCallViewModel", () => {
             const callStore = MockedCallStore.create(call);
 
             const vm1 = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm1);
             expect(vm1.getSnapshot().callDirection).toStrictEqual(CallDirection.Incoming);
 
             vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
             const vm2 = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm2);
             expect(vm2.getSnapshot().callDirection).toStrictEqual(CallDirection.Outgoing);
         });
 
@@ -107,6 +111,7 @@ describe("BaseOngoingCallViewModel", () => {
 
             // Call has no other participants other than alice
             const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().callHasOtherParticipants).toStrictEqual(false);
 
             // Let's say others join
@@ -139,6 +144,7 @@ describe("BaseOngoingCallViewModel", () => {
             const callStore = MockedCallStore.create(call);
 
             const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().isJoinable).toStrictEqual(true);
         });
     });
@@ -152,6 +158,7 @@ describe("BaseOngoingCallViewModel", () => {
         const call = MockedCall.create().withParticipants([mxEvent.sender]);
         const callStore = MockedCallStore.create(call);
         const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
+        tearDownAfterTest(vm);
 
         vm.join();
         const [, room, callType, platformCallType] = vi.mocked(placeCall).mock.calls[0];

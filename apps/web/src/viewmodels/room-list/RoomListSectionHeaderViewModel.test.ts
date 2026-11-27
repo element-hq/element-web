@@ -10,7 +10,7 @@
 import { vi, describe, it, expect, beforeEach, afterEach, type Mock } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { createTestClient, mkRoom } from "test-utils";
+import { createTestClient, mkRoom, tearDownAfterTest } from "test-utils";
 
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
 import { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
@@ -60,6 +60,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
 
         const snapshot = vm.getSnapshot();
         expect(snapshot.id).toBe("m.favourite");
@@ -74,6 +75,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
         expect(vm.isExpanded).toBe(true);
 
         await vm.onClick();
@@ -94,6 +96,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
 
         // Default space: collapse
         await vm.onClick();
@@ -122,6 +125,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().isExpanded).toBe(false);
     });
@@ -135,6 +139,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
 
         expect(vm.getSnapshot().isExpanded).toBe(false);
     });
@@ -147,6 +152,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
 
         await vm.onClick();
 
@@ -164,6 +170,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             spaceId: "!space:server",
             onToggleExpanded,
         });
+        tearDownAfterTest(vm);
 
         vm.isExpanded = false;
 
@@ -187,6 +194,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().displaySectionMenu).toBe(expected);
         });
     });
@@ -218,6 +226,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().canBeReordered).toBe(expected);
         });
     });
@@ -271,6 +280,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             expect(vm.getSnapshot().title).toBe("Old Title");
 
             vi.spyOn(SettingsStore, "getValue").mockReturnValue({ [tag]: { tag, name: "New Title" } });
@@ -287,6 +297,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
 
             vi.spyOn(SettingsStore, "getValue").mockReturnValue({});
             watchCallback();
@@ -301,6 +312,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
 
             watchCallback();
 
@@ -318,6 +330,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
 
             await vm.editSection();
             expect(editSectionSpy).toHaveBeenCalledWith(tag);
@@ -343,6 +356,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
 
             await vm.removeSection();
             expect(removeSectionSpy).toHaveBeenCalledWith(tag, true);
@@ -357,6 +371,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             vm.setRooms([mkRoom(matrixClient, "!room:server")]);
 
             await vm.removeSection();
@@ -371,7 +386,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         beforeEach(() => {
             vi.useFakeTimers();
             room = mkRoom(matrixClient, "!room:server");
-            notificationState = new RoomNotificationState(room, false);
+            notificationState = tearDownAfterTest(new RoomNotificationState(room, false));
             vi.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
         });
 
@@ -386,6 +401,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             vm.setRooms([room]);
 
             expect(vm.getSnapshot().isUnread).toBe(false);
@@ -400,6 +416,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             vm.setRooms([room]);
 
             expect(vm.getSnapshot().isUnread).toBe(true);
@@ -412,6 +429,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             await vm.onClick();
             expect(vm.getSnapshot().isExpanded).toBe(true);
 
@@ -429,6 +447,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
 
             vm.setRooms([]);
 
@@ -438,7 +457,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
         it("should subscribe to new rooms and unsubscribe from removed rooms", () => {
             const room2 = mkRoom(matrixClient, "!room2:server");
-            const notificationState2 = new RoomNotificationState(room2, false);
+            const notificationState2 = tearDownAfterTest(new RoomNotificationState(room2, false));
 
             vi.spyOn(RoomNotificationStateStore.instance, "getRoomState")
                 .mockReturnValueOnce(notificationState)
@@ -454,6 +473,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             vm.setRooms([room]);
 
             expect(notificationState.on).toHaveBeenCalledWith(NotificationStateEvents.Update, expect.any(Function));
@@ -475,6 +495,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             vm.setRooms([room]);
 
             expect(vm.getSnapshot().isUnread).toBe(false);
@@ -494,6 +515,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room]);
 
                 expect(vm.getSnapshot().notification).toEqual(
@@ -518,6 +540,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room]);
 
                 // Bold, but no badge to display
@@ -532,7 +555,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
             it("should merge mentions, notifications and counts across rooms", () => {
                 const room2 = mkRoom(matrixClient, "!room2:server");
-                const notificationState2 = new RoomNotificationState(room2, false);
+                const notificationState2 = tearDownAfterTest(new RoomNotificationState(room2, false));
 
                 vi.spyOn(RoomNotificationStateStore.instance, "getRoomState")
                     .mockReturnValueOnce(notificationState)
@@ -552,6 +575,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room, room2]);
 
                 expect(vm.getSnapshot().notification).toEqual(
@@ -575,6 +599,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room]);
 
                 expect(vm.getSnapshot().notification).toEqual(
@@ -587,7 +612,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
             it("should report invitations as a count rather than an icon", () => {
                 const room2 = mkRoom(matrixClient, "!room2:server");
-                const notificationState2 = new RoomNotificationState(room2, false);
+                const notificationState2 = tearDownAfterTest(new RoomNotificationState(room2, false));
                 for (const state of [notificationState, notificationState2]) {
                     // An invitation reports neither a mention nor a notification
                     vi.spyOn(state, "invited", "get").mockReturnValue(true);
@@ -604,6 +629,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room, room2]);
 
                 expect(vm.getSnapshot().notification).toEqual(
@@ -620,7 +646,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
             it("should aggregate an active call, preferring video over voice", () => {
                 const room2 = mkRoom(matrixClient, "!room2:server");
-                const notificationState2 = new RoomNotificationState(room2, false);
+                const notificationState2 = tearDownAfterTest(new RoomNotificationState(room2, false));
 
                 vi.spyOn(RoomNotificationStateStore.instance, "getRoomState")
                     .mockReturnValueOnce(notificationState)
@@ -648,6 +674,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room, room2]);
 
                 expect(vm.getSnapshot().notification).toEqual(
@@ -673,6 +700,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room]);
 
                 expect(vm.getSnapshot().notification?.callType).toBeUndefined();
@@ -691,6 +719,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room]);
 
                 expect(vm.getSnapshot().isUnread).toBe(true);
@@ -712,6 +741,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                     spaceId: "!space:server",
                     onToggleExpanded,
                 });
+                tearDownAfterTest(vm);
                 vm.setRooms([room]);
 
                 expect(vm.getSnapshot().notification?.isMention).toBe(false);
@@ -733,6 +763,7 @@ describe("RoomListSectionHeaderViewModel", () => {
                 spaceId: "!space:server",
                 onToggleExpanded,
             });
+            tearDownAfterTest(vm);
             vm.setRooms([room]);
 
             vm.dispose();

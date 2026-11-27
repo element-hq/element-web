@@ -10,24 +10,37 @@
 import React from "react";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { act, render, screen } from "test-utils-rtl";
-import { createTestClient, withClientContextRenderOptions } from "test-utils";
+import { createTestClient, TestSDKContext, withClientContextRenderOptions } from "test-utils";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import { EncryptionUserSettingsTab, type State } from "./EncryptionUserSettingsTab";
 import Modal from "../../../../../Modal";
+import { DeleteKeyStorageDialog } from "../../../dialogs/DeleteKeyStorageDialog";
+import { DeleteKeyStorageViewModel } from "../../../../../viewmodels/crypto/DeleteKeyStorageViewModel";
 import { DeviceListener } from "../../../../../device-listener";
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
+    let sdkContext: TestSDKContext;
 
     beforeEach(() => {
         matrixClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = matrixClient;
+
         vi.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockResolvedValue(true);
+
         // Recovery key is available
         vi.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue("default key");
+
+        // Asking for user verification status gives a valid response
+        vi.spyOn(matrixClient.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+
         // Secrets are cached
         vi.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
             privateKeysInSecretStorage: true,
@@ -39,6 +52,7 @@ describe("<EncryptionUserSettingsTab />", () => {
             },
         });
 
+        // The device is verified
         vi.spyOn(DeviceListener.sharedInstance(), "getDeviceState").mockReturnValue("ok");
     });
 
@@ -46,7 +60,9 @@ describe("<EncryptionUserSettingsTab />", () => {
         vi.resetAllMocks();
     });
 
-    function renderComponent(props: { initialState?: State } = {}) {
+    function renderComponent(
+        props: { initialState?: State; dehydrationSupported?: boolean; dehydratedDeviceId?: string | null } = {},
+    ) {
         return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
     }
 
@@ -60,17 +76,45 @@ describe("<EncryptionUserSettingsTab />", () => {
                 screen.getByText("You need to verify this device in order to view your encryption settings."),
             ).toBeInTheDocument(),
         );
+        await screen.findByText("ed25519");
         expect(asFragment()).toMatchSnapshot();
 
-        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: new Promise(() => {}) } as any);
+        const spy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([true]) } as any);
         await user.click(screen.getByText("Verify this device"));
         expect(spy).toHaveBeenCalled();
+        // The dialog resolving returns the tab to the main state. The device is still unverified, so it re-renders.
+        await waitFor(() => expect(screen.getByRole("button", { name: "Verify this device" })).toBeInTheDocument());
+    });
+
+    it("should display the advanced panel when the encryption is not set up", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("verify_this_session");
+
+        renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Verify this device" }));
+        expect(screen.getByRole("button", { name: "Export keys" })).toBeInTheDocument();
     });
 
     it("should display the recovery panel when key storage is enabled", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         renderComponent();
         await waitFor(() => expect(screen.getByText("Backup")).toBeInTheDocument());
+    });
+
+    it("should display the dehydrated device section when dehydrated device exists", async () => {
+        // Given key storage is enabled
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
+        // And we have a dehydrated device
+        const props = { dehydrationSupported: true, dehydratedDeviceId: "DEHYDDEV" };
+
+        // When we render the tab
+        const encryptionTab = renderComponent(props);
+
+        // Then we can see the dehydrated devices section
+        await waitFor(() =>
+            expect(encryptionTab.getByRole("heading", { name: "Offline device Active", level: 2 })).toBeInTheDocument(),
+        );
     });
 
     it("should not display the recovery panel when key storage is not enabled", async () => {
@@ -86,7 +130,17 @@ describe("<EncryptionUserSettingsTab />", () => {
         const { asFragment } = renderComponent();
 
         await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        await screen.findByText("ed25519");
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should display the advanced panel when the recovery is out of sync", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
+
+        renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        expect(screen.getByRole("button", { name: "Export keys" })).toBeInTheDocument();
     });
 
     it("should enter the 'reset identity' flow if user clicks 'forgot password' and we are missing identity keys", async () => {
@@ -117,6 +171,34 @@ describe("<EncryptionUserSettingsTab />", () => {
         await waitFor(() => expect(screen.getByText("Change recovery key")).toBeVisible());
     });
 
+    it.each(["verify_this_session", "key_storage_out_of_sync"] as const)(
+        "should enter the reset identity flow from the advanced panel when the device state is %s",
+        async (deviceState) => {
+            vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue(deviceState);
+            renderComponent();
+
+            const user = userEvent.setup();
+            const button = await waitFor(() => screen.getByRole("button", { name: "Reset digital identity" }));
+            await user.click(button);
+            await waitFor(() =>
+                expect(screen.getByText("Are you sure you want to reset your digital identity?")).toBeInTheDocument(),
+            );
+        },
+    );
+
+    it("should enter the 'change recovery key' flow if entering the recovery key fails", async () => {
+        vi.mocked(DeviceListener.sharedInstance().getDeviceState).mockReturnValue("key_storage_out_of_sync");
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        vi.spyOn(DeviceListener.sharedInstance(), "whilePaused").mockRejectedValue(new Error("failed to access 4S"));
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsCrossSigningReset").mockResolvedValue(false);
+        renderComponent();
+
+        const user = userEvent.setup();
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
+        await waitFor(() => expect(screen.getByText("Change recovery key")).toBeInTheDocument());
+    });
+
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
         vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         const user = userEvent.setup();
@@ -140,6 +222,52 @@ describe("<EncryptionUserSettingsTab />", () => {
             expect(screen.getByRole("heading", { name: "Save your recovery key somewhere safe" })).toBeInTheDocument(),
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should show the backup set up screen once the recovery key is set up", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        const user = userEvent.setup();
+        renderComponent({ initialState: "set_recovery_key" });
+
+        // Walk the whole recovery key flow: save the generated key, then confirm it.
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Finish set up" }));
+
+        await expect(screen.findByRole("heading", { name: "Your backup is now fully set up" })).resolves.toBeVisible();
+        expect(screen.getByText("Settings → Encryption → Backup", { exact: false })).toBeVisible();
+        expect(screen.getByRole("navigation")).toHaveTextContent("Get recovery key");
+
+        // Done goes back to the main panel
+        await user.click(screen.getByRole("button", { name: "Done" }));
+        await expect(screen.findByRole("heading", { name: "Key storage" })).resolves.toBeVisible();
+    });
+
+    it("should show the key active screen once the recovery key is changed", async () => {
+        vi.spyOn(DeviceListener.sharedInstance(), "keyStorageOutOfSyncNeedsBackupReset").mockResolvedValue(false);
+        const user = userEvent.setup();
+        renderComponent({ initialState: "change_recovery_key" });
+
+        await user.click(await screen.findByRole("button", { name: "Continue" }));
+        await user.type(await screen.findByTitle("Enter recovery key"), "encoded private key");
+        await user.click(screen.getByRole("button", { name: "Confirm new recovery key" }));
+
+        await expect(
+            screen.findByRole("heading", { name: "Your new recovery key is now active" }),
+        ).resolves.toBeVisible();
+        expect(screen.queryByText("Settings → Encryption → Backup", { exact: false })).not.toBeInTheDocument();
+        expect(screen.getByRole("navigation")).toHaveTextContent("Change recovery key");
+
+        await user.click(screen.getByRole("button", { name: "Done" }));
+        await expect(screen.findByRole("heading", { name: "Key storage" })).resolves.toBeVisible();
+    });
+
+    it("should go back to the main panel from the breadcrumbs of the confirmation screen", async () => {
+        const user = userEvent.setup();
+        renderComponent({ initialState: "recovery_key_changed" });
+
+        await user.click(screen.getByRole("button", { name: "Back" }));
+        await expect(screen.findByRole("heading", { name: "Key storage" })).resolves.toBeVisible();
     });
 
     it("should display the reset identity panel when the user clicks on the reset cryptographic identity panel", async () => {
@@ -228,5 +356,40 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await user.click(screen.getByRole("button", { name: "Continue with reset" }));
         expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeVisible();
+    });
+
+    it("should disable the key storage switch while turning key storage on", async () => {
+        const user = userEvent.setup();
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
+        const { promise, resolve } = Promise.withResolvers<null>();
+        vi.mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockReturnValue(promise);
+        renderComponent();
+
+        const toggle = await screen.findByRole("switch", { name: "Allow key storage" });
+        await user.click(toggle);
+
+        expect(toggle).toBeDisabled();
+        resolve(null);
+        await waitFor(() => expect(toggle).toBeEnabled());
+    });
+
+    it("should ask for confirmation in a dialog when turning off key storage", async () => {
+        const user = userEvent.setup();
+        vi.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+        const dialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({ finished: Promise.resolve([]) } as any);
+        renderComponent();
+
+        await user.click(await screen.findByRole("switch", { name: "Allow key storage" }));
+
+        expect(dialogSpy).toHaveBeenCalledWith(
+            DeleteKeyStorageDialog,
+            { vm: expect.any(DeleteKeyStorageViewModel) },
+            undefined,
+            false,
+            false,
+            expect.anything(),
+        );
+        expect(matrixClient.getCrypto()!.disableKeyStorage).not.toHaveBeenCalled();
+        expect(screen.getByRole("switch", { name: "Allow key storage" })).toBeChecked();
     });
 });

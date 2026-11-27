@@ -30,6 +30,15 @@ on:
                 type: string
                 required: false
                 description: "Whether to sign & notarise the build, requires 'Desktop eSigner' environment"
+            sign-cache-url:
+                type: string
+                required: false
+                description: |
+                    Public base URL to reuse previously signed DLLs, native modules & Squirrel.exe from when signing, to save on signatures.
+                    Files are fetched from `<url>/<certificate thumbprint>/<sha256 of unsigned file><ext>`.
+                    Files signed during the build are uploaded in the same layout as the `sign-cache-win-<arch>` artifact,
+                    for a trusted job to upload to the cache.
+                default: "https://packages.element.io/sign-cache"
             blob_report:
                 type: boolean
                 required: false
@@ -80,13 +89,9 @@ jobs:
         env:
             SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
             BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
-            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
-            - name: Configure git line endings
-              run: |
-                  git config --system core.autocrlf false
-                  git config --system core.eol lf
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
@@ -98,10 +103,12 @@ jobs:
                   name: ${{ inputs.prepare-artifact-name }}
                   path: apps/desktop/
 
-            - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+            - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: true
+                  # PR & merge queue caches are scoped to their own ref so nothing else can restore them
+                  save-cache: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
                   install: false
 
             # Ensure the prebuilt seshat binaries for the target architecture get installed when cross-building
@@ -169,26 +176,25 @@ jobs:
                   INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
                   MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
 
+            # Trust the sandbox cert before building so that signatures made during the build validate,
+            # letting the build skip re-signing files it has already signed, as it does with the real cert.
+            - name: Trust eSigner sandbox cert
+              if: inputs.sign == ''
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+
             - name: Build App
               working-directory: apps/desktop
               run: pnpm run build --publish never $BUILD_ARGS -w $TARGETS
               shell: bash
               env:
                   VARIANT_PATH: variant.json
-                  # Only set for Nightly builds
-                  # The windows packager relies on parsing this as semver, so we have to make it look like one.
-                  # This will give our update packages really stupid names, but we probably can't change that either
-                  # because squirrel windows parses them for the version too. We don't really care: nobody sees them.
-                  # We just give the installer a static name, so you'll just see this in the 'about' dialog.
-                  # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
-                  VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
+                  # Only set for Nightly builds, electron-builder.ts converts it into a semver version for Squirrel.Windows
+                  VERSION: ${{ inputs.version }}
                   TARGETS: ${{ inputs.targets }}
-
-            - name: Trust eSigner sandbox cert
-              if: inputs.sign == ''
-              run: |
-                  Set-StrictMode -Version 'Latest'
-                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+                  ED_SIGN_CACHE_URL: ${{ inputs.sign && inputs.sign-cache-url || '' }}
+                  ED_SIGN_CACHE_DIR: sign-cache
 
             - name: Check app was signed successfully
               working-directory: apps/desktop
@@ -199,35 +205,25 @@ jobs:
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `
                       -Recurse dist `
-                      -Include *.exe, *.msi `
+                      -Include *.exe, *.msi, *.dll, *.node `
                   | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
 
             - name: Upload Artifacts
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
                   path: |
                       apps/desktop/dist
                   retention-days: 1
 
-            - name: Assert executable is present
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/win-*unpacked/Element*.exe'
-
-            - name: Assert all Squirrel files are present
-              if: contains(inputs.targets, 'squirrel')
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/squirrel-windows*/Element Setup*.exe'
-                  Test-Path './dist/squirrel-windows*/element-desktop-*-full.nupkg'
-                  Test-Path './dist/squirrel-windows*/RELEASES'
-
-            - name: Assert MSI is present
-              if: contains(inputs.targets, 'msi')
-              working-directory: apps/desktop
-              run: |
-                  Test-Path './dist/Element*.msi'
+            - name: Upload newly signed files for the sign cache
+              if: inputs.sign
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+              with:
+                  name: ${{ inputs.artifact-prefix }}sign-cache-win-${{ inputs.arch }}
+                  path: apps/desktop/sign-cache
+                  if-no-files-found: ignore
+                  retention-days: 1
 
     test:
         name: Test Windows ${{ inputs.arch }}

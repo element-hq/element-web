@@ -12,6 +12,7 @@ import { playwright } from "@vitest/browser-playwright";
 import { env, platform } from "node:process";
 
 import rootConfig from "../../vitest.config.ts";
+import { getMinimumBrowserVersions } from "./supportedBrowsers.ts";
 
 function resolve(specifier: string): string {
     return fileURLToPath(import.meta.resolve(specifier));
@@ -33,6 +34,10 @@ const canCompareScreenshots = Boolean(wsEndpoint || env["CI"]);
 const browserPlatform = canCompareScreenshots ? "linux" : platform;
 
 export default defineProject({
+    // Matches the DefinePlugin values in webpack.config.ts
+    define: {
+        __MINIMUM_BROWSER_VERSIONS__: JSON.stringify(getMinimumBrowserVersions()),
+    },
     resolve: {
         alias: [
             { find: "test-utils-rtl", replacement: resolve("./src/test/test-utils/vitest-matrix-react") },
@@ -77,13 +82,27 @@ export default defineProject({
         globals: false,
         environment: "node",
         pool: "threads",
+        server: {
+            deps: {
+                // Vitest hands ES modules under node_modules to Node's own loader, which rejects directory
+                // imports like `matrix-js-sdk/lib/matrixrtc`. Processing the component through Vite instead
+                // resolves these imports to the directory's index file.
+                // TODO: We should be able to remove this once https://github.com/element-hq/element-call/blob/main/src/UrlConfiguration.ts#L20-L25 has been corrected.
+                inline: [/@element-hq\/element-call-component/],
+            },
+        },
         projects: [
             {
                 extends: true,
                 test: {
                     name: "unit",
                     include: ["src/**/*.test.{ts,tsx}"],
-                    setupFiles: ["src/test/setupJsdomPolyfills.ts", "src/test/setupTests.ts"],
+                    setupFiles: [
+                        "src/test/setupJsdomPolyfills.ts",
+                        // Before setupTests, so that its afterEach runs last: a failing afterEach skips the rest
+                        "src/test/setupLeakDetection.ts",
+                        "src/test/setupTests.ts",
+                    ],
                     environmentOptions: {
                         happyDOM: {
                             url: "http://localhost/",

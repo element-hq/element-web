@@ -31,7 +31,6 @@ import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
-import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
 
@@ -40,22 +39,6 @@ interface IIgnoredUserProps {
     onUnignored: (userId: string) => void;
     inProgress: boolean;
 }
-
-const SecureBackup: React.FC = () => {
-    const { dehydratedDeviceId } = useOwnDevices();
-    if (!dehydratedDeviceId) return null;
-
-    return (
-        <SettingsSubsection heading={_t("common|secure_backup")}>
-            <div className="mx_SettingsSubsection_content">
-                <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
-                <div className="mx_SettingsSubsection_text">
-                    {_t("settings|security|dehydrated_device_description")}
-                </div>
-            </div>
-        </SettingsSubsection>
-    );
-};
 
 export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     private onUnignoreClicked = (): void => {
@@ -287,8 +270,6 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
     }
 
     public render(): React.ReactNode {
-        const secureBackup = <SecureBackup />;
-
         const eventIndex = (
             <SettingsSubsection heading={_t("settings|security|message_search_section")}>
                 <EventIndexPanel />
@@ -354,8 +335,10 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
             }
         }
 
+        // Discovery binds 3PIDs to the identity server. UIFeature.IdentityServer is forced off when
+        // UIFeature.ThirdPartyID is off, so checking it covers both flags.
         let discoverySection;
-        if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+        if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             discoverySection = <DiscoverySettings />;
         }
 
@@ -373,10 +356,7 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
             <SettingsTab>
                 {warning}
                 <SetIntegrationManager />
-                <SettingsSection heading={_t("settings|security|encryption_section")}>
-                    {secureBackup}
-                    {eventIndex}
-                </SettingsSection>
+                <SettingsSection heading={_t("settings|security|encryption_section")}>{eventIndex}</SettingsSection>
                 {privacySection}
                 {advancedSection}
             </SettingsTab>

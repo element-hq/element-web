@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, onTestFinished } from "vitest";
 import { type EventTimeline, EventType, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "node:events";
 import { mkEvent, mkRoom, mkRoomMember, stubClient } from "test-utils";
@@ -63,6 +63,7 @@ describe("LatestRtcNotificationEventStore", () => {
         };
 
         const store = new LatestRtcNotificationEventStore(callStore);
+        onTestFinished(() => store.destroy());
         vi.spyOn(store, "matrixClient", "get").mockReturnValue(cli);
         await store.start();
         await vi.waitFor(() => {
@@ -140,6 +141,7 @@ describe("LatestRtcNotificationEventStore", () => {
         callStore.getCall = () => call as unknown as ElementCall;
 
         const store = new LatestRtcNotificationEventStore(callStore);
+        onTestFinished(() => store.destroy());
         vi.spyOn(store, "matrixClient", "get").mockReturnValue(cli);
         await store.start();
 

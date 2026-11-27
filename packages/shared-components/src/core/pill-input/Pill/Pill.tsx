@@ -55,6 +55,7 @@ export function Pill({ className, children, label, onClick, ...props }: PropsWit
             </span>
             {onClick && (
                 <IconButton
+                    type="button"
                     aria-describedby={id}
                     size="16px"
                     onClick={onClick}

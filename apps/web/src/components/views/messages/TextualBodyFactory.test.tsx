@@ -127,6 +127,7 @@ describe("<TextualBody />", () => {
             getRooms: () => [defaultRoom, otherRoom],
             getAccountData: (): MatrixEvent | undefined => undefined,
             isGuest: () => false,
+            baseUrl: "https://server",
             mxcUrlToHttp: (s: string) => s,
             getUserId: () => "@user:example.com",
             fetchRoomEvent: () => {
@@ -379,6 +380,7 @@ describe("<TextualBody />", () => {
                 on: (): void => undefined,
                 removeListener: (): void => undefined,
                 isGuest: () => false,
+                baseUrl: "https://server",
                 mxcUrlToHttp: (s: string) => s,
             });
             vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom(room1Id, "room name", matrixClient));
@@ -539,6 +541,7 @@ describe("<TextualBody />", () => {
                 getAccountData: (): MatrixClient | undefined => undefined,
                 getUrlPreview: (url: string) => new Promise(() => {}),
                 isGuest: () => false,
+                baseUrl: "https://server",
                 mxcUrlToHttp: (s: string) => s,
             });
             vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
@@ -609,6 +612,7 @@ describe("<TextualBody />", () => {
                 getAccountData: (): MatrixEvent | undefined => undefined,
                 getUrlPreview: vi.fn().mockResolvedValue(ogData()),
                 isGuest: () => false,
+                baseUrl: "https://server",
                 mxcUrlToHttp: (s: string) => s,
             });
             vi.mocked(matrixClient.getRoom).mockReturnValue(mkStubRoom("room_id", "room name", matrixClient));
@@ -663,6 +667,28 @@ describe("<TextualBody />", () => {
             fireEvent.click(screen.getByRole("button", { name: "Open link" }));
 
             expect(open).toHaveBeenCalledWith(link, "_blank", "noreferrer");
+        });
+
+        it("shows the thumbnail in the tile and the original image in the lightbox", async () => {
+            vi.mocked(matrixClient.getUrlPreview).mockResolvedValue(
+                ogData({ ...ogImage, "og:image:type": "image/gif" }),
+            );
+            const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as never);
+
+            await renderPreviews();
+
+            expect(screen.getByAltText("Matrix")).toHaveAttribute(
+                "src",
+                expect.stringContaining("https://server/_matrix/media/v3/thumbnail/example.org/preview?"),
+            );
+            fireEvent.click(screen.getByRole("button", { name: "View image" }));
+            expect(createDialog).toHaveBeenCalledWith(
+                ImageView,
+                expect.objectContaining({ src: "mxc://example.org/preview" }),
+                "mx_Dialog_lightbox",
+                undefined,
+                true,
+            );
         });
 
         it("should listen to showUrlPreview change", async () => {
@@ -726,33 +752,26 @@ describe("<TextualBody />", () => {
             return urlPreviewGroupProps.at(-1)!.urlPreviewKind;
         };
 
-        // Without the lab flag the bundle is ignored entirely and previews come from the server.
-        it("asks the server when the bundle feature is off", () => {
-            expect(renderAndGetKind()).toBe("fetchonly");
-        });
-
-        it("prefers the bundle when the bundle feature is on in an unencrypted room", () => {
-            enableSettings("feature_msc4095_url_preview_bundle");
+        it("prefers the bundle in an unencrypted room", () => {
             expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
         });
 
         // The user has not asked for the stricter behaviour, so an encrypted message whose bundle
         // is missing a preview may still be filled in by the server.
         it("prefers the bundle in an encrypted room when bundled-only is off", () => {
-            enableSettings("feature_msc4095_url_preview_bundle");
             expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("preferbundled");
         });
 
         // The whole point of the setting: in an encrypted room nothing about the message, not even
         // one of its URLs, may be sent to the homeserver.
         it("uses the bundle only in an encrypted room when bundled-only is on", () => {
-            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            enableSettings("urlPreviewsEnabled_e2ee_bundled_only");
             expect(renderAndGetKind({ isRoomEncrypted: true })).toBe("bundledonly");
         });
 
         // The setting is about encrypted rooms only, so it must not restrict an unencrypted one.
         it("ignores bundled-only in an unencrypted room", () => {
-            enableSettings("feature_msc4095_url_preview_bundle", "urlPreviewsEnabled_e2ee_bundled_only");
+            enableSettings("urlPreviewsEnabled_e2ee_bundled_only");
             expect(renderAndGetKind({ isRoomEncrypted: false })).toBe("preferbundled");
         });
     });

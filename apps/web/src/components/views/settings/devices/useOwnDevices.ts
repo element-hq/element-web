@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     ClientEvent,
     type IMyDevice,
@@ -27,7 +27,6 @@ import { getDeviceClientInformation, pruneClientInformation } from "../../../../
 import { type DevicesDictionary, type ExtendedDevice, type ExtendedDeviceAppInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { isDeviceVerified } from "../../../../utils/device/isDeviceVerified";
-import { SDKContext } from "../../../../contexts/SDKContext";
 
 const parseDeviceExtendedInformation = (matrixClient: MatrixClient, device: IMyDevice): ExtendedDeviceAppInfo => {
     const { name, version, url } = getDeviceClientInformation(matrixClient, device.device_id);
@@ -65,7 +64,14 @@ export enum OwnDevicesError {
 }
 export type DevicesState = {
     devices: DevicesDictionary;
-    dehydratedDeviceId?: string;
+    /**
+     * The ID of the dehydrated device.
+     *
+     * undefined = still checking for a dehydrated device
+     * null = there is no dehydrated device
+     * string = there is a dehydrated device with this ID
+     */
+    dehydratedDeviceId: string | null | undefined;
     pushers: IPusher[];
     localNotificationSettings: Map<string, LocalNotificationSettings>;
     currentDeviceId: string;
@@ -78,10 +84,7 @@ export type DevicesState = {
     error?: OwnDevicesError;
     supportsMSC3881?: boolean | undefined;
 };
-export const useOwnDevices = (): DevicesState => {
-    const sdkContext = useContext(SDKContext);
-    const matrixClient = sdkContext.client!;
-
+export const useOwnDevices = (matrixClient: MatrixClient): DevicesState => {
     const currentDeviceId = matrixClient.getDeviceId()!;
     const userId = matrixClient.getSafeUserId();
 
@@ -134,7 +137,7 @@ export const useOwnDevices = (): DevicesState => {
             // indicate that the user is using a dehydrated device).  If the user has
             // more than one, that is anomalous, and we show all the devices so that
             // nothing is hidden.
-            setDehydratedDeviceId(dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : undefined);
+            setDehydratedDeviceId(dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : null);
 
             setIsLoadingDeviceList(false);
         } catch (error) {

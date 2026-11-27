@@ -1,13 +1,15 @@
 {
     "name": "@element-hq/element-web-module-banner",
     "private": true,
-    "version": "2.1.1",
+    "version": "2.2.0",
     "type": "module",
     "main": "lib/index.js",
     "license": "SEE LICENSE IN README.md",
     "scripts": {
         "build": "nx build",
-        "lint:types": "nx lint:types"
+        "lint:types": "nx lint:types",
+        "i18n:sort": "matrix-sort-i18n src/translations.json",
+        "i18n:lint": "oxfmt src/translations.json"
     },
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
@@ -21,8 +23,8 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@vitejs/plugin-react": "catalog:",
-        "happy-dom": "^20.10.2",
-        "matrix-web-i18n": "^3.6.0",
+        "happy-dom": "^21.0.0",
+        "matrix-web-i18n": "catalog:",
         "matrix-widget-api": "^1.17.0",
         "react": "catalog:",
         "react-dom": "catalog:",

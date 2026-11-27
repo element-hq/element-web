@@ -23,6 +23,7 @@ exports[`Pill > renders the pill 1`] = `
       role="button"
       style="--cpd-icon-button-size: 16px;"
       tabindex="0"
+      type="button"
     >
       <div
         class="_indicator-icon_j097f_17"

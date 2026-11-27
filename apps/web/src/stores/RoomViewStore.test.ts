@@ -23,6 +23,7 @@ import {
     untilDispatch,
     untilEmission,
     TestSDKContext,
+    tearDownAfterTest,
 } from "test-utils";
 
 import { RoomViewStore } from "./RoomViewStore";
@@ -208,8 +209,15 @@ describe("RoomViewStore", function () {
             writable: true,
             configurable: true,
         });
-        roomViewStore = new RoomViewStore(dis, stores);
+        roomViewStore = tearDownAfterTest(new RoomViewStore(dis, stores));
         stores._RoomViewStore = roomViewStore;
+    });
+
+    it("stops reacting to dispatches once destroyed", async () => {
+        roomViewStore.destroy();
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId }, true);
+        await flushPromises();
+        expect(roomViewStore.getRoomId()).toBeNull();
     });
 
     it("can be used to view a room by ID and join", async () => {

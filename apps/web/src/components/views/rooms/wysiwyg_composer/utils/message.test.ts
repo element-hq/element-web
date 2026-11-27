@@ -563,8 +563,8 @@ describe("message", () => {
 
         it("Should attach the bundle to the new content before sending", async () => {
             const attachBundles = vi.fn(async (content: RoomMessageEventContent) => {
-                (content as unknown as Record<string, unknown>)["com.beeper.linkpreviews"] = [
-                    { matched_url: "https://example.org" },
+                (content as unknown as Record<string, unknown>)["m.url_previews"] = [
+                    { "matrix:matched_url": "https://example.org" },
                 ];
                 return false;
             });
@@ -584,7 +584,7 @@ describe("message", () => {
                 null,
                 expect.objectContaining({
                     "m.new_content": expect.objectContaining({
-                        "com.beeper.linkpreviews": [{ matched_url: "https://example.org" }],
+                        "m.url_previews": [{ "matrix:matched_url": "https://example.org" }],
                     }),
                 }),
             );

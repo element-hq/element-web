@@ -12,7 +12,7 @@ import { decode } from "html-entities";
 import type { UrlPreview } from "shared-types";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
-import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
+import { type BundledUrlPreview } from "../../@types/url-preview";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 import { decryptFile } from "./DecryptFile";
 import { type UrlPreviewApi as ModuleUrlPreviewApi } from "../modules/UrlPreviewApi";
@@ -246,50 +246,53 @@ export class UrlPreviewFetcher {
 
     /**
      * Convert an MSC4095 URL preview bundle item to a UrlPreview.
-     * This will load previews via the server if `single` only contains `matched_url`.
+     * This will load previews via the server if `single` only contains `matrix:matched_url`.
      *
-     * @param single A single preview.
-     * @param body The message text body. `matched_url` must appear within it.
+     * @param single A single preview, in the stable format. Use `getBundledUrlPreviews` to read
+     *               one from an event.
+     * @param event The event the preview was bundled with. `matrix:matched_url` must appear
+     *              within its body.
      * @param loadMedia Whether to include the preview image. Pass false when media is hidden.
-     * @param allowServerFallback Whether an entry carrying only `matched_url` may be resolved by
+     * @param allowServerFallback Whether an entry carrying only `matrix:matched_url` may be resolved by
      *                            asking the server. Pass false in encrypted rooms where the user
      *                            opted into bundled previews only, so no URL is leaked to it.
      */
     public async previewFromBundle(
-        single: UnstableBundledUrlPreviewSingle,
+        single: BundledUrlPreview,
         event: MatrixEvent,
         loadMedia = false,
         allowServerFallback = true,
     ): Promise<UrlPreview | null> {
-        if (!URL.canParse(single.matched_url)) {
+        const matchedUrl = single["matrix:matched_url"];
+        if (!URL.canParse(matchedUrl)) {
             return null;
         }
         const body = event.getContent().body;
-        const modulePreview = await this.previewModuleApi.getPreview(single.matched_url, event);
+        const modulePreview = await this.previewModuleApi.getPreview(matchedUrl, event);
         if (modulePreview) {
             return modulePreview;
         }
-        const url = new URL(single.matched_url);
+        const url = new URL(matchedUrl);
         if (url.protocol !== "http:" && url.protocol !== "https:")
             // Invalid protocol, skip.
             return null;
 
-        if (!body.includes(single.matched_url)) return null;
+        if (!body.includes(matchedUrl)) return null;
 
         if (Object.keys(single).length === 1)
-            // We ONLY have the matched_url, so request a preview.
-            return allowServerFallback ? await this.fetchPreview(single.matched_url, loadMedia) : null;
+            // We ONLY have the matched URL, so request a preview.
+            return allowServerFallback ? await this.fetchPreview(matchedUrl, loadMedia) : null;
 
         const preview: UrlPreview = {
-            link: single.matched_url,
-            title: single["og:title"] ?? single.matched_url,
+            link: matchedUrl,
+            title: single["og:title"] ?? matchedUrl,
             siteName: url.hostname,
-            showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
+            showTooltipOnLink: !!(matchedUrl !== single["og:title"] && this.showTooltips),
             description: single["og:description"],
             ogUrl: single["og:url"],
         };
 
-        const encryptedImage = single["beeper:image:encryption"];
+        const encryptedImage = single["matrix:image:encrypted"];
 
         if (!encryptedImage && !single["og:image"]) return preview;
 

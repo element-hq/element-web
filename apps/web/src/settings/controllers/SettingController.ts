@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { type SettingLevel } from "../SettingLevel";
 import type SettingsStore from "../SettingsStore";
 import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
+import { type CustomisationsApi } from "../../modules/customisationsApi.ts";
 
 /**
  * Represents a controller for individual settings to alter the reading behaviour
@@ -22,6 +23,8 @@ import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
 export default abstract class SettingController {
     public static sdkContext: SDKContextClass;
     public static settingsStore: typeof SettingsStore;
+    // Set by the ModuleApi when it's created
+    public static moduleCustomisations?: CustomisationsApi;
 
     /**
      * Gets the overridden value for the setting, if any. This must return null if the

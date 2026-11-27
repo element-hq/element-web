@@ -43,7 +43,9 @@ test.describe("Encryption tab", () => {
                 // The user's device is in an unverified state, therefore the only option available to them here is to verify it
                 const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
                 await expect(verifyButton).toBeVisible();
-                await expect(content).toMatchScreenshot("verify-device-encryption-tab.png");
+                await expect(content).toMatchScreenshot("verify-device-encryption-tab.png", {
+                    mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+                });
                 await verifyButton.click();
 
                 await util.verifyDevice(recoveryKey);
@@ -64,6 +66,28 @@ test.describe("Encryption tab", () => {
             },
         );
 
+        test(
+            "should show 'Offline device' section, and 'Not available' when dehydration is disabled",
+            { tag: "@screenshot" },
+            async ({ util }) => {
+                const dialog = await util.openEncryptionTab();
+                const content = util.getEncryptionTabContent();
+
+                // Given our device is verified
+                await dialog.getByRole("button", { name: "Verify this device" }).click();
+                await util.verifyDevice(recoveryKey);
+
+                // Then we can see the Offline device section but it's not available
+                await content
+                    .getByRole("heading", { name: "Offline device\nNot available", exact: true })
+                    .scrollIntoViewIfNeeded();
+
+                await expect(content).toMatchScreenshot("offline-device-not-available.png", {
+                    mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+                });
+            },
+        );
+
         // Test what happens if the cross-signing secrets are in secret storage but are not cached in the local DB.
         //
         // This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
@@ -81,7 +105,9 @@ test.describe("Encryption tab", () => {
                 const dialog = util.getEncryptionTabContent();
                 const enterKeyButton = dialog.getByRole("button", { name: "Enter recovery key" });
                 await expect(enterKeyButton).toBeVisible();
-                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png");
+                await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png", {
+                    mask: [dialog.getByTestId("deviceId"), dialog.getByTestId("sessionKey")],
+                });
                 await enterKeyButton.click();
 
                 // Fill the recovery key
@@ -126,9 +152,13 @@ test.describe("Encryption tab", () => {
 
             await page.getByRole("switch", { name: "Allow key storage" }).click();
 
-            await expect(page.getByRole("heading", { name: "Turn off and delete key storage?" })).toBeVisible();
+            // Stacked dialogs share a title id, so locate this one by its heading rather than its accessible name
+            const dialog = page.getByRole("dialog").filter({
+                has: page.getByRole("heading", { name: "Are you sure you want to delete key storage?" }),
+            });
+            await expect(dialog).toBeVisible();
 
-            await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
+            await expect(dialog).toMatchScreenshot("delete-key-storage-confirm.png");
 
             const deleteRequestPromises = [
                 page.waitForRequest((req) => req.url().endsWith("/account_data/m.cross_signing.master")),
@@ -139,8 +169,10 @@ test.describe("Encryption tab", () => {
                 page.waitForRequest((req) => req.url().includes("/account_data/m.secret_storage.key.")),
             ];
 
-            await page.getByRole("button", { name: "Delete key storage" }).click();
+            await dialog.getByRole("button", { name: "Delete" }).click();
 
+            // The dialog stays open until key storage has been deleted
+            await expect(dialog).toBeHidden();
             await expect(page.getByRole("switch", { name: "Allow key storage" })).not.toBeChecked();
 
             for (const prom of deleteRequestPromises) {

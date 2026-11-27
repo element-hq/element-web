@@ -37,6 +37,12 @@ import { getCircularReplacer } from "../utils/JSON";
 
 const FLUSH_RATE_MS = 30 * 1000;
 
+/**
+ * Matches the value of a `token=` URL parameter, such as an `access_token` or a `loginToken`, to remove it from
+ * log lines. It runs to the end of the parameter, as tokens can contain characters like `_`.
+ */
+const TOKEN_PATTERN = /(token=)[^&#\s"']+/gi;
+
 /** the length of log data we keep in indexeddb (and include in the reports), if there are more than 24 hours of logs */
 const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 
@@ -54,6 +60,41 @@ const consoleFunctionsToLevels = {
 type LogFunctionName = keyof typeof consoleFunctionsToLevels;
 
 // A class which monkey-patches the global console and stores log lines.
+/**
+ * The deepest `Error.cause` to include in a log line. Stops a chain which refers back to itself from
+ * looping forever.
+ */
+const MAX_ERROR_CAUSE_DEPTH = 5;
+
+/**
+ * Convert a value passed to a console function into the text written to the log.
+ *
+ * Errors include their `cause`, as that often holds the underlying error (for example the
+ * `DOMException` from a failed IndexedDB request) which explains the error being logged.
+ *
+ * @param arg - the value passed to the console function.
+ * @param depth - how many causes deep this value is.
+ * @returns the text to write to the log.
+ */
+function formatLogArg(arg: unknown, depth = 0): string {
+    let text: string;
+    if (arg instanceof DOMException) {
+        text = arg.message + ` (${arg.name} | ${arg.code})`;
+    } else if (arg instanceof Error) {
+        text = arg.message + (arg.stack ? `\n${arg.stack}` : "");
+    } else if (typeof arg === "object") {
+        return JSON.stringify(arg, getCircularReplacer());
+    } else {
+        // Left as-is so that joining the line handles it as it always has.
+        return arg as string;
+    }
+
+    if (arg.cause !== undefined && depth < MAX_ERROR_CAUSE_DEPTH) {
+        text += `\nCaused by: ${formatLogArg(arg.cause, depth + 1)}`;
+    }
+    return text;
+}
+
 export class ConsoleLogger {
     private logs = "";
     private originalFunctions: { [key in LogFunctionName]?: LogFunction } = {};
@@ -80,17 +121,7 @@ export class ConsoleLogger {
         const ts = new Date().toISOString();
 
         // Convert objects and errors to helpful things
-        args = args.map((arg) => {
-            if (arg instanceof DOMException) {
-                return arg.message + ` (${arg.name} | ${arg.code})`;
-            } else if (arg instanceof Error) {
-                return arg.message + (arg.stack ? `\n${arg.stack}` : "");
-            } else if (typeof arg === "object") {
-                return JSON.stringify(arg, getCircularReplacer());
-            } else {
-                return arg;
-            }
-        });
+        args = args.map((arg) => formatLogArg(arg));
 
         // Some browsers support string formatting which we're not doing here
         // so the lines are a little more ugly but easy to implement / quick to
@@ -100,7 +131,7 @@ export class ConsoleLogger {
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         let line = `${ts} ${level} ${args.join(" ")}\n`;
         // Do some cleanup
-        line = line.replace(/token=[a-zA-Z0-9-]+/gm, "token=xxxxx");
+        line = line.replace(TOKEN_PATTERN, "$1xxxxx");
         // Using + really is the quickest way in JS
         // http://jsperf.com/concat-vs-plus-vs-join
         this.logs += line;
@@ -483,6 +514,27 @@ function selectQuery<T>(
 }
 
 /**
+ * Log errors which nothing caught, as the browser reports them to the console itself, bypassing
+ * the console functions which {@link ConsoleLogger} wraps.
+ *
+ * @param target - the window to listen to.
+ * @param consoleLogger - the logger to log the errors to.
+ */
+export function logUncaughtErrors(target: Window, consoleLogger: ConsoleLogger): void {
+    target.addEventListener("error", (event) => {
+        // `error` is missing for errors from scripts on other origins, and can be any value which was thrown.
+        consoleLogger.log(
+            "E",
+            "Uncaught error:",
+            event.error ?? `${event.message} at ${event.filename}:${event.lineno}:${event.colno}`,
+        );
+    });
+    target.addEventListener("unhandledrejection", (event) => {
+        consoleLogger.log("E", "Unhandled promise rejection:", event.reason);
+    });
+}
+
+/**
  * Configure rage shaking support for sending bug reports.
  * Modifies globals.
  * @param {boolean} setUpPersistence When true (default), the persistence will
@@ -495,11 +547,7 @@ export function init(setUpPersistence = true): Promise<void> {
     }
     global.mx_rage_logger = new ConsoleLogger();
     global.mx_rage_logger.monkeyPatch(window.console);
-
-    // log unhandled rejections in the rageshake
-    window.addEventListener("unhandledrejection", (event) => {
-        global.mx_rage_logger.log("error", `Unhandled promise rejection: ${event.reason}`);
-    });
+    logUncaughtErrors(window, global.mx_rage_logger);
 
     if (setUpPersistence) {
         return tryInitStorage();

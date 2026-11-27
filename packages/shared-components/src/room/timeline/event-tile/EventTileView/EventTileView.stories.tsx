@@ -561,7 +561,7 @@ const StoryFooter = (): React.ReactElement => {
             "aria-label": "Thumbs up, 2 reactions",
             "tooltipVm": useStoryReactionTooltipVm("Thumbs up"),
         },
-        { onClick: fn() },
+        { onClick: fn(), setHoveredOrFocused: fn() },
     );
     const heartVm = useMockedViewModel(
         {
@@ -571,7 +571,7 @@ const StoryFooter = (): React.ReactElement => {
             "aria-label": "Red heart, 1 reaction",
             "tooltipVm": useStoryReactionTooltipVm("Red heart"),
         },
-        { onClick: fn() },
+        { onClick: fn(), setHoveredOrFocused: fn() },
     );
     return (
         <ReactionsRowView vm={vm} className={styles.storyReactions}>
@@ -1293,8 +1293,8 @@ function EventTileViewStoryContent({
                         <StoryInformationalBody>Alex changed the room name.</StoryInformationalBody>,
                     )}
                     {renderTile(
-                        false,
-                        "informational-second",
+                        true,
+                        "informational-notifications-own",
                         { info: true, continuation: false, lastInSection: false },
                         false,
                         <StoryInformationalBody>Notifications are enabled.</StoryInformationalBody>,
@@ -1302,12 +1302,38 @@ function EventTileViewStoryContent({
                     {renderTile(
                         false,
                         "informational-last",
-                        { info: true, continuation: false, lastInSection: true },
-                        true,
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
                         <StoryInformationalBody>
                             This longer informational event demonstrates how shared textual event styling handles a
                             detailed message that wraps across two rows in the timeline.
                         </StoryInformationalBody>,
+                    )}
+                    {renderTile(
+                        true,
+                        "informational-reaction-own",
+                        { info: true, continuation: false, lastInSection: false },
+                        false,
+                        <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                        undefined,
+                        {
+                            ...props.slots,
+                            body: <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                            footer: <StoryFooter />,
+                        },
+                    )}
+                    {renderTile(
+                        false,
+                        "informational-reaction-received",
+                        { info: true, continuation: false, lastInSection: true },
+                        true,
+                        <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                        undefined,
+                        {
+                            ...props.slots,
+                            body: <StoryInformationalBody>Info message with reaction</StoryInformationalBody>,
+                            footer: <StoryFooter />,
+                        },
                     )}
                 </>
             );
@@ -1478,6 +1504,7 @@ const storyHelpers = {
     StoryEditedMessageBody,
     StoryMessageComposer,
     StoryEmoteBody,
+    StoryFooter,
     StoryHighlightedBody,
     StoryInformationalBody,
     StoryLinkedTimestamp,

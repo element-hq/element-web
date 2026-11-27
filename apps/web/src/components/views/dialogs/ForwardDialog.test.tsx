@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, afterAll, vi } from "vitest";
 import {
     MatrixEvent,
     EventType,
@@ -38,7 +38,7 @@ import ForwardDialog from "./ForwardDialog";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { TILE_SERVER_WK_KEY } from "../../../utils/WellKnownUtils";
-import SettingsStore from "../../../settings/SettingsStore";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
 vi.mock("maplibre-gl");
 
@@ -83,6 +83,7 @@ describe("ForwardDialog", () => {
         getRoom: vi.fn(),
         getAccountData: vi.fn().mockReturnValue(accountDataEvent),
         getPushActionsForEvent: vi.fn(),
+        baseUrl: "https://server",
         mxcUrlToHttp: vi.fn().mockReturnValue(""),
         getProfileInfo: vi.fn().mockResolvedValue({
             displayname: "Alice",
@@ -125,6 +126,10 @@ describe("ForwardDialog", () => {
         mockClient.getUserId.mockReturnValue("@bob:example.org");
         mockClient.getSafeUserId.mockReturnValue("@bob:example.org");
         mockClient.sendEvent.mockReset();
+    });
+
+    afterEach(() => {
+        RoomNotificationStateStore.instance.clearRoomStates();
     });
 
     afterAll(() => {
@@ -441,33 +446,6 @@ describe("ForwardDialog", () => {
             };
 
             expect(mockClient.sendEvent).toHaveBeenCalledWith(roomId, pinDropLocationEvent.getType(), expectedContent);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
-        beforeEach(() => {
-            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            mockClient.getVisibleRooms.mockClear();
-            mountForwardDialog();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(false);
-        });
-    });
-
-    describe("If the feature_dynamic_room_predecessors is enabled", () => {
-        beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
-            vi.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_dynamic_room_predecessors",
-            );
-        });
-
-        it("Passes through the dynamic predecessor setting", async () => {
-            mockClient.getVisibleRooms.mockClear();
-            mountForwardDialog();
-            expect(mockClient.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
 });

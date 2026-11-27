@@ -47,7 +47,11 @@ export class AccessCancelledError extends Error {
     }
 }
 
-function makeInputToKey(
+/**
+ * Build a function turning what the user typed (a recovery key, or a passphrase for keys set up with one)
+ * into the private key described by `keyInfo`.
+ */
+export function makeInputToKey(
     keyInfo: SecretStorage.SecretStorageKeyDescription,
 ): (keyParams: KeyParams) => Promise<Uint8Array<ArrayBuffer>> {
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array<ArrayBuffer>> => {
@@ -163,6 +167,13 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
         secretStorageBeingAccessed = false;
         secretStorageKeys = {};
         secretStorageKeyInfo = {};
+
+        // DeviceListener suppresses toast updates while `secretStorageBeingAccessed`
+        // is set, so we should trigger a recheck now the operation is done.
+        // We import device listener lazily, since its test mocks the `SecurityManager`
+        // module (i.e. this module), and import cycles appear to break said mocking.
+        const { DeviceListener } = await import("./device-listener");
+        DeviceListener.sharedInstance().recheck();
     }
 }
 

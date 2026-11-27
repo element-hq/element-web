@@ -99,7 +99,7 @@ export function createTestClient(): MatrixClient {
         getUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getSafeUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
         getUserIdLocalpart: vi.fn().mockResolvedValue("userId"),
-        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }),
+        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn(), removeListener: vi.fn() }),
         getDevice: vi.fn(),
         getDeviceId: vi.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",
@@ -121,6 +121,7 @@ export function createTestClient(): MatrixClient {
             setPendingEvents: vi.fn().mockResolvedValue(undefined),
             storeRoom: vi.fn(),
             removeRoom: vi.fn(),
+            accountData: [],
         },
 
         getCrypto: vi.fn().mockReturnValue({
@@ -131,7 +132,6 @@ export function createTestClient(): MatrixClient {
             getDeviceVerificationStatus: vi.fn(),
             resetKeyBackup: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
-            isStateEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
             getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
             setDeviceIsolationMode: vi.fn(),
             prepareToEncrypt: vi.fn(),
@@ -320,8 +320,8 @@ export function createTestClient(): MatrixClient {
         _unstable_sendScheduledDelayedEvent: vi.fn(),
         _unstable_sendStickyEvent: vi.fn(),
         _unstable_sendStickyDelayedEvent: vi.fn(),
-        _unstable_getRTCTransports: vi.fn(),
-        _unstable_getLivekitToken: vi.fn(),
+        getRTCTransports: vi.fn(),
+        getLivekitToken: vi.fn(),
         _unstable_delegateDelayedLeave: vi.fn(),
         cachedRtcTransports: {
             wait: vi.fn().mockResolvedValue([]),
@@ -372,6 +372,7 @@ export function createTestClient(): MatrixClient {
         setRoomTag: vi.fn().mockResolvedValue({}),
         getExtendedProfileProperty: vi.fn(),
         setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
+        deleteExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
         doesServerSupportExtendedProfiles: vi.fn(),
     } as unknown as MatrixClient;
 
@@ -395,7 +396,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
     mockGetRoomSession.mockImplementation((roomId) => {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
-        session.getConsensusCallIntent = () => "video";
+        session.getConsensusIntent = () => "m.video";
         return session;
     });
     return {
@@ -709,7 +710,7 @@ export function mkStubRoom(
         findEventById: vi.fn().mockReturnValue(undefined),
         findPredecessor: vi.fn().mockReturnValue({ roomId: "", eventId: null }),
         getAltAliases: vi.fn().mockReturnValue([]),
-        getAvatarUrl: () => "mxc://avatar.url/room.png",
+        getAvatarUrl: () => "mxc://avatar.url/room",
         getCanonicalAlias: vi.fn(),
         getDMInviter: vi.fn(),
         getEventReadUpTo: vi.fn(() => null),
@@ -725,15 +726,15 @@ export function mkStubRoom(
             name: "Member",
             rawDisplayName: "Member",
             roomId: roomId,
-            getAvatarUrl: () => "mxc://avatar.url/image.png",
-            getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
+            getAvatarUrl: () => "mxc://avatar.url/image",
+            getMxcAvatarUrl: () => "mxc://avatar.url/image",
             events: {},
             isKicked: () => false,
         }),
         getMembers: vi.fn().mockReturnValue([]),
         getEncryptionTargetMembers: vi.fn().mockReturnValue([]),
         getMembersWithMembership: vi.fn().mockReturnValue([]),
-        getMxcAvatarUrl: () => "mxc://avatar.url/room.png",
+        getMxcAvatarUrl: () => "mxc://avatar.url/room",
         getMyMembership: vi.fn().mockReturnValue(KnownMembership.Join),
         getPendingEvents: vi.fn().mockReturnValue([]),
         getReceiptsForEvent: vi.fn().mockReturnValue([]),

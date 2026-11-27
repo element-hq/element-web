@@ -1,0 +1,179 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DeleteKeyStorageView > Storybook snapshots > renders the busy state 1`] = `
+<div>
+  <div
+    style="width: 480px;"
+  >
+    <div
+      class="Flex-module_flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
+    >
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      >
+        You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.
+      </p>
+      <div
+        class="Flex-module_flex DeleteKeyStorageView-module_buttons"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: end; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          aria-disabled="true"
+          class="_button_1nw83_8"
+          data-kind="secondary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </button>
+        <button
+          aria-disabled="true"
+          class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+          data-kind="primary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_1855a_18"
+            fill="currentColor"
+            height="20"
+            style="width: 20px; height: 20px;"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DeleteKeyStorageView > Storybook snapshots > renders the default state 1`] = `
+<div>
+  <div
+    style="width: 480px;"
+  >
+    <div
+      class="Flex-module_flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
+    >
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      >
+        You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.
+      </p>
+      <div
+        class="Flex-module_flex DeleteKeyStorageView-module_buttons"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: end; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          aria-disabled="false"
+          class="_button_1nw83_8"
+          data-kind="secondary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </button>
+        <button
+          aria-disabled="false"
+          class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+          data-kind="primary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 21q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 19V6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 5q0-.424.287-.713A.97.97 0 0 1 5 4h4q0-.424.287-.712A.97.97 0 0 1 10 3h4q.424 0 .713.288Q15 3.575 15 4h4q.424 0 .712.287Q20 4.576 20 5t-.288.713A.97.97 0 0 1 19 6v13q0 .824-.587 1.413A1.93 1.93 0 0 1 17 21zM7 6v13h10V6zm2 10q0 .424.287.712Q9.576 17 10 17t.713-.288A.97.97 0 0 0 11 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 10 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 9 9zm4 0q0 .424.287.712.288.288.713.288.424 0 .713-.288A.97.97 0 0 0 15 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 9z"
+            />
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DeleteKeyStorageView > Storybook snapshots > renders the failed state 1`] = `
+<div>
+  <div
+    style="width: 480px;"
+  >
+    <div
+      class="Flex-module_flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
+    >
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      >
+        You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices.
+      </p>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 DeleteKeyStorageView-module_error"
+        role="alert"
+      >
+        Failed to delete key storage. Please try again.
+      </p>
+      <div
+        class="Flex-module_flex DeleteKeyStorageView-module_buttons"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: end; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          aria-disabled="false"
+          class="_button_1nw83_8"
+          data-kind="secondary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </button>
+        <button
+          aria-disabled="false"
+          class="_button_1nw83_8 _has-icon_1nw83_60 _destructive_1nw83_110"
+          data-kind="primary"
+          data-size="md"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 21q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 19V6a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 5q0-.424.287-.713A.97.97 0 0 1 5 4h4q0-.424.287-.712A.97.97 0 0 1 10 3h4q.424 0 .713.288Q15 3.575 15 4h4q.424 0 .712.287Q20 4.576 20 5t-.288.713A.97.97 0 0 1 19 6v13q0 .824-.587 1.413A1.93 1.93 0 0 1 17 21zM7 6v13h10V6zm2 10q0 .424.287.712Q9.576 17 10 17t.713-.288A.97.97 0 0 0 11 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 10 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 9 9zm4 0q0 .424.287.712.288.288.713.288.424 0 .713-.288A.97.97 0 0 0 15 16V9a.97.97 0 0 0-.287-.713A.97.97 0 0 0 14 8a.97.97 0 0 0-.713.287A.97.97 0 0 0 13 9z"
+            />
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

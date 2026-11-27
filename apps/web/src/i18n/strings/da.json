@@ -41,7 +41,6 @@
         "decline_and_block": "Afvis og blokér",
         "decline_invite": "Afvis invitation",
         "delete": "Slet",
-        "deny": "Nægt",
         "disable": "Deaktiver",
         "disconnect": "Afbryd forbindelsen",
         "dismiss": "Afvis",
@@ -1262,8 +1261,6 @@
         "bridge_state_workspace": "Arbejdsområde: <networkLink/>",
         "click_for_info": "Klik for mere info",
         "currently_experimental": "I øjeblikket eksperimentel.",
-        "dynamic_room_predecessors": "Dynamiske rumforgængere",
-        "dynamic_room_predecessors_description": "Aktivér MSC3946 (for at understøtte forsinkede rumarkiver)",
         "element_call_video_rooms": "Element Call video-rum",
         "experimental_description": "Er du i humør til at eksperimentere? Afprøv vores nyeste ideer, som stadig er under udvikling. Disse funktioner er ikke færdigukviklende; de kan være ustabile, kan ændres eller kan blive droppet helt. <a>Få mere at vide</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
@@ -1544,8 +1541,6 @@
         "count_of_successfully_restored_keys": "%(sessionCount)s nøgler blev gendannet",
         "enter_key_description": "Få adgang til din sikre beskedhistorik, og opsæt sikker chat ved at indtaste din gendannelsesnøgle.",
         "enter_key_title": "Indtast gendannelsesnøgle",
-        "enter_phrase_description": "Få adgang til historikken for dine sikre beskeder og opsæt sikker beskedfunktion ved at indtaste din sikkerhedskode.",
-        "enter_phrase_title": "Indtast adgangsfrase",
         "incorrect_security_phrase_dialog": "Sikkerhedskopien kunne ikke dekrypteres med denne adgangsfrase: Kontrollér, at du har indtastet den korrekte.",
         "incorrect_security_phrase_title": "Forkert adgangsfrase",
         "key_backup_warning": "<b>Advarsel</b>: Du bør kun konfigurere nøglebackup fra en computer du stoler på.",
@@ -1557,7 +1552,6 @@
         "load_error_content": "Status for sikkerhedskopiering kunne ikke indlæses",
         "load_keys_progress": "%(completed)s af i alt %(total)s nøgler er restaureret",
         "no_backup_error": "Der blev ikke fundet nogen sikkerhedskopi",
-        "phrase_forgotten_text": "Hvis du har glemt din sikkerhedsfrase, kan du <button1>bruge din gendannelsesnøgle</button1> eller <button2>oprette nye gendannelsesmuligheder</button2>",
         "recovery_key_mismatch_description": "Sikkerhedskopien kunne ikke dekrypteres med denne gendannelsesnøgle: Bekræft venligst, at du har indtastet den korrekte gendannelsesnøgle.",
         "recovery_key_mismatch_title": "Uoverensstemmelse med gendannelsesnøgle",
         "restore_failed_error": "Kan ikke gendanne sikkerhedskopien"
@@ -2100,9 +2094,6 @@
                 "breadcrumb_page": "Nulstil kryptering",
                 "other_people_device_title": "Andre personers enheder"
             },
-            "delete_key_storage": {
-                "list_first": "Du vil ikke kunne se historikken for krypterede beskeder på nye enheder"
-            },
             "recovery": {
                 "key_storage_warning": "Dit nøglelager er ikke synkroniseret. Klik på en af knapperne herunder for at løse problemet."
             }
@@ -2440,7 +2431,6 @@
             "web_session": "Websession"
         },
         "show_avatar_changes": "Vis ændringer af profilbillede",
-        "show_breadcrumbs": "Vis genveje til senest viste rum over rumlisten",
         "show_chat_effects": "Vis chateffekter (animationer, når du modtager f.eks. konfetti)",
         "show_displayname_changes": "Vis ændringer af det viste navn",
         "show_join_leave": "Vis tilmeldings-/forladelsesbeskeder (invitationer/fjernelser/forbud påvirkes ikke)",

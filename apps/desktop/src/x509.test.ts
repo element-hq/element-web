@@ -53,11 +53,11 @@ class Pkcs11Error extends Error {
 // --- Fixtures ---
 
 /**
- * A root CA, an intermediate CA it signed, and two leaves it signed. Generated with `__fixtures__/x509/generate.sh`.
+ * A root CA, two intermediate CAs it signed, and three leaves it signed. Generated with `__fixtures__/x509/generate.sh`.
  * Round-tripped through {@link X509Certificate} so the PEM is normalised the way x509.ts emits it.
  */
-const [rootPem, intermediatePem, leafPem, otherLeafPem] = await Promise.all(
-    ["root-ca", "intermediate-ca", "alice", "bob"].map(async (name) =>
+const [rootPem, intermediatePem, shortIntermediatePem, aliceLeafPem, bobLeafPem, carolLeafPem] = await Promise.all(
+    ["root-ca", "intermediate-ca", "short-intermediate-ca", "alice", "bob", "carol"].map(async (name) =>
         new X509Certificate(
             await readFile(path.join(import.meta.dirname, "__fixtures__", "x509", `${name}.pem`)),
         ).toString(),
@@ -263,14 +263,14 @@ describe("getUserCertificate", () => {
     beforeEach(() => loadX509WithConfig({ ...PKCS11_LIBRARY, certificate_path: chainPath() }));
 
     it("returns the leaf and the chain file as provisioned", async () => {
-        await writeChain(leafPem, intermediatePem);
+        await writeChain(aliceLeafPem, intermediatePem);
 
         const result = await x509.getUserCertificate();
         assert(result.ok);
 
         expect(result.data.certificate.subject).toContain("CN=alice");
         expect(result.data.certificate.validTo).toBeInstanceOf(Date);
-        expect(result.data.chain).toBe(leafPem + intermediatePem);
+        expect(result.data.chain).toBe(aliceLeafPem + intermediatePem);
     });
 
     it("fails when no certificate path is configured", async () => {
@@ -285,7 +285,7 @@ describe("getUserCertificate", () => {
     it("fails when the certificate file cannot be read", async () => {
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
             ok: false,
-            error: { code: "CERTIFICATE_NOT_FOUND" },
+            error: { code: "CERTIFICATE_INVALID" },
         });
     });
 
@@ -294,16 +294,49 @@ describe("getUserCertificate", () => {
 
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
             ok: false,
-            error: { code: "CERTIFICATE_NOT_FOUND" },
+            error: { code: "CERTIFICATE_INVALID" },
         });
     });
 
     it("fails when the first certificate is a CA", async () => {
-        await writeChain(rootPem, leafPem);
+        await writeChain(rootPem, aliceLeafPem);
 
         await expect(x509.getUserCertificate()).resolves.toMatchObject({
             ok: false,
-            error: { code: "CERTIFICATE_NOT_FOUND" },
+            error: { code: "CERTIFICATE_INVALID" },
+        });
+    });
+
+    it("fails when an intermediate is unparseable", async () => {
+        await writeChain(aliceLeafPem, "-----BEGIN CERTIFICATE-----\ncoyotes!\n-----END CERTIFICATE-----\n");
+
+        await expect(x509.getUserCertificate()).resolves.toMatchObject({
+            ok: false,
+            error: { code: "CERTIFICATE_INVALID" },
+        });
+    });
+
+    describe("chainValidTo", () => {
+        it("returns the leaf's validTo when there are no intermediates", async () => {
+            await writeChain(aliceLeafPem);
+            await expect(x509.getUserCertificate()).resolves.toMatchObject({
+                ok: true,
+                data: { chainValidTo: new Date(new X509Certificate(aliceLeafPem).validTo) },
+            });
+        });
+        it("returns the leaf's validTo when it is earlier than the intermediates", async () => {
+            await writeChain(aliceLeafPem, intermediatePem);
+            await expect(x509.getUserCertificate()).resolves.toMatchObject({
+                ok: true,
+                data: { chainValidTo: new Date(new X509Certificate(aliceLeafPem).validTo) },
+            });
+        });
+        it("returns the earliest intermediate's validTo when it is earlier than the leaf", async () => {
+            await writeChain(carolLeafPem, intermediatePem, shortIntermediatePem);
+            await expect(x509.getUserCertificate()).resolves.toMatchObject({
+                ok: true,
+                data: { chainValidTo: new Date(new X509Certificate(shortIntermediatePem).validTo) },
+            });
         });
     });
 });
@@ -321,7 +354,7 @@ describe("IPC", () => {
         }));
         vi.doMock("pkcs11js", () => ({ default: { Pkcs11Error } }));
         await loadX509WithConfig({ ...PKCS11_LIBRARY, certificate_path: chainPath() });
-        await writeChain(leafPem);
+        await writeChain(aliceLeafPem);
     });
 
     it("routes the on-disk certificate command", async () => {
@@ -408,26 +441,26 @@ describe("IPC", () => {
             });
 
             it("reports a token holding only keys for other certificates", async () => {
-                token.insertKeyPair(otherLeafPem);
+                token.insertKeyPair(bobLeafPem);
 
                 await expect(keyState()).resolves.toBe("noSigningKey");
             });
 
             it("reports a token holding the key for the configured certificate", async () => {
-                token.insertKeyPair(leafPem);
+                token.insertKeyPair(aliceLeafPem);
 
                 await expect(keyState()).resolves.toBe("open");
             });
 
             it("reports a token that has been logged into", async () => {
-                token.insertKeyPair(leafPem);
+                token.insertKeyPair(aliceLeafPem);
 
                 await login();
                 await expect(keyState()).resolves.toBe("authenticated");
             });
 
             it("fails when no certificate is configured on disk", async () => {
-                token.insertKeyPair(leafPem);
+                token.insertKeyPair(aliceLeafPem);
                 mockX509Config(PKCS11_LIBRARY);
 
                 await expect(callIpc("getKeyState", "SERIAL1")).resolves.toMatchObject({
@@ -478,7 +511,7 @@ describe("IPC", () => {
             const data = new Uint8Array([1, 2, 3]);
 
             it("refuses to sign before logging in", async () => {
-                token.insertKeyPair(leafPem);
+                token.insertKeyPair(aliceLeafPem);
 
                 await expect(callIpc("signData", "SERIAL1", data)).resolves.toMatchObject({
                     ok: false,
@@ -488,25 +521,25 @@ describe("IPC", () => {
 
             it("signs with the private key matching the configured certificate", async () => {
                 // The token also holds someone else's key pair, which must not be picked.
-                token.insertKeyPair(otherLeafPem).insertKeyPair(leafPem);
+                token.insertKeyPair(bobLeafPem).insertKeyPair(aliceLeafPem);
 
                 await login();
                 await expect(callIpcAndUnwrap<Uint8Array>("signData", "SERIAL1", data)).resolves.toEqual(
                     Buffer.from("signature"),
                 );
                 // The private key is looked up by the CKA_ID of the matching public key.
-                expect(token.session.find).toHaveBeenCalledWith({ class: "private", id: keyId(leafPem) });
+                expect(token.session.find).toHaveBeenCalledWith({ class: "private", id: keyId(aliceLeafPem) });
                 // RSA-PSS with SHA-512 throughout, and a salt as long as the digest.
                 expect(RsaPssParams).toHaveBeenCalledWith("SHA512", "MGF1_SHA512", 64);
                 expect(token.session.createSign).toHaveBeenCalledWith(
                     expect.objectContaining({ name: "SHA512_RSA_PKCS_PSS" }),
-                    { id: keyId(leafPem) },
+                    { id: keyId(aliceLeafPem) },
                 );
                 expect(token.signer.once).toHaveBeenCalledWith(Buffer.from(data));
             });
 
             it("fails when the token holds only keys for other certificates", async () => {
-                token.insertKeyPair(otherLeafPem);
+                token.insertKeyPair(bobLeafPem);
 
                 await login();
                 await expect(callIpc("signData", "SERIAL1", data)).resolves.toMatchObject({
@@ -517,7 +550,7 @@ describe("IPC", () => {
             });
 
             it("fails when the token holds no private key for the certificate", async () => {
-                token.insertKeyPair(leafPem, { privateKey: false });
+                token.insertKeyPair(aliceLeafPem, { privateKey: false });
 
                 await login();
                 await expect(callIpc("signData", "SERIAL1", data)).resolves.toMatchObject({
@@ -528,7 +561,7 @@ describe("IPC", () => {
 
             it("fails when no certificate is configured on disk", async () => {
                 mockX509Config(PKCS11_LIBRARY);
-                token.insertKeyPair(leafPem);
+                token.insertKeyPair(aliceLeafPem);
 
                 await login();
                 await expect(callIpc("signData", "SERIAL1", data)).resolves.toMatchObject({
@@ -538,7 +571,7 @@ describe("IPC", () => {
             });
 
             it("drops the cached session on a PKCS#11 error so the next call reopens it", async () => {
-                token.insertKeyPair(leafPem);
+                token.insertKeyPair(aliceLeafPem);
                 token.session.createSign.mockImplementation(() => {
                     throw new Pkcs11Error(CKR_SESSION_HANDLE_INVALID, "CKR_SESSION_HANDLE_INVALID");
                 });

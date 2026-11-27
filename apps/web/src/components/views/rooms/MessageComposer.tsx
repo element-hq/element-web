@@ -404,7 +404,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         // snapshot need to be captured before the composer is cleared
         // otherwise the send message function will think there are no URLs in
         // message and will not attach URL bundles
-        const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
+        const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshotForSending();
         this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
             // There shouldn't be any text message to send when a voice recording is active, so

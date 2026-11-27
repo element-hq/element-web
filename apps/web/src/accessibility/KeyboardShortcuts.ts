@@ -94,6 +94,10 @@ export enum KeyBindingAction {
     ScrollUp = "KeyBinding.scrollUpInTimeline",
     /** Scroll down in the timeline */
     ScrollDown = "KeyBinding.scrollDownInTimeline",
+    /** Move to the previous message in the timeline */
+    PrevMessage = "KeyBinding.previousMessageInTimeline",
+    /** Move to the next message in the timeline */
+    NextMessage = "KeyBinding.nextMessageInTimeline",
     /** Dismiss read marker and jump to bottom */
     DismissReadMarker = "KeyBinding.dismissReadMarkerAndJumpToBottom",
     /** Jump to oldest unread message */
@@ -254,6 +258,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.JumpToOldestUnread,
             KeyBindingAction.ScrollUp,
             KeyBindingAction.ScrollDown,
+            KeyBindingAction.PrevMessage,
+            KeyBindingAction.NextMessage,
             KeyBindingAction.JumpToFirstMessage,
             KeyBindingAction.JumpToLatestMessage,
         ],

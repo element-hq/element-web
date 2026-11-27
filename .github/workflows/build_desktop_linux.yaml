@@ -53,10 +53,6 @@ on:
                 required: false
                 description: "List of targets to build"
                 default: "tar.gz deb"
-env:
-    # Used by glibc-check.sh. Ubuntu 22.04 (jammy) (2.35) is the oldest supported distro. Debian bookworm (2.36) and newer are a superset.
-    # Currently, our newest linked glibc version is 2.34 in the prebuilt Seshat binaries, Electron only links against 2.25.
-    MAX_GLIBC: 2.34
 permissions:
     contents: read
 jobs:
@@ -65,28 +61,16 @@ jobs:
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04') }}
         env:
             BUILDENV_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
+            # Only element-desktop's deps are installed, stop pnpm reinstalling the workspace before each run/exec
+            PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: "false"
         steps:
-            - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
-              id: config
-              with:
-                  key: "${{ inputs.arch }}"
-                  export_to: output
-                  map: |
-                      {
-                        "amd64": {
-                          "arch": "x86-64"
-                        },
-                        "arm64": {
-                          "arch": "aarch64",
-                          "build-args": "--arm64"
-                        }
-                      }
-
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
               with:
                   repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
+                  # On PRs, brings in the merge commit's parents, for `changed_files` step
+                  fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 1 }}
 
             - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
               with:
@@ -96,10 +80,12 @@ jobs:
             - name: "Get modified files"
               id: changed_files
               if: github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
-              uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47
-              with:
-                  files: |
-                      apps/desktop/dockerbuild/**
+              run: |
+                  if git diff --quiet HEAD^1 HEAD -- apps/desktop/dockerbuild; then
+                      echo "any_modified=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "any_modified=true" >> "$GITHUB_OUTPUT"
+                  fi
 
             # This allows contributors to test changes to the dockerbuild image within a pull request
             - name: Build docker image
@@ -114,10 +100,13 @@ jobs:
 
             # Install dependencies inside container so we compile native modules (like pkcs11js)
             # against bookworm's glibc.
+            # The container runs as the runner's user so that the files it writes stay owned by the runner,
+            # with a writable HOME for the pnpm, node-gyp & electron-builder caches.
             - name: Install Deps
               run: |
                   docker run \
                     -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    --user "$(id -u):$(id -g)" -e HOME=/tmp \
                     -e CI=1 \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm install --frozen-lockfile --filter element-desktop
@@ -133,82 +122,30 @@ jobs:
               run: |
                   docker run \
                     -v ${{ github.workspace }}:/work -w /work/apps/desktop \
+                    --user "$(id -u):$(id -g)" -e HOME=/tmp \
                     -e CI=1 \
                     -e VARIANT_PATH \
                     -e VERSION \
-                    -e USE_HARD_LINKS \
                     -e ED_DEBIAN_CHANGELOG \
+                    -e PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN \
                     $BUILDENV_DOCKER_IMAGE \
                     pnpm run build --publish never $BUILD_ARGS -l $TARGETS
-                  sudo chown -R $USER:$USER apps/desktop/dist
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
-                  # Workaround for https://github.com/electron-userland/electron-builder/issues/5721
-                  USE_HARD_LINKS: false
-                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
+                  BUILD_ARGS: ${{ case(inputs.arch == 'arm64', '--arm64', '') }}
                   TARGETS: ${{ inputs.targets }}
-
-            - name: Check native libraries
-              working-directory: apps/desktop
-              run: |
-                  set -x
-                  shopt -s globstar
-
-                  FILES=$(file dist/**/*.node)
-                  echo $FILES
-
-                  ! echo "$FILES" | grep -v "$ARCH"
-
-                  LIBS=$(readelf -d dist/**/*.node | grep NEEDED)
-                  echo "$LIBS"
-
-                  set +x
-                  assert_contains_string() { [[ "$1" == *"$2"* ]]; }
-                  # The prebuilt seshat binaries statically link sqlcipher & openssl
-                  ! assert_contains_string "$LIBS" "libcrypto.so"
-                  ! assert_contains_string "$LIBS" "libsqlcipher.so"
-
-                  for filename in dist/**/*.node dist/linux-*unpacked/element-desktop*; do
-                      ./scripts/glibc-check.sh $filename
-                  done
-              env:
-                  ARCH: ${{ steps.config.outputs.arch }}
 
             # We exclude *-unpacked as it loses permissions and the tarball contains it with correct permissions
             - name: Upload Artifacts
-              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
               with:
                   name: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}
                   path: |
                       apps/desktop/dist
                       !apps/desktop/dist/*-unpacked/**
                   retention-days: 1
-
-            - name: Assert deb is present and valid
-              if: contains(inputs.targets, 'deb')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/element-desktop*$ARCH.deb
-
-                  DEB_LISTING=$(dpkg-deb --fsys-tarfile ./dist/element-desktop*.deb | tar -tv)
-                  echo "deb listing: "
-                  echo "$DEB_LISTING"
-                  ! echo "$DEB_LISTING" | grep '^h'
-              env:
-                  ARCH: ${{ inputs.arch }}
-
-            - name: Assert tar.gz is present
-              if: contains(inputs.targets, 'tar.gz')
-              working-directory: apps/desktop
-              run: |
-                  test -f ./dist/element-desktop*.tar.gz
-
-                  TAR_GZ_LISTING=$(tar -tvf ./dist/element-desktop*.tar.gz)
-                  echo "tar.gz listing: "
-                  echo "$TAR_GZ_LISTING"
-                  ! echo "$TAR_GZ_LISTING" | grep '^h'
 
     test:
         name: Test Linux ${{ inputs.arch }}

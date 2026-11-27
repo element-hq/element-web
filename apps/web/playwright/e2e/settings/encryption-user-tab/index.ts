@@ -96,8 +96,14 @@ class Helpers {
      * @param title - The title of the dialog
      * @param confirmButtonLabel - The label of the confirm button
      * @param screenshot
+     * @param confirmationTitle - The title of the confirmation screen shown after confirming
      */
-    async confirmRecoveryKey(title: string, confirmButtonLabel: string, screenshot: `${string}.png`) {
+    async confirmRecoveryKey(
+        title: string,
+        confirmButtonLabel: string,
+        screenshot: `${string}.png`,
+        confirmationTitle: string,
+    ) {
         const dialog = this.getEncryptionTabContent();
         await expect(dialog.getByText(title, { exact: true })).toBeVisible();
         await expect(dialog).toMatchScreenshot(screenshot);
@@ -108,6 +114,9 @@ class Helpers {
         await button.click();
         // Button should disable immediately after clicking.
         await expect(button).toBeDisabled();
+        // The confirmation screen is shown, and Done goes back to the main panel
+        await expect(dialog.getByRole("heading", { name: confirmationTitle })).toBeVisible();
+        await dialog.getByRole("button", { name: "Done" }).click();
         await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
     }
 }

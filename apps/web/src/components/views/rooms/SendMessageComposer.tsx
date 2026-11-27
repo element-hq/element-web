@@ -63,7 +63,7 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import { type Caret } from "../../../editor/caret";
 import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
-import { EMOJI_REGEX } from "../../../HtmlUtils";
+import { getEmojiRegex } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
@@ -123,7 +123,7 @@ export function isQuickReaction(model: EditorModel): boolean {
     // can be in 1 or 2 parts
     if (parts.length <= 2) {
         const hasShortcut = text.startsWith("+") || text.startsWith("+ ");
-        const emojiMatch = text.match(EMOJI_REGEX);
+        const emojiMatch = text.match(getEmojiRegex());
         if (hasShortcut && emojiMatch && emojiMatch.length == 1) {
             return emojiMatch[0] === text.substring(1) || emojiMatch[0] === text.substring(2);
         }
@@ -144,7 +144,11 @@ interface ISendMessageComposerProps extends MatrixClientProps {
 }
 
 interface ISendMessageActionProps {
-    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
+    /**
+     * The composer's URL previews to bundle with the message, or undefined if URL previews are
+     * turned off for the sender.
+     */
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot | undefined;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
@@ -212,7 +216,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
             case KeyBindingAction.SendMessage: {
-                const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
+                const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshotForSending();
                 void this.sendMessage({ urlPreviewSnapshot });
                 event.preventDefault();
                 break;

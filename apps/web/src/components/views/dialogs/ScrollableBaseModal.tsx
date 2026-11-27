@@ -78,6 +78,9 @@ export default abstract class ScrollableBaseModal<
                     lockProps={{
                         onKeyDown: this.onKeyDown,
                         role: "dialog",
+                        // Like BaseDialog, make the dialog focusable so that clicking non-interactive content
+                        // focuses it rather than the body, keeping the Escape key handling working
+                        tabIndex: -1,
                         ["aria-labelledby"]: "mx_CompoundDialog_title",
 
                         // Like BaseDialog, we'll just point this at the whole content

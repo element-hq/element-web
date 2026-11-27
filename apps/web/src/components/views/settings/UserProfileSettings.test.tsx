@@ -237,14 +237,19 @@ describe("ProfileSettings", () => {
     });
 
     it("displays confirmation dialog if no rooms are encrypted", async () => {
-        vi.spyOn(Modal, "createDialog");
+        const modalSpy = vi.spyOn(Modal, "createDialog");
 
         renderProfileSettings(toastRack, client);
 
         const signOutButton = await screen.findByText("Remove this device");
         await userEvent.click(signOutButton);
 
-        expect(Modal.createDialog).toHaveBeenCalled();
+        expect(modalSpy).toHaveBeenCalled();
+
+        // the dialog must not close on background click, only via its own buttons
+        const { onBeforeClose } = modalSpy.mock.lastCall![5]!;
+        await expect(onBeforeClose!("backgroundClick")).resolves.toBe(false);
+        await expect(onBeforeClose!()).resolves.toBe(true);
     });
 
     it("displays confirmation dialog if rooms are encrypted", async () => {

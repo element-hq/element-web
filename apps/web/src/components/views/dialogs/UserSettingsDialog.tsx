@@ -43,12 +43,15 @@ import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
 import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
+import { ModuleApi } from "../../../modules/Api";
 import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext } from "../../../contexts/SDKContext";
 import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { NoChange, useEventEmitterAsyncState, type AsyncStateCallbackResult } from "../../../hooks/useEventEmitter";
 import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
+import { useOwnDevices } from "../settings/devices/useOwnDevices";
+import { useDehydrationSupported } from "../settings/useDehydrationSupported";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -108,6 +111,8 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
     const [initialEncryptionState, setInitialEncryptionState] = useState(props.initialEncryptionState);
     const [startCustomStatus, setStartCustomStatus] = useState(props.startCustomStatus);
+    const dehydrationSupported = useDehydrationSupported(props.sdkContext.client!);
+    const { dehydratedDeviceId } = useOwnDevices(props.sdkContext.client!);
 
     // If the user doesn't have Recovery set up (no default Secret Storage key),
     // we show an indicator on the Encryption tab.
@@ -128,6 +133,12 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         [],
         false,
     );
+
+    // AJB: for #29080 use this:
+    // const showEnableDehydrationIndicator = dehydrationSupported && dehydratedDeviceId === null;
+    const showEnableDehydrationIndicator = false;
+
+    const showEncryptionIndicator = showSetupRecoveryIndicator || showEnableDehydrationIndicator;
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
@@ -223,9 +234,13 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Encryption,
                 _td("settings|encryption|title"),
                 <KeyIcon />,
-                <EncryptionUserSettingsTab initialState={initialEncryptionState} />,
+                <EncryptionUserSettingsTab
+                    initialState={initialEncryptionState}
+                    dehydrationSupported={dehydrationSupported}
+                    dehydratedDeviceId={dehydratedDeviceId}
+                />,
                 "UserSettingsEncryption",
-                showSetupRecoveryIndicator ? "mx_SettingsDialog_tabLabelsAlert" : undefined,
+                showEncryptionIndicator ? "mx_SettingsDialog_tabLabelsAlert" : undefined,
             ),
         );
 
@@ -250,7 +265,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Help,
                 _td("setting|help_about|title"),
                 <HelpIcon />,
-                <HelpUserSettingsTab />,
+                <HelpUserSettingsTab moduleApi={ModuleApi.instance} />,
                 "UserSettingsHelpAbout",
             ),
         );

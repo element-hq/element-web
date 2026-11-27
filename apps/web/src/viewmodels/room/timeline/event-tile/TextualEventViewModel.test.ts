@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect } from "vitest";
-import { stubClient } from "test-utils";
+import { stubClient, tearDownAfterTest } from "test-utils";
 
 import { textForEvent } from "../../../../TextForEvent";
 import { TextualEventViewModel } from "./TextualEventViewModel";
@@ -27,6 +27,7 @@ describe("TextualEventViewModel", () => {
             showHiddenEvents: false,
             mxEvent: fakeEvent,
         });
+        tearDownAfterTest(vm);
 
         const cb = vi.fn();
 
@@ -42,7 +43,7 @@ describe("TextualEventViewModel", () => {
         const client = stubClient();
         vi.mocked(textForEvent).mockClear();
 
-        const vm = new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent });
+        const vm = tearDownAfterTest(new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent }));
 
         expect(textForEvent).toHaveBeenCalledWith(fakeEvent, client, true, false);
         expect(vm.getSnapshot().content).toBe("Test Message");
@@ -54,6 +55,7 @@ describe("TextualEventViewModel", () => {
         vi.mocked(textForEvent).mockClear();
 
         const vm = new TextualEventViewModel({ showHiddenEvents: false, mxEvent: fakeEvent, forExport: true });
+        tearDownAfterTest(vm);
 
         expect(textForEvent).toHaveBeenCalledWith(fakeEvent, client);
         expect(vm.getSnapshot().content).toBe("Test Message");

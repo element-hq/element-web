@@ -11,11 +11,11 @@ import { Button, ErrorMessage, Field, IconButton, Label, PasswordControl, Root, 
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import { logger } from "matrix-js-sdk/src/logger";
-import classNames from "classnames";
 import { copyPlainTextToClipboard } from "@element-hq/element-web-shared-utils";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
+import Spinner from "../../elements/Spinner";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration.ts";
@@ -48,9 +48,9 @@ interface ChangeRecoveryKeyBodyProps {
      */
     onCancelClick: () => void;
     /**
-     * Extra class name for the card, e.g. `mx_EncryptionCard_noBorder` when shown in a dialog.
+     * Whether the card is shown in a dialog, which adjusts its styling. Passed to {@link EncryptionCard}.
      */
-    className?: string;
+    dialog?: boolean;
 }
 
 /**
@@ -61,7 +61,7 @@ export function ChangeRecoveryKeyBody({
     userHasRecoveryKey,
     onFinish,
     onCancelClick,
-    className,
+    dialog,
 }: Readonly<ChangeRecoveryKeyBodyProps>): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
@@ -75,7 +75,7 @@ export function ChangeRecoveryKeyBody({
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
     // Waiting for the recovery key to be generated
-    if (!recoveryKey) return null;
+    if (!recoveryKey) return <Spinner />;
 
     let content: JSX.Element;
     switch (state) {
@@ -94,8 +94,7 @@ export function ChangeRecoveryKeyBody({
             // Ask the user to enter the recovery key they just saved to confirm it.
             content = (
                 <KeyForm
-                    // encodedPrivateKey is always defined, the optional typing is incorrect
-                    recoveryKey={recoveryKey.encodedPrivateKey!}
+                    expectedKey={recoveryKey.encodedPrivateKey}
                     onCancelClick={onCancelClickWrapper}
                     onSubmit={async () => {
                         const crypto = matrixClient.getCrypto();
@@ -152,7 +151,8 @@ export function ChangeRecoveryKeyBody({
             Icon={KeyIcon}
             title={labels.title}
             description={labels.description}
-            className={classNames("mx_ChangeRecoveryKey", className)}
+            className="mx_ChangeRecoveryKey"
+            dialog={dialog}
         >
             {content}
         </EncryptionCard>
@@ -256,51 +256,73 @@ interface KeyFormProps {
      */
     onCancelClick: MouseEventHandler;
     /**
-     * Called when the form is submitted.
+     * Called with the entered recovery key when the form is submitted.
+     * Resolving to `false` marks the entered key as incorrect.
      */
-    onSubmit: () => Promise<void>;
+    onSubmit: (recoveryKey: string) => Promise<boolean | void>;
     /**
-     * The recovery key to confirm.
+     * The recovery key the user is expected to enter.
+     * If given, the submit button stays disabled until the entered key matches it.
      */
-    recoveryKey: string;
+    expectedKey?: string;
     /**
      * The label for the submit button.
      */
     submitButtonLabel: string;
+    /**
+     * The label for the cancel button. Defaults to "Cancel".
+     */
+    cancelButtonLabel?: string;
+    /**
+     * The error shown when the entered key is incorrect.
+     */
+    errorLabel?: string;
 }
 
 /**
- * The form to confirm the recovery key.
- * The finish button is disabled until the key is filled and valid.
- * The entered key is valid if it matches the recovery key.
+ * The form to enter a recovery key.
+ * With an `expectedKey`, the submit button is disabled until the entered key matches it.
+ * Otherwise the key can only be checked by `onSubmit`, which reports whether it was correct.
  */
-function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: KeyFormProps): JSX.Element {
+export function KeyForm({
+    onCancelClick,
+    onSubmit,
+    expectedKey,
+    submitButtonLabel,
+    cancelButtonLabel = _t("action|cancel"),
+    errorLabel = _t("settings|encryption|recovery|enter_key_error"),
+}: Readonly<KeyFormProps>): JSX.Element {
     // Undefined by default, as the key is not filled yet
     const [isKeyValid, setIsKeyValid] = useState<boolean>();
-    const [isKeyChangeInProgress, setIsKeyChangeInProgress] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const isKeyInvalidAndFilled = isKeyValid === false;
+    const canSubmit = (expectedKey === undefined || isKeyValid) && !isSubmitting;
+
+    // The cast of `recoveryKey` is safe here, since it holds a string
+    const getFilledKey = (form: HTMLFormElement): string => (new FormData(form).get("recoveryKey") as string).trim();
 
     return (
         <Root
             className="mx_KeyForm"
             onSubmit={(evt) => {
                 evt.preventDefault();
-                if (isKeyChangeInProgress) {
-                    // Don't allow repeated attempts.
-                    return;
-                }
-                setIsKeyChangeInProgress(true);
-                void onSubmit().finally(() => {
-                    setIsKeyChangeInProgress(false);
-                });
+                // Don't allow early or repeated attempts, since `Button` uses `aria-disabled` to flag its disabled
+                // state, which interacts poorly with `Form`.
+                if (!canSubmit) return;
+                setIsSubmitting(true);
+                void onSubmit(getFilledKey(evt.currentTarget))
+                    .then((isCorrect) => {
+                        if (isCorrect === false) setIsKeyValid(false);
+                    })
+                    .finally(() => {
+                        setIsSubmitting(false);
+                    });
             }}
-            onChange={async (evt) => {
+            onChange={(evt) => {
                 evt.preventDefault();
                 evt.stopPropagation();
-
-                // We don't have any file in the form, we can cast it as string safely
-                const filledKey = new FormData(evt.currentTarget).get("recoveryKey") as string | "";
-                setIsKeyValid(filledKey.trim() === recoveryKey);
+                // Without an expected key, editing only clears the error from the last submission
+                setIsKeyValid(expectedKey === undefined ? undefined : getFilledKey(evt.currentTarget) === expectedKey);
             }}
         >
             <Field name="recoveryKey" serverInvalid={isKeyInvalidAndFilled}>
@@ -311,14 +333,12 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
                     title={_t("settings|encryption|recovery|enter_recovery_key")}
                     className="mx_KeyForm_password mx_no_textinput"
                 />
-                {isKeyInvalidAndFilled && (
-                    <ErrorMessage>{_t("settings|encryption|recovery|enter_key_error")}</ErrorMessage>
-                )}
+                {isKeyInvalidAndFilled && <ErrorMessage>{errorLabel}</ErrorMessage>}
             </Field>
             <EncryptionCardButtons>
-                <Button disabled={!isKeyValid || isKeyChangeInProgress}>{submitButtonLabel}</Button>
-                <Button kind="tertiary" onClick={onCancelClick}>
-                    {_t("action|cancel")}
+                <Button disabled={!canSubmit}>{submitButtonLabel}</Button>
+                <Button kind="tertiary" type="button" onClick={onCancelClick}>
+                    {cancelButtonLabel}
                 </Button>
             </EncryptionCardButtons>
         </Root>

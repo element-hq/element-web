@@ -6,9 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { type Api } from "@element-hq/element-web-module-api";
+import { type Api, UIComponent } from "@element-hq/element-web-module-api";
 
 import RestrictedGuestsModule from "./index";
+import { CONFIG_KEY } from "./config";
+import Translations from "./translations.json";
 
 const makeApi = (config: unknown, profile: { isGuest?: boolean; userId?: string } = {}): Api => {
     return {
@@ -16,7 +18,8 @@ const makeApi = (config: unknown, profile: { isGuest?: boolean; userId?: string 
             get: vi.fn((key?: string) => (key ? config : {})),
         },
         i18n: {
-            register: vi.fn(),
+            registerLanguage: vi.fn(),
+            namespaced: vi.fn().mockReturnThis(),
         },
         profile: {
             value: profile,
@@ -46,7 +49,18 @@ describe("RestrictedGuestsModule", () => {
             const module = new RestrictedGuestsModule(api);
             await module.load();
 
-            expect(api.i18n.register).not.toHaveBeenCalled();
+            expect(api.i18n.registerLanguage).not.toHaveBeenCalled();
+        });
+
+        it("should register translations under the module's config key", async () => {
+            const api = makeApi(VALID_CONFIG);
+
+            const module = new RestrictedGuestsModule(api);
+            await module.load();
+
+            expect(api.i18n.namespaced).toHaveBeenCalledWith(CONFIG_KEY);
+            expect(api.i18n.registerLanguage).toHaveBeenCalledWith("en", Translations.en);
+            expect(api.i18n.registerLanguage).toHaveBeenCalledWith("de_DE", Translations.de_DE);
         });
     });
 
@@ -55,14 +69,14 @@ describe("RestrictedGuestsModule", () => {
             const module = new RestrictedGuestsModule(makeApi(null, { isGuest: true }));
             await module.load();
 
-            expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(true);
         });
 
         it("should show all components to regular users", async () => {
             const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, { userId: "@alice:server" }));
             await module.load();
 
-            expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(true);
         });
 
         it.each([
@@ -72,8 +86,10 @@ describe("RestrictedGuestsModule", () => {
             const module = new RestrictedGuestsModule(makeApi(VALID_CONFIG, profile));
             await module.load();
 
-            expect(module.shouldShowComponent("UIComponent.exploreRooms")).toBe(false);
-            expect(module.shouldShowComponent("UIComponent.filterContainer")).toBe(true);
+            expect(module.shouldShowComponent(UIComponent.ExploreRooms)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.ReleaseAnnouncements)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.FilterContainer)).toBe(false);
+            expect(module.shouldShowComponent(UIComponent.CreateDM)).toBe(false);
         });
     });
 });

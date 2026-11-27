@@ -18,7 +18,10 @@ import { type IWidget } from "matrix-widget-api";
 
 import type { CSSProperties, FC, ReactNode, RefObject } from "react";
 import type { SDKContextClass } from "../../contexts/SDKContextClass";
-import PersistedElement, { getPersistKey } from "../../components/views/elements/PersistedElement";
+import PersistedElement, {
+    DEFAULT_PERSISTED_Z_INDEX,
+    getPersistKey,
+} from "../../components/views/elements/PersistedElement";
 import { WrappedElementCallComponent } from "../../components/views/voip/WrappedElementCallComponent";
 import ActiveWidgetStore from "../../stores/ActiveWidgetStore";
 import { type IApp, isAppWidget } from "../../stores/WidgetStore";
@@ -31,7 +34,7 @@ import { type ActionPayload } from "../../dispatcher/payloads";
 
 // For persisted apps in PiP we want the zIndex to be higher than for other persisted apps (100),
 // otherwise the PiP view is drawn UNDER another persistent app when dragged around. Same as AppTile.
-const Z_INDEX_DOCKED = 9;
+const Z_INDEX_DOCKED = DEFAULT_PERSISTED_Z_INDEX;
 const Z_INDEX_MINI = 101;
 
 /**
@@ -99,15 +102,14 @@ const subscribeToCalls = (listener: () => void): (() => void) => {
  * Element Call for one widget, re-rendered when the room's call changes. Reads the call from the
  * `CallStore` rather than from a tile's view model, so that it belongs to no tile in particular.
  */
-const PersistedElementCall: FC<{ roomId: string; widgetId: string; client: MatrixClient }> = ({
-    roomId,
-    widgetId,
-    client,
-}) => {
+const PersistedElementCall: FC<{
+    roomId: string;
+    widgetId: string;
+}> = ({ roomId, widgetId }) => {
     const call = useSyncExternalStore(subscribeToCalls, () =>
         resolveCall(CallStore.instance.getCall(roomId), widgetId),
     );
-    return call === null ? null : <WrappedElementCallComponent call={call} client={client} />;
+    return call === null ? null : <WrappedElementCallComponent call={call} />;
 };
 
 /**
@@ -118,10 +120,10 @@ const PersistedElementCall: FC<{ roomId: string; widgetId: string; client: Matri
  * the session on unmount would end the call.
  */
 const elementCallComponents = new Map<string, FC>();
-const elementCallComponentFor = (persistKey: string, roomId: string, widgetId: string, client: MatrixClient): FC => {
+const elementCallComponentFor = (persistKey: string, roomId: string, widgetId: string): FC => {
     let component = elementCallComponents.get(persistKey);
     if (!component) {
-        component = () => <PersistedElementCall roomId={roomId} widgetId={widgetId} client={client} />;
+        component = () => <PersistedElementCall roomId={roomId} widgetId={widgetId} />;
         elementCallComponents.set(persistKey, component);
     }
     return component;
@@ -160,7 +162,7 @@ export class ElementCallAppTileViewModel
             ...layoutSnapshot(props),
         });
         this.client = props.sdkContext.client;
-        this.ElementCall = elementCallComponentFor(persistKey, roomId, props.app.id, this.client);
+        this.ElementCall = elementCallComponentFor(persistKey, roomId, props.app.id);
         this.elementCall = elementCall;
         this.miniMode = props.miniMode;
         this.widgetRoomId = isAppWidget(props.app) ? props.app.roomId : null;
@@ -234,6 +236,10 @@ export class ElementCallAppTileViewModel
     public readonly ElementCall: FC;
 
     private setDocked(docked: boolean): void {
+        // Disposing undocks for good. In StrictMode dev, a consumer's layout effect can still run against
+        // the disposed view model (see `start`), and docking from there would leak a reference that keeps
+        // the call docked, and out of the floating PiP, after its last tile has gone.
+        if (docked && this.isDisposed) return;
         if (docked === this.docked) return;
         this.docked = docked;
         const store = ActiveWidgetStore.instance;

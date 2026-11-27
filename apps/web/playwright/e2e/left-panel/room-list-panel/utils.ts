@@ -6,6 +6,7 @@
  */
 
 import { expect, type Locator, type Page } from "@playwright/test";
+import { escapeRegExp } from "lodash";
 
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
 
@@ -54,17 +55,27 @@ export async function assertRoomInSection(page: Page, sectionName: string, roomN
 }
 
 /**
+ * Options for {@link dragRoomToSection}.
+ */
+interface DragRoomToSectionOptions {
+    /** false if the room cannot be dragged, so the sections do not collapse. Defaults to true. */
+    canBeDragged?: boolean;
+    /** false if the section rejects the room, so there is no drop target to wait for. Defaults to true. */
+    isAccepted?: boolean;
+}
+
+/**
  * Drag and drop a room row onto a section header
  * @param page
  * @param roomName
  * @param sectionName
- * @param canBeDragged false if the room cannot be dragged, so the sections do not collapse
+ * @param options
  */
 export async function dragRoomToSection(
     page: Page,
     roomName: string,
     sectionName: string,
-    canBeDragged = true,
+    { canBeDragged = true, isAccepted = true }: DragRoomToSectionOptions = {},
 ): Promise<void> {
     const sourceRow = getRoomList(page).getByRole("row", { name: `Open room ${roomName}` });
     const source = sourceRow.locator("button").first();
@@ -86,8 +97,49 @@ export async function dragRoomToSection(
 
     //  Move the room on the section header
     await page.mouse.move(sourceX, targetY, { steps: 10 });
-    // Drop the room
+
+    if (!canBeDragged || !isAccepted) {
+        // Nothing will become the drop target, so there is no announcement to wait for.
+        await page.mouse.up();
+        return;
+    }
+
+    await dropOnTarget(page, sourceX, targetY, {
+        over: `${roomName} is over ${sectionName}`,
+        dropped: `${roomName} was dropped on ${sectionName}`,
+    });
+}
+
+/**
+ * Release the mouse once dnd-kit has picked the expected drop target.
+ *
+ * dnd-kit updates the positions of drop targets asynchronously, and the sections collapsing at drag
+ * start moves every header. On a slow browser, releasing the mouse as soon as it reaches the target
+ * can end the drag with no target, so the drop silently does nothing. Instead, wait for the
+ * room list's live region to announce that the pointer is over the target, nudging the pointer
+ * so dnd-kit re-checks the target against the updated positions.
+ *
+ * @param page
+ * @param x - pointer x coordinate over the target
+ * @param y - pointer y coordinate over the target
+ * @param announcements - the expected "over" announcement before the drop, and the "dropped" one after
+ */
+async function dropOnTarget(
+    page: Page,
+    x: number,
+    y: number,
+    announcements: { over: string | RegExp; dropped: string | RegExp },
+): Promise<void> {
+    await expect(async () => {
+        await page.mouse.move(x, y + 1);
+        await page.mouse.move(x, y);
+        await expect(page.getByRole("status").filter({ hasText: announcements.over })).toHaveCount(1, {
+            timeout: 1000,
+        });
+    }).toPass({ timeout: 10_000 });
+
     await page.mouse.up();
+    await expect(page.getByRole("alert").filter({ hasText: announcements.dropped })).toHaveCount(1);
 }
 
 async function startDrag(page: Page, x: number, y: number, waitForCollapse = true): Promise<void> {
@@ -154,7 +206,14 @@ export async function dragSectionToSection(
 
     // Move onto the (possibly relocated) target section header and drop.
     await page.mouse.move(sourceX, targetY, { steps: 10 });
-    await page.mouse.up();
+
+    // Whether the section lands before or after the target depends on the drag direction.
+    const sourceName = escapeRegExp(sourceSectionName);
+    const targetName = escapeRegExp(targetSectionName);
+    await dropOnTarget(page, sourceX, targetY, {
+        over: new RegExp(`${sourceName} will be dropped (before|after) ${targetName}`),
+        dropped: new RegExp(`${sourceName} was dropped (before|after) ${targetName}`),
+    });
 }
 
 /**

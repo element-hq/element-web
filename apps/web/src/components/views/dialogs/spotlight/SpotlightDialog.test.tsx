@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import React from "react";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     ConnectionError,
     type IProtocol,
@@ -21,7 +21,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sanitizeHtml } from "@element-hq/element-web-shared-utils";
-import { fireEvent, render, screen, waitFor } from "test-utils-rtl";
+import { act, fireEvent, render, screen, waitFor } from "test-utils-rtl";
 import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "test-utils";
 
 import SpotlightDialog from "./SpotlightDialog";
@@ -37,10 +37,17 @@ import SdkConfig from "../../../../SdkConfig";
 import { Action } from "../../../../dispatcher/actions";
 import { MetaSpace } from "../../../../stores/spaces";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
 
 vi.useFakeTimers({ shouldAdvanceTime: true });
 
 vi.mock("../../../../utils/Feedback");
+
+vi.mock("../../../../customisations/helpers/UIComponents", async (importOriginal) => {
+    const original = await importOriginal<typeof import("../../../../customisations/helpers/UIComponents")>();
+    return { shouldShowComponent: vi.fn(original.shouldShowComponent) };
+});
 
 vi.mock("../../../../utils/direct-messages", async () => ({
     // @ts-ignore
@@ -252,7 +259,7 @@ describe("Spotlight Dialog", () => {
         });
 
         it("with people filter", async () => {
-            render(
+            const { unmount } = render(
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
@@ -273,23 +280,14 @@ describe("Spotlight Dialog", () => {
                 expect(options.length).toBeGreaterThanOrEqual(1);
                 expect(options[0]!.innerHTML).toContain(testPerson.display_name);
             });
-        });
-    });
+            expect(screen.getByText("Start a group chat")).toBeInTheDocument();
 
-    describe("when MSC3946 dynamic room predecessors is enabled", () => {
-        beforeEach(async () => {
-            await SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
-        });
-
-        afterEach(() => {
-            vi.restoreAllMocks();
-        });
-
-        it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
-            render(<SpotlightDialog onFinished={() => null} />);
-            vi.advanceTimersByTime(200);
-            await flushPromisesWithFakeTimers();
-            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);
+            // The group chat option is not offered when DM creation is hidden
+            unmount();
+            vi.mocked(shouldShowComponent).mockImplementation((component) => component !== UIComponent.CreateDM);
+            render(<SpotlightDialog initialFilter={Filter.People} onFinished={() => null} />);
+            expect(screen.queryByText("Start a group chat")).not.toBeInTheDocument();
+            vi.mocked(shouldShowComponent).mockReset();
         });
     });
 
@@ -314,9 +312,6 @@ describe("Spotlight Dialog", () => {
                 expect(options.length).toBe(1);
                 expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
             });
-
-            // assert that getVisibleRooms is called without MSC3946 dynamic room predecessors
-            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(false);
         });
         it("with people", async () => {
             render(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);
@@ -360,6 +355,57 @@ describe("Spotlight Dialog", () => {
             filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
             expect(filterChip).not.toBeInTheDocument();
         });
+
+        it("keeps the keyboard selection when a public room search finishes after its filter was cleared", async () => {
+            const search = Promise.withResolvers<Awaited<ReturnType<MatrixClient["publicRooms"]>>>();
+            vi.mocked(mockedClient.publicRooms).mockReturnValue(search.promise);
+            render(<SpotlightDialog initialFilter={Filter.PublicSpaces} onFinished={() => null} />);
+            // start the debounced search, which is left running
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+            expect(mockedClient.publicRooms).toHaveBeenCalled();
+
+            const input = document.querySelector(".mx_SpotlightDialog_searchBox input")!;
+            fireEvent.keyDown(input, { key: "Backspace" });
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+            const firstOption = input.getAttribute("aria-activedescendant");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            const selectedOption = input.getAttribute("aria-activedescendant");
+            expect(selectedOption).not.toBe(firstOption);
+
+            await act(async () => {
+                search.resolve({ chunk: [testPublicRoom], total_room_count_estimate: 1 });
+                await flushPromisesWithFakeTimers();
+            });
+            // let any change of selection that the results cause happen
+            await act(async () => {
+                vi.advanceTimersByTime(200);
+            });
+
+            expect(input).toHaveAttribute("aria-activedescendant", selectedOption);
+        });
+
+        it("keeps a keyboard selection made straight after the filter was cleared", async () => {
+            render(<SpotlightDialog initialFilter={Filter.PublicSpaces} onFinished={() => null} />);
+            vi.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const input = document.querySelector(".mx_SpotlightDialog_searchBox input")!;
+            fireEvent.keyDown(input, { key: "Backspace" });
+            // move the selection before the dialog has run its deferred reset of the selection
+            const firstOption = input.getAttribute("aria-activedescendant");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            const selectedOption = input.getAttribute("aria-activedescendant");
+            expect(selectedOption).not.toBe(firstOption);
+
+            await act(async () => {
+                vi.advanceTimersByTime(200);
+            });
+
+            expect(input).toHaveAttribute("aria-activedescendant", selectedOption);
+        });
+
         it("with people filter", async () => {
             render(
                 <SpotlightDialog

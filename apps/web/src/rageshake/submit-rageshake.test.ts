@@ -358,6 +358,32 @@ describe("Rageshakes", () => {
             const formData = await collectBugReport();
             expect(formData.get("matrix_hs_server")).toBe("some_cdn");
         });
+
+        it("should give up on the server version if the homeserver doesn't respond", async () => {
+            vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+            // Node's AbortSignal.timeout() uses its own timers, which fake timers don't control.
+            vi.spyOn(AbortSignal, "timeout").mockImplementation((ms) => {
+                const controller = new AbortController();
+                setTimeout(() => controller.abort(new DOMException("The operation timed out.", "TimeoutError")), ms);
+                return controller.signal;
+            });
+            try {
+                // Each of these would answer, but only after the report has given up waiting.
+                const slow = { delay: 60_000 };
+                fetchMock.get("path:/_synapse/admin/v1/server_version", { server_version: "1.0" }, slow);
+                fetchMock.get("path:/.well-known/matrix/server", { "m.server": "fed.example.com" }, slow);
+                fetchMock.get("path:/_matrix/client/v3/login", { headers: { Server: "some_cdn" } }, slow);
+
+                const formDataPromise = collectBugReport();
+                await vi.advanceTimersByTimeAsync(5000);
+                const formData = await formDataPromise;
+
+                expect(formData.get("user_id")).toBe("@test:example.com");
+                expect([...formData.keys()].filter((key) => key.startsWith("matrix_hs_"))).toEqual([]);
+            } finally {
+                vi.useRealTimers();
+            }
+        });
     });
 
     describe("Settings Store", () => {

@@ -288,7 +288,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       tabindex="-1"
     >
       <div
-        class="_area_hlput_8 _content_3dqwm_39"
+        class="_area_1vt8x_8 _content_3dqwm_39"
         role="none"
       >
         <section
@@ -752,7 +752,7 @@ exports[`UserMenu > renders an open menu 1`] = `
       tabindex="-1"
     >
       <div
-        class="_area_hlput_8 _content_3dqwm_39"
+        class="_area_1vt8x_8 _content_3dqwm_39"
         role="none"
       >
         <section

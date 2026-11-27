@@ -71,14 +71,9 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
 
-    const urlPreviewBundleEnabled = useSettingValue("feature_msc4095_url_preview_bundle");
     const e2eeBundledUrlPreviewsOnly = useSettingValue("urlPreviewsEnabled_e2ee_bundled_only");
-
-    let urlPreviewKind: UrlPreviewKind;
-
-    if (urlPreviewBundleEnabled)
-        urlPreviewKind = roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
-    else urlPreviewKind = "fetchonly";
+    const urlPreviewKind: UrlPreviewKind =
+        roomContext.isRoomEncrypted && e2eeBundledUrlPreviewsOnly ? "bundledonly" : "preferbundled";
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -169,7 +164,8 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
         } else {
             content = {
                 type: "image",
-                image: preview.image.imageFull,
+                // Prefer the thumbnail: the original may be large and animated.
+                image: preview.image.imageThumb ?? preview.image.imageFull,
                 imageAlt: preview.title,
                 imageSize: "banner",
                 imageOnClick: () => {

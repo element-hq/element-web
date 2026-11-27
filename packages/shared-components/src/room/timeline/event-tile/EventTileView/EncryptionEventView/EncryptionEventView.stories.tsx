@@ -38,7 +38,6 @@ const meta = {
     },
     args: {
         state: EncryptionEventState.ENABLED,
-        encryptedStateEvents: false,
         userName: "Alice",
         className: "",
     },
@@ -48,13 +47,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const StateEncryptionEnabled: Story = {
-    args: {
-        state: EncryptionEventState.ENABLED,
-        encryptedStateEvents: true,
-    },
-};
 
 export const ParametersChanged: Story = {
     args: {

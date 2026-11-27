@@ -80,7 +80,8 @@ import ThreepidInviteStore, {
     type IThreepidInvite,
     type IThreepidInviteWireFormat,
 } from "../../stores/ThreepidInviteStore";
-import { UIFeature } from "../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../settings/UIFeature";
+import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
@@ -238,6 +239,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private readonly loggedInView = createRef<LoggedInViewType>();
     private dispatcherRef?: string;
     private blacklistUnverifiedDevicesWatcherRef?: string;
+    private analyticsOptInWatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
     private readonly stores: SDKContextClass;
@@ -538,6 +540,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (this.blacklistUnverifiedDevicesWatcherRef) {
             SettingsStore.unwatchSetting(this.blacklistUnverifiedDevicesWatcherRef);
         }
+        SettingsStore.unwatchSetting(this.analyticsOptInWatcherRef);
         DecryptionFailureTracker.instance.stop();
     }
 
@@ -854,6 +857,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.chatCreateOrReuse(payload.user_id);
                 break;
             case Action.CreateChat:
+                if (!shouldShowComponent(UIComponent.CreateDM)) break;
                 showStartChatInviteDialog(payload.initialText || "");
 
                 // View the welcome or home page if we need something to look at
@@ -1479,7 +1483,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Listen to changes in settings and show the toast if appropriate - this is necessary because account
         // settings can still be changing at this point in app init (due to the initial sync being cached, then
         // subsequent syncs being received from the server)
-        SettingsStore.watchSetting(
+        SettingsStore.unwatchSetting(this.analyticsOptInWatcherRef);
+        this.analyticsOptInWatcherRef = SettingsStore.watchSetting(
             "pseudonymousAnalyticsOptIn",
             null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
@@ -2240,7 +2245,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     />
                 );
             case Views.COMPLETE_SECURITY:
-                return <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
+                return (
+                    <CompleteSecurity
+                        onFinished={this.onCompleteSecurityE2eSetupFinished}
+                        anyEncryptedRooms={CompleteSecurity.anyEncryptedRooms(MatrixClientPeg.get())}
+                    />
+                );
             case Views.E2E_SETUP:
                 return <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
             case Views.PENDING_CLIENT_START:

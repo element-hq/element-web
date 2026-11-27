@@ -5,7 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type PropsWithChildren, type ComponentType, type SVGAttributes } from "react";
+import React, {
+    type JSX,
+    type PropsWithChildren,
+    type ComponentProps,
+    type ComponentType,
+    type SVGAttributes,
+} from "react";
 import { BigIcon, Heading } from "@vector-im/compound-web";
 import classNames from "classnames";
 
@@ -27,9 +33,18 @@ interface EncryptionCardProps {
      */
     destructive?: boolean;
     /**
+     * Whether this icon shows a successful outcome. Ignored if `destructive` is set.
+     */
+    success?: boolean;
+    /**
      * The icon to display.
      */
     Icon: ComponentType<SVGAttributes<SVGElement>>;
+    /**
+     * Whether the card is hosted in a dialog (logout and recovery key dialogs), which drops the
+     * border and centers the copy.
+     */
+    dialog?: boolean;
 }
 
 /**
@@ -40,13 +55,26 @@ export function EncryptionCard({
     description,
     className,
     destructive = false,
+    success = false,
     Icon,
+    dialog = false,
     children,
 }: PropsWithChildren<EncryptionCardProps>): JSX.Element {
+    let iconKind: ComponentProps<typeof BigIcon>["kind"] = "primary";
+    if (destructive) {
+        iconKind = "critical";
+    } else if (success) {
+        iconKind = "success";
+    }
+
     return (
-        <div className={classNames("mx_EncryptionCard", className)}>
+        <div
+            className={classNames("mx_EncryptionCard", className, {
+                "mx_EncryptionCard_noBorder mx_EncryptionCard_dialog": dialog,
+            })}
+        >
             <div className="mx_EncryptionCard_header">
-                <BigIcon kind={destructive ? "critical" : "primary"}>
+                <BigIcon kind={iconKind}>
                     <Icon />
                 </BigIcon>
                 <Heading as="h2" size="sm" weight="semibold">
