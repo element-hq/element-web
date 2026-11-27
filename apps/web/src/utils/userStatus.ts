@@ -18,7 +18,7 @@ const MAX_STATUS_TEXT_BYTES = 256;
 // We don't use the actual UserStatus type here as we want to translate the string at runtime,
 // so we can make the types reflect the fact it's not ready for human consumption.
 const ON_A_CALL_STATUS = {
-    emoji: "📞",
+    emoji: "🎧",
     textKey: _td("user_status|on_a_call"),
 };
 
