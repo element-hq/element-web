@@ -65,3 +65,13 @@ export const WithLink: Story = {
         ),
     },
 };
+
+// Long button labels, as in some translations, widen the toast; the description should follow
+export const LongLabels: Story = {
+    args: {
+        description:
+            "Deine Chats werden automatisch mit Ende-zu-Ende-Verschlüsselung gesichert. Um dieses Backup wiederherzustellen und deine digitale Identität zu behalten, wenn du den Zugriff auf alle deine Geräte verlierst, benötigst du deinen Wiederherstellungsschlüssel.",
+        primaryLabel: "Wiederherstellungsschlüssel erstellen",
+        secondaryLabel: "Nicht jetzt",
+    },
+};

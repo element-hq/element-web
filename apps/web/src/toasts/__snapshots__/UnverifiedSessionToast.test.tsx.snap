@@ -34,7 +34,9 @@ exports[`UnverifiedSessionToast > when rendering the toast > should render as ex
         <div
           class="mx_Toast_body"
         >
-          <div>
+          <div
+            class="_toast"
+          >
             <div
               class="_description"
             >

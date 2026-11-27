@@ -2,7 +2,9 @@
 
 exports[`VerificationRequestToast > should render a cross-user verification 1`] = `
 <div>
-  <div>
+  <div
+    class="_toast"
+  >
     <div
       class="_description"
     >
@@ -38,7 +40,9 @@ exports[`VerificationRequestToast > should render a cross-user verification 1`] 
 
 exports[`VerificationRequestToast > should render a self-verification 1`] = `
 <div>
-  <div>
+  <div
+    class="_toast"
+  >
     <div
       class="_description"
     >
