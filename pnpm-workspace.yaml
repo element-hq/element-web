@@ -136,7 +136,7 @@ patchedDependencies:
     storybook-addon-vis@4: patches/storybook-addon-vis@4.8.0.patch
     # Bundled types squash `@ts-expect-error` comments onto the line they cover, so they fail type checks
     # https://github.com/storybookjs/storybook/issues/37336
-    "@storybook/react@10.6.7": patches/@storybook__react@10.6.7.patch
+    "@storybook/react@10.6.8": patches/@storybook__react@10.6.8.patch
 
 peerDependencyRules:
     allowedVersions:
