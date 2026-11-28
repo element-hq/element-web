@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { test } from "../../element-web-test";
+import { expect, test } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
@@ -25,5 +25,28 @@ test.describe("SSO login", () => {
         //    sudo ufw allow in on docker0
         //
         await doTokenRegistration(page, homeserver, testInfo);
+    });
+
+    test("shows several identity providers as a row of round buttons", { tag: "@screenshot" }, async ({ page }) => {
+        await page.route("**/_matrix/client/*/login", (route) =>
+            route.fulfill({
+                json: {
+                    flows: [
+                        { type: "m.login.password" },
+                        {
+                            type: "m.login.sso",
+                            identity_providers: ["apple", "github", "gitlab", "google"].map((brand) => ({
+                                id: brand,
+                                name: brand,
+                                brand,
+                            })),
+                        },
+                    ],
+                },
+            }),
+        );
+        await page.goto("/#/login");
+
+        await expect(page.locator(".mx_SSOButtons")).toMatchScreenshot("sso-buttons.png");
     });
 });
