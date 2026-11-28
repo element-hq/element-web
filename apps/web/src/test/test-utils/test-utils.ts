@@ -757,6 +757,7 @@ export function mkStubRoom(
         myUserId: client?.getUserId(),
         name,
         normalizedName: normalize(name || ""),
+        polls: new Map(),
         on: eventEmitter.on.bind(eventEmitter),
         once: eventEmitter.once.bind(eventEmitter),
         off: eventEmitter.off.bind(eventEmitter),
