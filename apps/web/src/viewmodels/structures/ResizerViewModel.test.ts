@@ -7,7 +7,7 @@
 
 // @vitest-environment happy-dom
 
-import { vi, describe, it, expect, afterEach } from "vitest";
+import { vi, describe, it, expect, afterEach, beforeEach } from "vitest";
 import { type PointerEvent } from "react";
 
 import { waitFor } from "test-utils-rtl";
@@ -187,5 +187,51 @@ describe("LeftPanelResizerViewModel", () => {
 
         vm.onLeftPanelResized(50);
         expect(mockHandle.resize).not.toHaveBeenCalled();
+    });
+
+    describe("should keep widgets from taking the pointer while the separator is dragged", () => {
+        let container: HTMLElement;
+
+        beforeEach(() => {
+            container = document.createElement("div");
+            container.id = "mx_PersistedElement_container";
+            document.body.append(container);
+        });
+
+        afterEach(() => {
+            container.remove();
+        });
+
+        /** Fires an event somewhere on the page away from the separator, as the pointer may be anywhere by then. */
+        const onPage = (type: string) => () => document.body.dispatchEvent(new Event(type, { bubbles: true }));
+
+        it.each([
+            ["the pointer is released", onPage("pointerup")],
+            ["the pointer is cancelled", onPage("pointercancel")],
+            ["a context menu opens", onPage("contextmenu")],
+            ["the window loses focus", () => window.dispatchEvent(new Event("blur"))],
+        ])("until %s", (_, endDrag) => {
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
+
+            vm.onPointerDown(pointerAt(100, 100));
+            vm.onPointerMove(pointerAt(160, 100));
+            onPage("pointermove")();
+            expect(container.style.pointerEvents).toBe("none");
+
+            endDrag();
+            expect(container.style.pointerEvents).toBe("");
+        });
+
+        it("on every drag", () => {
+            const vm = tearDownAfterTest(new ResizerViewModel(CallStore.instance));
+
+            vm.onPointerDown(pointerAt(100, 100));
+            onPage("pointerup")();
+            vm.onPointerDown(pointerAt(100, 100));
+            expect(container.style.pointerEvents).toBe("none");
+
+            onPage("pointerup")();
+            expect(container.style.pointerEvents).toBe("");
+        });
     });
 });
