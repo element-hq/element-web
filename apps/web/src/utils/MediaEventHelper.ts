@@ -16,6 +16,7 @@ import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
 import { getBlobSafeMimeType } from "./blobs.ts";
 import { queryUploadedMediaCache } from "./UploadedMediaCache";
+import { isVoiceMessage } from "./EventUtils";
 
 // Consider this list of message types as "media".
 const MEDIA_MSG_TYPES: string[] = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video];
@@ -156,11 +157,16 @@ export class MediaEventHelper implements IDestroyable {
 
     /**
      * Determine if the media event in question has a caption
+     * A voice message whose body is its filename without the extension is not a caption.
      * @returns `true` if the event is an image, file, audio or video message with a caption, otherwise `false`.
      */
     public static hasCaption(event: MatrixEvent): boolean {
         const content = event.getContent();
-        return MEDIA_MSG_TYPES.includes(content.msgtype!) && !!content.filename && content.filename !== content.body;
+        if (!MEDIA_MSG_TYPES.includes(content.msgtype!) || !content.filename || content.filename === content.body) {
+            return false;
+        }
+        if (isVoiceMessage(event) && content.filename.replace(/\.[^.]+$/, "") === content.body) return false;
+        return true;
     }
 
     /**

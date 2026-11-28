@@ -102,6 +102,7 @@ describe("<VoiceRecordComposerTile/>", () => {
             expect(mockClient.sendMessage).toHaveBeenCalledWith(roomId, {
                 "body": "Voice message",
                 "file": undefined,
+                "filename": "Voice message.ogg",
                 "info": {
                     duration: 1337000,
                     mimetype: "audio/ogg",
@@ -150,6 +151,7 @@ describe("<VoiceRecordComposerTile/>", () => {
             expect(mockClient.sendMessage).toHaveBeenCalledWith(roomId, {
                 "body": "Voice message",
                 "file": undefined,
+                "filename": "Voice message.ogg",
                 "info": {
                     duration: 1337000,
                     mimetype: "audio/ogg",

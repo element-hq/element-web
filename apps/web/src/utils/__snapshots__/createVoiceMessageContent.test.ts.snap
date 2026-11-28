@@ -4,6 +4,7 @@ exports[`createVoiceMessageContent > should create a voice message content 1`] =
 {
   "body": "Voice message",
   "file": {},
+  "filename": "Voice message.ogg",
   "info": {
     "duration": 23000,
     "mimetype": "ogg/opus",

@@ -27,6 +27,7 @@ export const createVoiceMessageContent = (
 ): RoomMessageEventContent => {
     return {
         "body": "Voice message",
+        "filename": "Voice message.ogg",
         //"msgtype": "org.matrix.msc2516.voice",
         "msgtype": MsgType.Audio,
         "url": mxc,
