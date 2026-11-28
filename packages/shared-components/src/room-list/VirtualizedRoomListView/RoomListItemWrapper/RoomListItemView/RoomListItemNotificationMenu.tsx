@@ -71,7 +71,9 @@ export function RoomListItemNotificationMenu({ vm, onOpenChange }: RoomListItemN
                 onKeyDown={(e) => e.stopPropagation()}
             >
                 <MenuItem
-                    aria-selected={snapshot.roomNotifState === RoomNotifState.AllMessages}
+                    role="menuitemradio"
+                    aria-checked={snapshot.roomNotifState === RoomNotifState.AllMessages}
+                    tabIndex={-1}
                     hideChevron={true}
                     label={_t("notifications|default_settings")}
                     onSelect={() => vm.onSetRoomNotifState(RoomNotifState.AllMessages)}
@@ -80,7 +82,9 @@ export function RoomListItemNotificationMenu({ vm, onOpenChange }: RoomListItemN
                     {snapshot.roomNotifState === RoomNotifState.AllMessages && checkComponent}
                 </MenuItem>
                 <MenuItem
-                    aria-selected={snapshot.roomNotifState === RoomNotifState.AllMessagesLoud}
+                    role="menuitemradio"
+                    aria-checked={snapshot.roomNotifState === RoomNotifState.AllMessagesLoud}
+                    tabIndex={-1}
                     hideChevron={true}
                     label={_t("notifications|all_messages")}
                     onSelect={() => vm.onSetRoomNotifState(RoomNotifState.AllMessagesLoud)}
@@ -89,7 +93,9 @@ export function RoomListItemNotificationMenu({ vm, onOpenChange }: RoomListItemN
                     {snapshot.roomNotifState === RoomNotifState.AllMessagesLoud && checkComponent}
                 </MenuItem>
                 <MenuItem
-                    aria-selected={snapshot.roomNotifState === RoomNotifState.MentionsOnly}
+                    role="menuitemradio"
+                    aria-checked={snapshot.roomNotifState === RoomNotifState.MentionsOnly}
+                    tabIndex={-1}
                     hideChevron={true}
                     label={_t("notifications|mentions_keywords")}
                     onSelect={() => vm.onSetRoomNotifState(RoomNotifState.MentionsOnly)}
@@ -98,7 +104,9 @@ export function RoomListItemNotificationMenu({ vm, onOpenChange }: RoomListItemN
                     {snapshot.roomNotifState === RoomNotifState.MentionsOnly && checkComponent}
                 </MenuItem>
                 <MenuItem
-                    aria-selected={snapshot.roomNotifState === RoomNotifState.Mute}
+                    role="menuitemradio"
+                    aria-checked={snapshot.roomNotifState === RoomNotifState.Mute}
+                    tabIndex={-1}
                     hideChevron={true}
                     label={_t("notifications|mute_room")}
                     onSelect={() => vm.onSetRoomNotifState(RoomNotifState.Mute)}
