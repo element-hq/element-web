@@ -63,7 +63,8 @@ Please see LICENSE files in the repository root for full details.
 
     & + span {
         display: inline-block;
-        margin-left: 34px;
+        /* Line up with the label, after the radio's 2px margin, its circle and the label's 14px margin */
+        margin-left: calc(2px + $font-16px + 14px);
         margin-bottom: 16px;
         font-size: $font-15px;
         line-height: $font-24px;
