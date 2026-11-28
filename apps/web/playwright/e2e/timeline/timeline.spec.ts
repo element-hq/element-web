@@ -871,6 +871,93 @@ test.describe("Timeline", () => {
             expect(await fontSize(message.locator(".mx_Emoji"))).not.toEqual(await fontSize(message));
         });
 
+        test("should render a code block quoted in a reply", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("```\nconst first = 1;\nconst second = 2;\nconst third = 3;\nconst fourth = 4;\n```");
+            await composer.press("Enter");
+
+            const codeTile = page.locator(".mx_EventTile").last();
+            await expect(codeTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
+            await codeTile.getByTestId("event-tile-slot-body").hover();
+            await codeTile.getByRole("button", { name: "Reply", exact: true }).click();
+            await composer.fill("Reply");
+            await composer.press("Enter");
+
+            const quotedCodeBlock = page.locator(".mx_EventTile").last().getByTestId("reply-tile-body").locator("pre");
+            await expect(quotedCodeBlock).toBeVisible();
+
+            // The reply quote's own 4px under the block, not the 16px of a code block in the timeline
+            await expect(quotedCodeBlock).toHaveCSS("margin-bottom", "4px");
+            // The quote shows two lines, and the third must not show through the block's bottom padding
+            await expect(quotedCodeBlock).toHaveCSS("overflow-clip-margin", "content-box");
+        });
+
+        test("should make room for line numbers in a code block in a bubble", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+
+            const composer = app.getComposerField();
+            await composer.fill('```\nfn main() {\n    let greeting = "hello from a longer line";\n}\n```');
+            await composer.press("Enter");
+
+            const codeBlock = page.locator(".mx_EventTile").last().locator("pre");
+            await expect(codeBlock).toBeVisible();
+
+            // The bubble's width must count the line numbers on every line, or the block scrolls sideways
+            expect(await codeBlock.evaluate((pre) => pre.scrollWidth - pre.clientWidth)).toBe(0);
+        });
+
+        test("should not move the code when expanding a code block", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("```\nconst a = 1;\nconst b = 2;\nconst c = 3;\nconst d = 4;\nconst e = 5;\n```");
+            await composer.press("Enter");
+
+            const codeBlock = page.locator(".mx_EventTile").last().locator(".mx_EventTile_pre_container");
+            const pre = codeBlock.locator("pre");
+            await expect(pre).toContainClass("mx_EventTile_collapsedCodeBlock");
+            const collapsedPadding = await pre.evaluate((node) => window.getComputedStyle(node).paddingTop);
+
+            await codeBlock.hover();
+            await codeBlock.getByRole("button", { name: "Expand" }).click();
+
+            await expect(pre).not.toContainClass("mx_EventTile_collapsedCodeBlock");
+            await expect(pre).toHaveCSS("padding-top", collapsedPadding);
+        });
+
+        test("should pad inline code at its sides", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("Run `pnpm install` first");
+            await composer.press("Enter");
+
+            const inlineCode = page.locator(".mx_EventTile").last().getByTestId("event-tile-slot-body").locator("code");
+            await expect(inlineCode).toHaveText("pnpm install");
+            await expect(inlineCode).not.toHaveCSS("padding-left", "0px");
+            await expect(inlineCode).not.toHaveCSS("padding-right", "0px");
+        });
+
+        test("should put the quote bar at the start of a right-to-left quote", async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+
+            const composer = app.getComposerField();
+            await composer.fill("> مرحبا بالعالم!");
+            await composer.press("Enter");
+
+            const quote = page
+                .locator(".mx_EventTile")
+                .last()
+                .getByTestId("event-tile-slot-body")
+                .locator("blockquote");
+            await expect(quote).toHaveCSS("direction", "rtl");
+            await expect(quote).toHaveCSS("border-right-width", "2px");
+            await expect(quote).toHaveCSS("border-left-style", "none");
+        });
+
         test(
             "should be able to hide an image",
             { tag: "@screenshot" },

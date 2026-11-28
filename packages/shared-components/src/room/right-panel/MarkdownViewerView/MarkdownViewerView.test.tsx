@@ -65,6 +65,23 @@ describe("MarkdownViewerView", () => {
         expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
+    it.each([
+        ["left-to-right", "A quote", "Left", "Right"],
+        ["right-to-left", "ציטוט", "Right", "Left"],
+    ] as const)("puts the quote bar at the start of %s text", (_, text, start, end) => {
+        const { container } = renderView({ status: "ready", html: `<blockquote><p>${text}</p></blockquote>` });
+        // Unit tests don't load the Compound tokens, so give the ones the quote uses a value
+        container.style.setProperty("--cpd-space-3x", "12px");
+        container.style.setProperty("--cpd-border-width-4", "4px");
+        container.style.setProperty("--cpd-color-border-interactive-secondary", "gray");
+
+        const quote = getComputedStyle(screen.getByText(text).closest("blockquote")!);
+        expect(quote[`border${start}Width`]).toBe("4px");
+        expect(quote[`padding${start}`]).toBe("12px");
+        expect(quote[`border${end}Width`]).toBe("0px");
+        expect(quote[`padding${end}`]).toBe("0px");
+    });
+
     it("forwards clicks within the document to the host", async () => {
         const user = userEvent.setup();
         const onContentClick = vi.fn((event: React.MouseEvent) => event.preventDefault());
