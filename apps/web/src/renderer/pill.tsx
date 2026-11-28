@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RuleId } from "matrix-js-sdk/src/matrix";
+import { RuleId, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type Element } from "html-react-parser";
 import { textContent } from "domutils";
 import reactStringReplace from "react-string-replace";
@@ -15,7 +15,7 @@ import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { Pill } from "../components/views/elements/Pill";
 import { PillType } from "../components/views/elements/PillType";
-import { parsePermalink } from "../utils/permalinks/Permalinks";
+import { parsePermalink, tryTransformEntityToPermalink } from "../utils/permalinks/Permalinks";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 import { hasParentMatching, type RendererMap, type ParentNode } from "./utils.ts";
 
@@ -26,19 +26,28 @@ const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
  *
  * It should be pillified if the permalink parser returns a result and one of the following conditions match:
  * - Text content equals href. This is the case when sending a plain permalink inside a message.
+ *   A `matrix:` URI also counts, since linkify rewrites its href to a matrix.to permalink.
  * - The link is not from linkify (isHtml=true).
  *   Composer completions already create an A tag.
  */
-const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null, isHtml: boolean): boolean => {
+const shouldBePillified = (
+    client: MatrixClient,
+    node: Element,
+    href: string,
+    parts: PermalinkParts | null,
+    isHtml: boolean,
+): boolean => {
     // permalink parser didn't return any parts
     if (!parts) return false;
 
     const text = textContent(node);
+    const textMatchesHref =
+        href === text || (text.startsWith("matrix:") && tryTransformEntityToPermalink(client, text) === href);
 
     // event permalink with custom label
-    if (parts.eventId && href !== text) return false;
+    if (parts.eventId && !textMatchesHref) return false;
 
-    return href === text || isHtml;
+    return textMatchesHref || isHtml;
 };
 
 const isPreCode = (domNode: ParentNode | null): boolean =>
@@ -55,7 +64,7 @@ export const mentionPillRenderer: RendererMap = {
         if (
             href &&
             !hasParentMatching(anchor, isPreCode) &&
-            shouldBePillified(anchor, href, parsePermalink(href), isHtml)
+            shouldBePillified(room.client, anchor, href, parsePermalink(href), isHtml)
         ) {
             return <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />;
         }

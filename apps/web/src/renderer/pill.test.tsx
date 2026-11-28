@@ -23,8 +23,9 @@ import {
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
-import { stubClient, withClientContextRenderOptions } from "test-utils";
+import { stubClient, TestSDKContext, withClientContextRenderOptions } from "test-utils";
 import { keywordPillRenderer, mentionPillRenderer, combineRenderers } from "./index";
+import { SDKContext } from "../contexts/SDKContext";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import DMRoomMap from "../utils/DMRoomMap";
 
@@ -97,17 +98,20 @@ describe("mention pills", () => {
         DMRoomMap.makeShared(cli);
     });
 
-    function renderPills(input: string, mxEvent?: MatrixEvent): RenderResult {
+    function renderPills(input: string, mxEvent?: MatrixEvent, isHtml = true): RenderResult {
+        // User pills look up profiles through the SDK context
+        const sdkContext = new TestSDKContext();
+        sdkContext._client = cli;
         return render(
-            <>
+            <SDKContext.Provider value={sdkContext}>
                 {parse(input, {
                     replace: combineRenderers(mentionPillRenderer)({
                         mxEvent: mxEvent ?? event,
                         room,
-                        isHtml: true,
+                        isHtml,
                     }),
                 })}
-            </>,
+            </SDKContext.Provider>,
             withClientContextRenderOptions(cli),
         );
     }
@@ -142,6 +146,41 @@ describe("mention pills", () => {
         );
         expect(asFragment()).toMatchSnapshot();
         expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
+    });
+
+    describe("linkified links in plain-text messages", () => {
+        it("should pillify a matrix.to user permalink", () => {
+            const href = "https://matrix.to/#/@user:example.org";
+            const { container } = renderPills(`<div><a href="${href}">${href}</a></div>`, undefined, false);
+            expect(container.querySelector(".mx_Pill.mx_UserPill")).not.toBeNull();
+        });
+
+        it("should pillify a matrix: user URI", () => {
+            const { container } = renderPills(
+                `<div><a href="https://matrix.to/#/@user:example.org">matrix:u/user:example.org</a></div>`,
+                undefined,
+                false,
+            );
+            expect(container.querySelector(".mx_Pill.mx_UserPill")).not.toBeNull();
+        });
+
+        it("should pillify a matrix: event URI", () => {
+            const { container } = renderPills(
+                `<div><a href="https://matrix.to/#/!room:example.org/$event">matrix:roomid/room:example.org/e/event</a></div>`,
+                undefined,
+                false,
+            );
+            expect(container.querySelector(".mx_Pill")).not.toBeNull();
+        });
+
+        it("should not pillify a permalink with a custom label", () => {
+            const { container } = renderPills(
+                `<div><a href="https://matrix.to/#/@user:example.org">some label</a></div>`,
+                undefined,
+                false,
+            );
+            expect(container.querySelector(".mx_Pill")).toBeNull();
+        });
     });
 });
 
