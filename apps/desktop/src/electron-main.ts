@@ -40,6 +40,7 @@ import * as updater from "./updater.js";
 import ProtocolHandler from "./protocol.js";
 import { _t, AppLocalization } from "./language-helper.js";
 import { setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { setupScreenshareAudio, wrapDisplayMediaCallback } from "./screenshare-audio.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
 import { handleWindowClose, revealMainWindow } from "./window-close.js";
@@ -370,9 +371,11 @@ app.on("ready", async () => {
     // is a MITIGATION of an upstream Electron/Chromium defect, not a root-cause fix — without it a dead
     // renderer stays a permanent blank window the user can only escape by killing the whole app.
     rendererRecovery = setupRendererRecovery(global.mainWindow);
+    setupScreenshareAudio(global.mainWindow.webContents);
 
     session.defaultSession.setDisplayMediaRequestHandler(
-        (_, callback) => {
+        (request, originalCallback) => {
+            const callback = wrapDisplayMediaCallback(request, originalCallback);
             if (process.env.XDG_SESSION_TYPE === "wayland") {
                 // On Wayland, calling getSources() opens the xdg-desktop-portal picker.
                 // The user can only select a single source there, so Electron will return an array with exactly one entry.

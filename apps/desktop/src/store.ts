@@ -89,6 +89,7 @@ interface StoreData {
     locale?: string | string[];
     disableHardwareAcceleration: boolean;
     enableContentProtection: boolean;
+    shareSystemAudio: boolean;
     safeStorage?: Record<string, string>;
     /** the safeStorage backend used for the safeStorage data as written */
     safeStorageBackend?: SafeStorageBackend;
@@ -341,6 +342,10 @@ class Store extends ElectronStore<StoreData> {
                     default: false,
                 },
                 enableContentProtection: {
+                    type: "boolean",
+                    default: false,
+                },
+                shareSystemAudio: {
                     type: "boolean",
                     default: false,
                 },

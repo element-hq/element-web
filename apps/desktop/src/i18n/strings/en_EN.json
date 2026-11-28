@@ -76,6 +76,14 @@
         "all_files": "All Files",
         "named_file_type": "%(extension)s File"
     },
+    "screenshare_audio": {
+        "all_apps": "All apps except %(brand)s",
+        "detail": "Your desktop does not tell %(brand)s which window you picked.",
+        "message": "Which app's audio do you want to share?",
+        "no_audio": "No audio",
+        "playing": "%(name)s (playing)",
+        "title": "Share audio"
+    },
     "store": {
         "error": {
             "backend_changed": "Clear data and reload?",

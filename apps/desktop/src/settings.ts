@@ -10,6 +10,7 @@ import { ipcMain } from "electron";
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { AutoLaunch, type AutoLaunchState } from "./auto-launch.js";
+import { isScreenshareAudioSupported } from "./screenshare-audio.js";
 
 interface Setting {
     read(): Promise<any>;
@@ -86,6 +87,18 @@ const Settings: Record<string, Setting> = {
         async write(value: any): Promise<void> {
             global.mainWindow?.setContentProtection(value);
             Store.instance?.set("enableContentProtection", value);
+        },
+    },
+    "Electron.shareSystemAudio": {
+        // Linux needs PipeWire, Windows needs Windows 11; see screenshare-audio.ts.
+        supported(): boolean {
+            return isScreenshareAudioSupported();
+        },
+        async read(): Promise<any> {
+            return Store.instance?.get("shareSystemAudio");
+        },
+        async write(value: any): Promise<void> {
+            Store.instance?.set("shareSystemAudio", value);
         },
     },
 };
