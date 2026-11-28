@@ -770,9 +770,17 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
 async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessionOpts): Promise<boolean> {
     logger.error("Unable to load session", e);
 
-    const modal = Modal.createDialog(SessionRestoreErrorDialog, {
-        error: e,
-    });
+    const modal = Modal.createDialog(
+        SessionRestoreErrorDialog,
+        {
+            error: e,
+        },
+        undefined,
+        false,
+        false,
+        // A background click would retry loading the session, which the user didn't ask for.
+        { blockBackgroundClick: true },
+    );
 
     const [success] = await modal.finished;
     if (success) {
@@ -973,7 +981,10 @@ async function doSetLoggedIn(
 }
 
 async function showStorageEvictedDialog(): Promise<boolean> {
-    const { finished } = Modal.createDialog(StorageEvictedDialog);
+    // A background click would carry on logging in with inconsistent storage, so the user must sign out.
+    const { finished } = Modal.createDialog(StorageEvictedDialog, undefined, undefined, false, false, {
+        blockBackgroundClick: true,
+    });
     const [ok] = await finished;
     return !!ok;
 }
