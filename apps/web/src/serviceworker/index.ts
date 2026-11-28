@@ -129,18 +129,75 @@ self.addEventListener("fetch", (event) => {
     );
 });
 
+/**
+ * The `/versions` check in flight for each server, shared by concurrent media requests: a room full of thumbnails
+ * would otherwise send one `/versions` request each while the cache is empty.
+ */
+const serverSupportChecks: { [serverUrl: string]: Promise<void> | undefined } = {};
+
+/**
+ * Make sure `serverSupportMap` has an up-to-date entry for a server, checking the server with
+ * {@link checkServerSupport} if it does not. Concurrent calls for the same server wait on the same check.
+ *
+ * @param clientApiUrl - The base URL of the server's client-server API.
+ * @param accessToken - The access token to send with the check, if any.
+ * @throws If the check fails. The map is then left as it was, so the next call checks again.
+ */
 async function tryUpdateServerSupportMap(clientApiUrl: string, accessToken?: string): Promise<void> {
     // only update if we don't know about it, or if the data is stale
     if (serverSupportMap[clientApiUrl]?.cacheExpiryTimeMs > new Date().getTime()) {
         return; // up to date
     }
 
-    const config = fetchConfigForToken(accessToken);
-    const versions = await (await fetch(`${clientApiUrl}/_matrix/client/versions`, config)).json();
+    serverSupportChecks[clientApiUrl] ??= checkServerSupport(clientApiUrl, accessToken).finally(() => {
+        serverSupportChecks[clientApiUrl] = undefined;
+    });
+    return serverSupportChecks[clientApiUrl];
+}
+
+/**
+ * Ask a server whether it supports authenticated media (spec version v1.11) and cache the answer in
+ * `serverSupportMap` for two hours.
+ *
+ * The answer comes from `/_matrix/client/versions`:
+ *
+ * - With an access token, the request is sent with it. If the server accepts it, its answer is cached.
+ * - If the server rejects the request with the token, it is sent again without one. `/versions` does not require
+ *   authentication, and authenticated media support is a property of the server, not of the user, so a rejected
+ *   token (typically an expired one read from storage before the app has refreshed it) must not decide the answer.
+ * - Without an access token, the request is sent without one.
+ * - If the request still fails, or the response has no list of versions, nothing is cached and the function throws.
+ *   Caching a failure would read as "no authenticated media" and send every media request to the legacy endpoints,
+ *   which fail on servers that enforce authenticated media, until the entry expires. The next media request checks
+ *   again instead.
+ *
+ * @param clientApiUrl - The base URL of the server's client-server API.
+ * @param accessToken - The access token to send with the request, if any.
+ * @throws Error if `/versions` fails, or TypeError if its response has no list of versions.
+ */
+async function checkServerSupport(clientApiUrl: string, accessToken?: string): Promise<void> {
+    const versionsUrl = `${clientApiUrl}/_matrix/client/versions`;
+    let response = await fetch(versionsUrl, fetchConfigForToken(accessToken));
+    if (!response.ok && accessToken) {
+        console.warn(
+            `[ServiceWorker] /versions for '${clientApiUrl}' returned ${response.status} with a token; retrying without one`,
+        );
+        discardBody(response);
+        response = await fetch(versionsUrl);
+    }
+
+    if (!response.ok) {
+        discardBody(response);
+        throw new Error(`SW: /versions for '${clientApiUrl}' returned ${response.status}; not caching server support`);
+    }
+    const versions = await response.json();
+    if (!Array.isArray(versions?.versions)) {
+        throw new TypeError(`SW: /versions for '${clientApiUrl}' has no list of versions; not caching server support`);
+    }
     console.log(`[ServiceWorker] /versions response for '${clientApiUrl}': ${JSON.stringify(versions)}`);
 
     serverSupportMap[clientApiUrl] = {
-        supportsAuthedMedia: Boolean(versions?.versions?.includes("v1.11")),
+        supportsAuthedMedia: versions.versions.includes("v1.11"),
         cacheExpiryTimeMs: new Date().getTime() + 2 * 60 * 60 * 1000, // 2 hours from now
     };
     console.log(
@@ -227,6 +284,11 @@ async function askClientForUserIdParams(client: Client): Promise<UserInfo> {
         // Ask the tab for the information we need. This is handled by WebPlatform.
         client.postMessage({ responseKey, type: "userinfo" });
     });
+}
+
+/** Release the connection behind a response whose body we are not going to read. */
+function discardBody(response: Response): void {
+    response.body?.cancel().catch(() => {});
 }
 
 function fetchConfigForToken(accessToken?: string): RequestInit | undefined {
