@@ -13,6 +13,7 @@ import DMRoomMap from "../DMRoomMap";
 import { isLocalRoom } from "../localRoom/isLocalRoom";
 import { isJoinedOrNearlyJoined } from "../membership";
 import { getFunctionalMembers } from "../room/getFunctionalMembers";
+import { isRoomLeftPendingSync } from "../room/leftRooms";
 
 /**
  * Iterates the rooms and tries to find a DM room with the user identified by UserId.
@@ -37,6 +38,8 @@ function extractSuitableRoom(rooms: Room[], userId: string, findRoomWithThirdpar
             // canonical DMs to solve.
             if (r && r.getMyMembership() === KnownMembership.Join) {
                 if (isLocalRoom(r)) return false;
+                // We may have just left the room, before sync has told the room about it.
+                if (isRoomLeftPendingSync(r.roomId)) return false;
 
                 const functionalUsers = getFunctionalMembers(r);
                 const members = r.currentState.getMembers();

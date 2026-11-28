@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { createTestClient, makeMembershipEvent, mkThirdPartyInviteEvent } from "test-utils";
 
@@ -17,6 +17,7 @@ import DMRoomMap from "../DMRoomMap";
 import { LocalRoom } from "../../models/LocalRoom";
 import { findDMForUser } from "./findDMForUser";
 import { getFunctionalMembers } from "../room/getFunctionalMembers";
+import { markRoomAsLeft } from "../room/leftRooms";
 
 vi.mock("../room/getFunctionalMembers", () => ({
     getFunctionalMembers: vi.fn(),
@@ -161,6 +162,19 @@ describe("findDMForUser", () => {
         room3.getLastActiveTimestamp = () => 2;
 
         expect(findDMForUser(mockClient, userId1)).toBe(room3);
+    });
+
+    it("should not find a room we have left until sync updates our membership in it", () => {
+        room1.getLastActiveTimestamp = () => 2;
+        room3.getLastActiveTimestamp = () => 1;
+
+        // the leave has succeeded, but sync has not told the room yet, so it still says we are joined
+        markRoomAsLeft(room1);
+        expect(findDMForUser(mockClient, userId1)).toBe(room3);
+
+        // once sync updates our membership, the room is judged on its membership again
+        room1.emit(RoomEvent.MyMembership, room1, KnownMembership.Join, KnownMembership.Leave);
+        expect(findDMForUser(mockClient, userId1)).toBe(room1);
     });
 
     it("should find a room by the 'all rooms' fallback", () => {

@@ -25,6 +25,7 @@ import { type AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoo
 import { bulkSpaceBehaviour } from "./space";
 import { SDKContextClass } from "../contexts/SDKContextClass";
 import { CallStore } from "../stores/CallStore";
+import { markRoomAsLeft } from "./room/leftRooms";
 
 export async function leaveRoomBehaviour(
     matrixClient: MatrixClient,
@@ -125,6 +126,11 @@ export async function leaveRoomBehaviour(
             await sleep(limitExceededError.data.retry_after_ms ?? 100);
             return leaveRoomBehaviour(matrixClient, roomId, false, false);
         }
+    }
+
+    if (!results[roomId]) {
+        // Our membership in the room only changes once the leave comes down sync, so remember it until then.
+        markRoomAsLeft(room);
     }
 
     spinnerModal?.close();
