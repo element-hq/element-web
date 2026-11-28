@@ -2867,7 +2867,7 @@
             "message_search_pending_rooms": "Rooms awaiting indexing: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s out of %(totalRooms)s",
             "message_search_section": "Message search",
-            "message_search_sleep_time": "How fast should messages be downloaded.",
+            "message_search_sleep_time": "How slow should messages be downloaded (delay in ms, bigger is slower).",
             "message_search_space_used": "Space used:",
             "message_search_unsupported": "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.",
