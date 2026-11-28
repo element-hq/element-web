@@ -27,6 +27,7 @@ import PosthogTrackers from "../../../PosthogTrackers.ts";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { EventPreviewViewModel } from "../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
+import { focusEventTileAfterScroll } from "../../../utils/FocusUtils";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -79,6 +80,11 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             room_id: room.roomId,
             metricsTrigger: undefined, // room doesn't change
         });
+
+        const pinnedEventId = pinnedEvent.getId();
+        if (pinnedEventId) {
+            focusEventTileAfterScroll(pinnedEventId);
+        }
 
         // Cycle through the pinned messages
         // When we reach the first message, we go back to the last message
