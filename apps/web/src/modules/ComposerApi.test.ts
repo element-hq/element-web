@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { describe, it, expect, vi } from "vitest";
 
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -13,6 +15,8 @@ import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type ComposerInsertPayload, ComposerType } from "../dispatcher/payloads/ComposerInsertPayload";
 import { ComposerApi, ModuleComposerApiEvents } from "./ComposerApi";
 import type { ComposerInsertFilesPayload } from "../dispatcher/payloads/ComposerInsertFilePayload";
+// Import the built-in commands, so that we can check module commands do not clash with them.
+import { CommandMap, Commands } from "../slash-commands/SlashCommands";
 
 describe("ComposerApi", () => {
     describe("insertPlaintextIntoComposer()", () => {
@@ -80,6 +84,35 @@ describe("ComposerApi", () => {
             const option = { type: "an_option", label: "New option", onSelected: () => {} };
             api.addFileUploadOption(option);
             expect(() => api.addFileUploadOption({ ...option })).toThrow('Option "an_option" already exists');
+        });
+    });
+    describe("registerSlashCommand()", () => {
+        it("should be able to register a slash command", () => {
+            const api = new ComposerApi(new MatrixDispatcher());
+            api.registerSlashCommand({
+                command: "module_test_cmd",
+                aliases: ["module_test_alias"],
+                description: "A test command",
+            });
+            const command = CommandMap.get("module_test_cmd");
+            expect(command?.getDescription()).toEqual("A test command");
+            expect(CommandMap.get("module_test_alias")).toBe(command);
+            expect(Commands).toContain(command);
+        });
+        it("throws if the command already exists", () => {
+            const api = new ComposerApi(new MatrixDispatcher());
+            expect(() => api.registerSlashCommand({ command: "shrug", description: "" })).toThrow(
+                'Command "shrug" already exists',
+            );
+        });
+        it("throws if an alias already exists", () => {
+            const api = new ComposerApi(new MatrixDispatcher());
+            const commandCount = Commands.length;
+            expect(() =>
+                api.registerSlashCommand({ command: "module_test_unique", aliases: ["shrug"], description: "" }),
+            ).toThrow('Command "shrug" already exists');
+            expect(CommandMap.has("module_test_unique")).toBe(false);
+            expect(Commands).toHaveLength(commandCount);
         });
     });
 });

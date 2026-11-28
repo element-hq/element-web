@@ -64,10 +64,12 @@ import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
 import { statusCommand } from "./status";
 import { SDKContextClass } from "../contexts/SDKContextClass.ts";
+import { Commands, CommandMap, registerCommand, setModuleCommandFactory } from "./registry";
+import { createModuleSlashCommand } from "./moduleCommand";
 
-export { CommandCategories, Command };
+export { CommandCategories, Command, Commands, CommandMap };
 
-export const Commands = [
+const builtinCommands = [
     new Command({
         command: "spoiler",
         args: "<message>",
@@ -866,14 +868,8 @@ export const Commands = [
     }),
 ];
 
-// build a map from names and aliases to the Command objects.
-export const CommandMap = new Map<string, Command>();
-Commands.forEach((cmd) => {
-    CommandMap.set(cmd.command, cmd);
-    cmd.aliases.forEach((alias) => {
-        CommandMap.set(alias, cmd);
-    });
-});
+builtinCommands.forEach(registerCommand);
+setModuleCommandFactory(createModuleSlashCommand);
 
 /**
  * If the supplied input starts with "/<command>", returns an object with these
