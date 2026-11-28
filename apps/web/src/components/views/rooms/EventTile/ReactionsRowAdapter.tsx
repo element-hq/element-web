@@ -167,7 +167,17 @@ export function ReactionsRowAdapter({
     }, [reactions, userId, vm]);
 
     useEffect(() => {
-        vm.setActionable(isContentActionable(mxEvent));
+        const updateActionable = (): void => {
+            vm.setActionable(isContentActionable(mxEvent));
+        };
+        updateActionable();
+
+        // The content of an edited event comes from its replacement. While that replacement is still encrypted
+        // the content is empty, so the event is not actionable until the decrypted replacement is applied.
+        mxEvent.on(MatrixEventEvent.Replaced, updateActionable);
+        return () => {
+            mxEvent.off(MatrixEventEvent.Replaced, updateActionable);
+        };
     }, [mxEvent, vm]);
 
     useEffect(() => {
