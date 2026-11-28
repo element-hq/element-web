@@ -21,6 +21,16 @@ Please see LICENSE files in the repository root for full details.
     .mx_StyledRadioButton_spacer {
         display: none;
     }
+
+    /* override default StyledCheckbox styling */
+    & input[type="checkbox"]:hover + div {
+        svg {
+            color: transparent;
+        }
+
+        border-color: var(--cpd-color-border-interactive-primary);
+        box-shadow: none;
+    }
 }
 
 .mx_PollOption,
@@ -33,6 +43,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_PollOption_content {
     display: flex;
     justify-content: space-between;
+    color: var(--cpd-color-text-primary);
 }
 
 .mx_PollOption_optionVoteCount {
@@ -62,10 +73,10 @@ Please see LICENSE files in the repository root for full details.
             border-color: var(--cpd-color-icon-primary);
             background-color: var(--cpd-color-icon-primary);
 
-            div {
-                background: none;
+            & div {
+                background: none; /* override the inner circle */
 
-                svg {
+                & svg {
                     color: var(--cpd-color-icon-on-solid-primary);
                     width: 12px;
                     height: 12px;
@@ -74,6 +85,30 @@ Please see LICENSE files in the repository root for full details.
                 }
             }
         }
+        & input[type="radio"]:checked:disabled + div {
+            div {
+                background: none; /* override the inner circle */
+            }
+        }
+    }
+
+    /* override default StyledCheckbox styling */
+    & input[type="checkbox"]:checked + div {
+        border-color: var(--cpd-color-icon-primary);
+        background-color: var(--cpd-color-icon-primary);
+    }
+
+    & input[type="checkbox"]:checked:disabled + div {
+        opacity: 0.5;
+    }
+
+    & input[type="checkbox"]:checked:hover + div {
+        svg {
+            color: var(--cpd-color-icon-on-solid-primary);
+        }
+
+        border-color: var(--cpd-color-icon-primary);
+        background-color: var(--cpd-color-icon-primary);
     }
 }
 
@@ -89,13 +124,23 @@ Please see LICENSE files in the repository root for full details.
         input[type="radio"]:checked + div {
             border-color: var(--cpd-color-icon-accent-tertiary);
             background-color: var(--cpd-color-icon-accent-tertiary);
+
+            & div {
+                background: none; /* override the inner circle */
+            }
         }
+    }
+
+    /* override StyledCheckbox:disabled styling */
+    & input[type="checkbox"]:checked + div {
+        border-color: var(--cpd-color-icon-accent-tertiary);
+        background-color: var(--cpd-color-icon-accent-tertiary);
     }
 }
 
-/* options not actionable in these states */
-.mx_PollOption_checked,
-.mx_PollOption_ended {
+/* options not actionable in ended and busy state */
+.mx_PollOption_ended,
+.mx_PollOption_busy {
     pointer-events: none;
 }
 

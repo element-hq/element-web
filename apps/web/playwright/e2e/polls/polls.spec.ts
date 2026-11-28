@@ -155,7 +155,7 @@ test.describe("Polls", () => {
         // 1 vote for yes
         await expectPollOptionVoteCount(page, pollId, pollParams.options[0], 1);
         // 1 vote for no
-        await expectPollOptionVoteCount(page, pollId, pollParams.options[0], 1);
+        await expectPollOptionVoteCount(page, pollId, pollParams.options[1], 1);
         // 0 for maybe
         await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 0);
     });

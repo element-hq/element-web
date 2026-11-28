@@ -1080,14 +1080,15 @@ exports[`MPollBody > renders a poll with local, non-local and invalid votes 1`] 
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_PollOption"
+        class="mx_PollOption mx_PollOption_busy"
         data-testid="pollOption-pizza"
       >
         <label
-          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled"
         >
           <input
             aria-label="Option 1, Pizza, 1 vote"
+            disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
             value="pizza"
@@ -1131,14 +1132,15 @@ exports[`MPollBody > renders a poll with local, non-local and invalid votes 1`] 
         </div>
       </div>
       <div
-        class="mx_PollOption"
+        class="mx_PollOption mx_PollOption_busy"
         data-testid="pollOption-poutine"
       >
         <label
-          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled"
         >
           <input
             aria-label="Option 2, Poutine, 0 votes"
+            disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
             value="poutine"
@@ -1182,14 +1184,15 @@ exports[`MPollBody > renders a poll with local, non-local and invalid votes 1`] 
         </div>
       </div>
       <div
-        class="mx_PollOption mx_PollOption_checked"
+        class="mx_PollOption mx_PollOption_checked mx_PollOption_busy"
         data-testid="pollOption-italian"
       >
         <label
-          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
         >
           <input
             aria-label="Option 3, Italian, 3 votes"
+            disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
             value="italian"
@@ -1245,14 +1248,15 @@ exports[`MPollBody > renders a poll with local, non-local and invalid votes 1`] 
         </div>
       </div>
       <div
-        class="mx_PollOption"
+        class="mx_PollOption mx_PollOption_busy"
         data-testid="pollOption-wings"
       >
         <label
-          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_disabled"
         >
           <input
             aria-label="Option 4, Wings, 1 vote"
+            disabled=""
             name="poll_answer_select-$mypoll"
             type="radio"
             value="wings"
@@ -1301,6 +1305,28 @@ exports[`MPollBody > renders a poll with local, non-local and invalid votes 1`] 
       data-testid="totalVotes"
     >
       Based on 5 votes
+      <div
+        class="mx_Spinner"
+      >
+        <svg
+          aria-label="Loading…"
+          class="_icon_1855a_18"
+          data-testid="spinner"
+          fill="currentColor"
+          height="1em"
+          role="progressbar"
+          style="width: 16px; height: 16px;"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </div>
     </div>
   </fieldset>
 </div>
