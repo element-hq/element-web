@@ -136,4 +136,14 @@ test.describe("HTML Export", () => {
             });
         },
     );
+
+    test("should render the size limit field as tall as the messages field", async ({ page, app, room }) => {
+        await app.toggleRoomInfoPanel();
+        await page.getByRole("menuitem", { name: "Export Chat" }).click();
+
+        const dialog = page.locator(".mx_ExportDialog");
+        const messagesBox = await dialog.locator(".mx_Field", { has: page.locator("#export-type") }).boundingBox();
+        const sizeLimitBox = await dialog.locator(".mx_Field", { has: page.locator("#size-limit") }).boundingBox();
+        expect(sizeLimitBox!.height).toBeCloseTo(messagesBox!.height, 0);
+    });
 });
