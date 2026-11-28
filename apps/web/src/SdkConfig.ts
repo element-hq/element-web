@@ -23,6 +23,8 @@ export const DEFAULTS = {
         auth_header_logo_url: "themes/element/img/logos/element-logo.svg",
         welcome_background_url: "themes/element/img/backgrounds/lake.jpg",
     },
+    // We report bugs locally by default
+    bug_report_endpoint_url: "local",
     help_url: "https://element.io/help",
     help_encryption_url: "https://element.io/help#encryption",
     help_key_storage_url: "https://element.io/help#encryption5",
