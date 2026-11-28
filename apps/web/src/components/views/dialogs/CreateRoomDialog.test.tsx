@@ -291,11 +291,7 @@ describe("<CreateRoomDialog />", () => {
             });
 
             it("should have a hint", () => {
-                expect(
-                    screen.getByText(
-                        "Anyone can request to join, but admins or moderators need to grant access. You can change this later.",
-                    ),
-                ).toBeInTheDocument();
+                expect(screen.getByText("Everyone must request access.")).toBeInTheDocument();
             });
 
             it("should create a knock room with private visibility", async () => {
@@ -430,6 +426,26 @@ describe("<CreateRoomDialog />", () => {
                     name: "Restricted Room",
                     joinRule: JoinRule.Restricted,
                 }),
+            );
+        });
+
+        it("should create a knock_restricted room when members of the space can join directly", async () => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
+            const onFinished = vi.fn();
+            render(<CreateRoomDialog parentSpace={parentSpace} onFinished={onFinished} />);
+            await flushPromises();
+
+            fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Knock Room" } });
+            fireEvent.click(screen.getByLabelText("Room visibility"));
+            fireEvent.click(screen.getByRole("option", { name: "Ask to join" }));
+            fireEvent.click(screen.getByRole("switch", { name: /can join but everyone else must request access/ }));
+
+            fireEvent.click(screen.getByText("Create room"));
+            await flushPromises();
+
+            expect(onFinished).toHaveBeenCalledWith(
+                true,
+                expect.objectContaining({ name: "Knock Room", joinRule: JoinRule.KnockRestricted, parentSpace }),
             );
         });
 

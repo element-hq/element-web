@@ -46,6 +46,7 @@ import { SDKContext } from "../../../contexts/SDKContext";
 import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { RoomSettingsTab } from "./RoomSettingsDialog-tab.ts";
 import SdkConfig from "../../../SdkConfig";
+import { isKnockJoinRule } from "../../../utils/room/isKnockJoinRule";
 
 interface IProps {
     roomId: string;
@@ -138,7 +139,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 "RoomSettingsGeneral",
             ),
         );
-        if (SettingsStore.getValue("feature_ask_to_join") && this.state.room.getJoinRule() === "knock") {
+        if (SettingsStore.getValue("feature_ask_to_join") && isKnockJoinRule(this.state.room.getJoinRule())) {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.People,
