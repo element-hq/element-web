@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// The letter spacing test below needs Compound's tokens
+import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -218,5 +220,18 @@ describe("DisambiguatedProfileView", () => {
         render(<DisambiguatedProfileView vm={vm} className="custom-profile another-class" />);
         const profileContainer = getProfileContainer("Classed User");
         expect(profileContainer).toHaveClass("custom-profile", "another-class");
+    });
+
+    it("spaces an emphasized display name with Compound's body letter spacing", () => {
+        render(<Emphasized />);
+        const bodyText = document.createElement("span");
+        bodyText.style.font = "var(--cpd-font-body-md-semibold)";
+        bodyText.style.letterSpacing = "var(--cpd-font-letter-spacing-body-md)";
+        document.body.append(bodyText);
+
+        expect(getComputedStyle(screen.getByText("Charlie")).letterSpacing).toBe(
+            getComputedStyle(bodyText).letterSpacing,
+        );
+        bodyText.remove();
     });
 });

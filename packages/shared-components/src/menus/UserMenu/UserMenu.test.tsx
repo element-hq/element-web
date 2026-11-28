@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// The color test below needs Compound's tokens
+import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
 import { composeStories } from "@storybook/react-vite";
 import { render } from "@test-utils";
 import React from "react";
@@ -53,5 +55,16 @@ describe("UserMenu", () => {
     it("renders an open menu with user status", async () => {
         const { container } = render(<WithStatusOpen />);
         expect(container).toMatchSnapshot();
+    });
+    it("draws the button in the primary text color", () => {
+        const { getByRole } = render(<Default />);
+        const primaryText = document.createElement("div");
+        primaryText.style.color = "var(--cpd-color-text-primary)";
+        document.body.append(primaryText);
+
+        expect(getComputedStyle(getByRole("button", { name: "User menu" })).color).toBe(
+            getComputedStyle(primaryText).color,
+        );
+        primaryText.remove();
     });
 });

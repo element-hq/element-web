@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// The border color test below needs Compound's tokens
+import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
@@ -179,5 +181,18 @@ describe("CustomStatusView", () => {
         await userEvent.click(await screen.findByText("😇"));
 
         expect(onRecordRecentEmoji).toHaveBeenCalledWith("😇");
+    });
+
+    it("outlines the emoji button in Compound's hovered border color while the picker is open", async () => {
+        render(<CustomStatusView onSave={vi.fn()} onCancel={vi.fn()} />);
+        const button = screen.getByRole("button", { name: "Choose Emoji" });
+        await userEvent.click(button);
+        await waitFor(() => expect(screen.getByLabelText("Emoji picker")).toBeInTheDocument());
+        const hoveredBorder = document.createElement("div");
+        hoveredBorder.style.color = "var(--cpd-color-border-interactive-hovered)";
+        document.body.append(hoveredBorder);
+
+        expect(getComputedStyle(button).borderColor).toBe(getComputedStyle(hoveredBorder).color);
+        hoveredBorder.remove();
     });
 });
