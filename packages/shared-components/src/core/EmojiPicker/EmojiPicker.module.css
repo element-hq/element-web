@@ -181,8 +181,9 @@
 
 .footer {
     border-top: 1px solid var(--cpd-color-gray-400);
-    min-height: 72px;
-    max-height: 72px;
+    /* 72px, growing above the default font size like the label and emoji inside it */
+    min-height: max(72px, 4.5rem);
+    max-height: max(72px, 4.5rem);
 
     display: flex;
     align-items: center;
@@ -224,4 +225,9 @@
 
 .quickHeader .name {
     margin-right: var(--cpd-space-1x);
+}
+
+/* Keep the shortcode shown on hover inside the heading's line, so the emoji below don't move */
+.quickHeader .shortcode {
+    line-height: 1;
 }

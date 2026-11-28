@@ -10,5 +10,21 @@ Please see LICENSE files in the repository root for full details.
     height: 40px;
     padding-left: 16px;
     line-height: 40px;
-    vertical-align: center;
+
+    /* The same highlight as .mx_IconizedContextMenu_item */
+    &:hover,
+    &:focus-visible {
+        background-color: var(--cpd-color-bg-action-secondary-hovered);
+    }
+
+    /* Keep the highlight inside the menu's rounded corners: its 12px radius less its border */
+    &:first-child {
+        border-start-start-radius: calc(12px - var(--cpd-border-width-1));
+        border-start-end-radius: calc(12px - var(--cpd-border-width-1));
+    }
+
+    &:last-child {
+        border-end-start-radius: calc(12px - var(--cpd-border-width-1));
+        border-end-end-radius: calc(12px - var(--cpd-border-width-1));
+    }
 }
