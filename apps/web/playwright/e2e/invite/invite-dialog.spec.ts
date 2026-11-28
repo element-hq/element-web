@@ -53,6 +53,14 @@ test.describe("Invite dialog", function () {
 
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-room-without-user.png");
 
+        // The Invite button must be vertically centered on the search field
+        const inputBox = await other.getByTestId("invite-dialog-input-wrapper").boundingBox();
+        const buttonBox = await other.getByRole("button", { name: "Invite" }).boundingBox();
+        expect(buttonBox!.y - inputBox!.y).toBeCloseTo(
+            inputBox!.y + inputBox!.height - (buttonBox!.y + buttonBox!.height),
+            0,
+        );
+
         await expect(other.locator(".mx_InviteDialog_identityServer")).not.toBeVisible();
 
         await other.getByTestId("invite-dialog-input").fill(bot.credentials!.userId);
